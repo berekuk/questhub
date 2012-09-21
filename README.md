@@ -1,4 +1,4 @@
-play-perl
+play-perl.org
 =========
 
 http://play-perl.org sources.
@@ -12,6 +12,8 @@ Quick start
 4. Run `vagrant ssh`
 5. cd to `/vagrant/app` and start hacking!
 
+You can edit `/vagrant` contents from the VM or from your own host. The changes are mirrored.
+
 How everything is configured
 =========
 
@@ -24,15 +26,15 @@ So, after starting VM using `vagrant up`, you can access nginx by going to http:
 
 We'll configure the dancer app to start as a service later.
 
-How to install new packages
+How to reconfigure the environment
 =========
 
 You can install new packages in the VM using `sudo apt-get install ...`, as usual.
 
-The VM is configured using [Chef](http://www.opscode.com/chef/).
+The VM contents is configured with [Chef](http://www.opscode.com/chef/).
 So you should also share your configuration with other users by editing `cookbooks/play-perl/recipes/default.rb` file.
 
-To add a new debian package to `default.rb` config, just add a `package 'PACKAGE_NAME'` line to the recipe.
+To add a new debian package to chef configuration, just add a `package 'PACKAGE_NAME'` line to the `default.rb` recipe.
 To add an arbitrary imperative initialization code, use a `bash` block:
 
 ```
@@ -42,3 +44,5 @@ bash "restart nginx" do
 EOH
 end
 ```
+
+If someone else has edited the recipe, you can run `vagrant reload` to restart the VM and redeploy the chef configuration.
