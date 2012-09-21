@@ -3,6 +3,7 @@ require_recipe "mongodb"
 package 'vim'
 package 'git'
 package 'libdancer-perl'
+package 'nginx'
 
 include_recipe "mongodb::default"
 
