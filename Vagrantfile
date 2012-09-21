@@ -66,23 +66,13 @@ Vagrant::Config.run do |config|
   # Enable and configure the chef solo provisioner
   config.vm.provision :chef_solo do |chef|
     # We're going to download our cookbooks from the web
-    chef.recipe_url = "http://files.vagrantup.com/getting_started/cookbooks.tar.gz"
+    #chef.recipe_url = "http://files.vagrantup.com/getting_started/cookbooks.tar.gz"
 
     # Tell chef what recipe to run. In this case, the `vagrant_main` recipe
     # does all the magic.
-    chef.add_recipe("vagrant_main")
+    #chef.add_recipe("vagrant_main")
+    chef.add_recipe('play-perl')
   end
-  #
-  # config.vm.provision :chef_solo do |chef|
-  #   chef.cookbooks_path = "../my-recipes/cookbooks"
-  #   chef.roles_path = "../my-recipes/roles"
-  #   chef.data_bags_path = "../my-recipes/data_bags"
-  #   chef.add_recipe "mysql"
-  #   chef.add_role "web"
-  #
-  #   # You may also specify custom JSON attributes:
-  #   chef.json = { :mysql_password => "foo" }
-  # end
 
   # Enable provisioning with chef server, specifying the chef server URL,
   # and the path to the validation key (relative to this Vagrantfile).

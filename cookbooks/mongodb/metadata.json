@@ -1,0 +1,139 @@
+{
+  "dependencies": {
+    "apt": ">= 0.0.0"
+  },
+  "name": "mongodb",
+  "maintainer_email": "markus.korn@edelight.de",
+  "attributes": {
+    "mongodb/sharded_collections": {
+      "required": "optional",
+      "calculated": false,
+      "choice": [
+
+      ],
+      "default": {
+      },
+      "type": "string",
+      "recipes": [
+
+      ],
+      "display_name": "Sharded Collections",
+      "description": "collections to shard"
+    },
+    "mongodb/shard_name": {
+      "required": "optional",
+      "calculated": false,
+      "choice": [
+
+      ],
+      "default": "default",
+      "type": "string",
+      "recipes": [
+
+      ],
+      "display_name": "Shard name",
+      "description": "Name of a mongodb shard"
+    },
+    "mongodb/dbpath": {
+      "required": "optional",
+      "calculated": false,
+      "choice": [
+
+      ],
+      "default": "/var/lib/mongodb",
+      "type": "string",
+      "recipes": [
+
+      ],
+      "display_name": "dbpath",
+      "description": "Path to store the mongodb data"
+    },
+    "mongodb/logpath": {
+      "required": "optional",
+      "calculated": false,
+      "choice": [
+
+      ],
+      "default": "/var/log/mongodb",
+      "type": "string",
+      "recipes": [
+
+      ],
+      "display_name": "logpath",
+      "description": "Path to store the logfiles of a mongodb instance"
+    },
+    "mongodb/cluster_name": {
+      "required": "optional",
+      "calculated": false,
+      "choice": [
+
+      ],
+      "default": null,
+      "type": "string",
+      "recipes": [
+
+      ],
+      "display_name": "Cluster Name",
+      "description": "Name of the mongodb cluster, all nodes of a cluster must have the same name."
+    },
+    "mongodb/client_roles": {
+      "required": "optional",
+      "calculated": false,
+      "choice": [
+
+      ],
+      "default": [
+
+      ],
+      "type": "string",
+      "recipes": [
+
+      ],
+      "display_name": "Client Roles",
+      "description": "Roles of nodes who need access to the mongodb instance"
+    },
+    "mongodb/port": {
+      "required": "optional",
+      "calculated": false,
+      "choice": [
+
+      ],
+      "default": "27017",
+      "type": "string",
+      "recipes": [
+
+      ],
+      "display_name": "Port",
+      "description": "Port the mongodb instance is running on"
+    }
+  },
+  "license": "Apache 2.0",
+  "suggestions": {
+  },
+  "platforms": {
+    "debian": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0"
+  },
+  "maintainer": "edelight GmbH",
+  "long_description": "",
+  "version": "0.11.0",
+  "recommendations": {
+  },
+  "recipes": {
+    "mongodb": "Installs and configures a single node mongodb instance",
+    "mongodb::shard": "Installs and configures a single shard",
+    "mongodb::configserver": "Installs and configures a configserver for mongodb sharding",
+    "mongodb::replicaset": "Installs and configures a mongodb replicaset",
+    "mongodb::mongos": "Installs and configures a mongos which can be used in a sharded setup",
+    "mongodb::10gen_repo": "Adds the 10gen repo to get the latest packages"
+  },
+  "groupings": {
+  },
+  "conflicting": {
+  },
+  "replacing": {
+  },
+  "description": "Installs and configures mongodb",
+  "providing": {
+  }
+}
