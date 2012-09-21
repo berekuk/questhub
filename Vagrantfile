@@ -62,6 +62,16 @@ Vagrant::Config.run do |config|
   # Enable provisioning with chef solo, specifying a cookbooks path, roles
   # path, and data_bags path (all relative to this Vagrantfile), and adding 
   # some recipes and/or roles.
+
+  # Enable and configure the chef solo provisioner
+  config.vm.provision :chef_solo do |chef|
+    # We're going to download our cookbooks from the web
+    chef.recipe_url = "http://files.vagrantup.com/getting_started/cookbooks.tar.gz"
+
+    # Tell chef what recipe to run. In this case, the `vagrant_main` recipe
+    # does all the magic.
+    chef.add_recipe("vagrant_main")
+  end
   #
   # config.vm.provision :chef_solo do |chef|
   #   chef.cookbooks_path = "../my-recipes/cookbooks"
