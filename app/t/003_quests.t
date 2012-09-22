@@ -12,7 +12,7 @@ use JSON;
 use Data::Dumper;
 
 # the order is important
-use Dancer qw();
+use Dancer;
 use Play;
 use Dancer::Test;
 
