@@ -26,7 +26,7 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="vendors/bootstrap/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="vendors/bootstrap/ico/apple-touch-icon-57-precomposed.png">
 
-    <script type="text/template" id="app">
+    <script type="text/template" id="template-app">
         <div class="navbar navbar-inverse navbar-fixed-top">
           <div class="navbar-inner">
             <div class="container">
@@ -45,26 +45,26 @@
           </div>
         </div>
 
-        <div class="container">
+        <div class="app-view-container container"></div>
+    </script>
 
-          <h1>Play Perl</h1>
-          <p>Hello! You are on the play-perl.org site</p>
-          <h2>Ради чего вообще это все?</h2>
-          <p>
-            <ol>
-              <li>
-      Помочь людям больше помогать развитию опенсорса за счет увеличения количества фана. Или просто, "больше фана от участия в опенсорсе".
-              </li>
-              <li>
-      Больше публичности и связности. Помочь людям в донесении до окружающих того, что они сделали. Увеличить количество фидбека.
-              </li>
-              <li>
-      Больше менеджмента. Стоп, это как-то неправильно звучит. Больше структуры и приоритезации.
-              </li>
-            </ol>
-          </p>
-
-        </div>
+    <script type="text/template" id="template-home">
+      <h1>Play Perl</h1>
+      <p>Hello! You are on the play-perl.org site</p>
+      <h2>Ради чего вообще это все?</h2>
+      <p>
+        <ol>
+          <li>
+  Помочь людям больше помогать развитию опенсорса за счет увеличения количества фана. Или просто, "больше фана от участия в опенсорсе".
+          </li>
+          <li>
+  Больше публичности и связности. Помочь людям в донесении до окружающих того, что они сделали. Увеличить количество фидбека.
+          </li>
+          <li>
+  Больше менеджмента. Стоп, это как-то неправильно звучит. Больше структуры и приоритезации.
+          </li>
+        </ol>
+      </p>
     </script>
   </head>
 
@@ -85,6 +85,7 @@
 
     <script src="models/user.js"></script>
     <script src="views/user.js"></script>
+    <script src="views/home.js"></script>
     <script src="views/app.js"></script>
     <script src="app.js"></script>
 
