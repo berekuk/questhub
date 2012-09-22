@@ -51,18 +51,22 @@ You can run `vagrant provision` to redeploy the chef configuration.
 
 ## API
 
-### /api/get_login
+### /auth/twitter
+
+OAuth twitter auth
+
+### /api/new_login?login=desired_login_on_play_perl
+
+### /api/user
 
     {
-       "status" : "ok",
-       "logged" : 1,
-       "login" : "mememe"
+       "twitter" : {
+          "login" : "login_on_twitter"
+       },
+       "login" : "login_on_play_perl"
     }
 
 ### /api/logout
 
 Kills currect session
 
-### /api/fakelogin/username
-
-Log you as user with login username

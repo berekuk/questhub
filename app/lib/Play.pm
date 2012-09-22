@@ -8,6 +8,7 @@ set serializer => 'JSON';
 prefix '/api';
 
 use Play::Quests;
+use Play::Auth;
 
 my $quests = Play::Quests->new;
 
@@ -58,7 +59,7 @@ get '/get_login' => sub {
 
 get '/logout' => sub {
 
-    session->destroy;
+    session->destroy(session); #FIXME: workaround a buggy Dancer::Session::MongoDB
 
     return {
         status => 'ok'
