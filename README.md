@@ -59,14 +59,57 @@ OAuth twitter auth
 
 ### /api/user
 
+#### Player впервые на сайте, ничего не делал, нет никаких логинов (или
+пользователь незалогинен)
+
+    {
+      "login" :  null
+    }
+
+
+#### Пользователь без логина на сервисе
+
     {
        "twitter" : {
-          "login" : "login_on_twitter"
+          "login" : "bessarabov"
        },
-       "login" : "login_on_play_perl"
+       "_id" : "505dc8f11ecebbd676000005",
+       "login" : null
+        serviceProvileds : [
+            {
+                type: twitter
+                login: bessarabov
+            },
+            {
+                type: github
+                login: bessarabov
+            },
+
+        ]
+    }
+
+
+#### Пользователь залогинен и с логином на сервисе
+
+    {
+       "twitter" : {
+          "login" : "bessarabov"
+       },
+       "_id" : "505dc8f11ecebbd676000005",
+       "login" : bessarabov
+        serviceProvileds : [
+            {
+                type: twitter
+                login: bessarabov
+            },
+            {
+                type: github
+                login: bessarabov
+            },
+
+        ]
     }
 
 ### /api/logout
 
 Kills currect session
-
