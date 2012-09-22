@@ -1,16 +1,16 @@
 Www.Router = Ember.Router.extend({
-  root: Ember.State.extend({
-    index: Ember.State.extend({
+  root: Ember.Route.extend({
+    index: Ember.Route.extend({
       route: '/',
       redirectsTo: 'home'
     }),
-    home: Ember.State.extend({
+    home: Ember.Route.extend({
       route: '/home'
     }),
-    quest: Ember.State.extend({
-      route: '/quests'
+    quest: Ember.Route.extend({
+      route: '/quests',
       
-      plan: Ember.State.extend({
+      plan: Ember.Route.extend({
         route: '/plan'
       })
     })
