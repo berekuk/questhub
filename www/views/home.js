@@ -4,10 +4,5 @@ pp.views.Home = Backbone.View.extend({
 
     initialize: function () {
         this.setElement($(this.template()));
-        this.$el.find('.quest-collection').append(
-            new pp.views.QuestCollection({
-                quests: this.options.quests
-            }).render().el
-        );
     }
 });

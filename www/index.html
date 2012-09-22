@@ -43,6 +43,7 @@
                     <a href="#" data-toggle="dropdown">Quest</a>
                       <ul class="dropdown-menu" role="menu" aria-labelledby="questMenu">
                         <li><a href="#quest/add">Add</a></li>
+                        <li><a href="#quests">Quests</a></li>
                       </ul>
                   </li>
                 </ul>
@@ -80,8 +81,8 @@
 
     <script type="text/template" id="template-quest-collection">
         <div>
-        <h2>Список квестов</h2>
-        <% !hasQuests === 0 && print('У вас пока нет квестов...') %>
+        <h2>List of quests</h2>
+        <% !hasQuests === 0 && print('You haven\'t any quest yet...') %>
         </div>
     </script>
 
