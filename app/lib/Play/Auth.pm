@@ -21,7 +21,6 @@ get '/twitter' => sub {
         
         my $twitter_login = session->{twitter_user}->{screen_name};
         my $user = $users->find_one({twitter=>{login=>$twitter_login}});
-        debug "found user!! ". Dumper($user);
         if ($user) {
             session 'login' => $user->{login};
         }
@@ -33,20 +32,25 @@ prefix '/api';
 
 
 get '/user' => sub {
+
+    my $constraints = {};
     if (request->params->{login}) {
-         return { error => "TODO" };
+         $constraints->{login} = request->params->{login};
     }
-    if (request->params->{twitter_login}) {
-         return { error => "TODO" };
+    if (request->params->{"twitter.login"}) {
+         $constraints->{twitter}->{login} = request->params->{"twitter.login"};
     }
     
-    my $login = session->{login};
-    #TODO: cache in session
-    my $user = $users->find_one({login => $login});
-    return { 
-        twitter => { login => $user->{twitter}->{login} },
-        login => $user->{login},   
-    };
+    unless (%$constraints) {
+        $constraints->{login} = session->{login} or return { error => "not authorized" };
+    }
+    
+    my $user = $users->find_one($constraints);
+    unless ($user) {
+        return { error => "not found" };
+    }
+    $user->{_id} = "$user->{_id}";
+    return $user;
 };
 
 get '/session' => sub {
