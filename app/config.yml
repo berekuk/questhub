@@ -32,3 +32,6 @@ mongodb_session_db: "play_perl"
 mongodb_session_coll: "sessions"
 
 serializer: JSON
+
+!include filename: twitter.yml
+
