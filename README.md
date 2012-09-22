@@ -45,4 +45,4 @@ EOH
 end
 ```
 
-If someone else has edited the recipe, you can run `vagrant reload` to restart the VM and redeploy the chef configuration.
+You can run `vagrant provision` to redeploy the chef configuration.
