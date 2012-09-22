@@ -2,6 +2,9 @@ server {
   listen       80;
   server_name play.perl.org;
 
+  # Turn sendfile off because it behaves bad with vboxsf
+  sendfile off;
+
   access_log /web/access.log;
   error_log  /web/error.log info;
 
