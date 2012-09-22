@@ -1,0 +1,6 @@
+POST /quest/{id}        # update quest
+POST /quest             # add quest for current user
+GET /quests             # get all quests
+GET /quest/{id}         # get one quest
+GET /get_login          # get login
+GET /logout             # logout (FIXME - should be POST!)

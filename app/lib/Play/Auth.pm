@@ -3,14 +3,13 @@ package Play::Auth;
 use Dancer ':syntax';
 use Dancer::Plugin::Auth::Twitter;
 
-use MongoDB;
-
 use Play::Quests;
+use Play::Mongo;
 
 use Data::Dumper;
 auth_twitter_init();
 
-my $users = MongoDB::Connection->new(host => 'localhost', port => 27017)->play_perl->users;
+my $users = Play::Mongo->db->users;
 
 prefix '/auth';
 

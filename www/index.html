@@ -43,23 +43,22 @@
                     <a href="#" data-toggle="dropdown">Quest</a>
                       <ul class="dropdown-menu" role="menu" aria-labelledby="questMenu">
                         <li><a href="#quest/add">Add</a></li>
+                        <li><a href="#quests">Quests</a></li>
                       </ul>
                   </li>
                 </ul>
-                <p class="navbar-text pull-right">Login with <a href="#"><i class="icon-twitter icon-large"></i></a></p>
-                    <ul class="nav pull-right">
-                        <li class="current-user-box">
-                        </li>
+                <p class="navbar-text pull-right"></p>
+                    <ul class="nav pull-right current-user-box">
                     </ul>
               </div><!--/.nav-collapse -->
             </div>
           </div>
         </div>
-
         <div class="app-view-container container"></div>
     </script>
 
     <script type="text/template" id="template-home">
+      <div>
       <h1>Play Perl</h1>
       <p>Hello! You are on the play-perl.org site</p>
       <h2>Ради чего вообще это все?</h2>
@@ -76,20 +75,43 @@
           </li>
         </ol>
       </p>
+      <div class="quest-collection"></div>
+      </div>
+    </script>
+
+    <script type="text/template" id="template-quest-collection">
+        <div>
+        <h2>List of quests</h2>
+        <% !hasQuests === 0 && print('You haven\'t any quest yet...') %>
+        </div>
     </script>
 
     <script type="text/template" id="template-quest-add">
       <h1>Add a quest</h1>
       <div>
-        <textarea name="text" rows="5" placeholder="Quest description" class="span6"></textarea>
+        <textarea name="name" rows="5" placeholder="Quest description" class="span6"></textarea>
         <div>
           <button class="btn btn-primary btn-large submit">Add quest</button>
         </div>
       </div>
     </script>
+    <script type="text/template" id="template-quest">
+        <p>[<%= status %>] <%= name %> (<%= user %>)</p>
+    </script>
 
     <script type="text/template" id="template-current-user">
-        <a href="#"><%= login %></a>
+        <li class="dropdown">
+            <% if (logged === 1) { %>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= login %></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="#" class="logout">Logout</a>
+                    </li>
+                </ul>
+            <% } else { %>
+                <a href="/auth/twitter">Login with <i class="icon-twitter icon-large"></i></a>
+            <% } %>
+        </li>
     </script>
   </head>
 
@@ -112,10 +134,13 @@
 
     <script src="models/user.js"></script>
     <script src="models/quest.js"></script>
+    <script src="models/quest-collection.js"></script>
     <script src="views/user.js"></script>
     <script src="views/current-user.js"></script>
+    <script src="views/quest-collection.js"></script>
     <script src="views/home.js"></script>
     <script src="views/app.js"></script>
+    <script src="views/quest/quest.js"></script>
     <script src="views/quest/add.js"></script>
     <script src="app.js"></script>
 

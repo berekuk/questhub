@@ -12,7 +12,7 @@ use Play::Auth;
 
 my $quests = Play::Quests->new;
 
-'post' => '/quest/:id' => sub {
+post '/quest/:id' => sub {
     die "not logged in" unless session->{login};
     my $updated_id = $quests->update(
         param('id'),

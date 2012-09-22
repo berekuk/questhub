@@ -1,16 +1,14 @@
 package Play::Quests;
 
 use Moo;
-use MongoDB;
 use Params::Validate qw(:all);
+use Play::Mongo;
 
 has 'collection' => (
     is => 'ro',
     lazy => 1,
     default => sub {
-        my $connection = MongoDB::Connection->new(host => 'localhost', port => 27017);
-        my $db = $ENV{TEST_DB} || 'play';
-        return $connection->$db->quests;
+        return Play::Mongo->db->quests;
     },
 );
 
