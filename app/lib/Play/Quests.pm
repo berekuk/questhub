@@ -9,7 +9,8 @@ has 'collection' => (
     lazy => 1,
     default => sub {
         my $connection = MongoDB::Connection->new(host => 'localhost', port => 27017);
-        return $connection->play->quests;
+        my $db = $ENV{TEST_DB} || 'play';
+        return $connection->$db->quests;
     },
 );
 
@@ -39,7 +40,7 @@ sub add {
 
 sub update {
     my $self = shift;
-    my ($id, $params) = validate_pos(@_, { type => HASHREF });
+    my ($id, $params) = validate_pos(@_, { type => SCALAR }, { type => HASHREF });
 
     my $user = $params->{user};
     die 'no user' unless $user;
@@ -49,6 +50,7 @@ sub update {
         die "access denied";
     }
 
+    delete $quest->{_id};
     $self->collection->update(
         { _id => MongoDB::OID->new(value => $id) },
         { %$quest, %$params }

@@ -11,22 +11,25 @@ use Play::Quests;
 
 my $quests = Play::Quests->new;
 
-post '/quest/:id' => sub {
-    $quests->update(
+'post' => '/quest/:id' => sub {
+    die "not logged in" unless session->{login};
+    my $updated_id = $quests->update(
         param('id'),
         {
-            user => 'fake',
+            user => session->{login},
             map { param($_) ? ($_ => param($_)) : () } qw/ name status /,
         }
     );
     return {
-        ok => 1,
+        result => 'ok',
+        id => $updated_id,
     }
 };
 
 post '/quest' => sub {
+    die "not logged in" unless session->{login};
     $quests->add({
-        user => 'fake',
+        user => session->{login},
         name => param('name'),
         status => 'open',
     });
