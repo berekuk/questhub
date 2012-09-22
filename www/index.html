@@ -81,11 +81,7 @@
     <script type="text/template" id="template-quest-collection">
         <div>
         <h2>Список квестов</h2>
-        <% if (quests.length) { %>
-            Есть квесты, но их нужно вывести.
-        <% } else { %>
-            У вас пока нет квестов...
-        <% } %>
+        <% !hasQuests === 0 && print('У вас пока нет квестов...') %>
         </div>
     </script>
 
@@ -97,6 +93,9 @@
           <button class="btn btn-primary btn-large submit">Add quest</button>
         </div>
       </div>
+    </script>
+    <script type="text/template" id="template-quest">
+        <p>[<%= status %>] <%= name %> (<%= user %>)</p>
     </script>
 
     <script type="text/template" id="template-current-user">
@@ -140,6 +139,7 @@
     <script src="views/quest-collection.js"></script>
     <script src="views/home.js"></script>
     <script src="views/app.js"></script>
+    <script src="views/quest/quest.js"></script>
     <script src="views/quest/add.js"></script>
     <script src="app.js"></script>
 
