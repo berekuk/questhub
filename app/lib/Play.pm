@@ -59,7 +59,6 @@ get '/get_login' => sub {
 
 get '/logout' => sub {
 
-    session->destroy;
     session->destroy(session); #FIXME: workaround a buggy Dancer::Session::MongoDB
 
     return {
