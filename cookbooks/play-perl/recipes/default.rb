@@ -13,6 +13,7 @@ cpan_module 'JSON'
 cpan_module 'Params::Validate'
 cpan_module 'Moo'
 
+cpan_module 'Dancer::Serializer::JSON'
 cpan_module 'Dancer::Session::MongoDB'
 cpan_module 'Dancer::Plugin::Auth::Twitter'
 
