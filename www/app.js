@@ -12,7 +12,7 @@ $(function () {
             appView.setPageView(homeView);
         },
         questAdd: function() {
-            var questAddView = new pp.views.QuestAdd();
+            var questAddView = new pp.views.QuestAdd({ model: new pp.models.Quest() });
             appView.setPageView(questAddView);
         },
     }))();

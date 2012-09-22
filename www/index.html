@@ -75,9 +75,12 @@
     </script>
     <script type="text/template" id="template-quest-add">
       <h1>Add a quest</h1>
-      <form action="">
-        <textarea rows="5" placeholder="Quest description" class="span6"></textarea>
-      </form>
+      <div>
+        <textarea name="text" rows="5" placeholder="Quest description" class="span6"></textarea>
+        <div>
+          <button class="btn btn-primary btn-large submit">Add quest</button>
+        </div>
+      </div>
     </script>
   </head>
 
@@ -98,6 +101,7 @@
     </script>
 
     <script src="models/user.js"></script>
+    <script src="models/quest.js"></script>
     <script src="views/user.js"></script>
     <script src="views/home.js"></script>
     <script src="views/app.js"></script>
