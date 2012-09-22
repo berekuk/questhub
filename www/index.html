@@ -39,7 +39,18 @@
               <div class="nav-collapse collapse">
                 <ul class="nav">
                   <li class="active"><a href="#">Home</a></li>
+                  <li class="dropdown">
+                    <a href="#" data-toggle="dropdown">Quest</a>
+                      <ul class="dropdown-menu" role="menu" aria-labelledby="questMenu">
+                        <li><a href="#quest/add">Add</a></li>
+                      </ul>
+                  </li>
                 </ul>
+                <p class="navbar-text pull-right">Login with <a href="#"><i class="icon-twitter icon-large"></i></a></p>
+                    <ul class="nav pull-right">
+                        <li class="current-user-box">
+                        </li>
+                    </ul>
               </div><!--/.nav-collapse -->
             </div>
           </div>
@@ -66,6 +77,20 @@
         </ol>
       </p>
     </script>
+
+    <script type="text/template" id="template-quest-add">
+      <h1>Add a quest</h1>
+      <div>
+        <textarea name="text" rows="5" placeholder="Quest description" class="span6"></textarea>
+        <div>
+          <button class="btn btn-primary btn-large submit">Add quest</button>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="template-current-user">
+        <a href="#"><%= login %></a>
+    </script>
   </head>
 
   <body>
@@ -79,15 +104,19 @@
 
     <script>
         var pp = {
+            app: {},
             models: {},
             views: {}
         };
     </script>
 
     <script src="models/user.js"></script>
+    <script src="models/quest.js"></script>
     <script src="views/user.js"></script>
+    <script src="views/current-user.js"></script>
     <script src="views/home.js"></script>
     <script src="views/app.js"></script>
+    <script src="views/quest/add.js"></script>
     <script src="app.js"></script>
 
   </body>

@@ -1,5 +1,6 @@
 pp.models.User = Backbone.Model.extend({
 
-    urlRoot: '/api/user/'
-
+    url: function () {
+        return '/api/get_login';
+    }
 });
