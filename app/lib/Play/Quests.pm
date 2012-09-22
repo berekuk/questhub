@@ -13,12 +13,19 @@ has 'collection' => (
     },
 );
 
+sub _prepare_quest {
+    my $self = shift;
+    my ($quest) = @_;
+    $quest->{_id} = $quest->{_id}->to_string;
+    return $quest;
+}
+
 sub list {
     my $self = shift;
-    my ($user) = validate_pos(@_, { type => SCALAR });
+    my ($params) = validate_pos(@_, { type => HASHREF });
 
-    my @quests = $self->collection->find({ user => $user })->all;
-    $_->{_id} = $_->{_id}->to_string for @quests;
+    my @quests = $self->collection->find($params)->all;
+    $self->_prepare_quest($_) for @quests;
     return \@quests;
 }
 
@@ -34,7 +41,10 @@ sub get {
     my $self = shift;
     my ($id) = validate_pos(@_, { type => SCALAR });
 
-    my $quest = $self->collection->find_one({ _id => $id });
+    my $quest = $self->collection->find_one({
+        _id => MongoDB::OID->new(value => $id)
+    });
+    $self->_prepare_quest($quest);
     return $quest;
 
 }

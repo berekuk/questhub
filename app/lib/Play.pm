@@ -14,7 +14,7 @@ my $quests = Play::Quests->new;
 post '/quest' => sub {
     $quests->add({
         user => 'fake',
-        name => param('description'),
+        name => param('name'),
         status => 'open',
     });
     return {
@@ -24,14 +24,12 @@ post '/quest' => sub {
 
 get '/quests' => sub {
     return $quests->list({
-        user => 'fake'
+        map { param($_) ? ($_ => param($_)) : () } qw/ user status /,
     });
 };
 
 get '/quest/:id' => sub {
-    return $quests->get({
-        id => param('id')
-    });
+    return $quests->get(param('id'));
 };
 
 get '/api/login' => sub {
