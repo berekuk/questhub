@@ -8,7 +8,12 @@ $(function () {
         },
 
         index: function () {
-            var homeView = new pp.views.Home();
+            var questCollectionModel = new pp.models.QuestCollection();
+            questCollectionModel.fetch();
+
+            var homeView = new pp.views.Home({
+                quests: questCollectionModel
+            });
             appView.setPageView(homeView);
         },
 

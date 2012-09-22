@@ -55,11 +55,11 @@
             </div>
           </div>
         </div>
-
         <div class="app-view-container container"></div>
     </script>
 
     <script type="text/template" id="template-home">
+      <div>
       <h1>Play Perl</h1>
       <p>Hello! You are on the play-perl.org site</p>
       <h2>Ради чего вообще это все?</h2>
@@ -76,6 +76,19 @@
           </li>
         </ol>
       </p>
+      <div class="quest-collection"></div>
+      </div>
+    </script>
+
+    <script type="text/template" id="template-quest-collection">
+        <div>
+        <h2>Список квестов</h2>
+        <% if (quests.length) { %>
+            Есть квесты, но их нужно вывести.
+        <% } else { %>
+            У вас пока нет квестов...
+        <% } %>
+        </div>
     </script>
 
     <script type="text/template" id="template-quest-add">
@@ -110,10 +123,12 @@
         };
     </script>
 
+    <script src="models/quest-collection.js"></script>
     <script src="models/user.js"></script>
     <script src="models/quest.js"></script>
     <script src="views/user.js"></script>
     <script src="views/current-user.js"></script>
+    <script src="views/quest-collection.js"></script>
     <script src="views/home.js"></script>
     <script src="views/app.js"></script>
     <script src="views/quest/add.js"></script>
