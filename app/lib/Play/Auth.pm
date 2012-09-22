@@ -74,4 +74,22 @@ get '/new_login' => sub {
     return { status => "ok", user => $user };
 };
 
+get '/users' => sub {
+    my @users = $users->find()->all;
+    $_->{_id} = "$_->{_id}" for @users;
+    return \@users;
+};
+
+# TODO - remove before going to production
+get '/fakeuser/:login' => sub {
+    my $login = param('login');
+    session 'login' => $login;
+    session 'twitter_user' => { screen_name => $login };
+
+    my $user = { login => $login, twitter => { login => $login } };
+    $users->insert($user);
+
+    return { status => 'ok', user => $user };
+};
+
 true;
