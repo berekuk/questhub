@@ -13,6 +13,12 @@ server {
     expires max;
   }
 
+  location /auth {
+    try_files $uri @proxy;
+    access_log off;
+    expires max;
+  }
+
   location @proxy {
         proxy_set_header Host $http_host;
         proxy_set_header X-Forwarded-Host $host;
