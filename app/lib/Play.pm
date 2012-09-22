@@ -45,10 +45,32 @@ get '/quest/:id' => sub {
     return $quests->get(param('id'));
 };
 
-get '/api/login' => sub {
+get '/get_login' => sub {
     return {
-        logged => '1',
-        login => 'userlogin',
+        status => 'ok',
+        logged => (defined session->{login} ? 1 : 0),
+        login => session->{login},
+    };
+};
+
+get '/logout' => sub {
+
+    session->destroy;
+
+    return {
+        status => 'ok'
+    };
+};
+
+get qr{/fakelogin/([\w]*)} => sub {
+
+    my ($fakelogin) = splat;
+
+    session login => $fakelogin;
+
+    return {
+        status => 'ok',
+        fakelogin => $fakelogin,
     };
 };
 
