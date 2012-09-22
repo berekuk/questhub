@@ -1,2 +1,3 @@
 .vagrant
 .ruby-version
+/www/.sass-cache/*
