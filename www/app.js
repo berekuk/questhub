@@ -1,7 +1,7 @@
 $(function () {
     var appView = pp.app.view = new pp.views.App({el: $('#layout')});
 
-    var router = new (Backbone.Router.extend({
+    var router = pp.app.router = new (Backbone.Router.extend({
         routes: {
             "": "index",
             "quest/add": "questAdd"

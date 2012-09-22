@@ -6,8 +6,6 @@ pp.views.App = Backbone.View.extend({
         this._currentUserView = new pp.views.CurrentUser();
         this.$el.html(this.template());
         this._currentUserView.setElement(this.$el.find('.current-user-box'));
-
-        console.log(this.$el.find('.current-user-box'));
     },
 
     setPageView: function (page) {
