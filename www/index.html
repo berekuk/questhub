@@ -39,7 +39,14 @@
               <div class="nav-collapse collapse">
                 <ul class="nav">
                   <li class="active"><a href="#">Home</a></li>
+                  <li class="dropdown">
+                    <a href="#" data-toggle="dropdown">Quest</a>
+                      <ul class="dropdown-menu" role="menu" aria-labelledby="questMenu">
+                        <li><a href="#quest/add">Add</a></li>
+                      </ul>
+                  </li>
                 </ul>
+                <p class="navbar-text pull-right">Login with <a href="#"><i class="icon-twitter icon-large"></i></a></p>
               </div><!--/.nav-collapse -->
             </div>
           </div>
@@ -66,6 +73,12 @@
         </ol>
       </p>
     </script>
+    <script type="text/template" id="template-quest-add">
+      <h1>Add a quest</h1>
+      <form action="">
+        <textarea rows="5" placeholder="Quest description" class="span6"></textarea>
+      </form>
+    </script>
   </head>
 
   <body>
@@ -88,6 +101,7 @@
     <script src="views/user.js"></script>
     <script src="views/home.js"></script>
     <script src="views/app.js"></script>
+    <script src="views/quest/add.js"></script>
     <script src="app.js"></script>
 
   </body>
