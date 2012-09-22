@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Play Perl</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href="vendors/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="vendors/fontawesome/css/font-awesome.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="vendors/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="vendors/bootstrap/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="vendors/bootstrap/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="vendors/bootstrap/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="vendors/bootstrap/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="vendors/bootstrap/ico/apple-touch-icon-57-precomposed.png">
+
+    <script type="text/template" id="template-app">
+        <div class="navbar navbar-inverse navbar-fixed-top">
+          <div class="navbar-inner">
+            <div class="container">
+              <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </a>
+              <a class="brand" href="#">Play Perl</a>
+              <div class="nav-collapse collapse">
+                <ul class="nav">
+                  <li class="active"><a href="#">Home</a></li>
+                </ul>
+              </div><!--/.nav-collapse -->
+            </div>
+          </div>
+        </div>
+
+        <div class="app-view-container container"></div>
+    </script>
+
+    <script type="text/template" id="template-home">
+      <h1>Play Perl</h1>
+      <p>Hello! You are on the play-perl.org site</p>
+      <h2>Ради чего вообще это все?</h2>
+      <p>
+        <ol>
+          <li>
+  Помочь людям больше помогать развитию опенсорса за счет увеличения количества фана. Или просто, "больше фана от участия в опенсорсе".
+          </li>
+          <li>
+  Больше публичности и связности. Помочь людям в донесении до окружающих того, что они сделали. Увеличить количество фидбека.
+          </li>
+          <li>
+  Больше менеджмента. Стоп, это как-то неправильно звучит. Больше структуры и приоритезации.
+          </li>
+        </ol>
+      </p>
+    </script>
+  </head>
+
+  <body>
+    <div id="layout"></div>
+
+    <script src="http://yandex.st/jquery/1.8.2/jquery.min.js"></script>
+    <script src="vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendors/underscore-min.js"></script>
+    <script src="vendors/backbone-min.js"></script>
+    <script src="vendors/jquery.cookie.js"></script>
+
+    <script>
+        var pp = {
+            models: {},
+            views: {}
+        };
+    </script>
+
+    <script src="models/user.js"></script>
+    <script src="views/user.js"></script>
+    <script src="views/home.js"></script>
+    <script src="views/app.js"></script>
+    <script src="app.js"></script>
+
+  </body>
+</html>
