@@ -9,6 +9,9 @@ package 'perl-doc'
 
 cpan_module 'Dancer'
 cpan_module 'MongoDB'
+cpan_module 'JSON'
+cpan_module 'Params::Validate'
+cpan_module 'Moo'
 
 include_recipe "mongodb::default"
 
