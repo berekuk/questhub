@@ -4,6 +4,7 @@ package 'vim'
 package 'git'
 package 'screen'
 package 'libdancer-perl'
+package 'libmongodb-perl'
 
 include_recipe "mongodb::default"
 
