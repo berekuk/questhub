@@ -27,6 +27,10 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="vendors/bootstrap/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="vendors/bootstrap/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="vendors/bootstrap/ico/apple-touch-icon-57-precomposed.png">
+
+    <script type="text/template" id="app">
+        <div>Oops!<div>
+    </script>
   </head>
 
   <body>
@@ -73,19 +77,23 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="vendors/bootstrap/js/jquery.js"></script>
-    <script src="vendors/bootstrap/js/bootstrap-transition.js"></script>
-    <script src="vendors/bootstrap/js/bootstrap-alert.js"></script>
-    <script src="vendors/bootstrap/js/bootstrap-modal.js"></script>
-    <script src="vendors/bootstrap/js/bootstrap-dropdown.js"></script>
-    <script src="vendors/bootstrap/js/bootstrap-scrollspy.js"></script>
-    <script src="vendors/bootstrap/js/bootstrap-tab.js"></script>
-    <script src="vendors/bootstrap/js/bootstrap-tooltip.js"></script>
-    <script src="vendors/bootstrap/js/bootstrap-popover.js"></script>
-    <script src="vendors/bootstrap/js/bootstrap-button.js"></script>
-    <script src="vendors/bootstrap/js/bootstrap-collapse.js"></script>
-    <script src="vendors/bootstrap/js/bootstrap-carousel.js"></script>
-    <script src="vendors/bootstrap/js/bootstrap-typeahead.js"></script>
+    <script src="http://yandex.st/jquery/1.8.2/jquery.min.js"></script>
+
+    <script src="vendors/bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="vendors/underscore-min.js"></script>
+    <script src="vendors/backbone-min.js"></script>
+
+    <script>
+        var pp = {
+            models: {},
+            views: {}
+        };
+    </script>
+    <script src="models/user.js"></script>
+    <script src="views/user.js"></script>
+    <script src="views/app.js"></script>
+    <script src="app.js"></script>
 
   </body>
 </html>
