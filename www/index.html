@@ -113,6 +113,13 @@
             <% } %>
         </li>
     </script>
+
+    <script type="text/template" id="template-error">
+        <div class="alert alert-error">
+          <button type="button" class="close" data-dismiss="alert">×</button>
+          <%= response.error %>
+        </div>
+    </script>
   </head>
 
   <body>
@@ -140,6 +147,7 @@
     <script src="views/quest-collection.js"></script>
     <script src="views/home.js"></script>
     <script src="views/app.js"></script>
+    <script src="views/error.js"></script>
     <script src="views/quest/quest.js"></script>
     <script src="views/quest/add.js"></script>
     <script src="app.js"></script>
