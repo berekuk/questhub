@@ -33,7 +33,8 @@ sub add {
     my $self = shift;
     my ($params) = validate_pos(@_, { type => HASHREF });
 
-    return $self->collection->insert($params);
+    my $id = $self->collection->insert($params);
+    return $id->to_string;
 }
 
 sub update {

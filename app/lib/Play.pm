@@ -22,20 +22,21 @@ post '/quest/:id' => sub {
         }
     );
     return {
-        result => 'ok',
+        status => 'ok',
         id => $updated_id,
     }
 };
 
 post '/quest' => sub {
     die "not logged in" unless session->{login};
-    $quests->add({
+    my $id = $quests->add({
         user => session->{login},
         name => param('name'),
         status => 'open',
     });
     return {
-        ok => 1,
+        status => 'ok',
+        id => $id,
     }
 };
 
