@@ -10,6 +10,9 @@ package 'perl-doc'
 cpan_module 'Dancer'
 cpan_module 'MongoDB'
 
+cpan_module 'Dancer::Session::MongoDB'
+cpan_module 'Dancer::Plugin::Auth::Twitter'
+
 include_recipe "mongodb::default"
 
 template "/etc/resolv.conf" do
