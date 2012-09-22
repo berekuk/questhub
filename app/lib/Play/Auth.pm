@@ -9,11 +9,12 @@ auth_twitter_init();
 
 prefix '/auth';
 
-get 'twitter' => sub {
+get '/twitter' => sub {
     if (not session('twitter_user')) {
         redirect auth_twitter_authenticate_url;
+    } else {
+    	redirect "/";
     }
-    redirect "/";
 };
 
 get '/user' => sub {
