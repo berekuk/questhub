@@ -37,6 +37,26 @@ sub add {
     return $self->collection->insert($params);
 }
 
+sub update {
+    my $self = shift;
+    my ($id, $params) = validate_pos(@_, { type => HASHREF });
+
+    my $user = $params->{user};
+    die 'no user' unless $user;
+
+    my $quest = $self->get($id);
+    unless ($quest->{user} eq $user) {
+        die "access denied";
+    }
+
+    $self->collection->update(
+        { _id => MongoDB::OID->new(value => $id) },
+        { %$quest, %$params }
+    );
+
+    return $id;
+}
+
 sub get {
     my $self = shift;
     my ($id) = validate_pos(@_, { type => SCALAR });
@@ -44,9 +64,9 @@ sub get {
     my $quest = $self->collection->find_one({
         _id => MongoDB::OID->new(value => $id)
     });
+    die "no such quest" unless $quest;
     $self->_prepare_quest($quest);
     return $quest;
-
 }
 
 1;

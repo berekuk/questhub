@@ -11,6 +11,19 @@ use Play::Quests;
 
 my $quests = Play::Quests->new;
 
+post '/quest/:id' => sub {
+    $quests->update(
+        param('id'),
+        {
+            user => 'fake',
+            map { param($_) ? ($_ => param($_)) : () } qw/ name status /,
+        }
+    );
+    return {
+        ok => 1,
+    }
+};
+
 post '/quest' => sub {
     $quests->add({
         user => 'fake',
