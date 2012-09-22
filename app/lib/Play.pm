@@ -11,14 +11,26 @@ use Play::Quests;
 
 my $quests = Play::Quests->new;
 
-get '/quest/list' => sub {
-    return $quests->list('fake');
+'post' => '/quest/:id' => sub {
+    die "not logged in" unless session->{login};
+    my $updated_id = $quests->update(
+        param('id'),
+        {
+            user => session->{login},
+            map { param($_) ? ($_ => param($_)) : () } qw/ name status /,
+        }
+    );
+    return {
+        result => 'ok',
+        id => $updated_id,
+    }
 };
 
-post '/quest/add' => sub {
+post '/quest' => sub {
+    die "not logged in" unless session->{login};
     $quests->add({
-        user => 'fake',
-        name => param('description'),
+        user => session->{login},
+        name => param('name'),
         status => 'open',
     });
     return {
@@ -26,10 +38,42 @@ post '/quest/add' => sub {
     }
 };
 
-get '/api/login' => sub {
+get '/quests' => sub {
+    return $quests->list({
+        map { param($_) ? ($_ => param($_)) : () } qw/ user status /,
+    });
+};
+
+get '/quest/:id' => sub {
+    return $quests->get(param('id'));
+};
+
+get '/get_login' => sub {
     return {
-        logged => '1',
-        login => 'userlogin',
+        status => 'ok',
+        logged => (defined session->{login} ? 1 : 0),
+        login => session->{login},
+    };
+};
+
+get '/logout' => sub {
+
+    session->destroy;
+
+    return {
+        status => 'ok'
+    };
+};
+
+get qr{/fakelogin/([\w]*)} => sub {
+
+    my ($fakelogin) = splat;
+
+    session login => $fakelogin;
+
+    return {
+        status => 'ok',
+        fakelogin => $fakelogin,
     };
 };
 
