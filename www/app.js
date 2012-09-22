@@ -10,11 +10,13 @@ $(function () {
 
         index: function () {
             appView.setPageView(new pp.views.Home());
+            setActiveMenuItem('home');
         },
 
         questAdd: function () {
             var questAddView = new pp.views.QuestAdd({ model: new pp.models.Quest() });
             appView.setPageView(questAddView);
+            setActiveMenuItem('quest');
         },
 
         quests: function () {
@@ -24,8 +26,18 @@ $(function () {
             appView.setPageView(new pp.views.QuestCollection({
                 quests: questCollectionModel
             }));
+            setActiveMenuItem('quest');
         }
     }))();
+
+    function setActiveMenuItem(selector) {
+        appView.$el
+            .find('.active')
+                .removeClass('active')
+                .end()
+            .find('.menu-item-' + selector)
+                .addClass('active');
+    }
 
     Backbone.history.start();
 });
