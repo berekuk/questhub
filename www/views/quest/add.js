@@ -32,7 +32,7 @@ pp.views.QuestAdd = Backbone.View.extend({
         $('#layout > .container').prepend(
                     new pp.views.Notify({
                         // Whoops! It is injection here, model.name should be sanitized
-                        text: 'Quest "'+model.name+'"" has been add succesfully added'
+                        text: 'Quest "'+model.get('name')+'" has been add succesfully added'
                     }).render().el
         );
     }
