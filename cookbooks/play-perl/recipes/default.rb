@@ -1,8 +1,17 @@
 require_recipe "mongodb"
+require_recipe "perl"
 
 package 'vim'
 package 'git'
-package 'libdancer-perl'
+package 'screen'
+package 'make'
+package 'perl-doc'
+
+cpan_module 'Dancer'
+cpan_module 'MongoDB'
+
+cpan_module 'Dancer::Session::MongoDB'
+cpan_module 'Dancer::Plugin::Auth::Twitter'
 
 include_recipe "mongodb::default"
 

@@ -5,8 +5,9 @@ server {
   access_log /web/access.log;
   error_log  /web/error.log info;
 
-  root /vagrant/app/public;
-  location / {
+  root /vagrant/www/app;
+
+  location /api {
     try_files $uri @proxy;
     access_log off;
     expires max;
