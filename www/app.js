@@ -5,6 +5,7 @@ $(function () {
         routes: {
             "": "index",
             "quest/add": "questAdd",
+            "quest/:id": "questShow",
             "quests": "quests"
         },
 
@@ -16,6 +17,12 @@ $(function () {
         questAdd: function () {
             var questAddView = new pp.views.QuestAdd({ model: new pp.models.Quest() });
             appView.setPageView(questAddView);
+            setActiveMenuItem('quest');
+        },
+
+        questShow: function (id) {
+            var questShowView = new pp.views.QuestShow({ model: new pp.models.Quest({ id: id }) });
+            appView.setPageView(questShowView);
             setActiveMenuItem('quest');
         },
 

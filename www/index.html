@@ -123,7 +123,11 @@
     <script type="text/template" id="template-error">
         <div class="alert alert-error">
           <button type="button" class="close" data-dismiss="alert">×</button>
-          <%= response.error %>
+          <% if (response && response.error) { %>
+            <%= response.error %>
+          <% } else { %>
+            Unknown error
+          <% } %>
         </div>
     </script>
 
@@ -132,6 +136,22 @@
           <button type="button" class="close" data-dismiss="alert">×</button>
           <%= text %>
         </div>
+    </script>
+
+    <script type="text/template" id="template-quest-show">
+
+      <h1><%= name %></h1>
+      <div class="quest-details">
+        <span class="label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
+      </div>
+    </script>
+    <script type="text/template" id="template-quest">
+        <tr class="<%= status === 'open' && 'warning' %>">
+            <td>
+                <span class="label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
+                <a href="#quest/<%= _id %>"><%= name  %></a>
+            </td>
+        </tr>
     </script>
   </head>
 
@@ -164,6 +184,7 @@
     <script src="views/notify.js"></script>
     <script src="views/quest/quest.js"></script>
     <script src="views/quest/add.js"></script>
+    <script src="views/quest/show.js"></script>
     <script src="app.js"></script>
 
   </body>
