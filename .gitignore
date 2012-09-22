@@ -1,3 +1,4 @@
 .vagrant
 .ruby-version
 /www/.sass-cache/*
+app/twitter.yml
