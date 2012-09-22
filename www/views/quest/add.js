@@ -14,7 +14,7 @@ pp.views.QuestAdd = Backbone.View.extend({
     		'name': this.$('[name=name]').val()
     	},
         {
-            'success': function() {},
+            'success': this.onSuccess,
             'error': this.onError
         });
     },
@@ -25,6 +25,15 @@ pp.views.QuestAdd = Backbone.View.extend({
                         response: response
                     }).render().el
                 );
-                //console.log(.error)
-            }
+            },
+    
+    onSuccess: function (model) {
+        pp.app.router.navigate('quests', { trigger: true });
+        $('#layout > .container').prepend(
+                    new pp.views.Notify({
+                        // Whoops! It is injection here, model.name should be sanitized
+                        text: 'Quest "'+model.name+'"" has been add succesfully added'
+                    }).render().el
+        );
+    }
 });
