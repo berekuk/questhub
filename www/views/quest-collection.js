@@ -16,7 +16,7 @@ pp.views.QuestCollection = Backbone.View.extend({
 
     onAdd: function (quest) {
         var view = new pp.views.Quest({model: quest});
-        this.$el.append(view.render().el);
+        this.$el.find('.quests-list').append(view.render().el);
     },
 
     onReset: function () {
