@@ -5,10 +5,14 @@ pp.views.QuestCollection = Backbone.View.extend({
     template: _.template($('#template-quest-collection').text()),
 
     initialize: function () {
-        this.setElement(
-            $(this.template({
-                quests: this.options.collection.models
-            }))
-        );
+        this.options.quests.on('reset', this.render, this);
+        this.options.quests.on('update', this.render, this);
+    },
+
+    render: function (collection) {
+        if (collection) {
+            this.$el.html(this.template({quests: this.options.quests}));
+        }
+        return this;
     }
 });

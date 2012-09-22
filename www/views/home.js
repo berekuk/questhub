@@ -6,7 +6,7 @@ pp.views.Home = Backbone.View.extend({
         this.setElement($(this.template()));
         this.$el.find('.quest-collection').append(
             new pp.views.QuestCollection({
-                collection: this.options.quests
+                quests: this.options.quests
             }).render().el
         );
     }
