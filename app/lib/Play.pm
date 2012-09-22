@@ -11,11 +11,7 @@ use Play::Quests;
 
 my $quests = Play::Quests->new;
 
-get '/quest/list' => sub {
-    return $quests->list('fake');
-};
-
-post '/quest/add' => sub {
+post '/quest' => sub {
     $quests->add({
         user => 'fake',
         name => param('description'),
@@ -24,6 +20,18 @@ post '/quest/add' => sub {
     return {
         ok => 1,
     }
+};
+
+get '/quests' => sub {
+    return $quests->list({
+        user => 'fake'
+    });
+};
+
+get '/quest/:id' => sub {
+    return $quests->get({
+        id => param('id')
+    });
 };
 
 get '/api/login' => sub {

@@ -30,4 +30,13 @@ sub add {
     return $self->collection->insert($params);
 }
 
+sub get {
+    my $self = shift;
+    my ($id) = validate_pos(@_, { type => SCALAR });
+
+    my $quest = $self->collection->find_one({ _id => $id });
+    return $quest;
+
+}
+
 1;
