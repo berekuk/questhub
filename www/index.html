@@ -83,6 +83,7 @@
         <div>
         <h2>List of quests</h2>
         <% !hasQuests === 0 && print('You haven\'t any quest yet...') %>
+        <table class="table table-bordered quests-list"></table>
         </div>
     </script>
 
@@ -96,7 +97,12 @@
       </div>
     </script>
     <script type="text/template" id="template-quest">
-        <p>[<%= status %>] <%= name %> (<%= user %>)</p>
+        <tr class="<%= status === 'open' && 'warning' %>">
+            <td>
+                <span class="label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
+                <a href="#quest/<%= _id %>"><%= name  %></a>
+            </td>
+        </tr>
     </script>
 
     <script type="text/template" id="template-current-user">
