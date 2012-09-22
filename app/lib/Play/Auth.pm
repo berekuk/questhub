@@ -7,14 +7,14 @@ use Play::Quests;
 
 auth_twitter_init();
 
-before sub {
-    return if request->path =~ m{/auth/twitter/callback};
+prefix '/auth';
+
+get 'twitter' => sub {
     if (not session('twitter_user')) {
         redirect auth_twitter_authenticate_url;
     }
+    redirect "/";
 };
-
-prefix '/auth';
 
 get '/user' => sub {
     return { twitter => session('twitter_user') };

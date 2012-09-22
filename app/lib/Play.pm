@@ -27,4 +27,33 @@ post '/quest/add' => sub {
     }
 };
 
+get '/get_login' => sub {
+    return {
+        status => 'ok',
+        logged => (defined session->{login} ? 1 : 0),
+        login => session->{login},
+    };
+};
+
+get '/logout' => sub {
+
+    session->destroy;
+
+    return {
+        status => 'ok'
+    };
+};
+
+get qr{/fakelogin/([\w]*)} => sub {
+
+    my ($fakelogin) = splat;
+
+    session login => $fakelogin;
+
+    return {
+        status => 'ok',
+        fakelogin => $fakelogin,
+    };
+};
+
 true;
