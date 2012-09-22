@@ -11,7 +11,7 @@ pp.views.QuestAdd = Backbone.View.extend({
 
     saveToModel: function() {
     	this.model.save({
-    		'text': this.$('[name=text]').val()
+    		'name': this.$('[name=name]').val()
     	});
     }
 });

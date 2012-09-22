@@ -66,16 +66,4 @@ get '/logout' => sub {
     };
 };
 
-get qr{/fakelogin/([\w]*)} => sub {
-
-    my ($fakelogin) = splat;
-
-    session login => $fakelogin;
-
-    return {
-        status => 'ok',
-        fakelogin => $fakelogin,
-    };
-};
-
 true;
