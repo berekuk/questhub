@@ -28,7 +28,7 @@ template: "simple"
 #     end_tag:   '%]'
 
 session: "MongoDB"
-mongodb_session_db: "play_perl"
+mongodb_session_db: "play"
 mongodb_session_coll: "sessions"
 
 serializer: JSON
