@@ -1,3 +1,17 @@
+require.config({
+  shim: {
+  },
 
+ paths: {
+    ember: '../../components/ember',
 
-var Www = Ember.Application.create();
+    hm: 'vendor/hm',
+    esprima: 'vendor/esprima',
+    jquery: 'vendor/jquery.min'
+  }
+});
+ 
+require(['app'], function(app) {
+  // use app here
+  console.log(app);
+});
