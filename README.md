@@ -46,3 +46,23 @@ end
 ```
 
 You can run `vagrant provision` to redeploy the chef configuration.
+
+=========
+
+## API
+
+### /api/get_login
+
+    {
+       "status" : "ok",
+       "logged" : 1,
+       "login" : "mememe"
+    }
+
+### /api/logout
+
+Kills currect session
+
+### /api/fakelogin/username
+
+Log you as user with login username
