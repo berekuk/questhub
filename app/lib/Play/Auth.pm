@@ -74,4 +74,10 @@ get '/new_login' => sub {
     return { status => "ok", user => $user };
 };
 
+get '/users' => sub {
+    my @users = $users->find()->all;
+    $_->{_id} = "$$_->{_id}" for @users;
+    return \@users;
+};
+
 true;

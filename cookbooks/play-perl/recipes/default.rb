@@ -12,6 +12,7 @@ cpan_module 'MongoDB'
 cpan_module 'JSON'
 cpan_module 'Params::Validate'
 cpan_module 'Moo'
+cpan_module 'Test::Deep'
 
 cpan_module 'Dancer::Serializer::JSON'
 cpan_module 'Dancer::Session::MongoDB'
