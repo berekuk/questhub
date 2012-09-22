@@ -38,5 +38,5 @@ plugins:
     consumer_key:     "fkOCnMftQeZBItRnaTipA"
     consumer_secret:  "Yr4UiHIzky8mCn0nMpApea5xc8ClGfvFN7C6XtnH54Y"
     callback_url:     "http://localhost:3000/auth/twitter/callback"
-    callback_success: "/"
+    callback_success: "/auth/twitter"
     callback_fail:    "/fail"
