@@ -1,5 +1,29 @@
-<h1>application</h1>
-
-<p>Your content here.</p>
-
-{{outlet}}
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <a class="brand" href="#">Play Perl</a>
+      <div class="nav-collapse collapse">
+        <ul class="nav">
+          <li class="active menu-item-home"><a href="#">Home</a></li>
+          <li class="dropdown menu-item-quest">
+            <a href="#" data-toggle="dropdown">Quest</a>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="questMenu">
+                <li><a href="#quest/add">Add</a></li>
+                <li><a href="#quests">Quests</a></li>
+              </ul>
+          </li>
+        </ul>
+        <p class="navbar-text pull-right"></p>
+        <ul class="nav pull-right current-user-box"></ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+</div>
+<div class="app-view-container container">
+  {{outlet}}
+</div>
