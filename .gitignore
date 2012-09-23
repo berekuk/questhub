@@ -1,5 +1,5 @@
 .vagrant
 .ruby-version
-/www/.sass-cache/*
+static/.sass-cache/*
 app/twitter.yml
 *.swp
