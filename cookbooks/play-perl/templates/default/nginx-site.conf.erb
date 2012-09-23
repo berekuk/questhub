@@ -8,7 +8,7 @@ server {
   access_log /web/access.log;
   error_log  /web/error.log info;
 
-  root /vagrant/static;
+  root /vagrant/static/app;
 
   location /api {
     try_files $uri @proxy;
