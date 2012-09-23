@@ -1,15 +1,24 @@
 PlayPerl.Router = Ember.Router.extend({
   root: Ember.Route.extend({
     index: Ember.Route.extend({
-      route: '/'
+      route: '/',
+      redirectsTo: 'home'
+    }),
+    home: Ember.Route.extend({
+      route: '/home'
+    }),
+    quests: Ember.Route.extend({
+      route: '/quests'.
 
-      // You'll likely want to connect a view here.
-      // connectOutlets: function(router) {
-      //   router.get('applicationController').connectOutlet(App.MainView);
-      // }
-
-      // Layout your routes here...
-    })
+      index: Ember.Route.extend({
+        route: '/'
+      }),
+      create: Ember.Route.extend({
+        route: '/create'
+      }),
+      read: Ember.Route.extend({
+        route: '/:id'
+      }),
+    }),
   })
 });
-
