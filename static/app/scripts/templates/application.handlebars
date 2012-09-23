@@ -6,15 +6,15 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <a class="brand" href="#">Play Perl</a>
+      <a class="brand" href="{{urlFor "index"}}">Play Perl</a>
       <div class="nav-collapse collapse">
         <ul class="nav">
-          <li class="active menu-item-home"><a href="#">Home</a></li>
+          <li class="active menu-item-home"><a href="{{urlFor "home"}}">Home</a></li>
           <li class="dropdown menu-item-quest">
             <a href="#" data-toggle="dropdown">Quest</a>
               <ul class="dropdown-menu" role="menu" aria-labelledby="questMenu">
-                <li><a href="#quest/add">Add</a></li>
-                <li><a href="#quests">Quests</a></li>
+                <li><a href="{{urlFor "quests.create"}}">Add</a></li>
+                <li><a href="{{urlFor "quests.index"}}">List</a></li>
               </ul>
           </li>
         </ul>
