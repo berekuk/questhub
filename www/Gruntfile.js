@@ -164,19 +164,8 @@ module.exports = function( grunt ) {
       // no minification, is done by the min task
       optimize: 'none',
       baseUrl: './scripts',
-      wrap: true,
-      name: 'main'
+      wrap: true
     },
-
-    // While Yeoman handles concat/min when using
-    // usemin blocks, you can still use them manually
-    concat: {
-      dist: ''
-    },
-
-    min: {
-      dist: ''
-    }
   });
 
   // Alias the `test` task to run the `mocha` task instead
