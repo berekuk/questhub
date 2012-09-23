@@ -5,10 +5,17 @@ module.exports = function( grunt ) {
   //
   // https://github.com/cowboy/grunt/blob/master/docs/getting_started.md
   //
+  grunt.loadNpmTasks('grunt-ember-handlebars');
   grunt.initConfig({
 
     // Project configuration
     // ---------------------
+    ember_handlebars: {
+      dist: {
+        src: ['app/scripts/templates/**/*.handlebars'],
+        dest: 'app/scripts/templates/'
+      },
+    },
 
     // specify an alternate install location for Bower
     bower: {
@@ -67,6 +74,10 @@ module.exports = function( grunt ) {
           'app/images/**/*'
         ],
         tasks: 'reload'
+      },
+      handlebars: {
+        files: [ 'app/scripts/templates/**/*.handlebars' ],
+        tasks: 'ember_handlebars reload'
       }
     },
 
@@ -171,4 +182,8 @@ module.exports = function( grunt ) {
   // Alias the `test` task to run the `mocha` task instead
   grunt.registerTask('test', 'mocha');
 
+  grunt.renameTask('server', 'yeoman-server');
+  grunt.registerTask('server', function() {
+    grunt.task.run('yeoman-server ember_handlebars')
+  });
 };

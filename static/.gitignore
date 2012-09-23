@@ -1,2 +1,4 @@
 temp
 dist
+app/scripts/templates/*.js
+node_modules
