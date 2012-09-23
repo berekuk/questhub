@@ -8,7 +8,7 @@ PlayPerl.Router = Ember.Router.extend({
       route: '/home'
     }),
     quests: Ember.Route.extend({
-      route: '/quests'.
+      route: '/quests',
 
       index: Ember.Route.extend({
         route: '/'
