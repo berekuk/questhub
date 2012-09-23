@@ -184,6 +184,6 @@ module.exports = function( grunt ) {
 
   grunt.renameTask('server', 'yeoman-server');
   grunt.registerTask('server', function() {
-    grunt.task.run('yeoman-server ember_handlebars')
+    grunt.task.run('ember_handlebars yeoman-server')
   });
 };
