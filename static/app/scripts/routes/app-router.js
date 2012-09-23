@@ -5,7 +5,10 @@ PlayPerl.Router = Ember.Router.extend({
       redirectsTo: 'home'
     }),
     home: Ember.Route.extend({
-      route: '/home'
+      route: '/home',
+      connectOutlets: function(router) {
+        router.get('applicationController').connectOutlet('home');
+      }
     }),
     quests: Ember.Route.extend({
       route: '/quests',

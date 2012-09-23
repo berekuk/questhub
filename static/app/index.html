@@ -13,22 +13,6 @@
 
     </head>
     <body>
-    <div class="container">
-        <div class="hero-unit">
-            <h1>Cheerio!</h1>
-            <p>You now have</p>
-            <ul>
-                <li>HTML5 Boilerplate</li>
-                <li>jQuery</li>
-                <li>Ember 1.0pre</li>
-                <li>Handlebars 1.0 beta</li>
-                <li>Mocha</li>
-            </ul>
-            <p>installed.</p>
-            <h3>Enjoy coding! - Yeoman</h3>
-        </div>
-    </div>
-
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
         <![endif]-->
@@ -47,8 +31,12 @@
         <script src="scripts/routes/app-router.js"></script>
         <script src="scripts/store.js"></script>
         <script src="scripts/controllers/application-controller.js"></script>
+        <script src="scripts/controllers/home-controller.js"></script>
         <script src="scripts/models/application-model.js"></script>
         <script src="scripts/views/application-view.js"></script>
+        <script src="scripts/views/home-view.js"></script>
+        <script src="scripts/templates/application.js"></script>
+        <script src="scripts/templates/home.js"></script>
 
         <script src="scripts/vendor/bootstrap/bootstrap-affix.js"></script>
         <script src="scripts/vendor/bootstrap/bootstrap-alert.js"></script>
@@ -64,7 +52,9 @@
         <script src="scripts/vendor/bootstrap/bootstrap-collapse.js"></script>
         <script src="scripts/vendor/bootstrap/bootstrap-tab.js"></script>
         <!-- endbuild -->
-
+        <script>
+            PlayPerl.initialize();
+        </script>
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
             var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
