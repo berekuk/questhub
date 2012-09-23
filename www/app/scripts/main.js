@@ -1,3 +1,3 @@
 
 
-var Www = Ember.Application.create();
+var PlayPerl = Ember.Application.create();

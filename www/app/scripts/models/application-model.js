@@ -1,3 +1,3 @@
 
 // Requires Ember-Data
-// Www.Application = DS.Model.extend({});
+// PlayPerl.Application = DS.Model.extend({});

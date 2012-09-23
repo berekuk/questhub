@@ -1,4 +1,4 @@
-Www.Router = Ember.Router.extend({
+PlayPerl.Router = Ember.Router.extend({
   root: Ember.Route.extend({
     index: Ember.Route.extend({
       route: '/'

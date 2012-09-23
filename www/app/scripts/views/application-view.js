@@ -1,3 +1,3 @@
-Www.ApplicationView = Ember.View.extend({
+PlayPerl.ApplicationView = Ember.View.extend({
   templateName: 'application'
 });
