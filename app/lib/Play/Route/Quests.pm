@@ -29,7 +29,7 @@ post '/quest' => sub {
         status => 'open',
     });
     return {
-        ok => 1,
+        result => 'ok',
         id => $id,
     }
 };

@@ -159,7 +159,7 @@ my ( $quests, $collection, $ids );
     $subtestname = 'Edit specified quest - OK';
     $got         = JSON::decode_json( $response->{content} );
                    delete $got->{id};
-    $expect      = { status  => 'ok' };
+    $expect      = { result  => 'ok' };
     cmp_deeply( $got, $expect, $subtestname )
         or note explain 'got',    $got,
                         'expect', $expect;
@@ -217,7 +217,7 @@ my ( $quests, $collection, $ids );
     $subtestname = 'Add new, data - OK';
     $got         = JSON::decode_json( $response->{content} );
     my $got_id = delete $got->{id};
-    $expect      = { status  => 'ok' };
+    $expect      = { result  => 'ok' };
     cmp_deeply( $got, $expect, $subtestname )
         or note explain 'got',    $got,
                         'expect', $expect;
