@@ -22,8 +22,10 @@ my $json = JSON->new;
 }
 
 {
-    my $add_result = dancer_response GET => '/api/fakeuser/blah';
-    is $add_result->status, 200;
+    for my $user (qw( blah blah2 )) {
+        my $add_result = dancer_response GET => "/api/fakeuser/$user";
+        is $add_result->status, 200;
+    }
 }
 
 {
@@ -31,11 +33,41 @@ my $json = JSON->new;
     is $user->status, 200;
     cmp_deeply $json->decode($user->content), {
         "twitter" => {
-            "login" => 'blah',
+            "login" => 'blah2',
         },
         "_id" => re('\S+'),
-        "login" => 'blah',
+        "login" => 'blah2',
     };
+}
+
+{
+    my $user = dancer_response GET => '/api/users';
+    is $user->status, 200;
+    cmp_deeply $json->decode($user->content), [
+        {
+            "twitter" => {
+                "login" => 'blah',
+            },
+            "_id" => re('\S+'),
+            "login" => 'blah',
+        },
+        {
+            "twitter" => {
+                "login" => 'blah2',
+            },
+            "_id" => re('\S+'),
+            "login" => 'blah2',
+        },
+    ];
+}
+
+{
+    my $users = dancer_response GET => '/api/logout';
+    is $users->status, 200;
+
+    my $user = dancer_response GET => '/api/user';
+    is $user->status, 200;
+    cmp_deeply $json->decode($user->content), { error => 'not authorized' };
 }
 
 done_testing;
