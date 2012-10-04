@@ -8,6 +8,7 @@ package 'make'
 package 'perl-doc'
 
 cpan_module 'Dancer'
+cpan_module 'YAML'
 cpan_module 'MongoDB'
 cpan_module 'JSON'
 cpan_module 'Params::Validate'
