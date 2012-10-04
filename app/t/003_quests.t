@@ -1,14 +1,10 @@
 use strict;
 use warnings;
-use utf8;
 
-use Test::More tests => 12;
-use Test::Deep;
-#use EasyMocker;
-#use Sub::Override;
-#use Test::MockModule;
+use Test::More import => ['!pass'];
+use Test::Deep qw(cmp_deeply);
 
-use JSON;
+use JSON qw(encode_json decode_json);
 use Data::Dumper;
 
 # the order is important
@@ -38,37 +34,33 @@ my $quests_data = {
 
 
 #--- Init
-my ( $quests, $collection, $ids );
-{
-    $ENV{TEST_DB} = 'play_test';
+$ENV{TEST_DB} = 'play_test';
+my $quests = Play::Quests->new;
+my $collection = $quests->collection;
+my $ids;
+sub _init_db_data {
 
-    #--
-    $quests     = Play::Quests->new;
-    $collection = $quests->collection;
+    #--- Delete all
+    $collection->remove({});
 
-    _init_db_data();
-
-    #-- Чиним UTF
-    use Test::Builder;
-    for my $fh (Test::Builder->new()->todo_output, Test::Builder->new()->failure_output, Test::Builder->new()->output) {
-        binmode($fh, ":encoding(utf8)");
+    #-- Insert
+    foreach ( keys %$quests_data ) {
+        delete $quests_data->{$_}->{_id};
+        my $OID = $collection->insert( $quests_data->{$_} ); # MongoDB::OID
+        $quests_data->{$_}->{_id} = $OID->to_string;
+        $ids->{ $_ } = $OID;
     }
-
-#    my $mockSVN = new Test::MockModule('Dancer::Session');
-#    $mockSVN->mock( log => sub {
-#        my ( $self, $REPOSITORY_URL, $min_rev, $max_rev, $discover_changed_paths, $strict_node_history, $SUB ) = @_;
-
 }
+_init_db_data();
 
 
 ####
 {
-    my $testname = 'Check list, get all - OK';
-    my $got         = [ sort { $a->{_id} cmp $b->{_id} } @{ $quests->list({}) } ];
-    my $expect      = [ sort { $a->{_id} cmp $b->{_id} } values %$quests_data ];
-    cmp_deeply( $got, $expect, $testname )
-        or note explain 'got',    $got,
-                        'expect', $expect;
+    cmp_deeply(
+        [ sort { $a->{_id} cmp $b->{_id} } @{ $quests->list({}) } ],
+        [ sort { $a->{_id} cmp $b->{_id} } values %$quests_data ],
+        'Check list, get all'
+    );
 }
 
 
@@ -87,7 +79,7 @@ my ( $quests, $collection, $ids );
 
     #--
     $subtestname = 'Select by params, get all, data - OK';
-    $got         = [ sort { $a->{_id} cmp $b->{_id} } @{ JSON::decode_json( $response->{content} ) } ];
+    $got         = [ sort { $a->{_id} cmp $b->{_id} } @{ decode_json( $response->{content} ) } ];
     $expect      = [ sort { $a->{_id} cmp $b->{_id} } values %$quests_data ];
     cmp_deeply( $got, $expect, $subtestname )
         or note explain 'got',    $got,
@@ -109,7 +101,7 @@ my ( $quests, $collection, $ids );
 
     #--
     $subtestname = 'Select by params, status closed, data - OK';
-    $got         = JSON::decode_json( $response->{content} );
+    $got         = decode_json( $response->{content} );
     $expect      = [ $quests_data->{3} ];
     cmp_deeply( $got, $expect, $subtestname )
         or note explain 'got',    $got,
@@ -117,21 +109,16 @@ my ( $quests, $collection, $ids );
 }
 
 
-####
-{
-    my $testname    = 'Get by ID';
+subtest 'Get by ID' => sub {
 
     my $id          =  $quests_data->{1}->{_id};
     my $response    = dancer_response GET => '/api/quest/'.$id;
 
-    #--
-    my $subtestname = 'Get by ID - OK';
-    my $got         = JSON::decode_json( $response->{content} );
-    my $expect      = $quests_data->{1};
-    cmp_deeply( $got, $expect, $subtestname )
-        or note explain 'got',    $got,
-                        'expect', $expect;
-}
+    cmp_deeply(
+        decode_json( $response->{content} ),
+        $quests_data->{1}
+    );
+};
 
 
 ####
@@ -157,7 +144,7 @@ my ( $quests, $collection, $ids );
 
     #--
     $subtestname = 'Edit specified quest - OK';
-    $got         = JSON::decode_json( $response->{content} );
+    $got         = decode_json( $response->{content} );
                    delete $got->{id};
     $expect      = { result  => 'ok' };
     cmp_deeply( $got, $expect, $subtestname )
@@ -215,7 +202,7 @@ my ( $quests, $collection, $ids );
 
     #--
     $subtestname = 'Add new, data - OK';
-    $got         = JSON::decode_json( $response->{content} );
+    $got         = decode_json( $response->{content} );
     my $got_id = delete $got->{id};
     $expect      = { result  => 'ok' };
     cmp_deeply( $got, $expect, $subtestname )
@@ -240,23 +227,4 @@ my ( $quests, $collection, $ids );
 }
 
 
-#    warn Data::Dumper->Dump( [ Dancer::session ], ['session qweqwe'] );
-#    my $mock_ya_init = new Test::MockModule('Dancer::Session::YAML');
-#    $mock_ya_init->mock( init       => sub {1} );
-#    $mock_ya_init->mock( create     => sub { $fake_session } );
-#    $mock_ya_init->mock( retrieve   => sub { $fake_session } );
-#    $mock_ya_init->mock( flush      => sub { $fake_session } );
-
-sub _init_db_data {
-
-    #--- Delete all
-    $collection->remove({});
-
-    #-- Insert
-    foreach ( keys %$quests_data ) {
-        delete $quests_data->{$_}->{_id};
-        my $OID = $collection->insert( $quests_data->{$_} ); # MongoDB::OID
-        $quests_data->{$_}->{_id} = $OID->to_string; #
-        $ids->{ $_ } = $OID;
-    }
-}
+done_testing;
