@@ -5,15 +5,12 @@ use Test::More import => ['!pass'];
 use Test::Deep qw(cmp_deeply);
 
 use JSON qw(encode_json decode_json);
-use Data::Dumper;
 
 # the order is important
 use Dancer;
 use Play;
 use Dancer::Test;
 
-
-#--
 my $quests_data = {
     1 => {
         name    => 'name_1',
@@ -54,19 +51,16 @@ sub _init_db_data {
 _init_db_data();
 
 
-####
-{
+subtest 'Check list, get all' => sub {
     cmp_deeply(
         [ sort { $a->{_id} cmp $b->{_id} } @{ $quests->list({}) } ],
         [ sort { $a->{_id} cmp $b->{_id} } values %$quests_data ],
-        'Check list, get all'
     );
-}
+};
 
 
-####
-{
-    my $testname = 'Select by params, get all';
+subtest 'Select by params, get all' => sub {
+
     my $response    = dancer_response GET => '/api/quests';
 
     #--
@@ -84,11 +78,10 @@ _init_db_data();
     cmp_deeply( $got, $expect, $subtestname )
         or note explain 'got',    $got,
                         'expect', $expect;
-}
+};
 
-####
-{
-    my $testname = 'Select by params, status closed';
+subtest 'Select by params, status closed' => sub {
+
     my $response    = dancer_response GET => '/api/quests', { params => { status => 'closed' } };
 
     #--
@@ -106,7 +99,7 @@ _init_db_data();
     cmp_deeply( $got, $expect, $subtestname )
         or note explain 'got',    $got,
                         'expect', $expect;
-}
+};
 
 
 subtest 'Get by ID' => sub {
@@ -121,9 +114,7 @@ subtest 'Get by ID' => sub {
 };
 
 
-####
-{
-    my $testname    = 'Edit specified quest';
+subtest 'Edit specified quest' => sub {
 
     my $edited_quest = $quests_data->{1};
     my $id          = $edited_quest->{_id};
@@ -167,12 +158,10 @@ subtest 'Get by ID' => sub {
 
     #--- restore data
     _init_db_data();
-}
+};
 
 
-####
-{
-    my $testname = 'Add new';
+subtest 'Add new' => sub {
 
     my $user = 'user_4';
     my $new_record = {
@@ -224,7 +213,7 @@ subtest 'Get by ID' => sub {
 
     #--- restore data
     _init_db_data();
-}
+};
 
 
 done_testing;
