@@ -67,17 +67,13 @@ subtest 'Select by params, get all' => sub {
     my $subtestname = 'Select by params, get all, status - OK';
     my $got         = $response->{status};
     my $expect      = 200;
-    is $got, $expect, $subtestname
-        or note explain 'got',    $got,
-                        'expect', $expect;
+    is $got, $expect, $subtestname;
 
     #--
     $subtestname = 'Select by params, get all, data - OK';
     $got         = [ sort { $a->{_id} cmp $b->{_id} } @{ decode_json( $response->{content} ) } ];
     $expect      = [ sort { $a->{_id} cmp $b->{_id} } values %$quests_data ];
-    cmp_deeply( $got, $expect, $subtestname )
-        or note explain 'got',    $got,
-                        'expect', $expect;
+    cmp_deeply $got, $expect, $subtestname;
 };
 
 subtest 'Select by params, status closed' => sub {
@@ -88,17 +84,13 @@ subtest 'Select by params, status closed' => sub {
     my $subtestname = 'Select by params, status closed, status - OK';
     my $got         = $response->{status};
     my $expect      = 200;
-    is $got, $expect, $subtestname
-        or note explain 'got',    $got,
-                        'expect', $expect;
+    is $got, $expect, $subtestname;
 
     #--
     $subtestname = 'Select by params, status closed, data - OK';
     $got         = decode_json( $response->{content} );
     $expect      = [ $quests_data->{3} ];
-    cmp_deeply( $got, $expect, $subtestname )
-        or note explain 'got',    $got,
-                        'expect', $expect;
+    cmp_deeply $got, $expect, $subtestname;
 };
 
 
@@ -120,7 +112,7 @@ subtest 'Edit specified quest' => sub {
     my $id          = $edited_quest->{_id};
     local $edited_quest->{name} = 'name_11'; # Change
 
-    #---
+    #--
     my $old_login = Dancer::session->{login};
     Dancer::session login => $edited_quest->{user};
 
@@ -130,17 +122,14 @@ subtest 'Edit specified quest' => sub {
     my $subtestname = 'Edit specified quest, status - OK';
     my $got         = $response->{status};
     my $expect      = 200;
-    is $got, $expect, $subtestname
-        or note explain 'content', $response->{content};
+    is $got, $expect, $subtestname;
 
     #--
     $subtestname = 'Edit specified quest - OK';
     $got         = decode_json( $response->{content} );
                    delete $got->{id};
     $expect      = { result  => 'ok' };
-    cmp_deeply( $got, $expect, $subtestname )
-        or note explain 'got',    $got,
-                        'expect', $expect;
+    cmp_deeply $got, $expect, $subtestname;
 
     #---
     $subtestname    = 'Edit specified quest, check updated - OK';
@@ -149,9 +138,7 @@ subtest 'Edit specified quest' => sub {
                       });
                       Play::Quests::_prepare_quest( undef, $got );
     $expect         = $edited_quest;
-    cmp_deeply( $got, $expect, $subtestname )
-        or note explain 'got',    $got,
-                        'expect', $expect;
+    cmp_deeply $got, $expect, $subtestname;
 
     #-- restore session login
     Dancer::session( login => $old_login ) if $old_login;
@@ -180,8 +167,7 @@ subtest 'Add new' => sub {
     my $subtestname = 'Add new, status - OK';
     my $got         = $response->{status};
     my $expect      = 200;
-    is $got, $expect, $subtestname
-        or note explain 'content', $response->{content};
+    is $got, $expect, $subtestname;
 
     if ( ref $response->{content} eq 'GLOB' ) {
         my $fh = $response->{content};
@@ -194,9 +180,7 @@ subtest 'Add new' => sub {
     $got         = decode_json( $response->{content} );
     my $got_id = delete $got->{id};
     $expect      = { result  => 'ok' };
-    cmp_deeply( $got, $expect, $subtestname )
-        or note explain 'got',    $got,
-                        'expect', $expect;
+    cmp_deeply $got, $expect, $subtestname;
 
     #---
     $subtestname    = 'Add new, check inserted - OK';
@@ -204,9 +188,7 @@ subtest 'Add new' => sub {
     Play::Quests::_prepare_quest( undef, $got );
     $new_record->{_id} = $got_id;
     $expect         = $new_record;
-    cmp_deeply( $got, $expect, $subtestname )
-        or note explain 'got',    $got,
-                        'expect', $expect;
+    cmp_deeply $got, $expect, $subtestname;
 
     #-- restore session login
     Dancer::session( login => $old_login ) if $old_login;
