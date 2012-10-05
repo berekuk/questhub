@@ -1,3 +1,3 @@
 pp.models.Quest = Backbone.Model.extend({
-	url: '/api/quest'
+	urlRoot: '/api/quest',
 });
