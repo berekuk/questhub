@@ -41,7 +41,7 @@ sub _init_db_data {
 _init_db_data();
 
 
-subtest 'Check list, get all' => sub {
+subtest 'Play::Quests list' => sub {
     cmp_deeply(
         [ sort { $a->{_id} cmp $b->{_id} } @{ $quests->list({}) } ],
         [ sort { $a->{_id} cmp $b->{_id} } values %$quests_data ],
@@ -49,42 +49,32 @@ subtest 'Check list, get all' => sub {
 };
 
 
-subtest 'Select by params, get all' => sub {
+subtest '/api/quests' => sub {
 
     my $response    = dancer_response GET => '/api/quests';
 
-    #--
-    my $subtestname = 'Select by params, get all, status - OK';
-    my $got         = $response->{status};
-    my $expect      = 200;
-    is $got, $expect, $subtestname;
+    is $response->{status}, 200, 'http code';
 
-    #--
-    $subtestname = 'Select by params, get all, data - OK';
-    $got         = [ sort { $a->{_id} cmp $b->{_id} } @{ decode_json( $response->{content} ) } ];
-    $expect      = [ sort { $a->{_id} cmp $b->{_id} } values %$quests_data ];
-    cmp_deeply $got, $expect, $subtestname;
+    cmp_deeply
+        [ sort { $a->{_id} cmp $b->{_id} } @{ decode_json( $response->{content} ) } ],
+        [ sort { $a->{_id} cmp $b->{_id} } values %$quests_data ],
+        'json';
 };
 
-subtest 'Select by params, status closed' => sub {
+subtest '/api/quests filtering' => sub {
 
     my $response    = dancer_response GET => '/api/quests', { params => { status => 'closed' } };
 
-    #--
-    my $subtestname = 'Select by params, status closed, status - OK';
-    my $got         = $response->{status};
-    my $expect      = 200;
-    is $got, $expect, $subtestname;
+    is $response->{status}, 200, 'http code';
 
-    #--
-    $subtestname = 'Select by params, status closed, data - OK';
-    $got         = decode_json( $response->{content} );
-    $expect      = [ $quests_data->{3} ];
-    cmp_deeply $got, $expect, $subtestname;
+    cmp_deeply
+        decode_json( $response->{content} ),
+        [ $quests_data->{3} ],
+        'json';
 };
 
 
-subtest 'Get by ID' => sub {
+subtest '/api/quest/ID' => sub {
 
     my $id          =  $quests_data->{1}->{_id};
     my $response    = dancer_response GET => '/api/quest/'.$id;
