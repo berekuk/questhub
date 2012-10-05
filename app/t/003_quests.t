@@ -1,15 +1,6 @@
-use strict;
-use warnings;
-
-use Test::More import => ['!pass'];
-use Test::Deep qw(cmp_deeply);
+use t::common;
 
 use JSON qw(encode_json decode_json);
-
-# the order is important
-use Dancer;
-use Play;
-use Dancer::Test;
 
 my $quests_data = {
     1 => {
@@ -31,7 +22,6 @@ my $quests_data = {
 
 
 #--- Init
-$ENV{TEST_DB} = 'play_test';
 my $quests = Play::Quests->new;
 my $collection = $quests->collection;
 my $ids;

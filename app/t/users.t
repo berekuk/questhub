@@ -1,18 +1,6 @@
-#!/usr/bin/perl
+use t::common;
 
-use strict;
-use warnings;
-
-use Test::More;
-
-use Play::Mongo qw(:test);
-
-use Dancer;
-use Play;
-use Dancer::Test;
-use Test::Deep qw(cmp_deeply re);
-
-use JSON;
+use JSON ();
 my $json = JSON->new;
 
 {

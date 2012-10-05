@@ -1,13 +1,4 @@
-#!/usr/bin/perl
-
-use strict;
-use warnings;
-
-use Test::More;
-
-use Dancer;
-use Play;
-use Dancer::Test;
+use t::common;
 
 # not logged in
 {
