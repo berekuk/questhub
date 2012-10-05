@@ -14,6 +14,8 @@ cpan_module 'JSON'
 cpan_module 'Params::Validate'
 cpan_module 'Moo'
 cpan_module 'Test::Deep'
+cpan_module 'Import::Into'
+cpan_module 'Carp::Always'
 
 cpan_module 'Dancer::Serializer::JSON'
 cpan_module 'Dancer::Session::MongoDB'
