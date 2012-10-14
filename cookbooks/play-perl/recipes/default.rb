@@ -1,5 +1,6 @@
-require_recipe "mongodb"
-require_recipe "perl"
+include_recipe "mongodb"
+include_recipe "perl"
+include_recipe "ubic"
 
 package 'vim'
 package 'git'
@@ -35,6 +36,10 @@ template "/etc/resolv.conf" do
   owner "root"
   group "root"
   mode 0644
+end
+
+ubic_service "dancer" do
+  action [:install, :start]
 end
 
 # nginx

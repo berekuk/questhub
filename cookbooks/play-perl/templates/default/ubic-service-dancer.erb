@@ -1,0 +1,9 @@
+use strict;
+use warnings;
+
+use Ubic::Service::SimpleDaemon;
+
+Ubic::Service::SimpleDaemon->new(
+    bin => "bin/app.pl",
+    cwd => "/vagrant/app",
+);
