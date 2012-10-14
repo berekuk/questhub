@@ -1,9 +1,20 @@
+# vim: ft=perl
 use strict;
 use warnings;
 
-use Ubic::Service::SimpleDaemon;
+use Ubic::Service::Plack;
 
-Ubic::Service::SimpleDaemon->new(
-    bin => "bin/app.pl",
+Ubic::Service::Plack->new({
+    server => 'Starman',
+    server_args => {
+        port => 3000,
+    },
+    env => {
+        PLACK_ENV => 'production',
+    },
+    app => "bin/app.pl",
     cwd => "/vagrant/app",
-);
+    stdout => '/web/dancer/stdout.log',
+    stderr => '/web/dancer/stderr.log',
+    ubic_log => '/web/dancer/ubic.log',
+});
