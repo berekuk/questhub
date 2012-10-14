@@ -1,0 +1,13 @@
+# vim: ft=perl
+use strict;
+use warnings;
+
+use Ubic::Service::SimpleDaemon;
+
+Ubic::Service::SimpleDaemon->new({
+    bin => "bin/app.pl --port 3001 --environment development",
+    cwd => "/vagrant/app",
+    stdout => '/web/dancer-dev/stdout.log',
+    stderr => '/web/dancer-dev/stderr.log',
+    ubic_log => '/web/dancer-dev/ubic.log',
+});

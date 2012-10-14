@@ -9,43 +9,35 @@ Quick start
 1. Install http://vagrantup.com/
 2. Clone this repo
 3. Run `vagrant up`
-4. Run `vagrant ssh`
-5. cd to `/vagrant/app` and start hacking!
+4. Go to http://localhost:3001 in your browser.
 
-You can edit `/vagrant` contents from the VM or from your own host. The changes are mirrored.
+Run `vagrant ssh` to access your VM.
 
 How everything is configured
 =========
 
-nginx is a http proxy. Inside the VM, it proxies 80 => 3000 port.
-You can start your app by running `bin/app.pl` from `/vagrant/app`.
-It listens to 3000 port and doesn't detach from the terminal.
+nginx listens to 80 and 81 ports. Port 80 is for production, 81 is for development.
+It serves static html/css/js files from `www` folder, except for `/api` calls, which it proxies to 3000 or 3001 ports.
+So `:80/api` is proxied to `:3000/api`, and `:81/api` is proxied to `:3001/api`.
 
-Port 80 from VM proxies to port 3000 on your localhost.
-So, after starting VM using `vagrant up`, you can access nginx by going to http://localhost:3000 in your browser.
+There are two Dancer instances, one for production on `:3000` and one for development on `:3001`.
+Both are running as Ubic services.
+Development Dancer instance should reload code changes automatically, thanks to Dancer's `auto_reload` option.
+To reload the production instance, run `sudo ubic restart dancer` inside the VM.
 
-We'll configure the dancer app to start as a service later.
+Port 80 from VM is forwarded to port 3000 on your localhost, and port 81 to 3001.
+So, after starting VM using `vagrant up`, you can access the development instance by going to http://localhost:3001 in your browser.
+
+nginx logs are in `/web`. Dancer logs are in `/web/dancer` and `/web/dancer-dev`.
 
 How to reconfigure the environment
 =========
 
-You can install new packages in the VM using `sudo apt-get install ...`, as usual.
-
 The VM contents is configured with [Chef](http://www.opscode.com/chef/).
-So you should also share your configuration with other users by editing `cookbooks/play-perl/recipes/default.rb` file.
+If you need a new debian package, add `package %package_name%` line to `cookbooks/play-perl/recipes/default.rb` file.
+If you need a new CPAN module, add `cpan_module %module_name%` line to `cookbooks/play-perl/recipes/default.rb` file.
 
-To add a new debian package to chef configuration, just add a `package 'PACKAGE_NAME'` line to the `default.rb` recipe.
-To add an arbitrary imperative initialization code, use a `bash` block:
-
-```
-bash "restart nginx" do
-  code <<-EOH
-  ANY SHELL CODE
-EOH
-end
-```
-
-You can run `vagrant provision` to redeploy the chef configuration.
+You can re-deploy a new chef configuration into an existing VM by running `vagrant provision`.
 
 =========
 

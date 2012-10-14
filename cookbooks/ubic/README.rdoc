@@ -1,0 +1,9 @@
+= DESCRIPTION:
+
+Installs ubic, provides a resource+provider to specify ubic services.
+
+= AUTHORS:
+
+* Vyacheslav Matyukhin
+
+Based on supervisord chef cookbook.
