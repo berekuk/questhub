@@ -1,6 +1,5 @@
 include_recipe "mongodb"
 include_recipe "perl"
-include_recipe "ubic"
 
 # for development
 package 'vim'
@@ -19,7 +18,6 @@ cpan_module 'Moo'
 cpan_module 'Test::Deep'
 cpan_module 'Import::Into'
 cpan_module 'Carp::Always'
-cpan_module 'Ubic::Service::Plack'
 cpan_module 'Starman'
 
 # auto_reload for development
@@ -39,13 +37,11 @@ template "/etc/resolv.conf" do
   mode 0644
 end
 
-template "/etc/resolv.conf" do
-  source "resolv.conf.erb"
-  owner "root"
-  group "root"
-  mode 0644
-end
+directory '/web' # logs
 
+# dancer services
+include_recipe "ubic"
+cpan_module 'Ubic::Service::Plack'
 directory "/web/dancer"
 ubic_service "dancer" do
   action [:install, :start]
@@ -56,8 +52,6 @@ ubic_service "dancer-dev" do
 end
 
 # nginx
-directory '/web' # logs
-
 package 'nginx'
 
 file '/etc/nginx/sites-enabled/default' do
