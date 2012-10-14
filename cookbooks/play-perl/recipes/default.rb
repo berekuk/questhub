@@ -51,10 +51,7 @@ template "/etc/nginx/sites-enabled/play-perl.org" do
   owner "root"
   group "root"
   mode 0644
+  notifies :restart, "service[nginx]"
 end
 
-bash "restart nginx" do
-  code <<-EOH
-/etc/init.d/nginx restart
-EOH
-end
+service "nginx"
