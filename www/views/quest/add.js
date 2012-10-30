@@ -1,7 +1,7 @@
 pp.views.QuestAdd = Backbone.View.extend({
-	events: {
-		'click .submit': 'saveToModel'
-	},
+    events: {
+        'click .submit': 'saveToModel'
+    },
 
     template: _.template($('#template-quest-add').text()),
 
@@ -10,9 +10,9 @@ pp.views.QuestAdd = Backbone.View.extend({
     },
 
     saveToModel: function() {
-    	this.model.save({
-    		'name': this.$('[name=name]').val()
-    	},
+        this.model.save({
+            'name': this.$('[name=name]').val()
+        },
         {
             'success': this.onSuccess,
             'error': this.onError
@@ -26,7 +26,7 @@ pp.views.QuestAdd = Backbone.View.extend({
                     }).render().el
                 );
             },
-    
+
     onSuccess: function (model) {
         pp.app.router.navigate('quests', { trigger: true });
         $('#layout > .container').prepend(
