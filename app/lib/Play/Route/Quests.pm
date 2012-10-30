@@ -6,7 +6,7 @@ prefix '/api';
 use Play::Quests;
 my $quests = Play::Quests->new;
 
-post '/quest/:id' => sub {
+put '/quest/:id' => sub {
     die "not logged in" unless session->{login};
     my $updated_id = $quests->update(
         param('id'),
