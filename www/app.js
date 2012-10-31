@@ -35,11 +35,11 @@ $(function () {
                         appView.setPageView(new pp.views.Home());
                     }
                     else {
-                        var questCollectionModel = new pp.models.QuestCollection();
-                        questCollectionModel.fetch();
+                        var myQuests = new pp.models.QuestCollection([], { user: user.get("login") });
+                        myQuests.fetch();
 
                         appView.setPageView(new pp.views.QuestCollection({
-                            quests: questCollectionModel
+                            quests: myQuests
                         }));
                     }
                     setActiveMenuItem('home');
