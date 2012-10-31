@@ -35,12 +35,9 @@ $(function () {
                         appView.setPageView(new pp.views.Home());
                     }
                     else {
-                        var myQuests = new pp.models.QuestCollection([], { user: user.get("login") });
-                        myQuests.fetch();
-
-                        appView.setPageView(new pp.views.QuestCollection({
-                            quests: myQuests
-                        }));
+                        appView.setPageView(
+                            new pp.views.Dashboard({ user: user }) // TODO: is 'user' global enough to save it into pp.app.user?
+                        );
                     }
                     setActiveMenuItem('home');
                 },
