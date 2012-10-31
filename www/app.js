@@ -1,6 +1,14 @@
 $(function () {
     var appView = pp.app.view = new pp.views.App({el: $('#layout')});
 
+    pp.app.onError = function(model, response) {
+        $('#layout > .container').prepend(
+            new pp.views.Error({
+                response: response
+            }).render().el
+        );
+    };
+
     var router = pp.app.router = new (Backbone.Router.extend({
         routes: {
             "": "dashboard",
@@ -36,9 +44,7 @@ $(function () {
                     }
                     setActiveMenuItem('home');
                 },
-                error: function() {
-                    alert("user info fetch error");
-                },
+                error: pp.app.onError,
             });
 
         }
