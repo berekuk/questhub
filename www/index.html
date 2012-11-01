@@ -39,13 +39,7 @@
               <div class="nav-collapse collapse">
                 <ul class="nav">
                   <li class="active menu-item-home"><a href="#">Home</a></li>
-                  <li class="dropdown menu-item-quest">
-                    <a href="#" data-toggle="dropdown">Quest</a>
-                      <ul class="dropdown-menu" role="menu" aria-labelledby="questMenu">
-                        <li><a href="#quest/add">Add</a></li>
-                        <li><a href="#quests">Quests</a></li>
-                      </ul>
-                  </li>
+                  <li class="menu-item-add-quest"><a href="#quest/add">Add Quest</a></li>
                 </ul>
                 <p class="navbar-text pull-right"></p>
                     <ul class="nav pull-right current-user-box">
@@ -55,6 +49,11 @@
           </div>
         </div>
         <div class="app-view-container container"></div>
+    </script>
+
+    <script type="text/template" id="template-dashboard">
+        <div class="open-quests container"></div>
+        <div class="closed-quests container"></div>
     </script>
 
     <script type="text/template" id="template-home">
@@ -76,8 +75,7 @@
 
     <script type="text/template" id="template-quest-collection">
         <div>
-        <h2>List of quests</h2>
-        <% !hasQuests === 0 && print('You haven\'t any quest yet...') %>
+        <% !hasQuests === 0 && print('You don\'t have any quests yet...') %>
         <table class="table table-bordered quests-list"></table>
         </div>
     </script>
@@ -176,6 +174,7 @@
     <script src="views/quest-collection.js"></script>
     <script src="views/home.js"></script>
     <script src="views/app.js"></script>
+    <script src="views/dashboard.js"></script>
     <script src="views/error.js"></script>
     <script src="views/notify.js"></script>
     <script src="views/quest/quest.js"></script>

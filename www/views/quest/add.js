@@ -19,13 +19,7 @@ pp.views.QuestAdd = Backbone.View.extend({
         });
     },
 
-    onError: function(model, response) {
-                $('#layout > .container').prepend(
-                    new pp.views.Error({
-                        response: response
-                    }).render().el
-                );
-            },
+    onError: pp.app.onError,
 
     onSuccess: function (model) {
         pp.app.router.navigate('quests', { trigger: true });

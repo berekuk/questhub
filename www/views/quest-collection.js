@@ -7,6 +7,7 @@ pp.views.QuestCollection = Backbone.View.extend({
     initialize: function () {
         this.options.quests.on('reset', this.onReset, this);
         this.options.quests.on('update', this.render, this);
+        this.render(); // FIXME - is this really necessary?
     },
 
     render: function (collection) {
