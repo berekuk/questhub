@@ -5,6 +5,9 @@ use warnings;
 use Ubic::Service::SimpleDaemon;
 
 Ubic::Service::SimpleDaemon->new({
+    env => {
+        DEV_MODE => 1, # enables some development-only routes
+    },
     bin => "bin/app.pl --port 3001 --environment development",
     cwd => "/vagrant/app",
     stdout => '/web/dancer-dev/stdout.log',
