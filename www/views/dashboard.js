@@ -5,16 +5,21 @@ pp.views.Dashboard = Backbone.View.extend({
     initialize: function () {
         var login = this.options.user.get('login');
 
-        var myQuests = new pp.models.QuestCollection([], { user: login });
-        myQuests.fetch();
-
-        var myQuestsView = new pp.views.QuestCollection({
-            quests: myQuests
+        var view = this;
+        var statuses = ['open', 'closed'];
+        _.each(['open', 'closed'], function(st) {
+            var model = new pp.models.QuestCollection([], {
+               'user': login,
+               'status': st
+            });
+            model.fetch();
+            view[st + 'Quests'] = new pp.views.QuestCollection({
+                quests: model
+            });
         });
-        this.quests = myQuestsView;
 
         this.$el.html(this.template());
-        this.$el.find('.dashboard-view-container').append(this.quests.$el);
-        this.quests.render();
+        this.$el.find('.open-quests').append(this.openQuests.$el);
+        this.$el.find('.closed-quests').append(this.closedQuests.$el);
     }
 });
