@@ -62,18 +62,6 @@ get '/users' => sub {
     return $users->list;
 };
 
-# TODO - remove before going to production
-get '/fakeuser/:login' => sub {
-    my $login = param('login');
-    session 'login' => $login;
-    session 'twitter_user' => { screen_name => $login };
-
-    my $user = { login => $login, twitter => { login => $login } };
-    $users->add($user);
-
-    return { status => 'ok', user => $user };
-};
-
 get '/get_login' => sub {
     return {
         status => 'ok',
@@ -82,7 +70,7 @@ get '/get_login' => sub {
     };
 };
 
-get '/logout' => sub {
+post '/logout' => sub {
 
     session->destroy(session); #FIXME: workaround a buggy Dancer::Session::MongoDB
 
@@ -90,5 +78,18 @@ get '/logout' => sub {
         status => 'ok'
     };
 };
+
+if ($ENV{DEV_MODE}) {
+    get '/fakeuser/:login' => sub {
+        my $login = param('login');
+        session 'login' => $login;
+        session 'twitter_user' => { screen_name => $login };
+
+        my $user = { login => $login, twitter => { login => $login } };
+        $users->add($user);
+
+        return { status => 'ok', user => $user };
+    };
+}
 
 true;
