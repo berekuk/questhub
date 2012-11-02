@@ -32,7 +32,7 @@ $(function () {
             var user = new pp.models.User();
             user.fetch({
                 success: function(model, response) {
-                    if (!user.get("logged")) {
+                    if (!user.get("registered")) {
                         appView.setPageView(new pp.views.Home());
                     }
                     else {

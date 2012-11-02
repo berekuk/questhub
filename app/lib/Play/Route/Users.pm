@@ -18,7 +18,7 @@ get '/auth/twitter' => sub {
         if ($user) {
             session 'login' => $user->{login};
         }
-        redirect "/";
+        redirect "/#register";
     }
 };
 
@@ -26,20 +26,24 @@ prefix '/api';
 
 get '/user' => sub {
 
-    my $login = param('login') || session('login');
-    unless ($login) {
-        return { error => 'not authorized' };
+    my $user = {};
+    my $login = session('login');
+    if ($login) {
+        $user = $users->get({ login => $login });
+        $user->{registered} = 1;
     }
-    my $user = $users->get({ login => $login });
+    else {
+        $user->{registered} = 0;
+    }
 
-    unless ($user) {
-        return { error => "not found" };
+    if (session('twitter_user')) {
+        $user->{twitter} = session('twitter_user');
     }
 
     return $user;
 };
 
-get '/new_login' => sub {
+post '/register' => sub {
     if (not session('twitter_user')) {
         return { error => "not authorized" };
     }
@@ -52,7 +56,11 @@ get '/new_login' => sub {
     if ($users->get({ twitter => { login => $twitter_login } })) {
         return { error => "Already bound" };
     }
+
+    # note that race condition is still possible after these checks
+    # that's ok, mongodb will throw an exception
     my $user = { login => $login, twitter => { login => $twitter_login } };
+
     session 'login' => $login;
     $users->add($user);
     return { status => "ok", user => $user };
@@ -60,14 +68,6 @@ get '/new_login' => sub {
 
 get '/users' => sub {
     return $users->list;
-};
-
-get '/get_login' => sub {
-    return {
-        status => 'ok',
-        logged => (defined session->{login} ? 1 : 0),
-        login => session->{login},
-    };
 };
 
 post '/logout' => sub {
