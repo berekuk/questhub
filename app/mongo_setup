@@ -1,0 +1,4 @@
+db.quests.drop()
+db.users.drop()
+db.sessions.drop()
+db.users.ensureIndex({ "login": 1, "twitter.login": 1 }, { "unique": 1 })
