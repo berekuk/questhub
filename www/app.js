@@ -12,6 +12,7 @@ $(function () {
     var router = pp.app.router = new (Backbone.Router.extend({
         routes: {
             "": "dashboard",
+            "register": "register",
             "quest/add": "questAdd",
             "quest/:id": "questShow",
         },
@@ -44,6 +45,9 @@ $(function () {
                 error: pp.app.onError,
             });
 
+        },
+        register: function () {
+            appView.setPageView(new pp.views.Register());
         }
     }))();
 
