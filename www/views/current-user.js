@@ -18,7 +18,8 @@ pp.views.CurrentUser = Backbone.View.extend({
     },
 
     logout: function () {
-        $.ajax('/api/logout').always(function () {
+        // FIXME - it's probably better to reload the whole page
+        $.post('/api/logout').always(function () {
             this.model.fetch();
         }.bind(this));
     }
