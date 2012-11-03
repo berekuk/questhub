@@ -157,7 +157,9 @@
       <div class="quest-details">
         <span class="label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
       </div>
-      <button type="button" class="quest-close">Close</button>
+      <% if (status === 'open') { %>
+      <button class="quest-close btn">Close</button>
+      <% } %>
     </script>
     <script type="text/template" id="template-quest">
         <tr class="<%= status === 'open' && 'warning' %>">
