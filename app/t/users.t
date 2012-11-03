@@ -1,3 +1,6 @@
+BEGIN {
+    $ENV{DEV_MODE} = 1; # necessary for fakeuser
+}
 use t::common;
 
 use JSON ();
@@ -21,10 +24,11 @@ my $json = JSON->new;
     is $user->status, 200;
     cmp_deeply $json->decode($user->content), {
         "twitter" => {
-            "login" => 'blah2',
+            "screen_name" => 'blah2',
         },
         "_id" => re('\S+'),
         "login" => 'blah2',
+        registered => 1,
     };
 }
 
@@ -50,12 +54,12 @@ my $json = JSON->new;
 }
 
 {
-    my $users = dancer_response GET => '/api/logout';
+    my $users = dancer_response POST => '/api/logout';
     is $users->status, 200;
 
     my $user = dancer_response GET => '/api/user';
     is $user->status, 200;
-    cmp_deeply $json->decode($user->content), { error => 'not authorized' };
+    cmp_deeply $json->decode($user->content), { registered => 0 };
 }
 
 done_testing;

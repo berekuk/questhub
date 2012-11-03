@@ -96,7 +96,7 @@ subtest 'Edit specified quest' => sub {
     my $old_login = Dancer::session->{login};
     Dancer::session login => $edited_quest->{user};
 
-    my $response    = dancer_response POST => '/api/quest/'.$id, { params => { name => $edited_quest->{name} } };
+    my $response    = dancer_response PUT => '/api/quest/'.$id, { params => { name => $edited_quest->{name} } };
 
     #--
     my $subtestname = 'Edit specified quest, status - OK';
