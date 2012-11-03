@@ -7,8 +7,9 @@ GET /api/user                   # get current user; 'registered=1' flag means th
 POST /api/register              # register the new user login, associate it with the current twitter user, save to db
 GET /api/users                  # get the list of all users
 GET /api/fakeuser/{login}       # temporary, fake analog of /register; dev mode only
-PUT /api/quest/{id}             # update quest
 POST /api/quest                 # add a new quest for current user
+PUT /api/quest/{id}             # update quest
+DELETE /api/quest/{id}          # delete quest (actually, set its status to "deleted"; it won't be shown in /api/quests, but will still be fetchable by its id)
 GET /api/quests                 # get all quests
 GET /api/quests?user={login}    # get all quests of a given user
 GET /api/quests?status={status} # get all quests with a given status

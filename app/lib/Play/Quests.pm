@@ -24,6 +24,8 @@ sub list {
     my ($params) = validate_pos(@_, { type => HASHREF });
 
     my @quests = $self->collection->find($params)->all;
+    @quests = grep { $_->{status} ne 'deleted' } @quests;
+
     $self->_prepare_quest($_) for @quests;
     return \@quests;
 }
@@ -58,6 +60,26 @@ sub update {
     return $id;
 }
 
+sub remove {
+    my $self = shift;
+    my ($id, $params) = validate_pos(@_, { type => SCALAR }, { type => HASHREF });
+
+    my $user = $params->{user};
+    die 'no user' unless $user;
+
+    my $quest = $self->get($id);
+    unless ($quest->{user} eq $user) {
+        die "access denied";
+    }
+
+    delete $quest->{_id};
+    $self->collection->update(
+        { _id => MongoDB::OID->new(value => $id) },
+        { %$quest, status => 'deleted' },
+        { safe => 1 }
+    );
+}
+
 sub get {
     my $self = shift;
     my ($id) = validate_pos(@_, { type => SCALAR });
@@ -65,7 +87,7 @@ sub get {
     my $quest = $self->collection->find_one({
         _id => MongoDB::OID->new(value => $id)
     });
-    die "no such quest" unless $quest;
+    die "quest $id not found" unless $quest;
     $self->_prepare_quest($quest);
     return $quest;
 }

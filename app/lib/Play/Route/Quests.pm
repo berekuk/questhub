@@ -21,6 +21,17 @@ put '/quest/:id' => sub {
     }
 };
 
+del '/quest/:id' => sub {
+    die "not logged in" unless session->{login};
+    $quests->remove(
+        param('id'),
+        { user => session->{login} }
+    );
+    return {
+        result => 'ok',
+    }
+};
+
 post '/quest' => sub {
     die "not logged in" unless session->{login};
     my $id = $quests->add({

@@ -177,5 +177,41 @@ subtest 'Add new' => sub {
     _init_db_data();
 };
 
+subtest 'Delete' => sub {
+    _init_db_data();
+
+    my $id_to_remove;
+    my $user;
+    {
+        my $list_before_resp = dancer_response GET => '/api/quests';
+        my $result = decode_json($list_before_resp->{content});
+        is scalar @$result, 3;
+        $id_to_remove = $result->[1]{_id};
+        $user = $result->[1]{user};
+        like $id_to_remove, qr/^[0-9a-f]{24}$/; # just an assertion
+    }
+
+    {
+        my $delete_resp = dancer_response DELETE => "/api/quest/$id_to_remove";
+        is $delete_resp->{status}, 500, "Can't delete a quest while not logged in";
+    }
+
+    {
+        Dancer::session login => 'blah';
+        my $delete_resp = dancer_response DELETE => "/api/quest/$id_to_remove";
+        is $delete_resp->{status}, 500, "Can't delete another user's quest";
+    }
+
+    {
+        Dancer::session login => $user;
+        my $delete_resp = dancer_response DELETE => "/api/quest/$id_to_remove";
+        is $delete_resp->{status}, 200, "Can delete the quest you own" or diag $delete_resp->{content};
+    }
+
+    {
+        my $list_after_resp = dancer_response GET => '/api/quests';
+        is scalar @{ decode_json($list_after_resp->{content}) }, 2, 'deleted quests are not shown in list';
+    }
+};
 
 done_testing;
