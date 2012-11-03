@@ -1,4 +1,6 @@
 $(function () {
+    pp.app.user = new pp.models.CurrentUser();
+
     var appView = pp.app.view = new pp.views.App({el: $('#layout')});
 
     pp.app.onError = function(model, response) {
@@ -8,46 +10,54 @@ $(function () {
             }).render().el
         );
     };
+    pp.app.user.on("error", pp.app.onError);
 
     var router = pp.app.router = new (Backbone.Router.extend({
         routes: {
             "": "dashboard",
+            "welcome": "welcome",
             "register": "register",
             "quest/add": "questAdd",
             "quest/:id": "questShow",
         },
 
         questAdd: function () {
+            console.log("/#quest/add");
             var questAddView = new pp.views.QuestAdd({ model: new pp.models.Quest() });
             appView.setPageView(questAddView);
             setActiveMenuItem('add-quest');
         },
 
         questShow: function (id) {
+            console.log("/#quest/:id");
             var questShowView = new pp.views.QuestShow({ model: new pp.models.Quest({ id: id }) });
             appView.setPageView(questShowView);
         },
 
-        dashboard: function () {
-            var user = new pp.models.User();
-            user.fetch({
-                success: function(model, response) {
-                    if (!user.get("registered")) {
-                        appView.setPageView(new pp.views.Home());
-                    }
-                    else {
-                        appView.setPageView(
-                            new pp.views.Dashboard({ user: user }) // TODO: is 'user' global enough to save it into pp.app.user?
-                        );
-                    }
-                    setActiveMenuItem('home');
-                },
-                error: pp.app.onError,
-            });
-
+        welcome: function () {
+            console.log("/#welcome");
+            appView.setPageView(new pp.views.Home());
+            setActiveMenuItem('home');
         },
+
+        dashboard: function () {
+            console.log("/#dashboard");
+
+            var dashboard = new pp.views.Dashboard();
+            appView.setPageView(dashboard);
+
+            // start after setPageView, because dashboard can call back to router,
+            // and if if happens in he initializer before setPageView, then we show welcome view and then immediately replace it with (empty!) dashboard
+            // FIXME - this is ugly :(
+            dashboard.start();
+
+            setActiveMenuItem('home');
+        },
+
         register: function () {
+            console.log("/#register");
             appView.setPageView(new pp.views.Register());
+            setActiveMenuItem('home');
         }
     }))();
 

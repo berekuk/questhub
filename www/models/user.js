@@ -1,6 +1,6 @@
 pp.models.User = Backbone.Model.extend({
 
-    url: function () {
-        return '/api/user';
+    initialize: function() {
+        alert("trying to instantiate abstract base class");
     }
 });

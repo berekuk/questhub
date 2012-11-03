@@ -7,8 +7,9 @@ pp.views.CurrentUser = Backbone.View.extend({
     },
 
     initialize: function () {
-        (this.model = new pp.models.User({current: true}))
-            .on('change', this.render, this);
+        this.model = pp.app.user;
+
+        this.model.on('change', this.render, this);
 
         this.model.fetch();
     },
@@ -21,6 +22,7 @@ pp.views.CurrentUser = Backbone.View.extend({
         // FIXME - it's probably better to reload the whole page
         $.post('/api/logout').always(function () {
             this.model.fetch();
+            pp.app.router.navigate("/#welcome", { trigger: true });
         }.bind(this));
     }
 });
