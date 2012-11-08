@@ -5,6 +5,7 @@ pp.views.Dashboard = Backbone.View.extend({
     initialize: function () {
         var login = this.options.user.get('login');
 
+        // create self.openQuests and self.closedQuests
         var view = this;
         var statuses = ['open', 'closed'];
         _.each(['open', 'closed'], function(st) {
@@ -18,8 +19,19 @@ pp.views.Dashboard = Backbone.View.extend({
             });
         });
 
+        this.user = new pp.views.User({
+            model: this.options.user
+        });
+        this.user.render();
+
+        this.render();
+    },
+
+    render: function() {
         this.$el.html(this.template());
         this.$el.find('.open-quests').append(this.openQuests.$el);
         this.$el.find('.closed-quests').append(this.closedQuests.$el);
+
+        this.$el.find('.user').append(this.user.$el);
     }
 });
