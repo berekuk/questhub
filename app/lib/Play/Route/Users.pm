@@ -30,6 +30,9 @@ get '/user' => sub {
     my $login = session('login');
     if ($login) {
         $user = $users->get_by_login($login);
+        unless ($user) {
+            die "user '$login' not found";
+        }
         $user->{registered} = 1;
     }
     else {
@@ -38,6 +41,16 @@ get '/user' => sub {
 
     if (session('twitter_user')) {
         $user->{twitter} = session('twitter_user');
+    }
+
+    return $user;
+};
+
+get '/user/:login' => sub {
+    my $login = param('login');
+    my $user = $users->get_by_login($login);
+    unless ($user) {
+        die "user '$login' not found";
     }
 
     return $user;
@@ -88,7 +101,7 @@ if ($ENV{DEV_MODE}) {
 
         unless (param('notwitter')) {
             session 'twitter_user' => { screen_name => $login } unless param('notwitter');
-            $user->{twitter} = { login => $login };
+            $user->{twitter} = { screen_name => $login };
         }
 
         $users->add($user);
