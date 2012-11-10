@@ -4,6 +4,10 @@ use Moo;
 use Params::Validate qw(:all);
 use Play::Mongo;
 
+use Play::Users;
+
+my $users = Play::Users->new;
+
 has 'collection' => (
     is => 'ro',
     lazy => 1,
@@ -49,6 +53,15 @@ sub update {
     my $quest = $self->get($id);
     unless ($quest->{user} eq $user) {
         die "access denied";
+    }
+
+    if ($quest->{status} eq 'open' and $params->{status} and $params->{status} eq 'closed') {
+        $users->add_points($user, 1);
+    }
+
+    # reopen
+    if ($quest->{status} eq 'closed' and $params->{status} and $params->{status} eq 'open') {
+        $users->add_points($user, -1);
     }
 
     delete $quest->{_id};

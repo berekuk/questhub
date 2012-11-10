@@ -1,6 +1,3 @@
-BEGIN {
-    $ENV{DEV_MODE} = 1; # necessary for fakeuser
-}
 use t::common;
 
 use JSON ();

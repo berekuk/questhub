@@ -10,12 +10,12 @@ my $quests_data = {
     },
     2 => {
         name    => 'name_2',
-        user    => 'uaer_2',
+        user    => 'user_2',
         status  => 'open',
     },
     3 => {
         name    => 'name_3',
-        user    => 'uaer_3',
+        user    => 'user_3',
         status  => 'closed',
     },
 };
@@ -212,6 +212,26 @@ subtest 'Delete' => sub {
         my $list_after_resp = dancer_response GET => '/api/quests';
         is scalar @{ decode_json($list_after_resp->{content}) }, 2, 'deleted quests are not shown in list';
     }
+};
+
+subtest 'Points' => sub {
+    _init_db_data();
+
+    my $quest = $quests_data->{1};
+
+    my $add_user_result = dancer_response GET => "/api/fakeuser/$quest->{user}";
+    is $add_user_result->status, 200 or diag $add_user_result->content;
+    Dancer::session login => $quest->{user};
+
+    my $user_response = dancer_response GET => '/api/user';
+    is decode_json($user_response->content)->{points} || 0, 0;
+
+    my $response = dancer_response PUT => "/api/quest/$quest->{_id}", { params => { status => 'closed' } };
+    is $response->status, 200, 'updating status is ok' or diag $response->{content};
+
+    $user_response = dancer_response GET => '/api/user';
+    is decode_json($user_response->content)->{points}, 1;
+
 };
 
 done_testing;

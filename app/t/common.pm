@@ -6,6 +6,10 @@ use warnings;
 use lib 'lib';
 use Import::Into;
 
+BEGIN {
+    $ENV{DEV_MODE} = 1;
+}
+
 use Play::Mongo qw(:test);
 
 sub import {

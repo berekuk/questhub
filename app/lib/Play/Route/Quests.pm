@@ -4,7 +4,9 @@ use Dancer ':syntax';
 prefix '/api';
 
 use Play::Quests;
+use Play::Users;
 my $quests = Play::Quests->new;
+my $users = Play::Users->new;
 
 put '/quest/:id' => sub {
     die "not logged in" unless session->{login};

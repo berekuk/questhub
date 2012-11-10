@@ -52,4 +52,22 @@ sub list {
     return \@users;
 }
 
+sub add_points {
+    my $self = shift;
+    my ($login, $amount) = validate_pos(@_, { type => SCALAR }, { type => SCALAR, regex => qr/^\d+$/, default => 1 });
+
+    my $user = $self->get_by_login($login);
+    die "User '$login' not found" unless $user;
+
+    my $points = $user->{points} || 0;
+    $points += $amount;
+
+    my $id = MongoDB::OID->new(value => delete $user->{_id});
+    $self->collection->update(
+        { _id => $id },
+        { %$user, points => $points },
+        { safe => 1 }
+    );
+}
+
 1;
