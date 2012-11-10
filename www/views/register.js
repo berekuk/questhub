@@ -1,6 +1,7 @@
 pp.views.Register = Backbone.View.extend({
     events: {
        'click .submit': 'doRegister',
+       'keydown [name=login]': 'checkEnter'
     },
 
     template: _.template($('script#template-register').text()),
@@ -9,6 +10,7 @@ pp.views.Register = Backbone.View.extend({
         this.model = pp.app.user;
 
         this.model.on('change', this.checkUser, this);
+        _.bindAll(this, 'checkEnter', 'doRegister');
 
         this.model.fetch();
     },
@@ -26,6 +28,12 @@ pp.views.Register = Backbone.View.extend({
 
     render: function () {
         this.$el.html(this.template);
+    },
+
+    checkEnter: function (e) {
+        if (e.keyCode == 13) {
+          this.doRegister();
+        }
     },
 
     doRegister: function () {
