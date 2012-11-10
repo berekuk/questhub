@@ -1,6 +1,8 @@
 use t::common;
 use parent qw(Test::Class);
 
+use Play::Quests;
+
 my $quests_data = {
     1 => {
         name    => 'name_1',
@@ -23,7 +25,7 @@ sub setup :Tests(setup) {
 
     my $quests = Play::Quests->new;
 
-    Dancer::session login => undef;
+    Dancer::session->destroy;
     $quests->collection->remove({});
 
     # insert quests to DB
