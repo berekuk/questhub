@@ -46,10 +46,10 @@ sub perl_quest_list :Test(1) {
 
 sub quest_list :Tests {
     my $response    = dancer_response GET => '/api/quests';
-    is $response->{status}, 200, 'http code';
+    is $response->status, 200, 'http code';
 
     cmp_deeply
-        [ sort { $a->{_id} cmp $b->{_id} } @{ decode_json( $response->{content} ) } ],
+        [ sort { $a->{_id} cmp $b->{_id} } @{ decode_json($response->content) } ],
         [ sort { $a->{_id} cmp $b->{_id} } values %$quests_data ],
         'json';
 }
@@ -57,10 +57,10 @@ sub quest_list :Tests {
 sub quest_list_filtering :Tests {
     my $response    = dancer_response GET => '/api/quests', { params => { status => 'closed' } };
 
-    is $response->{status}, 200, 'http code';
+    is $response->status, 200, 'http code';
 
     cmp_deeply
-        decode_json( $response->{content} ),
+        decode_json( $response->content ),
         [ $quests_data->{3} ],
         'json';
 }
@@ -70,7 +70,7 @@ sub single_quest :Tests {
     my $response    = dancer_response GET => '/api/quest/'.$id;
 
     cmp_deeply(
-        decode_json( $response->{content} ),
+        decode_json( $response->content ),
         $quests_data->{1}
     );
 }
@@ -132,7 +132,7 @@ sub delete_quest :Tests {
     my $user;
     {
         my $list_before_resp = dancer_response GET => '/api/quests';
-        my $result = decode_json($list_before_resp->{content});
+        my $result = decode_json($list_before_resp->content);
         is scalar @$result, 3;
         $id_to_remove = $result->[1]{_id};
         $user = $result->[1]{user};
@@ -141,24 +141,24 @@ sub delete_quest :Tests {
 
     {
         my $delete_resp = dancer_response DELETE => "/api/quest/$id_to_remove";
-        is $delete_resp->{status}, 500, "Can't delete a quest while not logged in";
+        is $delete_resp->status, 500, "Can't delete a quest while not logged in";
     }
 
     {
         Dancer::session login => 'blah';
         my $delete_resp = dancer_response DELETE => "/api/quest/$id_to_remove";
-        is $delete_resp->{status}, 500, "Can't delete another user's quest";
+        is $delete_resp->status, 500, "Can't delete another user's quest";
     }
 
     {
         Dancer::session login => $user;
         my $delete_resp = dancer_response DELETE => "/api/quest/$id_to_remove";
-        is $delete_resp->{status}, 200, "Can delete the quest you own" or diag $delete_resp->{content};
+        is $delete_resp->status, 200, "Can delete the quest you own" or diag $delete_resp->content;
     }
 
     {
         my $list_after_resp = dancer_response GET => '/api/quests';
-        is scalar @{ decode_json($list_after_resp->{content}) }, 2, 'deleted quests are not shown in list';
+        is scalar @{ decode_json($list_after_resp->content) }, 2, 'deleted quests are not shown in list';
     }
 }
 
@@ -173,7 +173,7 @@ sub points :Tests {
     is decode_json($user_response->content)->{points} || 0, 0;
 
     my $response = dancer_response PUT => "/api/quest/$quest->{_id}", { params => { status => 'closed' } };
-    is $response->status, 200, 'updating status is ok' or diag $response->{content};
+    is $response->status, 200, 'updating status is ok' or diag $response->content;
 
     $user_response = dancer_response GET => '/api/user';
     is decode_json($user_response->content)->{points}, 1;
