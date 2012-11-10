@@ -13,7 +13,6 @@ pp.views.App = Backbone.View.extend({
             this._page.remove();
         }
         this._page = page;
-        console.log("setPageView");
         this.$el.find('.app-view-container').append((this._page = page).$el);
 
         // we don't call page.render() - our pages render themselves, but sometimes they do it in delayed fashion

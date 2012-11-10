@@ -4,7 +4,7 @@ pp.views.Dashboard = Backbone.View.extend({
 
     // separate function because of ugly hack in router code, see router code
     start: function() {
-        if (!this.current) {
+        if (!this.options.current) {
             this.model.on('change', this.render, this);
             return;
         }
@@ -18,11 +18,9 @@ pp.views.Dashboard = Backbone.View.extend({
 
     checkLogged: function() {
         if (!this.model.get("registered")) {
-            console.log("not registered, back to welcome");
             pp.app.router.navigate("/#welcome", { trigger: true });
             return;
         }
-        console.log("calling dashboard.render");
         this.render();
     },
 

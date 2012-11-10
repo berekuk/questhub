@@ -11,7 +11,7 @@ pp.views.QuestCollection = Backbone.View.extend({
     },
 
     render: function (collection) {
-        this.$el.html(this.template({hasQuests: this.options.quests.models.length}));
+        this.$el.html(this.template());
         return this;
     },
 

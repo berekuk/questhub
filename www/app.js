@@ -19,6 +19,7 @@ $(function () {
             "register": "register",
             "quest/add": "questAdd",
             "quest/:id": "questShow",
+            "players": "userList",
             "player/:login": "anotherDashboard",
         },
 
@@ -51,12 +52,19 @@ $(function () {
         },
 
         anotherDashboard: function (login) {
-            console.log('another dashboard');
             var user = new pp.models.AnotherUser({ login: login });
             var view = new pp.views.Dashboard({ model: user });
             view.start();
             user.fetch();
             appView.setPageView(view);
+        },
+
+        userList: function () {
+            var users = new pp.models.UserCollection();
+            var view = new pp.views.UserCollection({ users: users });
+            users.fetch();
+            appView.setPageView(view);
+            setActiveMenuItem('user-list');
         },
 
         register: function () {

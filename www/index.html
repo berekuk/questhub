@@ -40,6 +40,7 @@
                 <ul class="nav">
                   <li class="active menu-item-home"><a href="#">Home</a></li>
                   <li class="menu-item-add-quest"><a href="#quest/add">Add Quest</a></li>
+                  <li class="menu-item-user-list"><a href="#players">User List</a></li>
                 </ul>
                 <p class="navbar-text pull-right"></p>
                     <ul class="nav pull-right current-user-box">
@@ -103,6 +104,23 @@
     <script type="text/template" id="template-quest-collection">
         <div>
           <table class="table table-bordered quests-list" style="display: none"></table>
+        </div>
+    </script>
+
+    <script type="text/template" id="template-user-collection">
+        <div>
+          <table class="table table-bordered quests-list">
+          <% users.each(function(user) { %>
+            <tr>
+              <td>
+                <% if (user.get("twitter") && user.get("twitter").login) { %>
+                <img src="http://api.twitter.com/1/users/profile_image?screen_name=<%= user.get("twitter").login %>&size=mini"/>
+                <% } %>
+                <a href="#player/<%= user.get("login") %>"><%= user.get("login") %></a>
+              </td>
+            </tr>
+          <% }); %>
+          </table>
         </div>
     </script>
 
@@ -202,9 +220,11 @@
     <script src="models/another-user.js"></script>
     <script src="models/quest.js"></script>
     <script src="models/quest-collection.js"></script>
+    <script src="models/user-collection.js"></script>
     <script src="views/user.js"></script>
     <script src="views/current-user.js"></script>
     <script src="views/quest-collection.js"></script>
+    <script src="views/user-collection.js"></script>
     <script src="views/home.js"></script>
     <script src="views/app.js"></script>
     <script src="views/dashboard.js"></script>
