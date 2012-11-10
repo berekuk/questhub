@@ -1,6 +1,7 @@
 pp.models.CurrentUser = pp.models.User.extend({
 
     initialize: function () {
+        this.on('error', pp.app.onError);
 
         // This is a weird hack to allow dashboard view to render in both of these cases:
         // 1) app is just loaded, user is not fetched yet

@@ -19,31 +19,27 @@ $(function () {
             "register": "register",
             "quest/add": "questAdd",
             "quest/:id": "questShow",
+            "player/:login": "anotherDashboard",
         },
 
         questAdd: function () {
-            console.log("/#quest/add");
-            var questAddView = new pp.views.QuestAdd({ model: new pp.models.Quest() });
-            appView.setPageView(questAddView);
+            var view = new pp.views.QuestAdd({ model: new pp.models.Quest() });
+            appView.setPageView(view);
             setActiveMenuItem('add-quest');
         },
 
         questShow: function (id) {
-            console.log("/#quest/:id");
-            var questShowView = new pp.views.QuestShow({ model: new pp.models.Quest({ id: id }) });
-            appView.setPageView(questShowView);
+            var view = new pp.views.QuestShow({ model: new pp.models.Quest({ id: id }) });
+            appView.setPageView(view);
         },
 
         welcome: function () {
-            console.log("/#welcome");
             appView.setPageView(new pp.views.Home());
             setActiveMenuItem('home');
         },
 
         dashboard: function () {
-            console.log("/#dashboard");
-
-            var dashboard = new pp.views.Dashboard();
+            var dashboard = new pp.views.Dashboard({ model: pp.app.user, current: true });
             appView.setPageView(dashboard);
 
             // start after setPageView, because dashboard can call back to router,
@@ -54,8 +50,16 @@ $(function () {
             setActiveMenuItem('home');
         },
 
+        anotherDashboard: function (login) {
+            console.log('another dashboard');
+            var user = new pp.models.AnotherUser({ login: login });
+            var view = new pp.views.Dashboard({ model: user });
+            view.start();
+            user.fetch();
+            appView.setPageView(view);
+        },
+
         register: function () {
-            console.log("/#register");
             appView.setPageView(new pp.views.Register());
             setActiveMenuItem('home');
         }

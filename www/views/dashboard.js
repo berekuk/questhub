@@ -2,13 +2,12 @@ pp.views.Dashboard = Backbone.View.extend({
 
     template: _.template($('script#template-dashboard').text()),
 
-    initialize: function () {
-        this.model = pp.app.user; // TODO - support viewing other users dashboard
-    },
-
     // separate function because of ugly hack in router code, see router code
     start: function() {
-        console.log("initialize dashboard");
+        if (!this.current) {
+            this.model.on('change', this.render, this);
+            return;
+        }
         this.model.on('change', this.checkLogged, this);
 
         // see models/current-user.js for the explanation
@@ -18,7 +17,6 @@ pp.views.Dashboard = Backbone.View.extend({
     },
 
     checkLogged: function() {
-        console.log("checkLogged");
         if (!this.model.get("registered")) {
             console.log("not registered, back to welcome");
             pp.app.router.navigate("/#welcome", { trigger: true });
@@ -29,7 +27,6 @@ pp.views.Dashboard = Backbone.View.extend({
     },
 
     render: function() {
-        console.log("dashboard.render");
         var login = this.model.get('login');
 
         // create self.openQuests and self.closedQuests
