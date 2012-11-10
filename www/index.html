@@ -113,8 +113,8 @@
           <% users.each(function(user) { %>
             <tr>
               <td>
-                <% if (user.get("twitter") && user.get("twitter").login) { %>
-                <img src="http://api.twitter.com/1/users/profile_image?screen_name=<%= user.get("twitter").login %>&size=mini"/>
+                <% if (user.get("twitter") && user.get("twitter").screen_name) { %>
+                <img src="http://api.twitter.com/1/users/profile_image?screen_name=<%= user.get("twitter").screen_name %>&size=mini"/>
                 <% } %>
                 <a href="#player/<%= user.get("login") %>"><%= user.get("login") %></a>
               </td>

@@ -72,7 +72,7 @@ post '/register' => sub {
 
     # note that race condition is still possible after these checks
     # that's ok, mongodb will throw an exception
-    my $user = { login => $login, twitter => { login => $twitter_login } };
+    my $user = { login => $login, twitter => { screen_name => $twitter_login } };
 
     session 'login' => $login;
     $users->add($user);

@@ -16,7 +16,7 @@ sub get_by_twitter_login {
     my $self = shift;
     my ($login) = validate_pos(@_, { type => SCALAR });
 
-    return $self->get({ twitter => { login => $login } });
+    return $self->get({ twitter => { screen_name => $login } });
 }
 
 sub _prepare_user {
