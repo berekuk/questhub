@@ -83,11 +83,15 @@ if ($ENV{DEV_MODE}) {
     get '/fakeuser/:login' => sub {
         my $login = param('login');
         session 'login' => $login;
-        session 'twitter_user' => { screen_name => $login };
 
-        my $user = { login => $login, twitter => { login => $login } };
+        my $user = { login => $login };
+
+        unless (param('notwitter')) {
+            session 'twitter_user' => { screen_name => $login } unless param('notwitter');
+            $user->{twitter} = { login => $login };
+        }
+
         $users->add($user);
-
         return { status => 'ok', user => $user };
     };
 }
