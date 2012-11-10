@@ -50,6 +50,15 @@ sub another_user :Tests {
     };
 }
 
+sub nonexistent_user :Tests {
+    my $self = shift;
+    $self->_add_users;
+
+    my $response = dancer_response GET => '/api/user/nosuchuser';
+    $response->status, 500;
+    like $response->content, qr/user .* not found/;
+}
+
 sub logout :Tests {
     my $self = shift;
     $self->_add_users;
