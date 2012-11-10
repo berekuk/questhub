@@ -33,6 +33,7 @@ pp.views.Register = Backbone.View.extend({
         // TODO - what should we do if login is empty?
         $.post('/api/register', { login: login })
             .success(function () {
+                pp.app.user.fetch();
                 pp.app.router.navigate("/", { trigger: true });
             })
             .error(function () {
