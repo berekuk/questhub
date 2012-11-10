@@ -25,12 +25,13 @@ sub current_user :Tests {
 
     my $user = http_json GET => '/api/user';
     cmp_deeply $user, {
-        "twitter" => {
+        twitter => {
             "screen_name" => 'blah2',
         },
-        "_id" => re('\S+'),
-        "login" => 'blah2',
+        _id => re('\S+'),
+        login => 'blah2',
         registered => 1,
+        points => 0,
     };
 }
 
@@ -51,18 +52,20 @@ sub users_list :Tests {
     my $user = http_json GET => '/api/users';
     cmp_deeply $user, [
         {
-            "twitter" => {
-                "login" => 'blah',
+            twitter => {
+                login => 'blah',
             },
-            "_id" => re('\S+'),
-            "login" => 'blah',
+            _id => re('\S+'),
+            login => 'blah',
+            points => 0,
         },
         {
-            "twitter" => {
-                "login" => 'blah2',
+            twitter => {
+                login => 'blah2',
             },
-            "_id" => re('\S+'),
-            "login" => 'blah2',
+            _id => re('\S+'),
+            login => 'blah2',
+            points => 0,
         },
     ];
 }

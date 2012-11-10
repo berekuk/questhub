@@ -145,7 +145,7 @@ sub points :Tests {
     Dancer::session login => $quest->{user};
 
     my $user = http_json GET => '/api/user';
-    is $user->{points} || 0, 0;
+    is $user->{points}, 0;
 
     http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'closed' } };
 

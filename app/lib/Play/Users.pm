@@ -19,6 +19,14 @@ sub get_by_twitter_login {
     return $self->get({ twitter => { login => $login } });
 }
 
+sub _prepare_user {
+    my $self = shift;
+    my ($user) = @_;
+    $user->{_id} = $user->{_id}->to_string;
+    $user->{points} ||= 0;
+    return $user;
+}
+
 sub get {
     my $self = shift;
     my ($params) = validate_pos(@_, { type => HASHREF });
@@ -26,7 +34,7 @@ sub get {
     my $user = $self->collection->find_one($params);
     return unless $user;
 
-    $user->{_id} = "$user->{_id}";
+    $self->_prepare_user($user);
     return $user;
 }
 
@@ -47,8 +55,9 @@ sub add {
 sub list {
     my $self = shift;
     my ($params) = validate_pos(@_);
+
     my @users = $self->collection->find({})->all;
-    $_->{_id} = "$_->{_id}" for @users;
+    $self->_prepare_user($_) for @users;
     return \@users;
 }
 
