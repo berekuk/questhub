@@ -22,27 +22,24 @@ my $quests_data = {
 };
 
 
-#--- Init
-my $quests = Play::Quests->new;
-my $collection = $quests->collection;
-my $ids;
 sub setup :Tests(setup) {
 
-    #--- Delete all
-    $collection->remove({});
+    my $quests = Play::Quests->new;
 
-    #-- Insert
-    foreach ( keys %$quests_data ) {
+    Dancer::session login => undef;
+    $quests->collection->remove({});
+
+    # insert quests to DB
+    for (keys %$quests_data) {
         delete $quests_data->{$_}->{_id};
-        my $OID = $collection->insert( $quests_data->{$_} ); # MongoDB::OID
+        my $OID = $quests->collection->insert( $quests_data->{$_} ); # MongoDB::OID
         $quests_data->{$_}->{_id} = $OID->to_string;
-        $ids->{ $_ } = $OID;
     }
 }
 
 sub perl_quest_list :Test(1) {
     cmp_deeply(
-        [ sort { $a->{_id} cmp $b->{_id} } @{ $quests->list({}) } ],
+        [ sort { $a->{_id} cmp $b->{_id} } @{ Play::Quests->new->list({}) } ],
         [ sort { $a->{_id} cmp $b->{_id} } values %$quests_data ],
     );
 }
@@ -83,36 +80,16 @@ sub edit_quest :Tests {
     my $id          = $edited_quest->{_id};
     local $edited_quest->{name} = 'name_11'; # Change
 
-    #--
-    my $old_login = Dancer::session->{login};
     Dancer::session login => $edited_quest->{user};
 
-    my $response    = dancer_response PUT => '/api/quest/'.$id, { params => { name => $edited_quest->{name} } };
+    my $response = dancer_response PUT => "/api/quest/$id", { params => { name => $edited_quest->{name} } };
+    is $response->status, 200, 'status - OK';
 
-    #--
-    my $subtestname = 'Edit specified quest, status - OK';
-    my $got         = $response->{status};
-    my $expect      = 200;
-    is $got, $expect, $subtestname;
+    cmp_deeply decode_json($response->content), { result => 'ok', id => $id }, 'json';
 
-    #--
-    $subtestname = 'Edit specified quest - OK';
-    $got         = decode_json( $response->{content} );
-                   delete $got->{id};
-    $expect      = { result  => 'ok' };
-    cmp_deeply $got, $expect, $subtestname;
-
-    #---
-    $subtestname    = 'Edit specified quest, check updated - OK';
-    $got            = $collection->find_one({
-                        _id => MongoDB::OID->new(value => $id)
-                      });
-                      Play::Quests::_prepare_quest( undef, $got );
-    $expect         = $edited_quest;
-    cmp_deeply $got, $expect, $subtestname;
-
-    #-- restore session login
-    Dancer::session( login => $old_login ) if $old_login;
+    my $get_response = dancer_response GET => "/api/quest/$id";
+    is $get_response->status, 200;
+    cmp_deeply decode_json($get_response->content), $edited_quest;
 }
 
 
@@ -124,42 +101,30 @@ sub add_quest :Tests {
         status  => 'open',
     };
 
-    #---
-    my $old_login = Dancer::session->{login};
     Dancer::session login => $user;
 
     my $response    = dancer_response POST => '/api/quest', { params => $new_record };
 
-    #--
-    my $subtestname = 'Add new, status - OK';
-    my $got         = $response->{status};
-    my $expect      = 200;
-    is $got, $expect, $subtestname;
+    is $response->status, 200, 'status code';
 
-    if ( ref $response->{content} eq 'GLOB' ) {
-        my $fh = $response->{content};
+    if (ref $response->content eq 'GLOB') {
+        my $fh = $response->content;
         local $/ = undef;
-        $response->{content} = [ <$fh> ];
+        $response->content(join '', <$fh>);
     }
 
-    #--
-    $subtestname = 'Add new, data - OK';
-    $got         = decode_json( $response->{content} );
-    my $got_id = delete $got->{id};
-    $expect      = { result  => 'ok' };
-    cmp_deeply $got, $expect, $subtestname;
+    cmp_deeply
+        decode_json($response->content),
+        { result => 'ok', id => re('^\S+$') },
+        'response';
 
-    #---
-    $subtestname    = 'Add new, check inserted - OK';
-    $got            = $collection->find_one( $new_record );
-    Play::Quests::_prepare_quest( undef, $got );
-    $new_record->{_id} = $got_id;
-    $expect         = $new_record;
-    cmp_deeply $got, $expect, $subtestname;
+    my $id = decode_json($response->content)->{id};
 
-    #-- restore session login
-    Dancer::session( login => $old_login ) if $old_login;
-
+    my $get_response = dancer_response GET => "/api/quest/$id";
+    is $get_response->status, 200;
+    my $got_quest = decode_json($get_response->content);
+    delete $got_quest->{_id};
+    cmp_deeply $got_quest, $new_record;
 }
 
 sub delete_quest :Tests {
