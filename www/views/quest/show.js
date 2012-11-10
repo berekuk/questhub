@@ -20,6 +20,13 @@ pp.views.QuestShow = Backbone.View.extend({
     },
 
     render: function () {
-        this.$el.html(this.template(this.model.toJSON()));
+        var params = this.model.toJSON();
+        // TODO - should we move this to model?
+        params.my = (pp.app.user.get('login') == params.user);
+
+        this.$el.html(this.template(params));
+
+        // see http://stackoverflow.com/questions/6206471/re-render-tweet-button-via-js/6536108#6536108
+        $.ajax({ url: 'http://platform.twitter.com/widgets.js', dataType: 'script', cache:true});
     },
 });

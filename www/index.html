@@ -177,15 +177,27 @@
 
     <script type="text/template" id="template-quest-show">
 
-      <h1><%= name %></h1>
-      <div class="quest-details">
+      <h1>
         <span class="label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
-      </div>
+        <%= name %>
+      <% if (my) { %>
+        <a
+            href="https://twitter.com/share"
+            class="twitter-share-button"
+            data-lang="en"
+            data-url="http://play-perl.org/#quest/<%= _id %>"
+            data-text="<% if (status === 'open') { %>I've got the new quest:<% } else { %>I've completed the quest:<% } %> <%= name %>" data-hashtags="playperl">Tweet</a>
+      <% } %>
+      </h1>
+      <% if (my) { %>
+      <div>
       <% if (status === 'open') { %>
       <button class="quest-close btn">Close</button>
       <% } %>
       <% if (status === 'closed') { %>
       <button class="quest-reopen btn">Reopen</button>
+      <% } %>
+      </div>
       <% } %>
     </script>
     <script type="text/template" id="template-quest">
