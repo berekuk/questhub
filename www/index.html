@@ -72,9 +72,14 @@
     </script>
 
     <script type="text/template" id="template-user">
-      <div>
-        <span><%= login %></span><br/>
-        <span><%= points %></span>
+      <div class="well">
+        <% if (twitter.screen_name) { %>
+        <img src="http://api.twitter.com/1/users/profile_image?screen_name=<%= twitter.screen_name %>&size=bigger" width=73 height=73/>
+        <% } %>
+        <h4>
+          <%= login %>
+          <span class="badge badge-info"><%= points %></span>
+        </h4>
       </div>
     </script>
 
