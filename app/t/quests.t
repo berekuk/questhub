@@ -1,8 +1,6 @@
 use t::common;
 use parent qw(Test::Class);
 
-use JSON qw(encode_json decode_json);
-
 my $quests_data = {
     1 => {
         name    => 'name_1',
@@ -20,7 +18,6 @@ my $quests_data = {
         status  => 'closed',
     },
 };
-
 
 sub setup :Tests(setup) {
 
@@ -45,34 +42,24 @@ sub perl_quest_list :Test(1) {
 }
 
 sub quest_list :Tests {
-    my $response    = dancer_response GET => '/api/quests';
-    is $response->status, 200, 'http code';
+    my $list = http_json GET => '/api/quests';
 
     cmp_deeply
-        [ sort { $a->{_id} cmp $b->{_id} } @{ decode_json($response->content) } ],
-        [ sort { $a->{_id} cmp $b->{_id} } values %$quests_data ],
-        'json';
+        [ sort { $a->{_id} cmp $b->{_id} } @$list ],
+        [ sort { $a->{_id} cmp $b->{_id} } values %$quests_data ];
 }
 
 sub quest_list_filtering :Tests {
-    my $response    = dancer_response GET => '/api/quests', { params => { status => 'closed' } };
+    my $list = http_json GET => '/api/quests', { params => { status => 'closed' } };
 
-    is $response->status, 200, 'http code';
-
-    cmp_deeply
-        decode_json( $response->content ),
-        [ $quests_data->{3} ],
-        'json';
+    cmp_deeply $list, [ $quests_data->{3} ];
 }
 
 sub single_quest :Tests {
     my $id          =  $quests_data->{1}->{_id};
-    my $response    = dancer_response GET => '/api/quest/'.$id;
+    my $quest = http_json GET => '/api/quest/'.$id;
 
-    cmp_deeply(
-        decode_json( $response->content ),
-        $quests_data->{1}
-    );
+    cmp_deeply $quest, $quests_data->{1};
 }
 
 sub edit_quest :Tests {
@@ -82,14 +69,11 @@ sub edit_quest :Tests {
 
     Dancer::session login => $edited_quest->{user};
 
-    my $response = dancer_response PUT => "/api/quest/$id", { params => { name => $edited_quest->{name} } };
-    is $response->status, 200, 'status - OK';
+    my $put_result = http_json PUT => "/api/quest/$id", { params => { name => $edited_quest->{name} } };
+    cmp_deeply $put_result, { result => 'ok', id => $id }, 'put result';
 
-    cmp_deeply decode_json($response->content), { result => 'ok', id => $id }, 'json';
-
-    my $get_response = dancer_response GET => "/api/quest/$id";
-    is $get_response->status, 200;
-    cmp_deeply decode_json($get_response->content), $edited_quest;
+    my $got_quest = http_json GET => "/api/quest/$id";
+    cmp_deeply $got_quest, $edited_quest;
 }
 
 
@@ -103,26 +87,16 @@ sub add_quest :Tests {
 
     Dancer::session login => $user;
 
-    my $response    = dancer_response POST => '/api/quest', { params => $new_record };
-
-    is $response->status, 200, 'status code';
-
-    if (ref $response->content eq 'GLOB') {
-        my $fh = $response->content;
-        local $/ = undef;
-        $response->content(join '', <$fh>);
-    }
+    my $add_result = http_json POST => '/api/quest', { params => $new_record };
 
     cmp_deeply
-        decode_json($response->content),
+        $add_result,
         { result => 'ok', id => re('^\S+$') },
         'response';
 
-    my $id = decode_json($response->content)->{id};
+    my $id = $add_result->{id};
 
-    my $get_response = dancer_response GET => "/api/quest/$id";
-    is $get_response->status, 200;
-    my $got_quest = decode_json($get_response->content);
+    my $got_quest = http_json GET => "/api/quest/$id";
     delete $got_quest->{_id};
     cmp_deeply $got_quest, $new_record;
 }
@@ -165,18 +139,16 @@ sub delete_quest :Tests {
 sub points :Tests {
     my $quest = $quests_data->{1};
 
-    my $add_user_result = dancer_response GET => "/api/fakeuser/$quest->{user}";
-    is $add_user_result->status, 200 or diag $add_user_result->content;
+    http_json GET => "/api/fakeuser/$quest->{user}";
     Dancer::session login => $quest->{user};
 
-    my $user_response = dancer_response GET => '/api/user';
-    is decode_json($user_response->content)->{points} || 0, 0;
+    my $user = http_json GET => '/api/user';
+    is $user->{points} || 0, 0;
 
-    my $response = dancer_response PUT => "/api/quest/$quest->{_id}", { params => { status => 'closed' } };
-    is $response->status, 200, 'updating status is ok' or diag $response->content;
+    http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'closed' } };
 
-    $user_response = dancer_response GET => '/api/user';
-    is decode_json($user_response->content)->{points}, 1;
+    $user = http_json GET => '/api/user';
+    is $user->{points}, 1;
 }
 
 __PACKAGE__->new->runtests;

@@ -1,25 +1,17 @@
 use t::common;
 
-use JSON ();
-my $json = JSON->new;
-
 {
-    my $users = dancer_response GET => '/api/users';
-    is $users->status, 200;
-    cmp_deeply $json->decode($users->content), [];
+    my $users = http_json GET => '/api/users';
+    cmp_deeply $users, [];
+}
+
+for my $user (qw( blah blah2 )) {
+    http_json GET => "/api/fakeuser/$user";
 }
 
 {
-    for my $user (qw( blah blah2 )) {
-        my $add_result = dancer_response GET => "/api/fakeuser/$user";
-        is $add_result->status, 200;
-    }
-}
-
-{
-    my $user = dancer_response GET => '/api/user';
-    is $user->status, 200;
-    cmp_deeply $json->decode($user->content), {
+    my $user = http_json GET => '/api/user';
+    cmp_deeply $user, {
         "twitter" => {
             "screen_name" => 'blah2',
         },
@@ -30,9 +22,8 @@ my $json = JSON->new;
 }
 
 {
-    my $user = dancer_response GET => '/api/users';
-    is $user->status, 200;
-    cmp_deeply $json->decode($user->content), [
+    my $user = http_json GET => '/api/users';
+    cmp_deeply $user, [
         {
             "twitter" => {
                 "login" => 'blah',
@@ -51,12 +42,10 @@ my $json = JSON->new;
 }
 
 {
-    my $users = dancer_response POST => '/api/logout';
-    is $users->status, 200;
+    http_json POST => '/api/logout';
 
-    my $user = dancer_response GET => '/api/user';
-    is $user->status, 200;
-    cmp_deeply $json->decode($user->content), { registered => 0 };
+    my $user = http_json GET => '/api/user';
+    cmp_deeply $user, { registered => 0 };
 }
 
 done_testing;
