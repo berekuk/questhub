@@ -17,7 +17,9 @@ pp.views.QuestCollection = Backbone.View.extend({
 
     onAdd: function (quest) {
         var view = new pp.views.Quest({model: quest});
-        this.$el.find('.quests-list').append(view.render().el);
+        var ql = this.$el.find('.quests-list');
+        ql.show(); // quests table is hidden initially - see https://github.com/berekuk/play-perl/issues/61
+        ql.append(view.render().el);
     },
 
     onReset: function () {
