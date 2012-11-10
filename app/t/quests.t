@@ -1,4 +1,5 @@
 use t::common;
+use parent qw(Test::Class);
 
 use JSON qw(encode_json decode_json);
 
@@ -25,7 +26,7 @@ my $quests_data = {
 my $quests = Play::Quests->new;
 my $collection = $quests->collection;
 my $ids;
-sub _init_db_data {
+sub setup :Tests(setup) {
 
     #--- Delete all
     $collection->remove({});
@@ -38,31 +39,25 @@ sub _init_db_data {
         $ids->{ $_ } = $OID;
     }
 }
-_init_db_data();
 
-
-subtest 'Play::Quests list' => sub {
+sub perl_quest_list :Test(1) {
     cmp_deeply(
         [ sort { $a->{_id} cmp $b->{_id} } @{ $quests->list({}) } ],
         [ sort { $a->{_id} cmp $b->{_id} } values %$quests_data ],
     );
-};
+}
 
-
-subtest '/api/quests' => sub {
-
+sub quest_list :Tests {
     my $response    = dancer_response GET => '/api/quests';
-
     is $response->{status}, 200, 'http code';
 
     cmp_deeply
         [ sort { $a->{_id} cmp $b->{_id} } @{ decode_json( $response->{content} ) } ],
         [ sort { $a->{_id} cmp $b->{_id} } values %$quests_data ],
         'json';
-};
+}
 
-subtest '/api/quests filtering' => sub {
-
+sub quest_list_filtering :Tests {
     my $response    = dancer_response GET => '/api/quests', { params => { status => 'closed' } };
 
     is $response->{status}, 200, 'http code';
@@ -71,11 +66,9 @@ subtest '/api/quests filtering' => sub {
         decode_json( $response->{content} ),
         [ $quests_data->{3} ],
         'json';
-};
+}
 
-
-subtest '/api/quest/ID' => sub {
-
+sub single_quest :Tests {
     my $id          =  $quests_data->{1}->{_id};
     my $response    = dancer_response GET => '/api/quest/'.$id;
 
@@ -83,11 +76,9 @@ subtest '/api/quest/ID' => sub {
         decode_json( $response->{content} ),
         $quests_data->{1}
     );
-};
+}
 
-
-subtest 'Edit specified quest' => sub {
-
+sub edit_quest :Tests {
     my $edited_quest = $quests_data->{1};
     my $id          = $edited_quest->{_id};
     local $edited_quest->{name} = 'name_11'; # Change
@@ -122,14 +113,10 @@ subtest 'Edit specified quest' => sub {
 
     #-- restore session login
     Dancer::session( login => $old_login ) if $old_login;
-
-    #--- restore data
-    _init_db_data();
-};
+}
 
 
-subtest 'Add new' => sub {
-
+sub add_quest :Tests {
     my $user = 'user_4';
     my $new_record = {
         user    => $user,
@@ -173,13 +160,9 @@ subtest 'Add new' => sub {
     #-- restore session login
     Dancer::session( login => $old_login ) if $old_login;
 
-    #--- restore data
-    _init_db_data();
-};
+}
 
-subtest 'Delete' => sub {
-    _init_db_data();
-
+sub delete_quest :Tests {
     my $id_to_remove;
     my $user;
     {
@@ -212,11 +195,9 @@ subtest 'Delete' => sub {
         my $list_after_resp = dancer_response GET => '/api/quests';
         is scalar @{ decode_json($list_after_resp->{content}) }, 2, 'deleted quests are not shown in list';
     }
-};
+}
 
-subtest 'Points' => sub {
-    _init_db_data();
-
+sub points :Tests {
     my $quest = $quests_data->{1};
 
     my $add_user_result = dancer_response GET => "/api/fakeuser/$quest->{user}";
@@ -231,7 +212,6 @@ subtest 'Points' => sub {
 
     $user_response = dancer_response GET => '/api/user';
     is decode_json($user_response->content)->{points}, 1;
+}
 
-};
-
-done_testing;
+__PACKAGE__->new->runtests;
