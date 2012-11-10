@@ -150,7 +150,12 @@ sub points :Tests {
     http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'closed' } };
 
     $user = http_json GET => '/api/user';
-    is $user->{points}, 1;
+    is $user->{points}, 1, 'got a point';
+
+    http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'open' } };
+    $user = http_json GET => '/api/user';
+    is $user->{points}, 0, 'lost a point';
+
 }
 
 __PACKAGE__->new->runtests;
