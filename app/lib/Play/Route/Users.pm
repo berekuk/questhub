@@ -29,7 +29,7 @@ get '/user' => sub {
     my $user = {};
     my $login = session('login');
     if ($login) {
-        $user = $users->get({ login => $login });
+        $user = $users->get_by_login($login);
         $user->{registered} = 1;
     }
     else {
@@ -50,10 +50,10 @@ post '/register' => sub {
     my $twitter_login = session('twitter_user')->{screen_name};
     my $login = param('login') or return { error => 'no login specified' };
 
-    if ($users->get({ login => $login })) {
+    if ($users->get_by_login($login)) {
         return { error => "Already exists" };
     }
-    if ($users->get({ twitter => { login => $twitter_login } })) {
+    if ($users->get_by_twitter_login($twitter_login)) {
         return { error => "Already bound" };
     }
 

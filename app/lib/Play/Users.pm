@@ -12,15 +12,11 @@ has 'collection' => (
     },
 );
 
-# unlike ->get, this function returns undef if it doesn't find a user
 sub get_by_twitter_login {
     my $self = shift;
     my ($login) = validate_pos(@_, { type => SCALAR });
-    my $user = $self->collection->find_one({ twitter => { login => $login } });
-    return unless $user;
 
-    $user->{_id} = "$user->{_id}";
-    return $user;
+    return $self->get({ twitter => { login => $login } });
 }
 
 sub get {
@@ -32,6 +28,12 @@ sub get {
 
     $user->{_id} = "$user->{_id}";
     return $user;
+}
+
+sub get_by_login {
+    my $self = shift;
+    my ($login) = validate_pos(@_, { type => SCALAR });
+    return $self->get({ login => $login });
 }
 
 sub add {
