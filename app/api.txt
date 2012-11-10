@@ -4,9 +4,10 @@ Read the code (`lib/Play/Route/*.pm`) or try them in the browser for the resonse
 
 GET /auth/twitter               # go to twitter, obtain login, set 'twitter_user' session and return to /#register
 GET /api/user                   # get current user; 'registered=1' flag means the user is fully registered; otherwise json still can contain some info (e.g. twitter)
+GET /api/user/{login}           # get another user
 POST /api/register              # register the new user login, associate it with the current twitter user, save to db
 GET /api/users                  # get the list of all users
-GET /api/fakeuser/{login}       # temporary, fake analog of /register; dev mode only
+GET /api/fakeuser/{login}       # temporary, fake analog of /register; dev mode only; 'notwitter' cgi param disables fake twitter account generation
 POST /api/quest                 # add a new quest for current user
 PUT /api/quest/{id}             # update quest
 DELETE /api/quest/{id}          # delete quest (actually, set its status to "deleted"; it won't be shown in /api/quests, but will still be fetchable by its id)
