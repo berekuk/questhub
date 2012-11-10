@@ -160,6 +160,9 @@
       <% if (status === 'open') { %>
       <button class="quest-close btn">Close</button>
       <% } %>
+      <% if (status === 'closed') { %>
+      <button class="quest-reopen btn">Reopen</button>
+      <% } %>
     </script>
     <script type="text/template" id="template-quest">
         <tr class="<%= status === 'open' && 'warning' %>">

@@ -6,4 +6,10 @@ pp.models.Quest = Backbone.Model.extend({
             { error: pp.app.onError }
         );
     },
+    reopen: function() {
+        this.save(
+            { "status": "open" },
+            { error: pp.app.onError }
+        );
+    }
 });

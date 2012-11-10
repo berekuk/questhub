@@ -3,10 +3,15 @@ pp.views.QuestShow = Backbone.View.extend({
 
     events: {
         "click .quest-close": "close",
+        "click .quest-reopen": "reopen"
     },
 
     close: function () {
         this.model.close();
+    },
+
+    reopen: function () {
+        this.model.reopen();
     },
 
     initialize: function () {
