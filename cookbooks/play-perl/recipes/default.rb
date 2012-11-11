@@ -32,11 +32,14 @@ cpan_module 'Dancer::Plugin::Auth::Twitter'
 
 include_recipe "mongodb::default"
 
-template "/etc/resolv.conf" do
-  source "resolv.conf.erb"
-  owner "root"
-  group "root"
-  mode 0644
+# Override dns in dev; but leave the resolv.conf in production (i.e. on EC2) as is.
+if node['dev']
+  template "/etc/resolv.conf" do
+    source "resolv.conf.erb"
+    owner "root"
+    group "root"
+    mode 0644
+  end
 end
 
 directory '/web' # logs
@@ -48,9 +51,11 @@ directory "/web/dancer"
 ubic_service "dancer" do
   action [:install, :start]
 end
-directory "/web/dancer-dev"
-ubic_service "dancer-dev" do
-  action [:install, :start]
+if node['dev']
+  directory "/web/dancer-dev"
+  ubic_service "dancer-dev" do
+    action [:install, :start]
+  end
 end
 
 # nginx
@@ -72,16 +77,18 @@ template "/etc/nginx/sites-enabled/play-perl.org" do
   notifies :restart, "service[nginx]"
 end
 
-template "/etc/nginx/sites-enabled/play-perl-dev.org" do
-  source "nginx-site.conf.erb"
-  owner "root"
-  group "root"
-  mode 0644
-  variables({
-    :port => 81,
-    :dancer_port => 3001
-  })
-  notifies :restart, "service[nginx]"
+if node['dev']
+  template "/etc/nginx/sites-enabled/play-perl-dev.org" do
+    source "nginx-site.conf.erb"
+    owner "root"
+    group "root"
+    mode 0644
+    variables({
+      :port => 81,
+      :dancer_port => 3001
+    })
+    notifies :restart, "service[nginx]"
+  end
 end
 
 service "nginx"

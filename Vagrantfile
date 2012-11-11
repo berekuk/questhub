@@ -21,10 +21,11 @@ Vagrant::Config.run do |config|
 
   # Enable and configure the chef solo provisioner
   config.vm.provision :chef_solo do |chef|
-    # We're going to download our cookbooks from the web
-    #chef.recipe_url = "http://files.vagrantup.com/getting_started/cookbooks.tar.gz"
 
     chef.cookbooks_path = ['cookbooks']
+    chef.json = {
+      'dev' => true
+    }
 
     # Tell chef what recipe to run. In this case, the `vagrant_main` recipe
     # does all the magic.
@@ -36,13 +37,13 @@ Vagrant::Config.run do |config|
 
     require 'json'
     open('dna.json', 'w') do |f|
-        chef.json[:run_list] = chef.run_list
-        f.write chef.json.to_json
+      chef.json[:run_list] = chef.run_list
+      f.write chef.json.to_json
     end
     open('.cookbooks_path.json', 'w') do |f|
-        f.puts JSON.generate([chef.cookbooks_path]
-                             .flatten
-                             .map{|x| x})
+      f.puts JSON.generate(
+        [chef.cookbooks_path].flatten.map{|x| x}
+      )
     end
   end
 
