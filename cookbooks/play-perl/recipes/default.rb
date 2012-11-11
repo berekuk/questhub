@@ -1,4 +1,3 @@
-include_recipe "mongodb"
 include_recipe "perl"
 
 # for development
@@ -7,6 +6,10 @@ package 'git'
 package 'screen'
 package 'perl-doc'
 package 'libssl-dev' # used by Net::Twitter
+
+# There is a mongodb cookbook, but it's too generic and tries to do too many things to be portable.
+# I think the stock mongodb deb package will suffice for now.
+package 'mongodb'
 
 package 'make' # for compiling MongoDB
 
@@ -29,8 +32,6 @@ cpan_module 'Clone'
 cpan_module 'Dancer::Serializer::JSON'
 cpan_module 'Dancer::Session::MongoDB'
 cpan_module 'Dancer::Plugin::Auth::Twitter'
-
-include_recipe "mongodb::default"
 
 # Override dns in dev; but leave the resolv.conf in production (i.e. on EC2) as is.
 if node['dev']

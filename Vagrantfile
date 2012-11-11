@@ -31,7 +31,6 @@ Vagrant::Config.run do |config|
     # does all the magic.
     chef.add_recipe 'apt-repo'
     chef.add_recipe 'ubic'
-    chef.add_recipe 'mongodb'
     chef.add_recipe 'perl'
     chef.add_recipe 'play-perl'
 
