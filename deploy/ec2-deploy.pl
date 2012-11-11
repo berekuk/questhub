@@ -49,7 +49,6 @@ sub INFO {
 
 sub wait_for_bootstrap {
     INFO "Waiting for bootstrap to complete";
-    STDOUT->autoflush(1);
     for my $trial (1..20) {
         eval {
             system(qq{ssh -q -t $USER\@$IP "sudo -i which chef-solo > /dev/null"})
@@ -64,6 +63,14 @@ sub wait_for_bootstrap {
     }
     print "\n";
     die "Timeout, check /var/log/user-data.log to find out why bootstrap.sh failed";
+}
+
+sub checkout_code {
+    # we don't checkout it with chef because it's not in cookbooks, because sources and cookbooks are in a single repo...
+    # maybe it's worth refactoring
+    INFO 'Updating /vagrant code';
+    system(qq{ssh -t $USER\@$IP "sudo -i sh -c '[ -d /vagrant ] || git clone https://github.com/berekuk/play-perl.git /vagrant'"});
+    system(qq{ssh -t $USER\@$IP "sudo -i sh -c 'cd /vagrant && git pull'"});
 }
 
 sub provision {
@@ -93,15 +100,17 @@ sub start_instance {
 
     {
         my $ok;
-        for my $trial (1..5) {
+        for my $trial (1..20) {
             my $key = xqx("ssh-keyscan $IP 2>/dev/null");
+            chomp $key;
             unless ($key) {
                 # too early
+                print '.';
                 sleep 3;
                 next;
             }
             open my $fh, '>>', "$ENV{HOME}/.ssh/known_hosts";
-            print {$fh} $key;
+            print {$fh} "$key\n";
             close $fh;
             $ok = 1;
             last;
@@ -112,6 +121,7 @@ sub start_instance {
 }
 
 sub main {
+    STDOUT->autoflush(1);
 
     my $create;
     GetOptions(
@@ -127,6 +137,7 @@ sub main {
     system('tar cfz cookbooks.tgz cookbooks');
     system("scp -r cookbooks.tgz dna.json $USER\@$IP:.");
 
+    checkout_code();
     provision();
 }
 
