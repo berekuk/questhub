@@ -14,10 +14,9 @@ Vagrant::Config.run do |config|
   config.vm.forward_port 80, 3000
   config.vm.forward_port 81, 3001
 
-  # Share an additional folder to the guest VM. The first argument is
-  # an identifier, the second is the path on the guest to mount the
-  # folder, and the third is the path on the host to the actual folder.
-  # config.vm.share_folder "v-data", "/vagrant_data", "../data"
+  # bind source code to /play in addition to /vagrant
+  # all code should use /play, because we have no vagrant in production environment, and it would be weird to keep /vagrant folder there
+  config.vm.share_folder "play", "/play", "."
 
   # Enable and configure the chef solo provisioner
   config.vm.provision :chef_solo do |chef|

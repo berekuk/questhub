@@ -29,7 +29,9 @@ To reload the production instance, run `sudo ubic restart dancer` inside the VM.
 Port 80 from VM is forwarded to port 3000 on your localhost, and port 81 to 3001.
 So, after starting VM using `vagrant up`, you can access the development instance by going to http://localhost:3001 in your browser.
 
-nginx logs are in `/web`. Dancer logs are in `/web/dancer` and `/web/dancer-dev`.
+Source code is stored (mounted) in `/play`. It's also mounted into `/vagrant`, but you shouldn't reference `/vagrant` dir in the code, because there's no `/vagrant` in production.
+
+Logs and other data, except for mongodb, is in `/data`. Nginx logs are in `/data/access.log` and `/data/error.log`. Dancer logs are in `/data/dancer` and `/data/dancer-dev`.
 
 How to reconfigure the environment
 =========

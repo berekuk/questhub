@@ -68,9 +68,9 @@ sub wait_for_bootstrap {
 sub checkout_code {
     # we don't checkout it with chef because it's not in cookbooks, because sources and cookbooks are in a single repo...
     # maybe it's worth refactoring
-    INFO 'Updating /vagrant code';
-    system(qq{ssh -t $USER\@$IP "sudo -i sh -c '[ -d /vagrant ] || git clone https://github.com/berekuk/play-perl.git /vagrant'"});
-    system(qq{ssh -t $USER\@$IP "sudo -i sh -c 'cd /vagrant && git pull'"});
+    INFO 'Updating /play code';
+    system(qq{ssh -t $USER\@$IP "sudo -i sh -c '[ -d /play ] || git clone https://github.com/berekuk/play-perl.git /play'"});
+    system(qq{ssh -t $USER\@$IP "sudo -i sh -c 'cd /play && git pull'"});
 }
 
 sub provision {

@@ -9,8 +9,8 @@ Ubic::Service::SimpleDaemon->new({
         DEV_MODE => 1, # enables some development-only routes
     },
     bin => "bin/app.pl --port 3001 --environment development",
-    cwd => "/vagrant/app",
-    stdout => '/web/dancer-dev/stdout.log',
-    stderr => '/web/dancer-dev/stderr.log',
-    ubic_log => '/web/dancer-dev/ubic.log',
+    cwd => "/play/app",
+    stdout => '/data/dancer-dev/stdout.log',
+    stderr => '/data/dancer-dev/stderr.log',
+    ubic_log => '/data/dancer-dev/ubic.log',
 });

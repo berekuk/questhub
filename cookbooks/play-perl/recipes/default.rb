@@ -43,17 +43,17 @@ if node['dev']
   end
 end
 
-directory '/web' # logs
+directory '/data' # logs
 
 # dancer services
 include_recipe "ubic"
 cpan_module 'Ubic::Service::Plack'
-directory "/web/dancer"
+directory "/data/dancer"
 ubic_service "dancer" do
   action [:install, :start]
 end
 if node['dev']
-  directory "/web/dancer-dev"
+  directory "/data/dancer-dev"
   ubic_service "dancer-dev" do
     action [:install, :start]
   end

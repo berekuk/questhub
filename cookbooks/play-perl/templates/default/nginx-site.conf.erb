@@ -5,10 +5,10 @@ server {
   # Turn sendfile off because it behaves bad with vboxsf
   sendfile off;
 
-  access_log /web/access.log;
-  error_log  /web/error.log info;
+  access_log /data/access.log;
+  error_log  /data/error.log info;
 
-  root /vagrant/www;
+  root /play/www;
 
   location /api {
     try_files $uri @proxy;

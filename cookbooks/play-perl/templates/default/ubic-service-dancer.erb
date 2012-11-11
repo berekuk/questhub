@@ -13,8 +13,8 @@ Ubic::Service::Plack->new({
         PLACK_ENV => 'production',
     },
     app => "bin/app.pl",
-    cwd => "/vagrant/app",
-    stdout => '/web/dancer/stdout.log',
-    stderr => '/web/dancer/stderr.log',
-    ubic_log => '/web/dancer/ubic.log',
+    cwd => "/play/app",
+    stdout => '/data/dancer/stdout.log',
+    stderr => '/data/dancer/stderr.log',
+    ubic_log => '/data/dancer/ubic.log',
 });
