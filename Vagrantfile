@@ -21,29 +21,11 @@ Vagrant::Config.run do |config|
 
   # Enable and configure the chef solo provisioner
   config.vm.provision :chef_solo do |chef|
-
     chef.cookbooks_path = ['cookbooks']
     chef.json = {
       'dev' => true
     }
-
-    # Tell chef what recipe to run. In this case, the `vagrant_main` recipe
-    # does all the magic.
-    chef.add_recipe 'apt-repo'
-    chef.add_recipe 'ubic'
-    chef.add_recipe 'perl'
     chef.add_recipe 'play-perl'
-
-    require 'json'
-    open('dna.json', 'w') do |f|
-      chef.json[:run_list] = chef.run_list
-      f.write chef.json.to_json
-    end
-    open('.cookbooks_path.json', 'w') do |f|
-      f.puts JSON.generate(
-        [chef.cookbooks_path].flatten.map{|x| x}
-      )
-    end
   end
 
 end
