@@ -6,6 +6,7 @@ package 'vim'
 package 'git'
 package 'screen'
 package 'perl-doc'
+package 'libssl-dev' # used by Net::Twitter
 
 package 'make' # for compiling MongoDB
 
