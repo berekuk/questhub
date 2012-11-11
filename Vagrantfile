@@ -69,10 +69,28 @@ Vagrant::Config.run do |config|
     # We're going to download our cookbooks from the web
     #chef.recipe_url = "http://files.vagrantup.com/getting_started/cookbooks.tar.gz"
 
+    chef.cookbooks_path = ['cookbooks']
+
     # Tell chef what recipe to run. In this case, the `vagrant_main` recipe
     # does all the magic.
     #chef.add_recipe("vagrant_main")
-    chef.add_recipe('play-perl')
+    chef.add_recipe 'apt-repo'
+    chef.add_recipe 'ubic'
+    chef.add_recipe 'mongodb'
+    chef.add_recipe 'perl'
+    chef.add_recipe 'play-perl'
+
+    require 'json'
+    open('dna.json', 'w') do |f|
+        chef.json[:run_list] = chef.run_list
+        f.write chef.json.to_json
+    end
+    puts chef.cookbooks_path
+    open('.cookbooks_path.json', 'w') do |f|
+        f.puts JSON.generate([chef.cookbooks_path]
+                             .flatten
+                             .map{|x| x})
+    end
   end
 
   # Enable provisioning with chef server, specifying the chef server URL,
