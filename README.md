@@ -47,3 +47,5 @@ You can re-deploy a new chef configuration into an existing VM by running `vagra
 ## API
 
 See `app/api.txt` for backend API documentation.
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/799a7f93ca5a43d864a4743b54ff2402 "githalytics.com")](http://githalytics.com/berekuk/Ubic)
