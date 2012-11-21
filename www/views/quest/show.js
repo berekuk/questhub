@@ -16,6 +16,7 @@ pp.views.QuestShow = Backbone.View.extend({
 
     initialize: function () {
         this.model.bind('change', this.render, this);
+        pp.app.user.bind('change', this.render, this);
         this.model.fetch();
     },
 
