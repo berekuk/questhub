@@ -1,7 +1,5 @@
 pp.views.UserCollection = Backbone.View.extend({
 
-    tag: 'div',
-
     template: _.template($('#template-user-collection').text()),
 
     initialize: function () {

@@ -19,6 +19,8 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
+    <link href="css/common.css" rel="stylesheet">
+
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="vendors/bootstrap/ico/favicon.ico">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="vendors/bootstrap/ico/apple-touch-icon-144-precomposed.png">
@@ -124,6 +126,27 @@
         </div>
     </script>
 
+    <script type="text/template" id="template-comment-collection">
+        <table class="table table-bordered">
+          <% comments.each(function(comment) { %>
+            <tr>
+              <td>
+                <%= comment.get("author") %>
+              </td>
+              <td>
+                <%= comment.get("body") %>
+              </td>
+            </tr>
+          <% }); %>
+        </table>
+        <div class="comment-add">
+          <textarea name="comment" rows="3" placeholder="Comment" class="span6"></textarea>
+          <div>
+            <button class="btn btn-primary btn-large submit">Add comment</button>
+          </div>
+        </div>
+    </script>
+
     <script type="text/template" id="template-quest-add">
       <h1>Add a quest</h1>
       <div>
@@ -199,6 +222,7 @@
       <% } %>
       </div>
       <% } %>
+      <div class="comments"></div>
     </script>
     <script type="text/template" id="template-quest">
         <tr class="<%= status === 'open' && 'warning' %>">
@@ -245,12 +269,15 @@
     <script src="models/current-user.js"></script>
     <script src="models/another-user.js"></script>
     <script src="models/quest.js"></script>
-    <script src="models/quest-collection.js"></script>
+    <script src="models/comment.js"></script>
     <script src="models/user-collection.js"></script>
+    <script src="models/quest-collection.js"></script>
+    <script src="models/comment-collection.js"></script>
     <script src="views/user.js"></script>
     <script src="views/current-user.js"></script>
-    <script src="views/quest-collection.js"></script>
     <script src="views/user-collection.js"></script>
+    <script src="views/quest-collection.js"></script>
+    <script src="views/comment-collection.js"></script>
     <script src="views/home.js"></script>
     <script src="views/app.js"></script>
     <script src="views/dashboard.js"></script>
