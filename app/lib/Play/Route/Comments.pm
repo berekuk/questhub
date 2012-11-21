@@ -19,7 +19,7 @@ post '/comment/:id' => sub {
     }
 };
 
-get '/comments/:quest_id' => sub {
+get '/comment/:quest_id' => sub {
     return $comments->get(param('quest_id'));
 };
 

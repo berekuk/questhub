@@ -16,7 +16,7 @@ sub add_comment :Tests {
         { result => 'ok', id => re('^\S+$') },
         'add comment result';
 
-    my $list = http_json GET => "/api/comments/$quest_id";
+    my $list = http_json GET => "/api/comment/$quest_id";
     cmp_deeply
         $list,
         [
