@@ -8,6 +8,7 @@ pp.views.CommentCollection = Backbone.View.extend({
 
     initialize: function () {
         this.options.comments.on('reset', this.render, this);
+        _.bindAll(this);
     },
 
     render: function (collection) {
@@ -26,11 +27,6 @@ pp.views.CommentCollection = Backbone.View.extend({
     },
 
     onSuccess: function (model) {
-        $('#layout > .container').prepend(
-                    new pp.views.Notify({
-                        // Whoops! It is injection here, model.name should be sanitized
-                        text: 'Comment has been succesfully added'
-                    }).render().el
-        );
+        this.render();
     }
 });
