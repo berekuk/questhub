@@ -1,33 +1,42 @@
 pp.views.CommentCollection = Backbone.View.extend({
 
     events: {
-        'click .submit': 'addComment'
+        'click .submit': 'postComment'
     },
 
     template: _.template($('#template-comment-collection').text()),
 
     initialize: function () {
-        this.options.comments.on('reset', this.render, this);
         _.bindAll(this);
+        this.options.comments.on('reset', this.onReset, this);
+        this.options.comments.on('update', this.render, this);
+        this.render();
     },
 
     render: function (collection) {
-        this.$el.html(this.template({ comments: this.options.comments }));
+        this.$el.html(this.template());
         return this;
     },
 
-    addComment: function() {
+    renderOne: function (comment) {
+        var view = new pp.views.Comment({ model: comment });
+        var cl = this.$el.find('.comments-list');
+        cl.show();
+        cl.append(view.render().el);
+    },
+
+    postComment: function() {
         this.options.comments.create({
             'author': pp.app.user.get('login'),
             'body': this.$('[name=comment]').val()
         },
         {
-            'success': this.onSuccess,
+            'success': this.renderOne,
             'error': pp.app.onError
         });
     },
 
-    onSuccess: function (model) {
-        this.render();
+    onReset: function () {
+        this.options.comments.each(this.renderOne, this);
     }
 });

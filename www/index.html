@@ -127,19 +127,20 @@
     </script>
 
     <script type="text/template" id="template-comment-collection">
-        <div class="comments-list">
-          <% comments.each(function(comment) { %>
-            <div>
-            <%= comment.get("body") %> -- <%= comment.get("author") %>
-            </div>
-          <% }); %>
+      <div class="comments-list" style="display:none">
+      </div>
+      <div class="comment-add">
+        <textarea name="comment" rows="3" placeholder="Comment" class="span6"></textarea>
+        <div>
+          <button class="btn btn-primary btn-large submit">Add comment</button>
         </div>
-        <div class="comment-add">
-          <textarea name="comment" rows="3" placeholder="Comment" class="span6"></textarea>
-          <div>
-            <button class="btn btn-primary btn-large submit">Add comment</button>
-          </div>
-        </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="template-comment">
+      <div>
+        <%= body %> -- <%= author %>
+      </div>
     </script>
 
     <script type="text/template" id="template-quest-add">
@@ -193,8 +194,7 @@
         </div>
     </script>
 
-    <script type="text/template" id="template-quest-show">
-
+    <script type="text/template" id="template-quest-details">
       <h1>
         <span class="label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
         <%= name %>
@@ -217,8 +217,13 @@
       <% } %>
       </div>
       <% } %>
+    </script>
+
+    <script type="text/template" id="template-quest-page">
+      <div class="quest"></div>
       <div class="comments"></div>
     </script>
+
     <script type="text/template" id="template-quest">
         <tr class="<%= status === 'open' && 'warning' %>">
             <td>
@@ -281,7 +286,9 @@
     <script src="views/notify.js"></script>
     <script src="views/quest/quest.js"></script>
     <script src="views/quest/add.js"></script>
-    <script src="views/quest/show.js"></script>
+    <script src="views/quest/details.js"></script>
+    <script src="views/quest/page.js"></script>
+    <script src="views/comment.js"></script>
     <script src="app.js"></script>
 
   </body>
