@@ -18,6 +18,7 @@ pp.views.CommentCollection = Backbone.View.extend({
 
     addComment: function() {
         this.options.comments.create({
+            'author': pp.app.user.get('login'),
             'body': this.$('[name=comment]').val()
         },
         {
