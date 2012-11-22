@@ -127,18 +127,13 @@
     </script>
 
     <script type="text/template" id="template-comment-collection">
-        <table class="table table-bordered">
+        <div class="comments-list">
           <% comments.each(function(comment) { %>
-            <tr>
-              <td>
-                <%= comment.get("author") %>
-              </td>
-              <td>
-                <%= comment.get("body") %>
-              </td>
-            </tr>
+            <div>
+            <%= comment.get("body") %> -- <%= comment.get("author") %>
+            </div>
           <% }); %>
-        </table>
+        </div>
         <div class="comment-add">
           <textarea name="comment" rows="3" placeholder="Comment" class="span6"></textarea>
           <div>
