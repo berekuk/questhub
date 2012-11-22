@@ -18,7 +18,7 @@ $(function () {
             "welcome": "welcome",
             "register": "register",
             "quest/add": "questAdd",
-            "quest/:id": "questShow",
+            "quest/:id": "questPage",
             "players": "userList",
             "player/:login": "anotherDashboard",
         },
@@ -29,8 +29,8 @@ $(function () {
             setActiveMenuItem('add-quest');
         },
 
-        questShow: function (id) {
-            var view = new pp.views.QuestShow({ model: new pp.models.Quest({ id: id }) });
+        questPage: function (id) {
+            var view = new pp.views.QuestPage({ model: new pp.models.Quest({ id: id }) });
             appView.setPageView(view);
         },
 

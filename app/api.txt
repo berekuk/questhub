@@ -16,6 +16,8 @@ GET /api/quests?user={login}    # get all quests of a given user
 GET /api/quests?status={status} # get all quests with a given status
 GET /api/quest/{id}             # get one quest
 GET /api/dev/session/{name}     # get session value
+POST /api/comment/{quest_id}    # add new comment
+GET /api/comment/{quest_id}     # get all quest comments
 
 ## Registration
 
