@@ -28,6 +28,26 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="vendors/bootstrap/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="vendors/bootstrap/ico/apple-touch-icon-57-precomposed.png">
 
+    <!-- notification messages -->
+    <script type="text/template" id="template-error">
+        <div class="alert alert-error">
+          <button type="button" class="close" data-dismiss="alert">×</button>
+          <% if (response && response.error) { %>
+            <%= response.error %>
+          <% } else { %>
+            Unknown error
+          <% } %>
+        </div>
+    </script>
+
+    <script type="text/template" id="template-notify">
+        <div class="alert alert-notify">
+          <button type="button" class="close" data-dismiss="alert">×</button>
+          <%= text %>
+        </div>
+    </script>
+
+    <!-- main container with navbar -->
     <script type="text/template" id="template-app">
         <div class="navbar navbar-inverse navbar-fixed-top">
           <div class="navbar-inner">
@@ -54,39 +74,23 @@
         <div class="app-view-container container"></div>
     </script>
 
-    <script type="text/template" id="template-dashboard">
-      <div class="container-fluid">
-        <div class="row-fluid">
-          <div class="user span3"></div>
-          <div class="span9">
-            <div class="open-quests"></div>
-            <div class="closed-quests"></div>
-          </div>
-        </div>
-      </div>
+    <!-- current user widget from right-top corner -->
+    <script type="text/template" id="template-current-user">
+        <li class="dropdown">
+            <% if (registered === 1) { %>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= login %></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="#" class="logout">Logout</a>
+                    </li>
+                </ul>
+            <% } else { %>
+                <a href="/auth/twitter">Login with <i class="icon-twitter icon-large"></i></a>
+            <% } %>
+        </li>
     </script>
 
-    <script type="text/template" id="template-register">
-      <div>
-        Choose your name:
-        <input name="login" type="text" placeholder="Choose your login">
-        <button class="btn btn-primary btn-large submit">Register</button>
-      </div>
-    </script>
-
-    <script type="text/template" id="template-user-big">
-      <div class="well">
-        <% if (typeof(twitter) != 'undefined') {
-             if (twitter.screen_name) { %>
-        <img src="http://api.twitter.com/1/users/profile_image?screen_name=<%= twitter.screen_name %>&size=bigger" width=73 height=73/>
-        <% } } %>
-        <h4>
-          <%= login %>
-          <span class="badge badge-info"><%= points %></span>
-        </h4>
-      </div>
-    </script>
-
+    <!-- landing page -->
     <script type="text/template" id="template-home">
       <div>
       <h1>Play Perl</h1>
@@ -103,12 +107,57 @@
       </div>
     </script>
 
+    <!-- profile page - user and his/her quests -->
+    <script type="text/template" id="template-dashboard">
+      <div class="container-fluid">
+        <div class="row-fluid">
+          <div class="user span3"></div>
+          <div class="span9">
+            <div class="open-quests"></div>
+            <div class="closed-quests"></div>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="template-user-big">
+      <div class="well">
+        <% if (typeof(twitter) != 'undefined') {
+             if (twitter.screen_name) { %>
+        <img src="http://api.twitter.com/1/users/profile_image?screen_name=<%= twitter.screen_name %>&size=bigger" width=73 height=73/>
+        <% } } %>
+        <h4>
+          <%= login %>
+          <span class="badge badge-info"><%= points %></span>
+        </h4>
+      </div>
+    </script>
+
     <script type="text/template" id="template-quest-collection">
         <div>
           <table class="table table-bordered quests-list" style="display: none"></table>
         </div>
     </script>
 
+    <script type="text/template" id="template-quest-small">
+        <tr class="<%= status === 'open' && 'warning' %>">
+            <td>
+                <span class="label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
+                <a href="#quest/<%= _id %>"><%= name  %></a>
+            </td>
+        </tr>
+    </script>
+
+    <!-- registration form -->
+    <script type="text/template" id="template-register">
+      <div>
+        Choose your name:
+        <input name="login" type="text" placeholder="Choose your login">
+        <button class="btn btn-primary btn-large submit">Register</button>
+      </div>
+    </script>
+
+    <!-- users list -->
     <script type="text/template" id="template-user-collection">
         <div>
           <table class="table table-bordered quests-list">
@@ -126,23 +175,6 @@
         </div>
     </script>
 
-    <script type="text/template" id="template-comment-collection">
-      <div class="comments-list" style="display:none">
-      </div>
-      <div class="comment-add">
-        <textarea name="comment" rows="3" placeholder="Comment" class="span6"></textarea>
-        <div>
-          <button class="btn btn-primary btn-large submit">Add comment</button>
-        </div>
-      </div>
-    </script>
-
-    <script type="text/template" id="template-comment">
-      <div class="well well-small">
-        <%= body %> &mdash; <a href="#player/<%= author %>" class="label"><%= author %></a>
-      </div>
-    </script>
-
     <script type="text/template" id="template-quest-add">
       <h1>Add a quest</h1>
       <div>
@@ -153,37 +185,10 @@
       </div>
     </script>
 
-    <script type="text/template" id="template-current-user">
-        <li class="dropdown">
-            <% if (registered === 1) { %>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= login %></a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a href="#" class="logout">Logout</a>
-                    </li>
-                </ul>
-            <% } else { %>
-                <a href="/auth/twitter">Login with <i class="icon-twitter icon-large"></i></a>
-            <% } %>
-        </li>
-    </script>
-
-    <script type="text/template" id="template-error">
-        <div class="alert alert-error">
-          <button type="button" class="close" data-dismiss="alert">×</button>
-          <% if (response && response.error) { %>
-            <%= response.error %>
-          <% } else { %>
-            Unknown error
-          <% } %>
-        </div>
-    </script>
-
-    <script type="text/template" id="template-notify">
-        <div class="alert alert-notify">
-          <button type="button" class="close" data-dismiss="alert">×</button>
-          <%= text %>
-        </div>
+    <!-- quest details page -->
+    <script type="text/template" id="template-quest-page">
+      <div class="quest"></div>
+      <div class="comments"></div>
     </script>
 
     <script type="text/template" id="template-quest-big">
@@ -211,18 +216,21 @@
       <% } %>
     </script>
 
-    <script type="text/template" id="template-quest-page">
-      <div class="quest"></div>
-      <div class="comments"></div>
+    <script type="text/template" id="template-comment-collection">
+      <div class="comments-list" style="display:none">
+      </div>
+      <div class="comment-add">
+        <textarea name="comment" rows="3" placeholder="Comment" class="span6"></textarea>
+        <div>
+          <button class="btn btn-primary btn-large submit">Add comment</button>
+        </div>
+      </div>
     </script>
 
-    <script type="text/template" id="template-quest-small">
-        <tr class="<%= status === 'open' && 'warning' %>">
-            <td>
-                <span class="label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
-                <a href="#quest/<%= _id %>"><%= name  %></a>
-            </td>
-        </tr>
+    <script type="text/template" id="template-comment">
+      <div class="well well-small">
+        <%= body %> &mdash; <a href="#player/<%= author %>" class="label"><%= author %></a>
+      </div>
     </script>
 
     <!-- Google Analytics -->
