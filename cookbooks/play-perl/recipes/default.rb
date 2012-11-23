@@ -66,12 +66,6 @@ file '/etc/nginx/sites-enabled/default' do
   action :delete
 end
 
-if node['dev']
-  link '/play' do
-    to '/vagrant'
-  end
-end
-
 template "/etc/nginx/sites-enabled/play-perl.org" do
   source "nginx-site.conf.erb"
   owner "root"
