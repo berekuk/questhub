@@ -1,5 +1,5 @@
-pp.views.QuestDetails = Backbone.View.extend({
-    template: _.template($('#template-quest-details').text()),
+pp.views.QuestBig = Backbone.View.extend({
+    template: _.template($('#template-quest-big').text()),
 
     events: {
         "click .quest-close": "close",

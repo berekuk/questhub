@@ -74,7 +74,7 @@
       </div>
     </script>
 
-    <script type="text/template" id="template-user">
+    <script type="text/template" id="template-user-big">
       <div class="well">
         <% if (typeof(twitter) != 'undefined') {
              if (twitter.screen_name) { %>
@@ -152,14 +152,6 @@
         </div>
       </div>
     </script>
-    <script type="text/template" id="template-quest">
-        <tr class="<%= status === 'open' && 'warning' %>">
-            <td>
-                <span class="label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
-                <a href="#quest/<%= _id %>"><%= name  %></a>
-            </td>
-        </tr>
-    </script>
 
     <script type="text/template" id="template-current-user">
         <li class="dropdown">
@@ -194,7 +186,7 @@
         </div>
     </script>
 
-    <script type="text/template" id="template-quest-details">
+    <script type="text/template" id="template-quest-big">
       <h1>
         <span class="label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
         <%= name %>
@@ -224,7 +216,7 @@
       <div class="comments"></div>
     </script>
 
-    <script type="text/template" id="template-quest">
+    <script type="text/template" id="template-quest-small">
         <tr class="<%= status === 'open' && 'warning' %>">
             <td>
                 <span class="label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
@@ -265,30 +257,32 @@
         };
     </script>
 
-    <script src="models/user.js"></script>
-    <script src="models/current-user.js"></script>
-    <script src="models/another-user.js"></script>
-    <script src="models/quest.js"></script>
-    <script src="models/comment.js"></script>
-    <script src="models/user-collection.js"></script>
-    <script src="models/quest-collection.js"></script>
-    <script src="models/comment-collection.js"></script>
-    <script src="views/user.js"></script>
-    <script src="views/current-user.js"></script>
-    <script src="views/user-collection.js"></script>
-    <script src="views/quest-collection.js"></script>
-    <script src="views/comment-collection.js"></script>
-    <script src="views/home.js"></script>
     <script src="views/app.js"></script>
+    <script src="views/comment/collection.js"></script>
+    <script src="views/comment/normal.js"></script>
     <script src="views/dashboard.js"></script>
-    <script src="views/register.js"></script>
     <script src="views/error.js"></script>
+    <script src="views/home.js"></script>
     <script src="views/notify.js"></script>
-    <script src="views/quest/quest.js"></script>
     <script src="views/quest/add.js"></script>
-    <script src="views/quest/details.js"></script>
+    <script src="views/quest/big.js"></script>
+    <script src="views/quest/collection.js"></script>
     <script src="views/quest/page.js"></script>
-    <script src="views/comment.js"></script>
+    <script src="views/quest/small.js"></script>
+    <script src="views/register.js"></script>
+    <script src="views/user/big.js"></script>
+    <script src="views/user/collection.js"></script>
+    <script src="views/user/current.js"></script>
+
+    <script src="models/user.js"></script>
+    <script src="models/another-user.js"></script>
+    <script src="models/current-user.js"></script>
+    <script src="models/user-collection.js"></script>
+    <script src="models/comment.js"></script>
+    <script src="models/comment-collection.js"></script>
+    <script src="models/quest.js"></script>
+    <script src="models/quest-collection.js"></script>
+
     <script src="app.js"></script>
 
   </body>

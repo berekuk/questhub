@@ -41,7 +41,7 @@ pp.views.Dashboard = Backbone.View.extend({
             });
         });
 
-        this.user = new pp.views.User({
+        this.user = new pp.views.UserBig({
             model: this.model
         });
         this.user.render();

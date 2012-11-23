@@ -1,6 +1,6 @@
-pp.views.User = Backbone.View.extend({
+pp.views.UserBig = Backbone.View.extend({
 
-    template: _.template($('script#template-user').text()),
+    template: _.template($('script#template-user-big').text()),
 
     initialize: function () {
         this.model.on('change', this.render, this);
