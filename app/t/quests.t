@@ -93,7 +93,7 @@ sub add_quest :Tests {
 
     cmp_deeply
         $add_result,
-        { _id => re('^\S+$') },
+        { %$new_record, _id => re('^\S+$') },
         'response';
 
     my $id = $add_result->{_id};

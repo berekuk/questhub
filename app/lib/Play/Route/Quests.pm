@@ -35,14 +35,15 @@ del '/quest/:id' => sub {
 
 post '/quest' => sub {
     die "not logged in" unless session->{login};
-    my $id = $quests->add({
+
+    my $attributes = {
         user => session->{login},
         name => param('name'),
         status => 'open',
-    });
-    return {
-        _id => $id,
-    }
+    };
+    my $id = $quests->add($attributes);
+    $attributes->{_id} = $id;
+    return $attributes;
 };
 
 get '/quests' => sub {
