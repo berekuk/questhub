@@ -2,11 +2,11 @@ pp.models.Quest = Backbone.Model.extend({
     urlRoot: '/api/quest',
 
     like: function() {
-        var model = this;
-        $.post(this.url() + '/like')
-            .success(function () {
-                model.fetch();
-            }); // TODO - error handling?
+        this._likeOrUnlike('like');
+    },
+
+    unlike: function() {
+        this._likeOrUnlike('unlike');
     },
 
     close: function() {
@@ -31,6 +31,14 @@ pp.models.Quest = Backbone.Model.extend({
                 error: pp.app.onError
             }
         );
+    },
+
+    _likeOrUnlike: function(action) {
+        var model = this;
+        $.post(this.url() + '/' + action)
+            .success(function () {
+                model.fetch();
+            }); // TODO - error handling?
     }
 
 });

@@ -205,21 +205,41 @@
       <% } %>
       </h1>
       <% if (my) { %> <!-- quest belongs to the current user -->
-      <div>
-      <% if (status === 'open') { %>
-      <button class="quest-close btn">Close</button>
+
+        <!-- close/reopen button -->
+        <div>
+        <% if (status === 'open') { %>
+          <button class="quest-close btn">Close</button>
+        <% } %>
+          <% if (status === 'closed') { %>
+        <button class="quest-reopen btn">Reopen</button>
+        <% } %>
+        </div>
+
       <% } %>
-      <% if (status === 'closed') { %>
-      <button class="quest-reopen btn">Reopen</button>
-      <% } %>
-      </div>
-      <% } else { %> <!-- quest belongs to somebody else -->
-      <% if (typeof(likes) != 'undefined') { %>
+
+      <!-- likes count -->
+      <% if (likes.length) { %>
       <div>
         Likes: <span class="label"><%= likes.length %></span>
       </div>
       <% } %>
-      <button class="btn btn-mini btn-primary quest-like" type="button">Like</button>
+
+      <% if (!my) {
+        var meGusta = false;
+        if (currentUser) {
+          meGusta = _.contains(likes, currentUser);
+        }
+      %> <!-- quest belongs to somebody else -->
+
+
+        <!-- like/unlike button  -->
+        <% if (meGusta) { %>
+          <button class="btn btn-mini btn-primary quest-unlike" type="button">Unlike</button>
+        <% } else { %>
+          <button class="btn btn-mini btn-primary quest-like" type="button">Like</button>
+        <% } %>
+
       <% } %>
     </script>
 
