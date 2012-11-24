@@ -79,12 +79,18 @@ sub _like_or_unlike {
     my ($id, $user, $mode) = @_;
 
     my $result = $self->collection->update(
-        { _id => MongoDB::OID->new(value => $id) },
+        {
+            _id => MongoDB::OID->new(value => $id),
+            user => { '$ne' => $user },
+        },
         { $mode => { likes => $user } },
         { safe => 1 }
     );
-
-    return $result->{n}; # number of updated documents
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "Quest not found or unable to like your own quest";
+    }
+    return;
 }
 
 sub like {
