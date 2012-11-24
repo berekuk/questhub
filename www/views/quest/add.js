@@ -32,6 +32,9 @@ pp.views.QuestAdd = Backbone.View.extend({
             'success': this.onSuccess,
             'error': pp.app.onError
         });
+
+        // FIXME - this still doesn't disable click event!
+        this.$el.find('.quest-add').addClass('disabled');
     },
 
     onSuccess: function (model) {
