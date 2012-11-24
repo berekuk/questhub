@@ -50,6 +50,7 @@ sub update {
     my $user = $params->{user};
     die 'no user' unless $user;
 
+    # FIXME - rewrite to modifier-based atomic update!
     my $quest = $self->get($id);
     unless ($quest->{user} eq $user) {
         die "access denied";
@@ -73,6 +74,33 @@ sub update {
     return $id;
 }
 
+sub _like_or_unlike {
+    my $self = shift;
+    my ($id, $user, $mode) = @_;
+
+    my $result = $self->collection->update(
+        { _id => MongoDB::OID->new(value => $id) },
+        { $mode => { likes => $user } },
+        { safe => 1 }
+    );
+
+    return $result->{n}; # number of updated documents
+}
+
+sub like {
+    my $self = shift;
+    my ($id, $user) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+
+    return $self->_like_or_unlike($id, $user, '$addToSet');
+}
+
+sub unlike {
+    my $self = shift;
+    my ($id, $user) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+
+    return $self->_like_or_unlike($id, $user, '$pull');
+}
+
 sub remove {
     my $self = shift;
     my ($id, $params) = validate_pos(@_, { type => SCALAR }, { type => HASHREF });
@@ -80,6 +108,7 @@ sub remove {
     my $user = $params->{user};
     die 'no user' unless $user;
 
+    # FIXME - rewrite to modifier-based atomic update!
     my $quest = $self->get($id);
     unless ($quest->{user} eq $user) {
         die "access denied";
