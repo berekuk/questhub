@@ -18,8 +18,7 @@ put '/quest/:id' => sub {
         }
     );
     return {
-        result => 'ok',
-        id => $updated_id,
+        _id => $updated_id,
     }
 };
 
@@ -42,8 +41,7 @@ post '/quest' => sub {
         status => 'open',
     });
     return {
-        result => 'ok',
-        id => $id,
+        _id => $id,
     }
 };
 

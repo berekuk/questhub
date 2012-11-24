@@ -53,7 +53,7 @@ sub like_quest :Tests {
     my $result = http_json POST => '/api/quest', { params => {
         name => 'foo',
     } };
-    my $id = $result->{id};
+    my $id = $result->{_id};
     like $id, qr/^\S+$/, 'quest add id';
 
     my $response = dancer_response POST => "/api/quest/$id/like"; # self-like!
