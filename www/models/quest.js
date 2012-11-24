@@ -1,6 +1,14 @@
 pp.models.Quest = Backbone.Model.extend({
     urlRoot: '/api/quest',
 
+    like: function() {
+        var model = this;
+        $.post(this.url() + '/like')
+            .success(function () {
+                model.fetch();
+            }); // TODO - error handling?
+    },
+
     close: function() {
         this._setStatus('closed');
     },

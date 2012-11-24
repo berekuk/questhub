@@ -204,7 +204,7 @@
             data-text="<% if (status === 'open') { %>I've got the new quest:<% } else { %>I've completed the quest:<% } %> <%= name %>" data-hashtags="playperl">Tweet</a>
       <% } %>
       </h1>
-      <% if (my) { %>
+      <% if (my) { %> <!-- quest belongs to the current user -->
       <div>
       <% if (status === 'open') { %>
       <button class="quest-close btn">Close</button>
@@ -213,6 +213,13 @@
       <button class="quest-reopen btn">Reopen</button>
       <% } %>
       </div>
+      <% } else { %> <!-- quest belongs to somebody else -->
+      <% if (typeof(likes) != 'undefined') { %>
+      <div>
+        Likes: <span class="label"><%= likes.length %></span>
+      </div>
+      <% } %>
+      <button class="btn btn-mini btn-primary quest-like" type="button">Like</button>
       <% } %>
     </script>
 

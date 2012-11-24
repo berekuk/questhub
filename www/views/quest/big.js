@@ -3,7 +3,8 @@ pp.views.QuestBig = Backbone.View.extend({
 
     events: {
         "click .quest-close": "close",
-        "click .quest-reopen": "reopen"
+        "click .quest-reopen": "reopen",
+        "click .quest-like": "like"
     },
 
     close: function () {
@@ -12,6 +13,10 @@ pp.views.QuestBig = Backbone.View.extend({
 
     reopen: function () {
         this.model.reopen();
+    },
+
+    like: function () {
+        this.model.like();
     },
 
     initialize: function () {
