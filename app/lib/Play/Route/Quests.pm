@@ -18,8 +18,7 @@ put '/quest/:id' => sub {
         }
     );
     return {
-        result => 'ok',
-        id => $updated_id,
+        _id => $updated_id,
     }
 };
 
@@ -36,15 +35,15 @@ del '/quest/:id' => sub {
 
 post '/quest' => sub {
     die "not logged in" unless session->{login};
-    my $id = $quests->add({
+
+    my $attributes = {
         user => session->{login},
         name => param('name'),
         status => 'open',
-    });
-    return {
-        result => 'ok',
-        id => $id,
-    }
+    };
+    my $id = $quests->add($attributes);
+    $attributes->{_id} = $id;
+    return $attributes;
 };
 
 get '/quests' => sub {

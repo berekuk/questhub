@@ -14,8 +14,7 @@ post '/comment/:id' => sub {
         author => session->{login},
     );
     return {
-        result => 'ok',
-        id => $id,
+        _id => $id,
     }
 };
 

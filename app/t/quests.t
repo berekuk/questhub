@@ -72,7 +72,7 @@ sub edit_quest :Tests {
     Dancer::session login => $edited_quest->{user};
 
     my $put_result = http_json PUT => "/api/quest/$id", { params => { name => $edited_quest->{name} } };
-    cmp_deeply $put_result, { result => 'ok', id => $id }, 'put result';
+    cmp_deeply $put_result, { _id => $id }, 'put result';
 
     my $got_quest = http_json GET => "/api/quest/$id";
     cmp_deeply $got_quest, $edited_quest;
@@ -93,10 +93,10 @@ sub add_quest :Tests {
 
     cmp_deeply
         $add_result,
-        { result => 'ok', id => re('^\S+$') },
+        { %$new_record, _id => re('^\S+$') },
         'response';
 
-    my $id = $add_result->{id};
+    my $id = $add_result->{_id};
 
     my $got_quest = http_json GET => "/api/quest/$id";
     delete $got_quest->{_id};

@@ -1,5 +1,9 @@
 pp.views.Dashboard = Backbone.View.extend({
 
+    events: {
+        "click .quest-add-dialog": "newQuestDialog",
+    },
+
     template: _.template($('script#template-dashboard').text()),
 
     // separate function because of ugly hack in router code, see router code
@@ -31,15 +35,16 @@ pp.views.Dashboard = Backbone.View.extend({
         var view = this;
         var statuses = ['open', 'closed'];
         _.each(['open', 'closed'], function(st) {
-            var model = new pp.models.QuestCollection([], {
+            var collection = new pp.models.QuestCollection([], {
                'user': login,
                'status': st
             });
-            model.fetch();
+            collection.fetch();
             view[st + 'Quests'] = new pp.views.QuestCollection({
-                quests: model
+                quests: collection
             });
         });
+        this.questViews = view;
 
         this.user = new pp.views.UserBig({
             model: this.model
@@ -51,5 +56,17 @@ pp.views.Dashboard = Backbone.View.extend({
         this.$el.find('.open-quests').append(this.openQuests.$el);
         this.$el.find('.closed-quests').append(this.closedQuests.$el);
         this.$el.find('.user').append(this.user.$el);
-    }
+
+        var currentUser = pp.app.user.get('login');
+        if (currentUser && currentUser == login) {
+          this.$el.find('.new-quest').show();
+        }
+    },
+
+    newQuestDialog: function() {
+        var questAdd = new pp.views.QuestAdd({
+          collection: this.openQuests.options.quests
+        });
+        this.$el.append(questAdd.$el);
+    },
 });

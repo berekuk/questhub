@@ -1,4 +1,5 @@
 pp.models.Quest = Backbone.Model.extend({
+    idAttribute: '_id',
     urlRoot: '/api/quest',
 
     like: function() {
