@@ -1,33 +1,42 @@
 pp.views.QuestAdd = Backbone.View.extend({
     events: {
-        'click .submit': 'saveToModel'
+        'click .quest-add': 'saveToModel'
     },
 
     template: _.template($('#template-quest-add').text()),
 
-    initialize: function () {
-        this.setElement($(this.template()));
+    initialize: function() {
+        _.bindAll(this);
+        this.render();
     },
 
-    saveToModel: function() {
-        this.model.save({
-            'name': this.$('[name=name]').val()
-        },
-        {
-            'success': this.onSuccess,
-            'error': this.onError
+    render: function () {
+        this.setElement($(this.template()));
+
+        this.$el.find('#addQuest').modal().css({
+            'width': function () {
+                return ($(document).width() * .8) + 'px';
+            },
+            'margin-left': function () {
+                return -($(this).width() / 2);
+            }
         });
     },
 
-    onError: pp.app.onError,
+    saveToModel: function() {
+        console.log(this.collection);
+        var model = new this.collection.model();
+        model.save({
+            name: this.$('[name=name]').val()
+        }, {
+            'success': this.onSuccess,
+            'error': pp.app.onError
+        });
+    },
 
     onSuccess: function (model) {
-        $('#layout > .container').prepend(
-                    new pp.views.Notify({
-                        // Whoops! It is injection here, model.name should be sanitized
-                        text: 'Quest "'+model.get('name')+'" has been add succesfully added'
-                    }).render().el
-        );
-        pp.app.router.navigate('/', { trigger: true });
+        console.log(model);
+        this.collection.add(model);
+        this.$el.find('#addQuest').modal('hide');
     }
 });

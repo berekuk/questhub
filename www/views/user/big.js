@@ -1,4 +1,5 @@
 pp.views.UserBig = Backbone.View.extend({
+    // left column of the dashboard page
 
     template: _.template($('script#template-user-big').text()),
 
@@ -7,6 +8,7 @@ pp.views.UserBig = Backbone.View.extend({
     },
 
     render: function () {
-        this.$el.html(this.template(this.model.toJSON()));
-    }
+        var params = this.model.toJSON();
+        this.$el.html(this.template(params));
+    },
 });

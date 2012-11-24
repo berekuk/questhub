@@ -8,7 +8,6 @@
     <meta name="author" content="">
 
     <link href="vendors/bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="vendors/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet">
     <link href="vendors/fontawesome/css/font-awesome.css" rel="stylesheet">
     <style>
       body {
@@ -62,7 +61,6 @@
               <div class="nav-collapse collapse">
                 <ul class="nav">
                   <li class="active menu-item-home"><a href="#">Home</a></li>
-                  <li class="menu-item-add-quest"><a href="#quest/add">Add Quest</a></li>
                   <li class="menu-item-user-list"><a href="#players">User List</a></li>
                 </ul>
                 <p class="navbar-text pull-right"></p>
@@ -112,7 +110,12 @@
     <script type="text/template" id="template-dashboard">
       <div class="container-fluid">
         <div class="row-fluid">
-          <div class="user span3"></div>
+            <div class="span3">
+                <div class="user"></div>
+                <div class="new-quest" style="display:none">
+                    <button type="button" class="btn btn-primary quest-add-dialog">New quest</button>
+                </div>
+            </div>
           <div class="span9">
             <div class="open-quests"></div>
             <div class="closed-quests"></div>
@@ -177,13 +180,20 @@
     </script>
 
     <script type="text/template" id="template-quest-add">
-      <h1>Add a quest</h1>
-      <div>
-        <textarea name="name" rows="5" placeholder="Quest description" class="span6"></textarea>
         <div>
-          <button class="btn btn-primary btn-large submit">Add quest</button>
+      <div id="addQuest" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h3>Add a quest</h3>
+        </div>
+        <div class="modal-body modal-quest-add">
+          <textarea name="name" rows="5" placeholder="Quest description" class="span12"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary quest-add">Go!</button>
         </div>
       </div>
+        </div>
     </script>
 
     <!-- quest details page -->
@@ -281,8 +291,6 @@
 
     <script src="vendors/jquery-1.7.1.min.js"></script>
     <script src="vendors/bootstrap/js/bootstrap.min.js"></script>
-    <script src="vendors/bootstrap-modal/js/bootstrap-modalmanager.js"></script>
-    <script src="vendors/bootstrap-modal/js/bootstrap-modal.js"></script>
     <script src="vendors/underscore-min.js"></script>
     <script src="vendors/backbone-min.js"></script>
     <script src="vendors/jquery.cookie.js"></script>
