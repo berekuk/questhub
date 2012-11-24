@@ -204,15 +204,42 @@
             data-text="<% if (status === 'open') { %>I've got the new quest:<% } else { %>I've completed the quest:<% } %> <%= name %>" data-hashtags="playperl">Tweet</a>
       <% } %>
       </h1>
-      <% if (my) { %>
+      <% if (my) { %> <!-- quest belongs to the current user -->
+
+        <!-- close/reopen button -->
+        <div>
+        <% if (status === 'open') { %>
+          <button class="quest-close btn">Close</button>
+        <% } %>
+          <% if (status === 'closed') { %>
+        <button class="quest-reopen btn">Reopen</button>
+        <% } %>
+        </div>
+
+      <% } %>
+
+      <!-- likes count -->
+      <% if (likes.length) { %>
       <div>
-      <% if (status === 'open') { %>
-      <button class="quest-close btn">Close</button>
-      <% } %>
-      <% if (status === 'closed') { %>
-      <button class="quest-reopen btn">Reopen</button>
-      <% } %>
+        Likes: <span class="label"><%= likes.length %></span>
       </div>
+      <% } %>
+
+      <% if (!my) {
+        var meGusta = false;
+        if (currentUser) {
+          meGusta = _.contains(likes, currentUser);
+        }
+      %> <!-- quest belongs to somebody else -->
+
+
+        <!-- like/unlike button  -->
+        <% if (meGusta) { %>
+          <button class="btn btn-mini btn-primary quest-unlike" type="button">Unlike</button>
+        <% } else { %>
+          <button class="btn btn-mini btn-primary quest-like" type="button">Like</button>
+        <% } %>
+
       <% } %>
     </script>
 

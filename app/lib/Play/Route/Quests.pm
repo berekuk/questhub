@@ -57,4 +57,15 @@ get '/quest/:id' => sub {
     return $quests->get(param('id'));
 };
 
+for my $method (qw/ like unlike /) {
+    post "/quest/:id/$method" => sub {
+        die "not logged in" unless session->{login};
+        $quests->$method(param('id'), session->{login});
+
+        return {
+            result => 'ok',
+        }
+    };
+}
+
 true;
