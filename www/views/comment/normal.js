@@ -13,6 +13,8 @@ pp.views.Comment = Backbone.View.extend({
     },
 
     initialize: function () {
-        this.setElement($(this.template(this.model.toJSON())));
+        var params = this.model.toJSON();
+        params.my = (pp.app.user.get('login') == params.author);
+        this.setElement($(this.template(params)));
     }
 });
