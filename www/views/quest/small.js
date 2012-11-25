@@ -3,7 +3,6 @@ pp.views.QuestSmall = Backbone.View.extend({
 
     initialize: function () {
         var params = this.model.toJSON();
-        console.log(params);
         this.setElement($(this.template(params)));
     }
 });

@@ -14,7 +14,7 @@ put '/quest/:id' => sub {
         param('id'),
         {
             user => session->{login},
-            map { param($_) ? ($_ => param($_)) : () } qw/ name status /,
+            map { param($_) ? ($_ => param($_)) : () } qw/ name status type /,
         }
     );
     return {
@@ -40,6 +40,7 @@ post '/quest' => sub {
         user => session->{login},
         name => param('name'),
         status => 'open',
+        (param('type') ? (type => param('type')) : ()),
     };
     my $id = $quests->add($attributes);
     $attributes->{_id} = $id;

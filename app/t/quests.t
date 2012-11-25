@@ -158,4 +158,20 @@ sub points :Tests {
 
 }
 
+sub quest_types :Tests {
+    Dancer::session login => 'user_1';
+
+    http_json POST => '/api/quest', { params => {
+        name => 'typed-quest',
+        type => 'blog',
+    } };
+
+    my $unknown_type_response = dancer_response POST => '/api/quest', { params => {
+        name => 'typed-quest',
+        type => 'nosuchtype',
+    } };
+    is $unknown_type_response->status, 500;
+    like $unknown_type_response->content, qr/Unexpected quest type/;
+}
+
 __PACKAGE__->new->runtests;
