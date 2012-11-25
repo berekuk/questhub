@@ -50,7 +50,8 @@ Quest:
     _id: ...,
     status: 'open',
     user: 'blah',
-    name: 'quest title'
+    name: 'quest title',
+    type: 'bug'     // or 'blog', or 'feature'
     likes: [
         'foo-user',
         'bar-user'

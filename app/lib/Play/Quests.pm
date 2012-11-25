@@ -39,6 +39,12 @@ sub add {
     my $self = shift;
     my ($params) = validate_pos(@_, { type => HASHREF });
 
+    # validate
+    # TODO - do strict validation here instead of dancer route?
+    if ($params->{type}) {
+        die "Unexpected quest type '$params->{type}'" unless grep { $params->{type} eq $_ } qw/ bug blog feature other /;
+    }
+
     my $id = $self->collection->insert($params);
     return $id->to_string;
 }
