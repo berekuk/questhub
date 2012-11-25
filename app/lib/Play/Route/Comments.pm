@@ -22,4 +22,16 @@ get '/quest/:quest_id/comment' => sub {
     return $comments->get(param('quest_id'));
 };
 
+del '/quest/:quest_id/comment/:id' => sub {
+    die "not logged in" unless session->{login};
+    $comments->remove(
+        quest_id => param('quest_id'),
+        id => param('id'),
+        user => session->{login}
+    );
+    return {
+        result => 'ok',
+    }
+};
+
 true;

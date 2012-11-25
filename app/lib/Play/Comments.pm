@@ -34,4 +34,24 @@ sub get {
     return \@comments;
 }
 
+sub remove {
+    my $self = shift;
+    my $params = validate(@_, {
+        quest_id => { type => SCALAR },
+        id => { type => SCALAR },
+        user => { type => SCALAR }
+    });
+
+    my $result = $self->collection->remove(
+        {
+            _id => MongoDB::OID->new(value => $params->{id}),
+            quest_id => $params->{quest_id},
+            author => $params->{user},
+        },
+        { just_one => 1, safe => 1 }
+    );
+    die "comment not found or access denied" unless $result->{n} == 1;
+    return;
+}
+
 1;
