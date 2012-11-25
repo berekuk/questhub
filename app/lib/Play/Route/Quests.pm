@@ -47,7 +47,7 @@ post '/quest' => sub {
     return $attributes;
 };
 
-get '/quests' => sub {
+get '/quest' => sub {
     return $quests->list({
         map { param($_) ? ($_ => param($_)) : () } qw/ user status /,
     });

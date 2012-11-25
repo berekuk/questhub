@@ -1,4 +1,4 @@
 pp.models.UserCollection = Backbone.Collection.extend({
-    url: '/api/users',
+    url: '/api/user',
     model: pp.models.AnotherUser
 });

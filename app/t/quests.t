@@ -44,7 +44,7 @@ sub perl_quest_list :Test(1) {
 }
 
 sub quest_list :Tests {
-    my $list = http_json GET => '/api/quests';
+    my $list = http_json GET => '/api/quest';
 
     cmp_deeply
         [ sort { $a->{_id} cmp $b->{_id} } @$list ],
@@ -52,7 +52,7 @@ sub quest_list :Tests {
 }
 
 sub quest_list_filtering :Tests {
-    my $list = http_json GET => '/api/quests', { params => { status => 'closed' } };
+    my $list = http_json GET => '/api/quest', { params => { status => 'closed' } };
 
     cmp_deeply $list, [ $quests_data->{3} ];
 }
@@ -107,7 +107,7 @@ sub delete_quest :Tests {
     my $id_to_remove;
     my $user;
     {
-        my $list_before_resp = dancer_response GET => '/api/quests';
+        my $list_before_resp = dancer_response GET => '/api/quest';
         my $result = decode_json($list_before_resp->content);
         is scalar @$result, 3;
         $id_to_remove = $result->[1]{_id};
@@ -133,7 +133,7 @@ sub delete_quest :Tests {
     }
 
     {
-        my $list_after_resp = dancer_response GET => '/api/quests';
+        my $list_after_resp = dancer_response GET => '/api/quest';
         is scalar @{ decode_json($list_after_resp->content) }, 2, 'deleted quests are not shown in list';
     }
 }
@@ -144,16 +144,16 @@ sub points :Tests {
     http_json GET => "/api/fakeuser/$quest->{user}";
     Dancer::session login => $quest->{user};
 
-    my $user = http_json GET => '/api/user';
+    my $user = http_json GET => '/api/current_user';
     is $user->{points}, 0;
 
     http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'closed' } };
 
-    $user = http_json GET => '/api/user';
+    $user = http_json GET => '/api/current_user';
     is $user->{points}, 1, 'got a point';
 
     http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'open' } };
-    $user = http_json GET => '/api/user';
+    $user = http_json GET => '/api/current_user';
     is $user->{points}, 0, 'lost a point';
 
 }
