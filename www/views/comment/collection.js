@@ -29,7 +29,7 @@ pp.views.CommentCollection = Backbone.View.extend({
     },
 
     renderOne: function (comment) {
-        this.$('[name=comment]').attr({ disabled: null });
+        this.$('[name=comment]').removeAttr('disabled');
         this.$('[name=comment]').val('');
 
         var view = new pp.views.Comment({ model: comment });
@@ -56,7 +56,7 @@ pp.views.CommentCollection = Backbone.View.extend({
 
     onError: function(model, response) {
         pp.app.onError(model, response);
-        this.$('[name=comment]').attr({ disabled: null });
+        this.$('[name=comment]').removeAttr('disabled');
         // note that we don't clear textarea's val() to keep the comment from vanishing
     },
 
