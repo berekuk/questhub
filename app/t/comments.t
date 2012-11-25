@@ -29,8 +29,8 @@ sub add_comment :Tests {
     cmp_deeply
         $list,
         [
-            { _id => $first->{_id}, body => 'first comment!', author => 'blah', quest_id => $quest_id },
-            { _id => $second->{_id}, body => 'second comment!', author => 'blah', quest_id => $quest_id },
+            { _id => $first->{_id}, body => 'first comment!', author => 'blah', quest_id => $quest_id, body_html => re('first') },
+            { _id => $second->{_id}, body => 'second comment!', author => 'blah', quest_id => $quest_id, body_html => re('second') },
         ]
 }
 
@@ -61,4 +61,17 @@ sub remove :Tests {
     like $comments->[0]->{body}, qr/another/, 'another comment still exists';
 }
 
+sub body_html :Tests {
+    Dancer::session login => 'blah';
+
+    my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'foo', status => 'open' } };
+    my $quest_id = $quest_result->{_id};
+
+    my $body = 'To **boldly** go where no man has gone before';
+
+    http_json POST => "/api/quest/$quest_id/comment", { params => { body => $body } };
+    my $comments = http_json GET => "/api/quest/$quest_id/comment";
+    like $comments->[0]{body_html}, qr{To <strong>boldly</strong> go};
+    is $comments->[0]{body}, $body;
+}
 __PACKAGE__->new->runtests;
