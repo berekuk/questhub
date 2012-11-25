@@ -30,7 +30,7 @@ $(function () {
         },
 
         questPage: function (id) {
-            var view = new pp.views.QuestPage({ model: new pp.models.Quest({ id: id }) });
+            var view = new pp.views.QuestPage({ model: new pp.models.Quest({ _id: id }) });
             appView.setPageView(view);
         },
 
