@@ -9,12 +9,12 @@ pp.views.CommentCollection = Backbone.View.extend({
 
     initialize: function () {
         _.bindAll(this);
-        this.options.comments.on('reset', this.onReset, this);
-        this.options.comments.on('update', this.render, this);
-        this.render();
+        this.collection.on('destroy', this.onReset);
+        this.collection.on('reset', this.onReset);
+        this.collection.on('add', this.renderOne);
     },
 
-    render: function (collection) {
+    render: function () {
         this.$el.html(this.template());
         return this;
     },
@@ -44,12 +44,12 @@ pp.views.CommentCollection = Backbone.View.extend({
         }
         this.$('[name=comment]').attr({ disabled: 'disabled' });
 
-        this.options.comments.create({
+        this.collection.create({
             'author': pp.app.user.get('login'),
             'body': this.$('[name=comment]').val()
         },
         {
-            'success': this.renderOne,
+            'wait': true,
             'error': this.onError
         });
     },
@@ -57,10 +57,11 @@ pp.views.CommentCollection = Backbone.View.extend({
     onError: function(model, response) {
         pp.app.onError(model, response);
         this.$('[name=comment]').removeAttr('disabled');
-        // note that we don't clear textarea's val() to keep the comment from vanishing
+        // note that we don't clear textarea's val() to prevent the comment from vanishing
     },
 
     onReset: function () {
-        this.options.comments.each(this.renderOne, this);
+        this.render();
+        this.collection.each(this.renderOne);
     }
 });
