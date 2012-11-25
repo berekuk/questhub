@@ -5,7 +5,8 @@ pp.views.QuestBig = Backbone.View.extend({
         "click .quest-close": "close",
         "click .quest-reopen": "reopen",
         "click .quest-like": "like",
-        "click .quest-unlike": "unlike"
+        "click .quest-unlike": "unlike",
+        "click .quest-delete": "destroy"
     },
 
     close: function () {
@@ -22,6 +23,15 @@ pp.views.QuestBig = Backbone.View.extend({
 
     unlike: function () {
         this.model.unlike();
+    },
+
+    destroy: function () {
+        this.model.destroy({
+            success: function(model, response) {
+                pp.app.router.navigate("/", { trigger: true });
+            },
+            error: pp.app.onError
+        });
     },
 
     initialize: function () {
