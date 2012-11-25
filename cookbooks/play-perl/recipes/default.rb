@@ -24,6 +24,7 @@ cpan_module 'Test::Class'
 cpan_module 'Import::Into'
 cpan_module 'Carp::Always'
 cpan_module 'Starman'
+cpan_module 'Text::Markdown'
 
 # auto_reload for development
 cpan_module 'Module::Refresh'
