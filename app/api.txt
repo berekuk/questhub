@@ -32,3 +32,35 @@ This is how registration is implemented:
 6. User enters his new service login in the registration form, JS calls /api/register, and now we're fully registered.
 
 /api/user is the key for frontend to check the current authentification status.
+
+## Objects
+
+User:
+{
+    _id: ...,
+    login: 'blah',
+    points: 123,
+    twitter: {
+        screen_name: 'blah'
+    }
+}
+
+Quest:
+{
+    _id: ...,
+    status: 'open',
+    user: 'blah',
+    name: 'quest title'
+    likes: [
+        'foo-user',
+        'bar-user'
+    ]
+}
+
+Comment:
+{
+    _id: ...,
+    body: 'comment body',
+    quest_id: ...,
+    author: 'foo-user'
+}
