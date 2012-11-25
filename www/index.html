@@ -148,6 +148,9 @@
             <td>
                 <span class="label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
                 <a href="#quest/<%= _id %>"><%= name  %></a>
+                <% if (typeof(type) != 'undefined') { %>
+                <span class="label label-inverse quest-type-label"><%= type %></span>
+                <% } %>
             </td>
         </tr>
     </script>
@@ -188,6 +191,12 @@
         </div>
         <div class="modal-body modal-quest-add">
           <textarea name="name" rows="5" placeholder="Quest description" class="span12"></textarea>
+          <div class="btn-group quest-type-select">
+            <button type="button" class="btn" quest-type="bug">Bug</button>
+            <button type="button" class="btn" quest-type="blog">Blog post</button>
+            <button type="button" class="btn" quest-type="feature">New feature</button>
+            <button type="button" class="btn" quest-type="other">Other</button>
+          </div>
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary quest-add">Go!</button>
@@ -205,6 +214,7 @@
     <script type="text/template" id="template-quest-big">
       <h1>
         <span class="label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
+        <span class="label label-inverse"><%= type %></span>
         <%= name %>
       <% if (my) { %>
         <a
