@@ -3,6 +3,7 @@ package Play::Comments;
 use Moo;
 use Params::Validate qw(:all);
 use Play::Mongo;
+use Text::Markdown qw(markdown);
 
 has 'collection' => (
     is => 'ro',
@@ -12,6 +13,14 @@ has 'collection' => (
     },
 );
 
+sub _prepare_comment {
+    my $self = shift;
+    my ($comment) = @_;
+    $comment->{_id} = $comment->{_id}->to_string;
+    $comment->{body_html} = markdown($comment->{body});
+    return $comment;
+}
+
 sub add {
     my $self = shift;
     my %params = validate(@_, {
@@ -20,7 +29,7 @@ sub add {
         author => { type => SCALAR },
     });
     my $id = $self->collection->insert(\%params);
-    return $id->to_string;
+    return { _id => $id->to_string, body_html => markdown($params{body}) };
 }
 
 # get all comments for a quest
@@ -30,7 +39,7 @@ sub get {
     my ($quest_id) = validate_pos(@_, { type => SCALAR });
 
     my @comments = $self->collection->find({ quest_id => $quest_id })->all;
-    $_->{_id} = $_->{_id}->to_string for @comments;
+    $self->_prepare_comment($_) for @comments;
     return \@comments;
 }
 
