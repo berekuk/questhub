@@ -282,7 +282,7 @@
 
     <script type="text/template" id="template-comment">
       <div class="well well-small">
-        <%= body %> &mdash; <a href="#player/<%= author %>" class="label"><%= author %></a>
+        <%= body_html %> &mdash; <a href="#player/<%= author %>" class="label"><%= author %></a>
         <% if (my) { %>
         <button type="button" class="close comment-delete" data-dismiss="modal">&times;</button>
         <% } %>

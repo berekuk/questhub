@@ -29,7 +29,7 @@ sub add {
         author => { type => SCALAR },
     });
     my $id = $self->collection->insert(\%params);
-    return $id->to_string;
+    return { _id => $id->to_string, body_html => markdown($params{body}) };
 }
 
 # get all comments for a quest

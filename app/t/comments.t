@@ -22,7 +22,7 @@ sub add_comment :Tests {
 
     cmp_deeply
         $first,
-        { _id => re('^\S+$') },
+        { _id => re('^\S+$'), body_html => re('first') },
         'add comment result';
 
     my $list = http_json GET => "/api/quest/$quest_id/comment";
@@ -69,7 +69,9 @@ sub body_html :Tests {
 
     my $body = 'To **boldly** go where no man has gone before';
 
-    http_json POST => "/api/quest/$quest_id/comment", { params => { body => $body } };
+    my $add_result = http_json POST => "/api/quest/$quest_id/comment", { params => { body => $body } };
+    like $add_result->{body_html}, qr{To <strong>boldly</strong> go};
+
     my $comments = http_json GET => "/api/quest/$quest_id/comment";
     like $comments->[0]{body_html}, qr{To <strong>boldly</strong> go};
     is $comments->[0]{body}, $body;
