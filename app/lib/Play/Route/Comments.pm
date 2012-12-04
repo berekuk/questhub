@@ -6,21 +6,29 @@ prefix '/api';
 use Play::Comments;
 my $comments = Play::Comments->new;
 
-post '/comment/:id' => sub {
+post '/quest/:quest_id/comment' => sub {
     die "not logged in" unless session->{login};
-    my $id = $comments->add(
-        quest_id => param('id'),
+    return $comments->add(
+        quest_id => param('quest_id'),
         body => param('body'),
         author => session->{login},
     );
-    return {
-        result => 'ok',
-        id => $id,
-    }
 };
 
-get '/comment/:quest_id' => sub {
+get '/quest/:quest_id/comment' => sub {
     return $comments->get(param('quest_id'));
+};
+
+del '/quest/:quest_id/comment/:id' => sub {
+    die "not logged in" unless session->{login};
+    $comments->remove(
+        quest_id => param('quest_id'),
+        id => param('id'),
+        user => session->{login}
+    );
+    return {
+        result => 'ok',
+    }
 };
 
 true;

@@ -3,21 +3,23 @@
 Read the code (`lib/Play/Route/*.pm`) or try them in the browser for the resonse format. Hint: it's usually JSON.
 
 GET /auth/twitter               # go to twitter, obtain login, set 'twitter_user' session and return to /#register
-GET /api/user                   # get current user; 'registered=1' flag means the user is fully registered; otherwise json still can contain some info (e.g. twitter)
+GET /api/current_user           # get current user; 'registered=1' flag means the user is fully registered; otherwise json still can contain some info (e.g. twitter)
 GET /api/user/{login}           # get another user
 POST /api/register              # register the new user login, associate it with the current twitter user, save to db
-GET /api/users                  # get the list of all users
+GET /api/user                   # get the list of all users
 GET /api/fakeuser/{login}       # temporary, fake analog of /register; dev mode only; 'notwitter' cgi param disables fake twitter account generation
 POST /api/quest                 # add a new quest for current user
 PUT /api/quest/{id}             # update quest
 DELETE /api/quest/{id}          # delete quest (actually, set its status to "deleted"; it won't be shown in /api/quests, but will still be fetchable by its id)
-GET /api/quests                 # get all quests
-GET /api/quests?user={login}    # get all quests of a given user
-GET /api/quests?status={status} # get all quests with a given status
+GET /api/quest                  # get all quests
+GET /api/quest?user={login}     # get all quests of a given user
+GET /api/quest?status={status}  # get all quests with a given status
 GET /api/quest/{id}             # get one quest
 GET /api/dev/session/{name}     # get session value
-POST /api/comment/{quest_id}    # add new comment
-GET /api/comment/{quest_id}     # get all quest comments
+POST /api/quest/{quest_id}/comment    # add a new comment
+GET /api/quest/{quest_id}/comment     # get all quest comments
+POST /api/quest/{id}/like       # like a quest
+POST /api/quest/{id}/unlike     # unlike a quest
 
 ## Registration
 
@@ -30,3 +32,36 @@ This is how registration is implemented:
 6. User enters his new service login in the registration form, JS calls /api/register, and now we're fully registered.
 
 /api/user is the key for frontend to check the current authentification status.
+
+## Objects
+
+User:
+{
+    _id: ...,
+    login: 'blah',
+    points: 123,
+    twitter: {
+        screen_name: 'blah'
+    }
+}
+
+Quest:
+{
+    _id: ...,
+    status: 'open',
+    user: 'blah',
+    name: 'quest title',
+    type: 'bug'     // or 'blog', or 'feature'
+    likes: [
+        'foo-user',
+        'bar-user'
+    ]
+}
+
+Comment:
+{
+    _id: ...,
+    body: 'comment body',
+    quest_id: ...,
+    author: 'foo-user'
+}

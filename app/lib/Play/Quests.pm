@@ -39,6 +39,12 @@ sub add {
     my $self = shift;
     my ($params) = validate_pos(@_, { type => HASHREF });
 
+    # validate
+    # TODO - do strict validation here instead of dancer route?
+    if ($params->{type}) {
+        die "Unexpected quest type '$params->{type}'" unless grep { $params->{type} eq $_ } qw/ bug blog feature other /;
+    }
+
     my $id = $self->collection->insert($params);
     return $id->to_string;
 }
@@ -50,6 +56,7 @@ sub update {
     my $user = $params->{user};
     die 'no user' unless $user;
 
+    # FIXME - rewrite to modifier-based atomic update!
     my $quest = $self->get($id);
     unless ($quest->{user} eq $user) {
         die "access denied";
@@ -73,6 +80,39 @@ sub update {
     return $id;
 }
 
+sub _like_or_unlike {
+    my $self = shift;
+    my ($id, $user, $mode) = @_;
+
+    my $result = $self->collection->update(
+        {
+            _id => MongoDB::OID->new(value => $id),
+            user => { '$ne' => $user },
+        },
+        { $mode => { likes => $user } },
+        { safe => 1 }
+    );
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "Quest not found or unable to like your own quest";
+    }
+    return;
+}
+
+sub like {
+    my $self = shift;
+    my ($id, $user) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+
+    return $self->_like_or_unlike($id, $user, '$addToSet');
+}
+
+sub unlike {
+    my $self = shift;
+    my ($id, $user) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+
+    return $self->_like_or_unlike($id, $user, '$pull');
+}
+
 sub remove {
     my $self = shift;
     my ($id, $params) = validate_pos(@_, { type => SCALAR }, { type => HASHREF });
@@ -80,6 +120,7 @@ sub remove {
     my $user = $params->{user};
     die 'no user' unless $user;
 
+    # FIXME - rewrite to modifier-based atomic update!
     my $quest = $self->get($id);
     unless ($quest->{user} eq $user) {
         die "access denied";

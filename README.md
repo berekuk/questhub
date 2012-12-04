@@ -9,7 +9,7 @@ Quick start
 1. Install http://vagrantup.com/
 2. Clone this repo
 3. Run `vagrant up`.
-Due to the bug in Ubic cookbook ([#63](https://github.com/berekuk/play-perl/issues/63)), this step will fail. Do `vagrant ssh`, run `sudo apt-get update` inside the VM, and then reconfigure the VM with `vagrant provision`.
+(This step takes 15 minutes on my laptop.)
 4. Go to http://localhost:3001 in your browser.
 
 Run `vagrant ssh` to access your VM.

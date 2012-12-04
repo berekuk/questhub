@@ -35,6 +35,7 @@ cpan_module 'Test::Class'
 cpan_module 'Import::Into'
 cpan_module 'Carp::Always'
 cpan_module 'Starman'
+cpan_module 'Text::Markdown'
 
 # auto_reload for development
 cpan_module 'Module::Refresh'
@@ -65,12 +66,6 @@ package 'nginx'
 
 file '/etc/nginx/sites-enabled/default' do
   action :delete
-end
-
-if node['dev']
-  link '/play' do
-    to '/vagrant'
-  end
 end
 
 template "/etc/nginx/sites-enabled/play-perl.org" do

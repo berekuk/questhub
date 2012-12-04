@@ -9,7 +9,7 @@ sub setup :Tests(setup) {
 }
 
 sub users_list_empty :Tests {
-    my $users = http_json GET => '/api/users';
+    my $users = http_json GET => '/api/user';
     cmp_deeply $users, [];
 }
 
@@ -23,7 +23,7 @@ sub current_user :Tests {
     my $self = shift;
     $self->_add_users;
 
-    my $user = http_json GET => '/api/user';
+    my $user = http_json GET => '/api/current_user';
     cmp_deeply $user, {
         twitter => {
             screen_name => 'blah2',
@@ -65,7 +65,7 @@ sub logout :Tests {
 
     http_json post => '/api/logout';
 
-    my $user = http_json get => '/api/user';
+    my $user = http_json get => '/api/current_user';
     cmp_deeply $user, { registered => 0 };
 }
 
@@ -73,7 +73,7 @@ sub users_list :Tests {
     my $self = shift;
     $self->_add_users;
 
-    my $user = http_json GET => '/api/users';
+    my $user = http_json GET => '/api/user';
     cmp_deeply $user, [
         {
             twitter => {

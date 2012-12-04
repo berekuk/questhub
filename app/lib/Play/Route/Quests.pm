@@ -14,12 +14,11 @@ put '/quest/:id' => sub {
         param('id'),
         {
             user => session->{login},
-            map { param($_) ? ($_ => param($_)) : () } qw/ name status /,
+            map { param($_) ? ($_ => param($_)) : () } qw/ name status type /,
         }
     );
     return {
-        result => 'ok',
-        id => $updated_id,
+        _id => $updated_id,
     }
 };
 
@@ -36,18 +35,19 @@ del '/quest/:id' => sub {
 
 post '/quest' => sub {
     die "not logged in" unless session->{login};
-    my $id = $quests->add({
+
+    my $attributes = {
         user => session->{login},
         name => param('name'),
         status => 'open',
-    });
-    return {
-        result => 'ok',
-        id => $id,
-    }
+        (param('type') ? (type => param('type')) : ()),
+    };
+    my $id = $quests->add($attributes);
+    $attributes->{_id} = $id;
+    return $attributes;
 };
 
-get '/quests' => sub {
+get '/quest' => sub {
     return $quests->list({
         map { param($_) ? ($_ => param($_)) : () } qw/ user status /,
     });
@@ -56,5 +56,16 @@ get '/quests' => sub {
 get '/quest/:id' => sub {
     return $quests->get(param('id'));
 };
+
+for my $method (qw/ like unlike /) {
+    post "/quest/:id/$method" => sub {
+        die "not logged in" unless session->{login};
+        $quests->$method(param('id'), session->{login});
+
+        return {
+            result => 'ok',
+        }
+    };
+}
 
 true;

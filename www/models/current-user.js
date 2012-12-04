@@ -16,6 +16,6 @@ pp.models.CurrentUser = pp.models.User.extend({
     },
 
     url: function () {
-        return '/api/user';
+        return '/api/current_user';
     },
 });

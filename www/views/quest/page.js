@@ -8,13 +8,13 @@ pp.views.QuestPage = Backbone.View.extend({
     render: function () {
         this.$el.html(this.template());
 
-        var details = new pp.views.QuestDetails({ model: this.model });
+        var details = new pp.views.QuestBig({ model: this.model });
         this.$el.find('.quest').append(details.$el);
 
         var commentsModel = new pp.models.CommentCollection([], { 'quest_id': this.model.id });
         commentsModel.fetch();
         this.comments = new pp.views.CommentCollection({
-            comments: commentsModel
+            collection: commentsModel
         });
         this.$el.find('.comments').append(this.comments.$el);
 

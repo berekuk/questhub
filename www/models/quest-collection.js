@@ -2,7 +2,7 @@ pp.models.QuestCollection = Backbone.Collection.extend({
 
     initialize: function(models, args) {
         this.url = function() {
-            var url = '/api/quests';
+            var url = '/api/quest';
             var cgi = [];
             if (args.user) {
                 cgi.push('user=' + args.user);

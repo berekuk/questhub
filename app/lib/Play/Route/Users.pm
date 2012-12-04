@@ -24,7 +24,7 @@ get '/auth/twitter' => sub {
 
 prefix '/api';
 
-get '/user' => sub {
+get '/current_user' => sub {
 
     my $user = {};
     my $login = session('login');
@@ -79,7 +79,7 @@ post '/register' => sub {
     return { status => "ok", user => $user };
 };
 
-get '/users' => sub {
+get '/user' => sub {
     return $users->list;
 };
 

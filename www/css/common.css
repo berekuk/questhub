@@ -1,3 +1,11 @@
 .comments {
   margin-top: 10px;
 }
+
+.quest-type-label {
+    float: right;
+}
+
+.comment-delete {
+    float: right;
+}
