@@ -1,3 +1,13 @@
+# Override dns in dev; but leave the resolv.conf in production (i.e. on EC2) as is.
+if node['dev']
+  template "/etc/resolv.conf" do
+    source "resolv.conf.erb"
+    owner "root"
+    group "root"
+    mode 0644
+  end
+end
+
 include_recipe "perl"
 
 # for development
@@ -15,6 +25,7 @@ package 'make' # for compiling MongoDB
 
 cpan_module 'Dancer'
 cpan_module 'YAML'
+cpan_module 'Module::Install' # needed by MongoDB due to packaging issues - see https://github.com/berekuk/play-perl/issues/70
 cpan_module 'MongoDB'
 cpan_module 'JSON'
 cpan_module 'Params::Validate'
@@ -33,16 +44,6 @@ cpan_module 'Clone'
 cpan_module 'Dancer::Serializer::JSON'
 cpan_module 'Dancer::Session::MongoDB'
 cpan_module 'Dancer::Plugin::Auth::Twitter'
-
-# Override dns in dev; but leave the resolv.conf in production (i.e. on EC2) as is.
-if node['dev']
-  template "/etc/resolv.conf" do
-    source "resolv.conf.erb"
-    owner "root"
-    group "root"
-    mode 0644
-  end
-end
 
 directory '/data' # logs
 
