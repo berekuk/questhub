@@ -25,6 +25,7 @@ package 'make' # for compiling MongoDB
 
 cpan_module 'Dancer'
 cpan_module 'YAML'
+cpan_module 'Module::Install' # needed by MongoDB due to packaging issues - see https://github.com/berekuk/play-perl/issues/70
 cpan_module 'MongoDB'
 cpan_module 'JSON'
 cpan_module 'Params::Validate'
