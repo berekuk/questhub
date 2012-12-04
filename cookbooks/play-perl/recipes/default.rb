@@ -8,6 +8,11 @@ if node['dev']
   end
 end
 
+execute "apt-get-update" do
+  command "apt-get update"
+  ignore_failure true
+end
+
 include_recipe "perl"
 
 # for development
