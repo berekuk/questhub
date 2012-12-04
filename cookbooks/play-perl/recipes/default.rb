@@ -1,3 +1,13 @@
+# Override dns in dev; but leave the resolv.conf in production (i.e. on EC2) as is.
+if node['dev']
+  template "/etc/resolv.conf" do
+    source "resolv.conf.erb"
+    owner "root"
+    group "root"
+    mode 0644
+  end
+end
+
 include_recipe "perl"
 
 # for development
@@ -32,16 +42,6 @@ cpan_module 'Clone'
 cpan_module 'Dancer::Serializer::JSON'
 cpan_module 'Dancer::Session::MongoDB'
 cpan_module 'Dancer::Plugin::Auth::Twitter'
-
-# Override dns in dev; but leave the resolv.conf in production (i.e. on EC2) as is.
-if node['dev']
-  template "/etc/resolv.conf" do
-    source "resolv.conf.erb"
-    owner "root"
-    group "root"
-    mode 0644
-  end
-end
 
 directory '/data' # logs
 
