@@ -21,6 +21,7 @@ $(function () {
             "quest/:id": "questPage",
             "players": "userList",
             "player/:login": "anotherDashboard",
+            "about": "about",
         },
 
         questAdd: function () {
@@ -70,6 +71,11 @@ $(function () {
         register: function () {
             appView.setPageView(new pp.views.Register());
             setActiveMenuItem('home');
+        },
+
+        about: function () {
+            appView.setPageView(new pp.views.About());
+            setActiveMenuItem('about');
         }
     }))();
 
