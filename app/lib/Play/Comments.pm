@@ -9,7 +9,7 @@ has 'collection' => (
     is => 'ro',
     lazy => 1,
     default => sub {
-        return Play::Mongo->db->comments;
+        return Play::Mongo->db->get_collection('comments');
     },
 );
 

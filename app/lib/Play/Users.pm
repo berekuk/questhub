@@ -8,7 +8,7 @@ has 'collection' => (
     is => 'ro',
     lazy => 1,
     default => sub {
-        return Play::Mongo->db->users;
+        return Play::Mongo->db->get_collection('users');
     },
 );
 

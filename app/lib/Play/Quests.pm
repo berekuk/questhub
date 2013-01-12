@@ -12,7 +12,7 @@ has 'collection' => (
     is => 'ro',
     lazy => 1,
     default => sub {
-        return Play::Mongo->db->quests;
+        return Play::Mongo->db->get_collection('quests');
     },
 );
 
