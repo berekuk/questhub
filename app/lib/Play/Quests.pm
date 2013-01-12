@@ -49,6 +49,15 @@ sub add {
     return $id->to_string;
 }
 
+sub _quest2points {
+    my $self = shift;
+    my ($quest) = @_;
+
+    my $points = 1;
+    $points += scalar @{ $quest->{likes} } if $quest->{likes};
+    return $points;
+}
+
 sub update {
     my $self = shift;
     my ($id, $params) = validate_pos(@_, { type => SCALAR }, { type => HASHREF });
@@ -63,12 +72,12 @@ sub update {
     }
 
     if ($quest->{status} eq 'open' and $params->{status} and $params->{status} eq 'closed') {
-        $users->add_points($user, 1);
+        $users->add_points($user, $self->_quest2points($quest));
     }
 
     # reopen
     if ($quest->{status} eq 'closed' and $params->{status} and $params->{status} eq 'open') {
-        $users->add_points($user, -1);
+        $users->add_points($user, -$self->_quest2points($quest));
     }
 
     delete $quest->{_id};
@@ -96,6 +105,17 @@ sub _like_or_unlike {
     unless ($updated) {
         die "Quest not found or unable to like your own quest";
     }
+
+    my $quest = $self->get($id);
+    if ($quest->{status} eq 'closed') {
+        # add points retroactively
+        # FIXME - there's a race condition here somewhere
+        $users->add_points(
+            $quest->{user},
+            (($mode eq '$pull') ? -1 : 1)
+        );
+    }
+
     return;
 }
 

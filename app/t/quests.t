@@ -156,6 +156,33 @@ sub points :Tests {
     $user = http_json GET => '/api/current_user';
     is $user->{points}, 0, 'lost a point';
 
+    my $like = sub {
+        my ($quest, $user, $action) = @_;
+        my $old_login = Dancer::session('login');
+        http_json GET => "/api/fakeuser/$user";
+        Dancer::session login => $user;
+        http_json POST => "/api/quest/$quest->{_id}/$action";
+        Dancer::session login => $old_login;
+    };
+    $like->($quest, 'other', 'like');
+    $like->($quest, 'other2', 'like');
+
+    $user = http_json GET => '/api/current_user';
+    is $user->{points}, 0, 'no points for likes on an open quest';
+
+    http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'closed' } };
+    $user = http_json GET => '/api/current_user';
+    is $user->{points}, 3, '1 + number-of-likes points for a closed quest';
+
+    $like->($quest, 'other', 'unlike');
+    $like->($quest, 'other3', 'like');
+    $like->($quest, 'other4', 'like');
+    $user = http_json GET => '/api/current_user';
+    is $user->{points}, 4, 'likes and unlikes apply to the closed quest, retroactively';
+
+    http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'open' } };
+    $user = http_json GET => '/api/current_user';
+    is $user->{points}, 0, 'points are taken away if quest is reopened';
 }
 
 sub quest_types :Tests {
