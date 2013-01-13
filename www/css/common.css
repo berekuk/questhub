@@ -9,3 +9,7 @@
 .comment-delete {
     float: right;
 }
+
+.about h2 {
+    font-weight: 200;
+}
