@@ -5,7 +5,7 @@ pp.models.CurrentUser = pp.models.User.extend({
 
         // This is a weird hack to allow dashboard view to render in both of these cases:
         // 1) app is just loaded, user is not fetched yet
-        // 1) app is already loaded, user is fetched, and we need to go back to dashboard page
+        // 2) app is already loaded, user is fetched, and we need to go back to dashboard page
         // Backbone.js doesn't fire 'change' event in the second case, even if I invoke model.fetch() manually.
         //
         // tl;dr: It's weird that I have to track the fetch state in the model, it's probably because I don't understand Backbone.js enough yet.
