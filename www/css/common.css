@@ -18,6 +18,15 @@
     padding-bottom: 100px;
 }
 
+.likes {
+    margin-bottom: 8px;
+}
+
+.quest-label {
+    position: relative;
+    top: -5px;
+}
+
 dd {
   margin-bottom: 20px;
 }
