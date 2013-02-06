@@ -308,18 +308,15 @@
       </h1>
       <% if (my) { %> <!-- quest belongs to the current user -->
 
-        <!-- close/reopen button -->
         <div>
+        <!-- close/reopen button -->
         <% if (status === 'open') { %>
           <button class="quest-close btn">Close</button>
         <% } %>
           <% if (status === 'closed') { %>
         <button class="quest-reopen btn">Reopen</button>
         <% } %>
-        </div>
-
         <!-- delete button -->
-        <div>
           <button class="quest-delete btn">Delete</button>
         </div>
 
