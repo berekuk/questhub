@@ -26,11 +26,16 @@ pp.views.QuestBig = Backbone.View.extend({
     },
 
     destroy: function () {
-        this.model.destroy({
-            success: function(model, response) {
-                pp.app.router.navigate("/", { trigger: true });
-            },
-            error: pp.app.onError
+        var that = this;
+        bootbox.confirm("Quest and all comments will be destroyed permanently. Are you sure?", function(result) {
+            if (result) {
+                that.model.destroy({
+                    success: function(model, response) {
+                                 pp.app.router.navigate("/", { trigger: true });
+                             },
+                    error: pp.app.onError
+                });
+            }
         });
     },
 

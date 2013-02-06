@@ -290,19 +290,7 @@
 
     <script type="text/template" id="template-quest-big">
       <!-- delete button -->
-      <!-- Button to trigger modal -->
-      <a href="#quest-delete-modal" role="button" class="close" data-toggle="modal">&times;</a>
-      <!-- Modal -->
-      <div id="quest-delete-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="quest-delete-modal-label" aria-hidden="true">
-          <div class="modal-body">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <p>Quest and all comments will be destroyed permanently. Are you sure?</p>
-          </div>
-          <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-              <button class="btn btn-primary quest-delete">Delete a quest permanently</button>
-          </div>
-      </div>
+      <button type="button" class="close quest-delete">&times;</button>
 
       <h1>
         <%= name %>
@@ -400,6 +388,7 @@
 
     <script src="vendors/jquery-1.7.1.min.js"></script>
     <script src="vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendors/bootbox.min.js"></script>
     <script src="vendors/underscore-min.js"></script>
     <script src="vendors/backbone-min.js"></script>
     <script src="vendors/jquery.cookie.js"></script>
