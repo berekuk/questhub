@@ -290,9 +290,9 @@
 
     <script type="text/template" id="template-quest-big">
       <h1>
-        <span class="label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
-        <span class="label label-inverse"><%= type %></span>
         <%= name %>
+        <span class="quest-label label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
+        <span class="quest-label label label-inverse"><%= type %></span>
         <!--
         // this code is buggy; because of QuestBig view double rendering issue, 'Tweet' button is often rendered as a broken link
         // also, the current 'Tweet' button location is too annoying
