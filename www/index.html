@@ -289,6 +289,21 @@
     </script>
 
     <script type="text/template" id="template-quest-big">
+      <!-- delete button -->
+      <!-- Button to trigger modal -->
+      <a href="#quest-delete-modal" role="button" class="close" data-toggle="modal">&times;</a>
+      <!-- Modal -->
+      <div id="quest-delete-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="quest-delete-modal-label" aria-hidden="true">
+          <div class="modal-body">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <p>Quest and all comments will be destroyed permanently. Are you sure?</p>
+          </div>
+          <div class="modal-footer">
+              <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              <button class="btn btn-primary quest-delete">Delete a quest permanently</button>
+          </div>
+      </div>
+
       <h1>
         <%= name %>
         <span class="quest-label label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
@@ -339,8 +354,6 @@
           <% if (status === 'closed') { %>
         <button class="quest-reopen btn">Reopen</button>
         <% } %>
-        <!-- delete button -->
-          <button class="quest-delete btn">Delete</button>
         </div>
 
       <% } %>
