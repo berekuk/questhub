@@ -306,22 +306,7 @@
       <% } %>
       -->
       </h1>
-      <% if (my) { %> <!-- quest belongs to the current user -->
-
-        <div>
-        <!-- close/reopen button -->
-        <% if (status === 'open') { %>
-          <button class="quest-close btn">Close</button>
-        <% } %>
-          <% if (status === 'closed') { %>
-        <button class="quest-reopen btn">Reopen</button>
-        <% } %>
-        <!-- delete button -->
-          <button class="quest-delete btn">Delete</button>
-        </div>
-
-      <% } %>
-
+      <div class="likes">
       <% if (!my) {
         var meGusta = false;
         if (currentUser) {
@@ -341,6 +326,23 @@
       <!-- likes count -->
       <% if (likes.length) { %>
         Likes: <span class="label"><%= likes.length %></span>
+      <% } %>
+      </div>
+
+      <% if (my) { %> <!-- quest belongs to the current user -->
+
+        <div>
+        <!-- close/reopen button -->
+        <% if (status === 'open') { %>
+          <button class="quest-close btn">Close</button>
+        <% } %>
+          <% if (status === 'closed') { %>
+        <button class="quest-reopen btn">Reopen</button>
+        <% } %>
+        <!-- delete button -->
+          <button class="quest-delete btn">Delete</button>
+        </div>
+
       <% } %>
     </script>
 
