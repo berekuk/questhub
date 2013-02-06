@@ -13,3 +13,7 @@
 .about h2 {
     font-weight: 200;
 }
+
+dd {
+  margin-bottom: 20px;
+}
