@@ -6,9 +6,14 @@ pp.views.Comment = Backbone.View.extend({
     },
 
     destroy: function () {
-        this.model.destroy({
-            wait: true,
-            error: pp.app.onError
+        var that = this;
+        bootbox.confirm("Are you sure you want to delete this comment?", function(result) {
+            if (result) {
+                that.model.destroy({
+                    wait: true,
+                    error: pp.app.onError
+                });
+            }
         });
     },
 
