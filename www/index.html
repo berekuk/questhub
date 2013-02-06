@@ -112,6 +112,11 @@
 
     <script type="text/template" id="template-about">
       <div class="container-fluid about">
+        <h1>Play Perl</h1>
+        <div>
+          Play Perl is a new website for Perl developers.
+        </div>
+        <hr>
         <div class="row-fluid">
           <h2>Opensource, gamified</h2>
           <p>
@@ -119,14 +124,12 @@
           Play Perl gives you points and achievements to be proud of.
           </p>
         </div>
-        <hr>
         <div class='row-fluid'>
           <h2>Social Todo List</h2>
           <p>
           Play Perl allows you to announce your plans, gather the feedback, and find other people to cooperate with on common goals.
           </p>
         </div>
-        <hr>
         <div class="row-fluid">
           <h2>Collaborative prioritization</h2>
           <p>
@@ -138,8 +141,8 @@
         <div class="row-fluid">
           <h2>FAQ</h2>
           <dl>
-            <dt>Isn't Perl dead?</dt>
-            <dd>Maybe. We'll see.</dd>
+            <dt>"Quest"? "Player"? What is this?</dt>
+            <dd>Quest is any kind of task you're planning to do. Player is you, and other people are players too. You get 1+{number-of-likes} points for each quest you close.</dd>
             <dt>There are many other bug trackers! How is Play Perl different?</dt>
             <dd>
             Play Perl considers people to be more important than projects, and fun to be more important than planning. We're going to optimize its mechanics for:
@@ -157,26 +160,27 @@
             <dt>This doesn't motivate me.</dt>
             <dd>That's ok. <a href="http://berekuk.github.com/perl-motivation-survey/">People are different.</a></dd>
             <dt>I can't use this without feature X.</dt>
-            <dd>Is it simple enough for you to <a href="https://github.com/berekuk/play-perl">implement it yourself?</a></dd>
-            <dt>Quest? Player? WTF is all this?</dt>
-            <dd>Quest is any kind of task you're planning to do. Player is you, and other people are players too. You get 1+{number-of-likes} points for each quest you close.</dd>
-        </div>
-        <hr>
-        <div class="row-fluid">
-          <h2>Technology</h2>
-          Play Perl is built with:
-          <ul>
-            <li><a href="http://perldancer.org/">Dancer</a></li>
-            <li><a href="http://documentcloud.github.com/backbone/">Backbone.js</a></li>
-            <li><a href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
-            <li><a href="http://www.mongodb.org/">MongoDB</a></li>
-          </ul>
-          <div>
-            Backend is completely separated from the frontend. Backend API is documented <a href="https://github.com/berekuk/play-perl/blob/master/app/api.txt">here</a>, feel free to use it.<br>
-            (But please don't abuse game mechanics or you'll be banned.)
+            <dd>Can you <a href="https://github.com/berekuk/play-perl">implement it yourself?</a></dd>
+          </div>
+          <hr>
+          <div class="row-fluid">
+            <h2>Technology</h2>
+            Play Perl is built with:
+            <ul>
+              <li><a href="http://perldancer.org/">Dancer</a></li>
+              <li><a href="http://documentcloud.github.com/backbone/">Backbone.js</a></li>
+              <li><a href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
+              <li><a href="http://www.mongodb.org/">MongoDB</a></li>
+            </ul>
+            <div>
+              Backend is completely separated from the frontend. Backend API is documented <a href="https://github.com/berekuk/play-perl/blob/master/app/api.txt">here</a>, feel free to use it.<br>
+              (But please don't abuse game mechanics or you'll be banned.)
+            </div>
+            <div>
+              <br>
+              Play Perl sources are open. <a href="https://github.com/berekuk/play-perl">Clone it on GitHub!</a>
           </div>
         </div>
-      </div>
     </script>
 
     <!-- profile page - user and his/her quests -->
