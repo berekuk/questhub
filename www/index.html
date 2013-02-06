@@ -322,13 +322,6 @@
 
       <% } %>
 
-      <!-- likes count -->
-      <% if (likes.length) { %>
-      <div>
-        Likes: <span class="label"><%= likes.length %></span>
-      </div>
-      <% } %>
-
       <% if (!my) {
         var meGusta = false;
         if (currentUser) {
@@ -344,6 +337,10 @@
           <button class="btn btn-mini btn-primary quest-like" type="button">Like</button>
         <% } %>
 
+      <% } %>
+      <!-- likes count -->
+      <% if (likes.length) { %>
+        Likes: <span class="label"><%= likes.length %></span>
       <% } %>
     </script>
 
