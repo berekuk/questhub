@@ -1,13 +1,3 @@
-# Override dns in dev; but leave the resolv.conf in production (i.e. on EC2) as is.
-if node['dev']
-  template "/etc/resolv.conf" do
-    source "resolv.conf.erb"
-    owner "root"
-    group "root"
-    mode 0644
-  end
-end
-
 execute "apt-get-update" do
   command "apt-get update"
   ignore_failure true
