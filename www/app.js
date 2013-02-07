@@ -24,6 +24,16 @@ $(function () {
             "about": "about",
         },
 
+        // Google Analytics
+        initialize: function() {
+            return this.bind('all', this._trackPageview);
+        },
+        _trackPageview: function() {
+            var url;
+            url = Backbone.history.getFragment();
+            return _gaq.push(['_trackPageview', "/" + url]);
+        },
+
         questAdd: function () {
             var view = new pp.views.QuestAdd({ model: new pp.models.Quest() });
             appView.setPageView(view);
