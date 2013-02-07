@@ -22,7 +22,7 @@ pp.views.CurrentUser = Backbone.View.extend({
         // FIXME - it's probably better to reload the whole page
         $.post('/api/logout').always(function () {
             this.model.fetch();
-            pp.app.router.navigate("/#welcome", { trigger: true });
+            pp.app.router.navigate("/welcome", { trigger: true });
         }.bind(this));
     }
 });
