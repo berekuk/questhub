@@ -11,8 +11,8 @@ serializer: JSON
 
 plugins:
   "Auth::Twitter":
-    consumer_key:     "fkOCnMftQeZBItRnaTipA"
-    consumer_secret:  "Yr4UiHIzky8mCn0nMpApea5xc8ClGfvFN7C6XtnH54Y"
+    consumer_key:     "IRUAzmA5AjwBTrPQWrCzIQ"
+    consumer_secret:  "Cj4hB54BLMYeoG9eEX4fd5gexg02nQLIRJ2S3f0nAH4"
     callback_url:     "http://localhost:3000/auth/twitter/callback"
     callback_success: "/auth/twitter"
     callback_fail:    "/fail"
