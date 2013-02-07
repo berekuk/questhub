@@ -22,7 +22,7 @@ pp.views.Dashboard = Backbone.View.extend({
 
     checkLogged: function() {
         if (!this.model.get("registered")) {
-            pp.app.router.navigate("/#welcome", { trigger: true });
+            pp.app.router.navigate("/welcome", { trigger: true });
             return;
         }
         this.render();

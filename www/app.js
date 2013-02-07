@@ -98,5 +98,13 @@ $(function () {
                 .addClass('active');
     }
 
-    Backbone.history.start();
+    Backbone.history.start({ pushState: true });
+
+    $(document).on("click", "a[href^='/']", function(event) {
+        if (!event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+            event.preventDefault();
+            var url = $(event.currentTarget).attr("href").replace(/^\//, "");
+            pp.app.router.navigate(url, { trigger: true });
+        }
+    });
 });
