@@ -22,7 +22,12 @@ cookbook_path \"$CHEF_COOKBOOK_PATH\"
 role_path []" > $CHEF_FILE_CACHE_PATH/solo.rb
 
 # install chef
-apt-get update
-apt-get --no-install-recommends -y install build-essential ruby ruby-dev rubygems libopenssl-ruby
-gem install --no-rdoc --no-ri chef
+for i in $(seq 1 3); do
+    apt-get update # apt-get update is failing sometimes
+    sleep 1
+done
+apt-get --no-install-recommends -y install build-essential ruby ruby-dev rubygems libopenssl-ruby git
+gem install --no-rdoc --no-ri net-ssh -v 2.2.2
+gem install --no-rdoc --no-ri net-ssh-gateway -v 1.1.0
+gem install --no-rdoc --no-ri chef -v 10.14.2
 echo 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/var/lib/gems/1.8/bin"' > /etc/environment

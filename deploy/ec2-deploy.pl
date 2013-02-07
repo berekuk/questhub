@@ -49,7 +49,7 @@ sub INFO {
 
 sub wait_for_bootstrap {
     INFO "Waiting for bootstrap to complete";
-    for my $trial (1..20) {
+    for my $trial (1..40) {
         eval {
             system(qq{ssh -q -t $USER\@$IP "sudo -i which chef-solo > /dev/null"})
         };
@@ -91,6 +91,7 @@ sub start_instance {
 
     my ($instance) = $result =~ /^INSTANCE \s+ (i-\S+)/mx;
     INFO "Instance $instance created";
+    sleep 3;
 
     system("ec2-associate-address -i $instance $IP");
     INFO "IP $IP associated with $instance";
@@ -100,7 +101,7 @@ sub start_instance {
 
     {
         my $ok;
-        for my $trial (1..20) {
+        for my $trial (1..30) {
             my $key = xqx("ssh-keyscan $IP 2>/dev/null");
             chomp $key;
             unless ($key) {
