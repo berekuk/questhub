@@ -10,5 +10,6 @@ pp.views.UserBig = Backbone.View.extend({
     render: function () {
         var params = this.model.toJSON();
         this.$el.html(this.template(params));
+        this.$el.find('.badge').tooltip();
     },
 });
