@@ -9,11 +9,11 @@ mongodb_session_coll: "sessions"
 
 serializer: JSON
 
-# this config is generated
+# this config is generated, really
 plugins:
   "Auth::Twitter":
-    consumer_key:     "<%= @consumer_key %>"
-    consumer_secret:  "<%= @consumer_secret %>"
-    callback_url:     "<%= @callback_url %>"
+    consumer_key:     "<%= @twitter['consumer_key'] %>"
+    consumer_secret:  "<%= @twitter['consumer_secret'] %>"
+    callback_url:     "http://<%= @hostport %>/auth/twitter/callback"
     callback_success: "/auth/twitter"
     callback_fail:    "/fail"

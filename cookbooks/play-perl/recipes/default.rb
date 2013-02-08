@@ -56,7 +56,10 @@ template "/play/app/config.yml" do
   owner "root"
   group "root"
   mode 0644
-  variables(node.play_perl.twitter)
+  variables({
+      :twitter => node['play_perl']['twitter'],
+      :hostport => node['play_perl']['hostport']
+  })
   notifies :restart, "service[nginx]"
 end
 

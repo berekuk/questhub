@@ -21,10 +21,9 @@ Vagrant::Config.run do |config|
   # Enable and configure the chef solo provisioner
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = ['cookbooks']
-    chef.json = {
-      'dev' => true
-    }
-    chef.add_recipe 'play-perl'
+    chef.roles_path = 'roles'
+    chef.add_role('common')
+    chef.add_role('dev')
   end
 
 end
