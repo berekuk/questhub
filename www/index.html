@@ -243,10 +243,13 @@
 
     <!-- users list -->
     <script type="text/template" id="template-user-collection">
-        <div>
+        <div class="row-fluid">
+            <div class="span3">
+            </div>
+          <div class="span6">
           <table class="table table-bordered quests-list">
           <% users.each(function(user) { %>
-            <tr>
+            <tr class="warning">
               <td>
                 <% if (user.get("twitter") && user.get("twitter").screen_name) { %>
                 <img src="http://api.twitter.com/1/users/profile_image?screen_name=<%= user.get("twitter").screen_name %>&size=mini"/>
@@ -257,6 +260,7 @@
             </tr>
           <% }); %>
           </table>
+      </div>
         </div>
     </script>
 
