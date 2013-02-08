@@ -75,7 +75,7 @@ sub checkout_code {
 
 sub provision {
     INFO "Running chef-solo";
-    system(qq{ssh -t $USER\@$IP "sudo -i sh -c 'chef-solo -c /tmp/cheftime/solo.rb -j /home/ubuntu/dna.json -r /home/ubuntu/cookbooks.tgz'"});
+    system(qq{ssh -t $USER\@$IP "sudo -i sh -c 'chef-solo -c /tmp/cheftime/solo.rb -j /home/ubuntu/dna.json'"});
     INFO "Provisioning complete";
 }
 
@@ -139,8 +139,7 @@ sub main {
         wait_for_bootstrap();
     }
 
-    system('tar cfz cookbooks.tgz cookbooks');
-    system("scp -r cookbooks.tgz dna.json $USER\@$IP:.");
+    system("scp deploy/dna.json $USER\@$IP:.");
 
     checkout_code();
     provision();

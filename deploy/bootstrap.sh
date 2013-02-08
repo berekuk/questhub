@@ -18,8 +18,8 @@ mkdir -p $CHEF_COOKBOOK_PATH
 
 # chef-solo config
 echo "file_cache_path \"$CHEF_FILE_CACHE_PATH\"
-cookbook_path \"$CHEF_COOKBOOK_PATH\"
-role_path []" > $CHEF_FILE_CACHE_PATH/solo.rb
+cookbook_path \"/play/cookbooks\"
+role_path \"/play/roles\"" > $CHEF_FILE_CACHE_PATH/solo.rb
 
 # install chef
 for i in $(seq 1 3); do
