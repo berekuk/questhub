@@ -102,6 +102,24 @@ sub add_quest :Tests {
     my $got_quest = http_json GET => "/api/quest/$id";
     delete $got_quest->{_id};
     cmp_deeply $got_quest, $new_record;
+}
+
+sub quest_events :Tests {
+
+    my $user = 'euser';
+    http_json GET => "/api/fakeuser/$user";
+
+    my $new_record = {
+        user    => $user,
+        name    => 'test-quest',
+        status  => 'open',
+    };
+
+    Dancer::session login => $user;
+    my $add_result = http_json POST => '/api/quest', { params => $new_record }; # create
+    my $quest_id = $add_result->{_id};
+    http_json PUT => "/api/quest/$quest_id", { params => { status => 'closed' } }; # close
+    http_json PUT => "/api/quest/$quest_id", { params => { status => 'open' } }; # and reopen again
 
     cmp_deeply(
         Play::Events->new->list,
@@ -109,9 +127,25 @@ sub add_quest :Tests {
             _id => re('^\S+$'),
             ts => re('^\d+$'),
             object_type => 'quest',
+            action => 'reopen',
+            object_id => $quest_id,
+            object => { name => 'test-quest', status => 'open', user => $user },
+        },
+        {
+            _id => re('^\S+$'),
+            ts => re('^\d+$'),
+            object_type => 'quest',
+            action => 'close',
+            object_id => $quest_id,
+            object => { name => 'test-quest', status => 'closed', user => $user },
+        },
+        {
+            _id => re('^\S+$'),
+            ts => re('^\d+$'),
+            object_type => 'quest',
             action => 'add',
-            object_id => re('^\S+$'),
-            object => $new_record,
+            object_id => $quest_id,
+            object => { name => 'test-quest', status => 'open', user => $user },
         }]
     );
 }

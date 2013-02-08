@@ -81,20 +81,41 @@ sub update {
         die "access denied";
     }
 
+    my $action = '';
+
     if ($quest->{status} eq 'open' and $params->{status} and $params->{status} eq 'closed') {
-        $users->add_points($user, $self->_quest2points($quest));
+        $action = 'close';
     }
 
-    # reopen
     if ($quest->{status} eq 'closed' and $params->{status} and $params->{status} eq 'open') {
+        $action = 'reopen';
+    }
+
+    if ($action eq 'close') {
+        $users->add_points($user, $self->_quest2points($quest));
+    }
+    elsif ($action eq 'reopen') {
         $users->add_points($user, -$self->_quest2points($quest));
     }
 
     delete $quest->{_id};
+
+    my $quest_after_update = { %$quest, %$params };
     $self->collection->update(
         { _id => MongoDB::OID->new(value => $id) },
-        { %$quest, %$params }
+        $quest_after_update
     );
+
+    # there are other actions, for example editing the quest description
+    # TODO - should we split the update() method into several, more semantic methods?
+    if ($action eq 'close' or $action eq 'reopen') {
+        $events->add({
+            object_type => 'quest',
+            action => $action,
+            object_id => $id,
+            object => $quest_after_update,
+        });
+    }
 
     return $id;
 }
