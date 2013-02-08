@@ -31,7 +31,7 @@ This is how registration is implemented:
 5. JS checks whether the user has both twitter login and service login (using /api/user); if there's no service login, it shows the registration form
 6. User enters his new service login in the registration form, JS calls /api/register, and now we're fully registered.
 
-/api/user is the key for frontend to check the current authentification status.
+/api/current_user is the key for frontend to check the current authentification status.
 
 ## Objects
 
