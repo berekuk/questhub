@@ -5,8 +5,10 @@ use Params::Validate qw(:all);
 use Play::Mongo;
 
 use Play::Users;
+use Play::Events;
 
 my $users = Play::Users->new;
+my $events = Play::Events->new;
 
 has 'collection' => (
     is => 'ro',
@@ -46,6 +48,14 @@ sub add {
     }
 
     my $id = $self->collection->insert($params);
+
+    $events->add({
+        object_type => 'quest',
+        action => 'add',
+        object_id => $id->to_string,
+        object => $params,
+    });
+
     return $id->to_string;
 }
 

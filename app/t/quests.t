@@ -2,6 +2,7 @@ use t::common;
 use parent qw(Test::Class);
 
 use Play::Quests;
+use Play::Events;
 
 my $quests_data = {
     1 => {
@@ -26,7 +27,7 @@ sub setup :Tests(setup) {
     my $quests = Play::Quests->new;
 
     Dancer::session->destroy;
-    $quests->collection->remove({});
+    reset_db();
 
     # insert quests to DB
     for (keys %$quests_data) {
@@ -101,6 +102,18 @@ sub add_quest :Tests {
     my $got_quest = http_json GET => "/api/quest/$id";
     delete $got_quest->{_id};
     cmp_deeply $got_quest, $new_record;
+
+    cmp_deeply(
+        Play::Events->new->list,
+        [{
+            _id => re('^\S+$'),
+            ts => re('^\d+$'),
+            object_type => 'quest',
+            action => 'add',
+            object_id => re('^\S+$'),
+            object => $new_record,
+        }]
+    );
 }
 
 sub delete_quest :Tests {
