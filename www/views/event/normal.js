@@ -7,5 +7,7 @@ pp.views.Event = Backbone.View.extend({
         console.log('event ' + this.model.id);
         var template = this.template();
         this.setElement($(template(this.model.toJSON())));
+
+        this.$el.find("time.timeago").timeago();
     }
 });

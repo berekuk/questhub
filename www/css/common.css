@@ -42,3 +42,8 @@ small.hint {
 dd {
   margin-bottom: 20px;
 }
+
+time.timeago {
+    float: right;
+    color: #999;
+}

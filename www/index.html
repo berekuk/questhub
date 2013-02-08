@@ -277,6 +277,7 @@
     <script type="text/template" id="template-event-add-quest">
       <div class="well well-small">
         <a href="/player/<%= object.user %>"><%= object.user %></a> started a new quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
+        <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
       </div>
     </script>
 
@@ -432,6 +433,7 @@
     <script src="/vendors/underscore-min.js"></script>
     <script src="/vendors/backbone-min.js"></script>
     <script src="/vendors/jquery.cookie.js"></script>
+    <script src="/vendors/jquery.timeago.js"></script>
 
     <script>
         var pp = {
