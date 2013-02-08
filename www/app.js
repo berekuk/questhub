@@ -17,6 +17,7 @@ $(function () {
             "": "dashboard",
             "welcome": "welcome",
             "register": "register",
+            "auth/twitter": "twitterLogin",
             "quest/add": "questAdd",
             "quest/:id": "questPage",
             "players": "userList",
@@ -81,6 +82,12 @@ $(function () {
         register: function () {
             appView.setPageView(new pp.views.Register());
             setActiveMenuItem('home');
+        },
+
+        twitterLogin: function () {
+            console.log('auth/twitter');
+            window.location = '/auth/twitter';
+            console.log('location: ' + window.location);
         },
 
         about: function () {
