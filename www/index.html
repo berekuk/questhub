@@ -256,6 +256,9 @@
                 <% } %>
                 <a href="/player/<%= user.get("login") %>"><%= user.get("login") %></a>
                 <span class="badge badge-info"><%= user.get("points") %></span>
+                <% if (user.get("open_quests")) { %>
+                <span class="label label-inverse open-quest-count-label"><%= user.get("open_quests") %> open quests</span>
+                <% } %>
               </td>
             </tr>
           <% }); %>
