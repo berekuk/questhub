@@ -3,11 +3,8 @@ pp.views.Event = Backbone.View.extend({
         return _.template($('#template-event-' + this.model.get('action') + '-' + this.model.get('object_type')).text());
     },
 
-    initialize: function () {
-        console.log('event ' + this.model.id);
+    render: function () {
         var template = this.template();
-        this.setElement($(template(this.model.toJSON())));
-
-        this.$el.find("time.timeago").timeago();
+        this.$el.html(template(this.model.toJSON()));
     }
 });

@@ -19,10 +19,11 @@ pp.views.EventCollection = Backbone.View.extend({
     },
 
     onAdd: function (ev) {
-        var view = new pp.views.Event({model: ev});
+        var view = new pp.views.EventBox({model: ev});
         var l = this.$el.find('.events-list');
         l.show(); // see also: https://github.com/berekuk/play-perl/issues/61
-        l.append(view.render().el);
+        view.render();
+        l.append(view.el);
     },
 
     onReset: function () {
