@@ -260,26 +260,28 @@
     </script>
 
     <script type="text/template" id="template-quest-add">
-        <div>
-      <div id="addQuest" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h3>Add a quest</h3>
-        </div>
-        <div class="modal-body modal-quest-add">
-          <textarea name="name" rows="5" placeholder="Quest description" class="span12"></textarea>
-          <div class="btn-group quest-type-select">
-            <button type="button" class="btn" quest-type="bug">Bug</button>
-            <button type="button" class="btn" quest-type="blog">Blog post</button>
-            <button type="button" class="btn" quest-type="feature">New feature</button>
-            <button type="button" class="btn" quest-type="other">Other</button>
+      <div>
+        <div id="addQuest" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Add a quest</h3>
+          </div>
+          <div class="modal-body modal-quest-add">
+            <div class="row-fluid">
+              <textarea name="name" rows="5" placeholder="Quest description" class="span12"></textarea>
+              <div class="btn-group quest-type-select">
+                <button type="button" class="btn" quest-type="bug">Bug</button>
+                <button type="button" class="btn" quest-type="blog">Blog post</button>
+                <button type="button" class="btn" quest-type="feature">New feature</button>
+                <button type="button" class="btn" quest-type="other">Other</button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary quest-add">Go!</button>
           </div>
         </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary quest-add">Go!</button>
-        </div>
       </div>
-        </div>
     </script>
 
     <!-- quest details page -->
