@@ -130,8 +130,8 @@ sub main {
     ) or pod2usage(2);
     pod2usage(2) if @ARGV;
 
-    unless (-e 'cookbooks/play-perl/attributes/override.rb') {
-        die "Fill in 'cookbooks/play-perl/attributes/default.rb' with real twitter credentials first!\n";
+    unless (-e 'roles/ec2.rb') {
+        die "'roles/ec2.rb' is missing!\n"; # ec2.rb is not commited to the repo, because it contains the secret twitter credentials
     }
 
     if ($create) {
