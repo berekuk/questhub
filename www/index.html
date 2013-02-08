@@ -340,7 +340,7 @@
       <% } %>
       <!-- likes count -->
       <% if (likes.length) { %>
-        Likes: <span class="label"><%= likes.length %></span>
+        Likes: <span class="label" data-toggle="tooltip" title="<%= likes.join(', ') %>"><%= likes.length %></span>
       <% } %>
       </div>
 

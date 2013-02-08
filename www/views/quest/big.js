@@ -56,5 +56,6 @@ pp.views.QuestBig = Backbone.View.extend({
             params.likes = [];
         }
         this.$el.html(this.template(params));
+        this.$el.find('[data-toggle=tooltip]').tooltip();
     }
 });
