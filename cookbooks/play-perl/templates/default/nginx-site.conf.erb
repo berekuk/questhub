@@ -8,8 +8,6 @@ server {
   access_log /data/access.log;
   error_log  /data/error.log info;
 
-  root /play/www;
-
   location /api {
     try_files $uri @proxy;
     access_log off;
@@ -30,7 +28,8 @@ server {
         proxy_pass       http://127.0.0.1:<%= @dancer_port %>;
   }
 
-  location ~ ^/.+$ {
-    rewrite .* /index.html last;
+  location / {
+    root /play/www;
+    try_files $uri /index.html;
   }
 }
