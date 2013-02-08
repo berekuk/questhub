@@ -280,6 +280,18 @@
       </div>
     </script>
 
+    <script type="text/template" id="template-event-close-quest">
+      <div class="well well-small">
+        <a href="/player/<%= object.user %>"><%= object.user %></a> completed a quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
+      </div>
+    </script>
+
+    <script type="text/template" id="template-event-reopen-quest">
+      <div class="well well-small">
+        <a href="/player/<%= object.user %>"><%= object.user %></a> reopened a quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
+      </div>
+    </script>
+
     <script type="text/template" id="template-quest-add">
       <div>
         <div id="addQuest" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
