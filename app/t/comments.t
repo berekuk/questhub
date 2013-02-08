@@ -5,9 +5,7 @@ use Play::Quests;
 
 sub setup :Tests(setup) {
     Dancer::session->destroy;
-    for (qw/ quests comments users /) {
-        Play::Mongo->db->get_collection($_)->remove({});
-    }
+    reset_db();
 }
 
 sub add_comment :Tests {
