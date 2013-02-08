@@ -5,6 +5,7 @@ use Play::Users;
 
 sub setup :Tests(setup) {
     Play::Users->new->collection->remove({});
+    Play::Quests->new->collection->remove({});
     Dancer::session->destroy;
 }
 
@@ -82,6 +83,36 @@ sub users_list :Tests {
             _id => re('\S+'),
             login => 'blah',
             points => 0,
+        },
+        {
+            twitter => {
+                screen_name => 'blah2',
+            },
+            _id => re('\S+'),
+            login => 'blah2',
+            points => 0,
+        },
+    ];
+}
+
+sub open_quests_count :Tests {
+    my $self = shift;
+    $self->_add_users;
+
+    Dancer::session login => 'blah';
+    http_json POST => '/api/quest', { params => { user => 'blah', name => 'q1' } };
+    http_json POST => '/api/quest', { params => { user => 'blah', name => 'q2' } };
+
+    my $user = http_json GET => '/api/user';
+    cmp_deeply $user, [
+        {
+            twitter => {
+                screen_name => 'blah',
+            },
+            _id => re('\S+'),
+            login => 'blah',
+            points => 0,
+            open_quests => 2,
         },
         {
             twitter => {

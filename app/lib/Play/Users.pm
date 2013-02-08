@@ -4,6 +4,8 @@ use Moo;
 use Params::Validate qw(:all);
 use Play::Mongo;
 
+use Play::Quests; # recursive dependency!
+
 has 'collection' => (
     is => 'ro',
     lazy => 1,
@@ -11,6 +13,8 @@ has 'collection' => (
         return Play::Mongo->db->get_collection('users');
     },
 );
+
+my $quests = Play::Quests->new;
 
 sub get_by_twitter_login {
     my $self = shift;
@@ -58,6 +62,16 @@ sub list {
 
     my @users = $self->collection->find({})->all;
     $self->_prepare_user($_) for @users;
+
+    # filling 'open_quests' field
+    my $quests = $quests->list({ status => 'open' });
+    my %users = map { $_->{login} => $_ } @users;
+    for my $quest (@$quests) {
+        my $quser = $users{ $quest->{user} };
+        next unless $quser; # I guess user can be deleted and leave user-less quests behind, that's not a good reason for a failure
+        $quser->{open_quests}++;
+    }
+
     return \@users;
 }
 
