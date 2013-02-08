@@ -268,14 +268,17 @@
             <h3>Add a quest</h3>
           </div>
           <div class="modal-body modal-quest-add">
-            <div class="row-fluid">
-              <textarea name="name" rows="5" placeholder="Quest description" class="span12"></textarea>
+            <div class="row-fluid add-quest-field">
+              <small class="hint">Quest type is optional.</small>
               <div class="btn-group quest-type-select">
                 <button type="button" class="btn" quest-type="bug">Bug</button>
                 <button type="button" class="btn" quest-type="blog">Blog post</button>
                 <button type="button" class="btn" quest-type="feature">New feature</button>
-                <button type="button" class="btn" quest-type="other">Other</button>
               </div>
+            </div>
+            <div class="row-fluid add-quest-field">
+              <small class="hint">Write a short description of the task here. You can add details later in the comments.</small>
+              <textarea name="name" rows="3" placeholder="Quest description" class="span12"></textarea>
             </div>
           </div>
           <div class="modal-footer">
@@ -298,7 +301,9 @@
       <h1>
         <%= name %>
         <span class="quest-label label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
-        <span class="quest-label label label-inverse"><%= type %></span>
+        <% if (typeof(type) != 'undefined') { %>
+          <span class="quest-label label label-inverse"><%= type %></span>
+        <% } %>
         <!--
         // this code is buggy; because of QuestBig view double rendering issue, 'Tweet' button is often rendered as a broken link
         // also, the current 'Tweet' button location is too annoying

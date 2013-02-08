@@ -11,7 +11,6 @@ pp.views.QuestAdd = Backbone.View.extend({
         _.bindAll(this);
         this.render();
         this.submitted = false;
-        this.gotType = false;
         this.validate();
     },
 
@@ -23,7 +22,6 @@ pp.views.QuestAdd = Backbone.View.extend({
         $(e.target.parentElement).find('.active').removeClass('active');
         $(e.target).button('toggle');
         $(e.target).addClass('btn-primary');
-        this.gotType = true;
         this.validate();
     },
 
@@ -39,7 +37,7 @@ pp.views.QuestAdd = Backbone.View.extend({
     },
 
     validate: function() {
-        if (this.submitted || !this.gotType || !this.getDescription()) {
+        if (this.submitted || !this.getDescription()) {
             this.disable();
         }
         else {
@@ -69,16 +67,17 @@ pp.views.QuestAdd = Backbone.View.extend({
             return;
         }
 
+        var model_params = {
+            name: this.getDescription()
+        };
+
         var type = this.$('.quest-type-select button.active').attr('quest-type');
-        if (!type) {
-            type = 'other';
+        if (type) {
+            model_params.type = type;
         }
 
         var model = new this.collection.model();
-        model.save({
-            name: this.getDescription(),
-            type: type
-        }, {
+        model.save(model_params, {
             'success': this.onSuccess,
             'error': pp.app.onError
         });

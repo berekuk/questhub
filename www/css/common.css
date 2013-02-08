@@ -27,6 +27,14 @@
     top: -5px;
 }
 
+.add-quest-field {
+    margin-bottom: 10px;
+}
+
+small.hint {
+    color: #999;
+}
+
 dd {
   margin-bottom: 20px;
 }
