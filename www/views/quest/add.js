@@ -19,8 +19,10 @@ pp.views.QuestAdd = Backbone.View.extend({
         // Radio buttons - activate clicked button and disactivate all the others.
         // We can't use native radio buttons from bootstrap because of unpredictable event triggering order, btw.
         // See http://stackoverflow.com/questions/9262827/twitter-bootstrap-onclick-event-on-buttons-radio for details.
+        $(e.target.parentElement).find('.active').removeClass('btn-primary');
         $(e.target.parentElement).find('.active').removeClass('active');
         $(e.target).button('toggle');
+        $(e.target).addClass('btn-primary');
         this.gotType = true;
         this.validate();
     },
