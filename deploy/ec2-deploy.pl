@@ -139,7 +139,9 @@ sub main {
         wait_for_bootstrap();
     }
 
+    system("scp roles/ec2.rb $USER\@$IP:");
     system("scp deploy/dna.json $USER\@$IP:.");
+    system(qq{ssh -t $USER\@$IP "sudo -i sh -c 'mv /home/ubuntu/ec2.rb /play/roles/ec2.rb'"});
 
     checkout_code();
     provision();
