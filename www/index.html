@@ -274,9 +274,9 @@
         </div>
     </script>
 
-    <script type="text/template" id="template-event">
+    <script type="text/template" id="template-event-add-quest">
       <div class="well well-small">
-        Event: <%= _id %>
+        <a href="/player/<%= object.user %>"><%= object.user %></a> started a new quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
       </div>
     </script>
 
