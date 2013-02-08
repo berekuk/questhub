@@ -130,6 +130,10 @@ sub main {
     ) or pod2usage(2);
     pod2usage(2) if @ARGV;
 
+    unless (-e 'cookbooks/play-perl/attributes/override.rb') {
+        die "Fill in 'cookbooks/play-perl/attributes/default.rb' with real twitter credentials first!\n";
+    }
+
     if ($create) {
         start_instance();
         wait_for_bootstrap();
