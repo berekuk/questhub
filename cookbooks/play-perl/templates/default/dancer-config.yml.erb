@@ -12,8 +12,8 @@ serializer: JSON
 # this config is generated
 plugins:
   "Auth::Twitter":
-    consumer_key:     "IRUAzmA5AjwBTrPQWrCzIQ"
-    consumer_secret:  "Cj4hB54BLMYeoG9eEX4fd5gexg02nQLIRJ2S3f0nAH4"
-    callback_url:     "http://localhost:3000/auth/twitter/callback"
+    consumer_key:     "<%= @consumer_key %>"
+    consumer_secret:  "<%= @consumer_secret %>"
+    callback_url:     "<%= @callback_url %>"
     callback_success: "/auth/twitter"
     callback_fail:    "/fail"

@@ -50,6 +50,16 @@ cpan_module 'Dancer::Plugin::Auth::Twitter'
 
 directory '/data' # logs
 
+# dancer config
+template "/play/app/config.yml" do
+  source "dancer-config.yml.erb"
+  owner "root"
+  group "root"
+  mode 0644
+  variables(node.play_perl.twitter)
+  notifies :restart, "service[nginx]"
+end
+
 # dancer services
 include_recipe "ubic"
 cpan_module 'Ubic::Service::Plack'
