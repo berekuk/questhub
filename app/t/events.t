@@ -8,7 +8,7 @@ sub setup :Tests(setup) {
     reset_db();
 }
 
-sub add_event :Tests {
+sub event_perl_api :Tests {
     my $events = Play::Events->new;
     $events->add({ blah => 5, boo => 6 });
     $events->add({ foo => 'bar' });
@@ -28,4 +28,19 @@ sub events_limit :Tests {
 
     is scalar @{ $events->list }, 100;
 }
+
+sub events_http_api :Tests {
+    my $events = Play::Events->new;
+    $events->add({ blah => 5 });
+    $events->add({ blah => 6 });
+
+    my $list = http_json GET => '/api/event';
+    cmp_deeply
+        $list,
+        [
+            { blah => 6, _id => re('^\S+$'), ts => re('^\d+$') },
+            { blah => 5, _id => re('^\S+$'), ts => re('^\d+$') },
+        ]
+}
+
 __PACKAGE__->new->runtests;
