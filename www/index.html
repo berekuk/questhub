@@ -61,6 +61,7 @@
               <div class="nav-collapse collapse">
                 <ul class="nav">
                   <li class="active menu-item-home"><a href="/">Home</a></li>
+                  <li class="menu-item-event-list"><a href="/feed">News Feed</a></li>
                   <li class="menu-item-user-list"><a href="/players">Players</a></li>
                   <li class="menu-item-about"><a href="/about">About</a></li>
                 </ul>
@@ -267,6 +268,18 @@
         </div>
     </script>
 
+    <!-- events list -->
+    <script type="text/template" id="template-event-collection">
+        <div class="row-fluid events-list" style="display: none">
+        </div>
+    </script>
+
+    <script type="text/template" id="template-event-add-quest">
+      <div class="well well-small">
+        <a href="/player/<%= object.user %>"><%= object.user %></a> started a new quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
+      </div>
+    </script>
+
     <script type="text/template" id="template-quest-add">
       <div>
         <div id="addQuest" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -431,6 +444,8 @@
     <script src="/views/register.js"></script>
     <script src="/views/user/big.js"></script>
     <script src="/views/user/collection.js"></script>
+    <script src="/views/event/normal.js"></script>
+    <script src="/views/event/collection.js"></script>
     <script src="/views/user/current.js"></script>
     <script src="/views/about.js"></script>
 
@@ -438,6 +453,8 @@
     <script src="/models/another-user.js"></script>
     <script src="/models/current-user.js"></script>
     <script src="/models/user-collection.js"></script>
+    <script src="/models/event.js"></script>
+    <script src="/models/event-collection.js"></script>
     <script src="/models/comment.js"></script>
     <script src="/models/comment-collection.js"></script>
     <script src="/models/quest.js"></script>

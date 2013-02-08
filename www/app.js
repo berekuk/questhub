@@ -20,6 +20,7 @@ $(function () {
             "auth/twitter": "twitterLogin",
             "quest/add": "questAdd",
             "quest/:id": "questPage",
+            "feed": "eventList",
             "players": "userList",
             "player/:login": "anotherDashboard",
             "about": "about",
@@ -77,6 +78,14 @@ $(function () {
             users.fetch();
             appView.setPageView(view);
             setActiveMenuItem('user-list');
+        },
+
+        eventList: function () {
+            var events = new pp.models.EventCollection();
+            var view = new pp.views.EventCollection({ events: events });
+            events.fetch();
+            appView.setPageView(view);
+            setActiveMenuItem('event-list');
         },
 
         register: function () {

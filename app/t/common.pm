@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use parent qw(Exporter);
-our @EXPORT = qw( http_json );
+our @EXPORT = qw( http_json reset_db );
 
 use lib 'lib';
 use Import::Into;
@@ -27,6 +27,12 @@ sub http_json {
     }
 
     return JSON::decode_json($response->content);
+}
+
+sub reset_db {
+    for (qw/ quests comments users events /) {
+        Play::Mongo->db->get_collection($_)->remove({});
+    }
 }
 
 sub import {
