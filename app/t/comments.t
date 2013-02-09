@@ -74,4 +74,34 @@ sub body_html :Tests {
     like $comments->[0]{body_html}, qr{To <strong>boldly</strong> go};
     is $comments->[0]{body}, $body;
 }
+
+sub comment_events :Tests {
+    Dancer::session login => 'blah';
+
+    my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'foo', status => 'open' } };
+    my $quest_id = $quest_result->{_id};
+
+    my $add_result = http_json POST => "/api/quest/$quest_id/comment", { params => { body => 'cbody' } };
+
+    my $events = http_json GET => "/api/event";
+    cmp_deeply $events->[0], {
+        _id => re('^\S+$'),
+        action => 'add',
+        object_type => 'comment',
+        object_id => $add_result->{_id},
+        ts => re('^\d+$'),
+        object => {
+            author => 'blah',
+            body => 'cbody',
+            quest => {
+                _id => $quest_id,
+                name => 'foo',
+                status => 'open',
+                user => 'blah',
+            },
+            quest_id => $quest_id,
+        },
+    }, 'comment-add event';
+}
+
 __PACKAGE__->new->runtests;

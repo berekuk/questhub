@@ -5,6 +5,9 @@ use Params::Validate qw(:all);
 use Play::Mongo;
 use Text::Markdown qw(markdown);
 
+my $events = Play::Events->new;
+my $quests = Play::Quests->new;
+
 has 'collection' => (
     is => 'ro',
     lazy => 1,
@@ -30,6 +33,19 @@ sub add {
         author => { type => SCALAR },
     });
     my $id = $self->collection->insert(\%params);
+
+    my $quest = $quests->get($params{quest_id});
+
+    $events->add({
+        object_type => 'comment',
+        action => 'add',
+        object_id => $id->to_string,
+        object => {
+            %params,
+            quest => $quest,
+        },
+    });
+
     return { _id => $id->to_string, body_html => markdown($params{body}) };
 }
 
