@@ -16,12 +16,20 @@ has 'collection' => (
     },
 );
 
+sub _body_html {
+    my ($body) = @_;
+    my $html = markdown($body);
+    $html =~ s{^<p>}{};
+    $html =~ s{</p>$}{};
+    return $html;
+}
+
 sub _prepare_comment {
     my $self = shift;
     my ($comment) = @_;
     $comment->{ts} = $comment->{_id}->get_time;
     $comment->{_id} = $comment->{_id}->to_string;
-    $comment->{body_html} = markdown($comment->{body});
+    $comment->{body_html} = _body_html($comment->{body});
     return $comment;
 }
 
@@ -42,12 +50,12 @@ sub add {
         object_id => $id->to_string,
         object => {
             %params,
-            body_html => markdown($params{body}),
+            body_html => _body_html($params{body}), # markdown for comments in the feed is cached forever, to simplify the events storage and frontend logic
             quest => $quest,
         },
     });
 
-    return { _id => $id->to_string, body_html => markdown($params{body}) };
+    return { _id => $id->to_string, body_html => _body_html($params{body}) };
 }
 
 # get all comments for a quest
