@@ -43,6 +43,19 @@ sub get {
     return \@comments;
 }
 
+# get number of comments for each quest in given set
+sub bulk_count {
+    my $self = shift;
+    my ($ids) = validate_pos(@_, { type => ARRAYREF });
+
+    my @comments = $self->collection->find({ quest_id => { '$in' => $ids } })->all;
+    my %stat;
+    for (@comments) {
+        $stat{ $_->{quest_id} }++;
+    }
+    return \%stat;
+}
+
 sub remove {
     my $self = shift;
     my $params = validate(@_, {

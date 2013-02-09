@@ -6,9 +6,11 @@ use Play::Mongo;
 
 use Play::Users;
 use Play::Events;
+use Play::Comments;
 
 my $users = Play::Users->new;
 my $events = Play::Events->new;
+my $comments = Play::Comments->new;
 
 has 'collection' => (
     is => 'ro',
@@ -29,10 +31,25 @@ sub list {
     my $self = shift;
     my ($params) = validate_pos(@_, { type => HASHREF });
 
+    # hmmm, 'comment_count' have a special semantics; what if we'll want to query for "quests with >N comments"?
+    my $comment_count = delete $params->{comment_count};
+
     my @quests = $self->collection->find($params)->all;
     @quests = grep { $_->{status} ne 'deleted' } @quests;
 
     $self->_prepare_quest($_) for @quests;
+
+    if ($comment_count) {
+        my $comment_stat = $comments->bulk_count([
+            map { $_->{_id} } @quests
+        ]);
+
+        for my $quest (@quests) {
+            my $cc = $comment_stat->{$quest->{_id}};
+            $quest->{comment_count} = $cc if $cc;
+        }
+    }
+
     return \@quests;
 }
 

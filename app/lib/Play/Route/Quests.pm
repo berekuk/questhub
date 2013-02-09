@@ -49,7 +49,7 @@ post '/quest' => sub {
 
 get '/quest' => sub {
     return $quests->list({
-        map { param($_) ? ($_ => param($_)) : () } qw/ user status /,
+        map { param($_) ? ($_ => param($_)) : () } qw/ user status comment_count /,
     });
 };
 

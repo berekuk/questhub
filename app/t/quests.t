@@ -253,4 +253,31 @@ sub quest_types :Tests {
     like $unknown_type_response->content, qr/Unexpected quest type/;
 }
 
+sub cc :Tests {
+    my $user = 'user_c';
+    http_json GET => "/api/fakeuser/$user";
+    Dancer::session login => $user;
+
+    my $q1_result = http_json POST => '/api/quest', { params => {
+        name => 'q1',
+    } };
+    my $q2_result = http_json POST => '/api/quest', { params => {
+        name => 'q2',
+    } };
+    my $q3_result = http_json POST => '/api/quest', { params => {
+        name => 'q3',
+    } };
+
+    http_json POST => "/api/quest/$q1_result->{_id}/comment", { params => { body => 'first comment!' } };
+    http_json POST => "/api/quest/$q1_result->{_id}/comment", { params => { body => 'second comment on first quest!' } };
+    http_json POST => "/api/quest/$q3_result->{_id}/comment", { params => { body => 'first comment on third quest!' } };
+
+    my $list = http_json GET => "/api/quest?user=$user";
+    my $list_with_cc = http_json GET => "/api/quest?user=$user&comment_count=1";
+    is $list->[0]{comment_count}, undef;
+    is $list_with_cc->[0]{comment_count}, 2;
+    is $list_with_cc->[1]{comment_count}, undef;
+    is $list_with_cc->[2]{comment_count}, 1;
+}
+
 __PACKAGE__->new->runtests;
