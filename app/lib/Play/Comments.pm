@@ -103,4 +103,17 @@ sub remove {
     return;
 }
 
+sub update {
+    my $params = validate(@_, {
+        quest_id => { type => SCALAR },
+        id => { type => SCALAR },
+        body => { type => SCALAR },
+        user => { type => SCALAR }
+    });
+
+    my $quest = $self->get_one($id); ... # TODO - implement
+
+    ... # do an update
+}
+
 1;
