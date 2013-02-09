@@ -48,6 +48,7 @@ sub bulk_count {
     my $self = shift;
     my ($ids) = validate_pos(@_, { type => ARRAYREF });
 
+    # TODO - upgrade MongoDB to 2.2+ and use aggregation
     my @comments = $self->collection->find({ quest_id => { '$in' => $ids } })->all;
     my %stat;
     for (@comments) {
