@@ -42,6 +42,7 @@ sub add {
         object_id => $id->to_string,
         object => {
             %params,
+            body_html => markdown($params{body}),
             quest => $quest,
         },
     });

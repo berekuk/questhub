@@ -81,7 +81,7 @@ sub comment_events :Tests {
     my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'foo', status => 'open' } };
     my $quest_id = $quest_result->{_id};
 
-    my $add_result = http_json POST => "/api/quest/$quest_id/comment", { params => { body => 'cbody' } };
+    my $add_result = http_json POST => "/api/quest/$quest_id/comment", { params => { body => 'cbody, **bold cbody**' } };
 
     my $events = http_json GET => "/api/event";
     cmp_deeply $events->[0], {
@@ -92,7 +92,8 @@ sub comment_events :Tests {
         ts => re('^\d+$'),
         object => {
             author => 'blah',
-            body => 'cbody',
+            body => 'cbody, **bold cbody**',
+            body_html => re('<strong>bold cbody</strong>'),
             quest => {
                 _id => $quest_id,
                 name => 'foo',
