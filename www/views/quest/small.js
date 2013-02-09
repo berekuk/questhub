@@ -1,8 +1,9 @@
 pp.views.QuestSmall = Backbone.View.extend({
     template: _.template($('#template-quest-small').text()),
 
-    initialize: function () {
-        var params = this.model.toJSON();
-        this.setElement($(this.template(params)));
+    render: function () {
+        this.setElement($(this.template(this.model.toJSON())));
+        this.$el.find('[data-toggle=tooltip]').tooltip();
+        return this;
     }
 });
