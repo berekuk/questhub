@@ -61,3 +61,8 @@ input.quest-edit {
     width: 800px;
     font-weight: 200;
 }
+
+textarea.comment-edit {
+    width: 95%;
+    height: 100%;
+}

@@ -439,8 +439,14 @@
         <% if (my) { %>
         <button type="button" class="close comment-delete">&times;</button>
         <% } %>
+
         <p>
-        <%= body_html %>
+        <div class="comment-content">
+          <%= body_html %>
+        </div>
+        <% if (my) { %>
+            <textarea class="comment-edit" style="display: none"><%= body %></textarea>
+        <% } %>
         </p>
         <%= partial.user({ login: author }) %>
         <% if (typeof(ts) != 'undefined') { %>
