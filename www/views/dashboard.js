@@ -6,12 +6,6 @@ pp.views.Dashboard = Backbone.View.extend({
 
     template: _.template($('script#template-dashboard').text()),
 
-    initialize: function() {
-        this.user = new pp.views.UserBig({
-            model: this.model
-        });
-    },
-
     // separate function because of ugly hack in router code, see router code
     start: function() {
         if (!this.options.current) {
@@ -36,7 +30,6 @@ pp.views.Dashboard = Backbone.View.extend({
 
     // delay subviews initialization - they depend on model.get('login') which is fetched asynchrohously
     initializeQuestViews: function() {
-
         var login = this.model.get('login');
 
         // create self.openQuests and self.closedQuests
@@ -62,6 +55,11 @@ pp.views.Dashboard = Backbone.View.extend({
 
     render: function() {
         this.initializeQuestViews();
+
+        // due to some weird bug, can't initialize user subview in initialize()
+        this.user = new pp.views.UserBig({
+            model: this.model
+        });
         this.user.render();
 
         // self-render
