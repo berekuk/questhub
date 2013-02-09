@@ -193,6 +193,7 @@ sub get {
         _id => MongoDB::OID->new(value => $id)
     });
     die "quest $id not found" unless $quest;
+    die "quest $id is deleted" if $quest->{status} eq 'deleted';
     $self->_prepare_quest($quest);
     return $quest;
 }

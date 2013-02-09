@@ -183,6 +183,11 @@ sub delete_quest :Tests {
         my $list_after_resp = dancer_response GET => '/api/quest';
         is scalar @{ decode_json($list_after_resp->content) }, 2, 'deleted quests are not shown in list';
     }
+
+    {
+        my $delete_resp = dancer_response GET => "/api/quest/$id_to_remove";
+        is $delete_resp->status, 500, "Can't fetch a deleted quest by its id";
+    }
 }
 
 sub points :Tests {
