@@ -46,3 +46,8 @@ dd {
 time.timeago {
     color: #999;
 }
+
+.avatar-mini {
+    width: 24px;
+    height: 24px;
+}
