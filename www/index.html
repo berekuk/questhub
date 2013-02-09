@@ -353,7 +353,9 @@
 
     <script type="text/template" id="template-quest-big">
       <!-- delete button -->
+      <% if (my) { %>
       <button type="button" class="close quest-delete">&times;</button>
+      <% } %>
 
       <h1>
         <%= name %>
