@@ -14,7 +14,7 @@
     float: right;
 }
 
-.about h2 {
+h2 {
     font-weight: 200;
 }
 
@@ -33,10 +33,6 @@
 
 .add-quest-field {
     margin-bottom: 10px;
-}
-
-small.hint {
-    color: #999;
 }
 
 dd {
@@ -59,8 +55,9 @@ time.timeago {
 
 input.quest-edit {
     /* copied from h1 styles */
-    font-size: 36px;
+    font-size: 30px;
     line-height: 40px;
-    height: 45px;
+    height: 40px;
     width: 800px;
+    font-weight: 200;
 }
