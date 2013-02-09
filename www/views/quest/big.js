@@ -6,7 +6,10 @@ pp.views.QuestBig = Backbone.View.extend({
         "click .quest-reopen": "reopen",
         "click .quest-like": "like",
         "click .quest-unlike": "unlike",
-        "click .quest-delete": "destroy"
+        "click .quest-delete": "destroy",
+        "dblclick .quest-title": "edit",
+        "keypress .quest-edit": "updateOnEnter",
+        "blur .quest-edit": "closeEdit"
     },
 
     close: function () {
@@ -23,6 +26,29 @@ pp.views.QuestBig = Backbone.View.extend({
 
     unlike: function () {
         this.model.unlike();
+    },
+
+    edit: function () {
+        if (!this.isOwned()) {
+            return;
+        }
+        this.$('.quest-edit').show();
+        this.$('.quest-title').hide();
+        this.$('.quest-edit').focus();
+    },
+
+    updateOnEnter: function (e) {
+        if (e.keyCode == 13) this.closeEdit();
+    },
+
+    closeEdit: function() {
+        var value = this.$('.quest-edit').val();
+        if (!value) {
+            return;
+        }
+        this.model.save({ name: value });
+        this.$('.quest-edit').hide();
+        this.$('.quest-title').show();
     },
 
     destroy: function () {
@@ -47,11 +73,15 @@ pp.views.QuestBig = Backbone.View.extend({
         this.model.fetch();
     },
 
+    isOwned: function () {
+        return (pp.app.user.get('login') == this.model.get('user'));
+    },
+
     render: function () {
         var params = this.model.toJSON();
         // TODO - should we move this to model?
         params.currentUser = pp.app.user.get('login');
-        params.my = (params.currentUser == params.user);
+        params.my = this.isOwned();
         if (!params.likes) {
             params.likes = [];
         }

@@ -358,7 +358,10 @@
       <% } %>
 
       <h1>
-        <%= name %>
+        <span class="quest-title" <% if (my) { %> data-toggle="tooltip" title="double-click to edit" <% } %>><%= name %></span>
+        <% if (my) { %>
+          <input class="quest-edit" type="text" value="<%= name %>" style="display: none">
+        <% } %>
         <span class="quest-label label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
         <% if (typeof(type) != 'undefined') { %>
           <span class="quest-label label label-inverse"><%= type %></span>
