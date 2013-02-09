@@ -418,6 +418,9 @@
         <% } %>
         <%= body_html %>
         <a href="/player/<%= author %>" class="label"><%= author %></a>
+        <% if (typeof(ts) != 'undefined') { %>
+        <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
+        <% } %>
       </div>
     </script>
 

@@ -16,6 +16,7 @@ has 'collection' => (
 sub _prepare_comment {
     my $self = shift;
     my ($comment) = @_;
+    $comment->{ts} = $comment->{_id}->get_time;
     $comment->{_id} = $comment->{_id}->to_string;
     $comment->{body_html} = markdown($comment->{body});
     return $comment;

@@ -27,8 +27,8 @@ sub add_comment :Tests {
     cmp_deeply
         $list,
         [
-            { _id => $first->{_id}, body => 'first comment!', author => 'blah', quest_id => $quest_id, body_html => re('first') },
-            { _id => $second->{_id}, body => 'second comment!', author => 'blah', quest_id => $quest_id, body_html => re('second') },
+            { _id => $first->{_id}, ts => re('^\d+$'), body => 'first comment!', author => 'blah', quest_id => $quest_id, body_html => re('first') },
+            { _id => $second->{_id}, ts => re('^\d+$'), body => 'second comment!', author => 'blah', quest_id => $quest_id, body_html => re('second') },
         ]
 }
 

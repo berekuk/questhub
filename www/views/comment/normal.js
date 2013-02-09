@@ -17,9 +17,11 @@ pp.views.Comment = Backbone.View.extend({
         });
     },
 
-    initialize: function () {
+    render: function () {
         var params = this.model.toJSON();
         params.my = (pp.app.user.get('login') == params.author);
         this.setElement($(this.template(params)));
+        this.$el.find("time.timeago").timeago();
+        return this;
     }
 });
