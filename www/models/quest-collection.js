@@ -3,7 +3,7 @@ pp.models.QuestCollection = Backbone.Collection.extend({
     initialize: function(models, args) {
         this.url = function() {
             var url = '/api/quest';
-            var cgi = [];
+            var cgi = ['comment_count=1'];
             if (args.user) {
                 cgi.push('user=' + args.user);
             }
