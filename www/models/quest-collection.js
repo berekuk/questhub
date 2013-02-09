@@ -7,7 +7,7 @@ pp.models.QuestCollection = Backbone.Collection.extend({
             if (args.user) {
                 cgi.push('user=' + args.user);
             }
-            if (args.user) {
+            if (args.status) {
                 cgi.push('status=' + args.status);
             }
             if (cgi.length) {

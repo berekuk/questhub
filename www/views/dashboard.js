@@ -6,6 +6,12 @@ pp.views.Dashboard = Backbone.View.extend({
 
     template: _.template($('script#template-dashboard').text()),
 
+    initialize: function() {
+        this.user = new pp.views.UserBig({
+            model: this.model
+        });
+    },
+
     // separate function because of ugly hack in router code, see router code
     start: function() {
         if (!this.options.current) {
@@ -28,7 +34,9 @@ pp.views.Dashboard = Backbone.View.extend({
         this.render();
     },
 
-    render: function() {
+    // delay subviews initialization - they depend on model.get('login') which is fetched asynchrohously
+    initializeQuestViews: function() {
+
         var login = this.model.get('login');
 
         // create self.openQuests and self.closedQuests
@@ -39,27 +47,33 @@ pp.views.Dashboard = Backbone.View.extend({
                'user': login,
                'status': st
             });
+            collection.comparator = function(m1, m2) {
+                if (m1.id > m2.id) return -1; // before
+                if (m2.id > m1.id) return 1; // after
+                return 0; // equal
+            };
             collection.fetch();
             view[st + 'Quests'] = new pp.views.QuestCollection({
                 quests: collection
             });
         });
         this.questViews = view;
+    },
 
-        this.user = new pp.views.UserBig({
-            model: this.model
-        });
+    render: function() {
+        this.initializeQuestViews();
         this.user.render();
 
         // self-render
         this.$el.html(this.template());
-        this.$el.find('.open-quests').append(this.openQuests.$el);
-        this.$el.find('.closed-quests').append(this.closedQuests.$el);
-        this.$el.find('.user').append(this.user.$el);
+
+        this.user.setElement(this.$('.user')).render();
+        this.openQuests.setElement(this.$('.open-quests')).render();
+        this.closedQuests.setElement(this.$('.closed-quests')).render();
 
         var currentUser = pp.app.user.get('login');
-        if (currentUser && currentUser == login) {
-          this.$el.find('.new-quest').show();
+        if (currentUser && currentUser == this.model.get('login')) {
+          this.$('.new-quest').show();
         }
     },
 
