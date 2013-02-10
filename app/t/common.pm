@@ -30,7 +30,7 @@ sub http_json {
 }
 
 sub reset_db {
-    for (qw/ quests comments users events /) {
+    for (qw/ quests comments users events user_settings /) {
         Play::Mongo->db->get_collection($_)->remove({});
     }
 }
