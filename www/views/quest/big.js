@@ -1,5 +1,5 @@
-pp.views.QuestBig = Backbone.View.extend({
-    template: _.template($('#template-quest-big').text()),
+pp.views.QuestBig = pp.View.Common.extend({
+    t: 'quest-big',
 
     events: {
         "click .quest-close": "close",
@@ -66,6 +66,8 @@ pp.views.QuestBig = Backbone.View.extend({
     },
 
     initialize: function () {
+        pp.View.Common.prototype.initialize.apply(this, arguments);
+
         // FIXME - fix double rendering
         this.model.bind('change', this.render, this);
         pp.app.user.bind('change', this.render, this);
@@ -77,7 +79,7 @@ pp.views.QuestBig = Backbone.View.extend({
         return (pp.app.user.get('login') == this.model.get('user'));
     },
 
-    render: function () {
+    serialize: function () {
         var params = this.model.toJSON();
         // TODO - should we move this to model?
         params.currentUser = pp.app.user.get('login');
@@ -85,7 +87,8 @@ pp.views.QuestBig = Backbone.View.extend({
         if (!params.likes) {
             params.likes = [];
         }
-        this.$el.html(this.template(params));
-        this.$el.find('[data-toggle=tooltip]').tooltip();
-    }
+        return params;
+    },
+
+    features: ['tooltip'],
 });
