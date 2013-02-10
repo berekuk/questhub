@@ -18,8 +18,9 @@ GET /api/quest?user={login}     # get all quests of a given user
 GET /api/quest?status={status}  # get all quests with a given status
 GET /api/quest/{id}             # get one quest
 
-POST /api/quest/{quest_id}/comment    # add a new comment
-GET /api/quest/{quest_id}/comment     # get all quest comments
+POST /api/quest/{quest_id}/comment                  # add a new comment
+GET /api/quest/{quest_id}/comment                   # get all quest comments
+GET /api/quest/{quest_id}/comment/{comment_id}      # get a single comment
 
 POST /api/quest/{id}/like       # like a quest
 POST /api/quest/{id}/unlike     # unlike a quest

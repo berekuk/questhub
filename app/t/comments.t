@@ -114,7 +114,7 @@ sub perl_get_one :Tests {
     my $comment_result = http_json POST => "/api/quest/$quest_id/comment", { params => { body => "Blah" } };
     my $comment_id = $comment_result->{_id};
 
-    my $comment = Play::Comments->new->get_one($comment_id);
+    my $comment = http_json GET => "/api/quest/$quest_id/comment/$comment_id";
     like $comment->{body}, qr/Blah/;
 }
 
