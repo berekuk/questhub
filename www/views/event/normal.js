@@ -1,10 +1,13 @@
-pp.views.Event = Backbone.View.extend({
+pp.views.Event = pp.View.Base.extend({
     template: function () {
         return _.template($('#template-event-' + this.model.get('action') + '-' + this.model.get('object_type')).text());
     },
 
     render: function () {
         var template = this.template();
-        this.$el.html(template(this.model.toJSON()));
+        var params = this.model.toJSON();
+        params.partial = this.partial;
+        this.$el.html(template(params));
+        return this;
     }
 });

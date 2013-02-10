@@ -1,4 +1,4 @@
-pp.views.Comment = Backbone.View.extend({
+pp.views.Comment = pp.View.Base.extend({
     template: _.template($('#template-comment').text()),
 
     events: {
@@ -18,9 +18,13 @@ pp.views.Comment = Backbone.View.extend({
     },
 
     render: function () {
+
         var params = this.model.toJSON();
         params.my = (pp.app.user.get('login') == params.author);
-        this.setElement($(this.template(params)));
+        params.partial = this.partial;
+
+        this.$el.html(this.template(params));
+
         this.$el.find("time.timeago").timeago();
         return this;
     }
