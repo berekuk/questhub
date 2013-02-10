@@ -21,12 +21,10 @@ pp.views.QuestCollection = Backbone.View.extend({
     },
 
     onAdd: function () {
-        console.log('onAdd');
         this.render();
     },
 
     onReset: function () {
-        console.log('onReset');
         this.render();
     }
 });

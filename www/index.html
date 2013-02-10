@@ -210,6 +210,9 @@
         <% } } %>
         <h4>
           <%= login %>
+          <% if (my) { %>
+              <span class="mini-button-block"><a href="#" class="settings"><i class="icon-wrench"></i></a></span>
+          <% } %>
           <span class="badge badge-info" data-toggle="tooltip" title='points are granted for each completed quest and each "like" on those quests'><%= points %></span>
         </h4>
           <% if (typeof(twitter) != 'undefined') {
@@ -219,6 +222,41 @@
                 @<%= twitter.screen_name %>
               </a>
           <% } } %>
+      </div>
+      <div class="settings-box-subview"></div>
+    </script>
+
+    <script type="text/template" id="template-user-settings-box">
+      <div>
+        <div class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>User Settings</h3>
+          </div>
+          <div class="modal-body">
+            <div class="row-fluid">
+              <div class="settings-subview"></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary">Save settings</button>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="template-user-settings">
+      <div>
+        <input name="email" type="text" placeholder="Email" value="<%= obj.email || '' %>">
+      </div>
+      <div>
+        <span class="muted">Notify me by email when someone...</span>
+        <label class="checkbox">
+            <input name="notify-comments" type="checkbox" <%= (obj.notify_comments > 0) ? 'checked="checked"' : '' %>>comments on my quest
+        </label>
+        <label class="checkbox">
+            <input name="notify-likes" type="checkbox" <%= (obj.notify_likes > 0) ? 'checked="checked"' : '' %>>likes my quest
+        </label>
       </div>
     </script>
 
@@ -463,7 +501,7 @@
 
     <script type="text/template" id="partial-user"><a href="/player/<%= login %>" class="label"><%= login %></a></script>
     <script type="text/template" id="partial-edit-tools">
-      <div class="pull-right edit-buttons">
+      <div class="pull-right mini-button-block">
         <label> <!-- label fixes the font size, even inside h2 -->
           <a href="#" class="edit"><i class="icon-pencil"></i></a>
           <a href="#" class="delete"><i class="icon-remove"></i></a>
@@ -521,6 +559,8 @@
     <script src="/views/quest/small.js"></script>
     <script src="/views/register.js"></script>
     <script src="/views/user/current.js"></script>
+    <script src="/views/user/settings.js"></script>
+    <script src="/views/user/settings-box.js"></script>
     <script src="/views/user/big.js"></script>
     <script src="/views/user/collection.js"></script>
     <script src="/views/event/box.js"></script>
@@ -531,6 +571,7 @@
     <script src="/models/user.js"></script>
     <script src="/models/another-user.js"></script>
     <script src="/models/current-user.js"></script>
+    <script src="/models/user-settings.js"></script>
     <script src="/models/user-collection.js"></script>
     <script src="/models/event.js"></script>
     <script src="/models/event-collection.js"></script>

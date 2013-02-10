@@ -18,7 +18,6 @@ pp.views.UserCollection = pp.View.Base.extend({
 
     render: function () {
         var users = this.options.users;
-        console.log('render ' + this.all);
 
         var that = this;
         users = users.filter(function(user) {

@@ -46,6 +46,21 @@ get '/current_user' => sub {
     return $user;
 };
 
+# user settings are private; you can't get settings of other users
+get '/current_user/settings' => sub {
+    my $login = session('login');
+    die "not logged in" unless session->{login};
+    return $users->get_settings($login);
+};
+
+any ['put', 'post'] => '/current_user/settings' => sub {
+    die "not logged in" unless session->{login};
+    $users->set_settings(
+        session->{login} => scalar params()
+    );
+    return { result => 'ok' };
+};
+
 get '/user/:login' => sub {
     my $login = param('login');
     my $user = $users->get_by_login($login);

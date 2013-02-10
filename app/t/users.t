@@ -4,8 +4,7 @@ use parent qw(Test::Class);
 use Play::Users;
 
 sub setup :Tests(setup) {
-    Play::Users->new->collection->remove({});
-    Play::Quests->new->collection->remove({});
+    reset_db();
     Dancer::session->destroy;
 }
 

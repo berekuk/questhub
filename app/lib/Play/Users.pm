@@ -6,6 +6,14 @@ use Play::Mongo;
 
 use Play::Quests; # recursive dependency!
 
+has 'settings_collection' => (
+    is => 'ro',
+    lazy => 1,
+    default => sub {
+        return Play::Mongo->db->get_collection('user_settings');
+    },
+);
+
 has 'collection' => (
     is => 'ro',
     lazy => 1,
@@ -90,6 +98,28 @@ sub add_points {
         { _id => $id },
         { %$user, points => $points },
         { safe => 1 }
+    );
+}
+
+sub get_settings {
+    my $self = shift;
+    my ($login) = validate_pos(@_, { type => SCALAR });
+
+    my $settings = $self->settings_collection->find_one({ user => $login });
+    $settings ||= {};
+    delete $settings->{_id}; # nobody cares about settings _id
+
+    return $settings;
+}
+
+sub set_settings {
+    my $self = shift;
+    my ($login, $settings) = validate_pos(@_, { type => SCALAR }, { type => HASHREF });
+
+    $self->settings_collection->update(
+        { user => $login },
+        { %$settings, user => $login },
+        { safe => 1, upsert => 1 }
     );
 }
 
