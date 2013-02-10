@@ -30,6 +30,8 @@ server {
 
   location / {
     root /play/www;
+    expires 0;
+    add_header        Cache-Control private;
     try_files $uri /index.html;
   }
 }
