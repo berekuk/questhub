@@ -33,14 +33,14 @@ del '/quest/:quest_id/comment/:id' => sub {
 
 put '/quest/:quest_id/comment/:id' => sub {
     die "not logged in" unless session->{login};
-    $comments->update(
+    my $updated_id = $comments->update(
         quest_id => param('quest_id'),
         id => param('id'),
         body => param('body'),
         user => session->{login}
     );
     return {
-        result => 'ok',
+        _id => $updated_id,
     }
 };
 
