@@ -193,7 +193,7 @@ sub delete_quest :Tests {
 }
 
 sub points :Tests {
-    my $quest = $quests_data->{1};
+    my $quest = $quests_data->{1}; # name_2, user_2
 
     http_json GET => "/api/fakeuser/$quest->{user}";
     Dancer::session login => $quest->{user};
@@ -245,6 +245,19 @@ sub points :Tests {
     http_json DELETE => "/api/quest/$quest->{_id}";
     $user = http_json GET => '/api/current_user';
     is $user->{points}, 0, 'lost points after delete';
+}
+
+sub more_points :Tests {
+   my $quest = $quests_data->{1};
+    http_json GET => "/api/fakeuser/$quest->{user}";
+    Dancer::session login => $quest->{user};
+
+    my $user = http_json GET => '/api/current_user';
+    is $user->{points}, 0, 'zero points initially';
+
+    http_json DELETE => "/api/quest/$quest->{_id}";
+    $user = http_json GET => '/api/current_user';
+    is $user->{points}, 0, 'still zero points after removing an open quest';
 }
 
 sub quest_types :Tests {

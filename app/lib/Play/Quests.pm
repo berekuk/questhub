@@ -194,7 +194,9 @@ sub remove {
         die "access denied";
     }
 
-    $users->add_points($user, -$self->_quest2points($quest));
+    if ($quest->{status} eq 'closed') {
+        $users->add_points($user, -$self->_quest2points($quest));
+    }
 
     delete $quest->{_id};
     $self->collection->update(
