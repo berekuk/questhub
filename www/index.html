@@ -441,11 +441,15 @@
         <p>
         <%= body_html %>
         </p>
-        <a href="/player/<%= author %>" class="label"><%= author %></a>
+        <span class="player"></span>
         <% if (typeof(ts) != 'undefined') { %>
         <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
         <% } %>
       </div>
+    </script>
+
+    <script type="text/template" id="template-user-small">
+        <a href="/player/<%= login %>" class="label"><%= login %></a>
     </script>
 
     <!-- Google Analytics -->
@@ -495,12 +499,13 @@
     <script src="/views/quest/page.js"></script>
     <script src="/views/quest/small.js"></script>
     <script src="/views/register.js"></script>
+    <script src="/views/user/current.js"></script>
+    <script src="/views/user/small.js"></script>
     <script src="/views/user/big.js"></script>
     <script src="/views/user/collection.js"></script>
     <script src="/views/event/box.js"></script>
     <script src="/views/event/normal.js"></script>
     <script src="/views/event/collection.js"></script>
-    <script src="/views/user/current.js"></script>
     <script src="/views/about.js"></script>
 
     <script src="/models/user.js"></script>
