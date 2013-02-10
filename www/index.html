@@ -382,15 +382,12 @@
       -->
       </h2>
       <div class="likes">
-      <% if (!my) {
-        var meGusta = false;
-        if (currentUser) {
-          meGusta = _.contains(likes, currentUser);
-        }
+      <% if (!my && currentUser) {
+        var meGusta = _.contains(likes, currentUser);
       %> <!-- quest belongs to somebody else -->
 
 
-        <!-- like/unlike button  -->
+      <!-- like/unlike button  -->
         <% if (meGusta) { %>
           <button class="btn btn-mini btn-primary quest-unlike" type="button">Unlike</button>
         <% } else { %>
@@ -422,12 +419,16 @@
     <script type="text/template" id="template-comment-collection">
       <div class="comments-list" style="display:none">
       </div>
+      <% if (currentUser) { %>
       <div class="comment-add">
         <textarea name="comment" rows="3" placeholder="Comment (Markdown syntax supported)" class="span6"></textarea>
         <div>
           <button class="btn btn-primary btn-large submit disabled">Add comment</button>
         </div>
       </div>
+      <% } else { %>
+      <a href="/auth/twitter" class="btn btn-large btn-primary">Login with Twitter to comment</a>
+      <% } %>
     </script>
 
     <script type="text/template" id="template-comment">

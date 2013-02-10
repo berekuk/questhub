@@ -15,7 +15,9 @@ pp.views.CommentCollection = Backbone.View.extend({
     },
 
     render: function () {
-        this.$el.html(this.template());
+        var params = {};
+        params.currentUser = pp.app.user.get('login');
+        this.$el.html(this.template(params));
         return this;
     },
 
