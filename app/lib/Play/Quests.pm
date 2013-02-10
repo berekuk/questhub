@@ -194,6 +194,8 @@ sub remove {
         die "access denied";
     }
 
+    $users->add_points($user, -$self->_quest2points($quest));
+
     delete $quest->{_id};
     $self->collection->update(
         { _id => MongoDB::OID->new(value => $id) },

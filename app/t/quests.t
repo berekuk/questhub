@@ -169,12 +169,14 @@ sub delete_quest :Tests {
 
     {
         Dancer::session login => 'blah';
+        http_json GET => "/api/fakeuser/blah";
         my $delete_resp = dancer_response DELETE => "/api/quest/$id_to_remove";
         is $delete_resp->status, 500, "Can't delete another user's quest";
     }
 
     {
         Dancer::session login => $user;
+        http_json GET => "/api/fakeuser/$user";
         my $delete_resp = dancer_response DELETE => "/api/quest/$id_to_remove";
         is $delete_resp->status, 200, "Can delete the quest you own" or diag $delete_resp->content;
     }
@@ -235,6 +237,14 @@ sub points :Tests {
     http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'open' } };
     $user = http_json GET => '/api/current_user';
     is $user->{points}, 0, 'points are taken away if quest is reopened';
+
+    http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'closed' } };
+    $user = http_json GET => '/api/current_user';
+    is $user->{points}, 4, 'closed again, got points again...';
+
+    http_json DELETE => "/api/quest/$quest->{_id}";
+    $user = http_json GET => '/api/current_user';
+    is $user->{points}, 0, 'lost points after delete';
 }
 
 sub quest_types :Tests {
