@@ -358,6 +358,9 @@
       <% if (my) { %>
       <button type="button" class="close quest-delete">&times;</button>
       <% } %>
+      <div>
+        <%= partial.user({ login: obj.user }) %><span class="muted"> is on a quest:</span>
+      </div>
 
       <h2>
         <span class="quest-title" <% if (my) { %> data-toggle="tooltip" title="double-click to edit" <% } %>><%= name %></span>
