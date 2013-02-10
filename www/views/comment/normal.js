@@ -22,13 +22,36 @@ pp.views.Comment = pp.View.Common.extend({
     },
 
     closeEdit: function() {
-        var value = this.$('.comment-edit').val();
+        var edit = this.$('.comment-edit');
+        var value = edit.val();
         if (!value) {
             return;
         }
-        this.model.save({ name: value });
-        this.$('.comment-edit').hide();
-        this.$('.comment-content').show();
+
+        var that = this;
+        edit.attr('disabled', 'disabled');
+        this.model.save({ body: value }, {
+            success: function () {
+                that.model.fetch({
+                    success: function () {
+                        edit.attr('disabled', false);
+                        edit.hide();
+                        this.$('.comment-content').show();
+                        that.render();
+                    },
+                    error: function (model, xhr, options) {
+                        console.log('error - fetch failed');
+                        console.log(xhr);
+                        edit.attr('disabled', false);
+                        // pp.app.onError(model, { response: 'saveFailed'
+                    },
+                });
+            },
+            error: function (model, xhr) {
+                pp.app.onError(model, xhr);
+                edit.attr('disabled', false);
+            }
+        });
     },
 
     destroy: function () {
@@ -43,6 +66,7 @@ pp.views.Comment = pp.View.Common.extend({
         });
     },
 
+    features: ['timeago'],
 
     serialize: function () {
         var params = this.model.toJSON();
