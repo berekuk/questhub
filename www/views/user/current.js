@@ -1,21 +1,15 @@
-pp.views.CurrentUser = Backbone.View.extend({
+pp.views.CurrentUser = pp.View.Common.extend({
 
-    template: _.template($('script#template-current-user').text()),
+    t: 'current-user',
 
     events: {
         'click .logout': 'logout'
     },
 
-    initialize: function () {
+    afterInitialize: function () {
         this.model = pp.app.user;
-
         this.model.on('change', this.render, this);
-
         this.model.fetch();
-    },
-
-    render: function () {
-        this.$el.html(this.template(this.model.toJSON()));
     },
 
     logout: function () {

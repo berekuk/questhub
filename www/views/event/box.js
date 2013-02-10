@@ -6,9 +6,5 @@ pp.views.EventBox = pp.View.Common.extend({
         },
     },
 
-    serialize: function () {
-        return this.model.toJSON();
-    },
-
     features: ['timeago'],
 });

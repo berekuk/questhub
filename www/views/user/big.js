@@ -3,8 +3,4 @@ pp.views.UserBig = pp.View.Common.extend({
     t: 'user-big',
 
     features: ['tooltip'],
-
-    serialize: function () {
-        return this.model.toJSON();
-    },
 });

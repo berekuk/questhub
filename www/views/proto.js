@@ -9,7 +9,7 @@ pp.View.Base = Backbone.View.extend({
  * options:
  *   t: 'blah' - use '#template-blah' template
  *   selfRender: this flag causes initialize() to call render()
- *   serialize: should prepare params for the template
+ *   serialize: should prepare params for the template; defaults to self.model.toJSON(), or {} if model is not defined
  *   features: array with features that should be enabled in html after rendering; possible values: ['timeago', 'tooltip']
  *   afterRender: optional render() method modifier
  *   subviews: events-style hash with subviews; see assign pattern in http://ianstormtaylor.com/assigning-backbone-subviews-made-even-cleaner/
@@ -29,13 +29,22 @@ pp.View.Common = pp.View.Base.extend({
 
     initialize: function () {
         this.template = _.template($('#template-' + this.t).text());
+        this.afterInitialize();
         if (this.selfRender) {
             this.render();
         }
     },
 
+    afterInitialize: function () {
+    },
+
     serialize: function () {
-        return {};
+        if (this.model) {
+            return this.model.toJSON();
+        }
+        else {
+            return {};
+        }
     },
 
     features: [],
