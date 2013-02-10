@@ -4,10 +4,12 @@ Read the code (`lib/Play/Route/*.pm`) or try them in the browser for the respons
 
 GET /auth/twitter               # go to twitter, obtain login, set 'twitter_user' session and return to /#register
 GET /api/current_user           # get current user; 'registered=1' flag means the user is fully registered; otherwise json still can contain some info (e.g. twitter)
-GET /api/current_user/settings  # get current user's settings
-PUT /api/current_user/settings  # update current user's settings
 POST /api/register              # register the new user login, associate it with the current twitter user, save to db
 GET /api/fakeuser/{login}       # fake analog of /register; dev mode only; 'notwitter' cgi param disables fake twitter account generation
+
+GET /api/current_user/settings  # get current user's settings
+PUT /api/current_user/settings  # update current user's settings
+POST /api/current_user/settings # same as PUT - both rewrite settings completely
 
 GET /api/user/{login}           # get another user
 GET /api/user                   # get the list of all users

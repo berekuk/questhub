@@ -53,7 +53,7 @@ get '/current_user/settings' => sub {
     return $users->get_settings($login);
 };
 
-put '/current_user/settings' => sub {
+any ['put', 'post'] => '/current_user/settings' => sub {
     die "not logged in" unless session->{login};
     $users->set_settings(
         session->{login} => scalar params()

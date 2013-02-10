@@ -34,7 +34,6 @@ sub set_settings :Tests {
     http_json PUT => '/api/current_user/settings', { params => {
         email => 'me@berekuk.ru', timezone => 'MSK' # this example is fake, real settings will probably have a different format
     } };
-
     my $settings;
     $settings = http_json GET => '/api/current_user/settings';
     cmp_deeply $settings, {
@@ -52,6 +51,15 @@ sub set_settings :Tests {
         user => 'foo',
     }, 'updating settings overwrites them completely';
 
+    http_json POST => '/api/current_user/settings', { params => {
+        overwrite => 2,
+    } };
+    $settings = http_json GET => '/api/current_user/settings';
+    cmp_deeply $settings, {
+        overwrite => 2,
+        user => 'foo',
+    }, 'POST is the same as PUT';
+
     Dancer::session login => 'bar';
     http_json PUT => '/api/current_user/settings', { params => {
         a => 'b', user => 'foo' # attempt to hack foo's settings
@@ -65,7 +73,7 @@ sub set_settings :Tests {
     Dancer::session login => 'foo';
     $settings = http_json GET => '/api/current_user/settings';
     cmp_deeply $settings, {
-        overwrite => 1,
+        overwrite => 2,
         user => 'foo',
     }, 'foo settings are intact';
 }
