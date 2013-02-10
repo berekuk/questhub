@@ -105,4 +105,32 @@ sub comment_events :Tests {
     }, 'comment-add event';
 }
 
+sub perl_get_one :Tests {
+
+    Dancer::session login => 'blah';
+
+    my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'fff', status => 'open' } };
+    my $quest_id = $quest_result->{_id};
+    my $comment_result = http_json POST => "/api/quest/$quest_id/comment", { params => { body => "Blah" } };
+    my $comment_id = $comment_result->{_id};
+
+    my $comment = http_json GET => "/api/quest/$quest_id/comment/$comment_id";
+    like $comment->{body}, qr/Blah/;
+}
+
+sub edit_comment :Tests {
+    Dancer::session login => 'blah';
+
+    my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'foo', status => 'open' } };
+    my $quest_id = $quest_result->{_id};
+
+    my $comment_result = http_json POST => "/api/quest/$quest_id/comment", { params => { body => "Commentin" } };
+    my $comment_id = $comment_result->{_id};
+    like $comment_id, qr/^\S+$/, 'comment id looks good';
+
+    my $update_result = http_json PUT => "/api/quest/$quest_id/comment/$comment_id", { params => { body => "Commenting (fixed a typo)" } };
+    my $comments = http_json GET => "/api/quest/$quest_id/comment";
+    like $comments->[0]{body}, qr/fixed a typo/, 'comment body got updated';
+}
+
 __PACKAGE__->new->runtests;

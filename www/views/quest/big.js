@@ -6,8 +6,8 @@ pp.views.QuestBig = pp.View.Common.extend({
         "click .quest-reopen": "reopen",
         "click .quest-like": "like",
         "click .quest-unlike": "unlike",
-        "click .quest-delete": "destroy",
-        "dblclick .quest-title": "edit",
+        "click .delete": "destroy",
+        "click .edit": "edit",
         "keypress .quest-edit": "updateOnEnter",
         "blur .quest-edit": "closeEdit"
     },

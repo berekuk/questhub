@@ -10,10 +10,6 @@
     float: right;
 }
 
-.comment-delete {
-    float: right;
-}
-
 h2 {
     font-weight: 200;
 }
@@ -53,6 +49,15 @@ time.timeago {
     margin-bottom: 5px;
 }
 
+.edit-buttons a {
+    color: #999;
+}
+
+.edit-buttons a:hover {
+  text-decoration: none !important;
+  color: #333;
+}
+
 input.quest-edit {
     /* copied from h1 styles */
     font-size: 30px;
@@ -60,4 +65,9 @@ input.quest-edit {
     height: 40px;
     width: 800px;
     font-weight: 200;
+}
+
+textarea.comment-edit {
+    width: 95%;
+    height: 100%;
 }

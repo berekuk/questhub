@@ -66,7 +66,21 @@ sub get {
 
     my @comments = $self->collection->find({ quest_id => $quest_id })->all;
     $self->_prepare_comment($_) for @comments;
+
+    @comments = sort { $a->{ts} <=> $b->{ts} } @comments; # FIXME - sort on mongodb side
     return \@comments;
+}
+
+sub get_one {
+    my $self = shift;
+    my ($comment_id) = validate_pos(@_, { type => SCALAR });
+
+    my $comment = $self->collection->find_one({
+        _id => MongoDB::OID->new(value => $comment_id)
+    });
+    die "comment $comment_id not found" unless $comment;
+    $self->_prepare_comment($comment);
+    return $comment;
 }
 
 # get number of comments for each quest in given set
@@ -101,6 +115,32 @@ sub remove {
     );
     die "comment not found or access denied" unless $result->{n} == 1;
     return;
+}
+
+sub update {
+    my $self = shift;
+    my $params = validate(@_, {
+        quest_id => { type => SCALAR },
+        id => { type => SCALAR },
+        body => { type => SCALAR },
+        user => { type => SCALAR }
+    });
+    my $id = delete $params->{id};
+    delete $params->{quest_id}; # ignore it for now
+
+    my $comment = $self->get_one($id);
+    unless ($comment->{author} eq $params->{user}) {
+        die "access denied";
+    }
+
+    delete $comment->{_id};
+    my $comment_after_update = { %$comment, %$params };
+    $self->collection->update(
+        { _id => MongoDB::OID->new(value => $id) },
+        $comment_after_update
+    );
+
+    return $id;
 }
 
 1;
