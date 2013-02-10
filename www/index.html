@@ -256,11 +256,11 @@
     <!-- users list -->
     <script type="text/template" id="template-user-collection">
         <div class="row-fluid">
-            <div class="span3">
-            </div>
+          <div class="span3">
+          </div>
           <div class="span6">
           <table class="table table-bordered quests-list">
-          <% users.each(function(user) { %>
+          <% _.each(users, function(user) { %>
             <tr class="warning">
               <td>
                 <% if (user.get("twitter") && user.get("twitter").screen_name) { %>
@@ -275,8 +275,11 @@
             </tr>
           <% }); %>
           </table>
-      </div>
+          <% if (!all) { %>
+            <button class="btn btn-primary show-all">Show all</button>
+          <% } %>
         </div>
+      </div>
     </script>
 
     <!-- events list -->
