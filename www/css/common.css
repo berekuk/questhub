@@ -10,10 +10,6 @@
     float: right;
 }
 
-.comment-delete {
-    float: right;
-}
-
 h2 {
     font-weight: 200;
 }
@@ -51,6 +47,15 @@ time.timeago {
 .event-comment-well {
     margin-top: 5px;
     margin-bottom: 5px;
+}
+
+.edit-buttons a {
+    color: #999;
+}
+
+.edit-buttons a:hover {
+  text-decoration: none !important;
+  color: #333;
 }
 
 input.quest-edit {

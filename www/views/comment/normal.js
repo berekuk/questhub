@@ -2,9 +2,8 @@ pp.views.Comment = pp.View.Common.extend({
     t: 'comment',
 
     events: {
-        "click .comment-delete": "destroy",
-        "dblclick .comment-content": "edit",
-        "keypress .comment-edit": "updateOnEnter",
+        "click .delete": "destroy",
+        "click .edit": "edit",
         "blur .comment-edit": "closeEdit"
     },
 
@@ -15,10 +14,6 @@ pp.views.Comment = pp.View.Common.extend({
         this.$('.comment-edit').show();
         this.$('.comment-content').hide();
         this.$('.comment-edit').focus();
-    },
-
-    updateOnEnter: function (e) {
-        if (e.keyCode == 13) this.closeEdit();
     },
 
     closeEdit: function() {
