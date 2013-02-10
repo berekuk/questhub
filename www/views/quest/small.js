@@ -1,9 +1,12 @@
-pp.views.QuestSmall = Backbone.View.extend({
-    template: _.template($('#template-quest-small').text()),
+pp.views.QuestSmall = pp.View.Common.extend({
+    t: 'quest-small',
 
-    render: function () {
-        this.setElement($(this.template(this.model.toJSON())));
-        this.$el.find('[data-toggle=tooltip]').tooltip();
-        return this;
-    }
+    tagName: 'tr',
+
+    afterRender: function () {
+        var className = (this.model.get('status') == 'open' ? 'warning' : 'info');
+        this.$el.addClass(className);
+    },
+
+    features: ['tooltip']
 });

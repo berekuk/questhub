@@ -1,8 +1,4 @@
-pp.views.About = Backbone.View.extend({
-
-    template: _.template($('#template-about').text()),
-
-    initialize: function () {
-        this.setElement($(this.template()));
-    }
+pp.views.About = pp.View.Common.extend({
+    t: 'about',
+    selfRender: true,
 });
