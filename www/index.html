@@ -210,12 +210,10 @@
         <% } } %>
         <h4>
           <%= login %>
-          <span class="badge badge-info" data-toggle="tooltip" title='points are granted for each completed quest and each "like" on those quests'><%= points %></span>
           <% if (my) { %>
-          <div class="mini-button-block pull-right">
-            <a href="#" class="settings"><i class="icon-wrench"></i></a>
-          </div>
+              <span class="mini-button-block"><a href="#" class="settings"><i class="icon-wrench"></i></a></span>
           <% } %>
+          <span class="badge badge-info" data-toggle="tooltip" title='points are granted for each completed quest and each "like" on those quests'><%= points %></span>
         </h4>
           <% if (typeof(twitter) != 'undefined') {
             if (twitter.screen_name) { %>
