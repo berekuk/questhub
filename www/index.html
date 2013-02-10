@@ -354,20 +354,14 @@
     </script>
 
     <script type="text/template" id="template-quest-big">
-      <!-- delete button -->
-      <% if (my) { %>
-      <% } %>
       <div>
         <%= partial.user({ login: obj.user }) %><span class="muted"> is on a quest:</span>
       </div>
 
       <h2>
-        <div class="pull-right edit-buttons">
-          <label>
-              <a href="#" class="edit"><i class="icon-pencil"></i></a>
-              <a href="#" class="delete"><i class="icon-remove"></i></a>
-          </label>
-        </div>
+        <% if (my) { %>
+          <%= partial.edit_tools() %>
+        <% } %>
         <span class="quest-title"><%= name %></span>
         <% if (my) { %>
           <input class="quest-edit" type="text" value="<%= name %>" style="display: none">
@@ -442,10 +436,7 @@
     <script type="text/template" id="template-comment">
       <div class="well well-small">
         <% if (my) { %>
-          <div class="pull-right edit-buttons">
-            <a href="#" class="edit"><i class="icon-pencil"></i></a>
-            <a href="#" class="delete"><i class="icon-remove"></i></a>
-          </div>
+          <%= partial.edit_tools() %>
         <% } %>
 
         <p>
@@ -464,6 +455,14 @@
     </script>
 
     <script type="text/template" id="partial-user"><a href="/player/<%= login %>" class="label"><%= login %></a></script>
+    <script type="text/template" id="partial-edit-tools">
+      <div class="pull-right edit-buttons">
+        <label> <!-- label fixes the font size, even inside h2 -->
+          <a href="#" class="edit"><i class="icon-pencil"></i></a>
+          <a href="#" class="delete"><i class="icon-remove"></i></a>
+        </label>
+      </div>
+    </script>
 
     <!-- Google Analytics -->
     <script type="text/javascript">
