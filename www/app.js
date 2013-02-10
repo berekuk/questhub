@@ -94,9 +94,7 @@ $(function () {
         },
 
         twitterLogin: function () {
-            console.log('auth/twitter');
             window.location = '/auth/twitter';
-            console.log('location: ' + window.location);
         },
 
         about: function () {

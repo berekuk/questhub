@@ -1,61 +1,21 @@
-pp.views.UserSettings = Backbone.View.extend({
-    events: {
-        'click .btn-primary': 'submit',
-    },
+pp.views.UserSettings = pp.View.Common.extend({
 
-    template: _.template($('#template-user-settings').text()),
+    t: 'user-settings',
 
-    initialize: function() {
-        console.log('initialize settings view');
-        _.bindAll(this);
-        this.render();
-        this.submitted = false;
-    },
-
-    disable: function() {
-        this.$('.btn-primary').addClass('disabled');
-        this.enabled = false;
-    },
-
-    enable: function() {
-        this.$('.btn-primary').removeClass('disabled');
-        this.enabled = true;
-        this.submitted = false;
-    },
-
-    // TODO - common pp.View.Modal class
-    render: function () {
-        console.log('render settings view');
-        this.setElement($(this.template()));
-
-        this.$('.modal').modal().css({
-            'width': function () {
-                return ($(document).width() * .6) + 'px';
-            },
-            'margin-left': function () {
-                return -($(this).width() / 2);
-            }
-        });
+    afterInitialize: function() {
+        this.model.on('change', this.render, this);
     },
 
     getEmail: function () {
-        return this.$('.settings-notify-comments').val();
+        return this.$('[name=email]').val();
+        // TODO - validate email
     },
 
-    submit: function() {
-
+    save: function(cbOptions) {
         this.model.save({
-          email: this.getEmail(),
-        }, {
-            'success': this.onSuccess,
-            'error': pp.app.onError
-        });
-
-        this.submitted = true;
-    },
-
-    onSuccess: function (model) {
-        this.collection.add(model);
-        this.$('.modal').modal('hide');
+            email: this.getEmail(),
+            notify_comments: this.$('[name=notify-comments]').is(':checked'),
+            notify_likes: this.$('[name=notify-likes]').is(':checked')
+        }, cbOptions);
     },
 });

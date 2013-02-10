@@ -6,11 +6,30 @@ pp.views.UserBig = pp.View.Common.extend({
         'click .settings': 'editSettingsDialog',
     },
 
-    editSettingsDialog: function() {
-        var editSettings = new pp.views.UserSettings({
-          model: new pp.models.UserSettings()
+    subviews: {
+        '.settings-box-subview': 'editSettingsView',
+    },
+
+    editSettingsView: function () {
+        if (this.editSettings) {
+            return this.editSettings;
+        }
+        this.editSettings = new pp.views.UserSettingsBox({
+            model: new pp.models.UserSettings()
         });
-        this.$el.append(editSettings.$el);
+        return this.editSettings;
+    },
+
+    editSettingsDialog: function() {
+        this.editSettings.start();
+    },
+
+    serialize: function () {
+        var params = this.model.toJSON();
+
+        var currentUser = pp.app.user.get('login');
+        params.my = (currentUser && currentUser == this.model.get('login'));
+        return params;
     },
 
     features: ['tooltip'],

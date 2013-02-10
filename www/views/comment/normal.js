@@ -35,10 +35,8 @@ pp.views.Comment = pp.View.Common.extend({
                         that.render();
                     },
                     error: function (model, xhr, options) {
-                        console.log('error - fetch failed');
-                        console.log(xhr);
+                        pp.app.onError(model, xhr);
                         edit.attr('disabled', false);
-                        // pp.app.onError(model, { response: 'saveFailed'
                     },
                 });
             },

@@ -211,9 +211,11 @@
         <h4>
           <%= login %>
           <span class="badge badge-info" data-toggle="tooltip" title='points are granted for each completed quest and each "like" on those quests'><%= points %></span>
+          <% if (my) { %>
           <div class="mini-button-block pull-right">
             <a href="#" class="settings"><i class="icon-wrench"></i></a>
           </div>
+          <% } %>
         </h4>
           <% if (typeof(twitter) != 'undefined') {
             if (twitter.screen_name) { %>
@@ -223,9 +225,10 @@
               </a>
           <% } } %>
       </div>
+      <div class="settings-box-subview"></div>
     </script>
 
-    <script type="text/template" id="template-user-settings">
+    <script type="text/template" id="template-user-settings-box">
       <div>
         <div class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
           <div class="modal-header">
@@ -234,19 +237,28 @@
           </div>
           <div class="modal-body">
             <div class="row-fluid">
-                <input class="settings-email" type="text" placeholder="Email"></input>
-                <label class="checkbox">
-                    <input class="settings-notify-comments" type="checkbox"> Notify about new comments
-                </label>
-                <label class="checkbox">
-                    <input class="settings-notify-comments" type="checkbox"> Notify about new likes
-                </label>
+              <div class="settings-subview"></div>
             </div>
           </div>
           <div class="modal-footer">
             <button class="btn btn-primary">Save settings</button>
           </div>
         </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="template-user-settings">
+      <div>
+        <input name="email" type="text" placeholder="Email" value="<%= obj.email || '' %>">
+      </div>
+      <div>
+        <span class="muted">Notify me by email when someone...</span>
+        <label class="checkbox">
+            <input name="notify-comments" type="checkbox" <%= (obj.notify_comments > 0) ? 'checked="checked"' : '' %>>comments on my quest
+        </label>
+        <label class="checkbox">
+            <input name="notify-likes" type="checkbox" <%= (obj.notify_likes > 0) ? 'checked="checked"' : '' %>>likes my quest
+        </label>
       </div>
     </script>
 
@@ -550,6 +562,7 @@
     <script src="/views/register.js"></script>
     <script src="/views/user/current.js"></script>
     <script src="/views/user/settings.js"></script>
+    <script src="/views/user/settings-box.js"></script>
     <script src="/views/user/big.js"></script>
     <script src="/views/user/collection.js"></script>
     <script src="/views/event/box.js"></script>
