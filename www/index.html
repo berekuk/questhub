@@ -300,22 +300,21 @@
     </script>
 
     <script type="text/template" id="template-event-add-quest">
-        <a href="/player/<%= object.user %>"><%= object.user %></a> started a new quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
+        <%= partial.user({ login: object.user }) %> started a new quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
     </script>
 
     <script type="text/template" id="template-event-close-quest">
-        <a href="/player/<%= object.user %>"><%= object.user %></a> completed a quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
+        <%= partial.user({ login: object.user }) %> completed a quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
     </script>
 
     <script type="text/template" id="template-event-reopen-quest">
-        <a href="/player/<%= object.user %>"><%= object.user %></a> reopened a quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
+        <%= partial.user({ login: object.user }) %> reopened a quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
     </script>
 
     <script type="text/template" id="template-event-add-comment">
-        <% console.log(object) %>
-        <a href="/player/<%= object.author %>"><%= object.author %></a>
+        <%= partial.user({ login: object.author }) %>
         commented on
-        <a href="/player/<%= object.quest.user %>"><%= object.quest.user %></a>'s quest
+        <%= partial.user({ login: object.quest.user }) %>'s quest
         <a href="/quest/<%= object.quest._id %>"><%= object.quest.name %></a>:
         <div class="well well-small event-comment-well">
           <%= object.body_html %>
@@ -441,16 +440,14 @@
         <p>
         <%= body_html %>
         </p>
-        <span class="player"></span>
+        <%= partial.user({ login: author }) %>
         <% if (typeof(ts) != 'undefined') { %>
         <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
         <% } %>
       </div>
     </script>
 
-    <script type="text/template" id="template-user-small">
-        <a href="/player/<%= login %>" class="label"><%= login %></a>
-    </script>
+    <script type="text/template" id="partial-user"><a href="/player/<%= login %>" class="label"><%= login %></a></script>
 
     <!-- Google Analytics -->
     <script type="text/javascript">
@@ -482,10 +479,12 @@
         var pp = {
             app: {},
             models: {},
-            views: {}
+            views: {},
+            View: {}
         };
     </script>
 
+    <script src="/views/proto.js"></script>
     <script src="/views/app.js"></script>
     <script src="/views/comment/collection.js"></script>
     <script src="/views/comment/normal.js"></script>
@@ -500,7 +499,6 @@
     <script src="/views/quest/small.js"></script>
     <script src="/views/register.js"></script>
     <script src="/views/user/current.js"></script>
-    <script src="/views/user/small.js"></script>
     <script src="/views/user/big.js"></script>
     <script src="/views/user/collection.js"></script>
     <script src="/views/event/box.js"></script>

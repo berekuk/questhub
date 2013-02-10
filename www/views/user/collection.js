@@ -1,4 +1,4 @@
-pp.views.UserCollection = Backbone.View.extend({
+pp.views.UserCollection = pp.View.Base.extend({
 
     template: _.template($('#template-user-collection').text()),
 
@@ -28,7 +28,7 @@ pp.views.UserCollection = Backbone.View.extend({
             return false;
         });
 
-        this.$el.html(this.template({ users: users, all: this.all }));
+        this.$el.html(this.template({ users: users, all: this.all, partial: this.partial }));
         return this;
     }
 });

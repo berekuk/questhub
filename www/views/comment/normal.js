@@ -1,4 +1,4 @@
-pp.views.Comment = Backbone.View.extend({
+pp.views.Comment = pp.View.Base.extend({
     template: _.template($('#template-comment').text()),
 
     events: {
@@ -21,12 +21,9 @@ pp.views.Comment = Backbone.View.extend({
 
         var params = this.model.toJSON();
         params.my = (pp.app.user.get('login') == params.author);
+        params.partial = this.partial;
 
         this.$el.html(this.template(params));
-
-        var subview = new pp.views.UserSmall({ login: this.model.get('author') });
-        subview.setElement(this.$('.player'));
-        subview.render();
 
         this.$el.find("time.timeago").timeago();
         return this;
