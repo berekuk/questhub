@@ -256,7 +256,12 @@
     <!-- users list -->
     <script type="text/template" id="template-user-collection">
         <div class="row-fluid">
-          <div class="span3">
+          <div class="span1">
+          </div>
+          <div class="span2">
+              <button class="btn btn-primary show-switch">
+                <%= all ? 'Hide inactive players' : 'Show all players' %>
+              </button>
           </div>
           <div class="span6">
           <table class="table table-bordered quests-list">
@@ -269,15 +274,12 @@
                 <a href="/player/<%= user.get("login") %>"><%= user.get("login") %></a>
                 <span class="badge badge-info"><%= user.get("points") %></span>
                 <% if (user.get("open_quests")) { %>
-                <span class="label label-inverse open-quest-count-label"><%= user.get("open_quests") %> open quests</span>
+                  <span class="label label-inverse open-quest-count-label"><%= user.get("open_quests") %> quest<%= user.get("open_quests") > 1 ? 's' : '' %></span>
                 <% } %>
               </td>
             </tr>
           <% }); %>
           </table>
-          <% if (!all) { %>
-            <button class="btn btn-primary show-all">Show all</button>
-          <% } %>
         </div>
       </div>
     </script>

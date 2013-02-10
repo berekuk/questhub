@@ -3,16 +3,16 @@ pp.views.UserCollection = Backbone.View.extend({
     template: _.template($('#template-user-collection').text()),
 
     events: {
-        "click .show-all": "showAll",
+        "click .show-switch": "switchAll",
     },
 
     initialize: function () {
         this.options.users.on('reset', this.render, this);
-        this.all = false;
+        this.all = true;
     },
 
-    showAll: function () {
-        this.all = true;
+    switchAll: function () {
+        this.all = !this.all;
         this.render();
     },
 
