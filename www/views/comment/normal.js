@@ -1,5 +1,5 @@
-pp.views.Comment = pp.View.Base.extend({
-    template: _.template($('#template-comment').text()),
+pp.views.Comment = pp.View.Common.extend({
+    t: 'comment',
 
     events: {
         "click .comment-delete": "destroy"
@@ -17,15 +17,11 @@ pp.views.Comment = pp.View.Base.extend({
         });
     },
 
-    render: function () {
+    features: ['timeago'],
 
+    serialize: function () {
         var params = this.model.toJSON();
         params.my = (pp.app.user.get('login') == params.author);
-        params.partial = this.partial;
-
-        this.$el.html(this.template(params));
-
-        this.$el.find("time.timeago").timeago();
-        return this;
-    }
+        return params;
+    },
 });

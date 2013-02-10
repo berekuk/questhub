@@ -1,4 +1,4 @@
-pp.views.About = pp.View.Simple.extend({
+pp.views.About = pp.View.Common.extend({
     t: 'about',
     selfRender: true,
 });

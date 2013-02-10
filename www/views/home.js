@@ -1,8 +1,4 @@
-pp.views.Home = Backbone.View.extend({
-
-    template: _.template($('#template-home').text()),
-
-    initialize: function () {
-        this.setElement($(this.template()));
-    }
+pp.views.Home = pp.View.Common.extend({
+    t: 'home',
+    selfRender: true,
 });
