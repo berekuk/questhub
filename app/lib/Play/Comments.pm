@@ -66,6 +66,8 @@ sub get {
 
     my @comments = $self->collection->find({ quest_id => $quest_id })->all;
     $self->_prepare_comment($_) for @comments;
+
+    @comments = sort { $a->{ts} <=> $b->{ts} } @comments; # FIXME - sort on mongodb side
     return \@comments;
 }
 
