@@ -22,7 +22,7 @@ pp.views.UserCollection = Backbone.View.extend({
 
         var that = this;
         users = users.filter(function(user) {
-            if (that.all || user.get('open_quests') > 0) {
+            if (that.all || user.get('open_quests') > 0 || user.get('points') > 0) {
                 return true;
             }
             return false;
