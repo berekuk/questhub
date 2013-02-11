@@ -4,15 +4,23 @@ $(function () {
     var appView = pp.app.view = new pp.views.App({el: $('#wrap')});
 
     pp.app.onError = function(model, response) {
+        var error;
+        try {
+            var parsedResponse = jQuery.parseJSON(response.responseText);
+            error = parsedResponse.error;
+        }
+        catch(e) {
+            error = "HTTP ERROR: " + response.status + " " + response.statusText;
+        }
+
         $('#wrap > .container').prepend(
             new pp.views.Error({
-                response: response
+                error: error
             }).render().el
         );
     };
-    pp.app.user.on("error", pp.app.onError);
 
-    var router = pp.app.router = new (Backbone.Router.extend({
+    pp.app.router = new (Backbone.Router.extend({
         routes: {
             "": "dashboard",
             "welcome": "welcome",
@@ -20,7 +28,7 @@ $(function () {
             "auth/twitter": "twitterLogin",
             "quest/add": "questAdd",
             "quest/:id": "questPage",
-            "feed": "eventList",
+            "feed": "eventCollection",
             "players": "userList",
             "player/:login": "anotherDashboard",
             "about": "about",
@@ -80,17 +88,23 @@ $(function () {
             setActiveMenuItem('user-list');
         },
 
-        eventList: function () {
-            var events = new pp.models.EventCollection();
-            var view = new pp.views.EventCollection({ events: events });
-            events.fetch();
+        eventCollection: function () {
+            var collection = new pp.models.EventCollection();
+            var view = new pp.views.EventCollection({ collection: collection });
+            collection.fetch();
             appView.setPageView(view);
             setActiveMenuItem('event-list');
         },
 
         register: function () {
-            appView.setPageView(new pp.views.Register());
-            setActiveMenuItem('home');
+            var view = new pp.views.Register({ model: pp.app.user });
+            appView.setPageView(view); // not rendered yet
+
+            // check conditions and render
+            if (view.checkUser()) {
+                // ok, time to register
+                setActiveMenuItem('home');
+            }
         },
 
         twitterLogin: function () {
@@ -112,7 +126,16 @@ $(function () {
                 .addClass('active');
     }
 
-    Backbone.history.start({ pushState: true });
+    pp.app.user.fetch({
+        success: function () {
+            // We're waiting for CurrentUser to be loaded before everything else.
+            // It's a bit slower than starting the router immediately, but it prevents a few nasty race conditions.
+            // Also, it's done just once, so all following navigation is actually *faster*.
+            Backbone.history.start({ pushState: true });
+            pp.app.user.on("error", pp.app.onError);
+        },
+        error: pp.app.onError, // todo - try to refetch user in a loop until backends goes online
+    });
 
     $(document).on("click", "a[href^='/']", function(event) {
         if (!event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {

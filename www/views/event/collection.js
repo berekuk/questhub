@@ -7,13 +7,13 @@ pp.views.EventCollection = Backbone.View.extend({
     template: _.template($('#template-event-collection').text()),
 
     initialize: function () {
-        this.options.events.on('reset', this.onReset, this);
-        this.options.events.on('update', this.render, this);
-        this.options.events.on('add', this.onAdd, this);
+        this.collection.on('reset', this.onReset, this);
+        this.collection.on('update', this.render, this);
+        this.collection.on('add', this.onAdd, this);
         this.render();
     },
 
-    render: function (collection) {
+    render: function () {
         this.$el.html(this.template());
         return this;
     },
@@ -27,6 +27,6 @@ pp.views.EventCollection = Backbone.View.extend({
     },
 
     onReset: function () {
-        this.options.events.each(this.onAdd, this);
+        this.collection.each(this.onAdd, this);
     }
 });
