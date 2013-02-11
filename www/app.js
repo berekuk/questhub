@@ -1,10 +1,10 @@
 $(function () {
     pp.app.user = new pp.models.CurrentUser();
 
-    var appView = pp.app.view = new pp.views.App({el: $('#layout')});
+    var appView = pp.app.view = new pp.views.App({el: $('#wrap')});
 
     pp.app.onError = function(model, response) {
-        $('#layout > .container').prepend(
+        $('#wrap > .container').prepend(
             new pp.views.Error({
                 response: response
             }).render().el

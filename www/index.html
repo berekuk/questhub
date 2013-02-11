@@ -9,11 +9,6 @@
 
     <link href="/vendors/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="/vendors/fontawesome/css/font-awesome.css" rel="stylesheet">
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
     <link href="/vendors/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -45,34 +40,6 @@
           <button type="button" class="close" data-dismiss="alert">×</button>
           <%= text %>
         </div>
-    </script>
-
-    <!-- main container with navbar -->
-    <script type="text/template" id="template-app">
-        <div class="navbar navbar-inverse navbar-fixed-top">
-          <div class="navbar-inner">
-            <div class="container">
-              <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </a>
-              <a class="brand" href="/">Play Perl</a>
-              <div class="nav-collapse collapse">
-                <ul class="nav">
-                  <li class="active menu-item-home"><a href="/">Home</a></li>
-                  <li class="menu-item-event-list"><a href="/feed">News Feed</a></li>
-                  <li class="menu-item-user-list"><a href="/players">Players</a></li>
-                  <li class="menu-item-about"><a href="/about">About</a></li>
-                </ul>
-                <p class="navbar-text pull-right"></p>
-                    <ul class="nav pull-right current-user-box">
-                    </ul>
-              </div><!--/.nav-collapse -->
-            </div>
-          </div>
-        </div>
-        <div class="app-view-container container"></div>
     </script>
 
     <!-- current user widget from right-top corner -->
@@ -173,13 +140,13 @@
               <li><a href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
               <li><a href="http://www.mongodb.org/">MongoDB</a></li>
             </ul>
-            <div>
+            <p>
               Backend is completely separated from the frontend. Backend API is documented <a href="https://github.com/berekuk/play-perl/blob/master/app/api.txt">here</a>, feel free to use it.<br>
               (But please don't abuse game mechanics or you'll be banned.)
-            </div>
-            <div>
-              <br>
+            </p>
+            <p>
               Play Perl sources are open. <a href="https://github.com/berekuk/play-perl">Clone it on GitHub!</a>
+            </p>
           </div>
         </div>
     </script>
@@ -525,7 +492,47 @@
   </head>
 
   <body>
-    <div id="layout"></div>
+    <div id="wrap">
+      <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="/">Play Perl</a>
+            <div class="nav-collapse collapse">
+              <ul class="nav">
+                <li class="active menu-item-home"><a href="/">Home</a></li>
+                <li class="menu-item-event-list"><a href="/feed">News Feed</a></li>
+                <li class="menu-item-user-list"><a href="/players">Players</a></li>
+                <li class="menu-item-about"><a href="/about">About</a></li>
+              </ul>
+              <p class="navbar-text pull-right"></p>
+              <ul class="nav pull-right current-user-box">
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="app-view-container container"></div>
+      <div id="push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">
+          <a href="https://github.com/berekuk/play-perl/issues/new">Report a bug</a>
+          &nbsp; | &nbsp;
+          <a href="https://github.com/berekuk/play-perl">Github</a>
+          &nbsp; | &nbsp;
+          <a href="http://blogs.perl.org/mt/mt-search.fcgi?blog_id=310&tag=play-perl&limit=20">Blog posts with some explanations</a>
+          &nbsp; | &nbsp;
+          © 2012-2013 <a href="https://metacpan.org/author/MMCLERIC">Vyacheslav Matyukhin</a> and other contributors
+          </span>
+        </p>
+      </div>
+    </div>
 
     <script src="/vendors/jquery-1.7.1.min.js"></script>
     <script src="/vendors/bootstrap/js/bootstrap.min.js"></script>
