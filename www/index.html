@@ -256,10 +256,17 @@
 
     <!-- registration form -->
     <script type="text/template" id="template-register">
-      <div>
-        Choose your name:
-        <input name="login" type="text" placeholder="Choose your login">
-        <button class="btn btn-primary btn-large submit">Register</button>
+      <div class="row-fluid">
+        <div class="span3"></div>
+        <div class="span6">
+          <h2>Welcome to the Play Perl, <i class="icon-twitter icon-large"></i> <%= twitter.screen_name %>!</h2>
+          <h3>One final step before you can join your fellow hackers...</h3>
+          <div class="registration-form">
+            <input name="login" type="text" placeholder="Login (required)">
+            <div class="settings-subview"></div>
+            <button class="btn btn-primary btn-large submit">Register</button>
+          </div>
+        </div>
       </div>
     </script>
 

@@ -4,6 +4,12 @@ pp.views.Register = pp.View.Common.extend({
        'keydown [name=login]': 'checkEnter'
     },
 
+    subviews: {
+        '.settings-subview': function () {
+            return new pp.views.UserSettings({ model: new pp.models.UserSettings({ notify_likes: 1, notify_comments: 1 }) });
+        }
+    },
+
     t: 'register',
 
     afterInitialize: function () {
