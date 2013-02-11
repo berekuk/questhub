@@ -5,6 +5,10 @@ pp.views.App = Backbone.View.extend({
         this._currentUserView.setElement(this.$el.find('.current-user-box'));
     },
 
+    userSettingsDialog: function () {
+        this._currentUserView.settingsDialog();
+    },
+
     setPageView: function (page) {
         if (this._page) {
             this._page.remove(); // TODO - should we remove all subviews too?

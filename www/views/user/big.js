@@ -3,25 +3,11 @@ pp.views.UserBig = pp.View.Common.extend({
     t: 'user-big',
 
     events: {
-        'click .settings': 'editSettingsDialog',
+        'click .settings': 'settingsDialog',
     },
 
-    subviews: {
-        '.settings-box-subview': 'editSettingsView',
-    },
-
-    editSettingsView: function () {
-        if (this.editSettings) {
-            return this.editSettings;
-        }
-        this.editSettings = new pp.views.UserSettingsBox({
-            model: new pp.models.UserSettings()
-        });
-        return this.editSettings;
-    },
-
-    editSettingsDialog: function() {
-        this.editSettings.start();
+    settingsDialog: function () {
+        pp.app.view.userSettingsDialog();
     },
 
     serialize: function () {

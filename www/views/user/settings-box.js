@@ -17,10 +17,12 @@ pp.views.UserSettingsBox = pp.View.Common.extend({
     },
 
     afterInitialize: function() {
+        this.setElement($('#user-settings')); // settings-box is a singleton
         this.userSettings = new pp.views.UserSettings({ model: this.model });
     },
 
     start: function () {
+        this.render();
         this.$('.modal').modal('show');
         this.model.fetch();
     },

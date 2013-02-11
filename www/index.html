@@ -44,18 +44,19 @@
 
     <!-- current user widget from right-top corner -->
     <script type="text/template" id="template-current-user">
-        <li class="dropdown">
-            <% if (registered === 1) { %>
-                <a href="/" class="dropdown-toggle" data-toggle="dropdown"><%= login %></a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a href="#" class="logout">Logout</a>
-                    </li>
-                </ul>
-            <% } else { %>
-                <a href="/auth/twitter">Login with <i class="icon-twitter icon-large"></i></a>
-            <% } %>
-        </li>
+      <li class="dropdown">
+        <% if (registered === 1) { %>
+          <a href="/" class="dropdown-toggle" data-toggle="dropdown"><%= login %></a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="#" class="settings">Settings</a>
+              <a href="#" class="logout">Logout</a>
+            </li>
+          </ul>
+        <% } else { %>
+          <a href="/auth/twitter">Login with <i class="icon-twitter icon-large"></i></a>
+        <% } %>
+      </li>
     </script>
 
     <!-- landing page -->
@@ -190,24 +191,21 @@
               </a>
           <% } } %>
       </div>
-      <div class="settings-box-subview"></div>
     </script>
 
     <script type="text/template" id="template-user-settings-box">
-      <div>
-        <div class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>Player Settings</h3>
+      <div class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h3>Player Settings</h3>
+        </div>
+        <div class="modal-body">
+          <div class="row-fluid">
+            <div class="settings-subview"></div>
           </div>
-          <div class="modal-body">
-            <div class="row-fluid">
-              <div class="settings-subview"></div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button class="btn btn-primary">Save settings</button>
-          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary">Save settings</button>
         </div>
       </div>
     </script>
@@ -546,6 +544,13 @@
         </p>
       </div>
     </div>
+
+    <div id="user-settings"></div>
+
+    <!--
+    Not in any template - user settings are modal and usually hidden anyway.
+    It'd make no sense to copy-paste them into several views.
+    -->
 
     <script src="/vendors/jquery-1.7.1.min.js"></script>
     <script src="/vendors/bootstrap/js/bootstrap.min.js"></script>
