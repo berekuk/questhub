@@ -119,7 +119,7 @@ $(function () {
 
     function setActiveMenuItem(selector) {
         appView.$el
-            .find('.active')
+            .find('.navbar .active')
                 .removeClass('active')
                 .end()
             .find('.menu-item-' + selector)

@@ -1,12 +1,15 @@
+// see also for the similar code: views/quest/add.js
+// TODO - refactor them both into pp.View.Form
 pp.views.Register = pp.View.Common.extend({
     events: {
        'click .submit': 'doRegister',
-       'keydown [name=login]': 'checkEnter'
+       'keydown [name=login]': 'checkEnter',
+       'keyup [name=login]': 'validate'
     },
 
     subviews: {
         '.settings-subview': function () {
-            return new pp.views.UserSettings({ model: new pp.models.UserSettings({ notify_likes: 1, notify_comments: 1 }) });
+            return this.settingsSubview;
         }
     },
 
@@ -15,6 +18,7 @@ pp.views.Register = pp.View.Common.extend({
     afterInitialize: function () {
         _.bindAll(this);
         this.listenTo(this.model, 'change', this.checkUser);
+        this.settingsSubview = new pp.views.UserSettings({ model: new pp.models.UserSettings({ notify_likes: 1, notify_comments: 1 }) });
     },
 
     checkUser: function () {
@@ -34,32 +38,74 @@ pp.views.Register = pp.View.Common.extend({
         return this;
     },
 
+    afterRender: function () {
+        this.validate();
+    },
+
     checkEnter: function (e) {
         if (e.keyCode == 13) {
-          // TODO - disable form elements while we're waiting for the server response
-          // TODO - validate login
           this.doRegister();
         }
     },
 
+    getLogin: function () {
+        return this.$('[name=login]').val();
+    },
+
+    disable: function() {
+        this.$('.submit').addClass('disabled');
+        this.$('.progress').toggle(this.submitted);
+        this.enabled = false;
+    },
+
+    enable: function() {
+        this.$('.submit').removeClass('disabled');
+        this.$('.progress').hide();
+        this.enabled = true;
+        this.submitted = false;
+    },
+
+    validate: function() {
+        if (this.submitted || !this.getLogin()) {
+            this.disable();
+        }
+        else {
+            this.enable();
+        }
+    },
+
     doRegister: function () {
-        var login = this.$('[name=login]').val();
+        if (!this.enabled) {
+            return;
+        }
+
         var that = this;
+
         // TODO - what should we do if login is empty?
-        $.post('/api/register', { login: login })
-            .done(function (model, response) {
-                pp.app.user.fetch({
-                    success: function (model, response) {
-                        pp.app.router.navigate("/", { trigger: true });
-                    },
-                    error: function (model, response) {
-                        pp.app.router.navigate("/welcome", { trigger: true });
-                        pp.app.onError(model, response);
-                    }
-                });
-            })
-            .fail(function (response) {
-                pp.app.onError(false, response);
-            })
+        $.post('/api/register', {
+            login: this.getLogin(),
+            settings: JSON.stringify(this.settingsSubview.deserialize())
+        }).done(function (model, response) {
+            pp.app.user.fetch({
+                success: function (model, response) {
+                    pp.app.router.navigate("/", { trigger: true });
+                },
+                error: function (model, response) {
+                    pp.app.router.navigate("/welcome", { trigger: true });
+                    pp.app.onError(model, response);
+                }
+            });
+        })
+        .fail(function (response) {
+            // TODO - detect "login already taken" exceptions and render them appropriately
+            pp.app.onError(false, response);
+
+            // let's hope that server didn't register the user before it returned a error
+            that.submitted = false;
+            that.validate();
+        })
+
+        this.submitted = true;
+        this.validate();
     }
 });
