@@ -1,7 +1,7 @@
 #!/bin/sh
 
 rm -rf dump
-ssh ubuntu@play-perl.org "sh -c 'rm -rf dump && mongodump'"
+ssh ubuntu@play-perl.org "sh -c 'rm -rf dump && mongodump -d play'"
 scp -r ubuntu@play-perl.org:dump .
 vagrant ssh -c 'cd /play/app && ./clear_mongo.sh'
 vagrant ssh -c 'cd /play && mongorestore'
