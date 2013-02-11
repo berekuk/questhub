@@ -137,6 +137,7 @@ sub update {
     return $id;
 }
 
+# returns the quest that was liked
 sub _like_or_unlike {
     my $self = shift;
     my ($id, $user, $mode) = @_;
@@ -164,21 +165,54 @@ sub _like_or_unlike {
         );
     }
 
-    return;
+    return $quest;
 }
 
 sub like {
     my $self = shift;
     my ($id, $user) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
 
-    return $self->_like_or_unlike($id, $user, '$addToSet');
+    my $quest = $self->_like_or_unlike($id, $user, '$addToSet');
+
+    my $quest_owner_settings = $users->get_settings($quest->{user});
+    if ($quest_owner_settings->{notify_likes}) {
+        my $email_body = qq[
+            <p>
+            <a href="http://play-perl.org/player/$user">$user</a> likes your quest <a href="http://play-perl.org/quest/$quest->{_id}">$quest->{name}</a>!<br>
+            </p>
+        ];
+        if ($quest->{status} eq 'open') {
+            $email_body .= q[
+                <p>
+                Reward for completing this quest is now ].$self->_quest2points($quest).q[.
+                </p>
+            ];
+        }
+        elsif ($quest->{status} eq 'closed') {
+            $email_body .= q[
+                <p>
+                You already completed this quest! Now you get one more point for your great deed.
+                </p>
+            ];
+        }
+
+        # TODO - different bodies depending on quest status
+        $events->email(
+            $quest_owner_settings->{email},
+            "$user likes your quest '$quest->{name}'!",
+            $email_body,
+        );
+    }
+
+    return;
 }
 
 sub unlike {
     my $self = shift;
     my ($id, $user) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
 
-    return $self->_like_or_unlike($id, $user, '$pull');
+    $self->_like_or_unlike($id, $user, '$pull');
+    return;
 }
 
 sub remove {

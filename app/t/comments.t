@@ -141,7 +141,7 @@ sub email_comment :Tests {
     Dancer::session login => 'foo';
 
     http_json PUT => '/api/current_user/settings', { params => {
-        email => 'test@example.com', notify_comments => 1, notify_likes => 1
+        email => 'test@example.com', notify_comments => 1, notify_likes => 0
     } };
 
     my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'foo-quest', status => 'open' } };

@@ -303,4 +303,59 @@ sub cc :Tests {
     is $list_with_cc->[2]{comment_count}, 1;
 }
 
+sub email_like :Tests {
+
+    http_json GET => "/api/fakeuser/foo";
+    Dancer::session login => 'foo';
+
+    http_json PUT => '/api/current_user/settings', { params => {
+        email => 'test@example.com', notify_comments => 0, notify_likes => 1
+    } };
+
+    my $quest = http_json POST => '/api/quest', { params => {
+        name => 'q1',
+    } };
+
+    http_json GET => "/api/fakeuser/bar";
+    Dancer::session login => 'bar';
+
+    http_json POST => "/api/quest/$quest->{_id}/like";
+
+    my @deliveries = Email::Sender::Simple->default_transport->deliveries;
+    is scalar(@deliveries), 1, '1 email sent';
+    my $email = $deliveries[0];
+    cmp_deeply $email->{envelope}, {
+        from => 'notification@play-perl.org',
+        to => [ 'test@example.com' ],
+    }, 'from & to addresses';
+
+    like
+        $email->{email}->get_body,
+        qr/Reward for completing this quest is now 2/,
+        'reward line in email body';
+
+    # now let's close the quest and like it once more
+
+    Dancer::session login => 'foo';
+    my $quest = http_json PUT => "/api/quest/$quest->{_id}", { params => {
+        status => 'closed',
+    } };
+
+    http_json GET => "/api/fakeuser/bar2";
+    Dancer::session login => 'bar2';
+    http_json POST => "/api/quest/$quest->{_id}/like";
+
+    @deliveries = Email::Sender::Simple->default_transport->deliveries;
+    is scalar(@deliveries), 2, 'second email sent';
+    $email = $deliveries[1];
+    unlike
+        $email->{email}->get_body,
+        qr/Reward for completing this quest/,
+        "no reward line in emails on completed quest's like";
+    like
+        $email->{email}->get_body,
+        qr/you get one more point/,
+        "'already completed' text in email";
+}
+
 __PACKAGE__->new->runtests;
