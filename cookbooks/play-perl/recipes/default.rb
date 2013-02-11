@@ -19,6 +19,8 @@ package 'mongodb'
 
 package 'make' # for compiling MongoDB
 
+package 'sendmail'
+
 # forcing Net-HTTP=6.03 until https://rt.cpan.org/Ticket/Display.html?id=81237 is fixed
 execute "install-Net-HTTP" do
   environment "HOME" => "/root"
@@ -37,6 +39,7 @@ cpan_module 'Moo'
 cpan_module 'Starman'
 cpan_module 'Text::Markdown'
 cpan_module 'Clone'
+cpan_module 'Email::Sender'
 
 cpan_module 'Dancer::Serializer::JSON'
 cpan_module 'Dancer::Session::MongoDB'

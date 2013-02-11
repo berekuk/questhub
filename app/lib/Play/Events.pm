@@ -4,6 +4,10 @@ use Moo;
 use Play::Mongo;
 use Params::Validate qw(:all);
 
+use Email::Simple;
+use Email::Sender::Simple qw(sendmail);
+use Encode qw(encode_utf8);
+
 has 'collection' => (
     is => 'ro',
     lazy => 1,
@@ -26,6 +30,28 @@ sub add {
 
     my $id = $self->collection->insert($event);
     return 1;
+}
+
+sub email {
+    my $self = shift;
+    my ($address, $subject, $body) = validate_pos(@_, { type => SCALAR }, { type => SCALAR }, { type => SCALAR });
+
+    my $email = Email::Simple->create(
+        header => [
+            To => $address,
+            From => 'Play Perl <notification@play-perl.org>', # TODO - take from config
+            Subject => $subject,
+            'Reply-to' => 'Vyacheslav Matyukhin <me@berekuk.ru>', # TODO - take from config
+            'Content-Type' => 'text/html; charset=utf-8',
+        ],
+        body => encode_utf8($body),
+    );
+
+    # Errors are ignored for now. (It's better than "500 Internal Error" responses)
+    # TODO - introduce some kind of local asyncronous queue.
+    eval {
+        sendmail($email);
+    };
 }
 
 # returns last 100 events

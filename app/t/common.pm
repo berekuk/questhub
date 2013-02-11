@@ -11,6 +11,7 @@ use Import::Into;
 
 BEGIN {
     $ENV{DEV_MODE} = 1;
+    $ENV{EMAIL_SENDER_TRANSPORT} = 'Test';
 }
 
 use Play::Mongo qw(:test);
