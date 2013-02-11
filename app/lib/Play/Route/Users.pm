@@ -73,16 +73,16 @@ get '/user/:login' => sub {
 
 post '/register' => sub {
     if (not session('twitter_user')) {
-        return { error => "not authorized" };
+        die "not authorized";
     }
     my $twitter_login = session('twitter_user')->{screen_name};
-    my $login = param('login') or return { error => 'no login specified' };
+    my $login = param('login') or die 'no login specified';
 
     if ($users->get_by_login($login)) {
-        return { error => "Already exists" };
+        die "User $login already exists";
     }
     if ($users->get_by_twitter_login($twitter_login)) {
-        return { error => "Already bound" };
+        die "Twitter login $twitter_login is already bound";
     }
 
     # note that race condition is still possible after these checks
