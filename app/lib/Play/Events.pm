@@ -4,6 +4,9 @@ use Moo;
 use Play::Mongo;
 use Params::Validate qw(:all);
 
+use Email::Simple;
+use Email::Sender::Simple qw(sendmail);
+
 has 'collection' => (
     is => 'ro',
     lazy => 1,
@@ -26,6 +29,22 @@ sub add {
 
     my $id = $self->collection->insert($event);
     return 1;
+}
+
+sub email {
+    my $self = shift;
+    my ($address, $subject, $body) = validate_pos(@_, { type => SCALAR }, { type => SCALAR }, { type => SCALAR });
+
+    my $email = Email::Simple->create(
+        header => [
+            To => $address,
+            From => 'Play Perl <notification@play-perl.org>', # TODO - take from config
+            Subject => $subject,
+            'Reply-to' => 'Vyacheslav Matyukhin <me@berekuk.ru>', # TODO - take from config
+        ],
+        body => $body,
+    );
+    sendmail($email);
 }
 
 # returns last 100 events

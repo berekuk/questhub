@@ -2,6 +2,7 @@ use t::common;
 use parent qw(Test::Class);
 
 use Play::Quests;
+use Email::Sender::Simple;
 
 sub setup :Tests(setup) {
     Dancer::session->destroy;
@@ -131,6 +132,31 @@ sub edit_comment :Tests {
     my $update_result = http_json PUT => "/api/quest/$quest_id/comment/$comment_id", { params => { body => "Commenting (fixed a typo)" } };
     my $comments = http_json GET => "/api/quest/$quest_id/comment";
     like $comments->[0]{body}, qr/fixed a typo/, 'comment body got updated';
+}
+
+sub email_comment :Tests {
+    # 'foo' posts a quest, 'bar' comments on it
+
+    http_json GET => "/api/fakeuser/foo";
+    Dancer::session login => 'foo';
+
+    http_json PUT => '/api/current_user/settings', { params => {
+        email => 'test@example.com', notify_comments => 1, notify_likes => 1
+    } };
+
+    my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'foo-quest', status => 'open' } };
+    my $quest_id = $quest_result->{_id};
+
+    http_json GET => "/api/fakeuser/bar";
+    Dancer::session login => 'bar';
+    http_json POST => "/api/quest/$quest_id/comment", { params => { body => "Hello sweetie." } };
+
+    my @deliveries = Email::Sender::Simple->default_transport->deliveries;
+    is scalar(@deliveries), 1, '1 email sent';
+    cmp_deeply $deliveries[0]{envelope}, {
+        from => 'notification@play-perl.org',
+        to => [ 'test@example.com' ],
+    }, 'from & to addresses';
 }
 
 __PACKAGE__->new->runtests;

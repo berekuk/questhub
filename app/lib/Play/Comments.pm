@@ -7,6 +7,7 @@ use Text::Markdown qw(markdown);
 
 my $events = Play::Events->new;
 my $quests = Play::Quests->new;
+my $users = Play::Users->new;
 
 has 'collection' => (
     is => 'ro',
@@ -54,6 +55,15 @@ sub add {
             quest => $quest,
         },
     });
+    my $user_settings = $users->get_settings($quest->{user});
+    if ($user_settings->{notify_comments} and $params{author} ne $quest->{user}) {
+        # TODO - try/catch? async queue?
+        $events->email(
+            $user_settings->{email},
+            "$params{author} commented on '$quest->{name}'",
+            "Body: [$params{body}]",
+        );
+    }
 
     return { _id => $id->to_string, body_html => _body_html($params{body}) };
 }
