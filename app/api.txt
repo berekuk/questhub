@@ -39,7 +39,7 @@ This is how registration is implemented:
 1. JS redirects to /auth/twitter
 2. /auth/twitter redirects to twitter.com
 3. twitter.com redirects back to /auth/twitter
-4. /auth/twitter, now with the correct twitter login in user's session, redirects to /#register
+4. /auth/twitter, now with the correct twitter login in user's session, redirects to /register
 5. JS checks whether the user has both twitter login and service login (using /api/user); if there's no service login, it shows the registration form
 6. User enters his new service login in the registration form, JS calls /api/register, and now we're fully registered.
 
