@@ -55,7 +55,7 @@ sub nonexistent_user :Tests {
     $self->_add_users;
 
     my $response = dancer_response GET => '/api/user/nosuchuser';
-    $response->status, 500;
+    is $response->status, 500;
     like $response->content, qr/user .* not found/;
 }
 
@@ -122,6 +122,30 @@ sub open_quests_count :Tests {
             points => 0,
         },
     ];
+}
+
+sub register :Tests {
+    # register user without settings
+    Dancer::session twitter_user => { screen_name => 'twah' };
+    http_json POST => '/api/register', { params => { login => 'blah' } },
+
+    Dancer::session->destroy;
+
+    # register user with settings
+    Dancer::session twitter_user => { screen_name => 'twit' };
+    my $settings = {
+        email => 'twat@example.com',
+        notify_likes => 0,
+        notify_comments => 1,
+    };
+    http_json POST => '/api/register', { params => {
+        login => 'twat',
+        settings => $settings,
+    } };
+
+    Dancer::session login => 'twat';
+    my $got_settings = http_json GET => '/api/current_user/settings';
+    cmp_deeply $got_settings, superhashof($settings);
 }
 
 __PACKAGE__->new->runtests;

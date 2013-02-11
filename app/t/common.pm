@@ -40,7 +40,7 @@ sub import {
     my $target = caller;
 
     require Test::More; Test::More->import::into($target, import => ['!pass']);
-    require Test::Deep; Test::Deep->import::into($target, qw(cmp_deeply re));
+    require Test::Deep; Test::Deep->import::into($target, qw(cmp_deeply re superhashof));
     require JSON; JSON->import::into($target, qw(decode_json));
 
     # the order is important

@@ -91,6 +91,12 @@ post '/register' => sub {
 
     session 'login' => $login;
     $users->add($user);
+
+    my $settings = param('settings');
+    if ($settings) {
+        $users->set_settings($login => $settings);
+    }
+
     return { status => "ok", user => $user };
 };
 
