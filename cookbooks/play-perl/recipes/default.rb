@@ -37,6 +37,7 @@ cpan_module 'Moo'
 cpan_module 'Starman'
 cpan_module 'Text::Markdown'
 cpan_module 'Clone'
+cpan_module 'Email::Sender'
 
 cpan_module 'Dancer::Serializer::JSON'
 cpan_module 'Dancer::Session::MongoDB'
