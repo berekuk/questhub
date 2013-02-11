@@ -27,8 +27,8 @@ for i in $(seq 1 3); do
     sleep 1
 done
 apt-get --no-install-recommends -y install build-essential ruby ruby-dev rubygems libopenssl-ruby git
+gem install --no-rdoc --no-ri moneta -v 0.6.0
 gem install --no-rdoc --no-ri net-ssh -v 2.2.2
 gem install --no-rdoc --no-ri net-ssh-gateway -v 1.1.0
 gem install --no-rdoc --no-ri chef -v 10.14.2
-gem install --no-rdoc --no-ri moneta -v 0.6.0
 echo 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/var/lib/gems/1.8/bin"' > /etc/environment
