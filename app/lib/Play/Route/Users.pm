@@ -5,6 +5,7 @@ use Dancer ':syntax';
 use Dancer::Plugin::Auth::Twitter;
 auth_twitter_init();
 
+use JSON;
 use Play::Users;
 my $users = Play::Users->new;
 
@@ -18,7 +19,7 @@ get '/auth/twitter' => sub {
         if ($user) {
             session 'login' => $user->{login};
         }
-        redirect "/#register";
+        redirect "/register";
     }
 };
 
@@ -94,7 +95,7 @@ post '/register' => sub {
 
     my $settings = param('settings');
     if ($settings) {
-        $users->set_settings($login => $settings);
+        $users->set_settings($login => decode_json($settings));
     }
 
     return { status => "ok", user => $user };

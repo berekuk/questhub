@@ -127,20 +127,22 @@ sub open_quests_count :Tests {
 sub register :Tests {
     # register user without settings
     Dancer::session twitter_user => { screen_name => 'twah' };
-    http_json POST => '/api/register', { params => { login => 'blah' } },
-
-    Dancer::session->destroy;
+    http_json POST => '/api/register', { params => {
+        login => 'blah'
+    } };
 
     # register user with settings
+    Dancer::session->destroy;
     Dancer::session twitter_user => { screen_name => 'twit' };
     my $settings = {
         email => 'twat@example.com',
         notify_likes => 0,
         notify_comments => 1,
     };
+
     http_json POST => '/api/register', { params => {
         login => 'twat',
-        settings => $settings,
+        settings => encode_json($settings),
     } };
 
     Dancer::session login => 'twat';
