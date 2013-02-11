@@ -44,7 +44,12 @@ sub email {
         ],
         body => $body,
     );
-    sendmail($email);
+
+    # Errors are ignored for now. (It's better than "500 Internal Error" responses)
+    # TODO - introduce some kind of local asyncronous queue.
+    eval {
+        sendmail($email);
+    };
 }
 
 # returns last 100 events

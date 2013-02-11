@@ -57,7 +57,6 @@ sub add {
     });
     my $user_settings = $users->get_settings($quest->{user});
     if ($user_settings->{notify_comments} and $params{author} ne $quest->{user}) {
-        # TODO - try/catch? async queue?
         $events->email(
             $user_settings->{email},
             "$params{author} commented on '$quest->{name}'",
