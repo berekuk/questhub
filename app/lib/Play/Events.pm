@@ -6,6 +6,7 @@ use Params::Validate qw(:all);
 
 use Email::Simple;
 use Email::Sender::Simple qw(sendmail);
+use Encode qw(encode_utf8);
 
 has 'collection' => (
     is => 'ro',
@@ -41,8 +42,9 @@ sub email {
             From => 'Play Perl <notification@play-perl.org>', # TODO - take from config
             Subject => $subject,
             'Reply-to' => 'Vyacheslav Matyukhin <me@berekuk.ru>', # TODO - take from config
+            'Content-Type' => 'text/html; charset=utf-8',
         ],
-        body => $body,
+        body => encode_utf8($body),
     );
 
     # Errors are ignored for now. (It's better than "500 Internal Error" responses)

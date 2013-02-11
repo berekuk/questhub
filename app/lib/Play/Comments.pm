@@ -45,22 +45,33 @@ sub add {
 
     my $quest = $quests->get($params{quest_id});
 
+    my $body_html = _body_html($params{body}); # markdown for comments in the feed is cached forever, to simplify the events storage and frontend logic
+
     $events->add({
         object_type => 'comment',
         action => 'add',
         object_id => $id->to_string,
         object => {
             %params,
-            body_html => _body_html($params{body}), # markdown for comments in the feed is cached forever, to simplify the events storage and frontend logic
+            body_html => $body_html,
             quest => $quest,
         },
     });
     my $user_settings = $users->get_settings($quest->{user});
     if ($user_settings->{notify_comments} and $params{author} ne $quest->{user}) {
+        # TODO - quoting
+        # TODO - unsubscribe link
+        my $email_body = qq[
+            <p>
+            <a href="http://play-perl.org/player/$params{author}">$params{author}</a> commented on your quest <a href="http://play-perl.org/quest/$params{quest_id}">$quest->{name}</a>:
+            <hr>
+            </p>
+            <p>$body_html</p>
+        ];
         $events->email(
             $user_settings->{email},
             "$params{author} commented on '$quest->{name}'",
-            "Body: [$params{body}]",
+            $email_body,
         );
     }
 
