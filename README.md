@@ -23,7 +23,7 @@ So `:80/api` is proxied to `:3000/api`, and `:81/api` is proxied to `:3001/api`.
 
 There are two Dancer instances, one for production on `:3000` and one for development on `:3001`.
 Both are running as Ubic services.
-Development Dancer instance should reload code changes automatically, thanks to Dancer's `auto_reload` option.
+Development Dancer instance should reload code changes automatically, thanks to Dancer's `auto_reload` option. (Upd: It doesn't, `auto_reload` is broken. Restart manually with `sudo ubic restart dancer-dev`.)
 To reload the production instance, run `sudo ubic restart dancer` inside the VM.
 
 Port 80 from VM is forwarded to port 3000 on your localhost, and port 81 to 3001.
