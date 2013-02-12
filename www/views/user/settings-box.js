@@ -28,7 +28,7 @@ pp.views.UserSettingsBox = pp.View.Common.extend({
 
     submit: function() {
         var that = this;
-        this.userSettings.save({
+        this.subview('.settings-subview').save({
             success: function() {
                 that.$('.modal').modal('hide');
             },
