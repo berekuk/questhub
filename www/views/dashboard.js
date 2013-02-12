@@ -1,83 +1,51 @@
-pp.views.Dashboard = Backbone.View.extend({
+pp.views.Dashboard = pp.View.Common.extend({
+
+    t: 'dashboard',
+
+    activated: false,
 
     events: {
         "click .quest-add-dialog": "newQuestDialog",
     },
 
-    template: _.template($('script#template-dashboard').text()),
-
-    // separate function because of ugly hack in router code, see router code
-    start: function() {
-        if (!this.options.current) {
-            this.model.on('change', this.render, this);
-            return;
-        }
-        this.model.on('change', this.checkLogged, this);
-
-        // see models/current-user.js for the explanation
-        if (this.model.isFetched) {
-            this.model.trigger('change');
-        }
+    subviews: {
+        '.user': function () {
+            return new pp.views.UserBig({
+                model: this.model
+            }); // TODO - fetch or not?
+        },
+        '.open-quests': function () { return this.createQuestSubview('open') },
+        '.closed-quests': function () { return this.createQuestSubview('closed') }
     },
 
-    checkLogged: function() {
-        if (!this.model.get("registered")) {
-            pp.app.router.navigate("/welcome", { trigger: true });
-            return;
-        }
-        this.render();
-    },
-
-    // delay subviews initialization - they depend on model.get('login') which is fetched asynchrohously
-    initializeQuestViews: function() {
+    createQuestSubview: function (st) {
         var login = this.model.get('login');
-
-        // create self.openQuests and self.closedQuests
-        var view = this;
-        var statuses = ['open', 'closed'];
-        _.each(['open', 'closed'], function(st) {
-            var collection = new pp.models.QuestCollection([], {
-               'user': login,
-               'status': st
-            });
-            collection.comparator = function(m1, m2) {
-                if (m1.id > m2.id) return -1; // before
-                if (m2.id > m1.id) return 1; // after
-                return 0; // equal
-            };
-            collection.fetch();
-            view[st + 'Quests'] = new pp.views.QuestCollection({
-                quests: collection
-            });
+        var collection = new pp.models.QuestCollection([], {
+           'user': login,
+           'status': st
         });
-        this.questViews = view;
+        collection.comparator = function(m1, m2) {
+            if (m1.id > m2.id) return -1; // before
+            if (m2.id > m1.id) return 1; // after
+            return 0; // equal
+        };
+        collection.fetch();
+
+        return new pp.views.QuestCollection({
+            collection: collection
+        });
     },
 
-    render: function() {
-        this.initializeQuestViews();
-
-        // due to some weird bug, can't initialize user subview in initialize()
-        this.user = new pp.views.UserBig({
-            model: this.model
-        });
-        this.user.render();
-
-        // self-render
-        this.$el.html(this.template());
-
-        this.user.setElement(this.$('.user')).render();
-        this.openQuests.setElement(this.$('.open-quests')).render();
-        this.closedQuests.setElement(this.$('.closed-quests')).render();
-
+    afterRender: function () {
         var currentUser = pp.app.user.get('login');
         if (currentUser && currentUser == this.model.get('login')) {
-          this.$('.new-quest').show();
+            this.$('.new-quest').show();
         }
     },
 
     newQuestDialog: function() {
         var questAdd = new pp.views.QuestAdd({
-          collection: this.openQuests.options.quests
+          collection: this.subview('.open-quests').collection
         });
         this.$el.append(questAdd.$el);
     },

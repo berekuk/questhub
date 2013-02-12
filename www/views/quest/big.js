@@ -1,19 +1,10 @@
-// Note that this view extends CommonWithActivation.
-// The pattern for its usage is this:
-//
-// var view = new QuestBig(...);
-// model.on('change', function () {
-//     view.activate();
-// });
-// model.fetch();
-//
 // Used by: views/quest/page.js
-//
-// ===============
-// You know what, this view didn't have to be CommonWithActivation; it could just setup the model listener itself.
-// But it's the only example of CommonWithActivation pattern, so I'll keep it as is for now.
-pp.views.QuestBig = pp.View.CommonWithActivation.extend({
+pp.views.QuestBig = pp.View.Common.extend({
     t: 'quest-big',
+
+    // You know what, this view doesn't have to be deactivated; it could just setup the model listener itself.
+    // But it's my initial attempt to implement 'activated: false' pattern, so I'll keep it as is for now.
+    activated: false,
 
     events: {
         "click .quest-close": "close",
@@ -24,6 +15,10 @@ pp.views.QuestBig = pp.View.CommonWithActivation.extend({
         "click .edit": "edit",
         "keypress .quest-edit": "updateOnEnter",
         "blur .quest-edit": "closeEdit"
+    },
+
+    afterInitialize: function () {
+        this.listenTo(this.model, 'change', this.render);
     },
 
     close: function () {

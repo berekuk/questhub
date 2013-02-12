@@ -61,22 +61,28 @@ $(function () {
         },
 
         dashboard: function () {
-            var dashboard = new pp.views.Dashboard({ model: pp.app.user, current: true });
-            appView.setPageView(dashboard);
+            if (!pp.app.user.get('registered')) {
+                this.navigate('/welcome', { trigger: true });
+                return;
+            }
 
-            // start after setPageView, because dashboard can call back to router,
-            // and if if happens in he initializer before setPageView, then we show welcome view and then immediately replace it with (empty!) dashboard
-            // FIXME - this is ugly :(
-            dashboard.start();
+            var view = new pp.views.Dashboard({ model: pp.app.user, current: true });
+            view.activate(); // activate immediately, user is already fetched
 
+            appView.setPageView(view);
             setActiveMenuItem('home');
         },
 
         anotherDashboard: function (login) {
             var user = new pp.models.AnotherUser({ login: login });
             var view = new pp.views.Dashboard({ model: user });
-            view.start();
-            user.fetch();
+            user.fetch({
+                success: function () {
+                    view.activate();
+                },
+                error: pp.app.onError,
+            });
+
             appView.setPageView(view);
         },
 

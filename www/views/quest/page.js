@@ -18,9 +18,9 @@ pp.views.QuestPage = pp.View.Common.extend({
     },
 
     afterInitialize: function () {
-        this.listenTo(this.model, 'change', function () {
+        this.model.once('sync', function () {
             this.subview('.quest').activate();
-        });
+        }, this);
         this.model.fetch();
     },
 
