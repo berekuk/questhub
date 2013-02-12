@@ -39,7 +39,6 @@ sub set_settings :Tests {
     cmp_deeply $settings, {
         email => 'me@berekuk.ru',
         notify_likes => 1,
-        user => 'foo',
     }, 'new settings';
 
     http_json PUT => '/api/current_user/settings', { params => {
@@ -48,7 +47,6 @@ sub set_settings :Tests {
     $settings = http_json GET => '/api/current_user/settings';
     cmp_deeply $settings, {
         overwrite => 1,
-        user => 'foo',
     }, 'updating settings overwrites them completely';
 
     http_json POST => '/api/current_user/settings', { params => {
@@ -57,7 +55,6 @@ sub set_settings :Tests {
     $settings = http_json GET => '/api/current_user/settings';
     cmp_deeply $settings, {
         overwrite => 2,
-        user => 'foo',
     }, 'POST is the same as PUT';
 
     Dancer::session login => 'bar';
@@ -67,15 +64,29 @@ sub set_settings :Tests {
     $settings = http_json GET => '/api/current_user/settings';
     cmp_deeply $settings, {
         a => 'b',
-        user => 'bar',
     }, 'bar edited his own settings despite his attempt to break the app';
 
     Dancer::session login => 'foo';
     $settings = http_json GET => '/api/current_user/settings';
     cmp_deeply $settings, {
         overwrite => 2,
-        user => 'foo',
     }, 'foo settings are intact';
+}
+
+sub server_settings :Tests {
+    http_json GET => "/api/fakeuser/foo";
+    Dancer::session login => 'foo';
+
+    http_json PUT => '/api/current_user/settings', { params => {
+        email => 'someone@somewhere.com',
+        email_confirmed => 1,
+        email_confirmation_secret => 'iddqd',
+    } };
+
+    my $settings = http_json GET => '/api/current_user/settings';
+    cmp_deeply $settings, {
+        email => 'someone@somewhere.com',
+    }, "user can't change secret or protected settings";
 }
 
 __PACKAGE__->new->runtests;

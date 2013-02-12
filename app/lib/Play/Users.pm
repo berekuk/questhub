@@ -101,6 +101,16 @@ sub add_points {
     );
 }
 
+# some settings can't be set by the client
+sub protected_settings {
+    qw( email_confirmed );
+}
+
+# some settings can't even be seen
+sub secret_settings {
+    qw( email_confirmation_secret );
+}
+
 sub get_settings {
     my $self = shift;
     my ($login) = validate_pos(@_, { type => SCALAR });
@@ -109,12 +119,37 @@ sub get_settings {
     $settings ||= {};
     delete $settings->{_id}; # nobody cares about settings _id
 
+    delete $settings->{$_} for secret_settings, 'user';
+
     return $settings;
+}
+
+sub confirm_email {
+    my $self = shift;
+    my ($login) = validate_pos(@_, { type => SCALAR });
+
+    # TODO - check
+
+    $self->settings_collection->update(
+        { user => $login },
+        { '$set' =>  { 'email_protected' => 1 } },
+        { safe => 1 }
+    );
 }
 
 sub set_settings {
     my $self = shift;
     my ($login, $settings) = validate_pos(@_, { type => SCALAR }, { type => HASHREF });
+
+    # some settings can't be set by the client
+    delete $settings->{$_} for protected_settings, secret_settings;
+
+    my $old_settings = $self->get_settings($login);
+    for (protected_settings) {
+        $settings->{$_} = $old_settings->{$_} if exists $old_settings->{$_};
+    }
+
+    # TODO - generate secret key
 
     $self->settings_collection->update(
         { user => $login },
