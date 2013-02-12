@@ -157,6 +157,12 @@ pp.View.Common = pp.View.Base.extend({
 
 /*
  * Any collection view consisting of arbitrary list of subviews
+ *
+ * options:
+ *   generateItem(model): function generating one item subview
+ *   listSelector: css selector specifying the div to which subviews will be appended
+ *
+ * Note that this view defines 'afterInitialize' and 'afterRender'. Sorry, future me.
  */
 pp.View.AnyCollection = pp.View.Common.extend({
 
@@ -179,6 +185,7 @@ pp.View.AnyCollection = pp.View.Common.extend({
     },
 
     afterRender: function () {
+        console.log('afterRender');
         this.removeItemSubviews();
         this.collection.each(this.renderOne, this);
     },
@@ -191,7 +198,7 @@ pp.View.AnyCollection = pp.View.Common.extend({
         var view = this.generateItem(model);
         this.itemSubviews.push(view);
         var list = this.$el.find(this.listSelector);
-        list.show(); // quests table is hidden initially - see https://github.com/berekuk/play-perl/issues/61
+        list.show(); // collection table is hidden initially - see https://github.com/berekuk/play-perl/issues/61
         list.append(view.render().el);
     },
 
