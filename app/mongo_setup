@@ -1,5 +1,6 @@
 db.quests.drop()
 db.users.drop()
+db.user_settings.drop()
 db.sessions.drop()
 db.comments.drop()
 db.events.drop()
