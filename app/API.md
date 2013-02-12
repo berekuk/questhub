@@ -12,16 +12,19 @@ Go to Twitter, obtain login, set `twitter_user` session key and return to `/regi
 `GET /api/current_user`
 
 Get current user.
+
 `registered=1` flag means the user is fully registered. Otherwise json still can contain some info (e.g. Twitter).
 
 `POST /api/register`
 
 Register the new user login, associate it with the current twitter user, save to db.
+
 `settings` param can contain initial user settings (json-encoded).
 
 `GET /api/fakeuser/{login}`
 
 Fake analog of `/api/register`; dev mode only.
+
 `notwitter` cgi param disables fake twitter account generation.
 
 `GET /api/current_user/settings`
@@ -59,6 +62,7 @@ Update a quest.
 `DELETE /api/quest/{id}`
 
 Delete a quest.
+
 (actually, set its status to `deleted`; it won't be shown in `/api/quests` and won't be fetchable by its id.)
 
 `GET /api/quest`
