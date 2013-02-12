@@ -85,7 +85,7 @@ pp.views.Register = pp.View.Common.extend({
         // TODO - what should we do if login is empty?
         $.post('/api/register', {
             login: this.getLogin(),
-            settings: JSON.stringify(this.settingsSubview.deserialize())
+            settings: JSON.stringify(this.subview('.settings-subview').deserialize())
         }).done(function (model, response) {
             pp.app.user.fetch({
                 success: function () {
