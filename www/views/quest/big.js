@@ -1,4 +1,14 @@
-pp.views.QuestBig = pp.View.Common.extend({
+// Note that this view extends ViewWithActivaion.
+// The pattern for its usage is this:
+//
+// var view = new QuestBig(...);
+// model.on('change', function () {
+//     view.activate();
+// });
+// model.fetch();
+//
+// Used by: views/quest/page.js
+pp.views.QuestBig = pp.View.CommonWithActivation.extend({
     t: 'quest-big',
 
     events: {
@@ -63,16 +73,6 @@ pp.views.QuestBig = pp.View.Common.extend({
                 });
             }
         });
-    },
-
-    initialize: function () {
-        pp.View.Common.prototype.initialize.apply(this, arguments);
-
-        // FIXME - fix double rendering
-        this.model.bind('change', this.render, this);
-        pp.app.user.bind('change', this.render, this);
-
-        this.model.fetch();
     },
 
     isOwned: function () {

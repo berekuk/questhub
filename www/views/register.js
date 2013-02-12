@@ -9,7 +9,9 @@ pp.views.Register = pp.View.Common.extend({
 
     subviews: {
         '.settings-subview': function () {
-            return this.settingsSubview;
+            return new pp.views.UserSettings({
+                model: new pp.models.UserSettings({ notify_likes: 1, notify_comments: 1 })
+            });
         }
     },
 
@@ -18,7 +20,6 @@ pp.views.Register = pp.View.Common.extend({
     afterInitialize: function () {
         _.bindAll(this);
         this.listenTo(this.model, 'change', this.checkUser);
-        this.settingsSubview = new pp.views.UserSettings({ model: new pp.models.UserSettings({ notify_likes: 1, notify_comments: 1 }) });
     },
 
     checkUser: function () {

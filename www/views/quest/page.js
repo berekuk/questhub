@@ -4,7 +4,9 @@ pp.views.QuestPage = pp.View.Common.extend({
 
     subviews: {
         '.quest': function () {
-            return new pp.views.QuestBig({ model: this.model });
+            return new pp.views.QuestBig({
+                model: this.model
+            });
         },
         '.comments': function () {
             var commentsModel = new pp.models.CommentCollection([], { 'quest_id': this.model.id });
@@ -13,6 +15,13 @@ pp.views.QuestPage = pp.View.Common.extend({
                 collection: commentsModel
             });
         },
+    },
+
+    afterInitialize: function () {
+        this.listenTo(this.model, 'change', function () {
+            this.subview('.quest').activate();
+        });
+        this.model.fetch();
     },
 
     afterRender: function () {

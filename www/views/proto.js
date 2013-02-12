@@ -21,7 +21,7 @@ pp.View.Base = Backbone.View.extend({
  *     '.bar-item': 'barSubview',
  *   },
  *   barSubview: function() {
- *      return new pp.views.Bar();
+ *      return new pp.views.Bar(); // will be called only once and cached
  *   }
 */
 pp.View.Common = pp.View.Base.extend({
@@ -30,10 +30,34 @@ pp.View.Common = pp.View.Base.extend({
 
     initialize: function () {
         this.template = _.template($('#template-' + this.t).text());
+        this.initSubviews();
         this.afterInitialize();
         if (this.selfRender) {
             this.render();
         }
+    },
+
+    initSubviews: function () {
+        this._subviewInstances = {};
+        var that = this;
+        _.each(_.keys(this.subviews), function(key) {
+            that.subview(key); // will perform the lazy init
+        });
+    },
+
+    // get a subview from cache, lazily instantiate it if necessary
+    subview: function (key) {
+        if (!this._subviewInstances[key]) {
+            var value = this.subviews[key];
+
+            var method = value;
+            if (!_.isFunction(method)) method = this[value];
+            if (!method) throw new Error('Method "' + value + '" does not exist');
+            method = _.bind(method, this);
+            var subview = method();
+            this._subviewInstances[key] = subview;
+        }
+        return this._subviewInstances[key];
     },
 
     afterInitialize: function () {
@@ -72,16 +96,8 @@ pp.View.Common = pp.View.Base.extend({
 
         this.afterRender();
 
-        // note that we're initializing subviews in render() for now
-        // that's not the best solution, see http://ianstormtaylor.com/rendering-views-in-backbonejs-isnt-always-simple/ for details
-        _.each(_.keys(this.subviews), function(key) {
-            var value = that.subviews[key];
-
-            var method = value;
-            if (!_.isFunction(method)) method = that[value];
-            if (!method) throw new Error('Method "' + value + '" does not exist');
-            method = _.bind(method, that);
-            var subview = method();
+        _.each(_.keys(this._subviewInstances), function(key) {
+            var subview = that._subviewInstances[key];
 
             subview.setElement(that.$el.find(key)).render();
         });
@@ -92,4 +108,21 @@ pp.View.Common = pp.View.Base.extend({
     afterRender: function () {
     }
 
+});
+
+// CommonWithActivation view's render() method is void until you call activate() it
+// useful for views which shouldn't render until you fetch their model
+pp.View.CommonWithActivation = pp.View.Common.extend({
+
+    activate: function () {
+        this._activated = true;
+        this.render();
+    },
+
+    render: function () {
+        if (!this._activated) {
+            return;
+        }
+        pp.View.Common.prototype.render.apply(this, arguments);
+    }
 });

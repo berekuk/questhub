@@ -12,13 +12,12 @@ pp.views.UserSettingsBox = pp.View.Common.extend({
 
     subviews: {
         '.settings-subview': function () {
-            return this.userSettings;
+            return new pp.views.UserSettings({ model: this.model });
         }
     },
 
     afterInitialize: function() {
         this.setElement($('#user-settings')); // settings-box is a singleton
-        this.userSettings = new pp.views.UserSettings({ model: this.model });
     },
 
     start: function () {
