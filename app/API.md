@@ -5,109 +5,109 @@ Hint: it's usually JSON.
 
 ### Personal stuff - auth, settings, etc.
 
-`GET /auth/twitter`
+##### GET /auth/twitter
 
 Go to Twitter, obtain login, set `twitter_user` session key and return to `/register` (frontend one, not `/api/register`!)
 
-`GET /api/current_user`
+##### GET /api/current_user
 
 Get current user.
 
 `registered=1` flag means the user is fully registered. Otherwise json still can contain some info (e.g. Twitter).
 
-`POST /api/register`
+##### POST /api/register
 
 Register the new user login, associate it with the current twitter user, save to db.
 
 `settings` param can contain initial user settings (json-encoded).
 
-`GET /api/fakeuser/{login}`
+##### GET /api/fakeuser/{login}
 
 Fake analog of `/api/register`; dev mode only.
 
 `notwitter` cgi param disables fake twitter account generation.
 
-`GET /api/current_user/settings`
+##### GET /api/current_user/settings
 
 Get current user's settings.
 
-`PUT /api/current_user/settings`
+##### PUT /api/current_user/settings`
 
 Update current user's settings.
 
-`POST /api/current_user/settings`
+##### POST /api/current_user/settings
 
 Same as `PUT` - both rewrite settings entirely.
 
 ### Players
 
-`GET /api/user/{login}`
+##### GET /api/user/{login}
 
 Get any user data.
 
-`GET /api/user`
+##### GET /api/user
 
 Get the list of all users.
 
 ### Quests
 
-`POST /api/quest`
+##### POST /api/quest
 
 Add a new quest for the current user.
 
-`PUT /api/quest/{id}`
+##### PUT /api/quest/{id}
 
 Update a quest.
 
-`DELETE /api/quest/{id}`
+##### DELETE /api/quest/{id}
 
 Delete a quest.
 
 (actually, set its status to `deleted`; it won't be shown in `/api/quests` and won't be fetchable by its id.)
 
-`GET /api/quest`
+##### GET /api/quest
 
 Get all quests.
 
-`GET /api/quest?user={login}`
+##### GET /api/quest?user={login}
 
 Get all quests of a given user.
 
-`GET /api/quest?status={status}`
+##### GET /api/quest?status={status}
 
 Get all quests with a given status.
 
-`GET /api/quest/{id}`
+##### GET /api/quest/{id}
 
 Get one quest.
 
-`POST /api/quest/{quest_id}/comment`
+##### POST /api/quest/{quest_id}/comment
 
 Add a new comment.
 
-`GET /api/quest/{quest_id}/comment`
+##### GET /api/quest/{quest_id}/comment
 
 Get all quest's comments.
 
-`GET /api/quest/{quest_id}/comment/{comment_id}`
+##### GET /api/quest/{quest_id}/comment/{comment_id}
 
 Get a single comment.
 
-`POST /api/quest/{id}/like`
+##### POST /api/quest/{id}/like
 
 Like a quest.
 
-`POST /api/quest/{id}/unlike`
+##### POST /api/quest/{id}/unlike
 
 Unlike a quest.
 
 ### Other
 
-`GET /api/event`
+##### GET /api/event
 
 Get last 100 events.
 
-`GET /api/dev/session/{name}`
+##### GET /api/dev/session/{name}
 
 Get session value. Dev mode only.
 
