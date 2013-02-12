@@ -1,4 +1,4 @@
-pp.views.App = Backbone.View.extend({
+pp.views.App = pp.View.Base.extend({
 
     initialize: function () {
         this._currentUserView = new pp.views.CurrentUser();

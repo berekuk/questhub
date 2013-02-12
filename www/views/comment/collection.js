@@ -1,4 +1,4 @@
-pp.views.CommentCollection = Backbone.View.extend({
+pp.views.CommentCollection = pp.View.Base.extend({
 
     events: {
         'click .submit': 'postComment',

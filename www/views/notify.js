@@ -1,4 +1,4 @@
-pp.views.Notify = Backbone.View.extend({
+pp.views.Notify = pp.View.Base.extend({
 
     template: _.template($('#template-notify').text()),
 

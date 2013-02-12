@@ -1,4 +1,4 @@
-pp.views.QuestAdd = Backbone.View.extend({
+pp.views.QuestAdd = pp.View.Base.extend({
     events: {
         'click .quest-add': 'submit',
         'click .quest-type-select button': 'setType',

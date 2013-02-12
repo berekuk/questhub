@@ -1,4 +1,4 @@
-pp.views.EventCollection = Backbone.View.extend({
+pp.views.EventCollection = pp.View.Base.extend({
     // this is a copy-paste of views/quest/collection.js
     // need to learn a better way of rendering collections, or move this code to the common class
 

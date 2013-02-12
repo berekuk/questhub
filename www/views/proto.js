@@ -2,6 +2,12 @@ pp.View.Base = Backbone.View.extend({
     partial: {
         user: _.template($('#partial-user').text()),
         edit_tools: _.template($('#partial-edit-tools').text())
+    },
+
+    initialize: function () {
+        this.listenTo(Backbone, 'pp:logviews', function () {
+            console.log(this);
+        });
     }
 });
 
@@ -18,6 +24,7 @@ pp.View.Base = Backbone.View.extend({
  *   serialize: should prepare params for the template; defaults to self.model.toJSON(), or {} if model is not defined
  *   features: array with features that should be enabled in html after rendering; possible values: ['timeago', 'tooltip']
  *   subviews: events-style hash with subviews; see assign pattern in http://ianstormtaylor.com/assigning-backbone-subviews-made-even-cleaner/
+ *   activated: if false, turn render() into a null operation until someone calls activate(); also, don't initialize subviews until activation
  *
  * subviews usage example:
  *   subviews: {
@@ -35,15 +42,24 @@ pp.View.Common = pp.View.Base.extend({
     // TODO - detect 't' default value from the class name somehow? is it possible in JS?
 
     initialize: function () {
+        pp.View.Base.prototype.initialize.apply(this, arguments);
+
         this.template = _.template($('#template-' + this.t).text());
-        this.initSubviews();
+
+        if (this.activated) {
+            this.initSubviews();
+        }
         this.afterInitialize();
+
         if (this.selfRender) {
             this.render();
         }
     },
 
     initSubviews: function () {
+        if (this._subviewInstances) {
+            alert('initSubviews is called twice!');
+        }
         this._subviewInstances = {};
         var that = this;
         _.each(_.keys(this.subviews), function(key) {
@@ -79,9 +95,24 @@ pp.View.Common = pp.View.Base.extend({
     },
 
     features: [],
+
     subviews: {},
 
+    activated: true,
+
+    activate: function () {
+        if (!this.activated) {
+            this.activated = true;
+            this.initSubviews();
+            this.render();
+        }
+    },
+
     render: function () {
+        if (!this.activated) {
+            return;
+        }
+
         var params = this.serialize();
         params.partial = this.partial;
         this.$el.html(this.template(params));
@@ -124,19 +155,57 @@ pp.View.Common = pp.View.Base.extend({
     }
 });
 
-// CommonWithActivation view's render() method is void until you call activate() it
-// useful for views which shouldn't render until you fetch their model
-pp.View.CommonWithActivation = pp.View.Common.extend({
+/*
+ * Any collection view consisting of arbitrary list of subviews
+ */
+pp.View.AnyCollection = pp.View.Common.extend({
 
-    activate: function () {
-        this._activated = true;
+    activated: false,
+
+    afterInitialize: function () {
+        this.listenTo(this.collection, 'reset', this.activate);
+        this.listenTo(this.collection, 'add', this.activate); // TODO: optimize
+        this.listenTo(this.collection, 'remove', this.activate); // TODO: optimize
+    },
+
+    itemSubviews: [],
+
+    removeItemSubviews: function () {
+        console.log('removeItemSubviews ' + this.itemSubviews);
+        _.each(this.itemSubviews, function (subview) {
+            subview.remove();
+        });
+        this.itemSubviews = [];
+    },
+
+    afterRender: function () {
+        this.removeItemSubviews();
+        this.collection.each(this.renderOne, this);
+    },
+
+    generateItem: function (model) {
+        alert('not implemented');
+    },
+
+    renderOne: function(model) {
+        var view = this.generateItem(model);
+        this.itemSubviews.push(view);
+        var list = this.$el.find(this.listSelector);
+        list.show(); // quests table is hidden initially - see https://github.com/berekuk/play-perl/issues/61
+        list.append(view.render().el);
+    },
+
+    onAdd: function () {
         this.render();
     },
 
-    render: function () {
-        if (!this._activated) {
-            return;
-        }
-        pp.View.Common.prototype.render.apply(this, arguments);
+    onReset: function () {
+        this.render();
+    },
+
+    // copy-paste from pp.View.Common
+    remove: function () {
+        this.removeItemSubviews();
+        pp.View.Common.prototype.remove.apply(this, arguments);
     }
 });

@@ -88,7 +88,7 @@ pp.views.Register = pp.View.Common.extend({
             settings: JSON.stringify(this.settingsSubview.deserialize())
         }).done(function (model, response) {
             pp.app.user.fetch({
-                success: function (model, response) {
+                success: function () {
                     pp.app.router.navigate("/", { trigger: true });
                 },
                 error: function (model, response) {
