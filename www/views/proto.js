@@ -5,14 +5,18 @@ pp.View.Base = Backbone.View.extend({
     }
 });
 
-/* common play-perl view
- * it declares render() itself
+/* Common play-perl view.
+ * It declares render() itself, you need to declare serialize() instead of render.
+ * If you want to do some more work on render(), define afterRender().
+ *
+ * It also declares initialize().
+ * If you want to do some more work on render(), define afterInitialize().
+ *
  * options:
  *   t: 'blah' - use '#template-blah' template
  *   selfRender: this flag causes initialize() to call render()
  *   serialize: should prepare params for the template; defaults to self.model.toJSON(), or {} if model is not defined
  *   features: array with features that should be enabled in html after rendering; possible values: ['timeago', 'tooltip']
- *   afterRender: optional render() method modifier
  *   subviews: events-style hash with subviews; see assign pattern in http://ianstormtaylor.com/assigning-backbone-subviews-made-even-cleaner/
  *
  * subviews usage example:
@@ -23,6 +27,8 @@ pp.View.Base = Backbone.View.extend({
  *   barSubview: function() {
  *      return new pp.views.Bar(); // will be called only once and cached
  *   }
+ *
+ * Note that this class overrides remove(), calling remove() for all subviews for you. Die, zombies.
 */
 pp.View.Common = pp.View.Base.extend({
 
@@ -106,8 +112,16 @@ pp.View.Common = pp.View.Base.extend({
     },
 
     afterRender: function () {
-    }
+    },
 
+    remove: function () {
+        var that = this;
+        _.each(_.keys(this._subviewInstances), function(key) {
+            var subview = that._subviewInstances[key];
+            subview.remove();
+        });
+        pp.View.Base.prototype.remove.apply(this, arguments);
+    }
 });
 
 // CommonWithActivation view's render() method is void until you call activate() it
