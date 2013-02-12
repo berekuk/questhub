@@ -1,6 +1,7 @@
 ## All API urls
 
-Read the code (`lib/Play/Route/*.pm`) or try them in the browser for the response format. Hint: it's usually JSON.
+Read the code (`lib/Play/Route/*.pm`) or try them in the browser for the response format.
+Hint: it's usually JSON.
 
 ### Personal stuff - auth, settings, etc.
 
@@ -109,6 +110,7 @@ Get session value. Dev mode only.
 ## Registration
 
 This is how registration is implemented:
+
 1. JS redirects to `/auth/twitter`
 2. `/auth/twitter` redirects to twitter.com
 3. twitter.com redirects back to `/auth/twitter`
@@ -121,32 +123,35 @@ This is how registration is implemented:
 ## Objects
 
 User:
-{
-    _id: ...,
-    login: 'blah',
-    points: 123,
-    twitter: {
-        screen_name: 'blah'
+
+    {
+        _id: ...,
+        login: 'blah',
+        points: 123,
+        twitter: {
+            screen_name: 'blah'
+        }
     }
-}
 
 Quest:
-{
-    _id: ...,
-    status: 'open', // or 'closed'
-    user: 'blah',
-    name: 'quest title',
-    type: 'bug'     // or 'blog', or 'feature'
-    likes: [
-        'foo-user',
-        'bar-user'
-    ]
-}
+
+    {
+        _id: ...,
+        status: 'open', // or 'closed'
+        user: 'blah',
+        name: 'quest title',
+        type: 'bug'     // or 'blog', or 'feature'
+        likes: [
+            'foo-user',
+            'bar-user'
+        ]
+    }
 
 Comment:
-{
-    _id: ...,
-    body: 'comment body',
-    quest_id: ...,
-    author: 'foo-user'
-}
+
+    {
+        _id: ...,
+        body: 'comment body',
+        quest_id: ...,
+        author: 'foo-user'
+    }
