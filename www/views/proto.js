@@ -58,7 +58,7 @@ pp.View.Common = pp.View.Base.extend({
 
     initSubviews: function () {
         if (this._subviewInstances) {
-            alert('initSubviews is called twice!');
+            console.log('initSubviews is called twice!');
         }
         this._subviewInstances = {};
         var that = this;
@@ -177,7 +177,6 @@ pp.View.AnyCollection = pp.View.Common.extend({
     itemSubviews: [],
 
     removeItemSubviews: function () {
-        console.log('removeItemSubviews ' + this.itemSubviews);
         _.each(this.itemSubviews, function (subview) {
             subview.remove();
         });
@@ -185,7 +184,6 @@ pp.View.AnyCollection = pp.View.Common.extend({
     },
 
     afterRender: function () {
-        console.log('afterRender');
         this.removeItemSubviews();
         this.collection.each(this.renderOne, this);
     },

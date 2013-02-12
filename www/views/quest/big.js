@@ -17,6 +17,10 @@ pp.views.QuestBig = pp.View.Common.extend({
         "blur .quest-edit": "closeEdit"
     },
 
+    afterInitialize: function () {
+        this.listenTo(this.model, 'change', this.render);
+    },
+
     close: function () {
         this.model.close();
     },
