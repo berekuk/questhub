@@ -32,13 +32,13 @@ sub set_settings :Tests {
 
     Dancer::session login => 'foo';
     http_json PUT => '/api/current_user/settings', { params => {
-        email => 'me@berekuk.ru', timezone => 'MSK' # this example is fake, real settings will probably have a different format
+        email => 'me@berekuk.ru', notify_likes => 1,
     } };
     my $settings;
     $settings = http_json GET => '/api/current_user/settings';
     cmp_deeply $settings, {
         email => 'me@berekuk.ru',
-        timezone => 'MSK',
+        notify_likes => 1,
         user => 'foo',
     }, 'new settings';
 

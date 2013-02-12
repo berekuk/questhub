@@ -35,6 +35,8 @@ get '/current_user' => sub {
             die "user '$login' not found";
         }
         $user->{registered} = 1;
+
+        $user->{settings} = $users->get_settings($login);
     }
     else {
         $user->{registered} = 0;

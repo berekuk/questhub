@@ -32,6 +32,20 @@ sub current_user :Tests {
         login => 'blah2',
         registered => 1,
         points => 0,
+        settings => {},
+    };
+
+    http_json PUT => '/api/current_user/settings', { params => { foo => 'bar' } };
+    $user = http_json GET => '/api/current_user';
+    cmp_deeply $user, {
+        twitter => {
+            screen_name => 'blah2',
+        },
+        _id => re('\S+'),
+        login => 'blah2',
+        registered => 1,
+        points => 0,
+        settings => { foo => 'bar', user => 'blah2' },
     };
 }
 
