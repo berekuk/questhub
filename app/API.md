@@ -155,3 +155,15 @@ Comment:
         quest_id: ...,
         author: 'foo-user'
     }
+
+Settings:
+
+    {
+        email: "president@barackobama.com",
+        notify_comments: 1,
+        notify_likes: 0,
+
+        // these last two fields are implementation details and probably will be removed
+        user: "barack",
+        result: "ok"
+    }
