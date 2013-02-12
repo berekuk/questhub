@@ -170,8 +170,8 @@ pp.View.AnyCollection = pp.View.Common.extend({
 
     afterInitialize: function () {
         this.listenTo(this.collection, 'reset', this.activate);
-        this.listenTo(this.collection, 'add', this.activate); // TODO: optimize
-        this.listenTo(this.collection, 'remove', this.activate); // TODO: optimize
+        this.listenTo(this.collection, 'add', this.renderOne);
+        this.listenTo(this.collection, 'remove', this.render); // TODO: optimize
     },
 
     itemSubviews: [],

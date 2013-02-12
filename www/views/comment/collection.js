@@ -1,24 +1,28 @@
-pp.views.CommentCollection = pp.View.Base.extend({
+pp.views.CommentCollection = pp.View.AnyCollection.extend({
+
+    t: 'comment-collection',
 
     events: {
         'click .submit': 'postComment',
         'keyup [name=comment]': 'validate'
     },
 
-    template: _.template($('#template-comment-collection').text()),
-
-    initialize: function () {
-        _.bindAll(this);
-        this.collection.on('destroy', this.onReset);
-        this.collection.on('reset', this.onReset);
-        this.collection.on('add', this.renderOne);
+    serialize: function () {
+        return { currentUser: pp.app.user.get('login') };
     },
 
-    render: function () {
-        var params = {};
-        params.currentUser = pp.app.user.get('login');
-        this.$el.html(this.template(params));
-        return this;
+    generateItem: function (model) {
+        return new pp.views.Comment({ model: model });
+    },
+
+    listSelector: '.comments-list',
+
+    afterInitialize: function () {
+        this.listenTo(this.collection, 'add', function () {
+            this.$('[name=comment]').removeAttr('disabled');
+            this.$('[name=comment]').val('');
+        });
+        pp.View.AnyCollection.prototype.afterInitialize.apply(this, arguments);
     },
 
     validate: function (e) {
@@ -28,16 +32,6 @@ pp.views.CommentCollection = pp.View.Base.extend({
         else {
             this.$('.submit').addClass('disabled');
         }
-    },
-
-    renderOne: function (comment) {
-        this.$('[name=comment]').removeAttr('disabled');
-        this.$('[name=comment]').val('');
-
-        var view = new pp.views.Comment({ model: comment });
-        var cl = this.$el.find('.comments-list');
-        cl.show();
-        cl.append(view.render().el);
     },
 
     postComment: function() {
@@ -61,9 +55,4 @@ pp.views.CommentCollection = pp.View.Base.extend({
         this.$('[name=comment]').removeAttr('disabled');
         // note that we don't clear textarea's val() to prevent the comment from vanishing
     },
-
-    onReset: function () {
-        this.render();
-        this.collection.each(this.renderOne);
-    }
 });
