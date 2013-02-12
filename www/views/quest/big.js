@@ -1,4 +1,4 @@
-// Note that this view extends ViewWithActivaion.
+// Note that this view extends CommonWithActivation.
 // The pattern for its usage is this:
 //
 // var view = new QuestBig(...);
@@ -8,6 +8,10 @@
 // model.fetch();
 //
 // Used by: views/quest/page.js
+//
+// ===============
+// You know what, this view didn't have to be CommonWithActivation; it could just setup the model listener itself.
+// But it's the only example of CommonWithActivation pattern, so I'll keep it as is for now.
 pp.views.QuestBig = pp.View.CommonWithActivation.extend({
     t: 'quest-big',
 
