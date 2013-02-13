@@ -71,9 +71,18 @@ sub add {
 
 sub list {
     my $self = shift;
-    my ($params) = validate_pos(@_);
+    my $params = validate(@_, {
+        sort => { type => SCALAR, optional => 1 },
+        order => { type => SCALAR, regex => qr/^asc|desc$/, default => 'asc' },
+    });
 
-    my @users = $self->collection->find({})->all;
+    my $cursor = $self->collection->find(); # fetch everyone
+    if (defined $params->{sort}) {
+        my $order_flag = ($params->{order} eq 'asc' ? 1 : -1);
+        $cursor = $cursor->sort({ $params->{sort} => $order_flag })
+    }
+    my @users = $cursor->all;
+
     $self->_prepare_user($_) for @users;
 
     # filling 'open_quests' field

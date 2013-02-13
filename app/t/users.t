@@ -1,8 +1,6 @@
 use t::common;
 use parent qw(Test::Class);
 
-use Play::Users;
-
 sub setup :Tests(setup) {
     reset_db();
     Dancer::session->destroy;
@@ -136,6 +134,29 @@ sub open_quests_count :Tests {
             points => 0,
         },
     ];
+}
+
+sub users_list_sort :Tests {
+    my $self = shift;
+    $self->_add_users;
+
+    # blah2 completes a quest and gets one point
+    Dancer::session login => 'blah2';
+    {
+        my $quest = http_json POST => '/api/quest', { params => { name => 'xxx' } };
+        http_json PUT => "/api/quest/$quest->{_id}", { params => {
+            status => 'closed',
+        } };
+    }
+
+    my $user = http_json GET => '/api/user';
+    is_deeply [ map { $_->{login} } @$user ], [ qw/ blah blah2 / ];
+
+    $user = http_json GET => '/api/user?sort=points';
+    is_deeply [ map { $_->{login} } @$user ], [ qw/ blah blah2 / ];
+
+    $user = http_json GET => '/api/user?sort=points&order=desc';
+    is_deeply [ map { $_->{login} } @$user ], [ qw/ blah2 blah / ];
 }
 
 sub register :Tests {

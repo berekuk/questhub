@@ -61,6 +61,11 @@ Get any user data.
 
 Get the list of all users.
 
+Options:
+
+* `sort` - any field, e.g. `login`, `open_quests`, `points`
+* `order` - `asc` or `desc`, with `asc` being the default
+
 ### Quests
 
 ##### POST /api/quest
