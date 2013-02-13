@@ -24,21 +24,14 @@
     <link rel="apple-touch-icon-precomposed" href="/vendors/bootstrap/ico/apple-touch-icon-57-precomposed.png">
 
     <!-- notification messages -->
-    <script type="text/template" id="template-error">
-        <div class="alert alert-error">
-          <button type="button" class="close" data-dismiss="alert">×</button>
-          <% if (obj.error) { %>
-            <%= error %>
-          <% } else { %>
-            Unknown error
-          <% } %>
-        </div>
-    </script>
-
     <script type="text/template" id="template-notify">
-        <div class="alert alert-notify">
+        <div class="alert alert-<%= obj.type || 'error' %>">
           <button type="button" class="close" data-dismiss="alert">×</button>
-          <%= text %>
+          <% if (obj.message) { %>
+            <%= message %>
+          <% } else { %>
+            Unknown <%= obj.type || 'error' %> message
+          <% } %>
         </div>
     </script>
 
@@ -211,8 +204,13 @@
     </script>
 
     <script type="text/template" id="template-user-settings">
-      <div>
+      <div class="form-horizontal">
         <input name="email" type="text" placeholder="Email" value="<%= obj.email || '' %>">
+        <% if (obj.email_confirmed) { %>
+          <span class="label label-success">Confirmed</span>
+        <% } else if (obj.email) { %>
+          <button class="btn btn-warning resend-email-confirmation">Not confirmed. Resend confirmation key?</button>
+        <% } %>
       </div>
       <div>
         <span class="muted">Notify me by email when someone...</span>
@@ -270,6 +268,15 @@
             </div>
             </p>
           </div>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="template-confirm-email">
+      <div class="row-fluid">
+        <div class="span3"></div>
+        <div class="span6">
+          <h2>Confirming email...</h2>
         </div>
       </div>
     </script>
@@ -574,7 +581,7 @@
     <script src="/views/comment/collection.js"></script>
     <script src="/views/comment/normal.js"></script>
     <script src="/views/dashboard.js"></script>
-    <script src="/views/error.js"></script>
+    <script src="/views/notify.js"></script>
     <script src="/views/home.js"></script>
     <script src="/views/quest/add.js"></script>
     <script src="/views/quest/big.js"></script>
@@ -582,6 +589,7 @@
     <script src="/views/quest/page.js"></script>
     <script src="/views/quest/small.js"></script>
     <script src="/views/register.js"></script>
+    <script src="/views/confirm-email.js"></script>
     <script src="/views/user/current.js"></script>
     <script src="/views/user/settings.js"></script>
     <script src="/views/user/settings-box.js"></script>

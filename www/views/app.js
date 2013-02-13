@@ -5,6 +5,15 @@ pp.views.App = pp.View.Base.extend({
         this._currentUserView.setElement(this.$el.find('.current-user-box'));
     },
 
+    notify: function (type, message) {
+        this.$('.app-view-container').prepend(
+            new pp.views.Notify({
+                type: type,
+                message: message
+            }).render().el
+        );
+    },
+
     userSettingsDialog: function () {
         this._currentUserView.settingsDialog();
     },
@@ -16,7 +25,7 @@ pp.views.App = pp.View.Base.extend({
             this._page.remove(); // TODO - should we remove all subviews too?
         }
         this._page = page;
-        this.$el.find('.app-view-container').append(page.$el);
+        this.$('.app-view-container').append(page.$el);
 
         // (THIS COMMENT IS DEPRECATED. EVERYTHING HAS CHANGED.)
         // we don't call page.render() - our pages render themselves, but sometimes they do it in delayed fashion
