@@ -1,8 +1,6 @@
 use t::common;
 use parent qw(Test::Class);
 
-use Play::Users;
-
 sub setup :Tests(setup) {
     reset_db();
     Dancer::session->destroy;
@@ -136,6 +134,37 @@ sub open_quests_count :Tests {
             points => 0,
         },
     ];
+}
+
+sub users_list_sort :Tests {
+    my $self = shift;
+    http_json GET => "/api/fakeuser/$_" for qw/ Helga Marcel Etienne /;
+
+    my $start_quest = sub {
+        my $login = shift;
+        Dancer::session login => $login;
+        return http_json POST => '/api/quest', { params => { name => 'build a house' } }; # returns a quest
+    };
+    my $finish_quest = sub {
+        my $quest = shift;
+        Dancer::session login => $quest->{user};
+        http_json PUT => "/api/quest/$quest->{_id}", { params => {
+            status => 'closed',
+        } };
+    };
+
+    $start_quest->('Helga');
+    # poor Marcel didn't even start anything
+    $finish_quest->($start_quest->('Etienne'));
+
+    my $get_users = sub {
+        my $users = http_json GET => shift;
+        return [ map { $_->{login} } @$users ];
+    };
+
+    is_deeply $get_users->('/api/user'), [ qw/ Helga Marcel Etienne / ], 'default sorting';
+    is $get_users->('/api/user?sort=points&order=desc')[0], 'Etienne', 'Etienne is #1 by points score';
+    is_deeply $get_users->('/api/user?sort=leaderboard'), [qw/ Etienne Helga Marcel /], 'special leaderboard sorting';
 }
 
 sub register :Tests {

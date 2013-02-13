@@ -71,9 +71,13 @@ sub add {
 
 sub list {
     my $self = shift;
-    my ($params) = validate_pos(@_);
+    my $params = validate(@_, {
+        sort => { type => SCALAR, optional => 1 },
+        order => { type => SCALAR, regex => qr/^asc|desc$/, default => 'asc' },
+    });
 
-    my @users = $self->collection->find({})->all;
+    my @users = $self->collection->find()->all; # fetch everyone
+
     $self->_prepare_user($_) for @users;
 
     # filling 'open_quests' field
@@ -83,6 +87,24 @@ sub list {
         my $quser = $users{ $quest->{user} };
         next unless $quser; # I guess user can be deleted and leave user-less quests behind, that's not a good reason for a failure
         $quser->{open_quests}++;
+    }
+
+    # sorting on the client side, because 'open_quests' is not a user's attribute
+    if ($params->{sort} and $params->{sort} eq 'leaderboard') {
+        # special sorting, composite points->open_quests order
+        @users = sort {
+            my $c1 = ($b->{points} || 0) <=> ($a->{points} || 0);
+            return $c1 if $c1;
+            return ($b->{open_quests} || 0) <=> ($a->{open_quests} || 0);
+        } @users;
+    }
+    elsif (defined $params->{sort}) {
+        my $order_flag = ($params->{order} eq 'asc' ? 1 : -1);
+        @users = sort {
+            # TODO - support string sorting
+            my $c = ($a->{$params->{sort}} || 0) <=> ($b->{$params->{sort}} || 0);
+            return $c * $order_flag;
+        } @users;
     }
 
     return \@users;

@@ -61,6 +61,13 @@ Get any user data.
 
 Get the list of all users.
 
+Options:
+
+* `sort` - any numerical field, e.g. `open_quests` or `points`
+* `order` - `asc` or `desc`, with `asc` being the default
+
+Special `sort` value `leaderboard` can be used for composite points->open_quests sorting. It doesn't support order, i.e. it's always descending.
+
 ### Quests
 
 ##### POST /api/quest
