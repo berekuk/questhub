@@ -17,7 +17,7 @@ pp.views.UserSettings = pp.View.Common.extend({
         }
         btn.addClass('disabled');
 
-        $.post('http://localhost:3000/api/register/resend_email_confirmation', {})
+        $.post('http://play-perl.org/api/register/resend_email_confirmation', {})
         .done(function () {
             btn.text('Confirmation key sent');
         })
