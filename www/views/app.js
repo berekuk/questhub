@@ -3,6 +3,7 @@ pp.views.App = pp.View.Base.extend({
     initialize: function () {
         this._currentUserView = new pp.views.CurrentUser();
         this._currentUserView.setElement(this.$el.find('.current-user-box'));
+        this._markdownConverter = new Markdown.getSanitizingConverter();
     },
 
     notify: function (type, message) {
@@ -12,6 +13,10 @@ pp.views.App = pp.View.Base.extend({
                 message: message
             }).render().el
         );
+    },
+
+    markdownToHtml: function (markdown) {
+        return this._markdownConverter.makeHtml(markdown);
     },
 
     userSettingsDialog: function () {

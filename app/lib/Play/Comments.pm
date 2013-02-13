@@ -19,7 +19,7 @@ has 'collection' => (
     },
 );
 
-sub _body_html {
+sub pp_markdown {
     my ($body) = @_;
     my $html = markdown($body);
     $html =~ s{^<p>}{};
@@ -32,7 +32,7 @@ sub _prepare_comment {
     my ($comment) = @_;
     $comment->{ts} = $comment->{_id}->get_time;
     $comment->{_id} = $comment->{_id}->to_string;
-    $comment->{body_html} = _body_html($comment->{body});
+    $comment->{body_html} = pp_markdown($comment->{body});
     return $comment;
 }
 
@@ -47,7 +47,7 @@ sub add {
 
     my $quest = $quests->get($params{quest_id});
 
-    my $body_html = _body_html($params{body}); # markdown for comments in the feed is cached forever, to simplify the events storage and frontend logic
+    my $body_html = pp_markdown($params{body}); # markdown for comments in the feed is cached forever, to simplify the events storage and frontend logic
 
     $events->add({
         object_type => 'comment',
@@ -80,7 +80,7 @@ sub add {
         }
     }
 
-    return { _id => $id->to_string, body_html => _body_html($params{body}) };
+    return { _id => $id->to_string, body_html => pp_markdown($params{body}) };
 }
 
 # get all comments for a quest
