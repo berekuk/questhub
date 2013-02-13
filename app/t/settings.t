@@ -6,6 +6,7 @@ use Play::Users;
 sub setup :Tests(setup) {
     reset_db();
     Dancer::session->destroy;
+    Email::Sender::Simple->default_transport->clear_deliveries;
 }
 
 sub get_settings_no_login :Tests {
@@ -73,7 +74,14 @@ sub set_settings :Tests {
     }, 'foo settings are intact';
 }
 
+sub _email_to_secret {
+    my ($email) = @_;
+    my ($secret) = $email->{email}->get_body =~ qr/(\d+)</;
+    return $secret;
+}
+
 sub email_confirmation :Tests {
+    # TODO - check how email confirmation code works with the real /api/register
     http_json GET => "/api/fakeuser/foo";
     Dancer::session login => 'foo';
 
@@ -96,7 +104,7 @@ sub email_confirmation :Tests {
     is $response->status, 500;
     like $response->content, qr/didn't expect email confirmation/, 'no confirmation for non-existing user';
 
-    my $response = dancer_response POST => '/api/register/confirm_email', { params => { login => 'foo', secret => 'iddqd' } };
+    $response = dancer_response POST => '/api/register/confirm_email', { params => { login => 'foo', secret => 'iddqd' } };
     is $response->status, 500;
     like $response->content, qr/secret for foo is invalid/;
 
@@ -106,7 +114,7 @@ sub email_confirmation :Tests {
         from => 'notification@play-perl.org',
         to => [ 'someone@somewhere.com' ],
     }, 'from & to addresses';
-    my ($secret) = $deliveries[0]->{email}->get_body =~ qr/(\d+)</;
+    my ($secret) = _email_to_secret($deliveries[0]);
     ok $secret, 'parsed secret key from email';
     Email::Sender::Simple->default_transport->clear_deliveries;
 
@@ -124,7 +132,7 @@ sub email_confirmation :Tests {
     }
 
     http_json POST => '/api/register/confirm_email', { params => { login => 'foo', secret => $secret } }; # yay, confirmed
-    my $settings = http_json GET => '/api/current_user/settings';
+    $settings = http_json GET => '/api/current_user/settings';
     cmp_deeply $settings, superhashof({
         email => 'someone@somewhere.com',
         email_confirmed => 1,
@@ -148,4 +156,29 @@ sub email_confirmation :Tests {
     # TODO - check that further email changes reset the confirmation status!
 }
 
+sub resend_email_confirmation :Tests {
+    http_json GET => "/api/fakeuser/foo";
+    Dancer::session login => 'foo';
+
+    http_json PUT => '/api/current_user/settings', { params => {
+        email => 'someone@somewhere.com',
+    } };
+
+    my @deliveries = Email::Sender::Simple->default_transport->deliveries;
+    is scalar(@deliveries), 1;
+    my ($secret) = _email_to_secret($deliveries[0]);
+    ok $secret, 'got secret';
+    Email::Sender::Simple->default_transport->clear_deliveries;
+
+    http_json POST => '/api/register/resend_email_confirmation';
+    my $response = dancer_response POST => '/api/register/confirm_email', { params => { login => 'foo', secret => $secret } };
+    is $response->status, 500, 'old secret is invalid after email resending';
+
+    @deliveries = Email::Sender::Simple->default_transport->deliveries;
+    is scalar(@deliveries), 1;
+    ($secret) = _email_to_secret($deliveries[0]);
+    ok $secret, 'got a new secret';
+    $response = dancer_response POST => '/api/register/confirm_email', { params => { login => 'foo', secret => $secret } };
+    is $response->status, 200, 'new secret is fine';
+}
 __PACKAGE__->new->runtests;

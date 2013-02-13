@@ -166,6 +166,39 @@ sub confirm_email {
     );
 }
 
+sub _send_email_confirmation {
+    my $self = shift;
+    my ($login, $email) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+
+    # need email confirmation
+    my $secret = int rand(100000000000);
+    my $link = "http://play-perl.org/register/confirm/$login/$secret";
+    $events->email(
+        $email,
+        "Your Play Perl registration link, $login",
+        qq{
+            Here you go: <a href="$link">$link</a>.
+        }
+    );
+    return $secret;
+}
+
+sub resend_email_confirmation {
+    my $self = shift;
+    my ($login) = validate_pos(@_, { type => SCALAR });
+
+    my $settings = $self->get_settings($login);
+    unless ($settings->{email}) {
+        die "there's no email in $login\'s settings";
+    }
+    $settings->{email_confirmation_secret} = $self->_send_email_confirmation($login, $settings->{email});
+    $self->settings_collection->update(
+        { user => $login },
+        { %$settings, user => $login },
+        { safe => 1, upsert => 1 }
+    );
+}
+
 sub set_settings {
     my $self = shift;
     my ($login, $settings) = validate_pos(@_, { type => SCALAR }, { type => HASHREF });
@@ -185,16 +218,7 @@ sub set_settings {
         )
     ) {
         # need email confirmation
-        my $secret = int rand(100000000000);
-        $settings->{email_confirmation_secret} = $secret;
-        my $link = "http://play-perl.org/register/confirm/$login/$secret";
-        $events->email(
-            $settings->{email},
-            "Your Play Perl registration link, $login",
-            qq{
-                Here you go: <a href="$link">$link</a>.
-            }
-        );
+        $settings->{email_confirmation_secret} = $self->_send_email_confirmation($login, $settings->{email});
     }
 
     $self->settings_collection->update(
