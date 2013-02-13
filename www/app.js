@@ -149,6 +149,12 @@ $(function () {
         error: pp.app.onError, // todo - try to refetch user in a loop until backends goes online
     });
 
+    $(document).on("click", "a[href='#']", function(event) {
+        if (!event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+            event.preventDefault();
+        }
+    });
+
     $(document).on("click", "a[href^='/']", function(event) {
         if (!event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
             event.preventDefault();
