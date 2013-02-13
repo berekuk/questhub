@@ -145,6 +145,25 @@ sub confirm_email {
         { '$set' =>  { 'email_confirmed' => 1 } },
         { safe => 1 }
     );
+
+    my $bool2str = sub {
+        $settings->{$_[0]} ? 'enabled' : 'disabled';
+    };
+    $events->email(
+        $settings->{email},
+        "Email at Play Perl is confirmed, $login",
+        qq[
+            <p>
+            Login: $login<br>
+            Email: $settings->{email}<br>
+            Notify about likes on your quests: ].$bool2str->('notify_likes').q[<br>
+            Notify about comments on your quests: ].$bool2str->('notify_likes').q[
+            </p>
+            <p>
+            You can customize email notifications <a href="http://play-perl.org">at the website</a>.
+            </p>
+        ]
+    );
 }
 
 sub set_settings {
