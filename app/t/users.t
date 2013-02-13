@@ -138,25 +138,33 @@ sub open_quests_count :Tests {
 
 sub users_list_sort :Tests {
     my $self = shift;
-    $self->_add_users;
+    http_json GET => "/api/fakeuser/$_" for qw/ Helga Marcel Etienne /;
 
-    # blah2 completes a quest and gets one point
-    Dancer::session login => 'blah2';
-    {
-        my $quest = http_json POST => '/api/quest', { params => { name => 'xxx' } };
+    my $start_quest = sub {
+        my $login = shift;
+        Dancer::session login => $login;
+        return http_json POST => '/api/quest', { params => { name => 'build a house' } }; # returns a quest
+    };
+    my $finish_quest = sub {
+        my $quest = shift;
+        Dancer::session login => $quest->{user};
         http_json PUT => "/api/quest/$quest->{_id}", { params => {
             status => 'closed',
         } };
-    }
+    };
 
-    my $user = http_json GET => '/api/user';
-    is_deeply [ map { $_->{login} } @$user ], [ qw/ blah blah2 / ];
+    $start_quest->('Helga');
+    # poor Marcel didn't even start anything
+    $finish_quest->($start_quest->('Etienne'));
 
-    $user = http_json GET => '/api/user?sort=points';
-    is_deeply [ map { $_->{login} } @$user ], [ qw/ blah blah2 / ];
+    my $get_users = sub {
+        my $users = http_json GET => shift;
+        return [ map { $_->{login} } @$users ];
+    };
 
-    $user = http_json GET => '/api/user?sort=points&order=desc';
-    is_deeply [ map { $_->{login} } @$user ], [ qw/ blah2 blah / ];
+    is_deeply $get_users->('/api/user'), [ qw/ Helga Marcel Etienne / ], 'default sorting';
+    is $get_users->('/api/user?sort=points&order=desc')[0], 'Etienne', 'Etienne is #1 by points score';
+    is_deeply $get_users->('/api/user?sort=leaderboard'), [qw/ Etienne Helga Marcel /], 'special leaderboard sorting';
 }
 
 sub register :Tests {
