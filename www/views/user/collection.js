@@ -26,7 +26,13 @@ pp.views.UserCollection = pp.View.Base.extend({
             return false;
         });
 
-        this.$el.html(this.template({ users: users, all: this.all, partial: this.partial }));
+        this.$el.html(this.template({
+            users: users,
+            all: this.all,
+            partial: this.partial,
+            currentUser: pp.app.user.get('login') // used for highlighting
+        }));
+        that.$el.find('[data-toggle=tooltip]').tooltip('show');
         return this;
     }
 });

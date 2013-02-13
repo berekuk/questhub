@@ -298,16 +298,24 @@
           <div class="span6">
           <table class="table table-bordered quests-list">
           <% _.each(users, function(user) { %>
-            <tr class="warning">
+            <tr class="<%= (currentUser && user.get("login") == currentUser) ? "success" : "warning" %>">
               <td>
                 <% if (user.get("twitter") && user.get("twitter").screen_name) { %>
                 <img class="avatar avatar-mini" src="http://api.twitter.com/1/users/profile_image?screen_name=<%= user.get("twitter").screen_name %>&size=mini"/>
                 <% } %>
                 <a href="/player/<%= user.get("login") %>"><%= user.get("login") %></a>
                 <span class="badge badge-info"><%= user.get("points") %></span>
+
+                <% if (currentUser && user.get("login") == currentUser) { %>
+                  <div class="current-user-leaderboard-tip">
+                  <span data-toggle="tooltip" data-trigger="manual" data-placement="right" title="This is you. Climb up!"></span>
+                  </div>
+                <% } %>
+
                 <% if (user.get("open_quests")) { %>
                   <span class="label label-inverse open-quest-count-label"><%= user.get("open_quests") %> quest<%= user.get("open_quests") > 1 ? 's' : '' %></span>
                 <% } %>
+
               </td>
             </tr>
           <% }); %>

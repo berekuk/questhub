@@ -1,5 +1,5 @@
 .comments {
-  margin-top: 10px;
+    margin-top: 10px;
 }
 
 .quest-type-label {
@@ -8,6 +8,13 @@
 
 .open-quest-count-label {
     float: right;
+}
+
+.current-user-leaderboard-tip {
+    float: right;
+    position: relative;
+    left: 14px;
+    top: 12px;
 }
 
 h2, h3 {
