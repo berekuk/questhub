@@ -13,11 +13,9 @@ $(function () {
             error = "HTTP ERROR: " + response.status + " " + response.statusText;
         }
 
-        $('#wrap > .container').prepend(
-            new pp.views.Error({
-                error: error
-            }).render().el
-        );
+        console.log('error: ' + error);
+
+        pp.app.view.notify('error', error);
     };
 
     pp.app.router = new (Backbone.Router.extend({
@@ -25,6 +23,7 @@ $(function () {
             "": "dashboard",
             "welcome": "welcome",
             "register": "register",
+            "register/confirm/:login/:secret": "confirmEmail",
             "auth/twitter": "twitterLogin",
             "quest/add": "questAdd",
             "quest/:id": "questPage",
@@ -111,6 +110,11 @@ $(function () {
                 // ok, time to register
                 setActiveMenuItem('home');
             }
+        },
+
+        confirmEmail: function (login, secret) {
+            var view = new pp.views.ConfirmEmail({ login: login, secret: secret });
+            appView.setPageView(view);
         },
 
         twitterLogin: function () {

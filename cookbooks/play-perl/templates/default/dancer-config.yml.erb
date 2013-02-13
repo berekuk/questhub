@@ -1,3 +1,4 @@
+# this config is generated, see cookbooks/play-perl/templates/default/dancer-config.yml.erb
 appname: "Play"
 layout: "main"
 charset: "UTF-8"
@@ -9,7 +10,8 @@ mongodb_session_coll: "sessions"
 
 serializer: JSON
 
-# this config is generated, really
+hostport: "<%= @hostport %>"
+
 plugins:
   "Auth::Twitter":
     consumer_key:     "<%= @twitter['consumer_key'] %>"

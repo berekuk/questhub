@@ -12,11 +12,12 @@ sub setup :Tests(setup) {
 
 sub like_quest_internal :Tests {
     my $quests = Play::Quests->new;
-    my $id = $quests->add({
+    my $quest = $quests->add({
         user => 'blah',
         name => 'foo, foo',
         status => 'open',
     });
+    my $id = $quest->{_id};
 
     $quests->like($id, 'user1');
     $quests->like($id, 'user2');
@@ -28,6 +29,7 @@ sub like_quest_internal :Tests {
         $quests->get($id),
         {
             _id => re('^\S+$'),
+            ts => re('^\d+$'),
             likes => [
                 'user1', 'user2'
             ],
@@ -39,11 +41,12 @@ sub like_quest_internal :Tests {
 
 sub self_like_quest_internal :Tests {
     my $quests = Play::Quests->new;
-    my $id = $quests->add({
+    my $quest = $quests->add({
         user => 'blah',
         name => 'foo, foo',
         status => 'open',
     });
+    my $id = $quest->{_id};
 
     like exception { $quests->like($id, 'blah') }, qr/unable to like your own quest/;
 }

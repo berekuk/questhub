@@ -4,7 +4,12 @@ use Moo;
 use Params::Validate qw(:all);
 use Play::Mongo;
 
+use Play::Events;
 use Play::Quests; # recursive dependency!
+
+use Dancer qw(setting);
+
+my $events = Play::Events->new;
 
 has 'settings_collection' => (
     is => 'ro',
@@ -101,6 +106,16 @@ sub add_points {
     );
 }
 
+# some settings can't be set by the client
+sub protected_settings {
+    qw( email_confirmed );
+}
+
+# some settings can't even be seen
+sub secret_settings {
+    qw( email_confirmation_secret );
+}
+
 sub get_settings {
     my $self = shift;
     my ($login) = validate_pos(@_, { type => SCALAR });
@@ -109,18 +124,126 @@ sub get_settings {
     $settings ||= {};
     delete $settings->{_id}; # nobody cares about settings _id
 
+    delete $settings->{$_} for secret_settings, 'user';
+
     return $settings;
+}
+
+sub confirm_email {
+    my $self = shift;
+    my ($login, $secret) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+
+    my $settings = $self->settings_collection->find_one({ user => $login });
+    unless ($settings->{email_confirmation_secret}) {
+        die "didn't expect email confirmation for $login";
+    }
+
+    unless ($settings->{email_confirmation_secret} eq $secret) {
+        die "email confirmation secret for $login is invalid";
+    }
+
+    $self->settings_collection->update(
+        { user => $login },
+        { '$set' =>  { 'email_confirmed' => 1 } },
+        { safe => 1 }
+    );
+
+    my $bool2str = sub {
+        $settings->{$_[0]} ? 'enabled' : 'disabled';
+    };
+    $events->email(
+        $settings->{email},
+        "Your email at Play Perl is confirmed, $login",
+        qq[
+            <p>
+            Login: $login<br>
+            Email: $settings->{email}<br>
+            Notify about comments on your quests: ].$bool2str->('notify_comments').q[<br>
+            Notify about likes on your quests: ].$bool2str->('notify_likes').q[
+            </p>
+            <p>
+            You can customize your email notifications <a href="http://].setting('hostport').qq[">at the website</a>.
+            </p>
+        ]
+    );
+}
+
+sub _send_email_confirmation {
+    my $self = shift;
+    my ($login, $email) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+
+    # need email confirmation
+    my $secret = int rand(100000000000);
+    my $link = "http://".setting('hostport')."/register/confirm/$login/$secret";
+    $events->email(
+        $email,
+        "Your Play Perl email confirmation link, $login",
+        qq{
+            <p>
+            Click this if you registered on Play Perl recently: <a href="$link">$link</a>.
+            </p>
+            <p>
+            If you think this is a mistake, just ignore this message.
+            </p>
+        }
+    );
+    return $secret;
+}
+
+sub resend_email_confirmation {
+    my $self = shift;
+    my ($login) = validate_pos(@_, { type => SCALAR });
+
+    my $settings = $self->get_settings($login);
+    unless ($settings->{email}) {
+        die "there's no email in $login\'s settings";
+    }
+    $settings->{email_confirmation_secret} = $self->_send_email_confirmation($login, $settings->{email});
+    $self->settings_collection->update(
+        { user => $login },
+        { %$settings, user => $login },
+        { safe => 1, upsert => 1 }
+    );
 }
 
 sub set_settings {
     my $self = shift;
     my ($login, $settings) = validate_pos(@_, { type => SCALAR }, { type => HASHREF });
 
+    # some settings can't be set by the client
+    delete $settings->{$_} for protected_settings, secret_settings;
+
+    my $old_settings = $self->get_settings($login);
+    for (protected_settings) {
+        $settings->{$_} = $old_settings->{$_} if exists $old_settings->{$_};
+    }
+
+    if (
+        $settings->{email} and (
+            not $old_settings->{email}
+            or $old_settings->{email} ne $settings->{email}
+        )
+    ) {
+        # need email confirmation
+        $settings->{email_confirmation_secret} = $self->_send_email_confirmation($login, $settings->{email});
+        delete $settings->{email_confirmed};
+    }
+
     $self->settings_collection->update(
         { user => $login },
         { %$settings, user => $login },
         { safe => 1, upsert => 1 }
     );
+}
+
+sub get_email {
+    my $self = shift;
+    my ($login, $notify_field) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+
+    my $settings = $self->get_settings($login);
+    return unless $settings->{$notify_field};
+    return unless $settings->{email_confirmed};
+    return $settings->{email};
 }
 
 1;

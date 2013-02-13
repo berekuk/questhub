@@ -103,6 +103,20 @@ post '/register' => sub {
     return { status => "ok", user => $user };
 };
 
+post '/register/resend_email_confirmation' => sub {
+    my $login = session('login');
+    die "not logged in" unless session->{login};
+    $users->resend_email_confirmation($login);
+    return { result => 'ok' };
+};
+
+# user doesn't need to be logged to use this route
+post '/register/confirm_email' => sub {
+    # throws an exception if something's wrong
+    $users->confirm_email(param('login') => param('secret'));
+    return { confirmed => 1 };
+};
+
 get '/user' => sub {
     return $users->list;
 };

@@ -5,6 +5,8 @@ use Params::Validate qw(:all);
 use Play::Mongo;
 use Text::Markdown qw(markdown);
 
+use Dancer qw(setting);
+
 my $events = Play::Events->new;
 my $quests = Play::Quests->new;
 my $users = Play::Users->new;
@@ -57,19 +59,19 @@ sub add {
             quest => $quest,
         },
     });
-    my $user_settings = $users->get_settings($quest->{user});
-    if ($user_settings->{notify_comments} and $params{author} ne $quest->{user}) {
+
+    if (my $email = $users->get_email($quest->{user}, 'notify_comments')) {
         # TODO - quoting
         # TODO - unsubscribe link
         my $email_body = qq[
             <p>
-            <a href="http://play-perl.org/player/$params{author}">$params{author}</a> commented on your quest <a href="http://play-perl.org/quest/$params{quest_id}">$quest->{name}</a>:
+            <a href="http://].setting('hostport').qq[/player/$params{author}">$params{author}</a> commented on your quest <a href="http://].setting('hostport').qq[/quest/$params{quest_id}">$quest->{name}</a>:
             <hr>
             </p>
             <p>$body_html</p>
         ];
         $events->email(
-            $user_settings->{email},
+            $email,
             "$params{author} commented on '$quest->{name}'",
             $email_body,
         );

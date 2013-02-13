@@ -45,7 +45,7 @@ sub current_user :Tests {
         login => 'blah2',
         registered => 1,
         points => 0,
-        settings => { foo => 'bar', user => 'blah2' },
+        settings => { foo => 'bar' },
     };
 }
 
