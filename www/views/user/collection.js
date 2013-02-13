@@ -8,7 +8,7 @@ pp.views.UserCollection = pp.View.Base.extend({
 
     initialize: function () {
         this.collection.on('reset', this.render, this);
-        this.all = true;
+        this.all = false;
     },
 
     switchAll: function () {
