@@ -14,13 +14,18 @@ pp.views.Comment = pp.View.Common.extend({
         this.$('.comment-edit').show();
         this.$('.comment-content').hide();
         this.$('.comment-edit').focus();
+        this.$('.comment-edit').autosize();
     },
 
     closeEdit: function() {
         var edit = this.$('.comment-edit');
+        if (edit.attr('disabled')) {
+            return; // already saving
+        }
+
         var value = edit.val();
         if (!value) {
-            return;
+            return; // empty comments are forbidden
         }
 
         var that = this;

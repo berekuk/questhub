@@ -16,6 +16,7 @@ pp.views.CommentCollection = pp.View.AnyCollection.extend({
     },
 
     generateItem: function (model) {
+        console.log('generateItem');
         return new pp.views.Comment({ model: model });
     },
 
@@ -25,6 +26,11 @@ pp.views.CommentCollection = pp.View.AnyCollection.extend({
         _.bindAll(this, 'onError');
         this.listenTo(this.collection, 'add', this.resetForm);
         pp.View.AnyCollection.prototype.afterInitialize.apply(this, arguments);
+    },
+
+    afterRender: function () {
+        pp.View.AnyCollection.prototype.afterRender.apply(this, arguments);
+        this.$('[name=comment]').autosize();
     },
 
     // set the appropriate "add comment" button style
