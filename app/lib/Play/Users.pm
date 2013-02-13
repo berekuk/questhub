@@ -226,6 +226,7 @@ sub set_settings {
     ) {
         # need email confirmation
         $settings->{email_confirmation_secret} = $self->_send_email_confirmation($login, $settings->{email});
+        delete $settings->{email_confirmed};
     }
 
     $self->settings_collection->update(
