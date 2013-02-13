@@ -4,7 +4,10 @@ use Moo;
 use Params::Validate qw(:all);
 use Play::Mongo;
 
+use Play::Events;
 use Play::Quests; # recursive dependency!
+
+my $events = Play::Events->new;
 
 has 'settings_collection' => (
     is => 'ro',
@@ -126,13 +129,20 @@ sub get_settings {
 
 sub confirm_email {
     my $self = shift;
-    my ($login) = validate_pos(@_, { type => SCALAR });
+    my ($login, $secret) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
 
-    # TODO - check
+    my $settings = $self->settings_collection->find_one({ user => $login });
+    unless ($settings->{email_confirmation_secret}) {
+        die "didn't expect email confirmation for $login";
+    }
+
+    unless ($settings->{email_confirmation_secret} eq $secret) {
+        die "email confirmation secret for $login is invalid";
+    }
 
     $self->settings_collection->update(
         { user => $login },
-        { '$set' =>  { 'email_protected' => 1 } },
+        { '$set' =>  { 'email_confirmed' => 1 } },
         { safe => 1 }
     );
 }
@@ -149,13 +159,40 @@ sub set_settings {
         $settings->{$_} = $old_settings->{$_} if exists $old_settings->{$_};
     }
 
-    # TODO - generate secret key
+    if (
+        $settings->{email} and (
+            not $old_settings->{email}
+            or $old_settings->{email} ne $settings->{email}
+        )
+    ) {
+        # need email confirmation
+        my $secret = int rand(100000000000);
+        $settings->{email_confirmation_secret} = $secret;
+        my $link = "http://play-perl.org/api/user/$login/confirm_email/$secret";
+        $events->email(
+            $settings->{email},
+            "Your Play Perl registration link, $login",
+            qq{
+                Here you go: <a href="$link">$link</a>.
+            }
+        );
+    }
 
     $self->settings_collection->update(
         { user => $login },
         { %$settings, user => $login },
         { safe => 1, upsert => 1 }
     );
+}
+
+sub get_email {
+    my $self = shift;
+    my ($login, $notify_field) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+
+    my $settings = $self->get_settings($login);
+    return unless $settings->{$notify_field};
+    return unless $settings->{email_confirmed};
+    return $settings->{email};
 }
 
 1;

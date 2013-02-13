@@ -97,6 +97,7 @@ sub comment_events :Tests {
             body_html => re('<strong>bold cbody</strong>'),
             quest => {
                 _id => $quest_id,
+                ts => re('^\d+'),
                 name => 'foo',
                 status => 'open',
                 user => 'blah',
@@ -140,9 +141,7 @@ sub email_comment :Tests {
     http_json GET => "/api/fakeuser/foo";
     Dancer::session login => 'foo';
 
-    http_json PUT => '/api/current_user/settings', { params => {
-        email => 'test@example.com', notify_comments => 1, notify_likes => 0
-    } };
+    register_email 'foo' => { email => 'test@example.com', notify_comments => 1, notify_likes => 0 };
 
     my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'foo-quest', status => 'open' } };
     my $quest_id = $quest_result->{_id};

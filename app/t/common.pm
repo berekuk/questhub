@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use parent qw(Exporter);
-our @EXPORT = qw( http_json reset_db );
+our @EXPORT = qw( http_json reset_db register_email );
 
 use lib 'lib';
 use Import::Into;
@@ -34,6 +34,20 @@ sub reset_db {
     for (qw/ quests comments users events user_settings /) {
         Play::Mongo->db->get_collection($_)->remove({});
     }
+}
+
+# register_email 'foo' => { email => 'a@b.com', notify_likes => 1 }
+# email will be confirmed automatically
+# user must be logged in
+sub register_email {
+    my ($user, $settings) = @_;
+
+    http_json PUT => '/api/current_user/settings', { params => $settings };
+
+    my @deliveries = Email::Sender::Simple->default_transport->deliveries;
+    my ($secret) = $deliveries[0]->{email}->get_body =~ qr/(\d+)</;
+    http_json GET => "/api/user/$user/confirm_email/$secret";
+    Email::Sender::Simple->default_transport->clear_deliveries;
 }
 
 sub import {

@@ -73,12 +73,14 @@ sub set_settings :Tests {
     }, 'foo settings are intact';
 }
 
-sub server_settings :Tests {
+sub email_confirmation :Tests {
     http_json GET => "/api/fakeuser/foo";
     Dancer::session login => 'foo';
 
     http_json PUT => '/api/current_user/settings', { params => {
         email => 'someone@somewhere.com',
+        notify_likes => 1,
+        notify_comments => 1,
         email_confirmed => 1,
         email_confirmation_secret => 'iddqd',
     } };
@@ -86,7 +88,58 @@ sub server_settings :Tests {
     my $settings = http_json GET => '/api/current_user/settings';
     cmp_deeply $settings, {
         email => 'someone@somewhere.com',
+        notify_likes => 1,
+        notify_comments => 1,
     }, "user can't change secret or protected settings";
+
+    my $response = dancer_response GET => '/api/user/bar/confirm_email/iddqd';
+    is $response->status, 500;
+    like $response->content, qr/didn't expect email confirmation/, 'no confirmation for non-existing user';
+
+    $response = dancer_response GET => '/api/user/foo/confirm_email/iddqd';
+    is $response->status, 500;
+    like $response->content, qr/secret for foo is invalid/;
+
+    my @deliveries = Email::Sender::Simple->default_transport->deliveries;
+    is scalar(@deliveries), 1, 'registration email received';
+    cmp_deeply $deliveries[0]->{envelope}, {
+        from => 'notification@play-perl.org',
+        to => [ 'someone@somewhere.com' ],
+    }, 'from & to addresses';
+    my ($secret) = $deliveries[0]->{email}->get_body =~ qr/(\d+)</;
+    ok $secret, 'parsed secret key from email';
+    Email::Sender::Simple->default_transport->clear_deliveries;
+
+    # before we confirm the email, lets check that other emails are not sent before confirmation
+    {
+        my $quest = http_json POST => '/api/quest', { params => {
+            name => 'q1',
+        } };
+        http_json GET => "/api/fakeuser/bar";
+        Dancer::session login => 'bar';
+
+        http_json POST => "/api/quest/$quest->{_id}/like";
+        is(Email::Sender::Simple->default_transport->delivery_count, 0);
+        Dancer::session login => 'foo';
+    }
+
+    http_json GET => "/api/user/foo/confirm_email/$secret"; # yay, confirmed
+    my $settings = http_json GET => '/api/current_user/settings';
+    cmp_deeply $settings, superhashof({
+        email => 'someone@somewhere.com',
+        email_confirmed => 1,
+    }), "email_confirmed flag in settings";
+
+    # now other emails are working
+    {
+        my $quest = http_json POST => '/api/quest', { params => {
+            name => 'q2',
+        } };
+        Dancer::session login => 'bar';
+
+        http_json POST => "/api/quest/$quest->{_id}/like";
+        is(Email::Sender::Simple->default_transport->delivery_count, 1);
+    }
 }
 
 __PACKAGE__->new->runtests;

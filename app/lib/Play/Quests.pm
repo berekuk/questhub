@@ -23,6 +23,7 @@ has 'collection' => (
 sub _prepare_quest {
     my $self = shift;
     my ($quest) = @_;
+    $quest->{ts} = $quest->{_id}->get_time;
     $quest->{_id} = $quest->{_id}->to_string;
     return $quest;
 }
@@ -34,7 +35,12 @@ sub list {
     # hmmm, 'comment_count' have a special semantics; what if we'll want to query for "quests with >N comments"?
     my $comment_count = delete $params->{comment_count};
 
-    my @quests = $self->collection->find($params)->all;
+    my @quests = $self->collection->query(
+        $params,
+        {
+            sort_by => { '_id' => 1 }
+        }
+    )->all;
     @quests = grep { $_->{status} ne 'deleted' } @quests;
 
     $self->_prepare_quest($_) for @quests;
@@ -53,7 +59,7 @@ sub list {
     return \@quests;
 }
 
-# returns new quest's id
+# returns the new quest
 sub add {
     my $self = shift;
     my ($params) = validate_pos(@_, { type => HASHREF });
@@ -73,7 +79,10 @@ sub add {
         object => $params,
     });
 
-    return $id->to_string;
+    my $quest = { %$params, _id => $id };
+    $self->_prepare_quest($quest);
+
+    return $quest;
 }
 
 sub _quest2points {
@@ -116,6 +125,7 @@ sub update {
     }
 
     delete $quest->{_id};
+    delete $quest->{ts};
 
     my $quest_after_update = { %$quest, %$params };
     $self->collection->update(
@@ -174,8 +184,7 @@ sub like {
 
     my $quest = $self->_like_or_unlike($id, $user, '$addToSet');
 
-    my $quest_owner_settings = $users->get_settings($quest->{user});
-    if ($quest_owner_settings->{notify_likes}) {
+    if (my $email = $users->get_email($quest->{user}, 'notify_likes')) {
         my $email_body = qq[
             <p>
             <a href="http://play-perl.org/player/$user">$user</a> likes your quest <a href="http://play-perl.org/quest/$quest->{_id}">$quest->{name}</a>!<br>
@@ -198,7 +207,7 @@ sub like {
 
         # TODO - different bodies depending on quest status
         $events->email(
-            $quest_owner_settings->{email},
+            $email,
             "$user likes your quest '$quest->{name}'!",
             $email_body,
         );

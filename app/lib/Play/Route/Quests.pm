@@ -42,9 +42,7 @@ post '/quest' => sub {
         status => 'open',
         (param('type') ? (type => param('type')) : ()),
     };
-    my $id = $quests->add($attributes);
-    $attributes->{_id} = $id;
-    return $attributes;
+    return $quests->add($attributes);
 };
 
 get '/quest' => sub {

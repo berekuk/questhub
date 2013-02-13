@@ -34,6 +34,7 @@ sub setup :Tests(setup) {
         delete $quests_data->{$_}->{_id};
         my $OID = $quests->collection->insert( $quests_data->{$_} ); # MongoDB::OID
         $quests_data->{$_}->{_id} = $OID->to_string;
+        $quests_data->{$_}->{ts} = $OID->get_time;
     }
 }
 
@@ -94,14 +95,16 @@ sub add_quest :Tests {
 
     cmp_deeply
         $add_result,
-        { %$new_record, _id => re('^\S+$') },
-        'response';
+        { %$new_record, _id => re('^\S+$'), ts => re('^\d+$') },
+        'add response';
 
     my $id = $add_result->{_id};
 
     my $got_quest = http_json GET => "/api/quest/$id";
-    delete $got_quest->{_id};
-    cmp_deeply $got_quest, $new_record;
+    cmp_deeply
+        $got_quest,
+        { %$new_record, _id => re('^\S+$'), ts => re('^\d+$') },
+        'get response';
 }
 
 sub quest_events :Tests {
@@ -308,9 +311,7 @@ sub email_like :Tests {
     http_json GET => "/api/fakeuser/foo";
     Dancer::session login => 'foo';
 
-    http_json PUT => '/api/current_user/settings', { params => {
-        email => 'test@example.com', notify_comments => 0, notify_likes => 1
-    } };
+    register_email 'foo' => { email => 'test@example.com', notify_comments => 0, notify_likes => 1 };
 
     my $quest = http_json POST => '/api/quest', { params => {
         name => 'q1',
