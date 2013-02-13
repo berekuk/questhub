@@ -146,6 +146,9 @@ sub email_comment :Tests {
     my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'foo-quest', status => 'open' } };
     my $quest_id = $quest_result->{_id};
 
+    http_json POST => "/api/quest/$quest_id/comment", { params => { body => "self-commenting." } };
+    is(Email::Sender::Simple->default_transport->delivery_count, 0, "self-comment does't send an email");
+
     http_json GET => "/api/fakeuser/bar";
     Dancer::session login => 'bar';
     http_json POST => "/api/quest/$quest_id/comment", { params => { body => "Hello sweetie." } };

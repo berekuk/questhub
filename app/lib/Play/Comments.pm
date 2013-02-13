@@ -60,21 +60,24 @@ sub add {
         },
     });
 
-    if (my $email = $users->get_email($quest->{user}, 'notify_comments')) {
-        # TODO - quoting
-        # TODO - unsubscribe link
-        my $email_body = qq[
-            <p>
-            <a href="http://].setting('hostport').qq[/player/$params{author}">$params{author}</a> commented on your quest <a href="http://].setting('hostport').qq[/quest/$params{quest_id}">$quest->{name}</a>:
-            <hr>
-            </p>
-            <p>$body_html</p>
-        ];
-        $events->email(
-            $email,
-            "$params{author} commented on '$quest->{name}'",
-            $email_body,
-        );
+    if ($params{author} ne $quest->{user}) {
+        my $email = $users->get_email($quest->{user}, 'notify_comments');
+        if ($email) {
+            # TODO - quoting
+            # TODO - unsubscribe link
+            my $email_body = qq[
+                <p>
+                <a href="http://].setting('hostport').qq[/player/$params{author}">$params{author}</a> commented on your quest <a href="http://].setting('hostport').qq[/quest/$params{quest_id}">$quest->{name}</a>:
+                <hr>
+                </p>
+                <p>$body_html</p>
+            ];
+            $events->email(
+                $email,
+                "$params{author} commented on '$quest->{name}'",
+                $email_body,
+            );
+        }
     }
 
     return { _id => $id->to_string, body_html => _body_html($params{body}) };
