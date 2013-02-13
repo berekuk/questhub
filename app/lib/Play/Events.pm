@@ -4,6 +4,8 @@ use Moo;
 use Play::Mongo;
 use Params::Validate qw(:all);
 
+use Dancer qw(setting);
+
 use Email::Simple;
 use Email::Sender::Simple qw(sendmail);
 use Encode qw(encode_utf8);
@@ -39,7 +41,7 @@ sub email {
     my $email = Email::Simple->create(
         header => [
             To => $address,
-            From => 'Play Perl <notification@play-perl.org>', # TODO - take from config
+            From => 'Play Perl <notification@'.setting('hostport').'>',
             Subject => $subject,
             'Reply-to' => 'Vyacheslav Matyukhin <me@berekuk.ru>', # TODO - take from config
             'Content-Type' => 'text/html; charset=utf-8',

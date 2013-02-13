@@ -8,6 +8,8 @@ use Play::Users;
 use Play::Events;
 use Play::Comments;
 
+use Dancer qw(setting);
+
 my $users = Play::Users->new;
 my $events = Play::Events->new;
 my $comments = Play::Comments->new;
@@ -187,7 +189,7 @@ sub like {
     if (my $email = $users->get_email($quest->{user}, 'notify_likes')) {
         my $email_body = qq[
             <p>
-            <a href="http://play-perl.org/player/$user">$user</a> likes your quest <a href="http://play-perl.org/quest/$quest->{_id}">$quest->{name}</a>!<br>
+            <a href="http://].setting('hostport').qq[/player/$user">$user</a> likes your quest <a href="http://].setting('hostport').qq[/quest/$quest->{_id}">$quest->{name}</a>!<br>
             </p>
         ];
         if ($quest->{status} eq 'open') {

@@ -7,6 +7,8 @@ use Play::Mongo;
 use Play::Events;
 use Play::Quests; # recursive dependency!
 
+use Dancer qw(setting);
+
 my $events = Play::Events->new;
 
 has 'settings_collection' => (
@@ -151,7 +153,7 @@ sub confirm_email {
     };
     $events->email(
         $settings->{email},
-        "Email at Play Perl is confirmed, $login",
+        "Your email at Play Perl is confirmed, $login",
         qq[
             <p>
             Login: $login<br>
@@ -160,7 +162,7 @@ sub confirm_email {
             Notify about comments on your quests: ].$bool2str->('notify_likes').q[
             </p>
             <p>
-            You can customize email notifications <a href="http://play-perl.org">at the website</a>.
+            You can customize email notifications <a href="http://].setting('hostport').qq[">at the website</a>.
             </p>
         ]
     );
@@ -172,12 +174,17 @@ sub _send_email_confirmation {
 
     # need email confirmation
     my $secret = int rand(100000000000);
-    my $link = "http://play-perl.org/register/confirm/$login/$secret";
+    my $link = "http://".setting('hostport')."/register/confirm/$login/$secret";
     $events->email(
         $email,
-        "Your Play Perl registration link, $login",
+        "Your Play Perl email confirmation link, $login",
         qq{
-            Here you go: <a href="$link">$link</a>.
+            <p>
+            Click this if you registered on Play Perl recently: <a href="$link">$link</a>.
+            </p>
+            <p>
+            If you think this email is a mistake, just ignore this message.
+            </p>
         }
     );
     return $secret;

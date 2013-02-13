@@ -111,7 +111,7 @@ sub email_confirmation :Tests {
     my @deliveries = Email::Sender::Simple->default_transport->deliveries;
     is scalar(@deliveries), 1, 'registration email received';
     cmp_deeply $deliveries[0]->{envelope}, {
-        from => 'notification@play-perl.org',
+        from => 'notification@localhost',
         to => [ 'someone@somewhere.com' ],
     }, 'from & to addresses';
     my ($secret) = _email_to_secret($deliveries[0]);

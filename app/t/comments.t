@@ -153,7 +153,7 @@ sub email_comment :Tests {
     my @deliveries = Email::Sender::Simple->default_transport->deliveries;
     is scalar(@deliveries), 1, '1 email sent';
     cmp_deeply $deliveries[0]{envelope}, {
-        from => 'notification@play-perl.org',
+        from => 'notification@localhost',
         to => [ 'test@example.com' ],
     }, 'from & to addresses';
 }

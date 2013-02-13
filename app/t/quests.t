@@ -326,7 +326,7 @@ sub email_like :Tests {
     is scalar(@deliveries), 1, '1 email sent';
     my $email = $deliveries[0];
     cmp_deeply $email->{envelope}, {
-        from => 'notification@play-perl.org',
+        from => 'notification@localhost',
         to => [ 'test@example.com' ],
     }, 'from & to addresses';
 

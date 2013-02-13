@@ -5,6 +5,8 @@ use Params::Validate qw(:all);
 use Play::Mongo;
 use Text::Markdown qw(markdown);
 
+use Dancer qw(setting);
+
 my $events = Play::Events->new;
 my $quests = Play::Quests->new;
 my $users = Play::Users->new;
@@ -63,7 +65,7 @@ sub add {
         # TODO - unsubscribe link
         my $email_body = qq[
             <p>
-            <a href="http://play-perl.org/player/$params{author}">$params{author}</a> commented on your quest <a href="http://play-perl.org/quest/$params{quest_id}">$quest->{name}</a>:
+            <a href="http://].setting('hostport').qq[/player/$params{author}">$params{author}</a> commented on your quest <a href="http://].setting('hostport').qq[/quest/$params{quest_id}">$quest->{name}</a>:
             <hr>
             </p>
             <p>$body_html</p>
