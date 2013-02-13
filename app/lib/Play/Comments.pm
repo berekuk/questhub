@@ -57,8 +57,8 @@ sub add {
             quest => $quest,
         },
     });
-    my $user_settings = $users->get_settings($quest->{user});
-    if ($user_settings->{notify_comments} and $params{author} ne $quest->{user}) {
+
+    if (my $email = $users->get_email($quest->{user}, 'notify_comments')) {
         # TODO - quoting
         # TODO - unsubscribe link
         my $email_body = qq[
@@ -69,7 +69,7 @@ sub add {
             <p>$body_html</p>
         ];
         $events->email(
-            $user_settings->{email},
+            $email,
             "$params{author} commented on '$quest->{name}'",
             $email_body,
         );
