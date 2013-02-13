@@ -147,10 +147,13 @@ pp.View.Common = pp.View.Base.extend({
 
     remove: function () {
         var that = this;
-        _.each(_.keys(this._subviewInstances), function(key) {
-            var subview = that._subviewInstances[key];
-            subview.remove();
-        });
+        // _subviewInstances can be undefined if view was never activated
+        if (this._subviewInstances) {
+            _.each(_.keys(this._subviewInstances), function(key) {
+                var subview = that._subviewInstances[key];
+                subview.remove();
+            });
+        }
         pp.View.Base.prototype.remove.apply(this, arguments);
     }
 });
