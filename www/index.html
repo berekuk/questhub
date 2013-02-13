@@ -308,7 +308,8 @@
 
                 <% if (currentUser && user.get("login") == currentUser) { %>
                   <div class="current-user-leaderboard-tip">
-                  <span data-toggle="tooltip" data-trigger="manual" data-placement="right" title="This is you. Climb up!"></span>
+                    <!-- Bootstrap 2.3.0 tries to line up the text vertically, so we have to use &nbsp; -->
+                    <span data-toggle="tooltip" data-trigger="manual" data-placement="right" title="This&nbsp;is&nbsp;you.&nbsp;Climb&nbsp;up!"></span>
                   </div>
                 <% } %>
 
@@ -373,7 +374,9 @@
           </div>
           <div class="modal-body modal-quest-add">
             <div class="row-fluid add-quest-field">
-              <small class="muted">Quest type is optional.</small>
+              <div>
+                <small class="muted">Quest type is optional.</small>
+              </div>
               <div class="btn-group quest-type-select">
                 <button type="button" class="btn" quest-type="bug">Bug</button>
                 <button type="button" class="btn" quest-type="blog">Blog post</button>
