@@ -29,11 +29,15 @@ pp.views.CommentCollection = pp.View.AnyCollection.extend({
 
     // set the appropriate "add comment" button style
     validate: function (e) {
-        if (this.celem().val()) {
+        var text = this.celem().val();
+        if (text) {
             this.$('.submit').removeClass('disabled');
+            this.$('.comment-preview').show();
+            this.$('.comment-preview').html(pp.app.view.markdownToHtml(text));
         }
         else {
             this.$('.submit').addClass('disabled');
+            this.$('.comment-preview').hide();
         }
     },
 

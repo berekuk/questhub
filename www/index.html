@@ -361,7 +361,7 @@
         <%= partial.user({ login: object.quest.user }) %>'s quest
         <a href="/quest/<%= object.quest._id %>"><%= object.quest.name %></a>:
         <div class="well well-small event-comment-well">
-          <%= object.body_html %>
+          <%= pp.app.view.markdownToHtml(object.body) %>
         </div>
     </script>
 
@@ -472,6 +472,7 @@
       <% if (currentUser) { %>
       <div class="comment-add">
         <textarea name="comment" rows="3" placeholder="Comment (Markdown syntax supported)" class="span6"></textarea>
+        <div class="well well-small comment-preview hide"></div>
         <div>
           <button class="btn btn-primary btn-large submit disabled">Add comment</button>
         </div>
@@ -489,7 +490,7 @@
 
         <p>
         <div class="comment-content">
-          <%= body_html %>
+          <%= pp.app.view.markdownToHtml(body) %>
         </div>
         <% if (my) { %>
             <textarea class="comment-edit" style="display: none"><%= body %></textarea>
@@ -584,6 +585,8 @@
     <script src="/vendors/backbone-min.js"></script>
     <script src="/vendors/jquery.cookie.js"></script>
     <script src="/vendors/jquery.timeago.js"></script>
+    <script src="/vendors/pagedown/Markdown.Converter.js"></script>
+    <script src="/vendors/pagedown/Markdown.Sanitizer.js"></script>
 
     <script>
         var pp = {

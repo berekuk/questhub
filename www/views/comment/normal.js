@@ -64,6 +64,7 @@ pp.views.Comment = pp.View.Common.extend({
     serialize: function () {
         var params = this.model.toJSON();
         params.my = this.isOwned();
+
         return params;
     },
 
