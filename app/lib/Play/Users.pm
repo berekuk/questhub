@@ -158,11 +158,11 @@ sub confirm_email {
             <p>
             Login: $login<br>
             Email: $settings->{email}<br>
-            Notify about likes on your quests: ].$bool2str->('notify_likes').q[<br>
-            Notify about comments on your quests: ].$bool2str->('notify_likes').q[
+            Notify about comments on your quests: ].$bool2str->('notify_comments').q[<br>
+            Notify about likes on your quests: ].$bool2str->('notify_likes').q[
             </p>
             <p>
-            You can customize email notifications <a href="http://].setting('hostport').qq[">at the website</a>.
+            You can customize your email notifications <a href="http://].setting('hostport').qq[">at the website</a>.
             </p>
         ]
     );
@@ -183,7 +183,7 @@ sub _send_email_confirmation {
             Click this if you registered on Play Perl recently: <a href="$link">$link</a>.
             </p>
             <p>
-            If you think this email is a mistake, just ignore this message.
+            If you think this is a mistake, just ignore this message.
             </p>
         }
     );
