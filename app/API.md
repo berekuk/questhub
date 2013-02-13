@@ -23,6 +23,12 @@ Register the new user login, associate it with the current twitter user, save to
 
 `settings` param can contain initial user settings (json-encoded).
 
+##### POST /api/register/confirm_email
+
+Params: `login`, `secret`.
+
+Confirm the email ownership.
+
 ##### GET /api/fakeuser/{login}
 
 Fake analog of `/api/register`; dev mode only.

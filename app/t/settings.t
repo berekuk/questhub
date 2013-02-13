@@ -92,11 +92,11 @@ sub email_confirmation :Tests {
         notify_comments => 1,
     }, "user can't change secret or protected settings";
 
-    my $response = dancer_response GET => '/api/user/bar/confirm_email/iddqd';
+    my $response = dancer_response POST => '/api/register/confirm_email', { params => { login => 'bar', secret => 'iddqd' } };
     is $response->status, 500;
     like $response->content, qr/didn't expect email confirmation/, 'no confirmation for non-existing user';
 
-    $response = dancer_response GET => '/api/user/foo/confirm_email/iddqd';
+    my $response = dancer_response POST => '/api/register/confirm_email', { params => { login => 'foo', secret => 'iddqd' } };
     is $response->status, 500;
     like $response->content, qr/secret for foo is invalid/;
 
@@ -123,12 +123,16 @@ sub email_confirmation :Tests {
         Dancer::session login => 'foo';
     }
 
-    http_json GET => "/api/user/foo/confirm_email/$secret"; # yay, confirmed
+    http_json POST => '/api/register/confirm_email', { params => { login => 'foo', secret => $secret } }; # yay, confirmed
     my $settings = http_json GET => '/api/current_user/settings';
     cmp_deeply $settings, superhashof({
         email => 'someone@somewhere.com',
         email_confirmed => 1,
     }), "email_confirmed flag in settings";
+
+    # TODO - check contents
+    is(Email::Sender::Simple->default_transport->delivery_count, 1, "confirmation's confirmation email");
+    Email::Sender::Simple->default_transport->clear_deliveries;
 
     # now other emails are working
     {
@@ -140,6 +144,8 @@ sub email_confirmation :Tests {
         http_json POST => "/api/quest/$quest->{_id}/like";
         is(Email::Sender::Simple->default_transport->delivery_count, 1);
     }
+
+    # TODO - check that further email changes reset the confirmation status!
 }
 
 __PACKAGE__->new->runtests;

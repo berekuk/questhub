@@ -56,12 +56,6 @@ get '/current_user/settings' => sub {
     return $users->get_settings($login);
 };
 
-# not under /current_user because we want confirmation to work even for not-logged-in users
-get '/user/:login/confirm_email/:secret' => sub {
-    $users->confirm_email(param('login') => param('secret')); # throws an exception if something's wrong
-    return { confirmed => 1 };
-};
-
 any ['put', 'post'] => '/current_user/settings' => sub {
     die "not logged in" unless session->{login};
     $users->set_settings(
@@ -107,6 +101,13 @@ post '/register' => sub {
     }
 
     return { status => "ok", user => $user };
+};
+
+# user doesn't need to be logged to use this route
+post '/register/confirm_email' => sub {
+    # throws an exception if something's wrong
+    $users->confirm_email(param('login') => param('secret'));
+    return { confirmed => 1 };
 };
 
 get '/user' => sub {

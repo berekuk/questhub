@@ -46,7 +46,7 @@ sub register_email {
 
     my @deliveries = Email::Sender::Simple->default_transport->deliveries;
     my ($secret) = $deliveries[0]->{email}->get_body =~ qr/(\d+)</;
-    http_json GET => "/api/user/$user/confirm_email/$secret";
+    http_json POST => "/api/register/confirm_email", { params => { login => $user, secret => $secret } };
     Email::Sender::Simple->default_transport->clear_deliveries;
 }
 

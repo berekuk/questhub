@@ -187,7 +187,7 @@ sub set_settings {
         # need email confirmation
         my $secret = int rand(100000000000);
         $settings->{email_confirmation_secret} = $secret;
-        my $link = "http://play-perl.org/api/user/$login/confirm_email/$secret";
+        my $link = "http://play-perl.org/register/confirm/$login/$secret";
         $events->email(
             $settings->{email},
             "Your Play Perl registration link, $login",
