@@ -86,9 +86,11 @@ $(function () {
         },
 
         userList: function () {
-            var users = new pp.models.UserCollection();
-            var view = new pp.views.UserCollection({ users: users });
-            users.fetch();
+            var collection = new pp.models.UserCollection([], {
+               'sort_key': 'leaderboard'
+            });
+            var view = new pp.views.UserCollection({ collection: collection });
+            collection.fetch();
             appView.setPageView(view);
             setActiveMenuItem('user-list');
         },
