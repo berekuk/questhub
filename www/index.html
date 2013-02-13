@@ -206,11 +206,13 @@
     <script type="text/template" id="template-user-settings">
       <div class="form-horizontal">
         <input name="email" type="text" placeholder="Email" value="<%= obj.email || '' %>">
-        <% if (obj.email_confirmed) { %>
-          <span class="label label-success">Confirmed</span>
-        <% } else if (obj.email) { %>
-          <button class="btn btn-warning resend-email-confirmation">Not confirmed. Resend confirmation key?</button>
-        <% } %>
+        <span class="email-status <%= obj.hideEmailStatus ? "hide" : "" %>">
+          <% if (obj.email_confirmed) { %>
+            <span class="label label-success">Confirmed</span>
+          <% } else if (obj.email) { %>
+            <button class="btn btn-warning resend-email-confirmation">Not confirmed. Resend confirmation key?</button>
+          <% } %>
+        </div>
       </div>
       <div>
         <span class="muted">Notify me by email when someone...</span>

@@ -21,6 +21,7 @@ pp.views.UserSettingsBox = pp.View.Common.extend({
     },
 
     start: function () {
+        this.subview('.settings-subview').start();
         this.render();
         this.$('.modal').modal('show');
         this.model.fetch();
