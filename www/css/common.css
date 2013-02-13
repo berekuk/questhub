@@ -106,6 +106,7 @@ html, body {
 
 #wrap > .container {
     padding-top: 60px;
+    padding-bottom: 30px;
 }
 .container .credit {
     margin: 20px 0;
