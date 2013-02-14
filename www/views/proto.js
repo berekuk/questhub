@@ -104,8 +104,8 @@ pp.View.Common = pp.View.Base.extend({
         if (!this.activated) {
             this.activated = true;
             this.initSubviews();
-            this.render();
         }
+        this.render();
     },
 
     render: function () {

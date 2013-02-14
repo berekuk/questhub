@@ -2,28 +2,15 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
     t: 'user-collection',
 
     events: {
-        "click .show-switch": "switchAll",
+        "click .show-more": "showMore",
     },
 
     listSelector: '.users-list',
 
-    all: false,
-
-    switchAll: function () {
-        this.all = !this.all;
-        this.render();
-    },
-
-    render: function () {
-        var that = this;
-        var users = this.collection.filter(function(user) {
-            if (that.all || user.get('open_quests') > 0 || user.get('points') > 0) {
-                return true;
-            }
-            return false;
-        });
-        this.collection.reset(users, { silent: true });
-        pp.View.AnyCollection.prototype.render.apply(this, arguments);
+    showMore: function () {
+        // FIXME: this is O(N^2).
+        // Let's hope that Play Perl will grow popular enough that it'll need to be fixed.
+        this.collection.fetchMore(20);
     },
 
     generateItem: function (model) {
@@ -33,6 +20,7 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
     },
 
     afterRender: function () {
+        console.log('afterRender');
         pp.View.AnyCollection.prototype.afterRender.apply(this, arguments);
         this.$el.find('[data-toggle=tooltip]').tooltip('show');
     }
