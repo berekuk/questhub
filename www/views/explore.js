@@ -25,7 +25,8 @@ pp.views.Explore = pp.View.Common.extend({
         collection.sort();
 
         return new pp.views.QuestCollection({
-            collection: collection
+            collection: collection,
+            showAuthor: true
         });
     }
 });
