@@ -1,6 +1,10 @@
 pp.views.Event = pp.View.Base.extend({
     template: function () {
-        return _.template($('#template-event-' + this.model.get('action') + '-' + this.model.get('object_type')).text());
+        var templateElem = $('#template-event-' + this.model.get('action') + '-' + this.model.get('object_type'));
+        if (!templateElem.length) {
+            templateElem = $('#template-event-unknown');
+        }
+        return _.template(templateElem.text());
     },
 
     render: function () {
