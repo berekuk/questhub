@@ -1,20 +1,26 @@
 pp.models.UserCollection = Backbone.Collection.extend({
 
+    _opt2cgi: {
+        'sort_key': 'sort',
+        'order': 'order',
+        'limit': 'limit',
+        'offset': 'offset'
+    },
+
     url: function() {
         var url = '/api/user';
         var cgi = [];
-        if (this.options.sort_key) {
-            cgi.push('sort=' + this.options.sort_key);
-        }
-        if (this.options.order) {
-            cgi.push('order=' + this.options.order);
-        }
-        if (this.options.limit) {
-            cgi.push('limit=' + this.options.limit);
-        }
+
+        _.each(this._opt2cgi, function (cgiKey, optKey) {
+            if (this.options[optKey]) {
+                cgi.push(cgiKey + '=' + this.options[optKey]);
+            }
+        }, this);
+
         if (cgi.length) {
             url += '?' + cgi.join('&');
         }
+        console.log(url);
         return url;
     },
 
@@ -22,9 +28,18 @@ pp.models.UserCollection = Backbone.Collection.extend({
         this.options = args;
     },
 
-    fetchMore: function (count) {
-        this.options.limit += count;
-        this.fetch();
+    // pager
+    // supports { success: ..., error: ... } as a second parameter
+    fetchMore: function (count, options) {
+        this.options.offset = this.length;
+        this.options.limit = count;
+
+        if (!options) {
+            options = {};
+        }
+        options.update = true;
+        options.remove = false;
+        this.fetch(options);
     },
 
     model: pp.models.AnotherUser

@@ -25,6 +25,8 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
     },
 
     checkShowMoreButton: function () {
+        console.log('userCount: ' + this.userCount);
+        console.log('length: ' + this.collection.length);
         if (this.userCount > this.collection.length) {
             this.$('.show-more').show();
         }
@@ -54,17 +56,20 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
     afterInitialize: function () {
         pp.View.AnyCollection.prototype.afterInitialize.apply(this, arguments);
         this.progress(); // app.js fetches the collection for the first time immediately
-        this.listenTo(this.collection, 'reset', this.updateUserCount); // update user count after the collection fetch
+        this.collection.once('reset', this.updateUserCount, this); // update user count after the initial collection fetch
+        this.collection.on('all', function (e) { console.log(e) });
         this.listenTo(this.collection, 'error', this.noProgress);
         this.render();
     },
 
     showMore: function () {
-        // FIXME: this is O(N^2).
-        // Let's hope that Play Perl will grow popular enough that it'll need to be fixed.
-        this.collection.fetchMore(50);
-        this.$('.show-more').hide();
-        this.progress();
+        var that = this;
+        this.collection.fetchMore(50, {
+            success: function () {
+                that.$('.show-more').hide();
+                that.updateUserCount();
+            }
+        });
     },
 
     generateItem: function (model) {
