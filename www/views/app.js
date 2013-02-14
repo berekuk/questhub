@@ -6,7 +6,8 @@ pp.views.App = pp.View.Base.extend({
 
         this._markdownConverter = new Markdown.getSanitizingConverter();
         this._markdownConverter.hooks.chain('postSpanGamut', function (text) {
-            text = text.replace(/(\w+(?:::\w+)+)(?![^<>]*>)(?![^<>]*(?:>|<\/a>|<\/code>))/g, '<a href="http://metacpan.org/module/\$1">\$1</a>');
+            text = text.replace(/\b(\w+(?:::\w+)+)(?![^<>]*>)(?![^<>]*(?:>|<\/a>|<\/code>))/g, '<a href="http://metacpan.org/module/\$1">\$1</a>');
+            text = text.replace(/\bcpan:(\w+)(?![^<>]*>)(?![^<>]*(?:>|<\/a>|<\/code>))/g, '<a href="http://metacpan.org/module/\$1">\$1</a>');
             return text;
         });
     },
