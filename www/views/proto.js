@@ -189,6 +189,9 @@ pp.View.AnyCollection = pp.View.Common.extend({
     afterRender: function () {
         this.removeItemSubviews();
         this.collection.each(this.renderOne, this);
+        if (this.collection.length) {
+            this.$el.find(this.listSelector).show(); // collection table is hidden initially - see https://github.com/berekuk/play-perl/issues/61
+        }
     },
 
     generateItem: function (model) {
@@ -199,7 +202,6 @@ pp.View.AnyCollection = pp.View.Common.extend({
         var view = this.generateItem(model);
         this.itemSubviews.push(view);
         var list = this.$el.find(this.listSelector);
-        list.show(); // collection table is hidden initially - see https://github.com/berekuk/play-perl/issues/61
         list.append(view.render().el);
     },
 
