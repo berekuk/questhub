@@ -119,7 +119,7 @@ post '/register/confirm_email' => sub {
 
 get '/user' => sub {
     return $users->list({
-        map { param($_) ? ($_ => param($_)) : () } qw/ sort order limit /,
+        map { param($_) ? ($_ => param($_)) : () } qw/ sort order limit offset /,
     });
 };
 

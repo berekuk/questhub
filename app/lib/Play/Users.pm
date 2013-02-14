@@ -75,6 +75,7 @@ sub list {
         sort => { type => SCALAR, optional => 1 },
         order => { type => SCALAR, regex => qr/^asc|desc$/, default => 'asc' },
         limit => { type => SCALAR, regex => qr/^\d+$/, optional => 1 },
+        offset => { type => SCALAR, regex => qr/^\d+$/, default => 0 },
     });
 
     my @users = $self->collection->find()->all; # fetch everyone
@@ -109,7 +110,7 @@ sub list {
     }
 
     if ($params->{limit} and @users > $params->{limit}) {
-        @users = splice @users, 0, $params->{limit};
+        @users = splice @users, $params->{offset}, $params->{limit};
     }
 
     return \@users;
