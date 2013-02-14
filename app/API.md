@@ -69,6 +69,10 @@ Options:
 
 Special `sort` value `leaderboard` can be used for composite points->open_quests sorting. It doesn't support order, i.e. it's always descending.
 
+##### GET /api/user_count
+
+Get a total number of users.
+
 ### Quests
 
 ##### POST /api/quest

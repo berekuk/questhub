@@ -116,6 +116,9 @@ sub users_list :Tests {
             },
         } qw( blah blah2 )
     ];
+
+    my $result = http_json GET => '/api/user_count';
+    cmp_deeply $result, { count => 3 }, 'user_count';
 }
 
 sub open_quests_count :Tests {

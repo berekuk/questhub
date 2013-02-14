@@ -123,6 +123,11 @@ get '/user' => sub {
     });
 };
 
+get '/user_count' => sub {
+    my $count = scalar @{ $users->list };
+    return { count => $count };
+};
+
 post '/logout' => sub {
 
     session->destroy(session); #FIXME: workaround a buggy Dancer::Session::MongoDB
