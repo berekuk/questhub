@@ -1,38 +1,85 @@
-pp.views.UserCollection = pp.View.Base.extend({
-
-    template: _.template($('#template-user-collection').text()),
+pp.views.UserCollection = pp.View.AnyCollection.extend({
+    t: 'user-collection',
 
     events: {
-        "click .show-switch": "switchAll",
+        "click .show-more": "showMore",
     },
 
-    initialize: function () {
-        this.collection.on('reset', this.render, this);
-        this.all = false;
+    listSelector: '.users-list',
+
+    activated: true,
+
+    progress: function () {
+        this.noProgress();
+        var that = this;
+        this.progressPromise = window.setTimeout(function () {
+            that.$('.progress').show();
+        }, 500);
     },
 
-    switchAll: function () {
-        this.all = !this.all;
+    noProgress: function () {
+        this.$('.progress').hide();
+        if (this.progressPromise) {
+            window.clearTimeout(this.progressPromise);
+        }
+    },
+
+    checkShowMoreButton: function () {
+        console.log('userCount: ' + this.userCount);
+        console.log('length: ' + this.collection.length);
+        if (this.userCount > this.collection.length) {
+            this.$('.show-more').show();
+        }
+        else {
+            this.$('.show-more').hide();
+        }
+    },
+
+    updateUserCount: function () {
+
+        this.progress();
+
+        var that = this;
+
+        $.get('/api/user_count')
+        .done(function (data) {
+            that.userCount = data.count;
+            that.$('.progress').hide();
+            that.noProgress.apply(that);
+            that.checkShowMoreButton();
+        })
+        .fail(function (response) {
+            pp.app.onError(false, response);
+        });
+    },
+
+    afterInitialize: function () {
+        pp.View.AnyCollection.prototype.afterInitialize.apply(this, arguments);
+        this.progress(); // app.js fetches the collection for the first time immediately
+        this.collection.once('reset', this.updateUserCount, this); // update user count after the initial collection fetch
+        this.collection.on('all', function (e) { console.log(e) });
+        this.listenTo(this.collection, 'error', this.noProgress);
         this.render();
     },
 
-    render: function () {
-
+    showMore: function () {
         var that = this;
-        var users = this.collection.filter(function(user) {
-            if (that.all || user.get('open_quests') > 0 || user.get('points') > 0) {
-                return true;
+        this.collection.fetchMore(50, {
+            success: function () {
+                that.$('.show-more').hide();
+                that.updateUserCount();
             }
-            return false;
         });
+    },
 
-        this.$el.html(this.template({
-            users: users,
-            all: this.all,
-            partial: this.partial,
-            currentUser: pp.app.user.get('login') // used for highlighting
-        }));
-        that.$el.find('[data-toggle=tooltip]').tooltip('show');
-        return this;
+    generateItem: function (model) {
+        return new pp.views.UserSmall({
+            model: model
+        });
+    },
+
+    afterRender: function () {
+        pp.View.AnyCollection.prototype.afterRender.apply(this, arguments);
+        this.$el.find('[data-toggle=tooltip]').tooltip('show');
     }
 });

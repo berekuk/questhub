@@ -119,8 +119,13 @@ post '/register/confirm_email' => sub {
 
 get '/user' => sub {
     return $users->list({
-        map { param($_) ? ($_ => param($_)) : () } qw/ sort order /,
+        map { param($_) ? ($_ => param($_)) : () } qw/ sort order limit offset /,
     });
+};
+
+get '/user_count' => sub {
+    my $count = scalar @{ $users->list };
+    return { count => $count };
 };
 
 post '/logout' => sub {

@@ -74,6 +74,8 @@ sub list {
     my $params = validate(@_, {
         sort => { type => SCALAR, optional => 1 },
         order => { type => SCALAR, regex => qr/^asc|desc$/, default => 'asc' },
+        limit => { type => SCALAR, regex => qr/^\d+$/, optional => 1 },
+        offset => { type => SCALAR, regex => qr/^\d+$/, default => 0 },
     });
 
     my @users = $self->collection->find()->all; # fetch everyone
@@ -89,7 +91,9 @@ sub list {
         $quser->{open_quests}++;
     }
 
-    # sorting on the client side, because 'open_quests' is not a user's attribute
+    # Sorting on the client side, because 'open_quests' is not a user's attribute.
+    # Besides fetching the whole DB even if limit is set, this means we're N^2 on paging (see the frontend /players implementation).
+    # Let's hope that Play Perl will grow popular enough that it'll need to be fixed :)
     if ($params->{sort} and $params->{sort} eq 'leaderboard') {
         # special sorting, composite points->open_quests order
         @users = sort {
@@ -105,6 +109,10 @@ sub list {
             my $c = ($a->{$params->{sort}} || 0) <=> ($b->{$params->{sort}} || 0);
             return $c * $order_flag;
         } @users;
+    }
+
+    if ($params->{limit} and @users > $params->{limit}) {
+        @users = splice @users, $params->{offset}, $params->{limit};
     }
 
     return \@users;

@@ -127,3 +127,8 @@ html, body {
 .quest-row td {
     line-height: 25px;
 }
+
+/* trying to reduce the page jerkiness */
+.show-more-or-progress {
+    height: 60px;
+}

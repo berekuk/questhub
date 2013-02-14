@@ -83,27 +83,59 @@ sub logout :Tests {
 
 sub users_list :Tests {
     my $self = shift;
-    $self->_add_users;
+
+    for my $user (qw( blah blah2 blah3 )) {
+        http_json GET => "/api/fakeuser/$user";
+    }
 
     my $user = http_json GET => '/api/user';
     cmp_deeply $user, [
-        {
-            twitter => {
-                screen_name => 'blah',
+        map {
+            {
+                twitter => {
+                    screen_name => $_,
+                },
+                _id => re('\S+'),
+                login => $_,
+                points => 0,
             },
-            _id => re('\S+'),
-            login => 'blah',
-            points => 0,
-        },
-        {
-            twitter => {
-                screen_name => 'blah2',
-            },
-            _id => re('\S+'),
-            login => 'blah2',
-            points => 0,
-        },
+        } qw( blah blah2 blah3 )
     ];
+}
+
+
+sub users_list_limit_offset :Tests {
+    my $self = shift;
+
+    for my $user (map { "blah$_" } (1..5)) {
+        http_json GET => "/api/fakeuser/$user";
+    }
+
+    my $gen_expected = sub {
+        return [
+            map {
+                {
+                    twitter => {
+                        screen_name => $_,
+                    },
+                    _id => re('\S+'),
+                    login => $_,
+                    points => 0,
+                },
+            } @_
+        ];
+    };
+
+    # limit
+    my $user = http_json GET => '/api/user?limit=2';
+    cmp_deeply $user, $gen_expected->(qw/ blah1 blah2 /);
+
+    # offset
+    my $user = http_json GET => '/api/user?limit=3&offset=1';
+    cmp_deeply $user, $gen_expected->(qw/ blah2 blah3 blah4 /);
+
+    my $result = http_json GET => '/api/user_count';
+    cmp_deeply $result, { count => 5 }, 'user_count';
 }
 
 sub open_quests_count :Tests {

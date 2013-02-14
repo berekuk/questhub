@@ -65,8 +65,14 @@ Options:
 
 * `sort` - any numerical field, e.g. `open_quests` or `points`
 * `order` - `asc` or `desc`, with `asc` being the default
+* `limit`
+* `offset`
 
 Special `sort` value `leaderboard` can be used for composite points->open_quests sorting. It doesn't support order, i.e. it's always descending.
+
+##### GET /api/user_count
+
+Get a total number of users.
 
 ### Quests
 
