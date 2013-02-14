@@ -1,15 +1,13 @@
-pp.views.UserCollection = pp.View.Base.extend({
-
-    template: _.template($('#template-user-collection').text()),
+pp.views.UserCollection = pp.View.AnyCollection.extend({
+    t: 'user-collection',
 
     events: {
         "click .show-switch": "switchAll",
     },
 
-    initialize: function () {
-        this.collection.on('reset', this.render, this);
-        this.all = false;
-    },
+    listSelector: '.users-list',
+
+    all: false,
 
     switchAll: function () {
         this.all = !this.all;
@@ -17,7 +15,6 @@ pp.views.UserCollection = pp.View.Base.extend({
     },
 
     render: function () {
-
         var that = this;
         var users = this.collection.filter(function(user) {
             if (that.all || user.get('open_quests') > 0 || user.get('points') > 0) {
@@ -25,14 +22,18 @@ pp.views.UserCollection = pp.View.Base.extend({
             }
             return false;
         });
+        this.collection.reset(users, { silent: true });
+        pp.View.AnyCollection.prototype.render.apply(this, arguments);
+    },
 
-        this.$el.html(this.template({
-            users: users,
-            all: this.all,
-            partial: this.partial,
-            currentUser: pp.app.user.get('login') // used for highlighting
-        }));
-        that.$el.find('[data-toggle=tooltip]').tooltip('show');
-        return this;
+    generateItem: function (model) {
+        return new pp.views.UserSmall({
+            model: model
+        });
+    },
+
+    afterRender: function () {
+        pp.View.AnyCollection.prototype.afterRender.apply(this, arguments);
+        this.$el.find('[data-toggle=tooltip]').tooltip('show');
     }
 });
