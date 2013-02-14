@@ -149,12 +149,13 @@
     <script type="text/template" id="template-dashboard">
       <div class="container-fluid">
         <div class="row-fluid">
-            <div class="span3">
-                <div class="user"></div>
-                <div class="new-quest" style="display:none">
-                    <button type="button" class="btn btn-primary quest-add-dialog">New quest</button>
-                </div>
+          <div class="span3">
+            <div class="user">
             </div>
+            <div class="new-quest" style="display:none">
+              <button type="button" class="btn btn-primary quest-add-dialog">New quest</button>
+            </div>
+          </div>
           <div class="span9">
             <div class="open-quests"></div>
             <div class="closed-quests"></div>
@@ -250,6 +251,24 @@
           <span class="label label-inverse quest-type-label"><%= type %></span>
           <% } %>
       </td>
+    </script>
+
+    <!-- explore tab -->
+    <script type="text/template" id="template-explore">
+      <div class="row-fluid">
+        <div class="span1"></div>
+        <div class="span10">
+          <ul class="nav nav-tabs">
+              <li class="active"><a href="#" data-target="#open-quests-tab" data-toggle="tab">Open</a></li>
+              <li><a href="#" data-target="#closed-quests-tab" data-toggle="tab">Completed</a></li>
+          </ul>
+          <div class="tab-content">
+            <div id="open-quests-tab" class="tab-pane active">
+            </div>
+            <div id="closed-quests-tab" class="tab-pane">
+            </div>
+          </div>
+        </div>
     </script>
 
     <!-- registration form -->
@@ -544,6 +563,7 @@
                 <li class="active menu-item-home"><a href="/">Home</a></li>
                 <li class="menu-item-event-list"><a href="/feed">News Feed</a></li>
                 <li class="menu-item-user-list"><a href="/players">Players</a></li>
+                <li class="menu-item-explore"><a href="/explore">Explore</a></li>
                 <li class="menu-item-about"><a href="/about">About</a></li>
               </ul>
               <p class="navbar-text pull-right"></p>
@@ -600,10 +620,9 @@
 
     <script src="/views/proto.js"></script>
     <script src="/views/app.js"></script>
-    <script src="/views/comment/collection.js"></script>
-    <script src="/views/comment/normal.js"></script>
-    <script src="/views/dashboard.js"></script>
     <script src="/views/notify.js"></script>
+    <script src="/views/dashboard.js"></script>
+    <script src="/views/explore.js"></script>
     <script src="/views/home.js"></script>
     <script src="/views/quest/add.js"></script>
     <script src="/views/quest/big.js"></script>
@@ -617,6 +636,8 @@
     <script src="/views/user/settings-box.js"></script>
     <script src="/views/user/big.js"></script>
     <script src="/views/user/collection.js"></script>
+    <script src="/views/comment/collection.js"></script>
+    <script src="/views/comment/normal.js"></script>
     <script src="/views/event/box.js"></script>
     <script src="/views/event/normal.js"></script>
     <script src="/views/event/collection.js"></script>

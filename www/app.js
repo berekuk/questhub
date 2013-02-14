@@ -30,6 +30,7 @@ $(function () {
             "feed": "eventCollection",
             "players": "userList",
             "player/:login": "anotherDashboard",
+            "explore": "explore",
             "about": "about",
         },
 
@@ -52,6 +53,7 @@ $(function () {
         questPage: function (id) {
             var view = new pp.views.QuestPage({ model: new pp.models.Quest({ _id: id }) });
             appView.setPageView(view);
+            setActiveMenuItem('none');
         },
 
         welcome: function () {
@@ -83,6 +85,14 @@ $(function () {
             });
 
             appView.setPageView(view);
+            setActiveMenuItem('none');
+        },
+
+        explore: function () {
+            var view = new pp.views.Explore();
+
+            appView.setPageView(view);
+            setActiveMenuItem('explore');
         },
 
         userList: function () {
@@ -106,6 +116,7 @@ $(function () {
         register: function () {
             var view = new pp.views.Register({ model: pp.app.user });
             appView.setPageView(view); // not rendered yet
+            setActiveMenuItem('none');
 
             // check conditions and render
             if (view.checkUser()) {
@@ -117,6 +128,7 @@ $(function () {
         confirmEmail: function (login, secret) {
             var view = new pp.views.ConfirmEmail({ login: login, secret: secret });
             appView.setPageView(view);
+            setActiveMenuItem('none');
         },
 
         twitterLogin: function () {
