@@ -83,26 +83,38 @@ sub logout :Tests {
 
 sub users_list :Tests {
     my $self = shift;
-    $self->_add_users;
+
+    for my $user (qw( blah blah2 blah3 )) {
+        http_json GET => "/api/fakeuser/$user";
+    }
 
     my $user = http_json GET => '/api/user';
     cmp_deeply $user, [
-        {
-            twitter => {
-                screen_name => 'blah',
+        map {
+            {
+                twitter => {
+                    screen_name => $_,
+                },
+                _id => re('\S+'),
+                login => $_,
+                points => 0,
             },
-            _id => re('\S+'),
-            login => 'blah',
-            points => 0,
-        },
-        {
-            twitter => {
-                screen_name => 'blah2',
+        } qw( blah blah2 blah3 )
+    ];
+
+    # limit
+    my $user = http_json GET => '/api/user?limit=2';
+    cmp_deeply $user, [
+        map {
+            {
+                twitter => {
+                    screen_name => $_,
+                },
+                _id => re('\S+'),
+                login => $_,
+                points => 0,
             },
-            _id => re('\S+'),
-            login => 'blah2',
-            points => 0,
-        },
+        } qw( blah blah2 )
     ];
 }
 

@@ -74,6 +74,7 @@ sub list {
     my $params = validate(@_, {
         sort => { type => SCALAR, optional => 1 },
         order => { type => SCALAR, regex => qr/^asc|desc$/, default => 'asc' },
+        limit => { type => SCALAR, regex => qr/^\d+$/, optional => 1 },
     });
 
     my @users = $self->collection->find()->all; # fetch everyone
@@ -105,6 +106,10 @@ sub list {
             my $c = ($a->{$params->{sort}} || 0) <=> ($b->{$params->{sort}} || 0);
             return $c * $order_flag;
         } @users;
+    }
+
+    if ($params->{limit} and @users > $params->{limit}) {
+        @users = splice @users, 0, $params->{limit};
     }
 
     return \@users;
