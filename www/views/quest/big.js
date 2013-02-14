@@ -9,12 +9,16 @@ pp.views.QuestBig = pp.View.Common.extend({
     events: {
         "click .quest-close": "close",
         "click .quest-reopen": "reopen",
-        "click .quest-like": "like",
-        "click .quest-unlike": "unlike",
         "click .delete": "destroy",
         "click .edit": "edit",
         "keypress .quest-edit": "updateOnEnter",
         "blur .quest-edit": "closeEdit"
+    },
+
+    subviews: {
+        '.likes': function () {
+            return new pp.views.QuestLike({ model: this.model });
+        }
     },
 
     afterInitialize: function () {
@@ -27,14 +31,6 @@ pp.views.QuestBig = pp.View.Common.extend({
 
     reopen: function () {
         this.model.reopen();
-    },
-
-    like: function () {
-        this.model.like();
-    },
-
-    unlike: function () {
-        this.model.unlike();
     },
 
     edit: function () {
@@ -88,6 +84,4 @@ pp.views.QuestBig = pp.View.Common.extend({
         }
         return params;
     },
-
-    features: ['tooltip'],
 });

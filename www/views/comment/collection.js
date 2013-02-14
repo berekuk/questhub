@@ -16,7 +16,6 @@ pp.views.CommentCollection = pp.View.AnyCollection.extend({
     },
 
     generateItem: function (model) {
-        console.log('generateItem');
         return new pp.views.Comment({ model: model });
     },
 

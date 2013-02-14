@@ -122,3 +122,8 @@ html, body {
 .registration-form {
     margin-top: 30px;
 }
+
+/* see views/quest/small.js */
+.quest-row td {
+    line-height: 25px;
+}

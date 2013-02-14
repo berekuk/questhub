@@ -241,11 +241,7 @@
           <a href="/quest/<%= _id %>"><span class="badge badge-info"><i class="icon-comment"></i> <%= comment_count %></span></a>
           <% } %>
 
-        <% if (typeof(likes) != 'undefined') { %>
-          <% if (likes.length) { %>
-            <span class="badge badge-success" data-toggle="tooltip" title="<%= likes.join(', ') %>"><i class="icon-thumbs-up"></i> <%= likes.length %></span>
-            <% } %>
-          <% } %>
+        <span class="likes"></span>
 
         <% if (typeof(type) != 'undefined') { %>
           <span class="label label-inverse quest-type-label"><%= type %></span>
@@ -450,25 +446,8 @@
       <% } %>
       -->
       </h2>
-      <div class="likes">
-      <% if (!my && currentUser) {
-        var meGusta = _.contains(likes, currentUser);
-      %> <!-- quest belongs to somebody else -->
 
-
-      <!-- like/unlike button  -->
-        <% if (meGusta) { %>
-          <button class="btn btn-mini btn-primary quest-unlike" type="button">Unlike</button>
-        <% } else { %>
-          <button class="btn btn-mini btn-primary quest-like" type="button">Like</button>
-        <% } %>
-
-      <% } %>
-      <!-- likes count -->
-      <% if (likes.length) { %>
-          <span class="badge badge-success" data-toggle="tooltip" title="<%= likes.join(', ') %>"><i class="icon-thumbs-up"></i> <%= likes.length %></span>
-      <% } %>
-      </div>
+      <div class="likes"></div>
 
       <% if (my) { %> <!-- quest belongs to the current user -->
 
@@ -482,6 +461,24 @@
         <% } %>
         </div>
 
+      <% } %>
+    </script>
+
+    <!-- like/unlike button  -->
+    <script type="text/template" id="template-quest-like">
+      <!-- likes count -->
+      <% if (likes && likes.length) { %>
+          <span class="badge badge-success" data-toggle="tooltip" title="<%= likes.join(', ') %>"><i class="icon-thumbs-up"></i> <%= likes.length %></span>
+      <% } %>
+      <!-- like button -->
+      <% if (!my) { %>
+        <span class="like-button hide">
+          <% if (meGusta) { %>
+            <button class="btn btn-mini quest-unlike" type="button">Unlike</button>
+          <% } else { %>
+            <button class="btn btn-mini btn-primary quest-like" type="button">Like</button>
+          <% } %>
+        </span>
       <% } %>
     </script>
 
@@ -629,6 +626,7 @@
     <script src="/views/quest/collection.js"></script>
     <script src="/views/quest/page.js"></script>
     <script src="/views/quest/small.js"></script>
+    <script src="/views/quest/like.js"></script>
     <script src="/views/register.js"></script>
     <script src="/views/confirm-email.js"></script>
     <script src="/views/user/current.js"></script>
