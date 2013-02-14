@@ -66,6 +66,14 @@ sub add {
     my ($params) = validate_pos(@_, { type => HASHREF });
 
     my $id = $self->collection->insert($params);
+
+    $events->add({
+        object_type => 'user',
+        action => 'add',
+        object_id => $id->to_string,
+        object => $params,
+    });
+
     return "$id";
 }
 
