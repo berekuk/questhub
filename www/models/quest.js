@@ -40,6 +40,18 @@ pp.models.Quest = Backbone.Model.extend({
             .success(function () {
                 model.fetch();
             }); // TODO - error handling?
+    },
+
+    comment_count: function () {
+        return this.get('comment_count') || 0;
+    },
+
+    like_count: function () {
+        var likes = this.get('likes');
+        if (likes) {
+            return likes.length;
+        }
+        return 0;
     }
 
 });

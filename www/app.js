@@ -30,6 +30,7 @@ $(function () {
             "feed": "eventCollection",
             "players": "userList",
             "player/:login": "anotherDashboard",
+            "explore": "explore",
             "about": "about",
         },
 
@@ -83,6 +84,13 @@ $(function () {
             });
 
             appView.setPageView(view);
+        },
+
+        explore: function () {
+            var view = new pp.views.Explore();
+
+            appView.setPageView(view);
+            setActiveMenuItem('explore');
         },
 
         userList: function () {
