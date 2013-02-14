@@ -98,10 +98,10 @@ $(function () {
         userList: function () {
             var collection = new pp.models.UserCollection([], {
                'sort_key': 'leaderboard',
-                'limit': 20,
+                'limit': 50,
             });
             var view = new pp.views.UserCollection({ collection: collection });
-            collection.fetch();
+            collection.fetch({ error: pp.app.onError });
             appView.setPageView(view);
             setActiveMenuItem('user-list');
         },
