@@ -12,7 +12,7 @@ get '/event' => sub {
 
 get '/event/atom' => sub {
     my $events = $events->list;
-    use Data::Dumper; print Dumper($events);
+    header 'Content-Type' => 'application/xml';
     template 'event-atom' => { events => $events };
 };
 
