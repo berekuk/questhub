@@ -365,6 +365,10 @@
       </div>
     </script>
 
+    <script type="text/template" id="template-event-unknown">
+        <em>Unknown event type. Try to refresh the page.</em>
+    </script>
+
     <script type="text/template" id="template-event-add-quest">
         <%= partial.user({ login: object.user }) %> started a new quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
     </script>
@@ -379,10 +383,6 @@
 
     <script type="text/template" id="template-event-add-user">
         <%= partial.user({ login: object.login }) %> joins Play Perl!
-    </script>
-
-    <script type="text/template" id="template-event-unknown">
-        <em>Unknown event type. Try to refresh the page.</em>
     </script>
 
     <script type="text/template" id="template-event-add-comment">
