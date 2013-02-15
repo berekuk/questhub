@@ -6,22 +6,49 @@
 
 <% FOREACH event IN events %>
 <entry>
-    <title>TODO</title>
-    <id>tag:blogs.perl.org,2013-02-15:<% event._id %></id>
-    <link rel="alternate" type="text/html" href="http://play-perl.org/..." />
-
-    <updated><%= event.ts %></updated>
-
+    <updated><% event.updated %></updated>
+    <id>tag:blogs.perl.org,2013-02-15:<% event.object_type _ '/' _ event.eid %></id>
     <author>
-        <name><%= event.author %></name>
-        <uri>http://play-perl.org/player/<%= event.author %></uri>
+        <name><% event.author %></name>
+        <uri>http://play-perl.org/player/<% event.author %></uri>
     </author>
 
-    <content type="html" xml:lang="en">
+    <% IF event.object_type == 'quest' && event.action == 'add' %>
+    <title><% event.author %> is on a new quest: <% event.object.name %></title>
+    <link rel="alternate" type="text/html" href="http://play-perl.org/quest/<%= event.object_id %>" />
+
+    <% ELSIF event.object_type == 'quest' && event.action == 'close' %>
+    <title><% event.author %> completed a quest: <% event.object.name %></title>
+    <link rel="alternate" type="text/html" href="http://play-perl.org/quest/<%= event.object_id %>" />
+
+    <% ELSIF event.object_type == 'quest' && event.action == 'reopen' %>
+    <title><% event.author %> reopened a quest: <% event.object.name %></title>
+    <link rel="alternate" type="text/html" href="http://play-perl.org/quest/<%= event.object_id %>" />
+
+    <% ELSIF event.object_type == 'user' && event.action == 'add' %>
+    <title><% event.author %> joins Play Perl!</title>
+    <link rel="alternate" type="text/html" href="http://play-perl.org/quest/<%= event.object_id %>" />
+
+    <% ELSIF event.object_type == 'comment' && event.action == 'add' %>
+    <title><% event.author %> commented on <% event.object.quest.name %></title>
+    <link rel="alternate" type="text/html" href="http://play-perl.org/quest/<%= event.object.quest._id %>" />
+
+    <content type="html">
         <![CDATA[
-            TODO
+        <%= event.object.body_html %>
         ]]>
     </content>
+
+    <% ELSE %>
+    <title>Unknown event type (object_type: <% event.object_type %>, action: <% event.action %>)</title>
+    <link rel="alternate" type="text/html" href="http://play-perl.org" />
+    <content type="html" xml:lang="en">
+        <![CDATA[
+            <p>This is a bug, Play Perl developer probably forgot to add a rendering template for this event type.</p>
+            <p>Please report it to the <a href="https://github.com/berekuk/play-perl/issues/new">Github Issues</a>.</p>
+        ]]>
+    </content>
+    <% END %>
 </entry>
 <% END %>
 </feed>
