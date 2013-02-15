@@ -22,7 +22,6 @@ get '/event/atom' => sub {
         $event->{updated} = $rfc3339->format_datetime(
             DateTime->from_epoch(epoch => $event->{ts})
         );
-        $event->{eid} = $event->{_id}; # TT have issues with '_id' field
     }
 
     header 'Content-Type' => 'application/xml';
