@@ -43,4 +43,14 @@ sub events_http_api :Tests {
         ]
 }
 
+sub atom :Tests {
+    my $events = Play::Events->new;
+    $events->add({ blah => 5 });
+    $events->add({ blah => 6 });
+
+    my $response = dancer_response GET => '/api/event/atom';
+    is $response->status, 200;
+    diag explain $response;
+}
+
 __PACKAGE__->new->runtests;

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Play Perl - News Feed</title>
+    <link rel="alternate" type="text/html" href="http://play-perl.org/feed" />
+    <id>tag:play-perl.org,2013-02-15:global</id>
+
+<% FOREACH event IN events %>
+<entry>
+    <title>TODO</title>
+    <id>tag:blogs.perl.org,2013-02-15:<% event._id %></id>
+    <link rel="alternate" type="text/html" href="http://play-perl.org/..." />
+
+    <updated><%= event.ts %></updated>
+
+    <author>
+        <name><%= event.author %></name>
+        <uri>http://play-perl.org/player/<%= event.author %></uri>
+    </author>
+
+    <content type="html" xml:lang="en">
+        <![CDATA[
+            TODO
+        ]]>
+    </content>
+</entry>
+<% END %>
+</feed>
