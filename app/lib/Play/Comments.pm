@@ -52,7 +52,7 @@ sub add {
     $events->add({
         object_type => 'comment',
         action => 'add',
-        author => $params->{author},
+        author => $params{author},
         object_id => $id->to_string,
         object => {
             %params,
