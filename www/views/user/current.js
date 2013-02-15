@@ -23,7 +23,6 @@ pp.views.CurrentUser = pp.View.Common.extend({
     afterInitialize: function () {
         this.model = pp.app.user;
         this.model.on('change', this.render, this);
-        this.model.fetch();
     },
 
     logout: function (e) {
