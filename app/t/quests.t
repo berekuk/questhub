@@ -131,6 +131,7 @@ sub quest_events :Tests {
             ts => re('^\d+$'),
             object_type => 'quest',
             action => 'reopen',
+            author => $user,
             object_id => $quest_id,
             object => { name => 'test-quest', status => 'open', user => $user },
         },
@@ -139,6 +140,7 @@ sub quest_events :Tests {
             ts => re('^\d+$'),
             object_type => 'quest',
             action => 'close',
+            author => $user,
             object_id => $quest_id,
             object => { name => 'test-quest', status => 'closed', user => $user },
         },
@@ -147,6 +149,7 @@ sub quest_events :Tests {
             ts => re('^\d+$'),
             object_type => 'quest',
             action => 'add',
+            author => $user,
             object_id => $quest_id,
             object => { name => 'test-quest', status => 'open', user => $user },
         }

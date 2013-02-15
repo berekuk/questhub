@@ -89,6 +89,7 @@ sub comment_events :Tests {
         _id => re('^\S+$'),
         action => 'add',
         object_type => 'comment',
+        author => 'blah',
         object_id => $add_result->{_id},
         ts => re('^\d+$'),
         object => {
