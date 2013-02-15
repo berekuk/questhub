@@ -47,7 +47,7 @@ post '/quest' => sub {
 
 get '/quest' => sub {
     return $quests->list({
-        map { param($_) ? ($_ => param($_)) : () } qw/ user status comment_count /,
+        map { param($_) ? ($_ => param($_)) : () } qw/ user status comment_count sort order limit offset /,
     });
 };
 

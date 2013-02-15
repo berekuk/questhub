@@ -1,5 +1,7 @@
 package Play::Quests;
 
+use 5.010;
+
 use Moo;
 use Params::Validate qw(:all);
 use Play::Mongo;
@@ -32,13 +34,22 @@ sub _prepare_quest {
 
 sub list {
     my $self = shift;
-    my ($params) = validate_pos(@_, { type => HASHREF });
-
-    # hmmm, 'comment_count' have a special semantics; what if we'll want to query for "quests with >N comments"?
-    my $comment_count = delete $params->{comment_count};
+    my $params = validate(@_, {
+        # find() filters
+        user => { type => SCALAR, optional => 1 },
+        status => { type => SCALAR, optional => 1 },
+        # flag meaning "fetch comment_count too"
+        comment_count => { type => BOOLEAN, optional => 1 },
+        # sorting and paging
+        sort => { type => SCALAR, optional => 1, regex => qr/^(leaderboard)$/ }, # only 'leaderboard' sorting is supported by now
+        limit => { type => SCALAR, regex => qr/^\d+$/, optional => 1 },
+        offset => { type => SCALAR, regex => qr/^\d+$/, default => 0 },
+    });
 
     my @quests = $self->collection->query(
-        $params,
+        {
+            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ user status /
+        },
         {
             sort_by => { '_id' => 1 }
         }
@@ -47,7 +58,7 @@ sub list {
 
     $self->_prepare_quest($_) for @quests;
 
-    if ($comment_count) {
+    if ($params->{comment_count} or ($params->{sort} || '') eq 'leaderboard') {
         my $comment_stat = $comments->bulk_count([
             map { $_->{_id} } @quests
         ]);
@@ -56,6 +67,23 @@ sub list {
             my $cc = $comment_stat->{$quest->{_id}};
             $quest->{comment_count} = $cc if $cc;
         }
+    }
+
+    if ($params->{sort} and $params->{sort} eq 'leaderboard') {
+        # composite likes->comments order
+        @quests = sort {
+            my $c1 = (
+                ($b->{likes} ? scalar @{ $b->{likes} } : 0)
+                <=>
+                ($a->{likes} ? scalar @{ $a->{likes} } : 0)
+            );
+            return $c1 if $c1;
+            return ($b->{comment_count} || 0) <=> ($a->{comment_count} || 0);
+        } @quests;
+    }
+
+    if ($params->{limit} and @quests > $params->{limit}) {
+        @quests = splice @quests, $params->{offset}, $params->{limit};
     }
 
     return \@quests;
