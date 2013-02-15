@@ -63,7 +63,7 @@ $(function () {
 
         dashboard: function () {
             if (!pp.app.user.get('registered')) {
-                this.navigate('/welcome', { trigger: true });
+                this.navigate('/welcome', { trigger: true, replace: true });
                 return;
             }
 
