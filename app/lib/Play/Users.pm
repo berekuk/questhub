@@ -7,7 +7,7 @@ use Play::Mongo;
 use Play::Events;
 use Play::Quests; # recursive dependency!
 
-use Dancer qw(setting);
+use Dancer qw(info setting);
 
 my $events = Play::Events->new;
 
@@ -157,13 +157,15 @@ sub secret_settings {
 
 sub get_settings {
     my $self = shift;
-    my ($login) = validate_pos(@_, { type => SCALAR });
+    my ($login, $secret_flag) = validate_pos(@_, { type => SCALAR }, { type => BOOLEAN, default => 0 });
 
     my $settings = $self->settings_collection->find_one({ user => $login });
     $settings ||= {};
-    delete $settings->{_id}; # nobody cares about settings _id
+    delete $settings->{$_} for '_id', 'user'; # nobody cares about settings _id
 
-    delete $settings->{$_} for secret_settings, 'user';
+    unless ($secret_flag) {
+        delete $settings->{$_} for secret_settings;
+    }
 
     return $settings;
 }
@@ -252,20 +254,21 @@ sub set_settings {
     # some settings can't be set by the client
     delete $settings->{$_} for protected_settings, secret_settings;
 
-    my $old_settings = $self->get_settings($login);
+    my $old_settings = $self->get_settings($login, 1);
     for (protected_settings) {
         $settings->{$_} = $old_settings->{$_} if exists $old_settings->{$_};
     }
 
-    if (
-        $settings->{email} and (
-            not $old_settings->{email}
-            or $old_settings->{email} ne $settings->{email}
-        )
-    ) {
-        # need email confirmation
-        $settings->{email_confirmation_secret} = $self->_send_email_confirmation($login, $settings->{email});
-        delete $settings->{email_confirmed};
+    if ($settings->{email}) {
+        if (not $old_settings->{email} or $old_settings->{email} ne $settings->{email}) {
+            info 'need email confirmation';
+            $settings->{email_confirmation_secret} = $self->_send_email_confirmation($login, $settings->{email});
+            delete $settings->{email_confirmed};
+        }
+        elsif ($old_settings->{email_confirmation_secret}) {
+            # don't lose confirmation secret if user edits the rest of her settings!
+            $settings->{email_confirmation_secret} = $old_settings->{email_confirmation_secret};
+        }
     }
 
     $self->settings_collection->update(
@@ -273,6 +276,7 @@ sub set_settings {
         { %$settings, user => $login },
         { safe => 1, upsert => 1 }
     );
+    return;
 }
 
 sub get_email {
