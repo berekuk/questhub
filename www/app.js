@@ -57,7 +57,9 @@ $(function () {
         },
 
         welcome: function () {
-            appView.setPageView(new pp.views.Home());
+            // model is usually empty, but sometimes it's not - logged-in users can see the welcome page too
+            appView.setPageView(new pp.views.Home({ model: pp.app.user }));
+
             setActiveMenuItem('home');
         },
 

@@ -26,13 +26,13 @@ pp.views.Register = pp.View.Common.extend({
         // you can't see the registration form if you're already registered
         if (this.model.get("registered")) {
             this.remove();
-            pp.app.router.navigate("/", { trigger: true });
+            pp.app.router.navigate("/", { trigger: true, replace: true });
             return;
         }
         // or if you're not authentificated yet
         if (!this.model.get("twitter")) {
             this.remove();
-            pp.app.router.navigate("/welcome", { trigger: true });
+            pp.app.router.navigate("/welcome", { trigger: true, replace: true });
             return;
         }
         this.render();

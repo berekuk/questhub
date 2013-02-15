@@ -67,7 +67,11 @@
             </ol>
             </p>
             <p>
-            <a href="/auth/twitter" class="btn btn-large btn-primary">Login with Twitter</a>
+            <% if (registered) { %>
+              <a href="/" class="btn btn-large btn-primary">Go to your profile</a>
+            <% } else { %>
+              <a href="/auth/twitter" class="btn btn-large btn-primary">Login with Twitter</a>
+            <% } %>
             </p>
         </div>
     </script>
