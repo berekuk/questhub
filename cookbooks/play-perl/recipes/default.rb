@@ -44,6 +44,7 @@ cpan_module 'Email::Sender'
 cpan_module 'Dancer::Serializer::JSON'
 cpan_module 'Dancer::Session::MongoDB'
 cpan_module 'Dancer::Plugin::Auth::Twitter'
+cpan_module 'Template'
 
 directory '/data' # logs
 
