@@ -173,7 +173,7 @@ pp.View.AnyCollection = pp.View.Common.extend({
 
     afterInitialize: function () {
         this.listenTo(this.collection, 'reset', this.activate);
-        this.listenTo(this.collection, 'add', this.renderOne);
+        this.listenTo(this.collection, 'add', this.onAdd);
         this.listenTo(this.collection, 'remove', this.render); // TODO: optimize
     },
 
@@ -188,10 +188,10 @@ pp.View.AnyCollection = pp.View.Common.extend({
 
     afterRender: function () {
         this.removeItemSubviews();
-        this.collection.each(this.renderOne, this);
         if (this.collection.length) {
             this.$el.find(this.listSelector).show(); // collection table is hidden initially - see https://github.com/berekuk/play-perl/issues/61
         }
+        this.collection.each(this.renderOne, this);
     },
 
     generateItem: function (model) {
@@ -205,12 +205,9 @@ pp.View.AnyCollection = pp.View.Common.extend({
         list.append(view.render().el);
     },
 
-    onAdd: function () {
-        this.render();
-    },
-
-    onReset: function () {
-        this.render();
+    onAdd: function (model) {
+        this.$el.find(this.listSelector).show();
+        this.renderOne(model);
     },
 
     // copy-paste from pp.View.Common
