@@ -45,6 +45,8 @@ cpan_module 'Dancer::Serializer::JSON'
 cpan_module 'Dancer::Session::MongoDB'
 cpan_module 'Dancer::Plugin::Auth::Twitter'
 cpan_module 'Template'
+cpan_module 'DateTime'
+cpan_module 'DateTime::Format::RFC3339'
 
 directory '/data' # logs
 
