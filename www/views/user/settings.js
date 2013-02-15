@@ -6,10 +6,6 @@ pp.views.UserSettings = pp.View.Common.extend({
 
     t: 'user-settings',
 
-    afterInitialize: function() {
-        this.model.on('change', this.render, this);
-    },
-
     resendEmailConfirmation: function () {
         var btn = this.$('.resend-email-confirmation');
         if (btn.hasClass('disabled')) {
@@ -17,7 +13,7 @@ pp.views.UserSettings = pp.View.Common.extend({
         }
         btn.addClass('disabled');
 
-        $.post('http://play-perl.org/api/register/resend_email_confirmation', {})
+        $.post('http://localhost:3000/api/register/resend_email_confirmation', {})
         .done(function () {
             btn.text('Confirmation key sent');
         })
@@ -33,8 +29,21 @@ pp.views.UserSettings = pp.View.Common.extend({
     },
 
     start: function () {
+        this.running = true;
+        this.render();
         this.$('.email-status').show();
+        this.$('[name=email]').removeAttr('disabled');
+        this.$('[name=notify-comments]').removeAttr('disabled');
+        this.$('[name=notify-likes]').removeAttr('disabled');
         this.hideEmailStatus = false;
+    },
+
+    stop: function () {
+        this.running = false;
+        this.$('.email-status').hide();
+        this.$('[name=email]').attr({ disabled: 'disabled' });
+        this.$('[name=notify-comments]').attr({ disabled: 'disabled' });
+        this.$('[name=notify-likes]').attr({ disabled: 'disabled' });
     },
 
     typing: function() {

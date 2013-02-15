@@ -25,8 +25,6 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
     },
 
     checkShowMoreButton: function () {
-        console.log('userCount: ' + this.userCount);
-        console.log('length: ' + this.collection.length);
         if (this.userCount > this.collection.length) {
             this.$('.show-more').show();
         }
@@ -57,7 +55,6 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
         pp.View.AnyCollection.prototype.afterInitialize.apply(this, arguments);
         this.progress(); // app.js fetches the collection for the first time immediately
         this.collection.once('reset', this.updateUserCount, this); // update user count after the initial collection fetch
-        this.collection.on('all', function (e) { console.log(e) });
         this.listenTo(this.collection, 'error', this.noProgress);
         this.render();
     },

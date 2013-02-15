@@ -20,7 +20,6 @@ pp.models.UserCollection = Backbone.Collection.extend({
         if (cgi.length) {
             url += '?' + cgi.join('&');
         }
-        console.log(url);
         return url;
     },
 

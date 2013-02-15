@@ -22,8 +22,15 @@ pp.views.CurrentUser = pp.View.Common.extend({
 
     afterInitialize: function () {
         this.model = pp.app.user;
-        this.model.on('change', this.render, this);
-        this.model.on('sync', this.checkEmailConfirmed, this);
+        this.listenTo(this.model, 'change', this.render);
+        this.listenTo(this.model, 'sync', this.checkEmailConfirmed);
+
+        this.listenTo(this.model, 'change', function () {
+            var settingsModel = this.model.get('settings') || {};
+            // now settings box will show the preview of (probably) correct settings even before it refetches its actual version
+            // (see SettingsBox code for the details)
+            this.getSettingsBox().model.clear().set(settingsModel);
+        });
     },
 
     checkEmailConfirmed: function () {

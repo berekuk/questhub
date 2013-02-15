@@ -14,7 +14,6 @@ $(function () {
         }
 
         console.log('error: ' + error);
-
         pp.app.view.notify('error', error);
     };
 
