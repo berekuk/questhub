@@ -77,6 +77,7 @@ sub add {
     $events->add({
         object_type => 'quest',
         action => 'add',
+        author => $params->{user},
         object_id => $id->to_string,
         object => $params,
     });
@@ -141,6 +142,7 @@ sub update {
         $events->add({
             object_type => 'quest',
             action => $action,
+            author => $quest_after_update->{user},
             object_id => $id,
             object => $quest_after_update,
         });

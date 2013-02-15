@@ -70,6 +70,7 @@ sub add {
     $events->add({
         object_type => 'user',
         action => 'add',
+        author => $params->{login},
         object_id => $id->to_string,
         object => $params,
     });
