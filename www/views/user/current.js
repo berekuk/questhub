@@ -23,14 +23,16 @@ pp.views.CurrentUser = pp.View.Common.extend({
     afterInitialize: function () {
         this.model = pp.app.user;
         this.model.on('change', this.render, this);
-        this.model.on('sync', function (model) {
-            if (model.get('registered') && model.get('settings').email && !model.get('settings').email_confirmed) {
-                pp.app.view.notify(
-                    'warning',
-                    'Your email address is not confirmed. Click the link we sent to ' + model.get('settings').email + ' to confirm it.'
-                );
-            }
-        }, this);
+        this.model.on('sync', this.checkEmailConfirmed, this);
+    },
+
+    checkEmailConfirmed: function () {
+        if (this.model.get('registered') && this.model.get('settings').email && !this.model.get('settings').email_confirmed) {
+            pp.app.view.notify(
+                'warning',
+                'Your email address is not confirmed. Click the link we sent to ' + this.model.get('settings').email + ' to confirm it. (You can resend it from your settings if necessary.)'
+            );
+        }
     },
 
     logout: function (e) {

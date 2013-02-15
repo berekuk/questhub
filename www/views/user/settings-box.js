@@ -29,9 +29,14 @@ pp.views.UserSettingsBox = pp.View.Common.extend({
 
     submit: function() {
         var that = this;
+
         this.subview('.settings-subview').save({
             success: function() {
                 that.$('.modal').modal('hide');
+
+                // Just to be safe.
+                // Also, if email was changed, we want to trigger the 'sync' event and show the notify box.
+                pp.app.user.fetch();
             },
             failure: function() {
                 alert('modal submit failed!');
