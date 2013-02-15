@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Play Perl - News Feed</title>
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/feed" />
+    <id>tag:<% settings.hostport %>,2013-02-15:global</id>
+
+<% FOREACH event IN events %>
+<entry>
+    <updated><% event.updated %></updated>
+    <id>tag:blogs.perl.org,2013-02-15:<% event.object_type _ '/' _ event.item('_id') %></id>
+    <author>
+        <name><% event.author %></name>
+        <uri>http://<% settings.hostport %>/player/<% event.author %></uri>
+    </author>
+
+    <% IF event.object_type == 'quest' && event.action == 'add' %>
+    <title><% event.author %> is on a new quest: <% event.object.name %></title>
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object_id %>" />
+
+    <% ELSIF event.object_type == 'quest' && event.action == 'close' %>
+    <title><% event.author %> completed a quest: <% event.object.name %></title>
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object_id %>" />
+
+    <% ELSIF event.object_type == 'quest' && event.action == 'reopen' %>
+    <title><% event.author %> reopened a quest: <% event.object.name %></title>
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object_id %>" />
+
+    <% ELSIF event.object_type == 'user' && event.action == 'add' %>
+    <title><% event.author %> joins Play Perl!</title>
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/player/<%= event.author %>" />
+
+    <% ELSIF event.object_type == 'comment' && event.action == 'add' %>
+    <title><% event.author %> commented on <% event.object.quest.name %></title>
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object.quest.item('_id') %>" />
+
+    <content type="html">
+        <![CDATA[
+        <%= event.object.body_html %>
+        ]]>
+    </content>
+
+    <% ELSE %>
+    <title>Unknown event type (object_type: <% event.object_type %>, action: <% event.action %>)</title>
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>" />
+    <content type="html" xml:lang="en">
+        <![CDATA[
+            <p>This is a bug, Play Perl developer probably forgot to add a rendering template for this event type.</p>
+            <p>Please report it to the <a href="https://github.com/berekuk/play-perl/issues/new">Github Issues</a>.</p>
+        ]]>
+    </content>
+    <% END %>
+</entry>
+<% END %>
+</feed>

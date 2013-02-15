@@ -43,4 +43,23 @@ sub events_http_api :Tests {
         ]
 }
 
+sub atom :Tests {
+    # add-user event
+    http_json GET => '/api/fakeuser/Frodo';
+
+    # add-quest event
+    my $add_result = http_json POST => '/api/quest', {
+        user => 'Frodo',
+        name => 'Destroy the Ring',
+        status => 'open',
+    };
+
+    my $response = dancer_response GET => '/api/event/atom';
+    is $response->status, 200;
+
+    diag ($response->content);
+
+    like $response->content, qr/Frodo joins Play Perl/;
+}
+
 __PACKAGE__->new->runtests;

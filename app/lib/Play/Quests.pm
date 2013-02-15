@@ -61,7 +61,24 @@ sub list {
     return \@quests;
 }
 
-# returns the new quest
+=head1 FORMAT
+
+Events can be of different types and contain different loosely-typed fields, but they all follow the same structure:
+
+    {
+        # required fields:
+        object_type => 'quest', # possible values: 'quest', 'user', 'comment'...
+        action => 'add', # 'close', 'reopen'...
+        author => 'berekuk', # it's usually contained in other fields as well, but is kept here for consistency and simplifying further rendering
+
+        # optional
+        object_id => '123456789000000',
+        object => {
+            ... # anything goes, but usually an object of 'object_type'
+        }
+    }
+
+=cut
 sub add {
     my $self = shift;
     my ($params) = validate_pos(@_, { type => HASHREF });
@@ -77,6 +94,7 @@ sub add {
     $events->add({
         object_type => 'quest',
         action => 'add',
+        author => $params->{user},
         object_id => $id->to_string,
         object => $params,
     });
@@ -141,6 +159,7 @@ sub update {
         $events->add({
             object_type => 'quest',
             action => $action,
+            author => $quest_after_update->{user},
             object_id => $id,
             object => $quest_after_update,
         });

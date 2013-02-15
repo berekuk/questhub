@@ -132,6 +132,10 @@ Unlike a quest.
 
 Get last 100 events.
 
+##### GET /api/event/atom
+
+Get the Atom feed with 100 last events.
+
 ##### GET /api/dev/session/{name}
 
 Get session value. Dev mode only.
