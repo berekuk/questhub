@@ -67,7 +67,16 @@ pp.views.Register = pp.View.Common.extend({
     },
 
     validate: function() {
-        if (this.submitted || !this.getLogin()) {
+        var login = this.getLogin();
+        if (login.match(/^\w*$/)) {
+            this.$('.login').removeClass('error');
+        }
+        else {
+            this.$('.login').addClass('error');
+            login = undefined;
+        }
+
+        if (this.submitted || !login) {
             this.disable();
         }
         else {

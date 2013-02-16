@@ -215,7 +215,7 @@
 
     <script type="text/template" id="template-user-settings">
       <div class="form-horizontal">
-        <input name="email" type="text" placeholder="Email" value="<%= obj.email || '' %>">
+        <input name="email" type="email" placeholder="Email" value="<%= obj.email || '' %>">
         <span class="email-status <%= obj.hideEmailStatus ? "hide" : "" %>">
           <% if (obj.email_confirmed) { %>
             <span class="label label-success">Confirmed</span>
@@ -287,7 +287,9 @@
           <h2>Welcome to the Play Perl, <i class="icon-twitter icon-large"></i> <%= twitter.screen_name %>!</h2>
           <h3>One final step before you can join your fellow hackers...</h3>
           <div class="registration-form">
-            <input name="login" type="text" placeholder="Login (required)">
+            <div class="control-group login">
+              <input name="login" type="text" placeholder="Login (required)">
+            </div>
             <div class="settings-subview"></div>
             <button class="btn btn-primary btn-large submit">Register</button>
             <p>

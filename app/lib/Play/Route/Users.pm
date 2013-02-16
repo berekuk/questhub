@@ -88,6 +88,11 @@ post '/register' => sub {
         die "Twitter login $twitter_login is already bound";
     }
 
+    unless ($login =~ /^\w+$/) {
+        status 'bad request';
+        return "Invalid login '$login', only alphanumericals are allowed";
+    }
+
     # note that race condition is still possible after these checks
     # that's ok, mongodb will throw an exception
     my $user = { login => $login, twitter => { screen_name => $twitter_login } };

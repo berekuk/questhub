@@ -225,4 +225,12 @@ sub register :Tests {
     cmp_deeply $got_settings, superhashof($settings);
 }
 
+sub register_login_validation :Tests {
+    Dancer::session twitter_user => { screen_name => 'twah' };
+    my $response = dancer_response POST => '/api/register', { params => {
+        login => 'John Doe'
+    } };
+    is $response->status, 400, 'spaces in logins are forbidden';
+}
+
 __PACKAGE__->new->runtests;
