@@ -215,7 +215,7 @@
 
     <script type="text/template" id="template-user-settings">
       <div class="form-horizontal">
-        <input name="email" type="text" placeholder="Email" value="<%= obj.email || '' %>">
+        <input name="email" type="email" placeholder="Email" value="<%= obj.email || '' %>">
         <span class="email-status <%= obj.hideEmailStatus ? "hide" : "" %>">
           <% if (obj.email_confirmed) { %>
             <span class="label label-success">Confirmed</span>
