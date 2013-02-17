@@ -19,44 +19,18 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
     },
 
     noProgress: function () {
+        this.$('.show-more').toggle(this.collection.gotMore);
+        this.$('.show-more').removeClass('disabled');
         this.$('.icon-spinner').hide();
         if (this.progressPromise) {
             window.clearTimeout(this.progressPromise);
         }
     },
 
-    checkShowMoreButton: function () {
-        if (this.userCount > this.collection.length) {
-            this.$('.show-more').show();
-            this.$('.show-more').removeClass('disabled');
-        }
-        else {
-            this.$('.show-more').hide();
-        }
-    },
-
-    updateUserCount: function () {
-
-        this.progress();
-
-        var that = this;
-
-        $.get('/api/user_count')
-        .done(function (data) {
-            that.userCount = data.count;
-            that.$('.icon-spinner').hide();
-            that.noProgress.apply(that);
-            that.checkShowMoreButton();
-        })
-        .fail(function (response) {
-            pp.app.onError(false, response);
-        });
-    },
-
     afterInitialize: function () {
         pp.View.AnyCollection.prototype.afterInitialize.apply(this, arguments);
         this.progress(); // app.js fetches the collection for the first time immediately
-        this.collection.once('reset', this.updateUserCount, this); // update user count after the initial collection fetch
+        this.collection.once('reset', this.noProgress, this);
         this.listenTo(this.collection, 'error', this.noProgress);
         this.render();
     },
@@ -65,13 +39,12 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
         var that = this;
         this.progress();
         this.$('.show-more').addClass('disabled');
-        this.collection.fetchMore(50, {
-            success: function () {
-                that.$('.show-more').hide();
-                that.updateUserCount();
+        this.collection.fetchMore(3, {
+            success: function (collection) {
+                that.noProgress();
             },
             error: function (collection, response) {
-                this.$('.show-more').removeClass('disabled');
+                that.noProgress();
                 pp.app.onError(undefined, response);
             }
         });
