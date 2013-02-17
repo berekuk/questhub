@@ -59,6 +59,16 @@ sub quest_list_filtering :Tests {
     cmp_deeply $list, [ $quests_data->{3} ];
 }
 
+sub quest_sorting :Tests {
+    http_json GET => '/api/fakeuser/user_3';
+    http_json POST => '/api/quest/'.$quests_data->{2}{_id}.'/like';
+    http_json POST => '/api/quest/'.$quests_data->{1}{_id}.'/comment', { params => { body => 'bah!' } };
+
+    my $list = http_json GET => '/api/quest?sort=leaderboard';
+    my @names = map { $_->{name} } @$list;
+    is_deeply \@names, [qw/ name_2 name_1 name_3 /];
+}
+
 sub single_quest :Tests {
     my $id          =  $quests_data->{1}->{_id};
     my $quest = http_json GET => '/api/quest/'.$id;
@@ -341,7 +351,7 @@ sub email_like :Tests {
     # now let's close the quest and like it once more
 
     Dancer::session login => 'foo';
-    my $quest = http_json PUT => "/api/quest/$quest->{_id}", { params => {
+    $quest = http_json PUT => "/api/quest/$quest->{_id}", { params => {
         status => 'closed',
     } };
 

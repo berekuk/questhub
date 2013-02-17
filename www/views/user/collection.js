@@ -5,67 +5,46 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
         "click .show-more": "showMore",
     },
 
+    subviews: {
+        '.progress-spin': function () {
+            return new pp.views.Progress();
+        },
+    },
+
     listSelector: '.users-list',
+    insertOne: function (el) {
+        this.$('.show-more').before(el);
+    },
 
     activated: true,
 
-    progress: function () {
-        this.noProgress();
-        var that = this;
-        this.progressPromise = window.setTimeout(function () {
-            that.$('.progress').show();
-        }, 500);
-    },
-
     noProgress: function () {
-        this.$('.progress').hide();
-        if (this.progressPromise) {
-            window.clearTimeout(this.progressPromise);
-        }
-    },
-
-    checkShowMoreButton: function () {
-        if (this.userCount > this.collection.length) {
-            this.$('.show-more').show();
-        }
-        else {
-            this.$('.show-more').hide();
-        }
-    },
-
-    updateUserCount: function () {
-
-        this.progress();
-
-        var that = this;
-
-        $.get('/api/user_count')
-        .done(function (data) {
-            that.userCount = data.count;
-            that.$('.progress').hide();
-            that.noProgress.apply(that);
-            that.checkShowMoreButton();
-        })
-        .fail(function (response) {
-            pp.app.onError(false, response);
-        });
+        this.$('.show-more').toggle(this.collection.gotMore);
+        this.$('.show-more').removeClass('disabled');
+        this.subview('.progress-spin').off();
     },
 
     afterInitialize: function () {
         pp.View.AnyCollection.prototype.afterInitialize.apply(this, arguments);
-        this.progress(); // app.js fetches the collection for the first time immediately
-        this.collection.once('reset', this.updateUserCount, this); // update user count after the initial collection fetch
+        this.subview('.progress-spin').on(); // app.js fetches the collection for the first time immediately
+
+        this.collection.once('reset', this.noProgress, this);
         this.listenTo(this.collection, 'error', this.noProgress);
         this.render();
     },
 
     showMore: function () {
         var that = this;
+
+        this.$('.show-more').addClass('disabled');
+        this.subview('.progress-spin').on();
+
         this.collection.fetchMore(50, {
-            success: function () {
-                that.$('.show-more').hide();
-                that.updateUserCount();
+            error: function (collection, response) {
+                pp.app.onError(undefined, response);
             }
+        }).always(function () {
+            that.noProgress();
         });
     },
 

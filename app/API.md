@@ -74,6 +74,15 @@ Special `sort` value `leaderboard` can be used for composite points->open_quests
 
 Get a total number of users.
 
+Options:
+
+* `user` - filter by user
+* `status` - filter by status (`deleted` status is forbidden)
+* `comment_count` - add `comment_count` field to each returned quest
+* `sort` - only `leaderboard` value is supported for now, meaning composite likes_count->comments_count sorting
+* `limit`
+* `offset`
+
 ### Quests
 
 ##### POST /api/quest

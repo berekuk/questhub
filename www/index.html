@@ -238,9 +238,14 @@
     </script>
 
     <script type="text/template" id="template-quest-collection">
-        <div>
-          <table class="table table-bordered quests-list table-hover" style="display: none"></table>
-        </div>
+      <div>
+        <table class="table table-bordered quests-list table-hover hide">
+          <tr class="show-more">
+            <td><a href="#">Show more...</a></td>
+          </tr>
+        </table>
+        <span class="progress-spin"></span>
+      </div>
     </script>
 
     <script type="text/template" id="template-quest-small">
@@ -316,25 +321,23 @@
 
     <!-- users list -->
     <script type="text/template" id="template-user-collection">
-        <div class="row-fluid">
-          <div class="span3">
-              <div class="well well-small">
-                Players are sorted by:
-                <ol>
-                  <li>game points;</li>
-                  <li>open quests.</li>
-                </ol>
-              </div>
+      <div class="row-fluid">
+        <div class="span3">
+          <div class="well well-small">
+            Players are sorted by:
+            <ol>
+              <li>game points;</li>
+              <li>open quests.</li>
+            </ol>
           </div>
-          <div class="span6">
-          <table class="table table-bordered users-list hide">
+        </div>
+        <div class="span6">
+          <table class="table table-bordered users-list table-hover hide">
+            <tr class="show-more">
+              <td><a href="#">Show more...</a></td>
+            </tr>
           </table>
-          <div class="show-more-or-progress">
-            <button class="btn btn-primary show-more hide">Show more</button>
-            <div class="progress progress-striped active hide">
-              <div class="bar" style="width: 100%"></div>
-            </div>
-          </div>
+          <span class="progress-spin"></span>
         </div>
       </div>
     </script>
@@ -549,6 +552,10 @@
       </div>
     </script>
 
+    <script type="text/template" id="template-progress">
+      <i class="icon-spinner icon-spin hide"></i>
+    </script>
+
     <script type="text/template" id="partial-user"><a href="/player/<%= login %>" class="label"><%= login + (obj.colon ? ':' : '') %></a></script>
     <script type="text/template" id="partial-edit-tools">
       <div class="pull-right mini-button-block">
@@ -641,13 +648,16 @@
             app: {},
             models: {},
             views: {},
-            View: {}
+            View: {},
+            Model: {},
+            Collection: {}
         };
     </script>
 
     <script src="/views/proto.js"></script>
     <script src="/views/app.js"></script>
     <script src="/views/notify.js"></script>
+    <script src="/views/progress.js"></script>
     <script src="/views/dashboard.js"></script>
     <script src="/views/explore.js"></script>
     <script src="/views/home.js"></script>
@@ -672,6 +682,7 @@
     <script src="/views/event/collection.js"></script>
     <script src="/views/about.js"></script>
 
+    <script src="/models/proto.js"></script>
     <script src="/models/user.js"></script>
     <script src="/models/another-user.js"></script>
     <script src="/models/current-user.js"></script>

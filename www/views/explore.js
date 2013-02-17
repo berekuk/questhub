@@ -11,8 +11,12 @@ pp.views.Explore = pp.View.Common.extend({
 
     questSubview: function (st) {
         var collection = new pp.models.QuestCollection([], {
-           'status': st
+           'status': st,
+           'sort': 'leaderboard',
+           'limit': 100
         });
+
+        // duplicates server-side sorting logic!
         collection.comparator = function(m1, m2) {
             if (m1.like_count() > m2.like_count()) return -1; // before
             if (m2.like_count() > m1.like_count()) return 1; // after

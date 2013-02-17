@@ -98,7 +98,7 @@ $(function () {
 
         userList: function () {
             var collection = new pp.models.UserCollection([], {
-               'sort_key': 'leaderboard',
+               'sort': 'leaderboard',
                 'limit': 50,
             });
             var view = new pp.views.UserCollection({ collection: collection });
