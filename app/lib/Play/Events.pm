@@ -60,9 +60,12 @@ sub email {
 # TODO: pager
 sub list {
     my $self = shift;
-    validate_pos(@_);
+    my $params = validate(@_, {
+        limit => { type => SCALAR, regex => qr/^\d+$/, default => 100 },
+        offset => { type => SCALAR, regex => qr/^\d+$/, default => 0 },
+    });
 
-    my @events = $self->collection->query->sort({ _id => -1 })->limit(100)->all;
+    my @events = $self->collection->query->sort({ _id => -1 })->limit($params->{limit})->skip($params->{offset})->all;
     $self->_prepare_event($_) for @events;
 
     return \@events;

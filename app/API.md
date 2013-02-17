@@ -89,6 +89,11 @@ Options:
 
 Add a new quest for the current user.
 
+Options:
+
+* `limit`
+* `offset`
+
 ##### PUT /api/quest/{id}
 
 Update a quest.
@@ -139,7 +144,12 @@ Unlike a quest.
 
 ##### GET /api/event
 
-Get last 100 events.
+Get events, starting from the latest.
+
+Options:
+
+* `limit` (defaults to 100)
+* `offset`
 
 ##### GET /api/event/atom
 

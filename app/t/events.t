@@ -22,14 +22,27 @@ sub event_perl_api :Tests {
     );
 }
 
-sub events_limit :Tests {
+sub limit_offset :Tests {
     my $events = Play::Events->new;
     $events->add({ name => "e$_" }) for (1 .. 200);
 
-    is scalar @{ $events->list }, 100;
+    my $list = http_json GET => '/api/event';
+    is scalar @$list, 100;
+
+    $list = http_json GET => '/api/event?limit=30';
+    is scalar @$list, 30;
+    cmp_deeply
+        [ map { $_->{name} } @$list ],
+        [ map { "e$_" } reverse 171 .. 200 ];
+
+    $list = http_json GET => '/api/event?limit=30&offset=50';
+    is scalar @$list, 30;
+    cmp_deeply
+        [ map { $_->{name} } @$list ],
+        [ map { "e$_" } reverse 121 .. 150 ];
 }
 
-sub events_http_api :Tests {
+sub list :Tests {
     my $events = Play::Events->new;
     $events->add({ blah => 5 });
     $events->add({ blah => 6 });
@@ -56,8 +69,6 @@ sub atom :Tests {
 
     my $response = dancer_response GET => '/api/event/atom';
     is $response->status, 200;
-
-    diag ($response->content);
 
     like $response->content, qr/Frodo joins Play Perl/;
 }
