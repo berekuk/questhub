@@ -11,14 +11,17 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
 
     progress: function () {
         this.noProgress();
+        console.log('progress');
         var that = this;
         this.progressPromise = window.setTimeout(function () {
-            that.$('.progress').show();
+            console.log('show spin');
+            that.$('.icon-spinner').show();
         }, 500);
     },
 
     noProgress: function () {
-        this.$('.progress').hide();
+        console.log('noProgress');
+        this.$('.icon-spinner').hide();
         if (this.progressPromise) {
             window.clearTimeout(this.progressPromise);
         }
@@ -27,6 +30,7 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
     checkShowMoreButton: function () {
         if (this.userCount > this.collection.length) {
             this.$('.show-more').show();
+            this.$('.show-more').removeClass('disabled');
         }
         else {
             this.$('.show-more').hide();
@@ -42,7 +46,7 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
         $.get('/api/user_count')
         .done(function (data) {
             that.userCount = data.count;
-            that.$('.progress').hide();
+            that.$('.icon-spinner').hide();
             that.noProgress.apply(that);
             that.checkShowMoreButton();
         })
@@ -61,10 +65,16 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
 
     showMore: function () {
         var that = this;
+        this.progress();
+        this.$('.show-more').addClass('disabled');
         this.collection.fetchMore(50, {
             success: function () {
                 that.$('.show-more').hide();
                 that.updateUserCount();
+            },
+            error: function (collection, response) {
+                this.$('.show-more').removeClass('disabled');
+                pp.app.onError(undefined, response);
             }
         });
     },
