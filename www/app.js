@@ -99,7 +99,7 @@ $(function () {
         userList: function () {
             var collection = new pp.models.UserCollection([], {
                'sort': 'leaderboard',
-                'limit': 50,
+                'limit': 100,
             });
             var view = new pp.views.UserCollection({ collection: collection });
             collection.fetch({ error: pp.app.onError });

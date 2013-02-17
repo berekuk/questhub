@@ -39,7 +39,7 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
         this.$('.show-more').addClass('disabled');
         this.subview('.progress-spin').on();
 
-        this.collection.fetchMore(50, {
+        this.collection.fetchMore(100, {
             error: function (collection, response) {
                 pp.app.onError(undefined, response);
             }
