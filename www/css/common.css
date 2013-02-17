@@ -139,6 +139,6 @@ html, body {
     float: none; margin: 0 auto; text-align: center; display: block; width:auto; height:auto;
 }
 
-tr.show-more td {
+tbody tr.show-more > td {
     cursor: pointer;
 }
