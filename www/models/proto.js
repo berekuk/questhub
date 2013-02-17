@@ -52,7 +52,6 @@ pp.Collection.WithCgiAndPager = Backbone.Collection.extend({
 
             var method = options.update ? 'update' : 'reset';
             collection[method](resp, options);
-            console.log('original success: ' + success);
             if (success) {
                 success(collection, resp, options);
             }
@@ -63,7 +62,6 @@ pp.Collection.WithCgiAndPager = Backbone.Collection.extend({
     // pager
     // supports { success: ..., error: ... } as a second parameter
     fetchMore: function (count, options) {
-        console.log('fetchMore');
         this.options.offset = this.length;
         this.options.limit = count + 1;
 
@@ -74,8 +72,7 @@ pp.Collection.WithCgiAndPager = Backbone.Collection.extend({
         options.update = true;
         options.remove = false;
 
-        console.log('options: ' + options);
-        this.fetch(options);
+        return this.fetch(options);
     },
 
 });

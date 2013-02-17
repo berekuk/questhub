@@ -11,6 +11,8 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
 
     progress: function () {
         this.noProgress();
+        this.$('.show-more').addClass('disabled');
+
         var that = this;
         this.progressPromise = window.setTimeout(function () {
             console.log('show spin');
@@ -38,15 +40,13 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
     showMore: function () {
         var that = this;
         this.progress();
-        this.$('.show-more').addClass('disabled');
-        this.collection.fetchMore(3, {
-            success: function (collection) {
-                that.noProgress();
-            },
+
+        this.collection.fetchMore(50, {
             error: function (collection, response) {
-                that.noProgress();
                 pp.app.onError(undefined, response);
             }
+        }).always(function () {
+            that.noProgress();
         });
     },
 
