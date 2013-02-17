@@ -11,7 +11,6 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
 
     progress: function () {
         this.noProgress();
-        console.log('progress');
         var that = this;
         this.progressPromise = window.setTimeout(function () {
             console.log('show spin');
@@ -20,7 +19,6 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
     },
 
     noProgress: function () {
-        console.log('noProgress');
         this.$('.icon-spinner').hide();
         if (this.progressPromise) {
             window.clearTimeout(this.progressPromise);
