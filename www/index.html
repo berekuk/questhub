@@ -328,7 +328,7 @@
           <div class="show-more-or-progress">
               <h3><!-- h3 to increase the spin icon size without while keeping it inline -->
               <button class="btn btn-primary show-more hide">Show more</button>
-              <i class="icon-spinner icon-spin hide"></i></h3>
+              <span class="progress-spin"></span></h3>
             </h3>
           </div>
         </div>
@@ -545,6 +545,10 @@
       </div>
     </script>
 
+    <script type="text/template" id="template-progress">
+      <i class="icon-spinner icon-spin hide"></i>
+    </script>
+
     <script type="text/template" id="partial-user"><a href="/player/<%= login %>" class="label"><%= login + (obj.colon ? ':' : '') %></a></script>
     <script type="text/template" id="partial-edit-tools">
       <div class="pull-right mini-button-block">
@@ -646,6 +650,7 @@
     <script src="/views/proto.js"></script>
     <script src="/views/app.js"></script>
     <script src="/views/notify.js"></script>
+    <script src="/views/progress.js"></script>
     <script src="/views/dashboard.js"></script>
     <script src="/views/explore.js"></script>
     <script src="/views/home.js"></script>

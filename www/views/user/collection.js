@@ -5,33 +5,26 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
         "click .show-more": "showMore",
     },
 
+    subviews: {
+        '.progress-spin': function () {
+            return new pp.views.Progress();
+        },
+    },
+
     listSelector: '.users-list',
 
     activated: true,
 
-    progress: function () {
-        this.noProgress();
-        this.$('.show-more').addClass('disabled');
-
-        var that = this;
-        this.progressPromise = window.setTimeout(function () {
-            console.log('show spin');
-            that.$('.icon-spinner').show();
-        }, 500);
-    },
-
     noProgress: function () {
         this.$('.show-more').toggle(this.collection.gotMore);
         this.$('.show-more').removeClass('disabled');
-        this.$('.icon-spinner').hide();
-        if (this.progressPromise) {
-            window.clearTimeout(this.progressPromise);
-        }
+        this.subview('.progress-spin').off();
     },
 
     afterInitialize: function () {
         pp.View.AnyCollection.prototype.afterInitialize.apply(this, arguments);
-        this.progress(); // app.js fetches the collection for the first time immediately
+        this.subview('.progress-spin').on(); // app.js fetches the collection for the first time immediately
+
         this.collection.once('reset', this.noProgress, this);
         this.listenTo(this.collection, 'error', this.noProgress);
         this.render();
@@ -39,7 +32,9 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
 
     showMore: function () {
         var that = this;
-        this.progress();
+
+        this.$('.show-more').addClass('disabled');
+        this.subview('.progress-spin').on();
 
         this.collection.fetchMore(50, {
             error: function (collection, response) {
