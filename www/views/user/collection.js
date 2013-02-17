@@ -12,6 +12,9 @@ pp.views.UserCollection = pp.View.AnyCollection.extend({
     },
 
     listSelector: '.users-list',
+    insertOne: function (el) {
+        this.$('.show-more').before(el);
+    },
 
     activated: true,
 
