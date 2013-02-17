@@ -138,3 +138,6 @@ html, body {
 .center {
     float: none; margin: 0 auto; text-align: center; display: block; width:auto; height:auto;
 }
+
+/* Always show vertical scroll bar in browser. It fixes the issue with jumping buttons */
+html { overflow-y: scroll; }
