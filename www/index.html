@@ -236,9 +236,16 @@
     </script>
 
     <script type="text/template" id="template-quest-collection">
-        <div>
-          <table class="table table-bordered quests-list table-hover" style="display: none"></table>
+      <div>
+        <table class="table table-bordered quests-list table-hover hide"></table>
+        <div class="show-more-or-progress">
+          <h3><!-- h3 to increase the spin icon size without while keeping it inline -->
+            <button class="btn btn-primary show-more hide">Show more</button>
+            <span class="progress-spin"></span>
+          </h3>
+          </h3>
         </div>
+      </div>
     </script>
 
     <script type="text/template" id="template-quest-small">

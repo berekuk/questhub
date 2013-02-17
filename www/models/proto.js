@@ -2,11 +2,8 @@
 pp.Collection.WithCgiAndPager = Backbone.Collection.extend({
 
     // all implementations should support at least 'limit' and 'offset'
-    // if you override opt2cgi, don't forget about it!
-    opt2cgi: {
-        'limit': 'limit',
-        'offset': 'offset'
-    },
+    // if you override cgi, don't forget about it!
+    cgi: ['limit', 'offset'],
 
     // baseUrl is required
 
@@ -16,21 +13,24 @@ pp.Collection.WithCgiAndPager = Backbone.Collection.extend({
         var url = this.baseUrl;
         var cgi = this.defaultCgi.slice(0); // clone
 
-        _.each(this.opt2cgi, function (cgiKey, optKey) {
-            if (this.options[optKey]) {
-                cgi.push(cgiKey + '=' + this.options[optKey]);
+        console.log(this.cgi);
+        _.each(this.cgi, function (key) {
+            if (this.options[key]) {
+                cgi.push(key + '=' + this.options[key]);
             }
         }, this);
 
         if (cgi.length) {
             url += '?' + cgi.join('&');
         }
+        console.log(url);
         return url;
     },
 
     initialize: function(model, args) {
         this.options = args || {};
         if (this.options.limit) this.options.limit++; // always ask for one more
+        console.log('initialize');
         this.gotMore = true; // optimistic :)
     },
 
@@ -42,12 +42,13 @@ pp.Collection.WithCgiAndPager = Backbone.Collection.extend({
         if (options.parse === void 0) options.parse = true;
         var success = options.success;
         options.success = function(collection, resp, options) {
+            console.log('success');
             if (collection.options.limit) {
                 collection.gotMore = (resp.length >= collection.options.limit);
                 resp.pop(); // always ignore last item, we asked for it only for the sake of knowing if there's more
             }
             else {
-                this.gotMore = false; // there was no limit, so we got everything there is
+                collection.gotMore = false; // there was no limit, so we got everything there is
             }
 
             var method = options.update ? 'update' : 'reset';

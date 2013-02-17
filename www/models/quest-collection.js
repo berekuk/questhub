@@ -4,12 +4,7 @@ pp.models.QuestCollection = pp.Collection.WithCgiAndPager.extend({
 
     baseUrl: '/api/quest',
 
-    opt2cgi: {
-        'user': 'user',
-        'status': 'status',
-        'limit': 'limit',
-        'offset': 'offset'
-    },
+    cgi: ['user', 'status', 'limit', 'offset', 'sort'],
 
     model: pp.models.Quest
 });

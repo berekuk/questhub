@@ -1,11 +1,6 @@
 pp.models.UserCollection = pp.Collection.WithCgiAndPager.extend({
 
-    opt2cgi: {
-        'sort_key': 'sort',
-        'order': 'order',
-        'limit': 'limit',
-        'offset': 'offset'
-    },
+    cgi: ['sort', 'order', 'limit', 'offset'],
 
     baseUrl: '/api/user',
 
