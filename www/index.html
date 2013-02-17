@@ -37,8 +37,8 @@
 
     <!-- current user widget from right-top corner -->
     <script type="text/template" id="template-current-user">
+      <% if (registered === 1) { %>
       <li class="dropdown">
-        <% if (registered === 1) { %>
           <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= login %></a>
           <ul class="dropdown-menu">
             <li>
@@ -46,10 +46,10 @@
               <a href="#" class="logout">Logout</a>
             </li>
           </ul>
-        <% } else { %>
-          <a href="/auth/twitter">Login with <i class="icon-twitter icon-large"></i></a>
-        <% } %>
       </li>
+      <% } else { %>
+	    <a href="#myModal" role="button" class="btn btn-primary" data-toggle="modal">Login</a>
+      <% } %>
     </script>
 
     <!-- landing page -->
@@ -293,6 +293,23 @@
       </div>
     </script>
 
+	<!-- Login Modal -->
+    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Login</h3>
+      </div>
+      <div class="modal-body">
+         <p style="text-align:center">
+           <a href="/auth/twitter" class="btn btn-large btn-primary">Twitter <i class="icon-twitter icon-large"></i></a>
+		    <a href="/auth/github" class="btn btn-large btn-primary">Github <i class="icon-github icon-large"></i></a>
+		 </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+      </div>
+    </div>
+	  
     <script type="text/template" id="template-confirm-email">
       <div class="row-fluid">
         <div class="span3"></div>
