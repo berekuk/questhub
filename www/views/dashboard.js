@@ -22,7 +22,8 @@ pp.views.Dashboard = pp.View.Common.extend({
         var login = this.model.get('login');
         var collection = new pp.models.QuestCollection([], {
            'user': login,
-           'status': st
+           'status': st,
+            'limit': 30
         });
         collection.comparator = function(m1, m2) {
             if (m1.id > m2.id) return -1; // before

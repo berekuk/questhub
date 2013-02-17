@@ -122,11 +122,12 @@ pp.View.Common = pp.View.Base.extend({
         var that = this;
         _.each(this.features, function(feature) {
             if (feature == 'timeago') {
-                that.$el.find('time.timeago').timeago();
+                that.$('time.timeago').timeago();
             }
             else if (feature == 'tooltip') {
-                that.$el.find('[data-toggle=tooltip]').tooltip();
-            } else {
+                that.$('[data-toggle=tooltip]').tooltip();
+            }
+            else {
                 console.log("unknown feature: " + feature);
             }
         });
@@ -136,7 +137,7 @@ pp.View.Common = pp.View.Base.extend({
         _.each(_.keys(this._subviewInstances), function(key) {
             var subview = that._subviewInstances[key];
 
-            subview.setElement(that.$el.find(key)).render();
+            subview.setElement(that.$(key)).render();
         });
 
         return this;
@@ -163,7 +164,7 @@ pp.View.Common = pp.View.Base.extend({
  *
  * options:
  *   generateItem(model): function generating one item subview
- *   listSelector: css selector specifying the div to which subviews will be appended
+ *   listSelector: css selector specifying the div to which subviews will be appended (or prepended, or whatever - see 'insertMethod')
  *
  * Note that this view defines 'afterInitialize' and 'afterRender'. Sorry, future me.
  */
@@ -179,6 +180,11 @@ pp.View.AnyCollection = pp.View.Common.extend({
 
     itemSubviews: [],
 
+    // can be overriden if 'append' strategy doesn't fit you
+    insertOne: function (el) {
+        this.$(this.listSelector).append(el);
+    },
+
     removeItemSubviews: function () {
         _.each(this.itemSubviews, function (subview) {
             subview.remove();
@@ -189,7 +195,7 @@ pp.View.AnyCollection = pp.View.Common.extend({
     afterRender: function () {
         this.removeItemSubviews();
         if (this.collection.length) {
-            this.$el.find(this.listSelector).show(); // collection table is hidden initially - see https://github.com/berekuk/play-perl/issues/61
+            this.$(this.listSelector).show(); // collection table is hidden initially - see https://github.com/berekuk/play-perl/issues/61
         }
         this.collection.each(this.renderOne, this);
     },
@@ -201,12 +207,12 @@ pp.View.AnyCollection = pp.View.Common.extend({
     renderOne: function(model) {
         var view = this.generateItem(model);
         this.itemSubviews.push(view);
-        var list = this.$el.find(this.listSelector);
-        list.append(view.render().el);
+        var list = this.$(this.listSelector);
+        this.insertOne(view.render().el);
     },
 
     onAdd: function (model) {
-        this.$el.find(this.listSelector).show();
+        this.$(this.listSelector).show();
         this.renderOne(model);
     },
 

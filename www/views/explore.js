@@ -13,7 +13,7 @@ pp.views.Explore = pp.View.Common.extend({
         var collection = new pp.models.QuestCollection([], {
            'status': st,
            'sort': 'leaderboard',
-           'limit': 50
+           'limit': 100
         });
 
         // duplicates server-side sorting logic!

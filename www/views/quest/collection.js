@@ -12,11 +12,15 @@ pp.views.QuestCollection = pp.View.AnyCollection.extend({
     },
 
     listSelector: '.quests-list',
+    insertOne: function (el) {
+        this.$('.show-more').before(el);
+    },
 
     activated: true,
 
+    pageSize: 100,
+
     noProgress: function () {
-        console.log(this.collection);
         this.$('.show-more').toggle(this.collection.gotMore);
         this.$('.show-more').removeClass('disabled');
         this.subview('.progress-spin').off();
@@ -37,7 +41,7 @@ pp.views.QuestCollection = pp.View.AnyCollection.extend({
         this.$('.show-more').addClass('disabled');
         this.subview('.progress-spin').on();
 
-        this.collection.fetchMore(50, {
+        this.collection.fetchMore(this.pageSize, {
             error: function (collection, response) {
                 pp.app.onError(undefined, response);
             }
