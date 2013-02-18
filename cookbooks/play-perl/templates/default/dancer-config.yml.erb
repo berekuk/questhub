@@ -19,3 +19,10 @@ plugins:
     callback_url:     "http://<%= @hostport %>/auth/twitter/callback"
     callback_success: "/auth/twitter"
     callback_fail:    "/fail"
+	
+  "Auth::Github":
+    client_id:     "<%= @github['client_id'] %>"
+    client_secret:  "<%= @github['client_secret'] %>"
+    callback_url:     "http://<%= @hostport %>/auth/github/callback"
+    callback_success: "/auth/github"
+    callback_fail:    "/fail"

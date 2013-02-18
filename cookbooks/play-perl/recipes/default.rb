@@ -44,6 +44,7 @@ cpan_module 'Email::Sender'
 cpan_module 'Dancer::Serializer::JSON'
 cpan_module 'Dancer::Session::MongoDB'
 cpan_module 'Dancer::Plugin::Auth::Twitter'
+cpan_module 'Dancer::Plugin::Auth::Github'
 
 directory '/data' # logs
 
@@ -55,6 +56,7 @@ template "/play/app/config.yml" do
   mode 0644
   variables({
       :twitter => node['play_perl']['twitter'],
+	  :github => node['play_perl']['github'],
       :hostport => node['play_perl']['hostport']
   })
   notifies :restart, "service[nginx]"
