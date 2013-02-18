@@ -32,6 +32,7 @@ pp.View.PagedCollection = pp.View.AnyCollection.extend({
 
     afterInitialize: function () {
         pp.View.AnyCollection.prototype.afterInitialize.apply(this, arguments);
+
         this.subview('.progress-spin').on(); // app.js fetches the collection for the first time immediately
 
         this.collection.once('reset', this.noProgress, this);
@@ -40,7 +41,6 @@ pp.View.PagedCollection = pp.View.AnyCollection.extend({
     },
 
     showMore: function () {
-        console.log('showMore');
         var that = this;
 
         this.$('.show-more').addClass('disabled');
