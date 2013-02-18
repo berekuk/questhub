@@ -142,3 +142,6 @@ html, body {
 tbody tr.show-more > td {
     cursor: pointer;
 }
+
+/* Always show vertical scroll bar in browser. It fixes the issue with jumping buttons */
+html { overflow-y: scroll; }
