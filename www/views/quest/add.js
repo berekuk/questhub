@@ -60,6 +60,11 @@ pp.views.QuestAdd = pp.View.Base.extend({
                 return -($(this).width() / 2);
             }
         });
+
+        var qe = this.$('.quest-edit');
+        this.$('#addQuest').modal().on('shown', function () {
+            qe.focus();
+        });
     },
 
     submit: function() {

@@ -64,7 +64,7 @@ time.timeago {
 input.quest-edit {
     /* copied from h1 styles */
     font-size: 30px;
-    line-height: 40px;
+    line-height: 30px;
     height: 40px;
     width: 800px;
     font-weight: 200;
