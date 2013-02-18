@@ -22,7 +22,6 @@ pp.Collection.WithCgiAndPager = Backbone.Collection.extend({
         if (cgi.length) {
             url += '?' + cgi.join('&');
         }
-        console.log('url: ' + url);
         return url;
     },
 
@@ -42,7 +41,9 @@ pp.Collection.WithCgiAndPager = Backbone.Collection.extend({
         options.success = function(collection, resp, options) {
             if (collection.options.limit) {
                 collection.gotMore = (resp.length >= collection.options.limit);
-                resp.pop(); // always ignore last item, we asked for it only for the sake of knowing if there's more
+                if (collection.gotMore) {
+                    resp.pop(); // always ignore last item, we asked for it only for the sake of knowing if there's more
+                }
             }
             else {
                 collection.gotMore = false; // there was no limit, so we got everything there is
