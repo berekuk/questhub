@@ -1,4 +1,4 @@
-pp.views.EventCollection = pp.View.AnyCollection.extend({
+pp.views.EventCollection = pp.View.PagedCollection.extend({
     tag: 'div',
 
     t: 'event-collection',

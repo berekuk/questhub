@@ -22,6 +22,7 @@ pp.Collection.WithCgiAndPager = Backbone.Collection.extend({
         if (cgi.length) {
             url += '?' + cgi.join('&');
         }
+        console.log('url: ' + url);
         return url;
     },
 

@@ -108,7 +108,10 @@ $(function () {
         },
 
         eventCollection: function () {
-            var collection = new pp.models.EventCollection();
+            var collection = new pp.models.EventCollection([], {
+                'limit': 100
+            });
+            console.log(collection.url());
             var view = new pp.views.EventCollection({ collection: collection });
             collection.fetch();
             appView.setPageView(view);

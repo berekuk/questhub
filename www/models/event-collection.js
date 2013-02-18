@@ -1,4 +1,5 @@
-pp.models.EventCollection = Backbone.Collection.extend({
-    url: '/api/event',
+pp.models.EventCollection = pp.Collection.WithCgiAndPager.extend({
+    baseUrl: '/api/event',
+    cgi: ['limit', 'offset'],
     model: pp.models.Event
 });
