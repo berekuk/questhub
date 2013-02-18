@@ -207,7 +207,6 @@ pp.View.AnyCollection = pp.View.Common.extend({
     renderOne: function(model) {
         var view = this.generateItem(model);
         this.itemSubviews.push(view);
-        var list = this.$(this.listSelector);
         this.insertOne(view.render().el);
     },
 
