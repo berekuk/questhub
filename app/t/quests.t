@@ -133,9 +133,29 @@ sub quest_events :Tests {
     my $quest_id = $add_result->{_id};
     http_json PUT => "/api/quest/$quest_id", { params => { status => 'closed' } }; # close
     http_json PUT => "/api/quest/$quest_id", { params => { status => 'open' } }; # and reopen again
+    http_json PUT => "/api/quest/$quest_id", { params => { status => 'abandoned' } };
+    http_json PUT => "/api/quest/$quest_id", { params => { status => 'open' } };
 
     my @events = grep { $_->{object_type} eq 'quest' } @{ Play::Events->new->list };
     cmp_deeply \@events, [
+        {
+            _id => re('^\S+$'),
+            ts => re('^\d+$'),
+            object_type => 'quest',
+            action => 'resurrect',
+            author => $user,
+            object_id => $quest_id,
+            object => { name => 'test-quest', status => 'open', user => $user },
+        },
+        {
+            _id => re('^\S+$'),
+            ts => re('^\d+$'),
+            object_type => 'quest',
+            action => 'abandon',
+            author => $user,
+            object_id => $quest_id,
+            object => { name => 'test-quest', status => 'abandoned', user => $user },
+        },
         {
             _id => re('^\S+$'),
             ts => re('^\d+$'),
@@ -162,7 +182,7 @@ sub quest_events :Tests {
             author => $user,
             object_id => $quest_id,
             object => { name => 'test-quest', status => 'open', user => $user },
-        }
+        },
     ];
 }
 
