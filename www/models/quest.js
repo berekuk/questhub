@@ -14,6 +14,14 @@ pp.models.Quest = Backbone.Model.extend({
         this._setStatus('closed');
     },
 
+    abandon: function() {
+        this._setStatus('abandoned');
+    },
+
+    resurrect: function() {
+        this._setStatus('open');
+    },
+
     reopen: function() {
         this._setStatus('open');
     },

@@ -16,6 +16,25 @@ my $users = Play::Users->new;
 my $events = Play::Events->new;
 my $comments = Play::Comments->new;
 
+=pod
+
+$quest = {
+    user => '...',
+    status => qr/ open | closed | stalled | abandoned /,
+
+    open->closed
+    open->stalled
+    open->abandoned
+
+    closed->open
+    stalled->open
+    abandoned->open
+
+    any->deleted
+}
+
+=cut
+
 has 'collection' => (
     is => 'ro',
     lazy => 1,
@@ -157,12 +176,22 @@ sub update {
 
     my $action = '';
 
-    if ($quest->{status} eq 'open' and $params->{status} and $params->{status} eq 'closed') {
-        $action = 'close';
-    }
-
-    if ($quest->{status} eq 'closed' and $params->{status} and $params->{status} eq 'open') {
-        $action = 'reopen';
+    if ($params->{status} and $params->{status} ne $quest->{status}) {
+        if ($quest->{status} eq 'open' and $params->{status} eq 'closed') {
+            $action = 'close';
+        }
+        elsif ($quest->{status} eq 'closed' and $params->{status} eq 'open') {
+            $action = 'reopen';
+        }
+        elsif ($quest->{status} eq 'open' and $params->{status} eq 'abandoned') {
+            $action = 'abandon';
+        }
+        elsif ($quest->{status} eq 'abandoned' and $params->{status} eq 'open') {
+            $action = 'resurrect';
+        }
+        else {
+            die "quest status transition $quest->{status} => $params->{status} is forbidden";
+        }
     }
 
     if ($action eq 'close') {
@@ -183,7 +212,7 @@ sub update {
 
     # there are other actions, for example editing the quest description
     # TODO - should we split the update() method into several, more semantic methods?
-    if ($action eq 'close' or $action eq 'reopen') {
+    if ($action) {
         $events->add({
             object_type => 'quest',
             action => $action,

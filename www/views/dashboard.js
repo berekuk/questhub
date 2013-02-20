@@ -15,15 +15,19 @@ pp.views.Dashboard = pp.View.Common.extend({
             }); // TODO - fetch or not?
         },
         '.open-quests': function () { return this.createQuestSubview('open') },
-        '.closed-quests': function () { return this.createQuestSubview('closed') }
+        '.closed-quests': function () { return this.createQuestSubview('closed') },
+        '.abandoned-quests': function () { return this.createQuestSubview('abandoned', 5) }
     },
 
-    createQuestSubview: function (st) {
+    createQuestSubview: function (st, limit) {
+        if (limit === undefined) {
+            limit = 30;
+        }
         var login = this.model.get('login');
         var collection = new pp.models.QuestCollection([], {
            'user': login,
            'status': st,
-            'limit': 30
+            'limit': limit
         });
         collection.comparator = function(m1, m2) {
             if (m1.id > m2.id) return -1; // before
