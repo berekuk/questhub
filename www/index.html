@@ -185,6 +185,7 @@
           <div class="span9">
             <div class="open-quests"></div>
             <div class="closed-quests"></div>
+            <div class="abandoned-quests"></div>
           </div>
         </div>
       </div>
@@ -419,6 +420,14 @@
         <%= partial.user({ login: object.user }) %> reopened a quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
     </script>
 
+    <script type="text/template" id="template-event-abandon-quest">
+        <%= partial.user({ login: object.user }) %> abandoned a quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
+    </script>
+
+    <script type="text/template" id="template-event-resurrect-quest">
+        <%= partial.user({ login: object.user }) %> resurrected a quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
+    </script>
+
     <script type="text/template" id="template-event-add-user">
         <%= partial.user({ login: object.login }) %> joins Play Perl!
     </script>
@@ -508,9 +517,11 @@
         <!-- close/reopen button -->
         <% if (status === 'open') { %>
           <button class="quest-close btn btn-primary">Complete</button>
-        <% } %>
-          <% if (status === 'closed') { %>
+          <button class="quest-abandon btn">Abandon</button>
+        <% } else if (status === 'closed') { %>
         <button class="quest-reopen btn btn-primary">Reopen</button>
+        <% } else if (status === 'abandoned') { %>
+        <button class="quest-resurrect btn">Resurrect</button>
         <% } %>
         </div>
 

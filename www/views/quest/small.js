@@ -31,7 +31,13 @@ pp.views.QuestSmall = pp.View.Common.extend({
     },
 
     afterRender: function () {
-        var className = (this.model.get('status') == 'open' ? 'warning' : 'info');
+        var className = '';
+        if (this.model.get('status') == 'open') {
+            className = 'warning';
+        }
+        else if (this.model.get('status') == 'closed') {
+            className = 'info';
+        }
         this.$el.addClass(className);
     },
 
