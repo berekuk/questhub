@@ -25,6 +25,14 @@
     <title><% event.author %> reopened a quest: <% event.object.name %></title>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object_id %>" />
 
+    <% ELSIF event.object_type == 'quest' && event.action == 'abandon' %>
+    <title><% event.author %> abandoned a quest: <% event.object.name %></title>
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object_id %>" />
+
+    <% ELSIF event.object_type == 'quest' && event.action == 'resurrect' %>
+    <title><% event.author %> resurrected a quest: <% event.object.name %></title>
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object_id %>" />
+
     <% ELSIF event.object_type == 'user' && event.action == 'add' %>
     <title><% event.author %> joins Play Perl!</title>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/player/<%= event.author %>" />
