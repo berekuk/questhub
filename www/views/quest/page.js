@@ -3,7 +3,7 @@ pp.views.QuestPage = pp.View.Common.extend({
     selfRender: true,
 
     subviews: {
-        '.quest': function () {
+        '.quest-big': function () {
             return new pp.views.QuestBig({
                 model: this.model
             });
@@ -19,7 +19,7 @@ pp.views.QuestPage = pp.View.Common.extend({
 
     afterInitialize: function () {
         this.model.once('sync', function () {
-            this.subview('.quest').activate();
+            this.subview('.quest-big').activate();
         }, this);
         this.model.fetch();
     },

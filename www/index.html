@@ -474,58 +474,60 @@
 
     <!-- quest details page -->
     <script type="text/template" id="template-quest-page">
-      <div class="quest"></div>
+      <div class="quest-big"></div>
       <div class="comments"></div>
     </script>
 
     <script type="text/template" id="template-quest-big">
-      <div>
-        <%= partial.user({ login: obj.user }) %><span class="muted"> is on a quest:</span>
-      </div>
-
-      <h2>
-        <% if (my) { %>
-          <%= partial.edit_tools() %>
-        <% } %>
-        <span class="quest-title"><%= name %></span>
-        <% if (my) { %>
-          <input class="quest-edit" type="text" value="<%= name %>" style="display: none">
-        <% } %>
-        <span class="quest-label label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
-        <% if (typeof(type) != 'undefined') { %>
-          <span class="quest-label label label-inverse"><%= type %></span>
-        <% } %>
-        <!--
-        // this code is buggy; because of QuestBig view double rendering issue, 'Tweet' button is often rendered as a broken link
-        // also, the current 'Tweet' button location is too annoying
-      <% if (my) { %>
-        <a
-            href="https://twitter.com/share"
-            class="twitter-share-button"
-            data-lang="en"
-            data-url="http://play-perl.org/quest/<%= _id %>"
-            data-text="<% if (status === 'open') { %>I've got the new quest:<% } else { %>I've completed the quest:<% } %> <%= name %>" data-hashtags="playperl">Tweet</a>
-      <% } %>
-      -->
-      </h2>
-
-      <div class="likes"></div>
-
-      <% if (my) { %> <!-- quest belongs to the current user -->
-
+      <div class="<%= "quest-" + status %>">
         <div>
-        <!-- close/reopen button -->
-        <% if (status === 'open') { %>
-          <button class="quest-close btn btn-primary">Complete</button>
-          <button class="quest-abandon btn">Abandon</button>
-        <% } else if (status === 'closed') { %>
-        <button class="quest-reopen btn btn-primary">Reopen</button>
-        <% } else if (status === 'abandoned') { %>
-        <button class="quest-resurrect btn">Resurrect</button>
-        <% } %>
+          <%= partial.user({ login: obj.user }) %><span class="muted"> is on a quest:</span>
+          <% if (my) { %>
+            <%= partial.edit_tools() %>
+          <% } %>
         </div>
 
-      <% } %>
+        <h2>
+          <span class="quest-title"><%= name %></span>
+          <% if (my) { %>
+            <input class="quest-edit" type="text" value="<%= name %>" style="display: none">
+          <% } %>
+          <span class="quest-label label label-<%= status === 'open' && 'warning' %>"><%= status %></span>
+          <% if (typeof(type) != 'undefined') { %>
+            <span class="quest-label label label-inverse"><%= type %></span>
+          <% } %>
+          <!--
+          // this code is buggy; because of QuestBig view double rendering issue, 'Tweet' button is often rendered as a broken link
+          // also, the current 'Tweet' button location is too annoying
+        <% if (my) { %>
+          <a
+              href="https://twitter.com/share"
+              class="twitter-share-button"
+              data-lang="en"
+              data-url="http://play-perl.org/quest/<%= _id %>"
+              data-text="<% if (status === 'open') { %>I've got the new quest:<% } else { %>I've completed the quest:<% } %> <%= name %>" data-hashtags="playperl">Tweet</a>
+        <% } %>
+        -->
+        </h2>
+
+        <div class="likes"></div>
+
+        <% if (my) { %> <!-- quest belongs to the current user -->
+
+          <div>
+          <!-- close/reopen button -->
+          <% if (status === 'open') { %>
+            <button class="quest-close btn btn-primary">Complete</button>
+            <button class="quest-abandon btn">Abandon</button>
+          <% } else if (status === 'closed') { %>
+          <button class="quest-reopen btn btn-primary">Reopen</button>
+          <% } else if (status === 'abandoned') { %>
+          <button class="quest-resurrect btn">Resurrect</button>
+          <% } %>
+          </div>
+
+        <% } %>
+      </div>
     </script>
 
     <!-- like/unlike button  -->
