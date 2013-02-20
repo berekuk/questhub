@@ -1,12 +1,18 @@
 pp.views.Explore = pp.View.Common.extend({
-
     t: 'explore',
-
     selfRender: true,
+
+    events: {
+        'click a.explore-tab': 'switchTab',
+    },
 
     subviews: {
         '#open-quests-tab': function () { return this.questSubview('open') },
         '#closed-quests-tab': function () { return this.questSubview('closed') }
+    },
+
+    afterInitialize: function () {
+        _.bindAll(this);
     },
 
     questSubview: function (st) {
@@ -32,5 +38,20 @@ pp.views.Explore = pp.View.Common.extend({
             collection: collection,
             showAuthor: true
         });
+    },
+
+    switchTab: function (e) {
+        var tab = $(e.target).attr('data-explore-tab');
+        this.switchTabByName(tab);
+        pp.app.router.navigate('/explore/' + tab);
+    },
+
+    switchTabByName: function(tab) {
+        this.$('.nav > li').removeClass('active');
+        var el = this.$('[data-explore-tab=' + tab + ']');
+        el.parent().addClass('active');
+
+        this.$('.explore-tab-content').addClass('hide');
+        this.subview('#' + tab + '-quests-tab').$el.removeClass('hide');
     }
 });

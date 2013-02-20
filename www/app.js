@@ -29,7 +29,7 @@ $(function () {
             "feed": "eventCollection",
             "players": "userList",
             "player/:login": "anotherDashboard",
-            "explore": "explore",
+            "explore(/:tab)": "explore",
             "about": "about",
         },
 
@@ -89,8 +89,11 @@ $(function () {
             setActiveMenuItem('none');
         },
 
-        explore: function () {
+        explore: function (tab) {
             var view = new pp.views.Explore();
+            if (tab != undefined) {
+                view.switchTabByName(tab);
+            }
 
             appView.setPageView(view);
             setActiveMenuItem('explore');
