@@ -1,8 +1,7 @@
 use t::common;
 use parent qw(Test::Class);
 
-use Play::Quests;
-use Play::Events;
+use Play::DB qw(db);
 
 my $quests_data = {
     1 => {
@@ -24,15 +23,13 @@ my $quests_data = {
 
 sub setup :Tests(setup) {
 
-    my $quests = Play::Quests->new;
-
     Dancer::session->destroy;
     reset_db();
 
     # insert quests to DB
     for (keys %$quests_data) {
         delete $quests_data->{$_}->{_id};
-        my $OID = $quests->collection->insert( $quests_data->{$_} ); # MongoDB::OID
+        my $OID = db->quests->collection->insert( $quests_data->{$_} ); # MongoDB::OID
         $quests_data->{$_}->{_id} = $OID->to_string;
         $quests_data->{$_}->{ts} = $OID->get_time;
     }
@@ -40,7 +37,7 @@ sub setup :Tests(setup) {
 
 sub perl_quest_list :Test(1) {
     cmp_deeply(
-        [ sort { $a->{_id} cmp $b->{_id} } @{ Play::Quests->new->list({}) } ],
+        [ sort { $a->{_id} cmp $b->{_id} } @{ db->quests->list({}) } ],
         [ sort { $a->{_id} cmp $b->{_id} } values %$quests_data ],
     );
 }
@@ -147,7 +144,7 @@ sub quest_events :Tests {
     http_json PUT => "/api/quest/$quest_id", { params => { status => 'abandoned' } };
     http_json PUT => "/api/quest/$quest_id", { params => { status => 'open' } };
 
-    my @events = grep { $_->{object_type} eq 'quest' } @{ Play::Events->new->list };
+    my @events = grep { $_->{object_type} eq 'quest' } @{ db->events->list };
     cmp_deeply \@events, [
         {
             _id => re('^\S+$'),

@@ -6,8 +6,7 @@ use Dancer::Plugin::Auth::Twitter;
 auth_twitter_init();
 
 use JSON;
-use Play::Users;
-my $users = Play::Users->new;
+use Play::DB qw(db);
 
 get '/auth/twitter' => sub {
     if (not session('twitter_user')) {
@@ -15,7 +14,7 @@ get '/auth/twitter' => sub {
     } else {
 
         my $twitter_login = session('twitter_user')->{screen_name} or die "no twitter login in twitter_user session field";
-        my $user = $users->get_by_twitter_login($twitter_login);
+        my $user = db->users->get_by_twitter_login($twitter_login);
         if ($user) {
             session 'login' => $user->{login};
         }
@@ -30,13 +29,13 @@ get '/current_user' => sub {
     my $user = {};
     my $login = session('login');
     if ($login) {
-        $user = $users->get_by_login($login);
+        $user = db->users->get_by_login($login);
         unless ($user) {
             die "user '$login' not found";
         }
         $user->{registered} = 1;
 
-        $user->{settings} = $users->get_settings($login);
+        $user->{settings} = db->users->get_settings($login);
     }
     else {
         $user->{registered} = 0;
@@ -53,12 +52,12 @@ get '/current_user' => sub {
 get '/current_user/settings' => sub {
     my $login = session('login');
     die "not logged in" unless session->{login};
-    return $users->get_settings($login);
+    return db->users->get_settings($login);
 };
 
 any ['put', 'post'] => '/current_user/settings' => sub {
     die "not logged in" unless session->{login};
-    $users->set_settings(
+    db->users->set_settings(
         session->{login} => scalar params()
     );
     return { result => 'ok' };
@@ -66,7 +65,7 @@ any ['put', 'post'] => '/current_user/settings' => sub {
 
 get '/user/:login' => sub {
     my $login = param('login');
-    my $user = $users->get_by_login($login);
+    my $user = db->users->get_by_login($login);
     unless ($user) {
         die "user '$login' not found";
     }
@@ -81,10 +80,10 @@ post '/register' => sub {
     my $twitter_login = session('twitter_user')->{screen_name};
     my $login = param('login') or die 'no login specified';
 
-    if ($users->get_by_login($login)) {
+    if (db->users->get_by_login($login)) {
         die "User $login already exists";
     }
-    if ($users->get_by_twitter_login($twitter_login)) {
+    if (db->users->get_by_twitter_login($twitter_login)) {
         die "Twitter login $twitter_login is already bound";
     }
 
@@ -98,11 +97,11 @@ post '/register' => sub {
     my $user = { login => $login, twitter => { screen_name => $twitter_login } };
 
     session 'login' => $login;
-    $users->add($user);
+    db->users->add($user);
 
     my $settings = param('settings');
     if ($settings) {
-        $users->set_settings($login => decode_json($settings));
+        db->users->set_settings($login => decode_json($settings));
     }
 
     return { status => "ok", user => $user };
@@ -111,25 +110,25 @@ post '/register' => sub {
 post '/register/resend_email_confirmation' => sub {
     my $login = session('login');
     die "not logged in" unless session->{login};
-    $users->resend_email_confirmation($login);
+    db->users->resend_email_confirmation($login);
     return { result => 'ok' };
 };
 
 # user doesn't need to be logged to use this route
 post '/register/confirm_email' => sub {
     # throws an exception if something's wrong
-    $users->confirm_email(param('login') => param('secret'));
+    db->users->confirm_email(param('login') => param('secret'));
     return { confirmed => 1 };
 };
 
 get '/user' => sub {
-    return $users->list({
+    return db->users->list({
         map { param($_) ? ($_ => param($_)) : () } qw/ sort order limit offset /,
     });
 };
 
 get '/user_count' => sub {
-    my $count = scalar @{ $users->list };
+    my $count = scalar @{ db->users->list };
     return { count => $count };
 };
 
@@ -154,7 +153,7 @@ if ($ENV{DEV_MODE}) {
             $user->{twitter} = { screen_name => $login };
         }
 
-        $users->add($user);
+        db->users->add($user);
         return { status => 'ok', user => $user };
     };
 }
