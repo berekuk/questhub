@@ -267,7 +267,6 @@
 
     <script type="text/template" id="template-quest-small">
       <td>
-        <%= partial.status({ status: status }) %>
         <% if (obj.showAuthor) { %>
           <%= partial.user({ login: user, colon: true }) %>
         <% } %>
@@ -279,9 +278,9 @@
 
         <span class="likes"></span>
 
-        <% if (typeof(type) != 'undefined') { %>
-          <span class="label label-inverse quest-type-label"><%= type %></span>
-          <% } %>
+        <span class="pull-right">
+          <%= partial.quest_labels({ status: status, type: obj.type }) %>
+        </span>
       </td>
     </script>
 
@@ -491,10 +490,7 @@
         </div>
 
         <div class="quest-big-labels">
-          <%= partial.status({ status: status }) %>
-          <% if (typeof(type) != 'undefined') { %>
-            <span class="label label-inverse"><%= type %></span>
-          <% } %>
+          <%= partial.quest_labels({ status: status, type: obj.type }) %>
         </div>
 
         <h2>
@@ -599,7 +595,12 @@
     </script>
 
     <script type="text/template" id="partial-user"><a href="/player/<%= login %>" class="label"><%= login + (obj.colon ? ':' : '') %></a></script>
-    <script type="text/template" id="partial-status"><span class="label label-<%= status === 'open' && 'warning' %>"><%= status === 'closed' ? 'complete' : status %></span></script>
+    <script type="text/template" id="partial-quest-labels">
+      <% if (typeof(type) != 'undefined') { %>
+        <span class="label label-inverse"><%= type %></span>
+      <% } %>
+      <span class="label label-<%= status === 'open' && 'warning' %>"><%= status === 'closed' ? 'complete' : status %></span>
+    </script>
     <script type="text/template" id="partial-edit-tools">
       <div class="pull-right mini-button-block">
         <label> <!-- label fixes the font size, even inside h2 -->
