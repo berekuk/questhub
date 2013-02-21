@@ -482,11 +482,18 @@
     </script>
 
     <script type="text/template" id="template-quest-big">
-      <div class="<%= "quest-" + status %>">
+      <div class="<%= "quest-big-" + status %> quest-big">
         <div>
           <%= partial.user({ login: obj.user }) %><span class="muted"> is on a quest:</span>
           <% if (my) { %>
             <%= partial.edit_tools() %>
+          <% } %>
+        </div>
+
+        <div class="quest-big-labels">
+          <%= partial.status({ status: status }) %>
+          <% if (typeof(type) != 'undefined') { %>
+            <span class="label label-inverse"><%= type %></span>
           <% } %>
         </div>
 
@@ -496,10 +503,6 @@
             <input class="quest-edit" type="text" value="<%= name %>" style="display: none">
           <% } %>
 
-          <%= partial.status({ status: status }) %>
-          <% if (typeof(type) != 'undefined') { %>
-            <span class="label label-inverse"><%= type %></span>
-          <% } %>
           <!--
           // this code is buggy; because of QuestBig view double rendering issue, 'Tweet' button is often rendered as a broken link
           // also, the current 'Tweet' button location is too annoying
