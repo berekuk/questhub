@@ -1,4 +1,4 @@
-package Play::Events;
+package Play::DB::Events;
 
 use Moo;
 use Play::Mongo;

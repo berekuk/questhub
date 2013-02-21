@@ -1,4 +1,4 @@
-package Play::Users;
+package Play::DB::Users;
 
 use Moo;
 use Params::Validate qw(:all);

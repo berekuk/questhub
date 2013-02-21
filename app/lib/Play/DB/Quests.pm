@@ -1,4 +1,4 @@
-package Play::Quests;
+package Play::DB::Quests;
 
 use 5.010;
 

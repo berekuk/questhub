@@ -1,4 +1,4 @@
-package Play::Comments;
+package Play::DB::Comments;
 
 use Moo;
 use Params::Validate qw(:all);

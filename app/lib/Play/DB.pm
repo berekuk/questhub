@@ -13,23 +13,23 @@ sub db {
 }
 
 sub quests {
-    require Play::Quests;
-    return Play::Quests->new;
+    require Play::DB::Quests;
+    return Play::DB::Quests->new;
 }
 
 sub events {
-    require Play::Events;
-    return Play::Events->new;
+    require Play::DB::Events;
+    return Play::DB::Events->new;
 }
 
 sub users {
-    require Play::Users;
-    return Play::Users->new;
+    require Play::DB::Users;
+    return Play::DB::Users->new;
 }
 
 sub comments {
-    require Play::Comments;
-    return Play::Comments->new;
+    require Play::DB::Comments;
+    return Play::DB::Comments->new;
 }
 
 1;
