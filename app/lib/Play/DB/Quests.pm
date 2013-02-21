@@ -1,5 +1,20 @@
 package Play::DB::Quests;
 
+=head1 SYNOPSIS
+
+    $quests->add({ ...fields... });
+
+    $quests->list({ ...options... });
+
+    $quests->get($object_id);
+
+    $quests->remove($object_id, { user => $owner });
+
+    $quests->like($object_id, $liker);
+    $quests->unlike($object_id, $liker);
+
+    $quests->update($object_id, { ...new fields... });
+
 =head1 OBJECT FORMAT
 
   $quest = {
