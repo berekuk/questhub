@@ -4,12 +4,9 @@ use Moo;
 use Params::Validate qw(:all);
 use Play::Mongo;
 
-use Play::Events;
-use Play::Quests; # recursive dependency!
+use Play::DB qw(db);
 
 use Dancer qw(info setting);
-
-my $events = Play::Events->new;
 
 has 'settings_collection' => (
     is => 'ro',
@@ -26,8 +23,6 @@ has 'collection' => (
         return Play::Mongo->db->get_collection('users');
     },
 );
-
-my $quests = Play::Quests->new;
 
 sub get_by_twitter_login {
     my $self = shift;
@@ -67,7 +62,7 @@ sub add {
 
     my $id = $self->collection->insert($params);
 
-    $events->add({
+    db->events->add({
         object_type => 'user',
         action => 'add',
         author => $params->{login},
@@ -92,7 +87,7 @@ sub list {
     $self->_prepare_user($_) for @users;
 
     # filling 'open_quests' field
-    my $quests = $quests->list({ status => 'open' });
+    my $quests = db->quests->list({ status => 'open' });
     my %users = map { $_->{login} => $_ } @users;
     for my $quest (@$quests) {
         my $quser = $users{ $quest->{user} };
@@ -192,7 +187,7 @@ sub confirm_email {
     my $bool2str = sub {
         $settings->{$_[0]} ? 'enabled' : 'disabled';
     };
-    $events->email(
+    db->events->email(
         $settings->{email},
         "Your email at Play Perl is confirmed, $login",
         qq[
@@ -216,7 +211,7 @@ sub _send_email_confirmation {
     # need email confirmation
     my $secret = int rand(100000000000);
     my $link = "http://".setting('hostport')."/register/confirm/$login/$secret";
-    $events->email(
+    db->events->email(
         $email,
         "Your Play Perl email confirmation link, $login",
         qq{

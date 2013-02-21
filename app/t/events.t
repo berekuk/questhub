@@ -1,7 +1,7 @@
 use t::common;
 use parent qw(Test::Class);
 
-use Play::Events;
+use Play::DB qw(db);
 
 sub setup :Tests(setup) {
     Dancer::session->destroy;
@@ -9,12 +9,11 @@ sub setup :Tests(setup) {
 }
 
 sub event_perl_api :Tests {
-    my $events = Play::Events->new;
-    $events->add({ blah => 5, boo => 6 });
-    $events->add({ foo => 'bar' });
+    db->events->add({ blah => 5, boo => 6 });
+    db->events->add({ foo => 'bar' });
 
     cmp_deeply(
-        $events->list,
+        db->events->list,
         [
             { foo => 'bar', ts => re('^\d+$'), _id => re('^\S+$') }, # last in, first out
             { blah => 5, boo => 6, ts => re('^\d+$'), _id => re('^\S+$') },
@@ -23,8 +22,7 @@ sub event_perl_api :Tests {
 }
 
 sub limit_offset :Tests {
-    my $events = Play::Events->new;
-    $events->add({ name => "e$_" }) for (1 .. 200);
+    db->events->add({ name => "e$_" }) for (1 .. 200);
 
     my $list = http_json GET => '/api/event';
     is scalar @$list, 100;
@@ -43,9 +41,8 @@ sub limit_offset :Tests {
 }
 
 sub list :Tests {
-    my $events = Play::Events->new;
-    $events->add({ blah => 5 });
-    $events->add({ blah => 6 });
+    db->events->add({ blah => 5 });
+    db->events->add({ blah => 6 });
 
     my $list = http_json GET => '/api/event';
     cmp_deeply

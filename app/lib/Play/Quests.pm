@@ -6,15 +6,9 @@ use Moo;
 use Params::Validate qw(:all);
 use Play::Mongo;
 
-use Play::Users;
-use Play::Events;
-use Play::Comments;
+use Play::DB qw(db);
 
 use Dancer qw(setting);
-
-my $users = Play::Users->new;
-my $events = Play::Events->new;
-my $comments = Play::Comments->new;
 
 =pod
 
@@ -90,7 +84,7 @@ sub list {
     $self->_prepare_quest($_) for @quests;
 
     if ($params->{comment_count} or ($params->{sort} || '') eq 'leaderboard') {
-        my $comment_stat = $comments->bulk_count([
+        my $comment_stat = db->comments->bulk_count([
             map { $_->{_id} } @quests
         ]);
 
@@ -153,7 +147,7 @@ sub add {
 
     my $id = $self->collection->insert($params);
 
-    $events->add({
+    db->events->add({
         object_type => 'quest',
         action => 'add',
         author => $params->{user},
@@ -210,10 +204,10 @@ sub update {
     }
 
     if ($action eq 'close') {
-        $users->add_points($user, $self->_quest2points($quest));
+        db->users->add_points($user, $self->_quest2points($quest));
     }
     elsif ($action eq 'reopen') {
-        $users->add_points($user, -$self->_quest2points($quest));
+        db->users->add_points($user, -$self->_quest2points($quest));
     }
 
     delete $quest->{_id};
@@ -228,7 +222,7 @@ sub update {
     # there are other actions, for example editing the quest description
     # TODO - should we split the update() method into several, more semantic methods?
     if ($action) {
-        $events->add({
+        db->events->add({
             object_type => 'quest',
             action => $action,
             author => $quest_after_update->{user},
@@ -262,7 +256,7 @@ sub _like_or_unlike {
     if ($quest->{status} eq 'closed') {
         # add points retroactively
         # FIXME - there's a race condition here somewhere
-        $users->add_points(
+        db->users->add_points(
             $quest->{user},
             (($mode eq '$pull') ? -1 : 1)
         );
@@ -277,7 +271,7 @@ sub like {
 
     my $quest = $self->_like_or_unlike($id, $user, '$addToSet');
 
-    if (my $email = $users->get_email($quest->{user}, 'notify_likes')) {
+    if (my $email = db->users->get_email($quest->{user}, 'notify_likes')) {
         my $email_body = qq[
             <p>
             <a href="http://].setting('hostport').qq[/player/$user">$user</a> likes your quest <a href="http://].setting('hostport').qq[/quest/$quest->{_id}">$quest->{name}</a>!<br>
@@ -299,7 +293,7 @@ sub like {
         }
 
         # TODO - different bodies depending on quest status
-        $events->email(
+        db->events->email(
             $email,
             "$user likes your quest '$quest->{name}'!",
             $email_body,
@@ -331,7 +325,7 @@ sub remove {
     }
 
     if ($quest->{status} eq 'closed') {
-        $users->add_points($user, -$self->_quest2points($quest));
+        db->users->add_points($user, -$self->_quest2points($quest));
     }
 
     delete $quest->{_id};

@@ -1,16 +1,13 @@
 package Play::Route::Quests;
 
 use Dancer ':syntax';
-prefix '/api';
+use Play::DB qw(db);
 
-use Play::Quests;
-use Play::Users;
-my $quests = Play::Quests->new;
-my $users = Play::Users->new;
+prefix '/api';
 
 put '/quest/:id' => sub {
     die "not logged in" unless session->{login};
-    my $updated_id = $quests->update(
+    my $updated_id = db->quests->update(
         param('id'),
         {
             user => session->{login},
@@ -24,7 +21,7 @@ put '/quest/:id' => sub {
 
 del '/quest/:id' => sub {
     die "not logged in" unless session->{login};
-    $quests->remove(
+    db->quests->remove(
         param('id'),
         { user => session->{login} }
     );
@@ -42,23 +39,23 @@ post '/quest' => sub {
         status => 'open',
         (param('type') ? (type => param('type')) : ()),
     };
-    return $quests->add($attributes);
+    return db->quests->add($attributes);
 };
 
 get '/quest' => sub {
-    return $quests->list({
+    return db->quests->list({
         map { param($_) ? ($_ => param($_)) : () } qw/ user status comment_count sort order limit offset /,
     });
 };
 
 get '/quest/:id' => sub {
-    return $quests->get(param('id'));
+    return db->quests->get(param('id'));
 };
 
 for my $method (qw/ like unlike /) {
     post "/quest/:id/$method" => sub {
         die "not logged in" unless session->{login};
-        $quests->$method(param('id'), session->{login});
+        db->quests->$method(param('id'), session->{login});
 
         return {
             result => 'ok',

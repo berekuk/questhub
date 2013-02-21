@@ -7,9 +7,7 @@ use Text::Markdown qw(markdown);
 
 use Dancer qw(setting);
 
-my $events = Play::Events->new;
-my $quests = Play::Quests->new;
-my $users = Play::Users->new;
+use Play::DB qw(db);
 
 has 'collection' => (
     is => 'ro',
@@ -45,11 +43,11 @@ sub add {
     });
     my $id = $self->collection->insert(\%params);
 
-    my $quest = $quests->get($params{quest_id});
+    my $quest = db->quests->get($params{quest_id});
 
     my $body_html = pp_markdown($params{body}); # markdown for comments in the feed is cached forever, to simplify the events storage and frontend logic
 
-    $events->add({
+    db->events->add({
         object_type => 'comment',
         action => 'add',
         author => $params{author},
@@ -62,7 +60,7 @@ sub add {
     });
 
     if ($params{author} ne $quest->{user}) {
-        my $email = $users->get_email($quest->{user}, 'notify_comments');
+        my $email = db->users->get_email($quest->{user}, 'notify_comments');
         if ($email) {
             # TODO - quoting
             # TODO - unsubscribe link
@@ -73,7 +71,7 @@ sub add {
                 </p>
                 <p>$body_html</p>
             ];
-            $events->email(
+            db->events->email(
                 $email,
                 "$params{author} commented on '$quest->{name}'",
                 $email_body,

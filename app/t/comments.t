@@ -1,7 +1,6 @@
 use t::common;
 use parent qw(Test::Class);
 
-use Play::Quests;
 use Email::Sender::Simple;
 
 sub setup :Tests(setup) {

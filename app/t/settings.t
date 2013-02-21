@@ -1,7 +1,7 @@
 use t::common;
 use parent qw(Test::Class);
 
-use Play::Users;
+use Email::Sender::Simple;
 
 sub setup :Tests(setup) {
     reset_db();

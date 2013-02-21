@@ -3,30 +3,29 @@ use parent qw(Test::Class);
 
 use Test::Fatal;
 
-use Play::Quests;
+use Play::DB qw(db);
 
 sub setup :Tests(setup) {
-    Play::Users->new->collection->remove({});
+    db->users->collection->remove({});
     Dancer::session->destroy;
 }
 
 sub like_quest_internal :Tests {
-    my $quests = Play::Quests->new;
-    my $quest = $quests->add({
+    my $quest = db->quests->add({
         user => 'blah',
         name => 'foo, foo',
         status => 'open',
     });
     my $id = $quest->{_id};
 
-    $quests->like($id, 'user1');
-    $quests->like($id, 'user2');
+    db->quests->like($id, 'user1');
+    db->quests->like($id, 'user2');
 
     # double like is idempotent
-    $quests->like($id, 'user2');
+    db->quests->like($id, 'user2');
 
     cmp_deeply
-        $quests->get($id),
+        db->quests->get($id),
         {
             _id => re('^\S+$'),
             ts => re('^\d+$'),
@@ -40,15 +39,14 @@ sub like_quest_internal :Tests {
 }
 
 sub self_like_quest_internal :Tests {
-    my $quests = Play::Quests->new;
-    my $quest = $quests->add({
+    my $quest = db->quests->add({
         user => 'blah',
         name => 'foo, foo',
         status => 'open',
     });
     my $id = $quest->{_id};
 
-    like exception { $quests->like($id, 'blah') }, qr/unable to like your own quest/;
+    like exception { db->quests->like($id, 'blah') }, qr/unable to like your own quest/;
 }
 
 sub like_quest :Tests {

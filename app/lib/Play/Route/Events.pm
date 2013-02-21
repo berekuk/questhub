@@ -6,19 +6,18 @@ prefix '/api';
 use DateTime;
 use DateTime::Format::RFC3339;
 
-use Play::Events;
-my $events = Play::Events->new;
+use Play::DB qw(db);
 
 my $rfc3339 = DateTime::Format::RFC3339->new;
 
 get '/event' => sub {
-    return $events->list({
+    return db->events->list({
         map { param($_) ? ($_ => param($_)) : () } qw/ limit offset /,
     });
 };
 
 get '/event/atom' => sub {
-    my @events = @{ $events->list };
+    my @events = @{ db->events->list };
 
     for my $event (@events) {
         $event->{updated} = $rfc3339->format_datetime(
