@@ -69,6 +69,17 @@ sub quest_sorting :Tests {
     is_deeply \@names, [qw/ name_2 name_1 name_3 /];
 }
 
+sub quest_list_limit_offset :Tests {
+    my $list = http_json GET => '/api/quest?limit=2';
+    is scalar @$list, 2;
+
+    $list = http_json GET => '/api/quest?limit=2&offset=2';
+    is scalar @$list, 1;
+
+    $list = http_json GET => '/api/quest?limit=5';
+    is scalar @$list, 3;
+}
+
 sub single_quest :Tests {
     my $id          =  $quests_data->{1}->{_id};
     my $quest = http_json GET => '/api/quest/'.$id;

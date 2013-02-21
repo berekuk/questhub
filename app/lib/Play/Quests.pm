@@ -60,21 +60,33 @@ sub list {
         # flag meaning "fetch comment_count too"
         comment_count => { type => BOOLEAN, optional => 1 },
         # sorting and paging
-        sort => { type => SCALAR, optional => 1, regex => qr/^(leaderboard)$/ }, # only 'leaderboard' sorting is supported by now
+        sort => { type => SCALAR, optional => 1, regex => qr/^(leaderboard|ts)$/ },
+        order => { type => SCALAR, regex => qr/^asc|desc$/, default => 'asc' },
         limit => { type => SCALAR, regex => qr/^\d+$/, optional => 1 },
         offset => { type => SCALAR, regex => qr/^\d+$/, default => 0 },
     });
 
-    my @quests = $self->collection->query(
-        {
-            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ user status /
-        },
-        {
-            sort_by => { '_id' => 1 }
-        }
-    )->all;
-    @quests = grep { $_->{status} ne 'deleted' } @quests;
+    if (($params->{status} || '') eq 'deleted') {
+        die "Can't list deleted quests";
+    }
 
+    my $query = {
+            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ user status /
+    };
+    $query->{status} ||= { '$ne' => 'deleted' };
+
+    my $cursor = $self->collection->query($query);
+
+    # if sort=leaderboard, we have to fetch everything and sort manually
+    if (not $params->{sort}) {
+        my $order_flag = ($params->{order} eq 'asc' ? 1 : -1);
+        $cursor = $cursor->sort({ _id => $order_flag });
+
+        $cursor = $cursor->limit($params->{limit}) if $params->{limit};
+        $cursor = $cursor->skip($params->{offset}) if $params->{offset};
+    }
+
+    my @quests = $cursor->all;
     $self->_prepare_quest($_) for @quests;
 
     if ($params->{comment_count} or ($params->{sort} || '') eq 'leaderboard') {
@@ -101,8 +113,11 @@ sub list {
         } @quests;
     }
 
-    if ($params->{limit} and @quests > $params->{limit}) {
-        @quests = splice @quests, $params->{offset}, $params->{limit};
+    if ($params->{sort}) {
+        # manual limit/offset
+        if ($params->{limit} and @quests > $params->{limit}) {
+            @quests = splice @quests, $params->{offset}, $params->{limit};
+        }
     }
 
     return \@quests;
