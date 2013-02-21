@@ -1,6 +1,7 @@
 pp.View.Base = Backbone.View.extend({
     partial: {
         user: _.template($('#partial-user').text()),
+        status: _.template($('#partial-status').text()),
         edit_tools: _.template($('#partial-edit-tools').text())
     },
 

@@ -79,7 +79,6 @@ Options:
 * `user` - filter by user
 * `status` - filter by status (`deleted` status is forbidden)
 * `comment_count` - add `comment_count` field to each returned quest
-* `sort` - only `leaderboard` value is supported for now, meaning composite likes_count->comments_count sorting
 * `limit`
 * `offset`
 
@@ -93,6 +92,8 @@ Options:
 
 * `limit`
 * `offset`
+* `order` - `asc` or `desc`, with `asc` being the default
+* `sort` - only `leaderboard` value is supported for now, meaning composite likes_count->comments_count sorting
 
 ##### PUT /api/quest/{id}
 

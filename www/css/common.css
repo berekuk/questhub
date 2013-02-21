@@ -6,6 +6,12 @@
     float: right;
 }
 
+.quest-big-labels {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
 .open-quest-count-label {
     float: right;
 }
@@ -167,15 +173,18 @@ tbody tr.quest-abandoned:hover > td {
     background-color: #d3d3d3;
 }
 
-div.quest-open {
+div.quest-big-open {
+    position: relative;
     padding: 9px;
     background-color: #fcf8e3;
 }
-div.quest-closed {
+div.quest-big-closed {
+    position: relative;
     padding: 9px;
     background-color: #d9edf7;
 }
-div.quest-abandoned {
+div.quest-big-abandoned {
+    position: relative;
     padding: 9px;
     background-color: #dddddd;
 }
