@@ -92,8 +92,9 @@ $(function () {
         explore: function (tab) {
             var view = new pp.views.Explore();
             if (tab != undefined) {
-                view.switchTabByName(tab);
+                view.tab = tab;
             }
+            view.activate();
 
             appView.setPageView(view);
             setActiveMenuItem('explore');

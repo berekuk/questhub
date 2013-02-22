@@ -59,7 +59,8 @@ pp.View.Common = pp.View.Base.extend({
 
     initSubviews: function () {
         if (this._subviewInstances) {
-            console.log('initSubviews is called twice!');
+// this was a warning situation in the past, but now views/explore.js legitimately re-initializes subviews
+//            console.log('initSubviews is called twice!');
         }
         this._subviewInstances = {};
         var that = this;

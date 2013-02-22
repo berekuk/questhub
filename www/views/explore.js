@@ -1,31 +1,33 @@
 pp.views.Explore = pp.View.Common.extend({
     t: 'explore',
-    selfRender: true,
 
     events: {
-        'click a.explore-tab': 'switchTab',
+        'click ul.explore-nav a': 'switchTab',
     },
 
     subviews: {
-        '#latest-quests-tab': function () {
-            return this.questSubview({ order: 'desc' });
-        },
-        '#unclaimed-quests-tab': function () {
-            return this.questSubview({ unclaimed: 1, sort: 'leaderboard' });
-        },
-        '#open-quests-tab': function () {
-            return this.questSubview({ status: 'open', sort: 'leaderboard' });
-        },
-        '#closed-quests-tab': function () {
-            return this.questSubview({ status: 'closed', sort: 'leaderboard' });
-        }
+        '.explore-tab-content': 'tabSubview'
     },
+
+    tab: 'latest',
+    activated: false,
 
     afterInitialize: function () {
         _.bindAll(this);
     },
 
-    questSubview: function (options) {
+    name2options: {
+        'latest': { order: 'desc' },
+        'unclaimed': { unclaimed: 1, sort: 'leaderboard' },
+        'open': { status: 'open', sort: 'leaderboard' },
+        'closed': { status: 'closed', sort: 'leaderboard' }
+    },
+
+    tabSubview: function () {
+        return this.createSubview(this.name2options[this.tab]);
+    },
+
+    createSubview: function (options) {
 
         options.limit = 100;
         var collection = new pp.models.QuestCollection([], options);
@@ -59,11 +61,12 @@ pp.views.Explore = pp.View.Common.extend({
     },
 
     switchTabByName: function(tab) {
-        this.$('.nav > li').removeClass('active');
-        var el = this.$('[data-explore-tab=' + tab + ']');
-        el.parent().addClass('active');
+        this.tab = tab;
+        this.initSubviews(); // recreate tab subview
+        this.render();
+    },
 
-        this.$('.explore-tab-content').addClass('hide');
-        this.subview('#' + tab + '-quests-tab').$el.removeClass('hide');
+    afterRender: function () {
+        this.$('[data-explore-tab=' + this.tab + ']').parent().addClass('active');
     }
 });
