@@ -23,7 +23,7 @@ pp.views.QuestSmall = pp.View.Common.extend({
     },
 
     serialize: function () {
-        var params = this.model.toJSON();
+        var params = this.model.serialize();
         if (this.options.showAuthor) {
             params.showAuthor = true;
         }
@@ -31,7 +31,7 @@ pp.views.QuestSmall = pp.View.Common.extend({
     },
 
     afterRender: function () {
-        var className = 'quest-' + this.model.get('status');
+        var className = 'quest-' + this.model.extStatus();
         this.$el.addClass(className);
     },
 

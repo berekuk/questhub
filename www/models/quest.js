@@ -69,6 +69,21 @@ pp.models.Quest = Backbone.Model.extend({
             return likes.length;
         }
         return 0;
+    },
+
+    extStatus: function () {
+        var status = this.get('status');
+        var user = this.get('user');
+
+        if (status == 'open' && user == '') return 'unclaimed';
+        return status;
+    },
+
+    // augments attributes with 'ext_status'
+    serialize: function () {
+        var params = this.toJSON();
+        params.ext_status = this.extStatus();
+        return params;
     }
 
 });

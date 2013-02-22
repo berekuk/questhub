@@ -168,6 +168,13 @@ tbody tr.quest-abandoned > td {
 tbody tr.quest-abandoned:hover > td {
     background-color: #d3d3d3;
 }
+tbody tr.quest-unclaimed > td {
+    background-color: #dff0d8;
+}
+tbody tr.quest-unclaimed:hover > td {
+    background-color: #d0e9c6;
+}
+
 
 div.quest-big-open {
     position: relative;
@@ -183,4 +190,9 @@ div.quest-big-abandoned {
     position: relative;
     padding: 9px;
     background-color: #dddddd;
+}
+div.quest-big-unclaimed {
+    position: relative;
+    padding: 9px;
+    background-color: #dff0d8;
 }

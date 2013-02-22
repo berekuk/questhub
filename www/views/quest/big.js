@@ -95,7 +95,7 @@ pp.views.QuestBig = pp.View.Common.extend({
     },
 
     serialize: function () {
-        var params = this.model.toJSON();
+        var params = this.model.serialize();
         // TODO - should we move this to model?
         params.currentUser = pp.app.user.get('login');
         params.my = this.isOwned();
