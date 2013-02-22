@@ -11,7 +11,7 @@ pp.views.Explore = pp.View.Common.extend({
             return this.questSubview({ order: 'desc' });
         },
         '#unclaimed-quests-tab': function () {
-            return this.questSubview({ unclaimed: 1 });
+            return this.questSubview({ unclaimed: 1, sort: 'leaderboard' });
         },
         '#open-quests-tab': function () {
             return this.questSubview({ status: 'open', sort: 'leaderboard' });
