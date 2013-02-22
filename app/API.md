@@ -88,13 +88,6 @@ Options:
 
 Add a new quest for the current user.
 
-Options:
-
-* `limit`
-* `offset`
-* `order` - `asc` or `desc`, with `asc` being the default
-* `sort` - only `leaderboard` value is supported for now, meaning composite likes_count->comments_count sorting
-
 ##### PUT /api/quest/{id}
 
 Update a quest.
@@ -108,6 +101,16 @@ Delete a quest.
 ##### GET /api/quest
 
 Get all quests.
+
+Options:
+
+* `limit`
+* `offset`
+* `order` - `asc` or `desc`, with `asc` being the default
+* `sort` - only `leaderboard` value is supported for now, meaning composite likes_count->comments_count sorting
+* `user`
+* `comment_count`
+* `unclaimed` - if true, return unclaimed quests (user='')
 
 ##### GET /api/quest?user={login}
 
