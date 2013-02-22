@@ -427,9 +427,21 @@ sub join_leave :Tests {
     my $list = http_json GET => "/api/quest?unclaimed=1";
     cmp_deeply $list, [$got_quest], 'listing unclaimed=1 option';
 
+    http_json POST => "/api/quest/$quest->{_id}/like";
+    http_json GET => "/api/fakeuser/bar";
+    Dancer::session login => 'bar';
+    http_json POST => "/api/quest/$quest->{_id}/like";
+    Dancer::session login => 'foo';
+
+    $got_quest = http_json GET => "/api/quest/$quest->{_id}";
+    is_deeply $got_quest->{likes}, ['foo', 'bar'];
+
     http_json POST => "/api/quest/$quest->{_id}/join";
     $list = http_json GET => "/api/quest?unclaimed=1";
     is scalar @$list, 0;
+
+    $got_quest = http_json GET => "/api/quest/$quest->{_id}";
+    is_deeply $got_quest->{likes}, ['bar'], 'joining means unliking';
 }
 
 __PACKAGE__->new->runtests;

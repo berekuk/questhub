@@ -361,7 +361,10 @@ sub join {
             _id => MongoDB::OID->new(value => $id),
             user => '',
         },
-        { '$set' => { user => $user } },
+        {
+            '$set' => { user => $user },
+            '$pull' => { likes => $user }, # can't like your own quest
+        },
         { safe => 1 }
     );
     my $updated = $result->{n};
@@ -380,7 +383,9 @@ sub leave {
             _id => MongoDB::OID->new(value => $id),
             user => $user,
         },
-        { '$set' => { user => '' } },
+        {
+            '$set' => { user => '' }
+        },
         { safe => 1 }
     );
     my $updated = $result->{n};
