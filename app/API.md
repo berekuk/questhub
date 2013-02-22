@@ -141,6 +141,14 @@ Like a quest.
 
 Unlike a quest.
 
+##### POST /api/quest/{id}/join
+
+Join a quest. Quest must be unclaimed.
+
+##### POST /api/quest/{id}/leave
+
+Leave a quest. You must have this quest claimed at the moment of leaving.
+
 ### Other
 
 ##### GET /api/event

@@ -351,4 +351,43 @@ sub get {
     return $quest;
 }
 
+sub join {
+    my $self = shift;
+    my ($id, $user) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+    die "only non-empty users can join quests" unless length $user;
+
+    my $result = $self->collection->update(
+        {
+            _id => MongoDB::OID->new(value => $id),
+            user => '',
+        },
+        { user => $user },
+        { safe => 1 }
+    );
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "Quest not found or unable to join quest that's already taken";
+    }
+}
+
+sub leave {
+    my $self = shift;
+    my ($id, $user) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+    die "only non-empty users can join quests" unless length $user;
+
+    my $result = $self->collection->update(
+        {
+            _id => MongoDB::OID->new(value => $id),
+            user => $user,
+        },
+        { user => '' },
+        { safe => 1 }
+    );
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "Quest not found or unable to leave quest you don't own";
+    }
+
+}
+
 1;

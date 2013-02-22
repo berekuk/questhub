@@ -400,4 +400,27 @@ sub email_like :Tests {
         "'already completed' text in email";
 }
 
+sub join_leave :Tests {
+    http_json GET => "/api/fakeuser/foo";
+    Dancer::session login => 'foo';
+
+    my $quest = http_json POST => '/api/quest', { params => {
+        name => 'q1',
+    } };
+
+    my $response;
+
+    $response = dancer_response POST => "/api/quest/$quest->{_id}/join";
+    is $response->status, 500;
+    like $response->content, qr/unable to join quest/;
+
+    http_json POST => "/api/quest/$quest->{_id}/leave";
+
+    $response = dancer_response POST => "/api/quest/$quest->{_id}/leave";
+    is $response->status, 500;
+    like $response->content, qr/unable to leave quest/;
+
+    http_json POST => "/api/quest/$quest->{_id}/join";
+}
+
 __PACKAGE__->new->runtests;
