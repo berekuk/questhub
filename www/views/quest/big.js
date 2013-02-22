@@ -9,6 +9,7 @@ pp.views.QuestBig = pp.View.Common.extend({
     events: {
         "click .quest-close": "close",
         "click .quest-abandon": "abandon",
+        "click .quest-leave": "leave",
         "click .quest-resurrect": "resurrect",
         "click .quest-reopen": "reopen",
         "click .delete": "destroy",
@@ -33,6 +34,10 @@ pp.views.QuestBig = pp.View.Common.extend({
 
     abandon: function () {
         this.model.abandon();
+    },
+
+    leave: function () {
+        this.model.leave();
     },
 
     resurrect: function () {
