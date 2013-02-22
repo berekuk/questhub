@@ -10,6 +10,9 @@ pp.views.Explore = pp.View.Common.extend({
         '#latest-quests-tab': function () {
             return this.questSubview({ order: 'desc' });
         },
+        '#unclaimed-quests-tab': function () {
+            return this.questSubview({ unclaimed: 1 });
+        },
         '#open-quests-tab': function () {
             return this.questSubview({ status: 'open', sort: 'leaderboard' });
         },

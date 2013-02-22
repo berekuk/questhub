@@ -10,6 +10,7 @@ pp.views.QuestBig = pp.View.Common.extend({
         "click .quest-close": "close",
         "click .quest-abandon": "abandon",
         "click .quest-leave": "leave",
+        "click .quest-join": "join",
         "click .quest-resurrect": "resurrect",
         "click .quest-reopen": "reopen",
         "click .delete": "destroy",
@@ -38,6 +39,10 @@ pp.views.QuestBig = pp.View.Common.extend({
 
     leave: function () {
         this.model.leave();
+    },
+
+    join: function () {
+        this.model.join();
     },
 
     resurrect: function () {

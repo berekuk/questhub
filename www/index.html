@@ -291,16 +291,15 @@
         <div class="span10">
           <ul class="nav nav-tabs">
               <li class="active"><a href="#" data-explore-tab="latest" class="explore-tab">Latest</a></li>
+              <li><a href="#" data-explore-tab="unclaimed" class="explore-tab">Unclaimed</a></li>
               <li><a href="#" data-explore-tab="open" class="explore-tab">Best open</a></li>
               <li><a href="#" data-explore-tab="closed" class="explore-tab">Best completed</a></li>
           </ul>
           <div>
-            <div id="latest-quests-tab" class="explore-tab-content">
-            </div>
-            <div id="open-quests-tab" class="explore-tab-content hide">
-            </div>
-            <div id="closed-quests-tab" class="explore-tab-content hide">
-            </div>
+            <div id="latest-quests-tab" class="explore-tab-content"></div>
+            <div id="unclaimed-quests-tab" class="explore-tab-content hide"></div>
+            <div id="open-quests-tab" class="explore-tab-content hide"></div>
+            <div id="closed-quests-tab" class="explore-tab-content hide"></div>
           </div>
         </div>
     </script>
@@ -483,9 +482,11 @@
     <script type="text/template" id="template-quest-big">
       <div class="<%= "quest-big-" + status %> quest-big">
         <div>
-          <%= partial.user({ login: obj.user }) %><span class="muted"> is on a quest:</span>
-          <% if (my) { %>
-            <%= partial.edit_tools() %>
+          <% if (user != '') { %>
+            <%= partial.user({ login: obj.user }) %><span class="muted"> is on a quest:</span>
+            <% if (my) { %>
+              <%= partial.edit_tools() %>
+            <% } %>
           <% } %>
         </div>
 
@@ -530,6 +531,9 @@
           <% } %>
           </div>
 
+        <% } else if (user == '') { %>
+          <span class="muted">Would you like to take on this quest?</span>
+          <button class="quest-join btn btn-primary">Take</button>
         <% } %>
       </div>
     </script>
@@ -595,13 +599,20 @@
       <i class="icon-spinner icon-spin" style="display:none"></i>
     </script>
 
-    <script type="text/template" id="partial-user"><a href="/player/<%= login %>" class="label"><%= login + (obj.colon ? ':' : '') %></a></script>
+    <!-- Partials -->
+    <script type="text/template" id="partial-user">
+      <% if (login) { %>
+      <a href="/player/<%= login %>" class="label"><%= login + (obj.colon ? ':' : '') %></a>
+      <% } %>
+    </script>
+
     <script type="text/template" id="partial-quest-labels">
       <% if (typeof(type) != 'undefined') { %>
         <span class="label label-inverse"><%= type %></span>
       <% } %>
       <span class="label label-<%= status === 'open' && 'warning' %>"><%= status === 'closed' ? 'complete' : status %></span>
     </script>
+
     <script type="text/template" id="partial-edit-tools">
       <div class="pull-right mini-button-block">
         <label> <!-- label fixes the font size, even inside h2 -->
