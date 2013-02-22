@@ -416,6 +416,10 @@ sub join_leave :Tests {
 
     http_json POST => "/api/quest/$quest->{_id}/leave";
 
+    my $quest = http_json GET => "/api/quest/$quest->{_id}";
+    is $quest->{name}, 'q1', 'name is still untouched';
+    is $quest->{user}, '', 'user is now empty';
+
     $response = dancer_response POST => "/api/quest/$quest->{_id}/leave";
     is $response->status, 500;
     like $response->content, qr/unable to leave quest/;
