@@ -3,11 +3,19 @@ pp.models.Quest = Backbone.Model.extend({
     urlRoot: '/api/quest',
 
     like: function() {
-        this._likeOrUnlike('like');
+        this.act('like');
     },
 
     unlike: function() {
-        this._likeOrUnlike('unlike');
+        this.act('unlike');
+    },
+
+    join: function() {
+        this.act('join');
+    },
+
+    leave: function() {
+        this.act('leave');
     },
 
     close: function() {
@@ -42,7 +50,8 @@ pp.models.Quest = Backbone.Model.extend({
         );
     },
 
-    _likeOrUnlike: function(action) {
+    act: function(action) {
+        console.log('action: ' + action);
         var model = this;
         $.post(this.url() + '/' + action)
             .success(function () {

@@ -400,4 +400,48 @@ sub email_like :Tests {
         "'already completed' text in email";
 }
 
+sub join_leave :Tests {
+    http_json GET => "/api/fakeuser/foo";
+    Dancer::session login => 'foo';
+
+    my $quest = http_json POST => '/api/quest', { params => {
+        name => 'q1',
+    } };
+
+    my $response;
+
+    $response = dancer_response POST => "/api/quest/$quest->{_id}/join";
+    is $response->status, 500;
+    like $response->content, qr/unable to join quest/;
+
+    http_json POST => "/api/quest/$quest->{_id}/leave";
+
+    my $got_quest = http_json GET => "/api/quest/$quest->{_id}";
+    is $got_quest->{name}, 'q1', 'name is still untouched';
+    is $got_quest->{user}, '', 'user is now empty';
+
+    $response = dancer_response POST => "/api/quest/$quest->{_id}/leave";
+    is $response->status, 500;
+    like $response->content, qr/unable to leave quest/;
+
+    my $list = http_json GET => "/api/quest?unclaimed=1";
+    cmp_deeply $list, [$got_quest], 'listing unclaimed=1 option';
+
+    http_json POST => "/api/quest/$quest->{_id}/like";
+    http_json GET => "/api/fakeuser/bar";
+    Dancer::session login => 'bar';
+    http_json POST => "/api/quest/$quest->{_id}/like";
+    Dancer::session login => 'foo';
+
+    $got_quest = http_json GET => "/api/quest/$quest->{_id}";
+    is_deeply $got_quest->{likes}, ['foo', 'bar'];
+
+    http_json POST => "/api/quest/$quest->{_id}/join";
+    $list = http_json GET => "/api/quest?unclaimed=1";
+    is scalar @$list, 0;
+
+    $got_quest = http_json GET => "/api/quest/$quest->{_id}";
+    is_deeply $got_quest->{likes}, ['bar'], 'joining means unliking';
+}
+
 __PACKAGE__->new->runtests;

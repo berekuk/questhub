@@ -43,16 +43,21 @@ post '/quest' => sub {
 };
 
 get '/quest' => sub {
-    return db->quests->list({
+    my $params = {
         map { param($_) ? ($_ => param($_)) : () } qw/ user status comment_count sort order limit offset /,
-    });
+    };
+    if (param('unclaimed')) {
+        $params->{user} = '';
+    }
+
+    return db->quests->list($params);
 };
 
 get '/quest/:id' => sub {
     return db->quests->get(param('id'));
 };
 
-for my $method (qw/ like unlike /) {
+for my $method (qw/ like unlike join leave /) {
     post "/quest/:id/$method" => sub {
         die "not logged in" unless session->{login};
         db->quests->$method(param('id'), session->{login});
