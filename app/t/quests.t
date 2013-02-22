@@ -113,7 +113,7 @@ sub add_quest :Tests {
 
     cmp_deeply
         $add_result,
-        { %$new_record, _id => re('^\S+$'), ts => re('^\d+$') },
+        { %$new_record, author => $user, _id => re('^\S+$'), ts => re('^\d+$') },
         'add response';
 
     my $id = $add_result->{_id};
@@ -121,7 +121,7 @@ sub add_quest :Tests {
     my $got_quest = http_json GET => "/api/quest/$id";
     cmp_deeply
         $got_quest,
-        { %$new_record, _id => re('^\S+$'), ts => re('^\d+$') },
+        { %$new_record, author => $user, _id => re('^\S+$'), ts => re('^\d+$') },
         'get response';
 }
 
@@ -153,7 +153,7 @@ sub quest_events :Tests {
             action => 'resurrect',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'open', user => $user },
+            object => { name => 'test-quest', status => 'open', user => $user, author => $user },
         },
         {
             _id => re('^\S+$'),
@@ -162,7 +162,7 @@ sub quest_events :Tests {
             action => 'abandon',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'abandoned', user => $user },
+            object => { name => 'test-quest', status => 'abandoned', user => $user, author => $user },
         },
         {
             _id => re('^\S+$'),
@@ -171,7 +171,7 @@ sub quest_events :Tests {
             action => 'reopen',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'open', user => $user },
+            object => { name => 'test-quest', status => 'open', user => $user, author => $user },
         },
         {
             _id => re('^\S+$'),
@@ -180,7 +180,7 @@ sub quest_events :Tests {
             action => 'close',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'closed', user => $user },
+            object => { name => 'test-quest', status => 'closed', user => $user, author => $user },
         },
         {
             _id => re('^\S+$'),
@@ -189,7 +189,7 @@ sub quest_events :Tests {
             action => 'add',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'open', user => $user },
+            object => { name => 'test-quest', status => 'open', user => $user, author => $user },
         },
     ];
 }

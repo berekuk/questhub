@@ -147,6 +147,7 @@ sub add {
         die "Unexpected quest type '$params->{type}'" unless grep { $params->{type} eq $_ } qw/ bug blog feature other /;
     }
 
+    $params->{author} = $params->{user};
     my $id = $self->collection->insert($params);
 
     db->events->add({
