@@ -193,7 +193,7 @@
 
     <script type="text/template" id="template-user-big">
       <div class="well">
-        <% if (typeof(twitter) != 'undefined') {
+        <% if (obj.twitter) {
             if (twitter.screen_name) { %>
           <img src="http://api.twitter.com/1/users/profile_image?screen_name=<%= twitter.screen_name %>&size=bigger" width=73 height=73/>
         <% } } %>
@@ -204,13 +204,13 @@
           <% } %>
           <span class="badge badge-info" data-toggle="tooltip" title='points are granted for each completed quest and each "like" on those quests'><%= points %></span>
         </h4>
-          <% if (typeof(twitter) != 'undefined') {
-            if (twitter.screen_name) { %>
-              <a href="https://twitter.com/<%= twitter.screen_name %>">
-                <i class="icon-twitter icon-large"></i>
-                @<%= twitter.screen_name %>
-              </a>
-          <% } } %>
+        <% if (obj.twitter) {
+          if (twitter.screen_name) { %>
+            <a href="https://twitter.com/<%= twitter.screen_name %>">
+              <i class="icon-twitter icon-large"></i>
+              @<%= twitter.screen_name %>
+            </a>
+        <% } } %>
       </div>
     </script>
 
@@ -272,7 +272,7 @@
         <% } %>
         <a href="/quest/<%= _id %>"><%= name  %></a>
 
-        <% if (typeof(comment_count) != 'undefined') { %>
+        <% if (obj.comment_count) { %>
           <a href="/quest/<%= _id %>"><span class="badge badge-info"><i class="icon-comment"></i> <%= comment_count %></span></a>
           <% } %>
 
@@ -591,7 +591,7 @@
         <% } %>
         </p>
         <%= partial.user({ login: author }) %>
-        <% if (typeof(ts) != 'undefined') { %>
+        <% if (obj.ts) { %>
         <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
         <% } %>
       </div>
@@ -609,7 +609,7 @@
     </script>
 
     <script type="text/template" id="partial-quest-labels">
-      <% if (typeof(type) != 'undefined') { %>
+      <% if (obj.type) { %>
         <span class="label label-inverse"><%= type %></span>
       <% } %>
       <span class="label label-<%= status === 'open' && 'warning' %>"><%= status === 'closed' ? 'complete' : status %></span>
