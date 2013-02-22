@@ -361,7 +361,7 @@ sub join {
             _id => MongoDB::OID->new(value => $id),
             user => '',
         },
-        { user => $user },
+        { '$set' => { user => $user } },
         { safe => 1 }
     );
     my $updated = $result->{n};
