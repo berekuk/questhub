@@ -1,6 +1,9 @@
 package Play::Route::Users;
 
-use Dancer ':syntax';
+use Dancer qw(:syntax);
+
+use Dancer::Plugin::Auth::Github;
+auth_github_init();
 
 use Dancer::Plugin::Auth::Twitter;
 auth_twitter_init();
@@ -15,6 +18,8 @@ get '/auth/twitter' => sub {
     } else {
 
         my $twitter_login = session('twitter_user')->{screen_name} or die "no twitter login in twitter_user session field";
+		
+		#TODO: check if already registered email with Github account
         my $user = $users->get_by_twitter_login($twitter_login);
         if ($user) {
             session 'login' => $user->{login};
@@ -22,6 +27,35 @@ get '/auth/twitter' => sub {
         redirect "/register";
     }
 };
+
+# TODO: doesn't work yet
+get '/auth/github' => sub {
+    if (not session('github_user')) {
+        redirect auth_github_authenticate_url;
+    } else {
+        my $github_login = session('github_user')->{login} or die "no Github login in github_user session field";
+		
+		#check if github user exists
+        my $user = $users->get_by_github_login($github_login);
+		
+		#otherwise, check if a user with given email exists
+		if(!$user){
+			my $email = session('github_user')->{email};
+			$user = $users->get_by_email($email);
+			
+			#link accounts
+			# TODO: write /link-new page
+			if($user){
+				redirect '/link-new';
+			}
+		} else {
+            session 'login' => $user->{login};
+        }
+        redirect "/register";
+    }
+};
+
+# methods below are accessed via JS
 
 prefix '/api';
 
@@ -75,15 +109,27 @@ get '/user/:login' => sub {
 };
 
 post '/register' => sub {
-    if (not session('twitter_user')) {
-        die "not authorized";
-    }
-    my $twitter_login = session('twitter_user')->{screen_name};
-    my $login = param('login') or die 'no login specified';
+	my $user;
+	if( session('twitter_user') ){
+		$user = twitter_register();
+	}
+	elsif( session('github_user') ){
+		$user = github_register();
+	}else{
+		die 'not authorized';
+	}
 
+	return { status => "ok", user => $user };
+};
+
+#TODO: merge with github_register
+sub twitter_register {
+	my $twitter_login = session('twitter_user')->{screen_name};
+    my $login = param('login') or die 'no login specified';
+  
     if ($users->get_by_login($login)) {
         die "User $login already exists";
-    }
+	}
     if ($users->get_by_twitter_login($twitter_login)) {
         die "Twitter login $twitter_login is already bound";
     }
@@ -99,9 +145,33 @@ post '/register' => sub {
     if ($settings) {
         $users->set_settings($login => decode_json($settings));
     }
+	return $user;
+}
 
-    return { status => "ok", user => $user };
-};
+sub github_register {
+	my $github_login = session('github_user')->{login};
+    my $login = param('login') or die 'no login specified';
+
+    if ($users->get_by_login($login)) {
+        die "User $login already exists";
+    }
+    if ($users->get_by_github_login($github_login)) {
+        die "Github login $github_login is already bound";
+    }
+
+    # note that race condition is still possible after these checks
+    # that's ok, mongodb will throw an exception
+    my $user = { login => $login, github => { screen_name => $github_login } };
+
+    session 'login' => $login;
+    $users->add($user);
+
+    my $settings = param('settings');
+    if ($settings) {
+        $users->set_settings($login => decode_json($settings));
+    }
+	return $user;
+}
 
 post '/register/resend_email_confirmation' => sub {
     my $login = session('login');

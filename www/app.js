@@ -25,6 +25,7 @@ $(function () {
             "register": "register",
             "register/confirm/:login/:secret": "confirmEmail",
             "auth/twitter": "twitterLogin",
+            "auth/github": "githubLogin",
             "quest/add": "questAdd",
             "quest/:id": "questPage",
             "feed": "eventCollection",
@@ -133,6 +134,10 @@ $(function () {
 
         twitterLogin: function () {
             window.location = '/auth/twitter';
+        },
+
+        githubLogin: function () {
+            window.location = '/auth/github';
         },
 
         about: function () {

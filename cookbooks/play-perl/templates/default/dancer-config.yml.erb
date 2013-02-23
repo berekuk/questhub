@@ -23,6 +23,5 @@ plugins:
   "Auth::Github":
     client_id:     "<%= @github['client_id'] %>"
     client_secret:  "<%= @github['client_secret'] %>"
-    callback_url:     "http://<%= @hostport %>/auth/github/callback"
-    callback_success: "/auth/github"
-    callback_fail:    "/fail"
+    github_auth_success: "http://<%= @hostport %>/auth/github"
+    github_auth_success:    "http://<%= @hostport %>/fail"

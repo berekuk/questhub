@@ -29,11 +29,19 @@ has 'collection' => (
 
 my $quests = Play::Quests->new;
 
+# TODO: merge with get_by_github_login and get_by_login
 sub get_by_twitter_login {
     my $self = shift;
     my ($login) = validate_pos(@_, { type => SCALAR });
 
     return $self->get({ twitter => { screen_name => $login } });
+}
+ 
+sub get_by_github_login {
+    my $self = shift;
+    my ($login) = validate_pos(@_, { type => SCALAR });
+
+    return $self->get({ github => { screen_name => $login } });
 }
 
 sub _prepare_user {
@@ -59,6 +67,13 @@ sub get_by_login {
     my $self = shift;
     my ($login) = validate_pos(@_, { type => SCALAR });
     return $self->get({ login => $login });
+}
+
+#TODO: does this even work?
+sub get_by_email {
+	my $self = shift;
+    my ($email) = validate_pos(@_, { type => SCALAR });
+    return $self->get({ email => $email });
 }
 
 sub add {
