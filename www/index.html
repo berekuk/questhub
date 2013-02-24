@@ -51,7 +51,8 @@
             </li>
           </ul>
         <% } else { %>
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign In</a>
+          <!-- TODO: refactor to use views/user/signin.js -->
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-signin"></i> Sign In</a>
           <ul class="dropdown-menu">
             <li>
               <a href="/auth/twitter">with Twitter</i></a>
@@ -80,11 +81,16 @@
             <% if (registered) { %>
               <a href="/" class="btn btn-large btn-primary">Go to your profile</a>
             <% } else { %>
-              <a href="/auth/twitter" class="btn btn-large btn-primary login-with-twitter">Sign In with Twitter</a>
-              <a href="#" class="btn btn-large btn-primary login-with-persona">Sign In with Email</a>
+              <strong>Sign in:</strong>
+              <span class="signin"></span>
             <% } %>
             </p>
         </div>
+    </script>
+
+    <script type="text/template" id="template-signin">
+      <a href="/auth/twitter" class="btn btn-large btn-primary login-with-twitter">with Twitter</a>
+      <a href="#" class="btn btn-large btn-primary login-with-persona">with Email</a>
     </script>
 
     <script type="text/template" id="template-about">
@@ -583,7 +589,10 @@
         </div>
       </div>
       <% } else { %>
-      <a href="/auth/twitter" class="btn btn-large btn-primary">Sign In with Twitter to comment</a>
+      <div>
+        <strong>Sign in to comment:</strong>
+        <span class="signin"></span>
+      </div>
       <% } %>
     </script>
 
@@ -743,6 +752,7 @@
     <script src="/views/register.js"></script>
     <script src="/views/confirm-email.js"></script>
     <script src="/views/user/current.js"></script>
+    <script src="/views/user/signin.js"></script>
     <script src="/views/user/settings.js"></script>
     <script src="/views/user/settings-box.js"></script>
     <script src="/views/user/big.js"></script>

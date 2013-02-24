@@ -7,6 +7,10 @@ pp.views.CommentCollection = pp.View.AnyCollection.extend({
         'keyup [name=comment]': 'validate'
     },
 
+    subviews: {
+        '.signin': function () { return new pp.views.Signin(); }
+    },
+
     celem: function () {
         return this.$('[name=comment]');
     },
