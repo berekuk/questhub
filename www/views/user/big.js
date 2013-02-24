@@ -1,5 +1,5 @@
+// left column of the dashboard page
 pp.views.UserBig = pp.View.Common.extend({
-    // left column of the dashboard page
     t: 'user-big',
 
     events: {
@@ -7,7 +7,7 @@ pp.views.UserBig = pp.View.Common.extend({
     },
 
     settingsDialog: function () {
-        pp.app.view.userSettingsDialog();
+        pp.app.view.currentUser.settingsDialog();
     },
 
     serialize: function () {

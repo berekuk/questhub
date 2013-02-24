@@ -74,7 +74,8 @@
             <% if (registered) { %>
               <a href="/" class="btn btn-large btn-primary">Go to your profile</a>
             <% } else { %>
-              <a href="/auth/twitter" class="btn btn-large btn-primary">Login with Twitter</a>
+              <a href="/auth/twitter" class="btn btn-large btn-primary login-with-twitter">Login with Twitter</a>
+              <a href="#" class="btn btn-large btn-primary login-with-persona">Login with Persona</a>
             <% } %>
             </p>
         </div>
@@ -234,14 +235,20 @@
 
     <script type="text/template" id="template-user-settings">
       <div class="form-horizontal">
-        <input name="email" type="email" placeholder="Email" value="<%= obj.email || '' %>">
-        <span class="email-status <%= obj.hideEmailStatus ? "hide" : "" %>">
-          <% if (obj.email_confirmed) { %>
-            <span class="label label-success">Confirmed</span>
-          <% } else if (obj.email) { %>
-            <button class="btn btn-warning resend-email-confirmation">Not confirmed. Resend confirmation key?</button>
-          <% } %>
-        </span>
+        <% if (obj.email_confirmed == 'persona') { %>
+          <h4><%= obj.email || 'oops' %>
+          <span class="label label-success">Persona</span>
+          </h4>
+        <% } else { %>
+          <input name="email" type="email" placeholder="Email" value="<%= obj.email %>">
+          <span class="email-status <%= (obj.hideEmailStatus || obj.email_confirmed == 'persona') ? "hide" : "" %>">
+            <% if (obj.email_confirmed) { %>
+              <span class="label label-success">Confirmed</span>
+            <% } else if (obj.email) { %>
+              <button class="btn btn-warning resend-email-confirmation">Not confirmed. Resend confirmation key?</button>
+            <% } %>
+          </span>
+        <% } %>
       </div>
       <div>
         <span class="muted">Notify me by email when someone...</span>
@@ -306,7 +313,8 @@
       <div class="row-fluid">
         <div class="span3"></div>
         <div class="span6">
-          <h2>Welcome to the Play Perl, <i class="icon-twitter icon-large"></i> <%= twitter.screen_name %>!</h2>
+          <h2>Welcome to the Play Perl<% if (obj.twitter) { %>, <i class="icon-twitter icon-large"></i> <%= twitter.screen_name %><% } %>!
+          </h2>
           <h3>One final step before you can join your fellow hackers...</h3>
           <div class="registration-form">
             <div class="control-group login">
@@ -686,6 +694,9 @@
     Not in any template - user settings are modal and usually hidden anyway.
     It'd make no sense to copy-paste them into several views.
     -->
+
+    <!-- Mozilla recommends not to self-host persona JS code while Persona is still in beta -->
+    <script src="https://login.persona.org/include.js"></script>
 
     <script src="/vendors/jquery-1.7.1.min.js"></script>
     <script src="/vendors/autosize/jquery.autosize.js"></script>
