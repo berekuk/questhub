@@ -253,28 +253,29 @@ sub resend_email_confirmation {
 
 sub set_settings {
     my $self = shift;
-    my ($login, $settings, $force_protected) = validate_pos(@_, { type => SCALAR }, { type => HASHREF }, { type => BOOLEAN, optional => 1 });
+    my ($login, $settings, $persona) = validate_pos(@_, { type => SCALAR }, { type => HASHREF }, { type => BOOLEAN, optional => 1 });
 
     # some settings can't be set by the client
-    delete $settings->{$_} for secret_settings;
-    unless ($force_protected) {
-        delete $settings->{$_} for protected_settings;
-    }
+    delete $settings->{$_} for secret_settings, protected_settings;
 
-    my $old_settings = $self->get_settings($login, 1);
-    for (protected_settings) {
-        $settings->{$_} = $old_settings->{$_} if exists $old_settings->{$_};
+    if ($persona) {
+        $settings->{email_confirmed} = 'persona';
     }
+    else {
+        my $old_settings = $self->get_settings($login, 1);
+        if ($settings->{email}) {
 
-    if ($settings->{email}) {
-        if (not $old_settings->{email} or $old_settings->{email} ne $settings->{email}) {
-            info 'need email confirmation';
-            $settings->{email_confirmation_secret} = $self->_send_email_confirmation($login, $settings->{email});
-            delete $settings->{email_confirmed};
-        }
-        elsif ($old_settings->{email_confirmation_secret}) {
-            # don't lose confirmation secret if user edits the rest of her settings!
-            $settings->{email_confirmation_secret} = $old_settings->{email_confirmation_secret};
+            if ($old_settings->{email} and $old_settings->{email} eq $settings->{email}) {
+                # changing non-email settings -> confirmation status is not lost
+                for (qw/ email_confirmed email_confirmation_secret /) {
+                    $settings->{$_} = $old_settings->{$_} if exists $old_settings->{$_};
+                }
+                # TODO - if we ever get other protected_settings than 'email_confirmed', we need to preserve them from old_settings here too
+            }
+            elsif (not $settings->{email_confirmed}) { # email_confirmed can be set in settings if $force_protected flag is on
+                info 'need email confirmation';
+                $settings->{email_confirmation_secret} = $self->_send_email_confirmation($login, $settings->{email});
+            }
         }
     }
 
