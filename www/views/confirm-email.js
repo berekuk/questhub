@@ -2,7 +2,7 @@ pp.views.ConfirmEmail = pp.View.Common.extend({
     t: 'confirm-email',
     selfRender: true,
     afterInitialize: function () {
-        $.post('http://play-perl.org/api/register/confirm_email', this.options)
+        $.post('/api/register/confirm_email', this.options)
         .done(function () {
             $('.alert').alert('close');
             pp.app.view.notify('success', 'Email confirmed.');

@@ -4,7 +4,12 @@ pp.views.CurrentUser = pp.View.Common.extend({
 
     events: {
         'click .logout': 'logout',
-        'click .settings': 'settingsDialog'
+        'click .settings': 'settingsDialog',
+        'click .login-with-persona': 'loginWithPersona'
+    },
+
+    loginWithPersona: function () {
+        navigator.id.request();
     },
 
     getSettingsBox: function () {
@@ -20,17 +25,94 @@ pp.views.CurrentUser = pp.View.Common.extend({
         this.getSettingsBox().start();
     },
 
+    needsToRegister: function () {
+        if (this.model.get("registered")) {
+            console.log('registered');
+            return;
+        }
+
+        if (
+            this.model.get("twitter")
+            || (
+                this.model.get('settings')
+                && this.model.get('settings').email
+                && this.model.get('settings').email_confirmed
+            )
+        ) {
+            console.log('needs to register');
+            return true;
+        }
+        console.log('not logged in');
+        return;
+    },
+
+    setPersonaWatch: function () {
+        var persona = this.model.get('persona');
+        var user = null;
+        if (
+            this.model.get('settings')
+            && this.model.get('settings').email
+            && this.model.get('settings').email_confirmed
+            && this.model.get('settings').email_confirmed == 'persona'
+        ) {
+            user = this.model.get('settings').email;
+        }
+
+        console.log('user: ' + user);
+
+        var that = this;
+
+        navigator.id.watch({
+            loggedInUser: user,
+            onlogin: function(assertion) {
+                // A user has logged in! Here you need to:
+                // 1. Send the assertion to your backend for verification and to create a session.
+                // 2. Update your UI.
+                $.ajax({
+                    type: 'POST',
+                    url: '/auth/persona',
+                    data: { assertion: assertion },
+                    success: function(res, status, xhr) {
+                        console.log('success, updating user');
+                        that.model.fetch();
+                    },
+                    error: function(xhr, status, err) {
+                        pp.app.view.notify(
+                            'error',
+                            '/auth/persona failed.'
+                        );
+                    }
+                });
+            },
+            onlogout: that.backendLogout
+        });
+    },
+
     afterInitialize: function () {
         this.model = pp.app.user;
-        this.listenTo(this.model, 'change', this.render);
-        this.listenTo(this.model, 'sync', this.checkEmailConfirmed);
+        this.model.once('sync', this.setPersonaWatch, this);
 
+        this.model.on('all', function(e) { console.log('cuser event: ' + e) }, this);
+
+        this.listenTo(this.model, 'sync', this.checkUser);
+
+        this.listenTo(this.model, 'change', this.render);
         this.listenTo(this.model, 'change', function () {
             var settingsModel = this.model.get('settings') || {};
             // now settings box will show the preview of (probably) correct settings even before it refetches its actual version
             // (see SettingsBox code for the details)
             this.getSettingsBox().model.clear().set(settingsModel);
         });
+    },
+
+    checkUser: function () {
+        console.log('current.checkUser');
+        if (this.needsToRegister()) {
+            console.log('going to /register');
+            pp.app.router.navigate("/register", { trigger: true, replace: true });
+            return;
+        }
+        this.checkEmailConfirmed();
     },
 
     checkEmailConfirmed: function () {
@@ -42,10 +124,19 @@ pp.views.CurrentUser = pp.View.Common.extend({
         }
     },
 
-    logout: function (e) {
-        // TODO - fade to black until response
+    backendLogout: function () {
         $.post('/api/logout').always(function () {
             window.location = '/';
-        }.bind(this));
+        });
+    },
+
+    logout: function () {
+        // TODO - fade to black until response
+        if (this.model.get('settings') && this.model.get('settings').email_confirmed == 'persona') {
+            navigator.id.logout();
+        }
+        else {
+            this.backendLogout();
+        }
     }
 });

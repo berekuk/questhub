@@ -2,6 +2,9 @@ package Play::Route::Users;
 
 use Dancer ':syntax';
 
+use LWP::UserAgent;
+use JSON qw(decode_json);
+
 use Dancer::Plugin::Auth::Twitter;
 auth_twitter_init();
 
@@ -20,6 +23,37 @@ get '/auth/twitter' => sub {
         }
         redirect "/register";
     }
+};
+
+post '/auth/persona' => sub {
+    session 'persona_email' => undef;
+
+    my $assertion = param('assertion') or die "no assertion specified";
+    my $ua = LWP::UserAgent->new;
+    my $response = $ua->post('https://verifier.login.persona.org/verify', {
+        assertion => $assertion,
+        audience => setting('hostport'),
+    });
+    die "Invalid response from persona.org: ".$response->status_line unless $response->is_success;
+
+    my $json = $response->decoded_content;
+    my $verification_data = decode_json($json);
+
+    my $status = $verification_data->{status};
+    die "verification_data status is not okay (it's $status); json: $json" unless $status eq 'okay';
+
+    my $email = $verification_data->{email};
+    unless ($email) {
+        die "No email in verification_data";
+    }
+    session 'persona_email' => $email;
+
+    my $login = db->users->get_by_email($email);
+    if ($login) {
+        session 'login' => $login;
+    }
+
+    return { result => 'ok' };
 };
 
 prefix '/api';
@@ -43,6 +77,11 @@ get '/current_user' => sub {
 
     if (session('twitter_user')) {
         $user->{twitter} = session('twitter_user');
+    }
+
+    if (session('persona_email') and not $user->{registered}) {
+        $user->{settings}{email} = session('persona_email');
+        $user->{settings}{email_confirmed} = 'persona';
     }
 
     return $user;
@@ -74,35 +113,51 @@ get '/user/:login' => sub {
 };
 
 post '/register' => sub {
-    if (not session('twitter_user')) {
-        die "not authorized";
-    }
-    my $twitter_login = session('twitter_user')->{screen_name};
     my $login = param('login') or die 'no login specified';
-
-    if (db->users->get_by_login($login)) {
-        die "User $login already exists";
-    }
-    if (db->users->get_by_twitter_login($twitter_login)) {
-        die "Twitter login $twitter_login is already bound";
-    }
 
     unless ($login =~ /^\w+$/) {
         status 'bad request';
         return "Invalid login '$login', only alphanumericals are allowed";
     }
 
+    if (db->users->get_by_login($login)) {
+        die "User $login already exists";
+    }
+
+    my $user = { login => $login };
+    my $more_settings = {};
+
+    if (session('twitter_user')) {
+        my $twitter_login = session('twitter_user')->{screen_name};
+
+        if (db->users->get_by_twitter_login($twitter_login)) {
+            die "Twitter login $twitter_login is already bound";
+        }
+
+        $user->{twitter} = { screen_name => $twitter_login };
+    }
+    elsif (session('persona_email')) {
+        $more_settings->{email} = session('persona_email');
+    }
+    else {
+        die "not authorized by any 3rd party (either twitter or persona)";
+    }
+
     # note that race condition is still possible after these checks
     # that's ok, mongodb will throw an exception
-    my $user = { login => $login, twitter => { screen_name => $twitter_login } };
 
-    session 'login' => $login;
     db->users->add($user);
 
-    my $settings = param('settings');
-    if ($settings) {
-        db->users->set_settings($login => decode_json($settings));
-    }
+    my $settings = param('settings') || '{}';
+    db->users->set_settings(
+        $login => {
+            %{ decode_json($settings) },
+            %$more_settings
+        },
+        (session('persona_email') ? 1 : 0) # force 'email_confirmed' setting
+    );
+
+    session 'login' => $login;
 
     return { status => "ok", user => $user };
 };

@@ -1,8 +1,8 @@
 pp.views.App = pp.View.Base.extend({
 
     initialize: function () {
-        this._currentUserView = new pp.views.CurrentUser();
-        this._currentUserView.setElement(this.$el.find('.current-user-box'));
+        this.currentUser = new pp.views.CurrentUser();
+        this.currentUser.setElement(this.$el.find('.current-user-box'));
 
         this._markdownConverter = new Markdown.getSanitizingConverter();
         this._markdownConverter.hooks.chain('postSpanGamut', function (text) {
@@ -25,11 +25,8 @@ pp.views.App = pp.View.Base.extend({
         return this._markdownConverter.makeHtml(markdown);
     },
 
-    userSettingsDialog: function () {
-        this._currentUserView.settingsDialog();
-    },
-
     setPageView: function (page) {
+
         // the explanation of pattern can be found in this article: http://lostechies.com/derickbailey/2011/09/15/zombies-run-managing-page-transitions-in-backbone-apps/
         // (note that the article is dated - it's pre-0.9.2, Backbone didn't have .listenTo() back then
         if (this._page) {

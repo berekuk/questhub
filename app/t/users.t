@@ -1,6 +1,8 @@
 use t::common;
 use parent qw(Test::Class);
 
+use Play::DB qw(db);
+
 sub setup :Tests(setup) {
     reset_db();
     Dancer::session->destroy;
@@ -131,7 +133,7 @@ sub users_list_limit_offset :Tests {
     cmp_deeply $user, $gen_expected->(qw/ blah1 blah2 /);
 
     # offset
-    my $user = http_json GET => '/api/user?limit=3&offset=1';
+    $user = http_json GET => '/api/user?limit=3&offset=1';
     cmp_deeply $user, $gen_expected->(qw/ blah2 blah3 blah4 /);
 
     my $result = http_json GET => '/api/user_count';
@@ -200,29 +202,76 @@ sub users_list_sort :Tests {
 }
 
 sub register :Tests {
+    my $current_user = http_json GET => '/api/current_user';
+    cmp_deeply $current_user, { registered => 0 };
+
     # register user without settings
     Dancer::session twitter_user => { screen_name => 'twah' };
-    http_json POST => '/api/register', { params => {
-        login => 'blah'
-    } };
-
-    # register user with settings
-    Dancer::session->destroy;
-    Dancer::session twitter_user => { screen_name => 'twit' };
-    my $settings = {
-        email => 'twat@example.com',
-        notify_likes => 0,
-        notify_comments => 1,
+    $current_user = http_json GET => '/api/current_user';
+    cmp_deeply $current_user, {
+        registered => 0,
+        twitter => {
+            screen_name => 'twah',
+        },
     };
 
     http_json POST => '/api/register', { params => {
-        login => 'twat',
+        login => 'blah'
+    } };
+    $current_user = http_json GET => '/api/current_user';
+    cmp_deeply $current_user, {
+        registered => 1,
+        _id => re('^\S+$'),
+        points => 0,
+        login => 'blah',
+        twitter => {
+            screen_name => 'twah',
+        },
+        settings => {},
+    };
+}
+
+sub register_settings :Tests {
+    Dancer::session twitter_user => { screen_name => 'twit' };
+    my $settings = {
+        email => 'foo@example.com',
+        notify_likes => 0,
+        notify_comments => 1,
+        email_confirmed => 1,
+    };
+
+    http_json POST => '/api/register', { params => {
+        login => 'foo',
         settings => encode_json($settings),
     } };
 
-    Dancer::session login => 'twat';
     my $got_settings = http_json GET => '/api/current_user/settings';
-    cmp_deeply $got_settings, superhashof($settings);
+    cmp_deeply $got_settings, {
+        email => 'foo@example.com',
+        notify_likes => 0,
+        notify_comments => 1,
+        # no email_confirmed - important!
+    };
+
+    # TODO - try the same with email_confirmed=persona, since persona is special
+}
+
+sub register_persona :Tests {
+    Dancer::session persona_email => 'example@mozilla.com';
+
+    http_json POST => '/api/register', { params => {
+        login => 'Gary'
+    } };
+
+    my $current_user = http_json GET => '/api/current_user';
+    cmp_deeply $current_user, superhashof({
+        registered => 1,
+        login => 'Gary',
+        settings => superhashof({
+            email => 'example@mozilla.com',
+            email_confirmed => 'persona',
+        }),
+    });
 }
 
 sub register_login_validation :Tests {
@@ -231,6 +280,25 @@ sub register_login_validation :Tests {
         login => 'John Doe'
     } };
     is $response->status, 400, 'spaces in logins are forbidden';
+}
+
+sub perl_get_by_email :Tests {
+    # register user with settings
+    Dancer::session->destroy;
+    Dancer::session twitter_user => { screen_name => 'john' };
+    my $settings = {
+        email => 'jack@example.com',
+        notify_likes => 0,
+        notify_comments => 1,
+    };
+
+    http_json POST => '/api/register', { params => {
+        login => 'jack',
+        settings => encode_json($settings),
+    } };
+
+    my $user = db->users->get_by_email('jack@example.com');
+    is $user, 'jack', 'get_by_email returns login';
 }
 
 __PACKAGE__->new->runtests;

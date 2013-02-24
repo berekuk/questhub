@@ -1,6 +1,8 @@
 // see also for the similar code: views/quest/add.js
 // TODO - refactor them both into pp.View.Form
 pp.views.Register = pp.View.Common.extend({
+    t: 'register',
+
     events: {
        'click .submit': 'doRegister',
        'keydown [name=login]': 'checkEnter',
@@ -9,34 +11,22 @@ pp.views.Register = pp.View.Common.extend({
 
     subviews: {
         '.settings-subview': function () {
-            return new pp.views.UserSettings({
-                model: new pp.models.UserSettings({ notify_likes: 1, notify_comments: 1 })
+            var model = new pp.models.UserSettings({
+                notify_likes: 1,
+                notify_comments: 1
             });
+
+            if (this.model.get('settings')) {
+                model.set('email', this.model.get('settings')['email']);
+                model.set('email_confirmed', this.model.get('settings')['email_confirmed']);
+            }
+
+            return new pp.views.UserSettings({ model: model });
         }
     },
-
-    t: 'register',
 
     afterInitialize: function () {
         _.bindAll(this);
-        this.listenTo(this.model, 'change', this.checkUser);
-    },
-
-    checkUser: function () {
-        // you can't see the registration form if you're already registered
-        if (this.model.get("registered")) {
-            this.remove();
-            pp.app.router.navigate("/", { trigger: true, replace: true });
-            return;
-        }
-        // or if you're not authentificated yet
-        if (!this.model.get("twitter")) {
-            this.remove();
-            pp.app.router.navigate("/welcome", { trigger: true, replace: true });
-            return;
-        }
-        this.render();
-        return this;
     },
 
     afterRender: function () {

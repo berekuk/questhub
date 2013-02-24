@@ -122,15 +122,18 @@ $(function () {
         },
 
         register: function () {
+            console.log('route /register');
+            if (!pp.app.view.currentUser.needsToRegister()) {
+                console.log('going to /');
+                this.navigate("/", { trigger: true, replace: true });
+                return;
+            }
+
             var view = new pp.views.Register({ model: pp.app.user });
             appView.setPageView(view); // not rendered yet
-            setActiveMenuItem('none');
-
-            // check conditions and render
-            if (view.checkUser()) {
-                // ok, time to register
-                setActiveMenuItem('home');
-            }
+            setActiveMenuItem('home');
+            view.render();
+            console.log('rendered /register');
         },
 
         confirmEmail: function (login, secret) {
