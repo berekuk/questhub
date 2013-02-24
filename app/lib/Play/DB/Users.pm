@@ -31,6 +31,15 @@ sub get_by_twitter_login {
     return $self->get({ twitter => { screen_name => $login } });
 }
 
+sub get_by_email {
+    my $self = shift;
+    my ($email) = validate_pos(@_, { type => SCALAR });
+
+    my $settings = $self->settings_collection->find_one({ email => $email });
+    return unless $settings;
+    return $settings->{user};
+}
+
 sub _prepare_user {
     my $self = shift;
     my ($user) = @_;
@@ -244,10 +253,13 @@ sub resend_email_confirmation {
 
 sub set_settings {
     my $self = shift;
-    my ($login, $settings) = validate_pos(@_, { type => SCALAR }, { type => HASHREF });
+    my ($login, $settings, $force_protected) = validate_pos(@_, { type => SCALAR }, { type => HASHREF }, { type => BOOLEAN, optional => 1 });
 
     # some settings can't be set by the client
-    delete $settings->{$_} for protected_settings, secret_settings;
+    delete $settings->{$_} for secret_settings;
+    unless ($force_protected) {
+        delete $settings->{$_} for protected_settings;
+    }
 
     my $old_settings = $self->get_settings($login, 1);
     for (protected_settings) {

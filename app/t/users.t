@@ -1,6 +1,8 @@
 use t::common;
 use parent qw(Test::Class);
 
+use Play::DB qw(db);
+
 sub setup :Tests(setup) {
     reset_db();
     Dancer::session->destroy;
@@ -200,11 +202,33 @@ sub users_list_sort :Tests {
 }
 
 sub register :Tests {
+    my $current_user = http_json GET => '/api/current_user';
+    cmp_deeply $current_user, { registered => 0 };
+
     # register user without settings
     Dancer::session twitter_user => { screen_name => 'twah' };
+    $current_user = http_json GET => '/api/current_user';
+    cmp_deeply $current_user, {
+        registered => 0,
+        twitter => {
+            screen_name => 'twah',
+        },
+    };
+
     http_json POST => '/api/register', { params => {
         login => 'blah'
     } };
+    $current_user = http_json GET => '/api/current_user';
+    cmp_deeply $current_user, {
+        registered => 1,
+        _id => re('^\S+$'),
+        points => 0,
+        login => 'blah',
+        twitter => {
+            screen_name => 'twah',
+        },
+        settings => {},
+    };
 
     # register user with settings
     Dancer::session->destroy;
@@ -231,6 +255,25 @@ sub register_login_validation :Tests {
         login => 'John Doe'
     } };
     is $response->status, 400, 'spaces in logins are forbidden';
+}
+
+sub perl_get_by_email :Tests {
+    # register user with settings
+    Dancer::session->destroy;
+    Dancer::session twitter_user => { screen_name => 'john' };
+    my $settings = {
+        email => 'jack@example.com',
+        notify_likes => 0,
+        notify_comments => 1,
+    };
+
+    http_json POST => '/api/register', { params => {
+        login => 'jack',
+        settings => encode_json($settings),
+    } };
+
+    my $user = db->users->get_by_email('jack@example.com');
+    is $user, 'jack', 'get_by_email returns login';
 }
 
 __PACKAGE__->new->runtests;
