@@ -4,7 +4,12 @@ pp.views.CurrentUser = pp.View.Common.extend({
 
     events: {
         'click .logout': 'logout',
-        'click .settings': 'settingsDialog'
+        'click .settings': 'settingsDialog',
+        'click .login-with-persona': 'loginWithPersona'
+    },
+
+    loginWithPersona: function () {
+        navigator.id.request();
     },
 
     getSettingsBox: function () {
@@ -72,7 +77,10 @@ pp.views.CurrentUser = pp.View.Common.extend({
                         that.model.fetch();
                     },
                     error: function(xhr, status, err) {
-                        alert("Login failure: " + err);
+                        pp.app.view.notify(
+                            'error',
+                            '/auth/persona failed.'
+                        );
                     }
                 });
             },

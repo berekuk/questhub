@@ -51,7 +51,13 @@
             </li>
           </ul>
         <% } else { %>
-          <a href="/auth/twitter">Login with <i class="icon-twitter icon-large"></i></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign In</a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="/auth/twitter">with Twitter</i></a>
+              <a href="#" class="login-with-persona">with Email</a>
+            </li>
+          </ul>
         <% } %>
       </li>
     </script>
@@ -74,8 +80,8 @@
             <% if (registered) { %>
               <a href="/" class="btn btn-large btn-primary">Go to your profile</a>
             <% } else { %>
-              <a href="/auth/twitter" class="btn btn-large btn-primary login-with-twitter">Login with Twitter</a>
-              <a href="#" class="btn btn-large btn-primary login-with-persona">Login with Persona</a>
+              <a href="/auth/twitter" class="btn btn-large btn-primary login-with-twitter">Sign In with Twitter</a>
+              <a href="#" class="btn btn-large btn-primary login-with-persona">Sign In with Email</a>
             <% } %>
             </p>
         </div>
@@ -577,7 +583,7 @@
         </div>
       </div>
       <% } else { %>
-      <a href="/auth/twitter" class="btn btn-large btn-primary">Login with Twitter to comment</a>
+      <a href="/auth/twitter" class="btn btn-large btn-primary">Sign In with Twitter to comment</a>
       <% } %>
     </script>
 
