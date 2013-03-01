@@ -248,11 +248,11 @@
     <script type="text/template" id="template-user-settings">
       <div class="form-horizontal">
         <% if (obj.email_confirmed == 'persona') { %>
-          <h4><%= obj.email || 'oops' %>
+          <h4><%- obj.email || 'oops' %>
           <span class="label label-success">Persona</span>
           </h4>
         <% } else { %>
-          <input name="email" type="email" placeholder="Email" value="<%= obj.email %>">
+          <input name="email" type="email" placeholder="Email" value="<%- obj.email %>">
           <span class="email-status <%= (obj.hideEmailStatus || obj.email_confirmed == 'persona') ? "hide" : "" %>">
             <% if (obj.email_confirmed) { %>
               <span class="label label-success">Confirmed</span>
@@ -289,7 +289,7 @@
         <% if (obj.showAuthor) { %>
           <%= partial.user({ login: user, colon: true }) %>
         <% } %>
-        <a href="/quest/<%= _id %>"><%= name  %></a>
+        <a href="/quest/<%- _id %>"><%- name %></a>
 
         <% if (obj.comment_count) { %>
           <a href="/quest/<%= _id %>"><span class="badge badge-info"><i class="icon-comment"></i> <%= comment_count %></span></a>
@@ -427,23 +427,23 @@
     </script>
 
     <script type="text/template" id="template-event-add-quest">
-        <%= partial.user({ login: object.user }) %> started a new quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
+        <%= partial.user({ login: object.user }) %> started a new quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
     </script>
 
     <script type="text/template" id="template-event-close-quest">
-        <%= partial.user({ login: object.user }) %> completed a quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
+        <%= partial.user({ login: object.user }) %> completed a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
     </script>
 
     <script type="text/template" id="template-event-reopen-quest">
-        <%= partial.user({ login: object.user }) %> reopened a quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
+        <%= partial.user({ login: object.user }) %> reopened a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
     </script>
 
     <script type="text/template" id="template-event-abandon-quest">
-        <%= partial.user({ login: object.user }) %> abandoned a quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
+        <%= partial.user({ login: object.user }) %> abandoned a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
     </script>
 
     <script type="text/template" id="template-event-resurrect-quest">
-        <%= partial.user({ login: object.user }) %> resurrected a quest: <a href="/quest/<%= object_id %>"><%= object.name %></a>.
+        <%= partial.user({ login: object.user }) %> resurrected a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
     </script>
 
     <script type="text/template" id="template-event-add-user">
@@ -454,7 +454,7 @@
         <%= partial.user({ login: object.author }) %>
         commented on
         <%= partial.user({ login: object.quest.user }) %>'s quest
-        <a href="/quest/<%= object.quest._id %>"><%= object.quest.name %></a>:
+        <a href="/quest/<%= object.quest._id %>"><%- object.quest.name %></a>:
         <div class="well well-small event-comment-well">
           <%= pp.app.view.markdownToHtml(object.body) %>
         </div>
@@ -514,9 +514,9 @@
         </div>
 
         <h2>
-          <span class="quest-title"><%= name %></span>
+          <span class="quest-title"><%- name %></span>
           <% if (my) { %>
-            <input class="quest-edit" type="text" value="<%= name %>" style="display: none">
+            <input class="quest-edit" type="text" value="<%- name %>" style="display: none">
           <% } %>
 
           <!--
@@ -528,7 +528,7 @@
               class="twitter-share-button"
               data-lang="en"
               data-url="http://play-perl.org/quest/<%= _id %>"
-              data-text="<% if (status === 'open') { %>I've got the new quest:<% } else { %>I've completed the quest:<% } %> <%= name %>" data-hashtags="playperl">Tweet</a>
+              data-text="<% if (status === 'open') { %>I've got the new quest:<% } else { %>I've completed the quest:<% } %> <%- name %>" data-hashtags="playperl">Tweet</a>
         <% } %>
         -->
         </h2>
@@ -607,7 +607,7 @@
           <%= pp.app.view.markdownToHtml(body) %>
         </div>
         <% if (my) { %>
-            <textarea class="comment-edit" style="display: none"><%= body %></textarea>
+            <textarea class="comment-edit" style="display: none"><%- body %></textarea>
         <% } %>
         </p>
         <%= partial.user({ login: author }) %>
