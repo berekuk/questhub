@@ -6,5 +6,6 @@ use Play::Route::Quests;
 use Play::Route::Comments;
 use Play::Route::Events;
 use Play::Route::Dev;
+use Play::Route::Frontend;
 
 true;
