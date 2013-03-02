@@ -1,0 +1,198 @@
+.comments {
+    margin-top: 10px;
+}
+
+.quest-big-labels {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.open-quest-count-label {
+    float: right;
+}
+
+.current-user-leaderboard-tip {
+    float: right;
+    position: relative;
+    left: 14px;
+    top: 12px;
+}
+
+h2, h3 {
+    font-weight: 200;
+}
+
+.likes {
+    margin-bottom: 8px;
+}
+
+.quest-label {
+    position: relative;
+    top: -5px;
+}
+
+.add-quest-field {
+    margin-bottom: 10px;
+}
+
+dd {
+  margin-bottom: 20px;
+}
+
+time.timeago {
+    color: #999;
+}
+
+.avatar-mini {
+    width: 24px;
+    height: 24px;
+}
+
+.event-comment-well {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.mini-button-block a {
+    color: #999;
+}
+
+.mini-button-block a:hover {
+  text-decoration: none !important;
+  color: #333;
+}
+
+input.quest-edit {
+    /* copied from h1 styles */
+    font-size: 30px;
+    line-height: 30px;
+    height: 40px;
+    width: 800px;
+    font-weight: 200;
+}
+
+textarea.comment-edit {
+    width: 95%;
+    height: 100%;
+}
+
+/*
+* sticky footer, see http://twitter.github.com/bootstrap/
+*/
+html, body {
+    height: 100%;
+    /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by it's height */
+    margin: 0 auto -60px;
+}
+
+/* Set the fixed height of the footer here */
+#push,
+#footer {
+    height: 60px;
+}
+#footer {
+    background-color: #f5f5f5;
+}
+
+/* Lastly, apply responsive CSS fixes as necessary */
+@media (max-width: 767px) {
+    #footer {
+        margin-left: -20px;
+        margin-right: -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+#wrap > .container {
+    padding-top: 60px;
+    padding-bottom: 30px;
+}
+.container .credit {
+    margin: 20px 0;
+}
+
+.registration-form {
+    margin-top: 30px;
+}
+
+/* see views/quest/small.js */
+.quest-row td {
+    line-height: 25px;
+}
+
+/* trying to reduce the page jerkiness */
+.show-more-or-progress {
+    height: 60px;
+}
+
+/* via http://stackoverflow.com/questions/9554724/bootstrap-css-center-span7 */
+/* not used anywhere, though */
+.center {
+    float: none; margin: 0 auto; text-align: center; display: block; width:auto; height:auto;
+}
+
+tbody tr.show-more > td {
+    cursor: pointer;
+}
+
+/* Always show vertical scroll bar in browser. It fixes the issue with jumping buttons */
+html { overflow-y: scroll; }
+
+/* based on bootstrap's tr.info */
+tbody tr.quest-closed > td {
+    background-color: #d9edf7;
+}
+tbody tr.quest-closed:hover > td {
+    background-color: #c4e3f3;
+}
+/* based on bootstrap's tr.warning */
+tbody tr.quest-open > td {
+    background-color: #fcf8e3;
+}
+tbody tr.quest-open:hover > td {
+    background-color: #faf2cc;
+}
+tbody tr.quest-abandoned > td {
+    background-color: #dddddd;
+}
+tbody tr.quest-abandoned:hover > td {
+    background-color: #d3d3d3;
+}
+tbody tr.quest-unclaimed > td {
+    background-color: #dff0d8;
+}
+tbody tr.quest-unclaimed:hover > td {
+    background-color: #d0e9c6;
+}
+
+
+div.quest-big-open {
+    position: relative;
+    padding: 9px;
+    background-color: #fcf8e3;
+}
+div.quest-big-closed {
+    position: relative;
+    padding: 9px;
+    background-color: #d9edf7;
+}
+div.quest-big-abandoned {
+    position: relative;
+    padding: 9px;
+    background-color: #dddddd;
+}
+div.quest-big-unclaimed {
+    position: relative;
+    padding: 9px;
+    background-color: #dff0d8;
+}
