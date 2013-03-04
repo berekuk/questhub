@@ -187,6 +187,9 @@ sub confirm_email {
         die "email confirmation secret for $login is invalid";
     }
 
+    # already confirmed, let's stop early and avoid spamming a user with duplicate emails
+    return if $settings->{email_confirmed};
+
     $self->settings_collection->update(
         { user => $login },
         { '$set' =>  { 'email_confirmed' => 1 } },
