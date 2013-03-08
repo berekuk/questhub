@@ -202,7 +202,8 @@ Quest:
     {
         _id: ...,
         status: 'open', // or 'closed'
-        user: 'blah',
+        author: 'blah',
+        user: 'blah',   // can be different from author or even empty
         name: 'quest title',
         type: 'bug'     // or 'blog', or 'feature'
         likes: [
