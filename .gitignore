@@ -6,3 +6,4 @@ app/twitter.yml
 /.cookbooks_path.json
 /cookbooks.tgz
 /dna.json
+/dump
