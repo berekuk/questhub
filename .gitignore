@@ -7,3 +7,4 @@ app/twitter.yml
 /cookbooks.tgz
 /dna.json
 /dump
+/.chef
