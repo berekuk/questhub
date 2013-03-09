@@ -29,7 +29,7 @@ if ($index_html =~ m{"/(?:models|views)/}) {
     die "oops, looks like we missed some <script> tag";
 }
 
-system(q{rm -rf www-build/views www-build/models});
+system(q{rm -rf www-build/views www-build/models www-build/test});
 
 $index_html =~ s{(^\s*<script src="/app\.js"></script>\n$)}{\n    <script src="/scripts.js"></script>\n$1}m or die "no app.js include found";
 
