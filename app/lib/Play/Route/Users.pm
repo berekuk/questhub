@@ -70,6 +70,7 @@ get '/current_user' => sub {
         $user->{registered} = 1;
 
         $user->{settings} = db->users->get_settings($login);
+        $user->{notifications} = db->notifications->list($login);
     }
     else {
         $user->{registered} = 0;

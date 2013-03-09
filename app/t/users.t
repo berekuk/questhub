@@ -33,6 +33,7 @@ sub current_user :Tests {
         registered => 1,
         points => 0,
         settings => {},
+        notifications => [],
     };
 
     http_json PUT => '/api/current_user/settings', { params => { foo => 'bar' } };
@@ -46,7 +47,28 @@ sub current_user :Tests {
         registered => 1,
         points => 0,
         settings => { foo => 'bar' },
+        notifications => [],
     };
+
+    db->notifications->add('blah2', 'shout', 'preved');
+    db->notifications->add('blah2', 'shout', 'medved');
+
+    $user = http_json GET => '/api/current_user';
+    cmp_deeply $user, {
+        twitter => {
+            screen_name => 'blah2',
+        },
+        _id => re('\S+'),
+        login => 'blah2',
+        registered => 1,
+        points => 0,
+        settings => { foo => 'bar' },
+        notifications => [
+            superhashof({ params => 'preved' }),
+            superhashof({ params => 'medved' }),
+        ],
+    };
+
 }
 
 sub another_user :Tests {
@@ -228,6 +250,7 @@ sub register :Tests {
             screen_name => 'twah',
         },
         settings => {},
+        notifications => [],
     };
 }
 
