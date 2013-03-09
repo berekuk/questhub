@@ -16,8 +16,14 @@ pp.View.PagedCollection = pp.View.AnyCollection.extend({
         },
     },
 
-    insertOne: function (el) {
-        this.$('.show-more').before(el);
+    insertOne: function (el, options) {
+        if (options && options.prepend) {
+            this.$(this.listSelector).prepend(el);
+        }
+        else {
+            this.$('.show-more').before(el);
+
+        }
     },
 
     activated: true,

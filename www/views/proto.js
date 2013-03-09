@@ -183,8 +183,14 @@ pp.View.AnyCollection = pp.View.Common.extend({
     itemSubviews: [],
 
     // can be overriden if 'append' strategy doesn't fit you
-    insertOne: function (el) {
-        this.$(this.listSelector).append(el);
+    insertOne: function (el, options) {
+        if (options && options.prepend) {
+            // this branch is not used in any real code, but still supported for the consistency with proto-paged.js implementation
+            this.$(this.listSelector).prepend(el);
+        }
+        else {
+            this.$(this.listSelector).append(el);
+        }
     },
 
     removeItemSubviews: function () {
@@ -206,15 +212,15 @@ pp.View.AnyCollection = pp.View.Common.extend({
         alert('not implemented');
     },
 
-    renderOne: function(model) {
+    renderOne: function(model, options) {
         var view = this.generateItem(model);
         this.itemSubviews.push(view);
-        this.insertOne(view.render().el);
+        this.insertOne(view.render().el, options);
     },
 
-    onAdd: function (model) {
+    onAdd: function (model, collection, options) {
         this.$(this.listSelector).show();
-        this.renderOne(model);
+        this.renderOne(model, options); // possible options: { prepend: true }
     },
 
     // copy-paste from pp.View.Common

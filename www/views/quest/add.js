@@ -92,7 +92,7 @@ pp.views.QuestAdd = pp.View.Base.extend({
     },
 
     onSuccess: function (model) {
-        this.collection.add(model);
+        this.collection.add(model, { prepend: true });
         this.$('#addQuest').modal('hide');
     },
 });
