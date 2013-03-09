@@ -15,7 +15,7 @@ Get current user.
 
 `registered=1` flag means the user is fully registered. Otherwise json still can contain some info (e.g. Twitter).
 
-In addition to the usual user object, the response will contain `settings` field with entire user settings.
+In addition to the usual user object, the response will contain `settings` and `notifications` fields.
 
 ##### POST /api/register
 
