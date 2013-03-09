@@ -27,12 +27,16 @@ pp.views.CurrentUser = pp.View.Common.extend({
     },
 
     notificationsDialog: function () {
-        alert("not implemented");
+        if (!this._notificationsBox) {
+            this._notificationsBox = new pp.views.NotificationsBox({
+                model: this.model
+            });
+        }
+        this._notificationsBox.start();
     },
 
     needsToRegister: function () {
         if (this.model.get("registered")) {
-            console.log('registered');
             return;
         }
 
@@ -44,10 +48,8 @@ pp.views.CurrentUser = pp.View.Common.extend({
                 && this.model.get('settings').email_confirmed
             )
         ) {
-            console.log('needs to register');
             return true;
         }
-        console.log('not logged in');
         return;
     },
 
@@ -63,8 +65,6 @@ pp.views.CurrentUser = pp.View.Common.extend({
             user = this.model.get('settings').email;
         }
 
-        console.log('user: ' + user);
-
         var that = this;
 
         navigator.id.watch({
@@ -78,7 +78,6 @@ pp.views.CurrentUser = pp.View.Common.extend({
                     url: '/auth/persona',
                     data: { assertion: assertion },
                     success: function(res, status, xhr) {
-                        console.log('success, updating user');
                         that.model.fetch();
                     },
                     error: function(xhr, status, err) {
@@ -97,8 +96,6 @@ pp.views.CurrentUser = pp.View.Common.extend({
         this.model = pp.app.user;
         this.model.once('sync', this.setPersonaWatch, this);
 
-        this.model.on('all', function(e) { console.log('cuser event: ' + e) }, this);
-
         this.listenTo(this.model, 'sync', this.checkUser);
 
         this.listenTo(this.model, 'change', this.render);
@@ -111,9 +108,7 @@ pp.views.CurrentUser = pp.View.Common.extend({
     },
 
     checkUser: function () {
-        console.log('current.checkUser');
         if (this.needsToRegister()) {
-            console.log('going to /register');
             pp.app.router.navigate("/register", { trigger: true, replace: true });
             return;
         }
