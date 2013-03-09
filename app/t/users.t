@@ -33,6 +33,7 @@ sub current_user :Tests {
         registered => 1,
         points => 0,
         settings => {},
+        notifications => [],
     };
 
     http_json PUT => '/api/current_user/settings', { params => { foo => 'bar' } };
@@ -46,7 +47,28 @@ sub current_user :Tests {
         registered => 1,
         points => 0,
         settings => { foo => 'bar' },
+        notifications => [],
     };
+
+    db->notifications->add('blah2', 'shout', 'preved');
+    db->notifications->add('blah2', 'shout', 'medved');
+
+    $user = http_json GET => '/api/current_user';
+    cmp_deeply $user, {
+        twitter => {
+            screen_name => 'blah2',
+        },
+        _id => re('\S+'),
+        login => 'blah2',
+        registered => 1,
+        points => 0,
+        settings => { foo => 'bar' },
+        notifications => [
+            superhashof({ params => 'preved' }),
+            superhashof({ params => 'medved' }),
+        ],
+    };
+
 }
 
 sub another_user :Tests {
@@ -228,6 +250,7 @@ sub register :Tests {
             screen_name => 'twah',
         },
         settings => {},
+        notifications => [],
     };
 }
 
@@ -299,6 +322,25 @@ sub perl_get_by_email :Tests {
 
     my $user = db->users->get_by_email('jack@example.com');
     is $user, 'jack', 'get_by_email returns login';
+}
+
+sub dismiss_notification :Tests {
+    my $self = shift;
+
+    $self->_add_users;
+    my $id1 = db->notifications->add('blah2', 'shout', 'preved');
+    my $id2 = db->notifications->add('blah2', 'shout', 'medved');
+
+    http_json POST => "/api/current_user/dismiss_notification/$id2";
+
+    my $current_user = http_json GET => '/api/current_user';
+    cmp_deeply $current_user, superhashof({
+        registered => 1,
+        login => 'blah2',
+        notifications => [
+            superhashof({ params => 'preved' }),
+        ],
+    });
 }
 
 __PACKAGE__->new->runtests;

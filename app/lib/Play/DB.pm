@@ -32,4 +32,9 @@ sub comments {
     return Play::DB::Comments->new;
 }
 
+sub notifications {
+    require Play::DB::Notifications;
+    return Play::DB::Notifications->new;
+}
+
 1;

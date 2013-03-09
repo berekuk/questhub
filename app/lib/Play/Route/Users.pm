@@ -70,6 +70,7 @@ get '/current_user' => sub {
         $user->{registered} = 1;
 
         $user->{settings} = db->users->get_settings($login);
+        $user->{notifications} = db->notifications->list($login);
     }
     else {
         $user->{registered} = 0;
@@ -99,6 +100,13 @@ any ['put', 'post'] => '/current_user/settings' => sub {
     db->users->set_settings(
         session->{login} => scalar params()
     );
+    return { result => 'ok' };
+};
+
+post '/current_user/dismiss_notification/:id' => sub {
+    my $login = session('login');
+    die "not logged in" unless session->{login};
+    db->notifications->remove(param('id'), $login);
     return { result => 'ok' };
 };
 
