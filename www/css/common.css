@@ -196,3 +196,15 @@ div.quest-big-unclaimed {
     padding: 9px;
     background-color: #dff0d8;
 }
+
+.current-user-notifications-icon {
+    margin: 10px 0 0 0;
+}
+
+.current-user-notifications-icon a {
+    color: #f00;
+}
+
+.current-user-notifications-icon a:hover {
+    text-decoration: none;
+}

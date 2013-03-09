@@ -5,7 +5,8 @@ pp.views.CurrentUser = pp.View.Common.extend({
     events: {
         'click .logout': 'logout',
         'click .settings': 'settingsDialog',
-        'click .login-with-persona': 'loginWithPersona'
+        'click .login-with-persona': 'loginWithPersona',
+        'click .notifications': 'notificationsDialog'
     },
 
     loginWithPersona: function () {
@@ -23,6 +24,10 @@ pp.views.CurrentUser = pp.View.Common.extend({
 
     settingsDialog: function() {
         this.getSettingsBox().start();
+    },
+
+    notificationsDialog: function () {
+        alert("not implemented");
     },
 
     needsToRegister: function () {
