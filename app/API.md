@@ -51,6 +51,10 @@ Update current user's settings.
 
 Same as `PUT` - both rewrite settings entirely.
 
+##### POST /api/current_user/dismiss_notification/{id}
+
+Dismiss notification.
+
 ### Players
 
 ##### GET /api/user/{login}

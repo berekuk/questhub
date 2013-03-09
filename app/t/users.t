@@ -324,4 +324,23 @@ sub perl_get_by_email :Tests {
     is $user, 'jack', 'get_by_email returns login';
 }
 
+sub dismiss_notification :Tests {
+    my $self = shift;
+
+    $self->_add_users;
+    my $id1 = db->notifications->add('blah2', 'shout', 'preved');
+    my $id2 = db->notifications->add('blah2', 'shout', 'medved');
+
+    http_json POST => "/api/current_user/dismiss_notification/$id2";
+
+    my $current_user = http_json GET => '/api/current_user';
+    cmp_deeply $current_user, superhashof({
+        registered => 1,
+        login => 'blah2',
+        notifications => [
+            superhashof({ params => 'preved' }),
+        ],
+    });
+}
+
 __PACKAGE__->new->runtests;

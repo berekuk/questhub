@@ -103,6 +103,13 @@ any ['put', 'post'] => '/current_user/settings' => sub {
     return { result => 'ok' };
 };
 
+post '/current_user/dismiss_notification/:id' => sub {
+    my $login = session('login');
+    die "not logged in" unless session->{login};
+    db->notifications->remove(param('id'), $login);
+    return { result => 'ok' };
+};
+
 get '/user/:login' => sub {
     my $login = param('login');
     my $user = db->users->get_by_login($login);
