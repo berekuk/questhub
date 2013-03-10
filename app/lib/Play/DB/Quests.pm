@@ -49,6 +49,9 @@ use Play::DB qw(db);
 
 use Dancer qw(setting);
 
+with 'Play::DB::Role::Likeable';
+sub _build_entity_owner_field { 'user' };
+
 has 'collection' => (
     is => 'ro',
     lazy => 1,
@@ -237,42 +240,14 @@ sub update {
     return $id;
 }
 
-# returns the quest that was liked
-sub _like_or_unlike {
+after 'like' => sub {
     my $self = shift;
-    my ($id, $user, $mode) = @_;
-
-    my $result = $self->collection->update(
-        {
-            _id => MongoDB::OID->new(value => $id),
-            user => { '$ne' => $user },
-        },
-        { $mode => { likes => $user } },
-        { safe => 1 }
-    );
-    my $updated = $result->{n};
-    unless ($updated) {
-        die "Quest not found or unable to like your own quest";
-    }
+    my ($id, $user) = @_;
 
     my $quest = $self->get($id);
     if ($quest->{status} eq 'closed') {
-        # add points retroactively
-        # FIXME - there's a race condition here somewhere
-        db->users->add_points(
-            $quest->{user},
-            (($mode eq '$pull') ? -1 : 1)
-        );
+        db->users->add_points($quest->{user}, 1);
     }
-
-    return $quest;
-}
-
-sub like {
-    my $self = shift;
-    my ($id, $user) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
-
-    my $quest = $self->_like_or_unlike($id, $user, '$addToSet');
 
     if (my $email = db->users->get_email($quest->{user}, 'notify_likes')) {
         my $email_body = qq[
@@ -302,17 +277,16 @@ sub like {
             $email_body,
         );
     }
-
-    return;
-}
-
-sub unlike {
+};
+after 'unlike' => sub {
     my $self = shift;
-    my ($id, $user) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+    my ($id, $user) = @_;
 
-    $self->_like_or_unlike($id, $user, '$pull');
-    return;
-}
+    my $quest = $self->get($id);
+    if ($quest->{status} eq 'closed') {
+        db->users->add_points($quest->{user}, -1);
+    }
+};
 
 sub remove {
     my $self = shift;
