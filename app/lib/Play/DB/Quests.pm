@@ -42,23 +42,15 @@ Allowed status transitions:
 use 5.010;
 
 use Moo;
+
 use Params::Validate qw(:all);
-use Play::Mongo;
-
-use Play::DB qw(db);
-
 use Dancer qw(setting);
+
+use Play::Mongo;
+use Play::DB qw(db);
 
 with 'Play::DB::Role::Common', 'Play::DB::Role::Likeable';
 sub _build_entity_owner_field { 'user' };
-
-has 'collection' => (
-    is => 'ro',
-    lazy => 1,
-    default => sub {
-        return Play::Mongo->db->get_collection('quests');
-    },
-);
 
 sub _prepare_quest {
     my $self = shift;

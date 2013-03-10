@@ -1,21 +1,15 @@
 package Play::DB::Comments;
 
 use Moo;
-use Params::Validate qw(:all);
+
 use Play::Mongo;
-use Text::Markdown qw(markdown);
-
-use Dancer qw(setting);
-
 use Play::DB qw(db);
 
-has 'collection' => (
-    is => 'ro',
-    lazy => 1,
-    default => sub {
-        return Play::Mongo->db->get_collection('comments');
-    },
-);
+use Params::Validate qw(:all);
+use Text::Markdown qw(markdown);
+use Dancer qw(setting);
+
+with 'Play::DB::Role::Common';
 
 sub pp_markdown {
     my ($body) = @_;

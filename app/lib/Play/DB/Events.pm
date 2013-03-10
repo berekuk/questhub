@@ -20,22 +20,16 @@ Events can be of different types and contain different loosely-typed fields, but
 =cut
 
 use Moo;
+
 use Play::Mongo;
+
 use Params::Validate qw(:all);
-
 use Dancer qw(setting);
-
 use Email::Simple;
 use Email::Sender::Simple qw(sendmail);
 use Encode qw(encode_utf8);
 
-has 'collection' => (
-    is => 'ro',
-    lazy => 1,
-    default => sub {
-        return Play::Mongo->db->get_collection('events');
-    },
-);
+with 'Play::DB::Role::Common';
 
 sub _prepare_event {
     my $self = shift;

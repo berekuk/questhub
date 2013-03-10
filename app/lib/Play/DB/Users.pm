@@ -1,26 +1,20 @@
 package Play::DB::Users;
 
 use Moo;
-use Params::Validate qw(:all);
-use Play::Mongo;
 
+use Params::Validate qw(:all);
+use Dancer qw(info setting);
+
+use Play::Mongo;
 use Play::DB qw(db);
 
-use Dancer qw(info setting);
+with 'Play::DB::Role::Common';
 
 has 'settings_collection' => (
     is => 'ro',
     lazy => 1,
     default => sub {
         return Play::Mongo->db->get_collection('user_settings');
-    },
-);
-
-has 'collection' => (
-    is => 'ro',
-    lazy => 1,
-    default => sub {
-        return Play::Mongo->db->get_collection('users');
     },
 );
 

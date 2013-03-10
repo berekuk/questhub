@@ -1,17 +1,12 @@
 package Play::DB::Notifications;
 
 use Moo;
+
 use Params::Validate qw(:all);
 
 use Play::DB;
 
-has 'collection' => (
-    is => 'ro',
-    lazy => 1,
-    default => sub {
-        return Play::Mongo->db->get_collection('notifications');
-    },
-);
+with 'Play::DB::Role::Common';
 
 sub _prepare {
     my $self = shift;
