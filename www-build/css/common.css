@@ -208,3 +208,8 @@ div.quest-big-unclaimed {
 .current-user-notifications-icon a:hover {
     text-decoration: none;
 }
+
+.comment-bottom-line {
+    /* fixing the jumping line height on "like" button hide/show */
+    line-height: 24px;
+}

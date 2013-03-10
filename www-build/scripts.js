@@ -641,7 +641,7 @@ pp.views.QuestBig = pp.View.Common.extend({
 
     subviews: {
         '.likes': function () {
-            return new pp.views.QuestLike({ model: this.model });
+            return new pp.views.Like({ model: this.model });
         }
     },
 
@@ -789,7 +789,7 @@ pp.views.QuestSmall = pp.View.Common.extend({
 
     subviews: {
         '.likes': function () {
-            return new pp.views.QuestLike({
+            return new pp.views.Like({
                 model: this.model,
                 showButton: false
             });
@@ -811,13 +811,15 @@ pp.views.QuestSmall = pp.View.Common.extend({
 
     features: ['tooltip']
 });
-pp.views.QuestLike = pp.View.Common.extend({
-    t: 'quest-like',
+pp.views.Like = pp.View.Common.extend({
+    t: 'like',
 
     events: {
-        "click .quest-like": "like",
-        "click .quest-unlike": "unlike",
+        "click .like": "like",
+        "click .unlike": "unlike",
     },
+
+    ownerField: 'user',
 
     afterInitialize: function () {
         if (this.options.showButton == undefined) {
@@ -825,6 +827,10 @@ pp.views.QuestLike = pp.View.Common.extend({
         }
         else {
             this._sb = this.options.showButton;
+        }
+
+        if (this.options.ownerField != undefined) {
+            this.ownerField = this.options.ownerField;
         }
         this.listenTo(this.model, 'change', this.render);
     },
@@ -849,13 +855,13 @@ pp.views.QuestLike = pp.View.Common.extend({
 
     serialize: function () {
         var likes = this.model.get('likes');
-        var my = (pp.app.user.get('login') == this.model.get('user'));
+        var my = (pp.app.user.get('login') == this.model.get(this.ownerField));
         var currentUser = pp.app.user.get('login');
         var meGusta = _.contains(likes, currentUser);
 
         var params = {
             likes: this.model.get('likes'),
-            my: (pp.app.user.get('login') == this.model.get('user')),
+            my: (pp.app.user.get('login') == this.model.get(this.ownerField)),
             currentUser: pp.app.user.get('login'),
         };
         params.meGusta = _.contains(params.likes, params.currentUser);
@@ -863,8 +869,8 @@ pp.views.QuestLike = pp.View.Common.extend({
     },
 
     afterRender: function () {
-        if (this._sb) {
-            this.showButton();
+        if (!this._sb) {
+            this.hideButton();
         }
     },
 
@@ -1501,7 +1507,19 @@ pp.views.Comment = pp.View.Common.extend({
     events: {
         "click .delete": "destroy",
         "click .edit": "edit",
-        "blur .comment-edit": "closeEdit"
+        "blur .comment-edit": "closeEdit",
+        'mouseenter': function (e) {
+            this.subview('.likes').showButton();
+        },
+        'mouseleave': function (e) {
+            this.subview('.likes').hideButton();
+        }
+    },
+
+    subviews: {
+        '.likes': function () {
+            return new pp.views.Like({ model: this.model, showButton: false, ownerField: 'author' });
+        }
     },
 
     edit: function () {
@@ -1742,7 +1760,24 @@ pp.models.EventCollection = pp.Collection.WithCgiAndPager.extend({
     model: pp.models.Event
 });
 pp.models.Comment = Backbone.Model.extend({
-    idAttribute: '_id'
+    idAttribute: '_id',
+
+    like: function() {
+        this.act('like');
+    },
+
+    unlike: function() {
+        this.act('unlike');
+    },
+
+    act: function(action) {
+        var model = this;
+        console.log(this.url());
+        $.post(this.url() + '/' + action)
+        .done(function () {
+            model.fetch();
+        });
+    }
 });
 pp.models.CommentCollection = Backbone.Collection.extend({
 
@@ -1809,7 +1844,6 @@ pp.models.Quest = Backbone.Model.extend({
     },
 
     act: function(action) {
-        console.log('action: ' + action);
         var model = this;
         $.post(this.url() + '/' + action)
             .success(function () {

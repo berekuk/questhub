@@ -607,7 +607,7 @@
     </script>
 
     <!-- like/unlike button  -->
-    <script type="text/template" id="template-quest-like">
+    <script type="text/template" id="template-like">
       <!-- likes count -->
       <% if (likes && likes.length) { %>
           <span class="badge badge-success" data-toggle="tooltip" title="<%= likes.slice(0, 10).join(', ') %><%= (likes.length <= 10) ? '' : ' and ' + (likes.length - 10) + ' more' %>">
@@ -616,11 +616,11 @@
       <% } %>
       <!-- like button -->
       <% if (currentUser && !my) { %>
-        <span class="like-button hide">
+        <span class="like-button">
           <% if (meGusta) { %>
-            <button class="btn btn-mini quest-unlike" type="button">Unlike</button>
+            <button class="btn btn-mini unlike" type="button">Unlike</button>
           <% } else { %>
-            <button class="btn btn-mini btn-primary quest-like" type="button">Like</button>
+            <button class="btn btn-mini btn-primary like" type="button">Like</button>
           <% } %>
         </span>
       <% } %>
@@ -651,18 +651,19 @@
           <%= partial.edit_tools() %>
         <% } %>
 
-        <p>
         <div class="comment-content">
           <%= pp.app.view.markdownToHtml(body) %>
         </div>
         <% if (my) { %>
             <textarea class="comment-edit" style="display: none"><%- body %></textarea>
         <% } %>
-        </p>
-        <%= partial.user({ login: author }) %>
-        <% if (obj.ts) { %>
-        <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
-        <% } %>
+        <span class="comment-bottom-line">
+          <%= partial.user({ login: author }) %>
+          <% if (obj.ts) { %>
+          <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
+          <% } %>
+          <span class="likes"></span>
+        </span>
       </div>
     </script>
 
