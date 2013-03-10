@@ -9,7 +9,8 @@ use Params::Validate qw(:all);
 use Text::Markdown qw(markdown);
 use Dancer qw(setting);
 
-with 'Play::DB::Role::Common';
+with 'Play::DB::Role::Common', 'Play::DB::Role::Likeable';
+sub _build_entity_owner_field { 'author' };
 
 sub pp_markdown {
     my ($body) = @_;

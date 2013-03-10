@@ -47,4 +47,15 @@ put '/quest/:quest_id/comment/:id' => sub {
     }
 };
 
+for my $method (qw/ like unlike /) {
+    post "/quest/:quest_id/comment/:id/$method" => sub {
+        die "not logged in" unless session->{login};
+        db->comments->$method(param('id'), session->{login}); # ignore quest_id - comment id identifies the comment
+
+        return {
+            result => 'ok',
+        }
+    };
+}
+
 true;

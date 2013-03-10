@@ -162,4 +162,49 @@ sub email_comment :Tests {
     }, 'from & to addresses';
 }
 
+sub likes :Tests {
+    Dancer::session login => 'pink';
+
+    my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => "I've got a little black book", status => 'open' } };
+    my $quest_id = $quest_result->{_id};
+
+    Dancer::session login => 'floyd';
+    my $first_comment = http_json POST => "/api/quest/$quest_id/comment", { params => { body => 'Hello?' } };
+    my $second_comment = http_json POST => "/api/quest/$quest_id/comment", { params => { body => 'Is there anybody out there?' } };
+    my $comment_id = $second_comment->{_id};
+
+    my $response = dancer_response POST => "/api/quest/$quest_id/comment/$comment_id/like";
+    is $response->status, 500, 'self-likes are forbidden';
+    like $response->content, qr/unable to like your own comment/, "comment author can't like it";
+
+    Dancer::session login => 'pink';
+    $response = dancer_response POST => "/api/quest/$quest_id/comment/$comment_id/like";
+    is $response->status, 200, 'quest author is allowed to like comments on his quest';
+
+    Dancer::session login => 'worm';
+    $response = dancer_response POST => "/api/quest/$quest_id/comment/$comment_id/like";
+    is $response->status, 200, 'other (imaginary) people are allowed to like comments too';
+
+    my $comments = http_json GET => "/api/quest/$quest_id/comment";
+    ok not(defined $comments->[0]->{likes}), 'no likes on the first comment';
+    cmp_deeply $comments, [
+        ignore,
+        superhashof({
+            likes => ['pink', 'worm'],
+        }),
+    ], 'really, liked';
+
+    Dancer::session login => 'worm';
+    $response = dancer_response POST => "/api/quest/$quest_id/comment/$comment_id/unlike";
+    is $response->status, 200, 'comment can be unliked';
+
+    $comments = http_json GET => "/api/quest/$quest_id/comment";
+    cmp_deeply $comments, [
+        ignore,
+        superhashof({
+            likes => ['pink'],
+        }),
+    ], 'really, unliked';
+}
+
 __PACKAGE__->new->runtests;

@@ -140,6 +140,14 @@ Get all quest's comments.
 
 Get a single comment.
 
+##### POST /api/quest/{id}/comment/{comment_id}/like
+
+Like a comment.
+
+##### POST /api/quest/{id}/comment/{comment_id}/unlike
+
+Unlike a comment.
+
 ##### POST /api/quest/{id}/like
 
 Like a quest.
