@@ -51,7 +51,6 @@ pp.models.Quest = Backbone.Model.extend({
     },
 
     act: function(action) {
-        console.log('action: ' + action);
         var model = this;
         $.post(this.url() + '/' + action)
             .success(function () {

@@ -21,7 +21,7 @@ pp.views.QuestBig = pp.View.Common.extend({
 
     subviews: {
         '.likes': function () {
-            return new pp.views.QuestLike({ model: this.model });
+            return new pp.views.Like({ model: this.model });
         }
     },
 

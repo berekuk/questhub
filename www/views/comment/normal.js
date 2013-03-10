@@ -4,7 +4,19 @@ pp.views.Comment = pp.View.Common.extend({
     events: {
         "click .delete": "destroy",
         "click .edit": "edit",
-        "blur .comment-edit": "closeEdit"
+        "blur .comment-edit": "closeEdit",
+        'mouseenter': function (e) {
+            this.subview('.likes').showButton();
+        },
+        'mouseleave': function (e) {
+            this.subview('.likes').hideButton();
+        }
+    },
+
+    subviews: {
+        '.likes': function () {
+            return new pp.views.Like({ model: this.model, showButton: false, ownerField: 'author' });
+        }
     },
 
     edit: function () {

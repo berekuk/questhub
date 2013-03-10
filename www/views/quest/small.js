@@ -15,7 +15,7 @@ pp.views.QuestSmall = pp.View.Common.extend({
 
     subviews: {
         '.likes': function () {
-            return new pp.views.QuestLike({
+            return new pp.views.Like({
                 model: this.model,
                 showButton: false
             });
