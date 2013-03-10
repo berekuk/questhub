@@ -5,19 +5,11 @@ use Scalar::Util qw(blessed);
 
 use Params::Validate qw(:all);
 
+with 'Play::DB::Role::Common';
+
 has 'entity_owner_field' => (
     is => 'lazy',
 );
-
-has 'entity_name' => (
-    is => 'lazy',
-);
-sub _build_entity_name {
-    my $self = shift;
-    my $package = blessed $self;
-    $package =~ s{.*::(\w+)s$}{$1} or die "unexpected package '$package'";
-    return lcfirst $package;
-}
 
 # returns the entity that was liked
 sub _like_or_unlike {

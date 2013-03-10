@@ -49,7 +49,7 @@ use Play::DB qw(db);
 
 use Dancer qw(setting);
 
-with 'Play::DB::Role::Likeable';
+with 'Play::DB::Role::Common', 'Play::DB::Role::Likeable';
 sub _build_entity_owner_field { 'user' };
 
 has 'collection' => (
