@@ -38,5 +38,15 @@ pp.views.App = pp.View.Base.extend({
         // (THIS COMMENT IS DEPRECATED. EVERYTHING HAS CHANGED.)
         // we don't call page.render() - our pages render themselves, but sometimes they do it in delayed fashion
         // (i.e., wait for user model to fetch first, and sometimes navigate to the different page based on that)
+    },
+
+    setActiveMenuItem: function (selector) {
+        this.$el
+            .find('.navbar .active')
+                .removeClass('active')
+                .end()
+            .find('.menu-item-' + selector)
+                .addClass('active');
     }
+
 });
