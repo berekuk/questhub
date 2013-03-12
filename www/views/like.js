@@ -1,65 +1,67 @@
-pp.views.Like = pp.View.Common.extend({
-    t: 'like',
+define([
+    'models/current-user',
+    'views/proto/common'
+], function (currentUser, Common) {
+    return Common.extend({
+        t: 'like',
 
-    events: {
-        "click .like": "like",
-        "click .unlike": "unlike",
-    },
+        events: {
+            "click .like": "like",
+            "click .unlike": "unlike",
+        },
 
-    ownerField: 'user',
+        ownerField: 'user',
 
-    afterInitialize: function () {
-        if (this.options.showButton == undefined) {
+        afterInitialize: function () {
+            if (this.options.showButton == undefined) {
+                this._sb = true;
+            }
+            else {
+                this._sb = this.options.showButton;
+            }
+
+            if (this.options.ownerField != undefined) {
+                this.ownerField = this.options.ownerField;
+            }
+            this.listenTo(this.model, 'change', this.render);
+        },
+
+        showButton: function () {
+            this.$('.like-button').show();
             this._sb = true;
-        }
-        else {
-            this._sb = this.options.showButton;
-        }
+        },
 
-        if (this.options.ownerField != undefined) {
-            this.ownerField = this.options.ownerField;
-        }
-        this.listenTo(this.model, 'change', this.render);
-    },
+        hideButton: function () {
+            this.$('.like-button').hide();
+            this._sb = false;
+        },
 
-    showButton: function () {
-        this.$('.like-button').show();
-        this._sb = true;
-    },
+        like: function () {
+            this.model.like();
+        },
 
-    hideButton: function () {
-        this.$('.like-button').hide();
-        this._sb = false;
-    },
+        unlike: function () {
+            this.model.unlike();
+        },
 
-    like: function () {
-        this.model.like();
-    },
+        serialize: function () {
+            var currentLogin = currentUser.get('login');
 
-    unlike: function () {
-        this.model.unlike();
-    },
+            var params = {
+                likes: this.model.get('likes'),
+                my: (currentLogin == this.model.get(this.ownerField)),
+                currentUser: currentLogin
+            };
+            params.meGusta = _.contains(params.likes, params.currentUser);
+            return params;
+        },
 
-    serialize: function () {
-        var likes = this.model.get('likes');
-        var my = (pp.app.user.get('login') == this.model.get(this.ownerField));
-        var currentUser = pp.app.user.get('login');
-        var meGusta = _.contains(likes, currentUser);
+        afterRender: function () {
+            if (!this._sb) {
+                this.hideButton();
+            }
+        },
 
-        var params = {
-            likes: this.model.get('likes'),
-            my: (pp.app.user.get('login') == this.model.get(this.ownerField)),
-            currentUser: pp.app.user.get('login'),
-        };
-        params.meGusta = _.contains(params.likes, params.currentUser);
-        return params;
-    },
-
-    afterRender: function () {
-        if (!this._sb) {
-            this.hideButton();
-        }
-    },
-
-    features: ['tooltip'],
+        features: ['tooltip'],
+    });
 });

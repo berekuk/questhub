@@ -1,22 +1,27 @@
 // left column of the dashboard page
-pp.views.UserBig = pp.View.Common.extend({
-    t: 'user-big',
+define([
+    'views/proto/common',
+    'models/current-user'
+], function (Common, currentUser) {
+    return Common.extend({
+        t: 'user-big',
 
-    events: {
-        'click .settings': 'settingsDialog',
-    },
+        events: {
+            'click .settings': 'settingsDialog',
+        },
 
-    settingsDialog: function () {
-        pp.app.view.currentUser.settingsDialog();
-    },
+        settingsDialog: function () {
+            Backbone.trigger('pp:settings-dialog');
+        },
 
-    serialize: function () {
-        var params = this.model.toJSON();
+        serialize: function () {
+            var params = this.model.toJSON();
 
-        var currentUser = pp.app.user.get('login');
-        params.my = (currentUser && currentUser == this.model.get('login'));
-        return params;
-    },
+            var currentLogin = currentUser.get('login');
+            params.my = (currentLogin && currentLogin == this.model.get('login'));
+            return params;
+        },
 
-    features: ['tooltip'],
+        features: ['tooltip'],
+    });
 });

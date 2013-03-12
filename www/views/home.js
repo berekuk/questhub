@@ -1,22 +1,28 @@
-pp.views.Home = pp.View.Common.extend({
-    t: 'home',
-    selfRender: true,
+define([
+    'views/proto/common',
+    'views/user/signin',
+    'models/current-user'
+], function (Common, Signin, currentUser) {
+    return Common.extend({
+        t: 'home',
+        selfRender: true,
 
-    events: {
-        'click .login-with-persona': 'personaLogin',
-    },
+        events: {
+            'click .login-with-persona': 'personaLogin',
+        },
 
-    subviews: {
-        '.signin': function () { return new pp.views.Signin(); }
-    },
+        subviews: {
+            '.signin': function () { return new Signin(); }
+        },
 
-    afterInitialize: function () {
-        this.listenTo(pp.app.user, 'change:registered', function () {
-            pp.app.router.navigate("/", { trigger: true, replace: true });
-        });
-    },
+        afterInitialize: function () {
+            this.listenTo(currentUser, 'change:registered', function () {
+                Backbone.trigger('pp:navigate', "/", { trigger: true, replace: true });
+            });
+        },
 
-    personaLogin: function () {
-        navigator.id.request();
-    }
+        personaLogin: function () {
+            navigator.id.request();
+        }
+    });
 });

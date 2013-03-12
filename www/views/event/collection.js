@@ -1,11 +1,16 @@
-pp.views.EventCollection = pp.View.PagedCollection.extend({
-    tag: 'div',
+define([
+    'views/proto/paged-collection',
+    'views/event/box'
+], function (PagedCollection, EventBox) {
+    return PagedCollection.extend({
+        tag: 'div',
 
-    t: 'event-collection',
+        t: 'event-collection',
 
-    listSelector: '.events-list',
+        listSelector: '.events-list',
 
-    generateItem: function (model) {
-        return new pp.views.EventBox({ model: model });
-    }
+        generateItem: function (model) {
+            return new EventBox({ model: model });
+        }
+    });
 });

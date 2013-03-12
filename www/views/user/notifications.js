@@ -1,3 +1,7 @@
-pp.views.Notifications = pp.View.Common.extend({
-    t: 'notifications'
+define([
+    'views/proto/common'
+], function (Common) {
+    return Common.extend({
+        t: 'notifications'
+    });
 });

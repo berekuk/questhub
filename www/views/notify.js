@@ -1,9 +1,12 @@
 // TODO: check if we need to remove this view on close to avoid memory leak
-pp.views.Notify = pp.View.Common.extend({
+define([
+    'views/proto/common'
+], function (Common) {
+    return Common.extend({
+        t: 'notify',
 
-    t: 'notify',
-
-    serialize: function () {
-        return this.options;
-    }
+        serialize: function () {
+            return this.options;
+        }
+    });
 });

@@ -1,11 +1,15 @@
-pp.views.Signin = pp.View.Common.extend({
-    t: 'signin',
+define([
+    'views/proto/common'
+], function (Common) {
+    return Common.extend({
+        t: 'signin',
 
-    events: {
-        'click .login-with-persona': 'loginWithPersona'
-    },
+        events: {
+            'click .login-with-persona': 'loginWithPersona'
+        },
 
-    loginWithPersona: function () {
-        navigator.id.request();
-    }
+        loginWithPersona: function () {
+            navigator.id.request();
+        }
+    });
 });
