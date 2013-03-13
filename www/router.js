@@ -10,8 +10,12 @@ define([
     'views/explore',
     'views/home',
     'models/event-collection',
-    'views/event/collection'
-], function (Backbone, currentUser, Dashboard, QuestPage, QuestModel, UserCollectionModel, UserCollection, AnotherUserModel, Explore, Home, EventCollectionModel, EventCollection) {
+    'views/event/collection',
+    'views/quest/add',
+    'views/about',
+    'views/register',
+    'views/confirm-email'
+], function (Backbone, currentUser, Dashboard, QuestPage, QuestModel, UserCollectionModel, UserCollection, AnotherUserModel, Explore, Home, EventCollectionModel, EventCollection, QuestAdd, About, Register, ConfirmEmail) {
     return Backbone.Router.extend({
         routes: {
             "": "dashboard",
@@ -42,7 +46,7 @@ define([
         },
 
         questAdd: function () {
-            var view = new pp.views.QuestAdd({ model: new pp.models.Quest() });
+            var view = new QuestAdd({ model: new QuestModel() });
             this.appView.setPageView(view);
             this.appView.setActiveMenuItem('add-quest');
         },
@@ -119,22 +123,19 @@ define([
         },
 
         register: function () {
-            console.log('route /register');
-            if (!pp.app.view.currentUser.needsToRegister()) {
-                console.log('going to /');
+            if (!this.appView.currentUser.needsToRegister()) {
                 this.navigate("/", { trigger: true, replace: true });
                 return;
             }
 
-            var view = new pp.views.Register({ model: pp.app.user });
+            var view = new Register({ model: currentUser });
             this.appView.setPageView(view); // not rendered yet
             this.appView.setActiveMenuItem('home');
             view.render();
-            console.log('rendered /register');
         },
 
         confirmEmail: function (login, secret) {
-            var view = new pp.views.ConfirmEmail({ login: login, secret: secret });
+            var view = new ConfirmEmail({ login: login, secret: secret });
             this.appView.setPageView(view);
             this.appView.setActiveMenuItem('none');
         },
@@ -144,7 +145,7 @@ define([
         },
 
         about: function () {
-            this.appView.setPageView(new pp.views.About());
+            this.appView.setPageView(new About());
             this.appView.setActiveMenuItem('about');
         }
     });
