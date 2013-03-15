@@ -27,18 +27,6 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/vendors/bootstrap/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="/vendors/bootstrap/ico/apple-touch-icon-57-precomposed.png">
 
-    <!-- notification messages -->
-    <script type="text/template" id="template-notify">
-        <div class="alert alert-<%= obj.type || 'error' %>">
-          <button type="button" class="close" data-dismiss="alert">×</button>
-          <% if (obj.message) { %>
-            <%= message %>
-          <% } else { %>
-            Unknown <%= obj.type || 'error' %> message
-          <% } %>
-        </div>
-    </script>
-
     <!-- current user widget from right-top corner -->
     <script type="text/template" id="template-current-user">
       <% if (obj.notifications && obj.notifications.length) { %>
@@ -543,67 +531,6 @@
     <script type="text/template" id="template-quest-page">
       <div class="quest-big"></div>
       <div class="comments"></div>
-    </script>
-
-    <script type="text/template" id="template-quest-big">
-      <div class="<%= "quest-big-" + ext_status %> quest-big">
-        <div>
-          <% if (user == '') { %>
-            <%= partial.user({ login: obj.author }) %><span class="muted"> suggests a quest:</span>
-          <% } else { %>
-            <%= partial.user({ login: obj.user }) %><span class="muted"> is on a quest<%= (obj.user == obj.author) ? '' : ' by' + partial.user({ login: obj.author }) %>:</span>
-            <% if (my) { %>
-              <%= partial.edit_tools() %>
-            <% } %>
-          <% } %>
-        </div>
-
-        <div class="quest-big-labels">
-          <%= partial.quest_labels({ status: status, type: obj.type }) %>
-        </div>
-
-        <h2>
-          <span class="quest-title"><%- name %></span>
-          <% if (my) { %>
-            <input class="quest-edit" type="text" value="<%- name %>" style="display: none">
-          <% } %>
-
-          <!--
-          // this code is buggy; because of QuestBig view double rendering issue, 'Tweet' button is often rendered as a broken link
-          // also, the current 'Tweet' button location is too annoying
-        <% if (my) { %>
-          <a
-              href="https://twitter.com/share"
-              class="twitter-share-button"
-              data-lang="en"
-              data-url="http://play-perl.org/quest/<%= _id %>"
-              data-text="<% if (status === 'open') { %>I've got the new quest:<% } else { %>I've completed the quest:<% } %> <%- name %>" data-hashtags="playperl">Tweet</a>
-        <% } %>
-        -->
-        </h2>
-
-        <div class="likes"></div>
-
-        <% if (my) { %> <!-- quest belongs to the current user -->
-
-          <div>
-          <!-- close/reopen button -->
-          <% if (status === 'open') { %>
-            <button class="quest-close btn btn-primary">Complete</button>
-            <button class="quest-leave btn">Leave</button>
-            <button class="quest-abandon btn">Abandon</button>
-          <% } else if (status === 'closed') { %>
-          <button class="quest-reopen btn btn-primary">Reopen</button>
-          <% } else if (status === 'abandoned') { %>
-          <button class="quest-resurrect btn">Resurrect</button>
-          <% } %>
-          </div>
-
-        <% } else if (user == '') { %>
-          <span class="muted">This quest is not claimed by anybody. Would you like to take it?</span>
-          <button class="quest-join btn btn-primary">Take</button>
-        <% } %>
-      </div>
     </script>
 
     <!-- like/unlike button  -->

@@ -1,13 +1,15 @@
 define([
+    'underscore',
     'backbone',
     'views/proto/common',
     'views/like',
     'models/current-user',
-    'bootbox'
-], function (Backbone, Common, Like, currentUser, bootbox) {
+    'bootbox',
+    'text!templates/quest-big.html'
+], function (_, Backbone, Common, Like, currentUser, bootbox, html) {
     'use strict';
     return Common.extend({
-        t: 'quest-big',
+        template: _.template(html),
 
         // You know what, this view doesn't have to be deactivated; it could just setup the model listener itself.
         // But it's my initial attempt to implement 'activated: false' pattern, so I'll keep it as is for now.

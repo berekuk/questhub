@@ -1,9 +1,12 @@
 // TODO: check if we need to remove this view on close to avoid memory leak
 define([
-    'views/proto/common'
-], function (Common) {
+    'underscore',
+    'views/proto/common',
+    'text!templates/notify.html'
+], function (_, Common, html) {
+
     return Common.extend({
-        t: 'notify',
+        template: _.template(html),
 
         serialize: function () {
             return this.options;

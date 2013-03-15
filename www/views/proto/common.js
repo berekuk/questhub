@@ -35,7 +35,9 @@ define([
         initialize: function () {
             Base.prototype.initialize.apply(this, arguments);
 
-            this.template = _.template($('#template-' + this.t).text());
+            if (this['template'] == undefined) {
+                this.template = _.template($('#template-' + this.t).text());
+            }
 
             if (this.activated) {
                 this.initSubviews();
