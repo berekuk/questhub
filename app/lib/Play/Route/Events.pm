@@ -12,7 +12,7 @@ my $rfc3339 = DateTime::Format::RFC3339->new;
 
 get '/event' => sub {
     return db->events->list({
-        map { param($_) ? ($_ => param($_)) : () } qw/ limit offset /,
+        map { param($_) ? ($_ => param($_)) : () } qw/ limit offset types/,
     });
 };
 
