@@ -505,7 +505,7 @@
         <%= partial.user({ login: object.quest.user }) %>'s quest
         <a href="/quest/<%= object.quest._id %>"><%- object.quest.name %></a>:
         <div class="well well-small event-comment-well">
-          <%= pp.app.view.markdownToHtml(object.body) %>
+          <%= partial.markdown(object.body) %>
         </div>
     </script>
 
@@ -652,7 +652,7 @@
         <% } %>
 
         <div class="comment-content">
-          <%= pp.app.view.markdownToHtml(body) %>
+          <%= partial.markdown(body) %>
         </div>
         <% if (my) { %>
             <textarea class="comment-edit" style="display: none"><%- body %></textarea>
@@ -763,32 +763,7 @@
     <!-- Mozilla recommends not to self-host persona JS code while Persona is still in beta -->
     <script src="https://login.persona.org/include.js"></script>
 
-    <script src="/vendors/jquery-1.7.1.min.js"></script>
-    <script src="/vendors/autosize/jquery.autosize.js"></script>
-    <script src="/vendors/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/vendors/bootbox.min.js"></script>
-    <script src="/vendors/underscore-min.js"></script>
-    <script src="/vendors/backbone-min.js"></script>
-    <script src="/vendors/jquery.cookie.js"></script>
-    <script src="/vendors/jquery.timeago.js"></script>
-    <script src="/vendors/pagedown/Markdown.Converter.js"></script>
-    <script src="/vendors/pagedown/Markdown.Sanitizer.js"></script>
-
-    <script>
-        var pp = {
-            app: {},
-            models: {},
-            views: {},
-            View: {},
-            Model: {},
-            Collection: {}
-        };
-    </script>
-
-    <script src="/scripts.js"></script>
-
-
-    <script src="/app.js"></script>
+    <script data-main="/built" src="/vendors/require.js"></script>
 
   </body>
 </html>

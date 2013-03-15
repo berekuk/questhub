@@ -10,8 +10,10 @@ use autodie qw(:all);
 
 system('rm -rf www-build');
 system('cp -r www www-build');
+system(q{rm -rf www-build/views www-build/models www-build/test www-build/*.js});
 
-my $index_html = qx(cat www-build/index.html);
+system('cd www && node ./tools/r.js -o name=setup mainConfigFile=setup.js out=built.js baseUrl=.');
+rename 'www/built.js' => 'www-build/built.js';
 
 sub slurp {
     open my $fh, '<', shift;
@@ -19,19 +21,8 @@ sub slurp {
     return scalar <$fh>;
 }
 
-open my $scripts_fh, '>', 'www-build/scripts.js';
-while ($index_html =~ s{^\s*<script src="(/(?:models|views)/[^"]+\.js)"></script>$}{}m) {
-    print {$scripts_fh} slurp("www/$1");
-}
-close $scripts_fh;
-
-if ($index_html =~ m{"/(?:models|views)/}) {
-    die "oops, looks like we missed some <script> tag";
-}
-
-system(q{rm -rf www-build/views www-build/models www-build/test});
-
-$index_html =~ s{(^\s*<script src="/app\.js"></script>\n$)}{\n    <script src="/scripts.js"></script>\n$1}m or die "no app.js include found";
+my $index_html = slurp('www-build/index.html');
+$index_html =~ s{<script data-main="/setup"}{<script data-main="/built"} or die "Can't find the main requirejs <script> tag";
 
 open my $fh, '>', 'www-build/index.html';
 print {$fh} $index_html;

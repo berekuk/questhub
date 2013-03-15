@@ -1,10 +1,9 @@
-var Markdown;
+// NOTE: I converted this and Markdown.Sanitizer.js to RequireJS format.
+// -- mmcleric
 
-if (typeof exports === "object" && typeof require === "function") // we're in a CommonJS (e.g. Node.js) module
-    Markdown = exports;
-else
-    Markdown = {};
-    
+define(function () {
+    var Markdown = {};
+
 // The following text is included for historical reasons, but should
 // be taken with a pinch of salt; it's not all true anymore.
 
@@ -49,8 +48,6 @@ else
 // Note: move the sample code to the bottom of this
 // file before uncommenting it.
 //
-
-(function () {
 
     function identity(x) { return x; }
     function returnFalse(x) { return false; }
@@ -1397,4 +1394,5 @@ else
 
     }; // end of the Markdown.Converter constructor
 
-})();
+    return Markdown;
+});
