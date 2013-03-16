@@ -1,11 +1,12 @@
 define([
+    'models/current-user',
     'views/proto/base',
     'views/notify', 'views/user/current'
-], function (Base, Notify, CurrentUser) {
+], function (currentUserModel, Base, Notify, CurrentUser) {
     return Base.extend({
 
         initialize: function () {
-            this.currentUser = new CurrentUser();
+            this.currentUser = new CurrentUser({ model: currentUserModel });
             this.currentUser.setElement(this.$el.find('.current-user-box'));
         },
 

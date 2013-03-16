@@ -101,7 +101,6 @@ define([
         },
 
         afterInitialize: function () {
-            this.model = currentUser;
             this.model.once('sync', this.setPersonaWatch, this);
 
             this.listenTo(this.model, 'sync', this.checkUser);

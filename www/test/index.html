@@ -1,123 +1,16 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-  "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
   <title>Jasmine Spec Runner</title>
 
   <link rel="shortcut icon" type="image/png" href="lib/jasmine-1.3.1/jasmine_favicon.png">
   <link rel="stylesheet" type="text/css" href="lib/jasmine-1.3.1/jasmine.css">
-  <script type="text/javascript" src="lib/jasmine-1.3.1/jasmine.js"></script>
-  <script type="text/javascript" src="lib/jasmine-1.3.1/jasmine-html.js"></script>
 
-  <!-- include source files here... -->
-    <script src="https://login.persona.org/include.js"></script>
-
-    <script src="/vendors/jquery-1.7.1.min.js"></script>
-    <script src="/vendors/autosize/jquery.autosize.js"></script>
-    <script src="/vendors/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/vendors/bootbox.min.js"></script>
-    <script src="/vendors/underscore-min.js"></script>
-    <script src="/vendors/backbone-min.js"></script>
-    <script src="/vendors/jquery.timeago.js"></script>
-    <script src="/vendors/pagedown/Markdown.Converter.js"></script>
-    <script src="/vendors/pagedown/Markdown.Sanitizer.js"></script>
-
-    <script>
-        var pp = {
-            app: {},
-            models: {},
-            views: {},
-            View: {},
-            Model: {},
-            Collection: {}
-        };
-    </script>
-
-    <script src="/views/proto.js"></script>
-    <script src="/views/app.js"></script>
-    <script src="/views/notify.js"></script>
-    <script src="/views/progress.js"></script>
-    <script src="/views/proto-paged.js"></script>
-    <script src="/views/dashboard.js"></script>
-    <script src="/views/explore.js"></script>
-    <script src="/views/home.js"></script>
-    <script src="/views/quest/add.js"></script>
-    <script src="/views/quest/big.js"></script>
-    <script src="/views/quest/collection.js"></script>
-    <script src="/views/quest/page.js"></script>
-    <script src="/views/quest/small.js"></script>
-    <script src="/views/quest/like.js"></script>
-    <script src="/views/register.js"></script>
-    <script src="/views/confirm-email.js"></script>
-    <script src="/views/user/current.js"></script>
-    <script src="/views/user/signin.js"></script>
-    <script src="/views/user/settings.js"></script>
-    <script src="/views/user/settings-box.js"></script>
-    <script src="/views/user/notifications.js"></script>
-    <script src="/views/user/notifications-box.js"></script>
-    <script src="/views/user/big.js"></script>
-    <script src="/views/user/small.js"></script>
-    <script src="/views/user/collection.js"></script>
-    <script src="/views/comment/collection.js"></script>
-    <script src="/views/comment/normal.js"></script>
-    <script src="/views/event/box.js"></script>
-    <script src="/views/event/normal.js"></script>
-    <script src="/views/event/collection.js"></script>
-    <script src="/views/about.js"></script>
-
-    <script src="/models/proto.js"></script>
-    <script src="/models/user.js"></script>
-    <script src="/models/another-user.js"></script>
-    <script src="/models/current-user.js"></script>
-    <script src="/models/user-settings.js"></script>
-    <script src="/models/user-collection.js"></script>
-    <script src="/models/event.js"></script>
-    <script src="/models/event-collection.js"></script>
-    <script src="/models/comment.js"></script>
-    <script src="/models/comment-collection.js"></script>
-    <script src="/models/quest.js"></script>
-    <script src="/models/quest-collection.js"></script>
-
-    <!-- <script src="/app.js"></script> -->
-
-  <!-- include spec files here... -->
-  <script type="text/javascript" src="spec.js"></script>
-
-  <script type="text/javascript">
-    (function() {
-      var jasmineEnv = jasmine.getEnv();
-      jasmineEnv.updateInterval = 1000;
-
-      var htmlReporter = new jasmine.HtmlReporter();
-
-      jasmineEnv.addReporter(htmlReporter);
-
-      jasmineEnv.specFilter = function(spec) {
-        return htmlReporter.specFilter(spec);
-      };
-
-      var currentWindowOnload = window.onload;
-
-      window.onload = function() {
-        if (currentWindowOnload) {
-          currentWindowOnload();
-        }
-        execJasmine();
-      };
-
-      function execJasmine() {
-        jasmineEnv.execute();
-      }
-
-    })();
-  </script>
+  <script src="/vendors/require.js" data-main="spec"></script>
 
 </head>
 
 <body>
-  <h1>Tests are broken because they don't have an access to html templates yet. I have to refactor the main codebase to use RequireJS first.</h1>
+  <div id="sandbox" style="overflow: hidden; height: 1px;"></div>
 </body>
 </html>
-<!--
-vim: ts=2 sw=2 sts=2
--->
