@@ -1,10 +1,12 @@
 define([
+    'underscore',
     'views/proto/any-collection',
     'views/proto/paged-collection',
-    'views/quest/small'
-], function (AnyCollection, PagedCollection, QuestSmall) {
+    'views/quest/small',
+    'text!templates/quest-collection.html'
+], function (_, AnyCollection, PagedCollection, QuestSmall, html) {
     return PagedCollection.extend({
-        t: 'quest-collection',
+        template: _.template(html),
 
         listSelector: '.quests-list',
         generateItem: function (quest) {

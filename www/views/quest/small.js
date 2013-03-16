@@ -1,9 +1,11 @@
 define([
+    'underscore',
     'views/proto/common',
-    'views/like'
-], function (Common, Like) {
+    'views/like',
+    'text!templates/quest-small.html'
+], function (_, Common, Like, html) {
     return Common.extend({
-        t: 'quest-small',
+        template: _.template(html),
 
         tagName: 'tr',
         className: 'quest-row',

@@ -1,10 +1,12 @@
 define([
+    'underscore',
     'views/proto/common',
     'views/like',
-    'models/current-user'
-], function (Common, Like, currentUser) {
+    'models/current-user',
+    'text!templates/comment.html'
+], function (_, Common, Like, currentUser, html) {
     return Common.extend({
-        t: 'comment',
+        t: _.template(html),
 
         events: {
             "click .delete": "destroy",

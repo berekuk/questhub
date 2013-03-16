@@ -1,13 +1,14 @@
 define([
+    'underscore', 'markdown',
     'views/proto/any-collection',
     'models/current-user',
     'views/user/signin',
     'views/comment/normal',
-    'markdown'
-], function (AnyCollection, currentUser, Signin, Comment, markdown) {
+    'text!templates/comment-collection.html'
+], function (_, markdown, AnyCollection, currentUser, Signin, Comment, html) {
     return AnyCollection.extend({
 
-        t: 'comment-collection',
+        template: _.template(html),
 
         events: {
             'click .submit': 'postComment',

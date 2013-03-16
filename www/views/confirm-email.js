@@ -1,10 +1,13 @@
 define([
-    'jquery',
-    'views/proto/common'
-], function ($, Common) {
+    'underscore', 'jquery',
+    'views/proto/common',
+    'text!templates/confirm-email.html'
+], function (_, $, Common, html) {
     return Common.extend({
-        t: 'confirm-email',
+        template: _.template(html),
+
         selfRender: true,
+
         afterInitialize: function () {
             $.post('/api/register/confirm_email', this.options)
             .done(function () {

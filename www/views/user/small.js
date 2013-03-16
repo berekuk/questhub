@@ -1,9 +1,11 @@
 define([
+    'underscore',
     'views/proto/common',
-    'models/current-user'
-], function (Common, currentUser) {
+    'models/current-user',
+    'text!templates/user-small.html'
+], function (_, Common, currentUser, html) {
     return Common.extend({
-        t: 'user-small',
+        template: _.template(html),
 
         tagName: 'tr',
 

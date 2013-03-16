@@ -2,11 +2,12 @@ define([
     'backbone', 'underscore',
     'views/proto/common',
     'views/user/notifications-box', 'views/user/settings-box',
-    'models/current-user', 'models/user-settings'
-], function (Backbone, _, Common, NotificationsBox, UserSettingsBox, currentUser, UserSettingsModel) {
+    'models/current-user', 'models/user-settings',
+    'text!templates/current-user.html'
+], function (Backbone, _, Common, NotificationsBox, UserSettingsBox, currentUser, UserSettingsModel, html) {
     return Common.extend({
 
-        t: 'current-user',
+        template: _.template(html),
 
         events: {
             'click .logout': 'logout',

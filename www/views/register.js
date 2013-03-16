@@ -4,10 +4,11 @@ define([
     'underscore', 'jquery', 'views/proto/common',
     'models/user-settings',
     'models/current-user',
-    'views/user/settings'
-], function (_, $, Common, UserSettingsModel, currentUser, UserSettings) {
+    'views/user/settings',
+    'text!templates/register.html'
+], function (_, $, Common, UserSettingsModel, currentUser, UserSettings, html) {
     return Common.extend({
-        t: 'register',
+        template: _.template(html),
 
         events: {
            'click .submit': 'doRegister',

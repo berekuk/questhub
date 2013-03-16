@@ -6,16 +6,18 @@
 //
 // Also, separating modal view logic is a Good Thing in any case. This view can become 'views/proto/modal' in the future.
 define([
+    'underscore',
     'views/proto/common',
     'views/user/settings',
-    'models/current-user'
-], function (Common, UserSettings, currentUser) {
+    'models/current-user',
+    'text!templates/user-settings-box.html'
+], function (_, Common, UserSettings, currentUser, html) {
     return Common.extend({
+        template: _.template(html),
+
         events: {
             'click .btn-primary': 'submit'
         },
-
-        t: 'user-settings-box',
 
         subviews: {
             '.settings-subview': function () {

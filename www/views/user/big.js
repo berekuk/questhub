@@ -1,10 +1,12 @@
 // left column of the dashboard page
 define([
+    'underscore',
     'views/proto/common',
-    'models/current-user'
-], function (Common, currentUser) {
+    'models/current-user',
+    'text!templates/user-big.html'
+], function (_, Common, currentUser, html) {
     return Common.extend({
-        t: 'user-big',
+        template: _.template(html),
 
         events: {
             'click .settings': 'settingsDialog',

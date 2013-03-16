@@ -1,15 +1,16 @@
 define([
     'underscore',
-    'views/proto/base'
-], function (_, Base) {
+    'views/proto/base',
+    'text!templates/quest-add.html'
+], function (_, Base, html) {
     return Base.extend({
+        template: _.template(html),
+
         events: {
             'click .quest-add': 'submit',
             'click .quest-type-select button': 'setType',
             'keyup [name=name]': 'validate'
         },
-
-        template: _.template($('#template-quest-add').text()),
 
         initialize: function() {
             _.bindAll(this);

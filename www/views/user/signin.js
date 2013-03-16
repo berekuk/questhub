@@ -1,8 +1,10 @@
 define([
-    'views/proto/common'
-], function (Common) {
+    'underscore',
+    'views/proto/common',
+    'text!templates/signin.html'
+], function (_, Common, html) {
     return Common.extend({
-        t: 'signin',
+        template: _.template(html),
 
         events: {
             'click .login-with-persona': 'loginWithPersona'

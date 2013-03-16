@@ -2,10 +2,11 @@ define([
     'underscore',
     'views/proto/common',
     'models/quest-collection',
-    'views/quest/collection'
-], function (_, Common, QuestCollectionModel, QuestCollection) {
+    'views/quest/collection',
+    'text!templates/explore.html'
+], function (_, Common, QuestCollectionModel, QuestCollection, html) {
     return Common.extend({
-        t: 'explore',
+        template: _.template(html),
 
         events: {
             'click ul.explore-nav a': 'switchTab',

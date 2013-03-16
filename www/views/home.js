@@ -1,10 +1,11 @@
 define([
-    'views/proto/common',
-    'views/user/signin',
-    'models/current-user'
-], function (Common, Signin, currentUser) {
+    'underscore',
+    'views/proto/common', 'views/user/signin',
+    'models/current-user',
+    'text!templates/home.html'
+], function (_, Common, Signin, currentUser, html) {
     return Common.extend({
-        t: 'home',
+        template: _.template(html),
         selfRender: true,
 
         events: {

@@ -1,13 +1,15 @@
 define([
+    'underscore',
     'views/proto/common',
-    'views/user/notifications'
-], function (Common, Notifications) {
+    'views/user/notifications',
+    'text!templates/notifications-box.html'
+], function (_, Common, Notifications, html) {
     return Common.extend({
+        template: _.template(html),
+
         events: {
             'click .btn-primary': 'next'
         },
-
-        t: 'notifications-box',
 
         subviews: {
             '.subview': function () {

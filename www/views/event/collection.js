@@ -1,11 +1,13 @@
 define([
+    'underscore',
     'views/proto/paged-collection',
-    'views/event/box'
-], function (PagedCollection, EventBox) {
+    'views/event/box',
+    'text!templates/event-collection.html'
+], function (_, PagedCollection, EventBox, html) {
     return PagedCollection.extend({
-        tag: 'div',
+        template: _.template(html),
 
-        t: 'event-collection',
+        tag: 'div',
 
         listSelector: '.events-list',
 

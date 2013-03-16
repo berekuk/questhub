@@ -1,11 +1,13 @@
 define([
+    'underscore',
     'views/proto/common',
-    'views/quest/big',
-    'views/comment/collection',
-    'models/comment-collection'
-], function (Common, QuestBig, CommentCollection, CommentCollectionModel) {
+    'views/quest/big', 'views/comment/collection',
+    'models/comment-collection',
+    'text!templates/quest-page.html'
+], function (_, Common, QuestBig, CommentCollection, CommentCollectionModel, html) {
     return Common.extend({
-        t: 'quest-page',
+        template: _.template(html),
+
         selfRender: true,
 
         subviews: {

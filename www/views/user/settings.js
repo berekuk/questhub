@@ -1,14 +1,16 @@
 define([
+    'underscore',
     'jquery',
-    'views/proto/common'
-], function ($, Common) {
+    'views/proto/common',
+    'text!templates/user-settings.html'
+], function (_, $, Common, html) {
     return Common.extend({
+        template: _.template(html),
+
         events: {
            'click .resend-email-confirmation': 'resendEmailConfirmation',
            'keyup [name=email]': 'typing'
         },
-
-        t: 'user-settings',
 
         resendEmailConfirmation: function () {
             var btn = this.$('.resend-email-confirmation');

@@ -1,7 +1,9 @@
 define([
-    'views/proto/common'
-], function (Common) {
+    'underscore',
+    'views/proto/common',
+    'text!templates/notifications.html'
+], function (_, Common, html) {
     return Common.extend({
-        t: 'notifications'
+        template: _.template(html)
     });
 });

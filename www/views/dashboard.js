@@ -1,14 +1,13 @@
 define([
+    'underscore',
     'views/proto/common',
-    'views/user/big',
-    'models/quest-collection',
-    'models/current-user',
-    'views/quest/collection',
-    'views/quest/add',
-], function (Common, UserBig, QuestCollectionModel, currentUser, QuestCollection, QuestAdd) {
-    return Common.extend({
+    'views/user/big', 'views/quest/collection', 'views/quest/add',
+    'models/quest-collection', 'models/current-user',
+    'text!templates/dashboard.html'
+], function (_, Common, UserBig, QuestCollection, QuestAdd, QuestCollectionModel, currentUser, html) {
 
-        t: 'dashboard',
+    return Common.extend({
+        template: _.template(html),
 
         activated: false,
 

@@ -1,9 +1,11 @@
 define([
+    'underscore',
     'models/current-user',
-    'views/proto/common'
-], function (currentUser, Common) {
+    'views/proto/common',
+    'text!templates/like.html'
+], function (_, currentUser, Common, html) {
     return Common.extend({
-        t: 'like',
+        template: _.template(html),
 
         events: {
             "click .like": "like",

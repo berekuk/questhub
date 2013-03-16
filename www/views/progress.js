@@ -1,8 +1,10 @@
 define([
-    'views/proto/common'
-], function (Common) {
+    'underscore',
+    'views/proto/common',
+    'text!templates/progress.html'
+], function (_, Common, html) {
     return Common.extend({
-        t: 'progress',
+        template: _.template(html),
 
         on: function () {
             this.off();
