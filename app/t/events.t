@@ -79,10 +79,15 @@ sub atom :Tests {
         status => 'open',
     };
 
+    # Regular Atom
     my $response = dancer_response GET => '/api/event/atom';
     is $response->status, 200;
-
     like $response->content, qr/Frodo joins Play Perl/;
+
+    # Atom has filter.
+    $response = dancer_response GET => '/api/event/atom?types=add-quest';
+    is $response->status, 200;
+    unlike $response->content, qr/Frodo joins Play Perl/;
 }
 
 __PACKAGE__->new->runtests;

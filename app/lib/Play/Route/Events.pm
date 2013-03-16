@@ -17,7 +17,9 @@ get '/event' => sub {
 };
 
 get '/event/atom' => sub {
-    my @events = @{ db->events->list };
+    my @events = @{ db->events->list({
+        map { param($_) ? ( $_ => param($_) ): () } qw/types/,
+    })};
 
     for my $event (@events) {
         $event->{updated} = $rfc3339->format_datetime(
