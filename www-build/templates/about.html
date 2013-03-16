@@ -1,0 +1,112 @@
+<div class="container-fluid about">
+  <h1>Play Perl</h1>
+  <div>
+    Play Perl is a new website for Perl developers.
+  </div>
+  <hr>
+  <div class="row-fluid">
+    <h2>Concepts</h2>
+    <h3>Opensource, gamified</h3>
+    <p>
+    Gamification is great for tuning people motivations in a positive way.<br>
+    Play Perl gives you points and achievements to be proud of.
+    </p>
+  </div>
+  <div class='row-fluid'>
+    <h3>Social Todo List</h3>
+    <p>
+    Play Perl allows you to announce your plans, gather the feedback, and find other people to cooperate with on common goals.
+    </p>
+  </div>
+  <div class="row-fluid">
+    <h3>Collaborative prioritization</h3>
+    <p>
+    By liking other people's quests, you promise them points, — or give them points right now if they already completed the quest.<br>
+    So you can quickly gather opinions on what the community would like to be see more - new feature, internals refactoring, or new blog post.
+    </p>
+  </div>
+  <hr>
+  <div class="row-fluid">
+    <h2>Testimonials and announcements</h2>
+    <p>
+    <ul>
+      <li><a href="http://blogs.perl.org/users/david_mertens/2013/02/i-3-play-perl.html">David Mertens: I &lt;3 play-perl</a></li>
+      <li><a href="http://enetdown.org/dot-plan/posts/2013/02/12/play_perl_is_a_game_changer/">zmughal: Play Perl is a game changer</a></li>
+      <li><a href="http://babyl.dyndns.org/techblog/entry/play-perl">yanick: Playing with Play Perl</a></li>
+    </ul>
+    <ul>
+      <li><a href="http://blogs.perl.org/users/vyacheslav_matjukhin/2013/02/play-perl-is-online.html">Play Perl is online</a></li>
+      <li><a href="http://blogs.perl.org/users/vyacheslav_matjukhin/2013/02/play-perl-first-24-hours-and-the-power-of-likes.html">Play Perl: first 24 hours and the power of likes</a></li>
+      <li><a href="http://blogs.perl.org/users/vyacheslav_matjukhin/2013/02/play-perl-is-more-popular-than-rtcpanorg.html">Play Perl is more popular than rt.cpan.org!</a></li>
+      </p>
+    </ul>
+  </div>
+  <hr>
+  <div class="row-fluid">
+    <h2>FAQ</h2>
+    <dl>
+      <dt>"Quest"? "Player"? What is this?</dt>
+      <dd>Quest is any kind of task you're planning to do. Player is you, and other people are players too. You get 1+{number-of-likes} points for each quest you close.</dd>
+      <dt>There are many other bug trackers! How is Play Perl different?</dt>
+      <dd>
+      Play Perl considers people to be more important than projects, and fun to be more important than planning. We're going to optimize its mechanics for:
+      <ol>
+        <li>People feeling appreciated;</li>
+        <li>Praise being granted and received wherever and whenever necessary;</li>
+        <li>Contribution simplified as much as possible.</li>
+      </ol>
+      There are many more ideas for future features, check out our <a href="https://github.com/berekuk/play-perl/wiki/DesignDraft">DesignDraft</a>.
+      </dd>
+
+      <dt>Is this for Perl 5 or for Perl 6?</dt>
+      <dd>
+      Both.<br>
+      And also Moe, p2 and anything else that will grow out of Perl community in the future.
+      </dd>
+
+      <dt>Can I use this for my non-Perl tasks?</dt>
+      <dd>
+      Please don't.<br>
+      Here's the short list of rules for possible quests:
+      <ul>
+        <li>all quests are good if they're related to Perl somehow;</li>
+        <li>self-referential quests such as "get one more point" or "get to the top of players list" are not ok for obvious reasons;</li>
+        <li>quests not relevant to Perl are temporarily discouraged, because I didn't figure out yet how to a) allow them; b) keep the game points meaningful.</li>
+      </ul>
+      <p>
+      On the other hand, don't hesitate to create a quest even if you feel like the task is too small and not worth a point. Anything that helps you to move forward is fine, and points=likes+1 rule ensures that everyone, in theory, will get a fair score in the end.
+      <p>
+      <a href="http://play-perl.org/quest/512382e3e05a54857e000085">More details on the topic of non-perl quests.</a><br>
+      (tl;dr: play-github is going to happen one day.)
+      </dd>
+
+      <dt>This doesn't motivate me.</dt>
+      <dd>That's ok. <a href="http://berekuk.github.com/perl-motivation-survey/">People are different.</a></dd>
+
+      <dt>I can't use this without feature X.</dt>
+      <dd>Why don't you <a href="https://github.com/berekuk/play-perl">implement it yourself?</a></dd>
+
+      <dt>How can I add a link to a CPAN module in comments easily?</dt>
+      <dd>If your module name contains <code>::</code>, it'll turn into the link to MetaCPAN automatically. Use <code>cpan:Foo</code> syntax for one-word module names.</dd>
+    </dl>
+
+  </div>
+  <hr>
+  <div class="row-fluid">
+    <h2>Technology</h2>
+    Play Perl is built with:
+    <ul>
+      <li><a href="http://perldancer.org/">Dancer</a></li>
+      <li><a href="http://documentcloud.github.com/backbone/">Backbone.js</a></li>
+      <li><a href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
+      <li><a href="http://www.mongodb.org/">MongoDB</a></li>
+    </ul>
+    <p>
+    Backend is completely separated from the frontend. Backend API is documented <a href="https://github.com/berekuk/play-perl/blob/master/app/API.md">here</a>, feel free to use it.<br>
+    (But please don't abuse game mechanics or you'll be banned.)
+    </p>
+    <p>
+    Play Perl sources are open. <a href="https://github.com/berekuk/play-perl">Clone it on GitHub!</a>
+    </p>
+  </div>
+</div>

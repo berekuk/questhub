@@ -1,10 +1,14 @@
-pp.models.AnotherUser = pp.models.User.extend({
+define([
+    'backbone',
+    'models/user'
+], function (Backbone, User) {
+    return User.extend({
 
-    initialize: function () {
-        this.on('error', pp.app.onError);
-    },
+        initialize: function() {
+        },
 
-    url: function () {
-        return '/api/user/' + this.get('login');
-    }
+        url: function () {
+            return '/api/user/' + this.get('login');
+        }
+    });
 });

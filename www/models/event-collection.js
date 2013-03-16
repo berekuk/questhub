@@ -1,5 +1,10 @@
-pp.models.EventCollection = pp.Collection.WithCgiAndPager.extend({
-    baseUrl: '/api/event',
-    cgi: ['limit', 'offset'],
-    model: pp.models.Event
+define([
+    'backbone',
+    'models/proto/paged-collection', 'models/event'
+], function (Backbone, Parent, Event) {
+    return Parent.extend({
+        baseUrl: '/api/event',
+        cgi: ['limit', 'offset'],
+        model: Event
+    });
 });

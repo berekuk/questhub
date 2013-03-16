@@ -1,14 +1,10 @@
-(function () {
-    var output, Converter;
-    if (typeof exports === "object" && typeof require === "function") { // we're in a CommonJS (e.g. Node.js) module
-        output = exports;
-        Converter = require("./Markdown.Converter").Converter;
-    } else {
-        output = window.Markdown;
-        Converter = output.Converter;
-    }
-        
-    output.getSanitizingConverter = function () {
+define([
+    './Markdown.Converter'
+], function (Markdown) {
+
+    var Converter = Markdown.Converter;
+
+    Markdown.getSanitizingConverter = function () {
         var converter = new Converter();
         converter.hooks.chain("postConversion", sanitizeHtml);
         converter.hooks.chain("postConversion", balanceTags);
@@ -105,4 +101,6 @@
         });
         return html;
     }
-})();
+
+    return Markdown;
+});

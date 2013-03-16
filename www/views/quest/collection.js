@@ -1,16 +1,24 @@
-pp.views.QuestCollection = pp.View.PagedCollection.extend({
-    t: 'quest-collection',
+define([
+    'underscore',
+    'views/proto/any-collection',
+    'views/proto/paged-collection',
+    'views/quest/small',
+    'text!templates/quest-collection.html'
+], function (_, AnyCollection, PagedCollection, QuestSmall, html) {
+    return PagedCollection.extend({
+        template: _.template(html),
 
-    listSelector: '.quests-list',
-    generateItem: function (quest) {
-        return new pp.views.QuestSmall({
-            model: quest,
-            showAuthor: this.options.showAuthor
-        });
-    },
+        listSelector: '.quests-list',
+        generateItem: function (quest) {
+            return new QuestSmall({
+                model: quest,
+                showAuthor: this.options.showAuthor
+            });
+        },
 
-    // evil hack - ignore PagedCollection's afterRender, i.e. disable tooltip code
-    afterRender: function () {
-        pp.View.AnyCollection.prototype.afterRender.apply(this, arguments);
-    }
+        // evil hack - ignore PagedCollection's afterRender, i.e. disable tooltip code
+        afterRender: function () {
+            AnyCollection.prototype.afterRender.apply(this, arguments);
+        }
+    });
 });

@@ -1,0 +1,22 @@
+<!-- landing page -->
+<div class="container-fluid hero-unit">
+  <h1>Play Perl</h1>
+  <h2>What&apos;s going on here?</h2>
+  <p>
+  <ol>
+      <li>This is your public to-do list.</li>
+      <li>This is a gamified platform for connecting and encouraging people.</li>
+      <li>This is a social network for Perl developers.</li>
+      <li>This is a place to gather and provide feedback on the stuff you did and on the stuff you&apos;re going to do.</li>
+      <li>Finally, you can get game points here!</li>
+  </ol>
+  </p>
+  <p>
+  <% if (registered) { %>
+    <a href="/" class="btn btn-large btn-primary">Go to your profile</a>
+  <% } else { %>
+    <strong>Sign in:</strong>
+    <span class="signin"></span>
+  <% } %>
+  </p>
+</div>

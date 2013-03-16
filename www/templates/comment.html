@@ -1,0 +1,19 @@
+<div class="well well-small">
+  <% if (my) { %>
+    <%= partial.edit_tools() %>
+  <% } %>
+
+  <div class="comment-content">
+    <%= partial.markdown(body) %>
+  </div>
+  <% if (my) { %>
+      <textarea class="comment-edit" style="display: none"><%- body %></textarea>
+  <% } %>
+  <span class="comment-bottom-line">
+    <%= partial.user({ login: author }) %>
+    <% if (obj.ts) { %>
+    <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
+    <% } %>
+    <span class="likes"></span>
+  </span>
+</div>
