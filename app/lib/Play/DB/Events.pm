@@ -76,7 +76,7 @@ sub list {
     my $params = validate(@_, {
         limit => { type => SCALAR, regex => qr/^\d+$/, default => 100 },
         offset => { type => SCALAR, regex => qr/^\d+$/, default => 0 },
-        types => { type => SCALAR, regex => qr/^.+$/, default => '' },
+        types => { type => SCALAR, regex => qr/^.+$/, optional => 1 },
     });
 
     my $search_opt = _build_search_opt($params->{types});
