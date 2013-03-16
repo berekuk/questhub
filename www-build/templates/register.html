@@ -1,0 +1,22 @@
+<!-- registration form -->
+<div class="row-fluid">
+  <div class="span3"></div>
+  <div class="span6">
+    <h2>Welcome to the Play Perl<% if (obj.twitter) { %>, <i class="icon-twitter icon-large"></i> <%= twitter.screen_name %><% } %>!
+    </h2>
+    <h3>One final step before you can join your fellow hackers...</h3>
+    <div class="registration-form">
+      <div class="control-group login">
+        <input name="login" type="text" placeholder="Login (required)">
+      </div>
+      <div class="settings-subview"></div>
+      <button class="btn btn-primary btn-large submit">Register</button>
+      <p>
+      <!-- TODO - grap striped-button bootstrap addon from the web? -->
+      <div class="progress progress-striped active">
+        <div class="bar" style="width: 100%"></div>
+      </div>
+      </p>
+    </div>
+  </div>
+</div>

@@ -13,6 +13,7 @@ system('cp -r www www-build');
 system(q{rm -rf www-build/views www-build/models www-build/test www-build/*.js});
 
 system('cd www && node ./tools/r.js -o name=vendors/almond include=setup mainConfigFile=setup.js out=built.js baseUrl=. wrap=true');
+
 rename 'www/built.js' => 'www-build/built.js';
 
 sub slurp {
@@ -21,9 +22,17 @@ sub slurp {
     return scalar <$fh>;
 }
 
-my $index_html = slurp('www-build/index.html');
-$index_html =~ s{\Q<script data-main="/setup" src="/vendors/require.js">\E}{<script src="/built.js">} or die "Can't find the main requirejs <script> tag";
+sub edit_file {
+    my ($filename, $sub) = @_;
 
-open my $fh, '>', 'www-build/index.html';
-print {$fh} $index_html;
-close $fh;
+    local $_ = slurp($filename);
+    $sub->();
+
+    open my $fh, '>', $filename;
+    print {$fh} $_;
+    close $fh;
+}
+
+edit_file('www-build/index.html', sub {
+    s{\Q<script data-main="/setup" src="/vendors/require.js">\E}{<script src="/built.js">} or die "Can't find the main requirejs <script> tag";
+});
