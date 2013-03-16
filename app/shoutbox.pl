@@ -18,4 +18,4 @@ sub main {
     }
 }
 
-main(@ARGV) unless caller;
+main(join '', <>) unless caller;
