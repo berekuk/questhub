@@ -54,6 +54,7 @@ require(['underscore', 'jquery', 'jasmine-html'], function(_, $, jasmine){
 
     specs.push('spec/current-user');
     specs.push('spec/markdown');
+    specs.push('spec/comment');
 
     $(function(){
         require(specs, function(){

@@ -6,7 +6,7 @@ define([
     'text!templates/comment.html'
 ], function (_, Common, Like, currentUser, html) {
     return Common.extend({
-        t: _.template(html),
+        template: _.template(html),
 
         events: {
             "click .delete": "destroy",

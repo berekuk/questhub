@@ -1,5 +1,5 @@
 define(['models/current-user', 'views/user/current'], function (currentUser, View) {
-    describe('current user tests', function () {
+    describe('current user', function () {
         it("notifications icon", function () {
             var model = currentUser.clone();
             model.set({

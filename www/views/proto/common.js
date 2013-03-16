@@ -25,7 +25,9 @@
  * Note that this class overrides remove(), calling remove() for all subviews for you. Die, zombies.
 */
 define([
-    'backbone', 'underscore', 'views/proto/base'
+    'backbone', 'underscore',
+    'views/proto/base',
+    'jquery.timeago', 'bootstrap' // for features
 ], function (Backbone, _, Base) {
     "use strict";
     return Base.extend({
