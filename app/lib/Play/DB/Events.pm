@@ -54,7 +54,7 @@ sub email {
     my $email = Email::Simple->create(
         header => [
             To => $address,
-            From => 'Play Perl <notification@'.setting('hostport').'>',
+            From => setting('service_name').' <notification@'.setting('hostport').'>',
             Subject => $subject,
             'Reply-to' => 'Vyacheslav Matyukhin <me@berekuk.ru>', # TODO - take from config
             'Content-Type' => 'text/html; charset=utf-8',

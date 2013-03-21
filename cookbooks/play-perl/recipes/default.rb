@@ -60,6 +60,7 @@ template "/play/app/config.yml" do
   variables({
       :twitter => node['play_perl']['twitter'],
       :hostport => node['play_perl']['hostport']
+      :service_name => node['play_perl']['service_name']
   })
   notifies :restart, "service[nginx]"
 end
