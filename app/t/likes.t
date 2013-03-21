@@ -35,6 +35,7 @@ sub like_quest_internal :Tests {
             name => 'foo, foo',
             status => 'open',
             user => 'blah',
+            team => ['blah'],
             author => 'blah',
         };
 }

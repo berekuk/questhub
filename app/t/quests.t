@@ -36,10 +36,9 @@ sub setup :Tests(setup) {
 }
 
 sub perl_quest_list :Test(1) {
-    cmp_deeply(
+    cmp_deeply
         [ sort { $a->{_id} cmp $b->{_id} } @{ db->quests->list({}) } ],
-        [ sort { $a->{_id} cmp $b->{_id} } values %$quests_data ],
-    );
+        [ map { { %$_, team => [$_->{user}] } } sort { $a->{_id} cmp $b->{_id} } values %$quests_data ];
 }
 
 sub quest_list :Tests {
@@ -47,13 +46,18 @@ sub quest_list :Tests {
 
     cmp_deeply
         [ sort { $a->{_id} cmp $b->{_id} } @$list ],
-        [ sort { $a->{_id} cmp $b->{_id} } values %$quests_data ];
+        [ map { { %$_, team => [$_->{user}] } } sort { $a->{_id} cmp $b->{_id} } values %$quests_data ];
 }
 
 sub quest_list_filtering :Tests {
     my $list = http_json GET => '/api/quest', { params => { status => 'closed' } };
 
-    cmp_deeply $list, [ $quests_data->{3} ];
+    cmp_deeply $list, [
+        {
+            %{ $quests_data->{3} },
+            team => [ $quests_data->{3}{user} ],
+        }
+    ];
 }
 
 sub quest_sorting :Tests {
@@ -81,7 +85,7 @@ sub single_quest :Tests {
     my $id          =  $quests_data->{1}->{_id};
     my $quest = http_json GET => '/api/quest/'.$id;
 
-    cmp_deeply $quest, $quests_data->{1};
+    cmp_deeply $quest, { %{ $quests_data->{1} }, team => [$quests_data->{1}{user}] };
 }
 
 sub edit_quest :Tests {
@@ -113,7 +117,7 @@ sub add_quest :Tests {
 
     cmp_deeply
         $add_result,
-        { %$new_record, author => $user, _id => re('^\S+$'), ts => re('^\d+$') },
+        { %$new_record, team => [$user], author => $user, _id => re('^\S+$'), ts => re('^\d+$') },
         'add response';
 
     my $id = $add_result->{_id};
@@ -121,7 +125,7 @@ sub add_quest :Tests {
     my $got_quest = http_json GET => "/api/quest/$id";
     cmp_deeply
         $got_quest,
-        { %$new_record, author => $user, _id => re('^\S+$'), ts => re('^\d+$') },
+        { %$new_record, team => [$user], author => $user, _id => re('^\S+$'), ts => re('^\d+$') },
         'get response';
 }
 
@@ -153,7 +157,7 @@ sub quest_events :Tests {
             action => 'resurrect',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'open', user => $user, author => $user },
+            object => { name => 'test-quest', status => 'open', user => $user, team => [$user], author => $user },
         },
         {
             _id => re('^\S+$'),
@@ -162,7 +166,7 @@ sub quest_events :Tests {
             action => 'abandon',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'abandoned', user => $user, author => $user },
+            object => { name => 'test-quest', status => 'abandoned', user => $user, team => [$user], author => $user },
         },
         {
             _id => re('^\S+$'),
@@ -171,7 +175,7 @@ sub quest_events :Tests {
             action => 'reopen',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'open', user => $user, author => $user },
+            object => { name => 'test-quest', status => 'open', user => $user, team => [$user], author => $user },
         },
         {
             _id => re('^\S+$'),
@@ -180,7 +184,7 @@ sub quest_events :Tests {
             action => 'close',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'closed', user => $user, author => $user },
+            object => { name => 'test-quest', status => 'closed', user => $user, team => [$user], author => $user },
         },
         {
             _id => re('^\S+$'),
@@ -189,7 +193,7 @@ sub quest_events :Tests {
             action => 'add',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'open', user => $user, author => $user },
+            object => { name => 'test-quest', status => 'open', user => $user, team => [$user], author => $user },
         },
     ];
 }

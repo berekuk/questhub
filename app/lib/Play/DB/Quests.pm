@@ -57,6 +57,9 @@ sub _prepare_quest {
     my ($quest) = @_;
     $quest->{ts} = $quest->{_id}->get_time;
     $quest->{_id} = $quest->{_id}->to_string;
+
+    $quest->{team} = [$quest->{user}];
+
     return $quest;
 }
 
