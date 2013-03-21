@@ -148,16 +148,16 @@ sub add {
     $params->{author} = $params->{user};
     my $id = $self->collection->insert($params);
 
+    my $quest = { %$params, _id => $id };
+    $self->_prepare_quest($quest);
+
     db->events->add({
         object_type => 'quest',
         action => 'add',
         author => $params->{user},
         object_id => $id->to_string,
-        object => $params,
+        object => $quest,
     });
-
-    my $quest = { %$params, _id => $id };
-    $self->_prepare_quest($quest);
 
     return $quest;
 }

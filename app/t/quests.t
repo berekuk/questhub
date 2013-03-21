@@ -99,7 +99,7 @@ sub edit_quest :Tests {
     cmp_deeply $put_result, { _id => $id }, 'put result';
 
     my $got_quest = http_json GET => "/api/quest/$id";
-    cmp_deeply $got_quest, $edited_quest;
+    cmp_deeply $got_quest, { %$edited_quest, team => [ $edited_quest->{user} ] };
 }
 
 
@@ -157,7 +157,7 @@ sub quest_events :Tests {
             action => 'resurrect',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'open', user => $user, team => [$user], author => $user },
+            object => superhashof({ name => 'test-quest', status => 'open', user => $user, team => [$user], author => $user }),
         },
         {
             _id => re('^\S+$'),
@@ -166,7 +166,7 @@ sub quest_events :Tests {
             action => 'abandon',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'abandoned', user => $user, team => [$user], author => $user },
+            object => superhashof({ name => 'test-quest', status => 'abandoned', user => $user, team => [$user], author => $user }),
         },
         {
             _id => re('^\S+$'),
@@ -175,7 +175,7 @@ sub quest_events :Tests {
             action => 'reopen',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'open', user => $user, team => [$user], author => $user },
+            object => superhashof({ name => 'test-quest', status => 'open', user => $user, team => [$user], author => $user }),
         },
         {
             _id => re('^\S+$'),
@@ -184,7 +184,7 @@ sub quest_events :Tests {
             action => 'close',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'closed', user => $user, team => [$user], author => $user },
+            object => superhashof({ name => 'test-quest', status => 'closed', user => $user, team => [$user], author => $user }),
         },
         {
             _id => re('^\S+$'),
@@ -193,7 +193,7 @@ sub quest_events :Tests {
             action => 'add',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'open', user => $user, team => [$user], author => $user },
+            object => superhashof({ name => 'test-quest', status => 'open', user => $user, team => [$user], author => $user }),
         },
     ];
 }
