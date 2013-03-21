@@ -1,11 +1,19 @@
 define([
     'models/current-user',
     'views/proto/base',
-    'views/notify', 'views/user/current'
-], function (currentUserModel, Base, Notify, CurrentUser) {
+    'views/notify', 'views/user/current',
+    'text!templates/app.html'
+], function (currentUserModel, Base, Notify, CurrentUser, html) {
     return Base.extend({
 
+        template: _.template(html),
+
         initialize: function () {
+            this.$el.html($(this.template({
+                partial: this.partial
+            }))); // render app just once
+            document.title = this.partial.settings.service_name;
+
             this.currentUser = new CurrentUser({ model: currentUserModel });
             this.currentUser.setElement(this.$el.find('.current-user-box'));
         },
