@@ -16,12 +16,20 @@ sub _like_or_unlike {
     my $self = shift;
     my ($id, $user, $mode) = @_;
 
+    my $check;
+    $check = { '$ne' => $user } if $mode eq '$addToSet';
+    $check = $user if $mode eq '$pull';
+    die "unexpected mode '$mode'" unless defined $check;
+
     my $result = $self->collection->update(
         {
             _id => MongoDB::OID->new(value => $id),
             $self->entity_owner_field => { '$ne' => $user },
+            likes => $check,
         },
-        { $mode => { likes => $user } },
+        {
+            $mode => { likes => $user },
+        },
         { safe => 1 }
     );
     my $updated = $result->{n};

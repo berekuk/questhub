@@ -11,18 +11,21 @@ sub setup :Tests(setup) {
 }
 
 sub like_quest_internal :Tests {
+    http_json GET => "/api/fakeuser/blah";
+
     my $quest = db->quests->add({
         user => 'blah',
         name => 'foo, foo',
         status => 'open',
     });
     my $id = $quest->{_id};
+    db->quests->update($id, { status => 'closed', user => 'blah' });
 
     db->quests->like($id, 'user1');
     db->quests->like($id, 'user2');
 
-    # double like is idempotent
-    db->quests->like($id, 'user2');
+    # double like is forbidden
+    ok exception { db->quests->like($id, 'user2') };
 
     cmp_deeply
         db->quests->get($id),
@@ -33,10 +36,12 @@ sub like_quest_internal :Tests {
                 'user1', 'user2'
             ],
             name => 'foo, foo',
-            status => 'open',
+            status => 'closed',
             user => 'blah',
             author => 'blah',
         };
+
+    is db->users->get_by_login('blah')->{points}, 3;
 }
 
 sub self_like_quest_internal :Tests {
@@ -68,9 +73,10 @@ sub like_quest :Tests {
     Dancer::session login => 'blah3';
     http_json POST => "/api/quest/$id/like";
 
-    # double-like
+    # double like
     Dancer::session login => 'blah3';
-    http_json POST => "/api/quest/$id/like";
+    my $response = dancer_response POST => "/api/quest/$id/like";
+    is $response->status, 500, 'double like is forbidden';
 
     my $quest = http_json GET => "/api/quest/$id";
     is_deeply $quest->{likes}, ['blah2', 'blah3'], 'got quest with likes';
