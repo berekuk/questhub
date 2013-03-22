@@ -1,0 +1,39 @@
+<div>
+  <script type="text/template" class="unknown">
+    <em>Unknown event type. Try to refresh the page.</em>
+  </script>
+
+  <script type="text/template" class="add-quest">
+    <%= partial.user({ login: object.user }) %> started a new quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
+  </script>
+
+  <script type="text/template" class="close-quest">
+    <%= partial.user({ login: object.user }) %> completed a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
+  </script>
+
+  <script type="text/template" class="reopen-quest">
+    <%= partial.user({ login: object.user }) %> reopened a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
+  </script>
+
+  <script type="text/template" class="abandon-quest">
+    <%= partial.user({ login: object.user }) %> abandoned a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
+  </script>
+
+  <script type="text/template" class="resurrect-quest">
+    <%= partial.user({ login: object.user }) %> resurrected a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
+  </script>
+
+  <script type="text/template" class="add-user">
+    <%= partial.user({ login: object.login }) %> joins <%= partial.settings.service_name %>!
+  </script>
+
+  <script type="text/template" class="add-comment">
+    <%= partial.user({ login: object.author }) %>
+    commented on
+    <%= partial.user({ login: object.quest.user }) %>'s quest
+    <a href="/quest/<%= object.quest._id %>"><%- object.quest.name %></a>:
+    <div class="well well-small event-comment-well">
+      <%= partial.markdown(object.body) %>
+    </div>
+  </script>
+</div>
