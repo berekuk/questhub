@@ -6,7 +6,7 @@ ec2-deploy.pl - deploy play-perl.org code to Amazon EC2
 
 =head1 SYNOPSIS
 
-  ec2-deploy.pl [--create]
+  ec2-deploy.pl [--create] NAME
     options:
       --create      Create the new instance
 
@@ -30,9 +30,14 @@ use autodie qw(:all);
 use Term::ANSIColor qw(:constants);
 $Term::ANSIColor::AUTORESET = 1;
 
+my %INSTANCES = (
 # play-perl.org address, as registered in GoDaddy DNS
-my $IP = '54.243.208.16';
+    'play-perl' => '54.243.208.16',
+    'frf-todo' => '54.225.128.184',
+);
 my $USER = 'ubuntu';
+
+my $IP; # global variable, sorry;
 
 sub xqx {
     my $command = join ' ', @_;
@@ -69,6 +74,7 @@ sub checkout_code {
     # we don't checkout it with chef because it's not in cookbooks, because sources and cookbooks are in a single repo...
     # maybe it's worth refactoring
     INFO 'Updating /play code';
+    system(qq{ssh -t $USER\@$IP "sudo apt-get install git"});
     system(qq{ssh -t $USER\@$IP "sudo -i sh -c '[ -d /play ] || git clone https://github.com/berekuk/play-perl.git /play'"});
     system(qq{ssh -t $USER\@$IP "sudo -i sh -c 'cd /play && git pull'"});
 }
@@ -128,10 +134,14 @@ sub main {
     GetOptions(
         'create!' => \$create,
     ) or pod2usage(2);
-    pod2usage(2) if @ARGV;
 
-    unless (-e 'roles/ec2.rb') {
-        die "'roles/ec2.rb' is missing!\n"; # ec2.rb is not commited to the repo, because it contains the secret twitter credentials
+    pod2usage(2) unless @ARGV == 1;
+    my $name = shift @ARGV;
+
+    $IP = $INSTANCES{$name} or die "Unknown instance '$name'";
+
+    unless (-e "deploy/roles/$name.rb") {
+        die "'deploy/roles/$name.rb' is missing!\n"; # instance roles are not commited to the repo, because they contain the secret twitter credentials
     }
 
     if ($create) {
@@ -139,11 +149,12 @@ sub main {
         wait_for_bootstrap();
     }
 
-    system("scp roles/ec2.rb $USER\@$IP:");
+    checkout_code();
+
+    system("scp deploy/roles/$name.rb $USER\@$IP:/home/ubuntu/ec2.rb");
     system("scp deploy/dna.json $USER\@$IP:.");
     system(qq{ssh -t $USER\@$IP "sudo -i sh -c 'mv /home/ubuntu/ec2.rb /play/roles/ec2.rb'"});
 
-    checkout_code();
     provision();
 }
 

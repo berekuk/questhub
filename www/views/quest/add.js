@@ -9,7 +9,8 @@ define([
         events: {
             'click .quest-add': 'submit',
             'click .quest-type-select button': 'setType',
-            'keyup [name=name]': 'validate'
+            'keyup [name=name]': 'validate',
+            'keydown [name=name]': 'checkEnter'
         },
 
         initialize: function() {
@@ -93,6 +94,12 @@ define([
 
             this.submitted = true;
             this.validate();
+        },
+
+        checkEnter: function (e) {
+            if (e.keyCode == 13) {
+              this.submit();
+            }
         },
 
         onSuccess: function (model) {
