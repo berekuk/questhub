@@ -98,7 +98,8 @@ get '/current_user/settings' => sub {
 any ['put', 'post'] => '/current_user/settings' => sub {
     die "not logged in" unless session->{login};
     db->users->set_settings(
-        session->{login} => scalar params()
+        session->{login} => _expand_settings(scalar params()),
+        (session('persona_email') ? 1 : 0) # force 'email_confirmed' setting
     );
     return { result => 'ok' };
 };
@@ -120,6 +121,16 @@ get '/user/:login' => sub {
     return $user;
 };
 
+sub _expand_settings {
+    my ($settings) = @_;
+
+    my $more_settings = {};
+    if (session('persona_email')) {
+        $more_settings->{email} = session('persona_email');
+    }
+    return { %$settings, %$more_settings };
+}
+
 post '/register' => sub {
     my $login = param('login') or die 'no login specified';
 
@@ -134,6 +145,9 @@ post '/register' => sub {
 
     my $user = { login => $login };
     my $more_settings = {};
+
+    my $settings = param('settings') || '{}';
+    $settings = decode_json($settings);
 
     if (session('twitter_user')) {
         my $twitter_login = session('twitter_user')->{screen_name};
@@ -156,12 +170,9 @@ post '/register' => sub {
 
     db->users->add($user);
 
-    my $settings = param('settings') || '{}';
     db->users->set_settings(
-        $login => {
-            %{ decode_json($settings) },
-            %$more_settings
-        },
+        $login => _expand_settings($settings),
+        # TODO - copypasted from /register, refactor!
         (session('persona_email') ? 1 : 0) # force 'email_confirmed' setting
     );
 
