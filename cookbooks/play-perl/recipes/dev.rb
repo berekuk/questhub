@@ -29,3 +29,6 @@ package "nodejs"
 
 ppa "antono/phantomjs"
 package "phantomjs"
+
+# used by build_static.pl
+cpan_module "IPC::System::Simple"
