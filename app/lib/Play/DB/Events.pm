@@ -55,7 +55,7 @@ sub email {
         header => [
             To => $address,
             From => setting('service_name').' <notification@'.setting('hostport').'>',
-            Subject => $subject,
+            Subject => encode_utf8($subject),
             'Reply-to' => 'Vyacheslav Matyukhin <me@berekuk.ru>', # TODO - take from config
             'Content-Type' => 'text/html; charset=utf-8',
         ],
