@@ -1,0 +1,23 @@
+<div>
+  <script type="text/template" class="user">
+    <% if (login) { %>
+    <a href="/player/<%= login %>" class="label"><%= login + (obj.colon ? ':' : '') %></a>
+    <% } %>
+  </script>
+
+  <script type="text/template" class="quest-labels">
+    <% if (obj.type) { %>
+      <span class="label label-inverse"><%= type %></span>
+    <% } %>
+    <span class="label label-<%= status === 'open' && 'warning' %>"><%= status === 'closed' ? 'complete' : status %></span>
+  </script>
+
+  <script type="text/template" class="edit-tools">
+    <div class="pull-right mini-button-block">
+      <label> <!-- label fixes the font size, even inside h2 -->
+        <a href="#" class="edit"><i class="icon-pencil"></i></a>
+        <a href="#" class="delete"><i class="icon-remove"></i></a>
+      </label>
+    </div>
+  </script>
+</div>
