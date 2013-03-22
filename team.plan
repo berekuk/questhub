@@ -45,3 +45,4 @@ Backend points calculation
 
 Issues:
 - is everyone on the team the same?
+- upgrade the db, including 'events' collection
