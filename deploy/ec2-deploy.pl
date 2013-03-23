@@ -156,6 +156,8 @@ sub main {
     system(qq{ssh -t $USER\@$IP "sudo -i sh -c 'mv /home/ubuntu/ec2.rb /play/roles/ec2.rb'"});
 
     provision();
+
+    system(qq{ssh -t $USER\@$IP "sudo ubic try-restart dancer"});
 }
 
 main unless caller;
