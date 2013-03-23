@@ -59,7 +59,12 @@ sub _prepare_quest {
     $quest->{ts} = $quest->{_id}->get_time;
     $quest->{_id} = $quest->{_id}->to_string;
 
-    $quest->{team} = [$quest->{user}];
+    if (length $quest->{user}) {
+        $quest->{team} = [$quest->{user}];
+    }
+    else {
+        $quest->{team} = [];
+    }
 
     return $quest;
 }

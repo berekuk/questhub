@@ -423,6 +423,7 @@ sub join_leave :Tests {
     my $got_quest = http_json GET => "/api/quest/$quest->{_id}";
     is $got_quest->{name}, 'q1', 'name is still untouched';
     is $got_quest->{user}, '', 'user is now empty';
+    is_deeply $got_quest->{team}, [], 'team is empty too';
 
     $response = dancer_response POST => "/api/quest/$quest->{_id}/leave";
     is $response->status, 500;
