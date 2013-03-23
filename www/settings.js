@@ -1,7 +1,7 @@
 define([], function () {
     if (window.location.host == 'frf-todo.berekuk.ru') {
         return {
-            service_name: 'FRFTD',
+            service_name: 'Тудуинг',
             instance_name: 'frf-todo'
         };
     }
