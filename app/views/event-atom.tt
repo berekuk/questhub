@@ -14,23 +14,23 @@
     </author>
 
     <% IF event.object_type == 'quest' && event.action == 'add' %>
-    <title><% event.author %> is on a new quest: <% event.object.name %></title>
+    <title><% event.author %> is on a new quest: <% event.object.name | xml %></title>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object_id %>" />
 
     <% ELSIF event.object_type == 'quest' && event.action == 'close' %>
-    <title><% event.author %> completed a quest: <% event.object.name %></title>
+    <title><% event.author %> completed a quest: <% event.object.name | xml %></title>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object_id %>" />
 
     <% ELSIF event.object_type == 'quest' && event.action == 'reopen' %>
-    <title><% event.author %> reopened a quest: <% event.object.name %></title>
+    <title><% event.author %> reopened a quest: <% event.object.name | xml %></title>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object_id %>" />
 
     <% ELSIF event.object_type == 'quest' && event.action == 'abandon' %>
-    <title><% event.author %> abandoned a quest: <% event.object.name %></title>
+    <title><% event.author %> abandoned a quest: <% event.object.name | xml %></title>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object_id %>" />
 
     <% ELSIF event.object_type == 'quest' && event.action == 'resurrect' %>
-    <title><% event.author %> resurrected a quest: <% event.object.name %></title>
+    <title><% event.author %> resurrected a quest: <% event.object.name | xml %></title>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object_id %>" />
 
     <% ELSIF event.object_type == 'user' && event.action == 'add' %>
@@ -38,12 +38,12 @@
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/player/<%= event.author %>" />
 
     <% ELSIF event.object_type == 'comment' && event.action == 'add' %>
-    <title><% event.author %> commented on <% event.object.quest.name %></title>
+    <title><% event.author %> commented on <% event.object.quest.name | xml %></title>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object.quest.item('_id') %>" />
 
     <content type="html">
         <![CDATA[
-        <%= event.object.body_html %>
+        <% event.object.body_html %>
         ]]>
     </content>
 
