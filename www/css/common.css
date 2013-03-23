@@ -214,9 +214,8 @@ div.quest-big-unclaimed {
     line-height: 24px;
 }
 
-.reward-label {
+.reward-block {
     text-align: center;
-    padding-bottom: 10px;
 }
 
 .reward-circle {
@@ -226,9 +225,8 @@ div.quest-big-unclaimed {
 
     padding: 20px;
     display: inline-block;
-    background-color: #fcf8e3;
+    background-color: #ffb91f;
     text-align: center;
-    border: 2px solid yellow;
 }
 
 .reward-circle .points {
