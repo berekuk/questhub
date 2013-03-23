@@ -6,9 +6,10 @@ define([
     'text!templates/quest-page.html'
 ], function (_, Common, QuestBig, CommentCollection, CommentCollectionModel, html) {
     return Common.extend({
-        template: _.template(html),
 
-        selfRender: true,
+        activated: false,
+
+        template: _.template(html),
 
         subviews: {
             '.quest-big': function () {
@@ -26,15 +27,7 @@ define([
         },
 
         afterInitialize: function () {
-            this.model.once('sync', function () {
-                this.subview('.quest-big').activate();
-            }, this);
-            this.model.fetch();
-        },
-
-        afterRender: function () {
-            // see http://stackoverflow.com/questions/6206471/re-render-tweet-button-via-js/6536108#6536108
-            // $.ajax({ url: 'http://platform.twitter.com/widgets.js', dataType: 'script', cache:true});
-        },
+            this.listenTo(this.model, 'change', this.render);
+        }
     });
 });
