@@ -11,10 +11,6 @@ define([
     return Common.extend({
         template: _.template(html),
 
-        // You know what, this view doesn't have to be deactivated; it could just setup the model listener itself.
-        // But it's my initial attempt to implement 'activated: false' pattern, so I'll keep it as is for now.
-        activated: false,
-
         events: {
             "click .quest-close": "close",
             "click .quest-abandon": "abandon",

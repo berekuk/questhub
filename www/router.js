@@ -52,7 +52,15 @@ define([
         },
 
         questPage: function (id) {
-            var view = new QuestPage({ model: new QuestModel({ _id: id }) });
+            var model = new QuestModel({ _id: id });
+            var view = new QuestPage({ model: model });
+
+            model.fetch({
+                success: function () {
+                    view.activate();
+                }
+            });
+
             this.appView.setPageView(view);
             this.appView.setActiveMenuItem('none');
         },
