@@ -58,6 +58,7 @@ require(['underscore', 'jquery', 'jasmine-html'], function(_, $, jasmine){
     specs.push('spec/markdown');
     specs.push('spec/comment');
     specs.push('spec/quest-small');
+    specs.push('spec/quest-big');
 
     $(function(){
         require(specs, function(){
