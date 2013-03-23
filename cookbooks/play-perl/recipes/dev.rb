@@ -23,3 +23,12 @@ template "/etc/nginx/sites-enabled/play-perl-dev.org" do
   })
   notifies :restart, "service[nginx]"
 end
+
+ppa "chris-lea/node.js"
+package "nodejs"
+
+ppa "antono/phantomjs"
+package "phantomjs"
+
+# used by build_static.pl
+cpan_module "IPC::System::Simple"

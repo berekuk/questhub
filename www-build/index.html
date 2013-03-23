@@ -21,76 +21,6 @@
     <link rel="icon" href="/favicon.ico" sizes="16x16" type="image/x-icon">
     <link rel="icon" href="/favicon.png" sizes="16x16" type="image/png">
 
-    <!-- common box for any event type -->
-    <script type="text/template" id="template-event-any">
-      <div>
-        <div class="subview"></div>
-        <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
-        <hr>
-      </div>
-    </script>
-
-    <script type="text/template" id="template-event-unknown">
-        <em>Unknown event type. Try to refresh the page.</em>
-    </script>
-
-    <script type="text/template" id="template-event-add-quest">
-        <%= partial.user({ login: object.user }) %> started a new quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
-    </script>
-
-    <script type="text/template" id="template-event-close-quest">
-        <%= partial.user({ login: object.user }) %> completed a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
-    </script>
-
-    <script type="text/template" id="template-event-reopen-quest">
-        <%= partial.user({ login: object.user }) %> reopened a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
-    </script>
-
-    <script type="text/template" id="template-event-abandon-quest">
-        <%= partial.user({ login: object.user }) %> abandoned a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
-    </script>
-
-    <script type="text/template" id="template-event-resurrect-quest">
-        <%= partial.user({ login: object.user }) %> resurrected a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
-    </script>
-
-    <script type="text/template" id="template-event-add-user">
-        <%= partial.user({ login: object.login }) %> joins <%= partial.settings.service_name %>!
-    </script>
-
-    <script type="text/template" id="template-event-add-comment">
-        <%= partial.user({ login: object.author }) %>
-        commented on
-        <%= partial.user({ login: object.quest.user }) %>'s quest
-        <a href="/quest/<%= object.quest._id %>"><%- object.quest.name %></a>:
-        <div class="well well-small event-comment-well">
-          <%= partial.markdown(object.body) %>
-        </div>
-    </script>
-
-    <!-- Partials -->
-    <script type="text/template" id="partial-user">
-      <% if (login) { %>
-      <a href="/player/<%= login %>" class="label"><%= login + (obj.colon ? ':' : '') %></a>
-      <% } %>
-    </script>
-
-    <script type="text/template" id="partial-quest-labels">
-      <% if (obj.type) { %>
-        <span class="label label-inverse"><%= type %></span>
-      <% } %>
-      <span class="label label-<%= status === 'open' && 'warning' %>"><%= status === 'closed' ? 'complete' : status %></span>
-    </script>
-
-    <script type="text/template" id="partial-edit-tools">
-      <div class="pull-right mini-button-block">
-        <label> <!-- label fixes the font size, even inside h2 -->
-          <a href="#" class="edit"><i class="icon-pencil"></i></a>
-          <a href="#" class="delete"><i class="icon-remove"></i></a>
-        </label>
-      </div>
-    </script>
-
     <!-- Google Analytics -->
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -134,6 +64,3 @@
 
   </body>
 </html>
-<!--
-vim: ts=2 sw=2 sts=2
--->

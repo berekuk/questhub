@@ -1,14 +1,9 @@
 define([
-    'backbone', 'underscore', 'markdown', 'settings'
-], function (Backbone, _, markdown, settings) {
+    'backbone', 'underscore', 'markdown', 'settings',
+    'views/partials'
+], function (Backbone, _, markdown, settings, partials) {
     return Backbone.View.extend({
-        partial: {
-            user: _.template($('#partial-user').text()),
-            quest_labels: _.template($('#partial-quest-labels').text()),
-            edit_tools: _.template($('#partial-edit-tools').text()),
-            markdown: markdown,
-            settings: settings
-        },
+        partial: partials,
 
         initialize: function () {
             this.listenTo(Backbone, 'pp:logviews', function () {

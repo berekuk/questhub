@@ -12,6 +12,7 @@ require.config({
         // TODO - local storage
 
         'jasmine': 'test/lib/jasmine-1.3.1/jasmine',
+        'jasmine-jquery': 'test/lib/jasmine-jquery',
         'jasmine-html': 'test/lib/jasmine-1.3.1/jasmine-html',
         'spec': 'test/spec/'
     },
@@ -33,7 +34,8 @@ require.config({
         'jasmine-html': {
             deps: ['jasmine'],
             exports: 'jasmine'
-        }
+        },
+        'jasmine-jquery': ['jasmine']
     }
 });
 
@@ -55,6 +57,7 @@ require(['underscore', 'jquery', 'jasmine-html'], function(_, $, jasmine){
     specs.push('spec/current-user');
     specs.push('spec/markdown');
     specs.push('spec/comment');
+    specs.push('spec/quest-small');
 
     $(function(){
         require(specs, function(){

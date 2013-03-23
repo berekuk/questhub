@@ -1,14 +1,26 @@
 define([
-    'underscore',
-    'views/proto/base'
-], function (_, Base) {
+    'underscore', 'jquery',
+    'views/proto/base',
+    'text!templates/events.html'
+], function (_, $, Base, html) {
+
+    var el = $(html);
+    var templates = {};
+    el.find('script').each(function () {
+        var item = $(this);
+        templates[item.attr('class')] = _.template(item.text());
+    });
+
     return Base.extend({
         template: function () {
+            var eventName = this.model.get('action') + '-' + this.model.get('object_type');
             var templateElem = $('#template-event-' + this.model.get('action') + '-' + this.model.get('object_type'));
-            if (!templateElem.length) {
-                templateElem = $('#template-event-unknown');
+            if (templates[eventName]) {
+                return templates[eventName];
             }
-            return _.template(templateElem.text());
+            else {
+              return templates['unknown'];
+            }
         },
 
         render: function () {
