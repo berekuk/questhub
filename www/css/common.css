@@ -233,3 +233,7 @@ div.quest-big-unclaimed {
     display: block;
     font-size: 25px;
 }
+
+.twitter-share-button {
+    vertical-align: middle;
+}

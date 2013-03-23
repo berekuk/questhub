@@ -3,10 +3,11 @@ define([
     'backbone',
     'views/proto/common',
     'views/like',
+    'views/quest/completed',
     'models/current-user',
     'bootbox',
     'text!templates/quest-big.html'
-], function (_, Backbone, Common, Like, currentUser, bootbox, html) {
+], function (_, Backbone, Common, Like, QuestCompleted, currentUser, bootbox, html) {
     'use strict';
     return Common.extend({
         template: _.template(html),
@@ -36,6 +37,8 @@ define([
 
         close: function () {
             this.model.close();
+            var modal = new QuestCompleted({ model: this.model });
+            modal.start();
         },
 
         abandon: function () {

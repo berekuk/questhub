@@ -81,10 +81,15 @@ define([
             return status;
         },
 
+        reward: function () {
+            return 1 + (this.get('likes') ? this.get('likes').length : 0);
+        },
+
         // augments attributes with 'ext_status'
         serialize: function () {
             var params = this.toJSON();
             params.ext_status = this.extStatus();
+            params.reward = this.reward();
             return params;
         }
 

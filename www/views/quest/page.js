@@ -26,6 +26,10 @@ define([
             },
         },
 
+        serialize: function () {
+            return this.model.serialize();
+        },
+
         afterInitialize: function () {
             this.listenTo(this.model, 'change', this.render);
         }

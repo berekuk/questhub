@@ -7,17 +7,15 @@
     </div>
     <div class="span2">
       <div class="reward-block">
+      <% if (status == 'open') { %>
         <div class="muted">
-          <% if (status == 'open') { %>
-            Expected reward:
-          <% } else { %>
-            Reward:
-          <% } %>
+          Expected reward:
         </div>
-      <div class="reward-circle">
-        <span class="points"><%- 1 + (obj.likes ? obj.likes.length : 0) %></span>
-        <span class="points-text">points</span>
-      </div>
+        <div class="reward-circle">
+          <span class="points"><%- reward %></span>
+          <span class="points-text">points</span>
+        </div>
+      <% } %>
     </div>
   </div>
 </div>
