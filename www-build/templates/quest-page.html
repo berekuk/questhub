@@ -1,3 +1,21 @@
 <!-- quest details page -->
-<div class="quest-big"></div>
-<div class="comments"></div>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span10">
+      <div class="quest-big"></div>
+      <div class="comments"></div>
+    </div>
+    <div class="span2">
+      <div class="reward-block">
+      <% if (status == 'open') { %>
+        <div class="muted">
+          Expected reward:
+        </div>
+        <div class="reward-circle">
+          <span class="points"><%- reward %></span>
+          <span class="points-text">points</span>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>

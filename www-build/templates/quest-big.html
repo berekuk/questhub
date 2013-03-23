@@ -1,9 +1,9 @@
 <div class="<%= "quest-big-" + ext_status %> quest-big">
   <div>
-    <% if (user == '') { %>
+    <% if (team.length == 0) { %>
       <%= partial.user({ login: obj.author }) %><span class="muted"> suggests a quest:</span>
     <% } else { %>
-      <%= partial.user({ login: obj.user }) %><span class="muted"> is on a quest<%= (obj.user == obj.author) ? '' : ' by' + partial.user({ login: obj.author }) %>:</span>
+      <span class="muted"><%= partial.user({ login: _.first(team) }) %> is on a quest<%= (_.first(team) == obj.author) ? '' : ' by' + partial.user({ login: obj.author }) %>:</span>
       <% if (my) { %>
         <%= partial.edit_tools() %>
       <% } %>
@@ -51,7 +51,7 @@
     <% } %>
     </div>
 
-  <% } else if (user == '') { %>
+  <% } else if (team.length == 0) { %>
     <span class="muted">This quest is not claimed by anybody. Would you like to take it?</span>
     <button class="quest-join btn btn-primary">Take</button>
   <% } %>

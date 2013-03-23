@@ -30,7 +30,14 @@
   <script type="text/template" class="add-comment">
     <%= partial.user({ login: object.author }) %>
     commented on
-    <%= partial.user({ login: object.quest.user }) %>'s quest
+    <% if (object.quest.team && object.quest.team.length > 0) { %>
+      <%= partial.user({ login: _.first(object.quest.team) }) %>'s
+    <% } else if (object.quest.user && object.quest.user != '') { %>
+      <%= partial.user({ login: object.quest.user }) %>'s
+    <% } else { %>
+      a
+    <% } %>
+    quest
     <a href="/quest/<%= object.quest._id %>"><%- object.quest.name %></a>:
     <div class="well well-small event-comment-well">
       <%= partial.markdown(object.body) %>

@@ -1,6 +1,6 @@
 <td>
   <% if (obj.showAuthor) { %>
-    <%= partial.user({ login: user, colon: true }) %>
+    <%= partial.user({ login: _.first(team), colon: true }) %>
   <% } %>
   <a href="/quest/<%- _id %>"><%- name %></a>
 

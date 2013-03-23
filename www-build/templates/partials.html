@@ -1,9 +1,6 @@
 <div>
-  <script type="text/template" class="user">
-    <% if (login) { %>
-    <a href="/player/<%= login %>" class="label"><%= login + (obj.colon ? ':' : '') %></a>
-    <% } %>
-  </script>
+  <!-- avoiding extra spaces - we need to put an apostrophe after the user's badge sometimes -->
+  <script type="text/template" class="user"><% if (login) { %><a href="/player/<%= login %>" class="label"><%= login + (obj.colon ? ':' : '') %></a><% } %></script>
 
   <script type="text/template" class="quest-labels">
     <% if (obj.type) { %>

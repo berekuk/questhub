@@ -213,3 +213,27 @@ div.quest-big-unclaimed {
     /* fixing the jumping line height on "like" button hide/show */
     line-height: 24px;
 }
+
+.reward-block {
+    text-align: center;
+}
+
+.reward-circle {
+    border-radius: 50%;
+    -moz-border-radius:50%;
+    -webkit-border-radius: 50%;
+
+    padding: 20px;
+    display: inline-block;
+    background-color: #ffb91f;
+    text-align: center;
+}
+
+.reward-circle .points {
+    display: block;
+    font-size: 25px;
+}
+
+.twitter-share-button {
+    vertical-align: middle;
+}

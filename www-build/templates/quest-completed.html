@@ -1,0 +1,33 @@
+<div class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3><%- name %></h3>
+  </div>
+  <div class="modal-body">
+    <div class="row-fluid">
+      <p>
+      You completed a quest.
+      Congratulations, you get <%= reward %> points!<br>
+      <p>
+      Your total score: <span class="badge badge-info"><%= totalPoints %></span>
+      </p>
+      <% if (gotTwitter) { %>
+      <hr>
+      <div class="row-fluid">
+        <div class="span8">
+          <span class="muted">
+            Do you want to brag about this quest on Twitter?<br>
+            The more people like it, the more points you get.
+          </span>
+        </div>
+        <div class="span2">
+          <a href="https://twitter.com/share" class="twitter-share-button" data-text="<%- name + ' ' + window.location.href %>" data-size="large" data-count="none" data-hashtags="playperl" data-dnt="true">Tweet</a>
+        </div>
+      </div>
+      <% } %>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary">Dismiss</button>
+  </div>
+</div>
