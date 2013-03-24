@@ -19,7 +19,8 @@ template "/etc/nginx/sites-enabled/play-perl-dev.org" do
   variables({
     :port => 81,
     :dancer_port => 3001,
-    :static_root => '/play/www'
+    :static_root => '/play/www',
+    :dev => true
   })
   notifies :restart, "service[nginx]"
 end
