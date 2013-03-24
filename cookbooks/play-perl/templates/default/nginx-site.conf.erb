@@ -1,6 +1,5 @@
 server {
   listen       <%= @port %>;
-  server_name play.perl.org;
 
   <% if @dev %>
   # Turn sendfile off because it behaves bad with vboxsf
