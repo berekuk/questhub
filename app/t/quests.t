@@ -308,20 +308,20 @@ sub more_points :Tests {
     is $user->{points}, 0, 'still zero points after removing an open quest';
 }
 
-sub quest_types :Tests {
+sub quest_tags :Tests {
     Dancer::session login => 'user_1';
 
     http_json POST => '/api/quest', { params => {
         name => 'typed-quest',
-        type => 'blog',
+        tags => ['blog', 'moose'],
     } };
 
     my $unknown_type_response = dancer_response POST => '/api/quest', { params => {
         name => 'typed-quest',
-        type => 'nosuchtype',
+        tags => 'invalid',
     } };
     is $unknown_type_response->status, 500;
-    like $unknown_type_response->content, qr/Unexpected quest type/;
+    like $unknown_type_response->content, qr/should be arrayref/;
 }
 
 sub cc :Tests {

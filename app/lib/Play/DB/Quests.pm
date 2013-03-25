@@ -151,6 +151,10 @@ sub add {
         die "Unexpected quest type '$params->{type}'" unless grep { $params->{type} eq $_ } qw/ bug blog feature other /;
     }
 
+    if ($params->{tags}) {
+        die "Tags should be arrayref" unless ref($params->{tags}) eq 'ARRAY';
+    }
+
     $params->{author} = $params->{user};
     my $id = $self->collection->insert($params);
 
