@@ -11,7 +11,7 @@ define([
             "team" : ["berekuk"],
             "name" : "Fix Google Analytics code on play-perl.org",
             "author" : "mmcleric",
-            "type" : "bug",
+            "tags" : ["bug"],
             "likes": ["bessarabov", "kappa"]
         });
 
@@ -27,7 +27,7 @@ define([
                 expect(view.$el.find('.pull-right .label-false')).toHaveText('complete');
             });
 
-            it('quest type badge', function () {
+            it('quest tag badge', function () {
                 expect(view.$el.find('.pull-right .label-inverse')).toHaveText('bug');
             });
         });

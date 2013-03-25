@@ -1,33 +1,21 @@
 define([
-    'underscore',
+    'underscore', 'jquery',
     'views/proto/base',
     'text!templates/quest-add.html'
-], function (_, Base, html) {
+], function (_, $, Base, html) {
     return Base.extend({
         template: _.template(html),
 
         events: {
             'click .quest-add': 'submit',
-            'click .quest-type-select button': 'setType',
-            'keyup [name=name]': 'validate',
-            'keydown [name=name]': 'checkEnter'
+            'keyup [name=name]': 'nameEdit',
+            'keyup [name=tags]': 'tagsEdit'
         },
 
         initialize: function() {
             _.bindAll(this);
             this.render();
             this.submitted = false;
-            this.validate();
-        },
-
-        setType: function(e) {
-            // Radio buttons - activate clicked button and disactivate all the others.
-            // We can't use native radio buttons from bootstrap because of unpredictable event triggering order, btw.
-            // See http://stackoverflow.com/questions/9262827/twitter-bootstrap-onclick-event-on-buttons-radio for details.
-            $(e.target.parentElement).find('.active').removeClass('btn-primary');
-            $(e.target.parentElement).find('.active').removeClass('active');
-            $(e.target).button('toggle');
-            $(e.target).addClass('btn-primary');
             this.validate();
         },
 
@@ -43,11 +31,54 @@ define([
         },
 
         validate: function() {
+            this.enable();
             if (this.submitted || !this.getDescription()) {
                 this.disable();
             }
+
+            var tagLine = this.$('[name=tags]').val();
+            if (tagLine.match(/^\s*([\w-]+\s*,\s*)*([\w-]+\s*)?$/)) {
+                this.$('.quest-tags-edit').removeClass('error');
+            }
             else {
-                this.enable();
+                this.$('.quest-tags-edit').addClass('error');
+                this.disable();
+            }
+        },
+
+        nameEdit: function (e) {
+            this.validate();
+            this.optimizeNameFont();
+            this.checkEnter(e);
+        },
+
+        tagsEdit: function (e) {
+            this.validate();
+            this.checkEnter(e);
+        },
+
+        optimizeNameFont: function () {
+
+            var input = this.$('.quest-edit');
+
+            var testerId = '#quest-add-test-span';
+            var tester = $(testerId);
+            if (!tester.length) {
+                tester = $('<span id="' + testerId + '"></span>');
+                tester.css('display', 'none');
+                tester.css('fontFamily', input.css('fontFamily'));
+                this.$el.append(tester);
+            }
+
+            tester.css('fontSize', input.css('fontSize'));
+            tester.text(input.val());
+
+            if (tester.width() > input.width()) {
+                var newFontSize = parseInt(input.css('fontSize')) - 1;
+                if (newFontSize > 14) {
+                    newFontSize += 'px';
+                    input.css('fontSize', newFontSize);
+                }
             }
         },
 
@@ -55,17 +86,21 @@ define([
             return this.$('[name=name]').val();
         },
 
+        getTags: function() {
+            var tagLine = this.$('[name=tags]').val();
+            var tags = tagLine.split(',');
+            tags = _.map(tags, function (tag) {
+                tag = tag.replace(/^\s+|\s+$/g, '');
+                return tag;
+            });
+            tags = _.filter(tags, function (tag) {
+                return (tag != '');
+            });
+            return tags;
+        },
+
         render: function () {
             this.setElement($(this.template()));
-
-            this.$('#addQuest').modal().css({
-                'width': function () {
-                    return ($(document).width() * .8) + 'px';
-                },
-                'margin-left': function () {
-                    return -($(this).width() / 2);
-                }
-            });
 
             var qe = this.$('.quest-edit');
             this.$('#addQuest').modal().on('shown', function () {
@@ -82,9 +117,9 @@ define([
                 name: this.getDescription()
             };
 
-            var type = this.$('.quest-type-select button.active').attr('quest-type');
-            if (type) {
-                model_params.type = type;
+            var tags = this.getTags();
+            if (tags) {
+                model_params.tags = tags;
             }
 
             var model = new this.collection.model();

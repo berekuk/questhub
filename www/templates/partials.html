@@ -3,8 +3,10 @@
   <script type="text/template" class="user"><% if (login) { %><a href="/player/<%= login %>" class="label"><%= login + (obj.colon ? ':' : '') %></a><% } %></script>
 
   <script type="text/template" class="quest-labels">
-    <% if (obj.type) { %>
-      <span class="label label-inverse"><%= type %></span>
+    <% if (obj.tags) { %>
+      <% _.each(obj.tags, function (tag) { %>
+      <span class="label label-inverse"><%= tag %></span>
+      <% }) %>
     <% } %>
     <span class="label label-<%= status === 'open' && 'warning' %>"><%= status === 'closed' ? 'complete' : status %></span>
   </script>

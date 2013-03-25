@@ -14,7 +14,7 @@ define([
                     "team" : ["badger"],
                     "name" : "Badger Badger",
                     "author" : "jonti",
-                    "type" : "feature",
+                    "tags" : ["feature"],
                     "likes": ["mushroom", "snake"]
                 });
 
@@ -39,7 +39,7 @@ define([
                     "team" : [],
                     "name" : "Badger Badger",
                     "author" : "jonti",
-                    "type" : "feature",
+                    "tags" : ["feature"],
                     "likes": ["mushroom", "snake"]
                 });
 

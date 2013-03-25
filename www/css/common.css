@@ -32,10 +32,6 @@ h2, h3 {
     top: -5px;
 }
 
-.add-quest-field {
-    margin-bottom: 10px;
-}
-
 dd {
   margin-bottom: 20px;
 }
@@ -63,13 +59,20 @@ time.timeago {
   color: #333;
 }
 
+.modal-quest-add label {
+    cursor: default; /* override bootstrap's "pointer" cursor style, it's confusing */
+}
+
 input.quest-edit {
-    /* copied from h1 styles */
-    font-size: 30px;
-    line-height: 30px;
-    height: 40px;
-    width: 800px;
+    font-size: 26px;
+    line-height: 26px;
+    height: 35px;
+    width: 95%;
     font-weight: 200;
+}
+
+.quest-tags-edit input {
+    background-color: #fcf8e3;
 }
 
 textarea.comment-edit {
