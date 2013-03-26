@@ -90,7 +90,7 @@ sub start_instance {
     my @command = ('ec2-run-instances',
         'ami-3d4ff254', # ubuntu 12.04
         '--instance-type', 't1.micro',
-        '--user-data-file', 'deploy/bootstrap.sh',
+        '--user-data-file', 'deploy/files/bootstrap.sh',
         '--key', 'aws', # replace with your key pair name
     );
     my $result = xqx(@command);
@@ -131,8 +131,10 @@ sub main {
     STDOUT->autoflush(1);
 
     my $create;
+    my $provision;
     GetOptions(
         'create!' => \$create,
+        'p|provision!' => \$provision,
     ) or pod2usage(2);
 
     pod2usage(2) unless @ARGV == 1;
@@ -147,15 +149,17 @@ sub main {
     if ($create) {
         start_instance();
         wait_for_bootstrap();
+        $provision = 1;
     }
 
     checkout_code();
 
-    system("scp deploy/roles/$name.rb $USER\@$IP:/home/ubuntu/ec2.rb");
-    system("scp deploy/dna.json $USER\@$IP:.");
-    system(qq{ssh -t $USER\@$IP "sudo -i sh -c 'mv /home/ubuntu/ec2.rb /play/roles/ec2.rb'"});
-
-    provision();
+    if ($provision) {
+        system("scp deploy/roles/$name.rb $USER\@$IP:/home/ubuntu/ec2.rb");
+        system("scp deploy/files/dna.json $USER\@$IP:.");
+        system(qq{ssh -t $USER\@$IP "sudo -i sh -c 'mv /home/ubuntu/ec2.rb /play/roles/ec2.rb'"});
+        provision();
+    }
 
     system(qq{ssh -t $USER\@$IP "sudo ubic try-restart dancer"});
 }
