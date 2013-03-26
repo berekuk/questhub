@@ -240,3 +240,7 @@ div.quest-big-unclaimed {
 .twitter-share-button {
     vertical-align: middle;
 }
+
+.comment-content {
+    overflow: auto;
+}
