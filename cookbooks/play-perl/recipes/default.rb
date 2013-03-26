@@ -40,7 +40,10 @@ cpan_module 'Starman'
 cpan_module 'Text::Markdown'
 cpan_module 'Clone'
 cpan_module 'Email::Sender'
-cpan_module 'Authen::SASL' # needed by Email::Sender::Simple to send Amazon SES emails
+
+# needed by Email::Sender::Simple to send Amazon SES emails
+cpan_module 'Authen::SASL'
+cpan_module 'Net::SMTP::SSL'
 
 cpan_module 'Dancer::Serializer::JSON'
 cpan_module 'Dancer::Session::MongoDB'
