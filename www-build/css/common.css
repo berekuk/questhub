@@ -45,9 +45,16 @@ time.timeago {
     height: 24px;
 }
 
+/* comment as shown in the News Feed */
 .event-comment-well {
     margin-top: 5px;
     margin-bottom: 5px;
+    overflow: auto;
+}
+
+/* comment as shown on the quest page */
+.comment-content {
+    overflow: auto;
 }
 
 .mini-button-block a {
@@ -239,8 +246,4 @@ div.quest-big-unclaimed {
 
 .twitter-share-button {
     vertical-align: middle;
-}
-
-.comment-content {
-    overflow: auto;
 }
