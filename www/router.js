@@ -29,6 +29,7 @@ define([
             "players": "userList",
             "player/:login": "anotherDashboard",
             "explore(/:tab)": "explore",
+            "explore/:tab/tag/:tag": "explore",
             "about": "about",
         },
 
@@ -98,10 +99,13 @@ define([
             this.appView.setActiveMenuItem('none');
         },
 
-        explore: function (tab) {
+        explore: function (tab, tag) {
             var view = new Explore();
             if (tab != undefined) {
                 view.tab = tab;
+            }
+            if (tag != undefined) {
+                view.tag = tag;
             }
             view.activate();
 

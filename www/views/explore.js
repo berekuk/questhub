@@ -31,7 +31,11 @@ define([
         },
 
         tabSubview: function () {
-            return this.createSubview(this.name2options[this.tab]);
+            var options = _.clone(this.name2options[this.tab]);
+            if (this.tag != undefined) {
+                options.tags = this.tag;
+            }
+            return this.createSubview(options);
         },
 
         createSubview: function (options) {
@@ -64,7 +68,12 @@ define([
         switchTab: function (e) {
             var tab = $(e.target).attr('data-explore-tab');
             this.switchTabByName(tab);
-            Backbone.trigger('pp:navigate', '/explore/' + tab);
+
+            var url = '/explore/' + tab;
+            if (this.tag != undefined) {
+                url += '/tag/' + this.tag;
+            }
+            Backbone.trigger('pp:navigate', url);
         },
 
         switchTabByName: function(tab) {
