@@ -13,6 +13,7 @@ my $quests_data = {
         name    => 'name_2',
         user    => 'user_2',
         status  => 'open',
+        tags    => ['bug'],
     },
     3 => {
         name    => 'name_3',
@@ -51,11 +52,18 @@ sub quest_list :Tests {
 
 sub quest_list_filtering :Tests {
     my $list = http_json GET => '/api/quest', { params => { status => 'closed' } };
-
     cmp_deeply $list, [
         {
             %{ $quests_data->{3} },
             team => [ $quests_data->{3}{user} ],
+        }
+    ];
+
+    $list = http_json GET => '/api/quest', { params => { tags => 'bug' } };
+    cmp_deeply $list, [
+        {
+            %{ $quests_data->{2} },
+            team => [ $quests_data->{2}{user} ],
         }
     ];
 }

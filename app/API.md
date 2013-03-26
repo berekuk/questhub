@@ -115,6 +115,7 @@ Options:
 * `user`
 * `comment_count`
 * `unclaimed` - if true, return unclaimed quests (user='')
+* `tags` - filter by tag; only one-tag-per-query filtering is supported now
 
 ##### GET /api/quest?user={login}
 
