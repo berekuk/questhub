@@ -5,7 +5,9 @@
   <script type="text/template" class="quest-labels">
     <% if (obj.tags) { %>
       <% _.each(obj.tags, function (tag) { %>
-      <span class="label label-inverse"><%= tag %></span>
+        <a href="/explore/latest/tag/<%= tag %>" class="label label-inverse">
+          <%= tag %>
+        </a>
       <% }) %>
     <% } %>
     <span class="label label-<%= status === 'open' && 'warning' %>"><%= status === 'closed' ? 'complete' : status %></span>

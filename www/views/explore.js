@@ -10,6 +10,7 @@ define([
 
         events: {
             'click ul.explore-nav a': 'switchTab',
+            'click .remove-filter': 'removeFilter'
         },
 
         subviews: {
@@ -82,8 +83,16 @@ define([
             this.render();
         },
 
+        serialize: function () {
+            return { tag: this.tag };
+        },
+
         afterRender: function () {
             this.$('[data-explore-tab=' + this.tab + ']').parent().addClass('active');
+        },
+
+        removeFilter: function () {
+            Backbone.trigger('pp:navigate', '/explore/' + this.tab, { trigger: true });
         }
     });
 });
