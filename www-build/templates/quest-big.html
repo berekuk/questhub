@@ -3,7 +3,7 @@
     <% if (team.length == 0) { %>
       <%= partial.user({ login: obj.author }) %><span class="muted"> suggests a quest:</span>
     <% } else { %>
-      <span class="muted"><%= partial.user({ login: _.first(team) }) %> is on a quest<%= (_.first(team) == obj.author) ? '' : ' by' + partial.user({ login: obj.author }) %>:</span>
+      <span class="muted"><%= partial.user({ login: _.first(team) }) %> is on a quest<%= (_.first(team) == obj.author) ? '' : ' by ' + partial.user({ login: obj.author }) %>:</span>
       <% if (my) { %>
         <%= partial.edit_tools() %>
       <% } %>
