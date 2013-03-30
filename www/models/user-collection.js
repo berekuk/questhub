@@ -1,8 +1,12 @@
-pp.models.UserCollection = pp.Collection.WithCgiAndPager.extend({
+define([
+    'models/proto/paged-collection', 'models/another-user'
+], function (Parent, AnotherUser) {
+    return Parent.extend({
 
-    cgi: ['sort', 'order', 'limit', 'offset'],
+        cgi: ['sort', 'order', 'limit', 'offset'],
 
-    baseUrl: '/api/user',
+        baseUrl: '/api/user',
 
-    model: pp.models.AnotherUser
+        model: AnotherUser
+    });
 });

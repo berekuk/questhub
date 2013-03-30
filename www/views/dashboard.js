@@ -1,57 +1,65 @@
-pp.views.Dashboard = pp.View.Common.extend({
+define([
+    'underscore',
+    'views/proto/common',
+    'views/user/big', 'views/quest/collection', 'views/quest/add',
+    'models/quest-collection', 'models/current-user',
+    'text!templates/dashboard.html'
+], function (_, Common, UserBig, QuestCollection, QuestAdd, QuestCollectionModel, currentUser, html) {
 
-    t: 'dashboard',
+    return Common.extend({
+        template: _.template(html),
 
-    activated: false,
+        activated: false,
 
-    events: {
-        "click .quest-add-dialog": "newQuestDialog",
-    },
-
-    subviews: {
-        '.user': function () {
-            return new pp.views.UserBig({
-                model: this.model
-            }); // TODO - fetch or not?
+        events: {
+            "click .quest-add-dialog": "newQuestDialog",
         },
-        '.open-quests': function () { return this.createQuestSubview('open') },
-        '.closed-quests': function () { return this.createQuestSubview('closed') },
-        '.abandoned-quests': function () { return this.createQuestSubview('abandoned', 5) }
-    },
 
-    createQuestSubview: function (st, limit) {
-        if (limit === undefined) {
-            limit = 30;
-        }
-        var login = this.model.get('login');
-        var collection = new pp.models.QuestCollection([], {
-           'user': login,
-           'status': st,
-            'limit': limit
-        });
-        collection.comparator = function(m1, m2) {
-            if (m1.id > m2.id) return -1; // before
-            if (m2.id > m1.id) return 1; // after
-            return 0; // equal
-        };
-        collection.fetch();
+        subviews: {
+            '.user': function () {
+                return new UserBig({
+                    model: this.model
+                }); // TODO - fetch or not?
+            },
+            '.open-quests': function () { return this.createQuestSubview('open') },
+            '.closed-quests': function () { return this.createQuestSubview('closed') },
+            '.abandoned-quests': function () { return this.createQuestSubview('abandoned', 5) }
+        },
 
-        return new pp.views.QuestCollection({
-            collection: collection
-        });
-    },
+        createQuestSubview: function (st, limit) {
+            if (limit === undefined) {
+                limit = 30;
+            }
+            var login = this.model.get('login');
+            var collection = new QuestCollectionModel([], {
+               'user': login,
+               'status': st,
+                'limit': limit
+            });
+            collection.comparator = function(m1, m2) {
+                if (m1.id > m2.id) return -1; // before
+                if (m2.id > m1.id) return 1; // after
+                return 0; // equal
+            };
+            collection.fetch();
 
-    afterRender: function () {
-        var currentUser = pp.app.user.get('login');
-        if (currentUser && currentUser == this.model.get('login')) {
-            this.$('.new-quest').show();
-        }
-    },
+            return new QuestCollection({
+                collection: collection
+            });
+        },
 
-    newQuestDialog: function() {
-        var questAdd = new pp.views.QuestAdd({
-          collection: this.subview('.open-quests').collection
-        });
-        this.$el.append(questAdd.$el);
-    },
+        afterRender: function () {
+            var currentLogin = currentUser.get('login');
+            if (currentLogin && currentLogin == this.model.get('login')) {
+                this.$('.new-quest').show();
+            }
+        },
+
+        newQuestDialog: function() {
+            var questAdd = new QuestAdd({
+              collection: this.subview('.open-quests').collection
+            });
+            this.$el.append(questAdd.$el);
+        },
+    });
 });

@@ -1,9 +1,14 @@
 server {
   listen       <%= @port %>;
-  server_name play.perl.org;
 
+  <% if @dev %>
   # Turn sendfile off because it behaves bad with vboxsf
   sendfile off;
+  <% end %>
+
+  gzip             on;
+  gzip_min_length  1000;
+  gzip_types text/css text/javascript application/x-javascript;
 
   access_log /data/access.log;
   error_log  /data/error.log info;

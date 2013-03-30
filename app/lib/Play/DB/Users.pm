@@ -195,7 +195,7 @@ sub confirm_email {
     };
     db->events->email(
         $settings->{email},
-        "Your email at Play Perl is confirmed, $login",
+        "Your email at ".setting('service_name')." is confirmed, $login",
         qq[
             <p>
             Login: $login<br>
@@ -219,10 +219,10 @@ sub _send_email_confirmation {
     my $link = "http://".setting('hostport')."/register/confirm/$login/$secret";
     db->events->email(
         $email,
-        "Your Play Perl email confirmation link, $login",
+        "Your ".setting('service_name')." email confirmation link, $login",
         qq{
             <p>
-            Click this if you registered on Play Perl recently: <a href="$link">$link</a>.
+            Click this if you registered on }.setting('service_name').qq{ recently: <a href="$link">$link</a>.
             </p>
             <p>
             If you think this is a mistake, just ignore this message.

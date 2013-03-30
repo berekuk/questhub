@@ -101,6 +101,7 @@ sub comment_events :Tests {
                 name => 'foo',
                 status => 'open',
                 user => 'blah',
+                team => ['blah'],
                 author => 'blah',
             },
             quest_id => $quest_id,

@@ -40,6 +40,7 @@ Allowed status transitions:
 =cut
 
 use 5.010;
+use utf8;
 
 use Moo;
 
@@ -57,6 +58,14 @@ sub _prepare_quest {
     my ($quest) = @_;
     $quest->{ts} = $quest->{_id}->get_time;
     $quest->{_id} = $quest->{_id}->to_string;
+
+    if (length $quest->{user}) {
+        $quest->{team} = [$quest->{user}];
+    }
+    else {
+        $quest->{team} = [];
+    }
+
     return $quest;
 }
 
@@ -73,6 +82,7 @@ sub list {
         order => { type => SCALAR, regex => qr/^asc|desc$/, default => 'asc' },
         limit => { type => SCALAR, regex => qr/^\d+$/, optional => 1 },
         offset => { type => SCALAR, regex => qr/^\d+$/, default => 0 },
+        tags => { type => SCALAR, optional => 1 },
     });
 
     if (($params->{status} || '') eq 'deleted') {
@@ -80,7 +90,7 @@ sub list {
     }
 
     my $query = {
-            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ user status /
+            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ user status tags /
     };
     $query->{status} ||= { '$ne' => 'deleted' };
 
@@ -142,19 +152,23 @@ sub add {
         die "Unexpected quest type '$params->{type}'" unless grep { $params->{type} eq $_ } qw/ bug blog feature other /;
     }
 
+    if ($params->{tags}) {
+        die "Tags should be arrayref" unless ref($params->{tags}) eq 'ARRAY';
+    }
+
     $params->{author} = $params->{user};
     my $id = $self->collection->insert($params);
+
+    my $quest = { %$params, _id => $id };
+    $self->_prepare_quest($quest);
 
     db->events->add({
         object_type => 'quest',
         action => 'add',
         author => $params->{user},
         object_id => $id->to_string,
-        object => $params,
+        object => $quest,
     });
-
-    my $quest = { %$params, _id => $id };
-    $self->_prepare_quest($quest);
 
     return $quest;
 }

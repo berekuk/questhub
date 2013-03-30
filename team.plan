@@ -1,0 +1,48 @@
+PLAN!
+
+
+I.
+{
+    user => 'blah',
+    team => ['blah']
+}
+
+II.
+Frontend:
+support 'team' (never use 'user' directly; render multi-user teams correctly)
+
+III.
+Backend:
+never set user; choose player's quests using 'team' field; don't forget to index
+
+IV.
+Backend:
+join, leave internal methods
+
+V.
+Backend:
+/invite, /accept, /join nodes
+send notifications
+send emails
+/accept removes notification
+
+also, make sure "leaving" works right
+also, add "joined the quest with Foo and Bar" and "left the quest" events
+
+VI.
+Frontend:
+polymorphic notifications
+process email get link (hit /accept)
+
+VII.
+Frontend:
+invite button; "ask to join" button
+
+VIII.
+Backend points calculation
+
+=================
+
+Issues:
+- is everyone on the team the same?
+- upgrade the db, including 'events' collection

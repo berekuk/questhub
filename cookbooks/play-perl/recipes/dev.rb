@@ -19,7 +19,17 @@ template "/etc/nginx/sites-enabled/play-perl-dev.org" do
   variables({
     :port => 81,
     :dancer_port => 3001,
-    :static_root => '/play/www'
+    :static_root => '/play/www',
+    :dev => true
   })
   notifies :restart, "service[nginx]"
 end
+
+ppa "chris-lea/node.js"
+package "nodejs"
+
+ppa "antono/phantomjs"
+package "phantomjs"
+
+# used by build_static.pl
+cpan_module "IPC::System::Simple"

@@ -1,0 +1,24 @@
+<div>
+  <!-- avoiding extra spaces - we need to put an apostrophe after the user's badge sometimes -->
+  <script type="text/template" class="user"><% if (login) { %><a href="/player/<%= login %>" class="label"><%= login + (obj.colon ? ':' : '') %></a><% } %></script>
+
+  <script type="text/template" class="quest-labels">
+    <% if (obj.tags) { %>
+      <% _.each(obj.tags, function (tag) { %>
+        <a href="/explore/latest/tag/<%= tag %>" class="label label-inverse">
+          <%= tag %>
+        </a>
+      <% }) %>
+    <% } %>
+    <span class="label label-<%= status === 'open' && 'warning' %>"><%= status === 'closed' ? 'complete' : status %></span>
+  </script>
+
+  <script type="text/template" class="edit-tools">
+    <div class="pull-right mini-button-block">
+      <label> <!-- label fixes the font size, even inside h2 -->
+        <a href="#" class="edit"><i class="icon-pencil"></i></a>
+        <a href="#" class="delete"><i class="icon-remove"></i></a>
+      </label>
+    </div>
+  </script>
+</div>

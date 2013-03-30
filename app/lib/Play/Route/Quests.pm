@@ -11,7 +11,7 @@ put '/quest/:id' => sub {
         param('id'),
         {
             user => session->{login},
-            map { param($_) ? ($_ => param($_)) : () } qw/ name status type /,
+            map { param($_) ? ($_ => param($_)) : () } qw/ name status type tags /, # type is deprecated, TODO - remove
         }
     );
     return {
@@ -37,14 +37,14 @@ post '/quest' => sub {
         user => session->{login},
         name => param('name'),
         status => 'open',
-        (param('type') ? (type => param('type')) : ()),
+        (param('tags') ? (tags => param('tags')) : ()),
     };
     return db->quests->add($attributes);
 };
 
 get '/quest' => sub {
     my $params = {
-        map { param($_) ? ($_ => param($_)) : () } qw/ user status comment_count sort order limit offset /,
+        map { param($_) ? ($_ => param($_)) : () } qw/ user status comment_count sort order limit offset tags /,
     };
     if (param('unclaimed')) {
         $params->{user} = '';

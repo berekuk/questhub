@@ -1,0 +1,32 @@
+<div class="row-fluid">
+  <div class="span3">
+    <% if (tag) { %>
+    <div class="tag-filter">
+      <span class="muted">Filter:</span>
+      <span class="label label-inverse"><%= tag %></span>
+      <span class="mini-button-block">
+        <a href="#" class="remove-filter"><i class="icon-remove"></i></a>
+      </span>
+    </div>
+    <% } else { %>
+    <div class="well well-small">
+      <p>
+      The entire collection of quests lies before you.
+      <p>
+      Upvote the stuff you like, comment on the quests you don't understand, and poke those who promised to do something and then forgot.
+      </p>
+    </div>
+    <% } %>
+  </div>
+  <div class="span9">
+    <ul class="nav nav-tabs explore-nav">
+        <li><a href="#" data-explore-tab="latest">Latest</a></li>
+        <li><a href="#" data-explore-tab="unclaimed">Unclaimed</a></li>
+        <li><a href="#" data-explore-tab="open">Best open</a></li>
+        <li><a href="#" data-explore-tab="closed">Best completed</a></li>
+    </ul>
+    <div>
+      <div class="explore-tab-content"></div>
+    </div>
+  </div>
+</div>

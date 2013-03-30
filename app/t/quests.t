@@ -13,6 +13,7 @@ my $quests_data = {
         name    => 'name_2',
         user    => 'user_2',
         status  => 'open',
+        tags    => ['bug'],
     },
     3 => {
         name    => 'name_3',
@@ -36,10 +37,9 @@ sub setup :Tests(setup) {
 }
 
 sub perl_quest_list :Test(1) {
-    cmp_deeply(
+    cmp_deeply
         [ sort { $a->{_id} cmp $b->{_id} } @{ db->quests->list({}) } ],
-        [ sort { $a->{_id} cmp $b->{_id} } values %$quests_data ],
-    );
+        [ map { { %$_, team => [$_->{user}] } } sort { $a->{_id} cmp $b->{_id} } values %$quests_data ];
 }
 
 sub quest_list :Tests {
@@ -47,13 +47,25 @@ sub quest_list :Tests {
 
     cmp_deeply
         [ sort { $a->{_id} cmp $b->{_id} } @$list ],
-        [ sort { $a->{_id} cmp $b->{_id} } values %$quests_data ];
+        [ map { { %$_, team => [$_->{user}] } } sort { $a->{_id} cmp $b->{_id} } values %$quests_data ];
 }
 
 sub quest_list_filtering :Tests {
     my $list = http_json GET => '/api/quest', { params => { status => 'closed' } };
+    cmp_deeply $list, [
+        {
+            %{ $quests_data->{3} },
+            team => [ $quests_data->{3}{user} ],
+        }
+    ];
 
-    cmp_deeply $list, [ $quests_data->{3} ];
+    $list = http_json GET => '/api/quest', { params => { tags => 'bug' } };
+    cmp_deeply $list, [
+        {
+            %{ $quests_data->{2} },
+            team => [ $quests_data->{2}{user} ],
+        }
+    ];
 }
 
 sub quest_sorting :Tests {
@@ -81,7 +93,7 @@ sub single_quest :Tests {
     my $id          =  $quests_data->{1}->{_id};
     my $quest = http_json GET => '/api/quest/'.$id;
 
-    cmp_deeply $quest, $quests_data->{1};
+    cmp_deeply $quest, { %{ $quests_data->{1} }, team => [$quests_data->{1}{user}] };
 }
 
 sub edit_quest :Tests {
@@ -95,7 +107,7 @@ sub edit_quest :Tests {
     cmp_deeply $put_result, { _id => $id }, 'put result';
 
     my $got_quest = http_json GET => "/api/quest/$id";
-    cmp_deeply $got_quest, $edited_quest;
+    cmp_deeply $got_quest, { %$edited_quest, team => [ $edited_quest->{user} ] };
 }
 
 
@@ -113,7 +125,7 @@ sub add_quest :Tests {
 
     cmp_deeply
         $add_result,
-        { %$new_record, author => $user, _id => re('^\S+$'), ts => re('^\d+$') },
+        { %$new_record, team => [$user], author => $user, _id => re('^\S+$'), ts => re('^\d+$') },
         'add response';
 
     my $id = $add_result->{_id};
@@ -121,7 +133,7 @@ sub add_quest :Tests {
     my $got_quest = http_json GET => "/api/quest/$id";
     cmp_deeply
         $got_quest,
-        { %$new_record, author => $user, _id => re('^\S+$'), ts => re('^\d+$') },
+        { %$new_record, team => [$user], author => $user, _id => re('^\S+$'), ts => re('^\d+$') },
         'get response';
 }
 
@@ -153,7 +165,7 @@ sub quest_events :Tests {
             action => 'resurrect',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'open', user => $user, author => $user },
+            object => superhashof({ name => 'test-quest', status => 'open', user => $user, team => [$user], author => $user }),
         },
         {
             _id => re('^\S+$'),
@@ -162,7 +174,7 @@ sub quest_events :Tests {
             action => 'abandon',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'abandoned', user => $user, author => $user },
+            object => superhashof({ name => 'test-quest', status => 'abandoned', user => $user, team => [$user], author => $user }),
         },
         {
             _id => re('^\S+$'),
@@ -171,7 +183,7 @@ sub quest_events :Tests {
             action => 'reopen',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'open', user => $user, author => $user },
+            object => superhashof({ name => 'test-quest', status => 'open', user => $user, team => [$user], author => $user }),
         },
         {
             _id => re('^\S+$'),
@@ -180,7 +192,7 @@ sub quest_events :Tests {
             action => 'close',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'closed', user => $user, author => $user },
+            object => superhashof({ name => 'test-quest', status => 'closed', user => $user, team => [$user], author => $user }),
         },
         {
             _id => re('^\S+$'),
@@ -189,7 +201,7 @@ sub quest_events :Tests {
             action => 'add',
             author => $user,
             object_id => $quest_id,
-            object => { name => 'test-quest', status => 'open', user => $user, author => $user },
+            object => superhashof({ name => 'test-quest', status => 'open', user => $user, team => [$user], author => $user }),
         },
     ];
 }
@@ -304,20 +316,20 @@ sub more_points :Tests {
     is $user->{points}, 0, 'still zero points after removing an open quest';
 }
 
-sub quest_types :Tests {
+sub quest_tags :Tests {
     Dancer::session login => 'user_1';
 
     http_json POST => '/api/quest', { params => {
         name => 'typed-quest',
-        type => 'blog',
+        tags => ['blog', 'moose'],
     } };
 
     my $unknown_type_response = dancer_response POST => '/api/quest', { params => {
         name => 'typed-quest',
-        type => 'nosuchtype',
+        tags => 'invalid',
     } };
     is $unknown_type_response->status, 500;
-    like $unknown_type_response->content, qr/Unexpected quest type/;
+    like $unknown_type_response->content, qr/should be arrayref/;
 }
 
 sub cc :Tests {
@@ -419,6 +431,7 @@ sub join_leave :Tests {
     my $got_quest = http_json GET => "/api/quest/$quest->{_id}";
     is $got_quest->{name}, 'q1', 'name is still untouched';
     is $got_quest->{user}, '', 'user is now empty';
+    is_deeply $got_quest->{team}, [], 'team is empty too';
 
     $response = dancer_response POST => "/api/quest/$quest->{_id}/leave";
     is $response->status, 500;

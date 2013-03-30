@@ -1,9 +1,15 @@
 // TODO: check if we need to remove this view on close to avoid memory leak
-pp.views.Notify = pp.View.Common.extend({
+define([
+    'underscore',
+    'views/proto/common',
+    'text!templates/notify.html'
+], function (_, Common, html) {
 
-    t: 'notify',
+    return Common.extend({
+        template: _.template(html),
 
-    serialize: function () {
-        return this.options;
-    }
+        serialize: function () {
+            return this.options;
+        }
+    });
 });

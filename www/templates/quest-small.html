@@ -1,0 +1,16 @@
+<td>
+  <% if (obj.showAuthor) { %>
+    <%= partial.user({ login: _.first(team), colon: true }) %>
+  <% } %>
+  <a href="/quest/<%- _id %>"><%- name %></a>
+
+  <% if (obj.comment_count) { %>
+    <a href="/quest/<%= _id %>"><span class="badge badge-info"><i class="icon-comment"></i> <%= comment_count %></span></a>
+    <% } %>
+
+  <span class="likes"></span>
+
+  <span class="pull-right">
+    <%= partial.quest_labels(obj) %>
+  </span>
+</td>

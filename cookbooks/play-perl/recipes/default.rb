@@ -41,6 +41,10 @@ cpan_module 'Text::Markdown'
 cpan_module 'Clone'
 cpan_module 'Email::Sender'
 
+# needed by Email::Sender::Simple to send Amazon SES emails
+cpan_module 'Authen::SASL'
+cpan_module 'Net::SMTP::SSL'
+
 cpan_module 'Dancer::Serializer::JSON'
 cpan_module 'Dancer::Session::MongoDB'
 cpan_module 'Dancer::Plugin::Auth::Twitter'
@@ -59,7 +63,8 @@ template "/play/app/config.yml" do
   mode 0644
   variables({
       :twitter => node['play_perl']['twitter'],
-      :hostport => node['play_perl']['hostport']
+      :hostport => node['play_perl']['hostport'],
+      :service_name => node['play_perl']['service_name']
   })
   notifies :restart, "service[nginx]"
 end
