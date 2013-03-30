@@ -4,7 +4,7 @@ define([
 ], function (Backbone, Parent, Event) {
     return Parent.extend({
         baseUrl: '/api/event',
-        cgi: ['limit', 'offset'],
+        cgi: ['limit', 'offset', 'types'],
         model: Event
     });
 });
