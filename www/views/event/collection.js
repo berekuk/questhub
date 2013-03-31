@@ -26,9 +26,8 @@ define([
             });
 
             var filterString = types.join();
-            /* Fetch new collection  */
 
-            /* end fetch */
+            this.collection.setTypes(types);
         }
 
     });
