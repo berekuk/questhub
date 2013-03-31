@@ -125,11 +125,14 @@ define([
         },
 
         eventCollection: function () {
+            var types = getParameterByName('types');
             var collection = new EventCollectionModel([], {
-                'limit': 100
+                'limit': 100,
+                'types': types
             });
             var view = new EventCollection({ collection: collection });
             collection.fetch();
+
             this.appView.setPageView(view);
             this.appView.setActiveMenuItem('event-list');
         },
@@ -162,3 +165,15 @@ define([
         }
     });
 });
+
+function getParameterByName(name)
+{
+  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+  var regexS = "[\\?&]" + name + "=([^&#]*)";
+  var regex = new RegExp(regexS);
+  var results = regex.exec(window.location.search);
+  if(results == null)
+    return "";
+  else
+    return decodeURIComponent(results[1].replace(/\+/g, " "));
+}
