@@ -27,7 +27,42 @@ define([
 
             var filterString = types.join();
 
+            this.options.types = types;
+
             this.collection.setTypes(types);
+
+            /* Set queryString to URL */
+            var url = '/feed';
+            if ( filterString != undefined) {
+                url += '?types=' + filterString;
+            }
+
+            Backbone.trigger('pp:navigate', url);
+
+        },
+        serialize: function() {
+            var types = this.options.types || getParameterByName('types');
+            var filterList = [
+                {
+                    value: 'add-comment',
+                    description: 'add-comment',
+                },
+                {
+                    value: 'add-quest',
+                    description: 'add-quest',
+                }
+            ]
+
+            /* Add status for each filter */
+            for( var i = 0; i < filterList.length ; i++ ){
+                if( types.indexOf(filterList[i].value) != -1 ){
+                    filterList[i].status = 'checked';
+                }else{
+                    filterList[i].status = '';
+                }
+            }
+
+            return { filterList: filterList };
         }
 
     });

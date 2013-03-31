@@ -12,8 +12,9 @@
       <p>
       Filter
       </p>
-      <input type="checkbox" class="filter" value="add-comment"/> Add comment <br/>
-      <input type="checkbox" class="filter" value="add-quest"/> Open quest <br/>
+        <% _.each( filterList, function(i) { %>
+        <input type="checkbox" class="filter" <%= i.status %> value="<%= i.value %>"/> <%= i.description %><br/>
+        <% }); %>
     </div>
   </div>
   <div class="span9">
