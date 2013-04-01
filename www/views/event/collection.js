@@ -55,13 +55,13 @@ define([
             ]
 
             /* Add status for each filter */
-            for( var i = 0; i < filterList.length ; i++ ){
-                if( types.indexOf(filterList[i].value) != -1 ){
-                    filterList[i].status = 'checked';
+            _.each( filterList, function(list){
+                if( types.indexOf(list.value) != -1 ){
+                    list.status = 'checked';
                 }else{
-                    filterList[i].status = '';
+                    list.status = '';
                 }
-            }
+            });
 
             return { filterList: filterList };
         }
