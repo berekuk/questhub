@@ -126,14 +126,21 @@ define([
 
         eventCollection: function () {
             var types = this.queryParams('types');
+            if (types == '') {
+                types = [];
+            }
+            else {
+                types = types.split(',');
+            }
+
             var collection = new EventCollectionModel([], {
                 'limit': 100,
                 'types': types
             });
-            var view = new EventCollection({ collection: collection });
-
-            /* Initialize types */
-            view.options.types = types;
+            var view = new EventCollection({
+                collection: collection,
+                types: types
+            });
 
             collection.fetch();
 

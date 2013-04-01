@@ -8,15 +8,17 @@
       <a href="/api/event/atom" class="btn btn-warning"><i class="icon-rss"></i> RSS</a>
       </p>
     </div>
-    <div class="well well-small">
+    <div>
       <p>
-      Filter
+      Filter:
       </p>
-        <% _.each( filterList, function(i) { %>
-        <label class="checkbox">
-            <input type="checkbox" class="filter" <%= i.status %> value="<%= i.value %>"/> <%= i.description %><br/>
-        </label>
-        <% }); %>
+      <ul class="nav nav-pills nav-filter">
+      <% _.each( filterList, function(i) { %>
+      <li class="filter" data-type="<%= i.value %>"><a href="#">
+          <%= i.description %>
+      </a></li>
+      <% }); %>
+      </ul>
     </div>
   </div>
   <div class="span9">
