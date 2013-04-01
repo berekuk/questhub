@@ -13,7 +13,9 @@
       Filter
       </p>
         <% _.each( filterList, function(i) { %>
-        <input type="checkbox" class="filter" <%= i.status %> value="<%= i.value %>"/> <%= i.description %><br/>
+        <label class="checkbox">
+            <input type="checkbox" class="filter" <%= i.status %> value="<%= i.value %>"/> <%= i.description %><br/>
+        </label>
         <% }); %>
     </div>
   </div>
