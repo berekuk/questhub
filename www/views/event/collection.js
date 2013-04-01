@@ -15,8 +15,10 @@ define([
             return new EventBox({ model: model });
         },
 
-        events: {
-            "click .filter": "filter"
+        events: function(){
+            return _.extend({},PagedCollection.prototype.events,{
+                'click .filter' : 'filter'
+            });
         },
 
         filter: function () {
