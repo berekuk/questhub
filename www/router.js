@@ -125,12 +125,13 @@ define([
         },
 
         eventCollection: function () {
-            var types = getParameterByName('types');
+            var types = this.queryParams('types');
             var collection = new EventCollectionModel([], {
                 'limit': 100,
                 'types': types
             });
             var view = new EventCollection({ collection: collection });
+
             collection.fetch();
 
             this.appView.setPageView(view);
@@ -162,18 +163,18 @@ define([
         about: function () {
             this.appView.setPageView(new About());
             this.appView.setActiveMenuItem('about');
+        },
+        queryParams: function(name) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+            var results = regex.exec(window.location.search);
+
+            if(results == null){
+                return "";
+            } else {
+                return decodeURIComponent(results[1].replace(/\+/g, " "));
+            }
         }
     });
 });
-
-function getParameterByName(name)
-{
-  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-  var regexS = "[\\?&]" + name + "=([^&#]*)";
-  var regex = new RegExp(regexS);
-  var results = regex.exec(window.location.search);
-  if(results == null)
-    return "";
-  else
-    return decodeURIComponent(results[1].replace(/\+/g, " "));
-}
