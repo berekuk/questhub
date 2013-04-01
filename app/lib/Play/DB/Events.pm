@@ -76,12 +76,42 @@ sub list {
     my $params = validate(@_, {
         limit => { type => SCALAR, regex => qr/^\d+$/, default => 100 },
         offset => { type => SCALAR, regex => qr/^\d+$/, default => 0 },
+        types => { type => SCALAR, regex => qr/^.+$/, optional => 1 },
     });
 
-    my @events = $self->collection->query->sort({ _id => -1 })->limit($params->{limit})->skip($params->{offset})->all;
+    my $search_opt = _build_search_opt($params->{types});
+
+    my @events = $self->collection->query($search_opt)
+        ->sort({ _id => -1 })
+        ->limit($params->{limit})
+        ->skip($params->{offset})
+        ->all;
+
     $self->_prepare_event($_) for @events;
 
     return \@events;
+}
+
+sub _build_search_opt {
+    my $types = shift;
+
+    return {} unless $types;
+
+    my $res = {
+        action => { '$in' => [] },
+        object_type => { '$in' => [] },
+    };
+
+    my @opt = split( /,/, $types );
+
+    foreach( @opt ) {
+        my ( $action, $obj_type ) = split( /-/, $_ );
+
+        push( $res->{action}->{'$in'}, $action );
+        push( $res->{object_type}->{'$in'}, $obj_type);
+    }
+
+    return $res;
 }
 
 1;

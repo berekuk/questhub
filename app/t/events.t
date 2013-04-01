@@ -53,6 +53,21 @@ sub list :Tests {
         ]
 }
 
+sub filter_list :Tests {
+    db->events->add({ object => 'NEW_QUEST', object_type => 'quest', action => 'open' });
+    db->events->add({ object => 'REOPEN_QUEST', object_type => 'quest', action => 'reopen' });
+    db->events->add({ object => 'OLD_QUEST', object_type => 'comment', action => 'add' });
+
+    # Want add-comment.
+    my $list = http_json GET => '/api/event?types=add-comment,open-quest';
+    cmp_deeply
+        $list,
+        [
+            { object => 'OLD_QUEST', object_type => 'comment', action => 'add' , _id => re('^\S+$'), ts => re('^\d+$') },
+            { object => 'NEW_QUEST', object_type => 'quest', action => 'open' , _id => re('^\S+$'), ts => re('^\d+$') },
+        ]
+}
+
 sub atom :Tests {
     # add-user event
     http_json GET => '/api/fakeuser/Frodo';
@@ -64,10 +79,15 @@ sub atom :Tests {
         status => 'open',
     };
 
+    # Regular Atom
     my $response = dancer_response GET => '/api/event/atom';
     is $response->status, 200;
-
     like $response->content, qr/Frodo joins Play Perl/;
+
+    # Atom has filter.
+    $response = dancer_response GET => '/api/event/atom?types=add-quest';
+    is $response->status, 200;
+    unlike $response->content, qr/Frodo joins Play Perl/;
 }
 
 __PACKAGE__->new->runtests;

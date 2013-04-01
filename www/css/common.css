@@ -251,3 +251,9 @@ div.quest-big-unclaimed {
 .tag-filter {
     text-align: center;
 }
+
+ul.nav-filter li {
+    display: block;
+    float: none;
+    background-color: #f5f5f5;
+}
