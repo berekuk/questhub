@@ -33,7 +33,7 @@ define([
 
             /* Set queryString to URL */
             var url = '/feed';
-            if ( filterString != undefined) {
+            if ( types.length > 0 ) {
                 url += '?types=' + filterString;
             }
 
