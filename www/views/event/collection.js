@@ -62,24 +62,32 @@ define([
         serialize: function() {
             var filterList = [
                 {
-                    value: 'add-comment',
-                    description: 'Comments',
+                    value: 'add-quest',
+                    description: 'New quests'
                 },
                 {
                     value: 'close-quest',
-                    description: 'Completed quests',
+                    description: 'Completed quests'
                 },
                 {
                     value: 'reopen-quest',
-                    description: 'Reopened quests',
+                    description: 'Reopened quests'
                 },
                 {
                     value: 'abandon-quest',
-                    description: 'Abandoned quests',
+                    description: 'Abandoned quests'
                 },
                 {
-                    value: 'add-quest',
-                    description: 'New quests',
+                    value: 'resurrect-quest',
+                    description: 'Resurrected quests'
+                },
+                {
+                    value: 'add-user',
+                    description: 'New players'
+                },
+                {
+                    value: 'add-comment',
+                    description: 'Comments'
                 }
             ];
             return { filterList: filterList, types: this.options.types };
