@@ -37,7 +37,7 @@ define([
                 url += '?types=' + filterString;
             }
 
-            Backbone.trigger('pp:navigate', url);
+            Backbone.trigger('pp:navigate', url, { replace: true });
 
         },
         serialize: function() {
