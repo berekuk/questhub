@@ -41,7 +41,8 @@ define([
 
         },
         serialize: function() {
-            var types = this.options.types || getParameterByName('types');
+            var types = this.options.types || [];
+
             var filterList = [
                 {
                     value: 'add-comment',

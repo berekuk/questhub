@@ -132,6 +132,9 @@ define([
             });
             var view = new EventCollection({ collection: collection });
 
+            /* Initialize types */
+            view.options.types = types;
+
             collection.fetch();
 
             this.appView.setPageView(view);
