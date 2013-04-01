@@ -5,7 +5,7 @@
       <p>
       Everything that happens goes in here.
       <p>
-      <a href="/api/event/atom" class="btn btn-warning"><i class="icon-rss"></i> RSS</a>
+      <a href="/api/event/atom<%= types ? '?types=' + types.join(',') : '' %>" class="btn btn-warning"><i class="icon-rss"></i> RSS</a>
       </p>
     </div>
     <div>
@@ -14,7 +14,7 @@
       </p>
       <ul class="nav nav-pills nav-filter">
       <% _.each( filterList, function(i) { %>
-      <li class="filter" data-type="<%= i.value %>"><a href="#">
+      <li class="filter<%= _.contains(types, i.value) ? ' active' : '' %>" data-type="<%= i.value %>"><a href="#">
           <%= i.description %>
       </a></li>
       <% }); %>

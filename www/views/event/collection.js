@@ -22,6 +22,11 @@ define([
             });
         },
 
+        afterInitialize: function () {
+            this.options.types = this.options.types || [];
+            PagedCollection.prototype.afterInitialize.apply(this, arguments);
+        },
+
         filter: function (e) {
             var pill = $(e.target).parent();
 
@@ -77,14 +82,7 @@ define([
                     description: 'New quests',
                 }
             ];
-            return { filterList: filterList };
-        },
-
-        afterRender: function () {
-            PagedCollection.prototype.afterRender.apply(this, arguments);
-            _.each(this.options.types, function(type) {
-                this.$('.filter[data-type=' + type + ']').addClass('active');
-            });
+            return { filterList: filterList, types: this.options.types };
         }
 
     });
