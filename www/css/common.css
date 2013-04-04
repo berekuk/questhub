@@ -257,3 +257,8 @@ ul.nav-filter li {
     float: none;
     background-color: #f5f5f5;
 }
+
+.flattr-wrapper {
+  position: relative;
+  top: 6px;
+}
