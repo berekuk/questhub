@@ -61,6 +61,8 @@ require(['underscore', 'jquery', 'jasmine-html'], function(_, $, jasmine){
     specs.push('spec/quest-big');
     specs.push('spec/quest-add');
 
+    specs.push('spec/model/quest');
+
     $(function(){
         require(specs, function(){
             jasmineEnv.execute();

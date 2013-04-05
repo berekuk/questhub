@@ -37,7 +37,7 @@ define([
             }
 
             var tagLine = this.$('[name=tags]').val();
-            if (tagLine.match(/^\s*([\w-]+\s*,\s*)*([\w-]+\s*)?$/)) {
+            if (this.collection.model.prototype.validateTagline(tagLine)) {
                 this.$('.quest-tags-edit').removeClass('error');
             }
             else {
@@ -88,15 +88,7 @@ define([
 
         getTags: function() {
             var tagLine = this.$('[name=tags]').val();
-            var tags = tagLine.split(',');
-            tags = _.map(tags, function (tag) {
-                tag = tag.replace(/^\s+|\s+$/g, '');
-                return tag;
-            });
-            tags = _.filter(tags, function (tag) {
-                return (tag != '');
-            });
-            return tags;
+            return this.collection.model.prototype.tagline2tags(tagLine);
         },
 
         render: function () {

@@ -44,7 +44,7 @@ define([
                 { "status": st },
                 {
                     success: function (model) {
-                        if (model.get('user') == currentUser.get('login')) {
+                        if (_.contains(model.get('team'), currentUser.get('login'))) {
                             // update of the current user's quest causes update in points
                             currentUser.fetch();
                         }
@@ -75,9 +75,8 @@ define([
 
         extStatus: function () {
             var status = this.get('status');
-            var user = this.get('user');
 
-            if (status == 'open' && user == '') return 'unclaimed';
+            if (status == 'open' && this.get('team').length == 0) return 'unclaimed';
             return status;
         },
 
@@ -91,6 +90,23 @@ define([
             params.ext_status = this.extStatus();
             params.reward = this.reward();
             return params;
+        },
+
+        // static methods
+        tagline2tags: function (tagLine) {
+            var tags = tagLine.split(',');
+            tags = _.map(tags, function (tag) {
+                tag = tag.replace(/^\s+|\s+$/g, '');
+                return tag;
+            });
+            tags = _.filter(tags, function (tag) {
+                return (tag != '');
+            });
+            return tags;
+        },
+
+        validateTagline: function (tagLine) {
+            return Boolean(tagLine.match(/^\s*([\w-]+\s*,\s*)*([\w-]+\s*)?$/));
         }
 
     });
