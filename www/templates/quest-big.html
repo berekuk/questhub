@@ -19,19 +19,6 @@
     <% if (my) { %>
       <input class="quest-edit" type="text" value="<%- name %>" style="display: none">
     <% } %>
-
-    <!--
-    // this code is buggy; because of QuestBig view double rendering issue, 'Tweet' button is often rendered as a broken link
-    // also, the current 'Tweet' button location is too annoying
-  <% if (my) { %>
-    <a
-        href="https://twitter.com/share"
-        class="twitter-share-button"
-        data-lang="en"
-        data-url="http://play-perl.org/quest/<%= _id %>"
-        data-text="<% if (status === 'open') { %>I've got the new quest:<% } else { %>I've completed the quest:<% } %> <%- name %>" data-hashtags="playperl">Tweet</a>
-  <% } %>
-  -->
   </h2>
 
   <div class="likes"></div>
