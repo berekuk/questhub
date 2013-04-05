@@ -94,8 +94,12 @@ define([
             });
 
             describe('after edit is clicked', function () {
-                var view = createView();
-                view.$('.edit').click();
+                var view;
+
+                beforeEach(function () {
+                    view = createView();
+                    view.$('.edit').click();
+                });
 
                 it('title is hidden', function () {
                     expect(view.$el.find('h2 .quest-title')).toHaveCss({ display: 'none' });
@@ -103,6 +107,27 @@ define([
 
                 it('input is visible', function () {
                     expect(view.$el.find('h2 input')).not.toHaveCss({ display: 'none' });
+                });
+            });
+
+            describe('after title is edited', function () {
+
+                var view;
+
+                beforeEach(function () {
+                    view = createView();
+                    view.$('.edit').click();
+                    spyOn(view.model, 'save');
+
+                    view.$('.quest-edit').val('Mushroom! Mushroom!');
+
+                    var e = $.Event('keyup');
+                    e.which = 13; // enter
+                    view.$('.quest-edit').trigger(e);
+                });
+
+                it('title is hidden', function () {
+                    expect(view.model.save).toHaveBeenCalledWith({ 'name': 'Mushroom! Mushroom!' });
                 });
             });
         });

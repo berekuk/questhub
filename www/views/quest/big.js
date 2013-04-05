@@ -21,7 +21,7 @@ define([
             "click .quest-reopen": "reopen",
             "click .delete": "destroy",
             "click .edit": "edit",
-            "keypress .quest-edit": "updateOnEnter",
+            "keyup .quest-edit": "updateOnEnter",
             "blur .quest-edit": "closeEdit"
         },
 
@@ -71,7 +71,7 @@ define([
         },
 
         updateOnEnter: function (e) {
-            if (e.keyCode == 13) this.closeEdit();
+            if (e.which == 13) this.closeEdit();
         },
 
         closeEdit: function() {
