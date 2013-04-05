@@ -44,7 +44,7 @@ define([
                 { "status": st },
                 {
                     success: function (model) {
-                        if (model.get('user') == currentUser.get('login')) {
+                        if (_.contains(model.get('team'), currentUser.get('login'))) {
                             // update of the current user's quest causes update in points
                             currentUser.fetch();
                         }
@@ -75,9 +75,8 @@ define([
 
         extStatus: function () {
             var status = this.get('status');
-            var user = this.get('user');
 
-            if (status == 'open' && user == '') return 'unclaimed';
+            if (status == 'open' && this.get('team').length == 0) return 'unclaimed';
             return status;
         },
 
