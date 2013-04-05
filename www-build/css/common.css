@@ -76,10 +76,16 @@ input.quest-edit {
     height: 35px;
     width: 95%;
     font-weight: 200;
+    margin-bottom: 0px;
 }
 
 .quest-tags-edit input {
     background-color: #fcf8e3;
+}
+
+.quest-big-tags-edit input {
+    padding: 2px;
+    margin-bottom: 0px;
 }
 
 textarea.comment-edit {
