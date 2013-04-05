@@ -90,6 +90,23 @@ define([
             params.ext_status = this.extStatus();
             params.reward = this.reward();
             return params;
+        },
+
+        // static methods
+        tagline2tags: function (tagLine) {
+            var tags = tagLine.split(',');
+            tags = _.map(tags, function (tag) {
+                tag = tag.replace(/^\s+|\s+$/g, '');
+                return tag;
+            });
+            tags = _.filter(tags, function (tag) {
+                return (tag != '');
+            });
+            return tags;
+        },
+
+        validateTagline: function (tagLine) {
+            return Boolean(tagLine.match(/^\s*([\w-]+\s*,\s*)*([\w-]+\s*)?$/));
         }
 
     });

@@ -82,6 +82,11 @@ input.quest-edit {
     background-color: #fcf8e3;
 }
 
+.quest-big-tags-edit input {
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
 textarea.comment-edit {
     width: 95%;
     height: 100%;

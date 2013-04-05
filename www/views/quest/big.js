@@ -21,8 +21,7 @@ define([
             "click .quest-reopen": "reopen",
             "click .delete": "destroy",
             "click .edit": "edit",
-            "keyup .quest-edit": "updateOnEnter",
-            "blur .quest-edit": "closeEdit"
+            "keyup input": "updateOnEnter"
         },
 
         subviews: {
@@ -66,12 +65,17 @@ define([
                 return;
             }
             this.$('.quest-edit').show();
+            this.$('.quest-big-labels .quest-big-tags-edit').show();
+
+            var tags = this.model.get('tags') || [];
+            this.$('.quest-big-tags-input').val(tags.join(', '));
             this.$('.quest-title').hide();
+            this.$('.quest-tags').hide();
             this.$('.quest-edit').focus();
         },
 
         updateOnEnter: function (e) {
-            if (e.which == 13) this.closeEdit();
+            if (e.which == 13 || e.which == 27) this.closeEdit();
         },
 
         closeEdit: function() {
@@ -79,9 +83,22 @@ define([
             if (!value) {
                 return;
             }
-            this.model.save({ name: value });
+
+            var tagline = this.$('.quest-big-tags-input').val();
+            if (!this.model.validateTagline(tagline)) {
+                return;
+            }
+
+            var params = {
+                name: value,
+                tags: this.model.tagline2tags(tagline)
+            };
+            this.model.save(params);
+
             this.$('.quest-edit').hide();
+            this.$('.quest-big-labels .quest-big-tags-edit').hide();
             this.$('.quest-title').show();
+            this.$('.quest-tags').show();
         },
 
         destroy: function () {
