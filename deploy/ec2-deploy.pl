@@ -132,15 +132,31 @@ sub main {
 
     my $create;
     my $provision;
+    my $magic;
     GetOptions(
         'create!' => \$create,
         'p|provision!' => \$provision,
+        'm|magic' => \$magic,
     ) or pod2usage(2);
 
     pod2usage(2) unless @ARGV == 1;
     my $name = shift @ARGV;
 
     $IP = $INSTANCES{$name} or die "Unknown instance '$name'";
+
+    if ($magic) {
+        my $git_branch = qx(git rev-parse --abbrev-ref HEAD);
+        chomp $git_branch;
+        unless ($git_branch eq 'master') {
+            die "Error: you should be on master branch to use --magic mode.\n";
+        }
+
+        my $git_status = qx(git status --short);
+        chomp $git_status;
+        if ($git_status) {
+            die "You've got some uncommited files:\n$git_status\n";
+        }
+    }
 
     unless (-e "deploy/roles/$name.rb") {
         die "'deploy/roles/$name.rb' is missing!\n"; # instance roles are not commited to the repo, because they contain the secret twitter credentials
