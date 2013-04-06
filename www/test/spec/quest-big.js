@@ -127,7 +127,7 @@ define([
                 });
 
                 it('title is hidden', function () {
-                    expect(view.model.save).toHaveBeenCalledWith({ 'name': 'Mushroom! Mushroom!' });
+                    expect(view.model.save).toHaveBeenCalledWith({ 'name': 'Mushroom! Mushroom!', tags: ['feature'] });
                 });
             });
         });

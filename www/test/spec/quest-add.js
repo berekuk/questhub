@@ -15,7 +15,7 @@ define([
 
             beforeEach(function () {
                 // it's self-rendering, not calling render()
-                view = new QuestAdd();
+                view = new QuestAdd({ collection: new QuestCollection() });
             });
 
             it('not clickable initially', function () {

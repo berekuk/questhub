@@ -20,8 +20,8 @@ define([
             "click .quest-resurrect": "resurrect",
             "click .quest-reopen": "reopen",
             "click .delete": "destroy",
-            "click .edit": "edit",
-            "keyup input": "updateOnEnter"
+            "click .edit": "startEdit",
+            "keyup input": "edit"
         },
 
         subviews: {
@@ -60,40 +60,67 @@ define([
             this.model.reopen();
         },
 
-        edit: function () {
+        startEdit: function () {
             if (!this.isOwned()) {
                 return;
             }
             this.$('.quest-edit').show();
             this.$('.quest-big-labels .quest-big-tags-edit').show();
 
+            this.backup = _.clone(this.model.attributes);
+
             var tags = this.model.get('tags') || [];
             this.$('.quest-big-tags-input').val(tags.join(', '));
+            this.$('.quest-edit').val(this.model.get('name'));
+            this.validateForm();
+
             this.$('.quest-title').hide();
             this.$('.quest-tags').hide();
             this.$('.quest-edit').focus();
         },
 
-        updateOnEnter: function (e) {
-            if (e.which == 13 || e.which == 27) this.closeEdit();
+        // check if edit form is valid, and also highlight invalid fiels appropriately
+        validateForm: function () {
+            var ok = true;
+            if (this.$('.quest-edit').val().length) {
+                this.$('.quest-edit').parent().removeClass('error');
+            }
+            else {
+                this.$('.quest-edit').parent().addClass('error');
+                ok = false;
+            }
+
+            if (this.model.validateTagline(this.$('.quest-big-tags-input').val())) {
+                this.$('.quest-big-tags-input').parent().removeClass('error');
+            }
+            else {
+                this.$('.quest-big-tags-input').parent().addClass('error');
+                ok = false;
+            }
+            return ok;
         },
 
-        closeEdit: function() {
-            var value = this.$('.quest-edit').val();
-            if (!value) {
-                return;
+        edit: function (e) {
+            if (this.validateForm() && e.which == 13) {
+                this.closeEdit(true);
             }
-
-            var tagline = this.$('.quest-big-tags-input').val();
-            if (!this.model.validateTagline(tagline)) {
-                return;
+            else if (e.which == 27) {
+                this.closeEdit(false);
             }
+        },
 
-            var params = {
-                name: value,
-                tags: this.model.tagline2tags(tagline)
-            };
-            this.model.save(params);
+        closeEdit: function(save) {
+
+            if (save) {
+                // form is validated already by edit() method
+                var value = this.$('.quest-edit').val();
+                var tagline = this.$('.quest-big-tags-input').val();
+
+                this.model.save({
+                    name: value,
+                    tags: this.model.tagline2tags(tagline)
+                });
+            }
 
             this.$('.quest-edit').hide();
             this.$('.quest-big-labels .quest-big-tags-edit').hide();

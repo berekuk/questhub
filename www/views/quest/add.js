@@ -1,7 +1,8 @@
 define([
     'underscore', 'jquery',
     'views/proto/base',
-    'text!templates/quest-add.html'
+    'text!templates/quest-add.html',
+    'bootstrap'
 ], function (_, $, Base, html) {
     return Base.extend({
         template: _.template(html),
@@ -36,12 +37,29 @@ define([
                 this.disable();
             }
 
+
+            var qt = this.$('.quest-tags-edit');
             var tagLine = this.$('[name=tags]').val();
             if (this.collection.model.prototype.validateTagline(tagLine)) {
-                this.$('.quest-tags-edit').removeClass('error');
+                qt.removeClass('error');
+                qt.find('input').tooltip('hide');
             }
             else {
-                this.$('.quest-tags-edit').addClass('error');
+                if (!qt.hasClass('error')) {
+                    qt.addClass('error');
+                    console.log('adding error class');
+
+                    // .tooltip() loses focus for some reason, so we have to save it and restore
+                    //
+                    // Note that animation for this tooltip is disabled, to avoid race conditions.
+                    // I'm not sure how to fix them...
+                    // http://ricostacruz.com/backbone-patterns/#animation_buffer talks about animation buffers,
+                    // but I don't know how to integrate it with bootstrap-tooltip.js code - it doesn't accept any "onShown" callback.
+                    var oldFocus = $(':focus');
+                    qt.find('input').tooltip('show');
+                    $(oldFocus).focus();
+                }
+
                 this.disable();
             }
         },
@@ -132,6 +150,6 @@ define([
         onSuccess: function (model) {
             this.collection.add(model, { prepend: true });
             this.$('#addQuest').modal('hide');
-        },
+        }
     });
 });
