@@ -127,6 +127,20 @@ sub start_instance {
     INFO "New ssh host key obtained";
 }
 
+sub check_local_repo {
+    my $git_branch = qx(git rev-parse --abbrev-ref HEAD);
+    chomp $git_branch;
+    unless ($git_branch eq 'master') {
+        die "Error: you should be on master branch to use --magic mode.\n";
+    }
+
+    my $git_status = qx(git status --short);
+    chomp $git_status;
+    if ($git_status) {
+        die "You've got some uncommited files:\n$git_status\n";
+    }
+}
+
 sub main {
     STDOUT->autoflush(1);
 
@@ -145,17 +159,17 @@ sub main {
     $IP = $INSTANCES{$name} or die "Unknown instance '$name'";
 
     if ($magic) {
-        my $git_branch = qx(git rev-parse --abbrev-ref HEAD);
-        chomp $git_branch;
-        unless ($git_branch eq 'master') {
-            die "Error: you should be on master branch to use --magic mode.\n";
-        }
-
+        check_local_repo();
+        system('./build_static.pl');
         my $git_status = qx(git status --short);
-        chomp $git_status;
         if ($git_status) {
-            die "You've got some uncommited files:\n$git_status\n";
+            system('git add www-build');
+            system("git commit -m 'rebuild static");
+            check_local_repo();
+            system('git push origin master');
         }
+        # TODO - run frontend and backend tests
+        # TODO - compare the local git revision with remote and do nothing if they're equal
     }
 
     unless (-e "deploy/roles/$name.rb") {
