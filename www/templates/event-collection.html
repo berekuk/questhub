@@ -1,28 +1,4 @@
-<!-- events list -->
-<div class="row-fluid events-list hide">
-  <div class="span3">
-    <div class="well well-small">
-      <p>
-      Everything that happens goes in here.
-      <p>
-      <a href="/api/event/atom<%= types ? '?types=' + types.join(',') : '' %>" class="btn btn-warning"><i class="icon-rss"></i> RSS</a>
-      </p>
-    </div>
-    <div>
-      <p>
-      Filter:
-      </p>
-      <ul class="nav nav-pills nav-filter">
-      <% _.each( filterList, function(i) { %>
-      <li class="filter<%= _.contains(types, i.value) ? ' active' : '' %>" data-type="<%= i.value %>"><a href="#">
-          <%= i.description %>
-      </a></li>
-      <% }); %>
-      </ul>
-    </div>
-  </div>
-  <div class="span9">
-    <button class="show-more btn btn-primary">Show more</button>
-    <span class="progress-spin"></span>
-  </div>
+<div class="events-list hide">
+  <button class="show-more btn btn-primary">Show more</button>
+  <span class="progress-spin"></span>
 </div>
