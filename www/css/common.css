@@ -258,6 +258,10 @@ div.quest-big-unclaimed {
     text-align: center;
 }
 
+ul.nav-filter {
+    margin-bottom: 0px; /* accordion around it sets enough padding */
+}
+
 ul.nav-filter li {
     display: block;
     float: none;
