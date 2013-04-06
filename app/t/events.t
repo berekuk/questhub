@@ -54,17 +54,17 @@ sub list :Tests {
 }
 
 sub filter_list :Tests {
-    db->events->add({ object => 'NEW_QUEST', object_type => 'quest', action => 'open' });
+    db->events->add({ object => 'NEW_QUEST', object_type => 'quest', action => 'add' });
     db->events->add({ object => 'REOPEN_QUEST', object_type => 'quest', action => 'reopen' });
     db->events->add({ object => 'OLD_QUEST', object_type => 'comment', action => 'add' });
 
     # Want add-comment.
-    my $list = http_json GET => '/api/event?types=add-comment,open-quest';
+    my $list = http_json GET => '/api/event?types=add-comment,reopen-quest';
     cmp_deeply
         $list,
         [
             { object => 'OLD_QUEST', object_type => 'comment', action => 'add' , _id => re('^\S+$'), ts => re('^\d+$') },
-            { object => 'NEW_QUEST', object_type => 'quest', action => 'open' , _id => re('^\S+$'), ts => re('^\d+$') },
+            { object => 'REOPEN_QUEST', object_type => 'quest', action => 'reopen' , _id => re('^\S+$'), ts => re('^\d+$') },
         ]
 }
 

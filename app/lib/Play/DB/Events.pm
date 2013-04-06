@@ -97,21 +97,20 @@ sub _build_search_opt {
 
     return {} unless $types;
 
-    my $res = {
-        action => { '$in' => [] },
-        object_type => { '$in' => [] },
-    };
+    my $filter = [];
 
     my @opt = split( /,/, $types );
 
     foreach( @opt ) {
         my ( $action, $obj_type ) = split( /-/, $_ );
 
-        push( $res->{action}->{'$in'}, $action );
-        push( $res->{object_type}->{'$in'}, $obj_type);
+        push @$filter, {
+            action => $action,
+            object_type => $obj_type,
+        };
     }
 
-    return $res;
+    return { '$or' => $filter };
 }
 
 1;
