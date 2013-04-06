@@ -11,8 +11,8 @@
   </div>
 
   <div class="quest-big-labels">
-    <span class="muted quest-big-tags-edit" style="display: none">
-      Tags: <input class="quest-big-tags-input" type="text">
+    <span class="muted quest-big-tags-edit control-group" style="display: none">
+      Tags: <input class="quest-big-tags-input" type="text" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
     </span>
     <%= partial.quest_labels(obj) %>
   </div>
@@ -20,7 +20,9 @@
   <h2>
     <span class="quest-title"><%- name %></span>
     <% if (my) { %>
-      <input class="quest-edit" type="text" value="<%- name %>" style="display: none">
+      <span class="control-group">
+        <input class="quest-edit" type="text" style="display: none">
+      </span>
     <% } %>
   </h2>
 
