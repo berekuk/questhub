@@ -4,30 +4,37 @@
   </script>
 
   <script type="text/template" class="add-quest">
+    <i class="icon-plus"></i>
     <%= partial.user({ login: object.user }) %> started a new quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
   </script>
 
   <script type="text/template" class="close-quest">
+    <i class="icon-check"></i>
     <%= partial.user({ login: object.user }) %> completed a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
   </script>
 
   <script type="text/template" class="reopen-quest">
+    <i class="icon-backward"></i>
     <%= partial.user({ login: object.user }) %> reopened a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
   </script>
 
   <script type="text/template" class="abandon-quest">
+    <i class="icon-eject"></i>
     <%= partial.user({ login: object.user }) %> abandoned a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
   </script>
 
   <script type="text/template" class="resurrect-quest">
+    <i class="icon-play"></i>
     <%= partial.user({ login: object.user }) %> resurrected a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
   </script>
 
   <script type="text/template" class="add-user">
+    <i class="icon-user"></i>
     <%= partial.user({ login: object.login }) %> joins <%= partial.settings.service_name %>!
   </script>
 
   <script type="text/template" class="add-comment">
+    <i class="icon-comment"></i>
     <%= partial.user({ login: object.author }) %>
     commented on
     <% if (object.quest.team && object.quest.team.length > 0) { %>
