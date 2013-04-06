@@ -110,7 +110,7 @@ define([
                 });
             });
 
-            describe('after title is edited', function () {
+            describe('if enter is pressed', function () {
 
                 var view;
 
@@ -126,8 +126,95 @@ define([
                     view.$('.quest-edit').trigger(e);
                 });
 
-                it('title is hidden', function () {
+                it('title is visible', function () {
+                    expect(view.$el.find('h2 .quest-title')).not.toHaveCss({ display: 'none' });
+                });
+
+                it('model is saved', function () {
                     expect(view.model.save).toHaveBeenCalledWith({ 'name': 'Mushroom! Mushroom!', tags: ['feature'] });
+                });
+            });
+
+            describe('if enter is pressed on invalid data', function () {
+
+                var view;
+
+                beforeEach(function () {
+                    view = createView();
+                    view.$('.edit').click();
+                    spyOn(view.model, 'save');
+
+                    view.$('.quest-big-tags-input').val('a,,,,,,,,b');
+
+                    var e = $.Event('keyup');
+                    e.which = 13; // enter
+                    view.$('.quest-edit').trigger(e);
+                });
+
+                it('title is hidden', function () {
+                    expect(view.$el.find('h2 .quest-title')).toHaveCss({ display: 'none' });
+                });
+
+                it('model is not saved', function () {
+                    expect(view.model.save).not.toHaveBeenCalled();
+                });
+            });
+
+            describe('if escape is pressed', function () {
+
+                var view;
+
+                beforeEach(function () {
+                    view = createView();
+                    view.$('.edit').click();
+                    spyOn(view.model, 'save');
+
+                    view.$('.quest-edit').val('Mushroom! Mushroom!');
+
+                    var e = $.Event('keyup');
+                    e.which = 27; // escape
+                    view.$('.quest-edit').trigger(e);
+                });
+
+                it('title is visible', function () {
+                    expect(view.$el.find('h2 .quest-title')).not.toHaveCss({ display: 'none' });
+                });
+
+                it('model is not saved', function () {
+                    expect(view.model.save).not.toHaveBeenCalled();
+                });
+
+                it('title is not changed', function () {
+                    expect(view.$el.find('h2 .quest-title').text()).toEqual('Badger Badger');
+                });
+            });
+
+            describe('if escape is pressed on invalid data', function () {
+
+                var view;
+
+                beforeEach(function () {
+                    view = createView();
+                    view.$('.edit').click();
+                    spyOn(view.model, 'save');
+
+                    view.$('.quest-big-tags-input').val('a,,,,,,,,b');
+
+                    var e = $.Event('keyup');
+                    e.which = 27; // escape
+                    view.$('.quest-edit').trigger(e);
+                });
+
+                it('title is visible', function () {
+                    expect(view.$el.find('h2 .quest-title')).not.toHaveCss({ display: 'none' });
+                });
+
+                it('model is not saved', function () {
+                    expect(view.model.save).not.toHaveBeenCalled();
+                });
+
+                it('title is not changed', function () {
+                    expect(view.$el.find('h2 .quest-title').text()).toEqual('Badger Badger');
                 });
             });
         });
