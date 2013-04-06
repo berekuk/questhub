@@ -166,8 +166,8 @@ sub main {
             system('git add www-build');
             system("git commit -m 'rebuild static");
             check_local_repo();
-            system('git push origin master');
         }
+        system('git push origin master');
         # TODO - run frontend and backend tests
         # TODO - compare the local git revision with remote and do nothing if they're equal
     }
