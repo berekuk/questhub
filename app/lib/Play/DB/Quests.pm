@@ -154,6 +154,7 @@ sub add {
 
     if ($params->{tags}) {
         die "Tags should be arrayref" unless ref($params->{tags}) eq 'ARRAY';
+        $params->{tags} = [ sort @{ $params->{tags} } ];
     }
 
     $params->{author} = $params->{user};
@@ -193,6 +194,10 @@ sub update {
     my $quest = $self->get($id);
     unless ($quest->{user} eq $user) {
         die "access denied";
+    }
+
+    if ($params->{tags}) {
+        $params->{tags} = [ sort @{ $params->{tags} } ];
     }
 
     my $action = '';
