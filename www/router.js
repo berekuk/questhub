@@ -10,12 +10,12 @@ define([
     'views/explore',
     'views/home',
     'models/event-collection',
-    'views/event/collection',
+    'views/news-feed',
     'views/quest/add',
     'views/about',
     'views/register',
     'views/confirm-email'
-], function (Backbone, currentUser, Dashboard, QuestPage, QuestModel, UserCollectionModel, UserCollection, AnotherUserModel, Explore, Home, EventCollectionModel, EventCollection, QuestAdd, About, Register, ConfirmEmail) {
+], function (Backbone, currentUser, Dashboard, QuestPage, QuestModel, UserCollectionModel, UserCollection, AnotherUserModel, Explore, Home, EventCollectionModel, NewsFeed, QuestAdd, About, Register, ConfirmEmail) {
     return Backbone.Router.extend({
         routes: {
             "": "dashboard",
@@ -137,12 +137,13 @@ define([
                 'limit': 100,
                 'types': types
             });
-            var view = new EventCollection({
+            var view = new NewsFeed({
                 collection: collection,
                 types: types
             });
 
             collection.fetch();
+            view.render();
 
             this.appView.setPageView(view);
             this.appView.setActiveMenuItem('event-list');
