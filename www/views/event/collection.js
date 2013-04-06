@@ -3,7 +3,7 @@ define([
     'underscore',
     'views/proto/paged-collection',
     'views/event/box',
-    'text!templates/event-collection.html',
+    'text!templates/news-feed.html',
     'bootstrap'
 ], function ($, _, PagedCollection, EventBox, html) {
     return PagedCollection.extend({
