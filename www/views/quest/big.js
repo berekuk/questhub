@@ -90,11 +90,20 @@ define([
                 ok = false;
             }
 
-            if (this.model.validateTagline(this.$('.quest-big-tags-input').val())) {
-                this.$('.quest-big-tags-input').parent().removeClass('error');
+              var cg = this.$('.quest-big-tags-input').parent(); // control-group
+            if (this.model.validateTagline(cg.find('input').val())) {
+                cg.removeClass('error');
+                cg.find('input').tooltip('hide');
             }
             else {
-                this.$('.quest-big-tags-input').parent().addClass('error');
+                if (!cg.hasClass('error')) {
+                    cg.addClass('error');
+
+                    // copy-pasted from views/quest/add, TODO - refactor
+                    var oldFocus = $(':focus');
+                    cg.find('input').tooltip('show');
+                    $(oldFocus).focus();
+                }
                 ok = false;
             }
             return ok;

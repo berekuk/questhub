@@ -47,7 +47,6 @@ define([
             else {
                 if (!qt.hasClass('error')) {
                     qt.addClass('error');
-                    console.log('adding error class');
 
                     // .tooltip() loses focus for some reason, so we have to save it and restore
                     //
