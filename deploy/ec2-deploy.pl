@@ -9,6 +9,7 @@ ec2-deploy.pl - deploy play-perl.org code to Amazon EC2
   ec2-deploy.pl [--create] NAME
     options:
       --create      Create the new instance
+      --magic       Rebuild static and push code (can be dangerously, but automates my usual workflow)
 
 =head1 DESCRIPTION
 
