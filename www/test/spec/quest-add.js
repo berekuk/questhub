@@ -50,7 +50,7 @@ define([
 
                 view.$('.btn-primary').click();
 
-                expect($.ajax.mostRecentCall.args[0].data).toContain('["foo","bar","baz"]');
+                expect($.ajax.mostRecentCall.args[0].data).toContain('["bar","baz","foo"]');
             });
         });
     });
