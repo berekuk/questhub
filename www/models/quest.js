@@ -89,6 +89,12 @@ define([
             var params = this.toJSON();
             params.ext_status = this.extStatus();
             params.reward = this.reward();
+            if (params.tags) {
+                params.tags = params.tags.sort();
+            }
+            else {
+                params.tags = [];
+            }
             return params;
         },
 
@@ -102,7 +108,7 @@ define([
             tags = _.filter(tags, function (tag) {
                 return (tag != '');
             });
-            return tags;
+            return tags.sort();
         },
 
         validateTagline: function (tagLine) {
