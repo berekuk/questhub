@@ -86,7 +86,9 @@ sub list {
         offset => { type => SCALAR, regex => qr/^\d+$/, default => 0 },
     });
 
-    my @users = $self->collection->find()->all; # fetch everyone
+    # fetch everyone
+    # note that sorting is always by _id, see the explanation and manual sorting below
+    my @users = $self->collection->find()->sort({ '_id' => 1 })->all;
 
     $self->_prepare_user($_) for @users;
 
