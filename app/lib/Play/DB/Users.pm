@@ -39,6 +39,7 @@ sub _prepare_user {
     my ($user) = @_;
     $user->{_id} = $user->{_id}->to_string;
     $user->{points} ||= 0;
+    delete $user->{settings};
     return $user;
 }
 
