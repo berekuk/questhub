@@ -256,11 +256,15 @@ after 'like' => sub {
     my ($id, $user) = @_;
 
     my $quest = $self->get($id);
+
+    return unless $quest->{team} and scalar @{ $quest->{team} };
+    my @team = @{ $quest->{team} };
+
     if ($quest->{status} eq 'closed') {
-        db->users->add_points($quest->{user}, 1);
+        db->users->add_points($_, 1) for @team;
     }
 
-    if (my $email = db->users->get_email($quest->{user}, 'notify_likes')) {
+    if (my $email = db->users->get_email($team[0], 'notify_likes')) {
         my $email_body = qq[
             <p>
             <a href="http://].setting('hostport').qq[/player/$user">$user</a> likes your quest <a href="http://].setting('hostport').qq[/quest/$quest->{_id}">$quest->{name}</a>!<br>

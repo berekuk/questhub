@@ -10,7 +10,7 @@ sub setup :Tests(setup) {
 
 sub add_comment :Tests {
 
-    Dancer::session login => 'blah';
+    http_json GET => "/api/fakeuser/blah";
 
     my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'foo', status => 'open' } };
     my $quest_id = $quest_result->{_id};
@@ -34,7 +34,7 @@ sub add_comment :Tests {
 
 sub remove :Tests {
 
-    Dancer::session login => 'blah';
+    http_json GET => "/api/fakeuser/blah";
 
     my $quest_result = http_json POST => '/api/quest', { params => { name => 'foo', status => 'open' } };
     my $quest_id = $quest_result->{_id};
@@ -42,7 +42,8 @@ sub remove :Tests {
     my $comment = http_json POST => "/api/quest/$quest_id/comment", { params => { body => "I'm just a little comment!" } };
     my $second_comment = http_json POST => "/api/quest/$quest_id/comment", { params => { body => "another one" } };
 
-    Dancer::session login => 'other-user';
+    http_json GET => "/api/fakeuser/other-user";
+
     my $response = dancer_response DELETE => "/api/quest/$quest_id/comment/$comment->{_id}";
     is $response->status, 500, "can't delete another user's comment";
     like decode_json($response->content)->{error}, qr/access denied/;
@@ -60,7 +61,7 @@ sub remove :Tests {
 }
 
 sub body_html :Tests {
-    Dancer::session login => 'blah';
+    http_json GET => "/api/fakeuser/blah";
 
     my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'foo', status => 'open' } };
     my $quest_id = $quest_result->{_id};
@@ -76,7 +77,7 @@ sub body_html :Tests {
 }
 
 sub comment_events :Tests {
-    Dancer::session login => 'blah';
+    http_json GET => "/api/fakeuser/blah";
 
     my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'foo', status => 'open' } };
     my $quest_id = $quest_result->{_id};
@@ -111,7 +112,7 @@ sub comment_events :Tests {
 
 sub perl_get_one :Tests {
 
-    Dancer::session login => 'blah';
+    http_json GET => "/api/fakeuser/blah";
 
     my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'fff', status => 'open' } };
     my $quest_id = $quest_result->{_id};
@@ -123,7 +124,8 @@ sub perl_get_one :Tests {
 }
 
 sub edit_comment :Tests {
-    Dancer::session login => 'blah';
+
+    http_json GET => "/api/fakeuser/blah";
 
     my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'foo', status => 'open' } };
     my $quest_id = $quest_result->{_id};
@@ -141,7 +143,6 @@ sub email_comment :Tests {
     # 'foo' posts a quest, 'bar' comments on it
 
     http_json GET => "/api/fakeuser/foo";
-    Dancer::session login => 'foo';
 
     register_email 'foo' => { email => 'test@example.com', notify_comments => 1, notify_likes => 0 };
 
@@ -152,7 +153,6 @@ sub email_comment :Tests {
     is(Email::Sender::Simple->default_transport->delivery_count, 0, "self-comment does't send an email");
 
     http_json GET => "/api/fakeuser/bar";
-    Dancer::session login => 'bar';
     http_json POST => "/api/quest/$quest_id/comment", { params => { body => "Hello sweetie." } };
 
     my @deliveries = Email::Sender::Simple->default_transport->deliveries;
@@ -164,12 +164,13 @@ sub email_comment :Tests {
 }
 
 sub likes :Tests {
-    Dancer::session login => 'pink';
+    http_json GET => "/api/fakeuser/pink";
 
     my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => "I've got a little black book", status => 'open' } };
     my $quest_id = $quest_result->{_id};
 
-    Dancer::session login => 'floyd';
+    http_json GET => "/api/fakeuser/floyd";
+
     my $first_comment = http_json POST => "/api/quest/$quest_id/comment", { params => { body => 'Hello?' } };
     my $second_comment = http_json POST => "/api/quest/$quest_id/comment", { params => { body => 'Is there anybody out there?' } };
     my $comment_id = $second_comment->{_id};
@@ -182,7 +183,8 @@ sub likes :Tests {
     $response = dancer_response POST => "/api/quest/$quest_id/comment/$comment_id/like";
     is $response->status, 200, 'quest author is allowed to like comments on his quest';
 
-    Dancer::session login => 'worm';
+    http_json GET => "/api/fakeuser/worm";
+
     $response = dancer_response POST => "/api/quest/$quest_id/comment/$comment_id/like";
     is $response->status, 200, 'other (imaginary) people are allowed to like comments too';
 

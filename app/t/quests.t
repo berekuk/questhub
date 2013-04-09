@@ -33,6 +33,8 @@ sub setup :Tests(setup) {
         my $OID = db->quests->collection->insert( $quests_data->{$_} ); # MongoDB::OID
         $quests_data->{$_}->{_id} = $OID->to_string;
         $quests_data->{$_}->{ts} = $OID->get_time;
+
+        http_json GET => "/api/fakeuser/$quests_data->{$_}{user}";
     }
 }
 
@@ -362,7 +364,6 @@ sub cc :Tests {
 sub email_like :Tests {
 
     http_json GET => "/api/fakeuser/foo";
-    Dancer::session login => 'foo';
 
     register_email 'foo' => { email => 'test@example.com', notify_comments => 0, notify_likes => 1 };
 
@@ -371,7 +372,6 @@ sub email_like :Tests {
     } };
 
     http_json GET => "/api/fakeuser/bar";
-    Dancer::session login => 'bar';
 
     http_json POST => "/api/quest/$quest->{_id}/like";
 
@@ -396,7 +396,7 @@ sub email_like :Tests {
     } };
 
     http_json GET => "/api/fakeuser/bar2";
-    Dancer::session login => 'bar2';
+
     http_json POST => "/api/quest/$quest->{_id}/like";
 
     @deliveries = Email::Sender::Simple->default_transport->deliveries;
@@ -414,7 +414,6 @@ sub email_like :Tests {
 
 sub join_leave :Tests {
     http_json GET => "/api/fakeuser/foo";
-    Dancer::session login => 'foo';
 
     my $quest = http_json POST => '/api/quest', { params => {
         name => 'q1',
@@ -441,9 +440,10 @@ sub join_leave :Tests {
     cmp_deeply $list, [$got_quest], 'listing unclaimed=1 option';
 
     http_json POST => "/api/quest/$quest->{_id}/like";
+
     http_json GET => "/api/fakeuser/bar";
-    Dancer::session login => 'bar';
     http_json POST => "/api/quest/$quest->{_id}/like";
+
     Dancer::session login => 'foo';
 
     $got_quest = http_json GET => "/api/quest/$quest->{_id}";
