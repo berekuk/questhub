@@ -57,7 +57,7 @@ sub self_like_quest_internal :Tests {
 }
 
 sub like_quest :Tests {
-    Dancer::session login => 'blah';
+    http_json GET => "/api/fakeuser/blah";
     my $result = http_json POST => '/api/quest', { params => {
         name => 'foo',
     } };
@@ -68,14 +68,13 @@ sub like_quest :Tests {
     is $response->status, 500, 'self-like is forbidden';
     like $response->content, qr/unable to like your own quest/;
 
-    Dancer::session login => 'blah2';
+    http_json GET => "/api/fakeuser/blah2";
     http_json POST => "/api/quest/$id/like";
 
-    Dancer::session login => 'blah3';
+    http_json GET => "/api/fakeuser/blah3";
     http_json POST => "/api/quest/$id/like";
 
     # double like
-    Dancer::session login => 'blah3';
     my $response = dancer_response POST => "/api/quest/$id/like";
     is $response->status, 500, 'double like is forbidden';
 

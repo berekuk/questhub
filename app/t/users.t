@@ -127,7 +127,6 @@ sub users_list :Tests {
     ];
 }
 
-
 sub users_list_limit_offset :Tests {
     my $self = shift;
 

@@ -4,6 +4,8 @@ use 5.010;
 
 use Moo;
 
+use Play::Mongo;
+
 use parent qw(Exporter);
 our @EXPORT_OK = qw( db );
 
@@ -35,6 +37,20 @@ sub comments {
 sub notifications {
     require Play::DB::Notifications;
     return Play::DB::Notifications->new;
+}
+
+sub ensure_indices {
+    my $users_collection = Play::Mongo->db->get_collection('users');
+    $users_collection->drop_indexes; # yeah! (FIXME)
+    $users_collection->ensure_index({ 'login' => 1 }, { unique => 1 });
+    $users_collection->ensure_index({ 'twitter.login' => 1 }, { unique => 1, sparse => 1 });
+    $users_collection->ensure_index({ 'settings.email' => 1 }, { unique => 1, sparse => 1 });
+
+    my $quests_collection = Play::Mongo->db->get_collection('quests');
+    $quests_collection->drop_indexes;
+    $quests_collection->ensure_index({ 'tags' => 1 });
+    $quests_collection->ensure_index({ 'user' => 1 }); # deprecated
+    $quests_collection->ensure_index({ 'team' => 1 });
 }
 
 1;

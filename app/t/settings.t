@@ -83,7 +83,6 @@ sub _email_to_secret {
 sub email_confirmation :Tests {
     # TODO - check how email confirmation code works with the real /api/register
     http_json GET => "/api/fakeuser/foo";
-    Dancer::session login => 'foo';
 
     http_json PUT => '/api/current_user/settings', { params => {
         email => 'someone@somewhere.com',
@@ -102,7 +101,7 @@ sub email_confirmation :Tests {
 
     my $response = dancer_response POST => '/api/register/confirm_email', { params => { login => 'bar', secret => 'iddqd' } };
     is $response->status, 500;
-    like $response->content, qr/didn't expect email confirmation/, 'no confirmation for non-existing user';
+    like $response->content, qr/User 'bar' not found/, 'no confirmation for non-existing user';
 
     $response = dancer_response POST => '/api/register/confirm_email', { params => { login => 'foo', secret => 'iddqd' } };
     is $response->status, 500;
