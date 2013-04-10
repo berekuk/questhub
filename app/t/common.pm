@@ -62,6 +62,9 @@ sub import {
     require Play; Play->import::into($target);
     require Dancer::Test; Dancer::Test->import::into($target);
 
+    use Play::DB qw(db);
+    db->ensure_indices();
+
     __PACKAGE__->export_to_level(1, @_);
 }
 

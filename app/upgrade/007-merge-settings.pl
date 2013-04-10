@@ -24,6 +24,5 @@ for my $settings (@settings) {
     );
 }
 
-$users->ensure_index({ 'login' => 1 }, { unique => 1 });
-$users->ensure_index({ 'twitter.login' => 1 }, { unique => 1 });
-$users->ensure_index({ 'settings.email' => 1 }, { unique => 1 });
+use Play::DB qw(db);
+db->ensure_indices();
