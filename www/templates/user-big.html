@@ -1,8 +1,9 @@
 <div class="well">
-  <% if (obj.twitter) {
-      if (twitter.screen_name) { %>
-    <img src="http://api.twitter.com/1/users/profile_image?screen_name=<%= twitter.screen_name %>&size=bigger" width=73 height=73/>
-  <% } } %>
+  <% if (obj.twitter && obj.twitter.screen_name) { %>
+    <img src="http://api.twitter.com/1/users/profile_image?screen_name=<%= twitter.screen_name %>&size=bigger" width="73" height="73"/>
+  <% } else if (obj.image) { %>
+    <img src="<%- image %>?s=73" width="73" height="73"/>
+  <% } %>
   <h4>
     <%= login %>
     <% if (my) { %>
