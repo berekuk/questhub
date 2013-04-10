@@ -56,7 +56,7 @@ sub add {
     my $self = shift;
     my ($params) = validate_pos(@_, { type => HASHREF });
 
-    my $id = $self->collection->insert($params);
+    my $id = $self->collection->insert($params, { safe => 1 });
 
     db->events->add({
         object_type => 'user',
