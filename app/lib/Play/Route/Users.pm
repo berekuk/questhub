@@ -227,7 +227,7 @@ if ($ENV{DEV_MODE}) {
             $user->{twitter} = { screen_name => $login };
         }
 
-        db->users->add($user);
+        db->users->get_by_login($login) or db->users->add($user);
         return { status => 'ok', user => $user };
     };
 }
