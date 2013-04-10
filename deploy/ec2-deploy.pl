@@ -165,7 +165,7 @@ sub main {
         my $git_status = qx(git status --short);
         if ($git_status) {
             system('git add www-build');
-            system("git commit -m 'rebuild static");
+            system("git commit -m 'rebuild static'");
             check_local_repo();
         }
         system('git push origin master');
