@@ -5,6 +5,8 @@ use Moo;
 use Params::Validate qw(:all);
 use Dancer qw(info setting);
 
+use Digest::MD5 qw(md5_hex);
+
 use Play::Mongo;
 use Play::DB qw(db);
 
@@ -31,6 +33,10 @@ sub _prepare_user {
     my ($user) = @_;
     $user->{_id} = $user->{_id}->to_string;
     $user->{points} ||= 0;
+
+    if (not $user->{twitter}{screen_name} and $user->{settings}{email}) {
+        $user->{image} = 'http://www.gravatar.com/avatar/'.md5_hex(lc($user->{settings}{email}));
+    }
     delete $user->{settings};
     return $user;
 }
