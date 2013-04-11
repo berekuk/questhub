@@ -1,6 +1,8 @@
 <td>
   <% if (obj.twitter && obj.twitter.screen_name) { %>
     <img class="avatar avatar-mini" src="http://api.twitter.com/1/users/profile_image?screen_name=<%= obj.twitter.screen_name %>&size=mini"/>
+  <% } else if (obj.image) { %>
+    <img src="<%- image %>?s=24" width="24" height="24"/>
   <% } %>
   <a href="/player/<%= login %>"><%= login %></a>
   <span class="badge badge-info"><%= points %></span>

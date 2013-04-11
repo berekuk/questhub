@@ -7,6 +7,6 @@ vagrant ssh -c 'cd /play/app && ./clear_mongo.sh'
 vagrant ssh -c 'cd /play && mongorestore'
 
 # to avoid accidentally sending emails to users while debugging
-vagrant ssh -c '(echo '\''use play'\''; echo '\''db.user_settings.drop()'\'') | mongo'
+vagrant ssh -c '(echo '\''use play'\''; echo '\''db.users.update({}, {"$unset": { "settings" : 1 } }, false, true)'\'') | mongo'
 
 vagrant ssh -c 'sudo ubic try-restart -f'

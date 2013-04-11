@@ -5,18 +5,12 @@ use Moo;
 use Params::Validate qw(:all);
 use Dancer qw(info setting);
 
+use Digest::MD5 qw(md5_hex);
+
 use Play::Mongo;
 use Play::DB qw(db);
 
 with 'Play::DB::Role::Common';
-
-has 'settings_collection' => (
-    is => 'ro',
-    lazy => 1,
-    default => sub {
-        return Play::Mongo->db->get_collection('user_settings');
-    },
-);
 
 sub get_by_twitter_login {
     my $self = shift;
@@ -29,9 +23,9 @@ sub get_by_email {
     my $self = shift;
     my ($email) = validate_pos(@_, { type => SCALAR });
 
-    my $settings = $self->settings_collection->find_one({ email => $email });
-    return unless $settings;
-    return $settings->{user};
+    my $user = $self->collection->find_one({ 'settings.email' => $email });
+    return unless $user;
+    return $user->{login};
 }
 
 sub _prepare_user {
@@ -39,6 +33,11 @@ sub _prepare_user {
     my ($user) = @_;
     $user->{_id} = $user->{_id}->to_string;
     $user->{points} ||= 0;
+
+    if (not $user->{twitter}{screen_name} and $user->{settings}{email}) {
+        $user->{image} = 'http://www.gravatar.com/avatar/'.md5_hex(lc($user->{settings}{email}));
+    }
+    delete $user->{settings};
     return $user;
 }
 
@@ -63,7 +62,7 @@ sub add {
     my $self = shift;
     my ($params) = validate_pos(@_, { type => HASHREF });
 
-    my $id = $self->collection->insert($params);
+    my $id = $self->collection->insert($params, { safe => 1 });
 
     db->events->add({
         object_type => 'user',
@@ -85,7 +84,9 @@ sub list {
         offset => { type => SCALAR, regex => qr/^\d+$/, default => 0 },
     });
 
-    my @users = $self->collection->find()->all; # fetch everyone
+    # fetch everyone
+    # note that sorting is always by _id, see the explanation and manual sorting below
+    my @users = $self->collection->find()->sort({ '_id' => 1 })->all;
 
     $self->_prepare_user($_) for @users;
 
@@ -138,9 +139,10 @@ sub add_points {
     my $id = MongoDB::OID->new(value => delete $user->{_id});
     $self->collection->update(
         { _id => $id },
-        { %$user, points => $points },
+        { '$set' => { points => $points } },
         { safe => 1 }
     );
+    return;
 }
 
 # some settings can't be set by the client
@@ -157,9 +159,10 @@ sub get_settings {
     my $self = shift;
     my ($login, $secret_flag) = validate_pos(@_, { type => SCALAR }, { type => BOOLEAN, default => 0 });
 
-    my $settings = $self->settings_collection->find_one({ user => $login });
-    $settings ||= {};
-    delete $settings->{$_} for '_id', 'user'; # nobody cares about settings _id
+    my $user = $self->collection->find_one({ login => $login });
+    die "User '$login' not found" unless $user;
+
+    my $settings = $user->{settings} || {};
 
     unless ($secret_flag) {
         delete $settings->{$_} for secret_settings;
@@ -172,7 +175,7 @@ sub confirm_email {
     my $self = shift;
     my ($login, $secret) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
 
-    my $settings = $self->settings_collection->find_one({ user => $login });
+    my $settings = $self->get_settings($login, 1);
     unless ($settings->{email_confirmation_secret}) {
         die "didn't expect email confirmation for $login";
     }
@@ -184,9 +187,9 @@ sub confirm_email {
     # already confirmed, let's stop early and avoid spamming a user with duplicate emails
     return if $settings->{email_confirmed};
 
-    $self->settings_collection->update(
-        { user => $login },
-        { '$set' =>  { 'email_confirmed' => 1 } },
+    $self->collection->update(
+        { login => $login },
+        { '$set' =>  { 'settings.email_confirmed' => 1 } },
         { safe => 1 }
     );
 
@@ -241,9 +244,9 @@ sub resend_email_confirmation {
         die "there's no email in $login\'s settings";
     }
     $settings->{email_confirmation_secret} = $self->_send_email_confirmation($login, $settings->{email});
-    $self->settings_collection->update(
-        { user => $login },
-        { %$settings, user => $login },
+    $self->collection->update(
+        { login => $login },
+        { '$set' => { settings => $settings } },
         { safe => 1, upsert => 1 }
     );
 }
@@ -254,6 +257,7 @@ sub set_settings {
 
     # some settings can't be set by the client
     delete $settings->{$_} for secret_settings, protected_settings;
+    delete $settings->{user}; # just to avoid the confusion, nobody uses this field anyway (since we merged user_settings and users collections)
 
     if ($persona) {
         $settings->{email_confirmed} = 'persona';
@@ -276,9 +280,9 @@ sub set_settings {
         }
     }
 
-    $self->settings_collection->update(
-        { user => $login },
-        { %$settings, user => $login },
+    $self->collection->update(
+        { login => $login },
+        { '$set' => { settings => $settings } },
         { safe => 1, upsert => 1 }
     );
     return;
