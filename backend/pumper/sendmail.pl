@@ -4,7 +4,8 @@ package bin::pumper::sendmail;
 use lib '/play/backend/lib';
 
 use Moo;
-with 'Moo::Runnable';
+use MooX::Options;
+with 'Moo::Runnable::Looper';
 
 use Lock::File 'lockfile';
 use Log::Any '$log';
@@ -16,7 +17,7 @@ use Email::Simple;
 use Email::Sender::Simple qw(sendmail);
 use Encode qw(encode_utf8);
 
-sub run {
+sub run_once {
     my $lock;
     unless (setting('test')) {
         $lock = lockfile('/data/pumper/sendmail.lock', { blocking => 0 }) or return;

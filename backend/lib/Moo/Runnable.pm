@@ -1,6 +1,7 @@
 package Moo::Runnable;
 
 use Moo::Role;
+use MooX::Options;
 
 requires 'run';
 
@@ -15,7 +16,7 @@ sub run_script {
         require Log::Any::Adapter;
         Log::Any::Adapter->import('File', '/dev/stdout');
 
-        $class->new->run;
+        $class->new_with_options->run;
     }
 }
 

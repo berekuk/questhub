@@ -16,7 +16,8 @@ use Play::Flux;
 use Log::Any::Test;
 use Log::Any qw($log);
 
-my $pumper = (require 'pumper/sendmail.pl')->new;
+my $pumper = require 'pumper/sendmail.pl';
+$pumper = $pumper->new;
 
 $pumper->run;
 $log->contains_ok(qr/0 emails sent/);
