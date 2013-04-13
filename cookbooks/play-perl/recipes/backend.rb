@@ -1,6 +1,7 @@
 cpan_module 'Flux::File'
-cpan_module 'Flux::Format'
+cpan_module 'Flux::Format::JSON'
 cpan_module 'Log::Any::Adapter'
+cpan_module 'MooX::Options'
 
 directory "/data/pumper"
 directory "/data/storage"
