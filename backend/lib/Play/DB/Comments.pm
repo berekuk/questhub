@@ -6,21 +6,12 @@ use Play::Mongo;
 use Play::DB qw(db);
 
 use Params::Validate qw(:all);
-use Text::Markdown qw(markdown);
 use Play::Config qw(setting);
 
 use Play::DB::Role::PushPull;
 with
     'Play::DB::Role::Common',
     PushPull(field => 'likes', except_field => 'author', push_method => 'like', pull_method => 'unlike');
-
-sub pp_markdown {
-    my ($body) = @_;
-    my $html = markdown($body);
-    $html =~ s{^<p>}{};
-    $html =~ s{</p>$}{};
-    return $html;
-}
 
 sub _prepare_comment {
     my $self = shift;
@@ -41,7 +32,6 @@ sub add {
 
     my $quest = db->quests->get($params{quest_id});
 
-
     db->events->add({
         object_type => 'comment',
         action => 'add',
@@ -53,26 +43,9 @@ sub add {
         },
     });
 
-    if ($params{author} ne $quest->{user}) {
-        my $email = db->users->get_email($quest->{user}, 'notify_comments');
-        if ($email) {
-            my $body_html = pp_markdown($params{body});
-            # TODO - quoting
-            # TODO - unsubscribe link
-            my $email_body = qq[
-                <p>
-                <a href="http://].setting('hostport').qq[/player/$params{author}">$params{author}</a> commented on your quest <a href="http://].setting('hostport').qq[/quest/$params{quest_id}">$quest->{name}</a>:
-                <hr>
-                </p>
-                <p>$body_html</p>
-            ];
-            db->events->email(
-                $email,
-                "$params{author} commented on '$quest->{name}'",
-                $email_body,
-            );
-        }
-    }
+    my $comments_queue = Play::Flux->comments;
+    $comments_queue->write(\%params);
+    $comments_queue->commit;
 
     return { _id => $id->to_string };
 }

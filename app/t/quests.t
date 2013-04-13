@@ -487,7 +487,6 @@ sub watch_unwatch :Tests {
 }
 
 sub email_watchers :Tests {
-    local $TODO = 'all watchers should receive emails when someone comments on a watched quest';
 
     http_json GET => "/api/fakeuser/foo";
     register_email('foo' => { email => "foo\@example.com", notify_comments => 1 });
@@ -502,9 +501,15 @@ sub email_watchers :Tests {
         register_email($user => { email => "$user\@example.com", notify_comments => 1 });
     }
 
-    http_json POST => '/api/quest/'.$quests_data->{1}{_id}.'/comment', { params => { body => 'hello to foo, bar and baz!' } };
+    http_json POST => '/api/quest/'.$quest->{_id}.'/comment', { params => { body => 'hello to foo, bar and baz!' } };
+
+    pumper('comments2email')->run;
     my @deliveries = process_email_queue();
     is scalar @deliveries, 3;
+
+    cmp_deeply
+        [ sort map { $_->{successes}[0] } @deliveries ],
+        [ sort map { "$_\@example.com" } qw( foo bar baz ) ];
 }
 
 __PACKAGE__->new->runtests;

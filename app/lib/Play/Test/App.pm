@@ -46,11 +46,10 @@ sub register_email {
 }
 
 sub process_email_queue {
-    state $email_pumper = (require '/play/backend/pumper/sendmail.pl')->new;
 
     Email::Sender::Simple->default_transport->clear_deliveries;
     my @t = Email::Sender::Simple->default_transport->deliveries;
-    $email_pumper->run;
+    Play::Test::pumper('sendmail')->run;
 
     my @deliveries = Email::Sender::Simple->default_transport->deliveries;
     return @deliveries;

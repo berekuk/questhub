@@ -9,18 +9,31 @@ use Flux::Storage::Memory;
 
 use Play::Config qw(setting);
 
-sub email {
-    state $result = do {
-        my $storage;
-        if (setting('test')) {
-            $storage = Flux::Storage::Memory->new;
-        }
-        else {
-            $storage = Flux::File->new('/data/storage/email/log');
-        }
+sub _storage {
+    my ($name) = @_;
 
-        Flux::Format::JSON->new->wrap($storage);
-    };
+    my $storage;
+    if (setting('test')) {
+        $storage = Flux::Storage::Memory->new;
+    }
+    else {
+        $storage = Flux::File->new("/data/storage/$name/log");
+    }
+
+    return Flux::Format::JSON->new->wrap($storage);
+}
+
+sub email {
+    state $result = _storage('email');
+    return $result;
+}
+
+sub emails {
+    return email();
+}
+
+sub comments {
+    state $result = _storage('comments');
     return $result;
 }
 

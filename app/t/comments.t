@@ -1,3 +1,5 @@
+use 5.010;
+
 use lib 'lib';
 use Play::Test::App;
 use parent qw(Test::Class);
@@ -19,15 +21,15 @@ sub add_comment :Tests {
 
     cmp_deeply
         $first,
-        { _id => re('^\S+$'), body_html => re('first') },
+        { _id => re('^\S+$') },
         'add comment result';
 
     my $list = http_json GET => "/api/quest/$quest_id/comment";
     cmp_deeply
         $list,
         [
-            { _id => $first->{_id}, ts => re('^\d+$'), body => 'first comment!', author => 'blah', quest_id => $quest_id, body_html => re('first') },
-            { _id => $second->{_id}, ts => re('^\d+$'), body => 'second comment!', author => 'blah', quest_id => $quest_id, body_html => re('second') },
+            { _id => $first->{_id}, ts => re('^\d+$'), body => 'first comment!', author => 'blah', quest_id => $quest_id },
+            { _id => $second->{_id}, ts => re('^\d+$'), body => 'second comment!', author => 'blah', quest_id => $quest_id },
         ]
 }
 
@@ -59,22 +61,6 @@ sub remove :Tests {
     like $comments->[0]->{body}, qr/another/, 'another comment still exists';
 }
 
-sub body_html :Tests {
-    http_json GET => "/api/fakeuser/blah";
-
-    my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'foo', status => 'open' } };
-    my $quest_id = $quest_result->{_id};
-
-    my $body = 'To **boldly** go where no man has gone before';
-
-    my $add_result = http_json POST => "/api/quest/$quest_id/comment", { params => { body => $body } };
-    like $add_result->{body_html}, qr{To <strong>boldly</strong> go};
-
-    my $comments = http_json GET => "/api/quest/$quest_id/comment";
-    like $comments->[0]{body_html}, qr{To <strong>boldly</strong> go};
-    is $comments->[0]{body}, $body;
-}
-
 sub comment_events :Tests {
     http_json GET => "/api/fakeuser/blah";
 
@@ -94,7 +80,6 @@ sub comment_events :Tests {
         object => {
             author => 'blah',
             body => 'cbody, **bold cbody**',
-            body_html => re('<strong>bold cbody</strong>'),
             quest => {
                 _id => $quest_id,
                 ts => re('^\d+'),
@@ -154,6 +139,7 @@ sub email_comment :Tests {
     http_json GET => "/api/fakeuser/bar";
     http_json POST => "/api/quest/$quest_id/comment", { params => { body => "Hello sweetie." } };
 
+    pumper('comments2email')->run;
     my @deliveries = process_email_queue();
     is scalar(@deliveries), 1, '1 email sent';
     cmp_deeply $deliveries[0]{envelope}, {

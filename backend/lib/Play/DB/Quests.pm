@@ -160,7 +160,7 @@ sub add {
     }
 
     $params->{author} = $params->{user};
-    my $id = $self->collection->insert($params);
+    my $id = $self->collection->insert($params, { safe => 1 });
 
     my $quest = { %$params, _id => $id };
     $self->_prepare_quest($quest);

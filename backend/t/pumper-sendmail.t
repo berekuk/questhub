@@ -1,19 +1,11 @@
 #!/usr/bin/perl
 
-use strict;
-use warnings;
-
 use lib 'lib';
-use Test::More;
+use Play::Test;
 
-BEGIN {
-    $ENV{PLAY_CONFIG_FILE} = '/play/backend/t/data/config.yml';
-    $ENV{EMAIL_SENDER_TRANSPORT} = 'Test';
-}
 use Email::Sender::Simple;
 use Play::Flux;
 
-use Log::Any::Test;
 use Log::Any qw($log);
 
 my $pumper = require 'pumper/sendmail.pl';
