@@ -1,13 +1,11 @@
 action :start do
   execute "start ubic service #{new_resource.name}" do
-    not_if "ubic status #{new_resource.name}"
     command "ubic start #{new_resource.name}"
   end
 end
 
 action :stop do
   execute "stop ubic service #{new_resource.name}" do
-    only_if "ubic status #{new_resource.name}"
     command "ubic stop #{new_resource.name}"
   end
 end
