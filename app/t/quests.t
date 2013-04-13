@@ -39,12 +39,6 @@ sub setup :Tests(setup) {
     }
 }
 
-sub perl_quest_list :Test(1) {
-    cmp_deeply
-        [ sort { $a->{_id} cmp $b->{_id} } @{ db->quests->list({}) } ],
-        [ map { { %$_, team => [$_->{user}] } } sort { $a->{_id} cmp $b->{_id} } values %$quests_data ];
-}
-
 sub quest_list :Tests {
     my $list = http_json GET => '/api/quest';
 
