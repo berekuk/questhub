@@ -23,7 +23,7 @@ sub main {
     }
 
     my $storage = Play::Flux->email;
-    my $in = $storage->in('/data/pumper/email/pos'); # FIXME - move from Flux::File to more advanced storage with named clients
+    my $in = $storage->in('/data/storage/email/pos'); # FIXME - move from Flux::File to more advanced storage with named clients
 
     my $processed = 0;
 
@@ -40,8 +40,8 @@ sub main {
             ],
             body => encode_utf8($body),
         );
+        $in->commit; # it's better to lose the email than to spam a user indefinitely
         sendmail($email);
-        $in->commit;
         $processed++;
     }
 
