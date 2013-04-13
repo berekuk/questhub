@@ -9,8 +9,10 @@ use Params::Validate qw(:all);
 use Text::Markdown qw(markdown);
 use Play::Config qw(setting);
 
-with 'Play::DB::Role::Common', 'Play::DB::Role::Likeable';
-sub _build_entity_owner_field { 'author' };
+use Play::DB::Role::PushPull;
+with
+    'Play::DB::Role::Common',
+    PushPull(field => 'likes', except_field => 'author', push_method => 'like', pull_method => 'unlike');
 
 sub pp_markdown {
     my ($body) = @_;
