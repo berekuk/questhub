@@ -1,0 +1,2 @@
+hostport: "example.com:3000"
+service_name: "example"
