@@ -1,7 +1,8 @@
-use t::common;
-use parent qw(Test::Class);
-
+use lib 'lib';
+use Play::Test::App;
 use Play::DB qw(db);
+
+use parent qw(Test::Class);
 
 sub setup :Tests(setup) {
     reset_db();

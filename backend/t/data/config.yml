@@ -1,0 +1,3 @@
+hostport: "localhost:3000"
+service_name: "Play Perl - testing instance"
+test: 1

@@ -45,9 +45,8 @@ use utf8;
 use Moo;
 
 use Params::Validate qw(:all);
-use Dancer qw(setting);
+use Play::Config qw(setting);
 
-use Play::Mongo;
 use Play::DB qw(db);
 
 with 'Play::DB::Role::Common', 'Play::DB::Role::Likeable';

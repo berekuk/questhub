@@ -1,4 +1,5 @@
-use t::common;
+use lib 'lib';
+use Play::Test::App;
 use parent qw(Test::Class);
 
 use Play::DB qw(db);
@@ -375,7 +376,7 @@ sub email_like :Tests {
 
     http_json POST => "/api/quest/$quest->{_id}/like";
 
-    my @deliveries = Email::Sender::Simple->default_transport->deliveries;
+    my @deliveries = process_email_queue();
     is scalar(@deliveries), 1, '1 email sent';
     my $email = $deliveries[0];
     cmp_deeply $email->{envelope}, {
@@ -399,9 +400,9 @@ sub email_like :Tests {
 
     http_json POST => "/api/quest/$quest->{_id}/like";
 
-    @deliveries = Email::Sender::Simple->default_transport->deliveries;
-    is scalar(@deliveries), 2, 'second email sent';
-    $email = $deliveries[1];
+    @deliveries = process_email_queue();
+    is scalar(@deliveries), 1, 'second email sent';
+    $email = $deliveries[0];
     unlike
         $email->{email}->get_body,
         qr/Reward for completing this quest/,

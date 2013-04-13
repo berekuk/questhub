@@ -1,7 +1,6 @@
-use t::common;
+use lib 'lib';
+use Play::Test::App;
 use parent qw(Test::Class);
-
-use Email::Sender::Simple;
 
 sub setup :Tests(setup) {
     Dancer::session->destroy;
@@ -150,12 +149,12 @@ sub email_comment :Tests {
     my $quest_id = $quest_result->{_id};
 
     http_json POST => "/api/quest/$quest_id/comment", { params => { body => "self-commenting." } };
-    is(Email::Sender::Simple->default_transport->delivery_count, 0, "self-comment does't send an email");
+    is(scalar(process_email_queue), 0, "self-comment does't send an email");
 
     http_json GET => "/api/fakeuser/bar";
     http_json POST => "/api/quest/$quest_id/comment", { params => { body => "Hello sweetie." } };
 
-    my @deliveries = Email::Sender::Simple->default_transport->deliveries;
+    my @deliveries = process_email_queue();
     is scalar(@deliveries), 1, '1 email sent';
     cmp_deeply $deliveries[0]{envelope}, {
         from => 'notification@localhost',

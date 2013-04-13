@@ -7,7 +7,7 @@ use Play::DB qw(db);
 
 use Params::Validate qw(:all);
 use Text::Markdown qw(markdown);
-use Dancer qw(setting);
+use Play::Config qw(setting);
 
 with 'Play::DB::Role::Common', 'Play::DB::Role::Likeable';
 sub _build_entity_owner_field { 'author' };

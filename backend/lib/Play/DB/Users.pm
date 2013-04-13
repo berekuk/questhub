@@ -3,7 +3,8 @@ package Play::DB::Users;
 use Moo;
 
 use Params::Validate qw(:all);
-use Dancer qw(info setting);
+use Play::Config qw(setting);
+use Log::Any qw($log);
 
 use Digest::MD5 qw(md5_hex);
 
@@ -274,7 +275,7 @@ sub set_settings {
                 # TODO - if we ever get other protected_settings than 'email_confirmed', we need to preserve them from old_settings here too
             }
             elsif (not $settings->{email_confirmed}) { # email_confirmed can be set in settings if $force_protected flag is on
-                info 'need email confirmation';
+                $log->info('need email confirmation');
                 $settings->{email_confirmation_secret} = $self->_send_email_confirmation($login, $settings->{email});
             }
         }
