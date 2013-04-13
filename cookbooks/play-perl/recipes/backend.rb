@@ -9,6 +9,16 @@ file "/data/storage/email/log" do
     action :create_if_missing
 end
 
-cron "email-pumper" do
-    command "/play/backend/pumper/sendmail.pl >>/data/pumper/sendmail.log 2>>/data/pumper/sendmail.err.log"
+include_recipe "ubic"
+ubic_service "sendmail" do
+  action [:install, :start]
+end
+
+template "/etc/logrotate.d/sendmail-pumper" do
+  source "logrotate.conf.erb"
+  mode 0644
+  variables({
+    :log => '/data/pumper/sendmail.log /data/pumper/sendmail.err.log',
+    :postrotate => 'ubic reload sendmail',
+  })
 end

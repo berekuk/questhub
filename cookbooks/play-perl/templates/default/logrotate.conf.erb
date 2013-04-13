@@ -1,0 +1,10 @@
+<%= @log %> {
+    daily
+    rotate 7
+    missingok
+    create 644 root root
+    sharedscripts
+    postrotate
+      <%= @postrotate %>
+    endscript
+}
