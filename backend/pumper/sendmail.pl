@@ -1,10 +1,10 @@
 #!/usr/bin/env perl
 package bin::pumper::sendmail;
 
-use strict;
-use warnings;
-
 use lib '/play/backend/lib';
+
+use Moo;
+with 'Moo::Runnable';
 
 use Lock::File 'lockfile';
 use Log::Any '$log';
@@ -16,7 +16,7 @@ use Email::Simple;
 use Email::Sender::Simple qw(sendmail);
 use Encode qw(encode_utf8);
 
-sub main {
+sub run {
     my $lock;
     unless (setting('test')) {
         $lock = lockfile('/data/pumper/sendmail.lock', { blocking => 0 }) or return;
@@ -48,11 +48,4 @@ sub main {
     $log->info("$processed emails sent");
 }
 
-if (caller) {
-    return __PACKAGE__;
-}
-else {
-    require Log::Any::Adapter;
-    Log::Any::Adapter->import('File', '/dev/stdout');
-    main;
-}
+__PACKAGE__->run_script;
