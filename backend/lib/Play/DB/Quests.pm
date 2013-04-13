@@ -52,7 +52,8 @@ use Play::DB qw(db);
 use Play::DB::Role::PushPull;
 with
     'Play::DB::Role::Common',
-    PushPull(field => 'likes', except_field => 'user', push_method => 'like', pull_method => 'unlike');
+    PushPull(field => 'likes', except_field => 'user', push_method => 'like', pull_method => 'unlike'),
+    PushPull(field => 'watchers', except_field => 'user', push_method => 'watch', pull_method => 'unwatch');
 
 sub _prepare_quest {
     my $self = shift;

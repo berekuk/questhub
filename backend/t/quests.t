@@ -82,4 +82,24 @@ sub list :Tests {
         [ map { superhashof({ %$_, team => [$_->{user}] }) } sort { $a->{_id} cmp $b->{_id} } @data ];
 }
 
+sub watch_unwatch :Tests {
+    my $quest = db->quests->add({
+        name => 'quest name',
+        user => 'foo',
+        status => 'open',
+    });
+
+    like exception { db->quests->watch($quest->{_id}, 'foo') }, qr/unable to watch/;
+    like exception { db->quests->unwatch($quest->{_id}, 'foo') }, qr/unable to unwatch/;
+
+    db->quests->watch($quest->{_id}, 'bar');
+    db->quests->watch($quest->{_id}, 'baz');
+    $quest = db->quests->get($quest->{_id});
+    cmp_deeply $quest->{watchers}, [qw( bar baz )];
+
+    db->quests->unwatch($quest->{_id}, 'bar');
+    $quest = db->quests->get($quest->{_id});
+    cmp_deeply $quest->{watchers}, [qw( baz )];
+}
+
 __PACKAGE__->new->runtests;
