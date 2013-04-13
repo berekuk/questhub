@@ -1,17 +1,11 @@
-package t::common;
-
-use strict;
-use warnings;
-
 use parent qw(Exporter);
-our @EXPORT = qw( http_json reset_db register_email );
+our @EXPORT = qw( http_json register_email );
 
 use lib 'lib';
 use Import::Into;
 
 BEGIN {
     $ENV{DEV_MODE} = 1;
-    $ENV{EMAIL_SENDER_TRANSPORT} = 'Test';
 }
 
 use Play::Mongo qw(:test);
@@ -28,26 +22,6 @@ sub http_json {
     }
 
     return JSON::decode_json($response->content);
-}
-
-sub reset_db {
-    for (qw/ quests comments users events notifications /) {
-        Play::Mongo->db->get_collection($_)->remove({});
-    }
-}
-
-# register_email 'foo' => { email => 'a@b.com', notify_likes => 1 }
-# email will be confirmed automatically
-# user must be logged in
-sub register_email {
-    my ($user, $settings) = @_;
-
-    http_json PUT => '/api/current_user/settings', { params => $settings };
-
-    my @deliveries = Email::Sender::Simple->default_transport->deliveries;
-    my ($secret) = $deliveries[0]->{email}->get_body =~ qr/(\d+)</;
-    http_json POST => "/api/register/confirm_email", { params => { login => $user, secret => $secret } };
-    Email::Sender::Simple->default_transport->clear_deliveries;
 }
 
 sub import {

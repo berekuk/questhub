@@ -1,12 +1,10 @@
-use t::common;
+use lib 'lib';
+use Play::Test::App;
 use parent qw(Test::Class);
-
-use Email::Sender::Simple;
 
 sub setup :Tests(setup) {
     reset_db();
     Dancer::session->destroy;
-    Email::Sender::Simple->default_transport->clear_deliveries;
 }
 
 sub get_settings_no_login :Tests {
@@ -107,7 +105,7 @@ sub email_confirmation :Tests {
     is $response->status, 500;
     like $response->content, qr/secret for foo is invalid/;
 
-    my @deliveries = Email::Sender::Simple->default_transport->deliveries;
+    my @deliveries = process_email_queue();
     is scalar(@deliveries), 1, 'registration email received';
     cmp_deeply $deliveries[0]->{envelope}, {
         from => 'notification@localhost',
@@ -115,7 +113,6 @@ sub email_confirmation :Tests {
     }, 'from & to addresses';
     my ($secret) = _email_to_secret($deliveries[0]);
     ok $secret, 'parsed secret key from email';
-    Email::Sender::Simple->default_transport->clear_deliveries;
 
     # before we confirm the email, lets check that other emails are not sent before confirmation
     {
@@ -126,7 +123,7 @@ sub email_confirmation :Tests {
         Dancer::session login => 'bar';
 
         http_json POST => "/api/quest/$quest->{_id}/like";
-        is(Email::Sender::Simple->default_transport->delivery_count, 0);
+        is(scalar(process_email_queue()), 0);
         Dancer::session login => 'foo';
     }
 
@@ -138,8 +135,7 @@ sub email_confirmation :Tests {
     }), "email_confirmed flag in settings";
 
     # TODO - check contents
-    is(Email::Sender::Simple->default_transport->delivery_count, 1, "confirmation's confirmation email");
-    Email::Sender::Simple->default_transport->clear_deliveries;
+    is(scalar(process_email_queue()), 1, "confirmation's confirmation email");
 
     # now other emails are working
     {
@@ -149,7 +145,7 @@ sub email_confirmation :Tests {
         Dancer::session login => 'bar';
 
         http_json POST => "/api/quest/$quest->{_id}/like";
-        is(Email::Sender::Simple->default_transport->delivery_count, 1);
+        is(scalar(process_email_queue()), 1);
     }
 
     # TODO - check that further email changes reset the confirmation status!
@@ -163,17 +159,16 @@ sub resend_email_confirmation :Tests {
         email => 'someone@somewhere.com',
     } };
 
-    my @deliveries = Email::Sender::Simple->default_transport->deliveries;
+    my @deliveries = process_email_queue();
     is scalar(@deliveries), 1;
     my ($secret) = _email_to_secret($deliveries[0]);
     ok $secret, 'got secret';
-    Email::Sender::Simple->default_transport->clear_deliveries;
 
     http_json POST => '/api/register/resend_email_confirmation';
     my $response = dancer_response POST => '/api/register/confirm_email', { params => { login => 'foo', secret => $secret } };
     is $response->status, 500, 'old secret is invalid after email resending';
 
-    @deliveries = Email::Sender::Simple->default_transport->deliveries;
+    @deliveries = process_email_queue();
     is scalar(@deliveries), 1;
     ($secret) = _email_to_secret($deliveries[0]);
     ok $secret, 'got a new secret';

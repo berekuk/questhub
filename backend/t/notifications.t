@@ -1,4 +1,5 @@
-use t::common;
+use lib 'lib';
+use Play::Test;
 use parent qw(Test::Class);
 
 use Play::DB qw(db);
@@ -6,14 +7,11 @@ use Test::Fatal;
 
 sub setup :Tests(setup) {
     reset_db();
-    Dancer::session->destroy;
 }
 
 sub add_and_list :Tests {
 
-    # not really necessary
-    http_json GET => "/api/fakeuser/foo";
-    http_json GET => "/api/fakeuser/bar";
+    db->users->add({ login => $_ }) for qw( foo bar );
 
     db->notifications->add('foo', 'shoutbox', { body => 'good news, everyone!' });
     db->notifications->add('bar', 'shoutbox', { body => 'good news, everyone!' });

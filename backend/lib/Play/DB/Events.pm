@@ -20,16 +20,12 @@ Events can be of different types and contain different loosely-typed fields, but
 =cut
 
 use Moo;
+with 'Play::DB::Role::Common';
 
 use Play::Mongo;
+use Play::Flux;
 
 use Params::Validate qw(:all);
-use Dancer qw(setting);
-use Email::Simple;
-use Email::Sender::Simple qw(sendmail);
-use Encode qw(encode_utf8);
-
-with 'Play::DB::Role::Common';
 
 sub _prepare_event {
     my $self = shift;
@@ -51,22 +47,9 @@ sub email {
     my $self = shift;
     my ($address, $subject, $body) = validate_pos(@_, { type => SCALAR }, { type => SCALAR }, { type => SCALAR });
 
-    my $email = Email::Simple->create(
-        header => [
-            To => $address,
-            From => setting('service_name').' <notification@'.setting('hostport').'>',
-            Subject => encode_utf8($subject),
-            'Reply-to' => 'Vyacheslav Matyukhin <me@berekuk.ru>', # TODO - take from config
-            'Content-Type' => 'text/html; charset=utf-8',
-        ],
-        body => encode_utf8($body),
-    );
-
-    # Errors are ignored for now. (It's better than "500 Internal Error" responses)
-    # TODO - introduce some kind of local asyncronous queue.
-    eval {
-        sendmail($email);
-    };
+    my $email_storage = Play::Flux->email;
+    $email_storage->write([ $address, $subject, $body ]);
+    $email_storage->commit;
 }
 
 # returns last 100 events
