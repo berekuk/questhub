@@ -6,8 +6,8 @@ use warnings;
 
 use lib '/play/backend/lib';
 
-use Lock::File qw(lockfile);
-use Log::Any qw($log);
+use Lock::File 'lockfile';
+use Log::Any '$log';
 
 use Play::Flux;
 use Play::Config qw(setting);
@@ -52,5 +52,7 @@ if (caller) {
     return __PACKAGE__;
 }
 else {
+    require Log::Any::Adapter;
+    Log::Any::Adapter->import('File', '/dev/stdout');
     main;
 }
