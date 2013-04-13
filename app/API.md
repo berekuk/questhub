@@ -157,6 +157,14 @@ Like a quest.
 
 Unlike a quest.
 
+##### POST /api/quest/{id}/watch
+
+Start watching a quest.
+
+##### POST /api/quest/{id}/unwatch
+
+Stop watching a quest.
+
 ##### POST /api/quest/{id}/join
 
 Join a quest. Quest must be unclaimed.
