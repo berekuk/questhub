@@ -4,6 +4,8 @@ execute "apt-get-update" do
 end
 
 include_recipe "perl"
+include_recipe "play-perl::frontend"
+include_recipe "play-perl::backend"
 
 # for development
 package 'vim'
@@ -17,7 +19,7 @@ package 'libssl-dev' # used by Net::Twitter
 # I think the stock mongodb deb package will suffice for now.
 package 'mongodb'
 
-package 'make' # for compiling MongoDB
+package 'make' # for compiling MongoDB.pm
 
 package 'sendmail'
 
@@ -40,6 +42,7 @@ cpan_module 'Starman'
 cpan_module 'Text::Markdown'
 cpan_module 'Clone'
 cpan_module 'Email::Sender'
+cpan_module 'Log::Any'
 
 # needed by Email::Sender::Simple to send Amazon SES emails
 cpan_module 'Authen::SASL'
@@ -66,7 +69,20 @@ template "/play/app/config.yml" do
       :hostport => node['play_perl']['hostport'],
       :service_name => node['play_perl']['service_name']
   })
-  notifies :restart, "service[nginx]"
+  # TODO - notify ubic service restart
+end
+
+# global config
+template "/data/config.yml" do
+  source "config.yml.erb"
+  owner "root"
+  group "root"
+  mode 0644
+  variables({
+      :hostport => node['play_perl']['hostport'],
+      :service_name => node['play_perl']['service_name']
+  })
+  # TODO - notify ubic service restart
 end
 
 # dancer services
@@ -76,25 +92,3 @@ directory "/data/dancer"
 ubic_service "dancer" do
   action [:install, :start]
 end
-
-# nginx
-package 'nginx'
-
-file '/etc/nginx/sites-enabled/default' do
-  action :delete
-end
-
-template "/etc/nginx/sites-enabled/play-perl.org" do
-  source "nginx-site.conf.erb"
-  owner "root"
-  group "root"
-  mode 0644
-  variables({
-    :port => 80,
-    :dancer_port => 3000,
-    :static_root => '/play/www-build'
-  })
-  notifies :restart, "service[nginx]"
-end
-
-service "nginx"
