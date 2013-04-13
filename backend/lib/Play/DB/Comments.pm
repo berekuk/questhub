@@ -27,7 +27,6 @@ sub _prepare_comment {
     my ($comment) = @_;
     $comment->{ts} = $comment->{_id}->get_time;
     $comment->{_id} = $comment->{_id}->to_string;
-    $comment->{body_html} = pp_markdown($comment->{body});
     return $comment;
 }
 
@@ -42,7 +41,6 @@ sub add {
 
     my $quest = db->quests->get($params{quest_id});
 
-    my $body_html = pp_markdown($params{body}); # markdown for comments in the feed is cached forever, to simplify the events storage and frontend logic
 
     db->events->add({
         object_type => 'comment',
@@ -51,7 +49,6 @@ sub add {
         object_id => $id->to_string,
         object => {
             %params,
-            body_html => $body_html,
             quest => $quest,
         },
     });
@@ -59,6 +56,7 @@ sub add {
     if ($params{author} ne $quest->{user}) {
         my $email = db->users->get_email($quest->{user}, 'notify_comments');
         if ($email) {
+            my $body_html = pp_markdown($params{body});
             # TODO - quoting
             # TODO - unsubscribe link
             my $email_body = qq[
@@ -76,7 +74,7 @@ sub add {
         }
     }
 
-    return { _id => $id->to_string, body_html => pp_markdown($params{body}) };
+    return { _id => $id->to_string };
 }
 
 # get all comments for a quest
