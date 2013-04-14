@@ -57,7 +57,7 @@ get '/quest/:id' => sub {
     return db->quests->get(param('id'));
 };
 
-for my $method (qw/ like unlike join leave /) {
+for my $method (qw/ like unlike join leave watch unwatch /) {
     post "/quest/:id/$method" => sub {
         die "not logged in" unless session->{login};
         db->quests->$method(param('id'), session->{login});

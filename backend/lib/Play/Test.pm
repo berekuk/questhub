@@ -1,11 +1,14 @@
 package Play::Test;
 
+use 5.010;
+
 use strict;
 use warnings;
 
 use parent qw(Exporter);
-our @EXPORT = qw( reset_db );
+our @EXPORT = qw( reset_db pumper );
 
+use Log::Any::Test;
 use Import::Into;
 
 BEGIN {
@@ -18,6 +21,15 @@ sub reset_db {
     for (qw/ quests comments users events notifications /) {
         Play::Mongo->db->get_collection($_)->remove({});
     }
+}
+
+sub pumper {
+    my ($name) = @_;
+    state $cache = {};
+    unless ($cache->{$name}) {
+        $cache->{$name} = (require "/play/backend/pumper/$name.pl")->new;
+    }
+    return $cache->{$name};
 }
 
 sub import {

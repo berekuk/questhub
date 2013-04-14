@@ -6,26 +6,18 @@ use Play::Mongo;
 use Play::DB qw(db);
 
 use Params::Validate qw(:all);
-use Text::Markdown qw(markdown);
 use Play::Config qw(setting);
 
-with 'Play::DB::Role::Common', 'Play::DB::Role::Likeable';
-sub _build_entity_owner_field { 'author' };
-
-sub pp_markdown {
-    my ($body) = @_;
-    my $html = markdown($body);
-    $html =~ s{^<p>}{};
-    $html =~ s{</p>$}{};
-    return $html;
-}
+use Play::DB::Role::PushPull;
+with
+    'Play::DB::Role::Common',
+    PushPull(field => 'likes', except_field => 'author', push_method => 'like', pull_method => 'unlike');
 
 sub _prepare_comment {
     my $self = shift;
     my ($comment) = @_;
     $comment->{ts} = $comment->{_id}->get_time;
     $comment->{_id} = $comment->{_id}->to_string;
-    $comment->{body_html} = pp_markdown($comment->{body});
     return $comment;
 }
 
@@ -40,8 +32,6 @@ sub add {
 
     my $quest = db->quests->get($params{quest_id});
 
-    my $body_html = pp_markdown($params{body}); # markdown for comments in the feed is cached forever, to simplify the events storage and frontend logic
-
     db->events->add({
         object_type => 'comment',
         action => 'add',
@@ -49,32 +39,15 @@ sub add {
         object_id => $id->to_string,
         object => {
             %params,
-            body_html => $body_html,
             quest => $quest,
         },
     });
 
-    if ($params{author} ne $quest->{user}) {
-        my $email = db->users->get_email($quest->{user}, 'notify_comments');
-        if ($email) {
-            # TODO - quoting
-            # TODO - unsubscribe link
-            my $email_body = qq[
-                <p>
-                <a href="http://].setting('hostport').qq[/player/$params{author}">$params{author}</a> commented on your quest <a href="http://].setting('hostport').qq[/quest/$params{quest_id}">$quest->{name}</a>:
-                <hr>
-                </p>
-                <p>$body_html</p>
-            ];
-            db->events->email(
-                $email,
-                "$params{author} commented on '$quest->{name}'",
-                $email_body,
-            );
-        }
-    }
+    my $comments_queue = Play::Flux->comments;
+    $comments_queue->write(\%params);
+    $comments_queue->commit;
 
-    return { _id => $id->to_string, body_html => pp_markdown($params{body}) };
+    return { _id => $id->to_string };
 }
 
 # get all comments for a quest

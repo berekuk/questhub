@@ -23,7 +23,7 @@ my $quests_data = {
     },
 };
 
-sub setup :Tests(setup) {
+sub setup :Tests(setup => no_plan) {
 
     Dancer::session->destroy;
     reset_db();
@@ -450,6 +450,66 @@ sub join_leave :Tests {
 
     $got_quest = http_json GET => "/api/quest/$quest->{_id}";
     is_deeply $got_quest->{likes}, ['bar'], 'joining means unliking';
+}
+
+sub watch_unwatch :Tests {
+    http_json GET => "/api/fakeuser/foo";
+
+    my $quest = http_json POST => '/api/quest', { params => {
+        name => 'q1',
+    } };
+
+    my $response;
+
+    $response = dancer_response POST => "/api/quest/$quest->{_id}/watch";
+    is $response->status, 500;
+    like $response->content, qr/unable to watch/;
+
+    $response = dancer_response POST => "/api/quest/$quest->{_id}/unwatch";
+    is $response->status, 500;
+    like $response->content, qr/unable to unwatch/;
+
+    http_json GET => "/api/fakeuser/bar";
+    http_json POST => "/api/quest/$quest->{_id}/watch";
+
+    my $got_quest = http_json GET => "/api/quest/$quest->{_id}";
+    cmp_deeply $got_quest->{watchers}, ['bar'], 'bar is a watcher now';
+
+    http_json GET => "/api/fakeuser/baz";
+    http_json POST => "/api/quest/$quest->{_id}/watch";
+
+    $got_quest = http_json GET => "/api/quest/$quest->{_id}";
+    cmp_deeply $got_quest->{watchers}, ['bar', 'baz'], 'baz is a watcher now too';
+
+    http_json POST => "/api/quest/$quest->{_id}/unwatch";
+    $got_quest = http_json GET => "/api/quest/$quest->{_id}";
+    cmp_deeply $got_quest->{watchers}, ['bar'], 'baz is not a watcher anymore';
+}
+
+sub email_watchers :Tests {
+
+    http_json GET => "/api/fakeuser/foo";
+    register_email('foo' => { email => "foo\@example.com", notify_comments => 1 });
+
+    my $quest = http_json POST => '/api/quest', { params => {
+        name => 'q1',
+    } };
+
+    for my $user (qw/ bar baz buzz /) {
+        http_json GET => "/api/fakeuser/$user";
+        http_json POST => "/api/quest/$quest->{_id}/watch";
+        register_email($user => { email => "$user\@example.com", notify_comments => 1 });
+    }
+
+    http_json POST => '/api/quest/'.$quest->{_id}.'/comment', { params => { body => 'hello to foo, bar and baz!' } };
+
+    pumper('comments2email')->run;
+    my @deliveries = process_email_queue();
+    is scalar @deliveries, 3;
+
+    cmp_deeply
+        [ sort map { $_->{successes}[0] } @deliveries ],
+        [ sort map { "$_\@example.com" } qw( foo bar baz ) ];
 }
 
 __PACKAGE__->new->runtests;

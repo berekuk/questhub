@@ -49,8 +49,11 @@ use Play::Config qw(setting);
 
 use Play::DB qw(db);
 
-with 'Play::DB::Role::Common', 'Play::DB::Role::Likeable';
-sub _build_entity_owner_field { 'user' };
+use Play::DB::Role::PushPull;
+with
+    'Play::DB::Role::Common',
+    PushPull(field => 'likes', except_field => 'user', push_method => 'like', pull_method => 'unlike'),
+    PushPull(field => 'watchers', except_field => 'user', push_method => 'watch', pull_method => 'unwatch');
 
 sub _prepare_quest {
     my $self = shift;
@@ -157,7 +160,7 @@ sub add {
     }
 
     $params->{author} = $params->{user};
-    my $id = $self->collection->insert($params);
+    my $id = $self->collection->insert($params, { safe => 1 });
 
     my $quest = { %$params, _id => $id };
     $self->_prepare_quest($quest);
@@ -381,7 +384,6 @@ sub leave {
     unless ($updated) {
         die "Quest not found or unable to leave quest you don't own";
     }
-
 }
 
 1;

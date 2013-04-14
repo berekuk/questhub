@@ -1,19 +1,19 @@
 define([
     'underscore',
     'views/proto/push-pull',
-    'text!templates/like.html'
+    'text!templates/quest-watch.html'
 ], function (_, PushPull, html) {
     return PushPull.extend({
         template: _.template(html),
-        field: 'likes',
+        field: 'watchers',
         ownerField: 'user',
 
         push: function () {
-            this.model.like();
+            this.model.act('watch');
         },
 
         pull: function () {
-            this.model.unlike();
+            this.model.act('unwatch');
         }
     });
 });

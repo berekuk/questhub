@@ -5,10 +5,7 @@ use lib '/play/backend/lib';
 
 use Moo;
 use MooX::Options;
-with 'Moo::Runnable::Looper';
-
-use Lock::File 'lockfile';
-use Log::Any '$log';
+with 'Play::Pumper';
 
 use Play::Flux;
 use Play::Config qw(setting);
@@ -17,18 +14,17 @@ use Email::Simple;
 use Email::Sender::Simple qw(sendmail);
 use Encode qw(encode_utf8);
 
+has 'in' => (
+    is => 'lazy',
+    default => sub {
+        return Play::Flux->email->in('/data/storage/email/pos');
+    },
+);
+
 sub run_once {
-    my $lock;
-    unless (setting('test')) {
-        $lock = lockfile('/data/pumper/sendmail.lock', { blocking => 0 }) or return;
-    }
+    my $self = shift;
 
-    my $storage = Play::Flux->email;
-    my $in = $storage->in('/data/storage/email/pos'); # FIXME - move from Flux::File to more advanced storage with named clients
-
-    my $processed = 0;
-
-    while (my $item = $in->read) {
+    while (my $item = $self->in->read) {
         my ($address, $subject, $body) = @$item;
 
         my $email = Email::Simple->create(
@@ -41,12 +37,10 @@ sub run_once {
             ],
             body => encode_utf8($body),
         );
-        $in->commit; # it's better to lose the email than to spam a user indefinitely
+        $self->in->commit; # it's better to lose the email than to spam a user indefinitely
         sendmail($email);
-        $processed++;
+        $self->add_stat('emails sent');
     }
-
-    $log->info("$processed emails sent");
 }
 
 __PACKAGE__->run_script;

@@ -28,7 +28,7 @@ sub like_quest :Tests {
     http_json POST => "/api/quest/$id/like";
 
     # double like
-    my $response = dancer_response POST => "/api/quest/$id/like";
+    $response = dancer_response POST => "/api/quest/$id/like";
     is $response->status, 500, 'double like is forbidden';
 
     my $quest = http_json GET => "/api/quest/$id";

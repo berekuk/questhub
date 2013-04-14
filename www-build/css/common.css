@@ -23,6 +23,9 @@ h2, h3 {
     font-weight: 200;
 }
 
+.watchers {
+    margin-bottom: 8px;
+}
 .likes {
     margin-bottom: 8px;
 }

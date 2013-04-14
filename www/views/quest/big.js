@@ -3,11 +3,12 @@ define([
     'backbone',
     'views/proto/common',
     'views/like',
+    'views/quest/watch',
     'views/quest/completed',
     'models/current-user',
     'bootbox',
     'text!templates/quest-big.html'
-], function (_, Backbone, Common, Like, QuestCompleted, currentUser, bootbox, html) {
+], function (_, Backbone, Common, Like, Watch, QuestCompleted, currentUser, bootbox, html) {
     'use strict';
     return Common.extend({
         template: _.template(html),
@@ -27,6 +28,9 @@ define([
         subviews: {
             '.likes': function () {
                 return new Like({ model: this.model });
+            },
+            '.watchers': function () {
+                return new Watch({ model: this.model });
             }
         },
 
@@ -151,7 +155,11 @@ define([
         },
 
         isOwned: function () {
-            return (currentUser.get('login') == this.model.get('user'));
+            var currentLogin = currentUser.get('login');
+            if (!currentLogin || !currentLogin.length) {
+                return;
+            }
+            return _.contains(this.model.get('team') || [], currentLogin);
         },
 
         serialize: function () {

@@ -8,7 +8,6 @@ use JSON qw(decode_json);
 use Dancer::Plugin::Auth::Twitter;
 auth_twitter_init();
 
-use JSON;
 use Play::DB qw(db);
 
 get '/auth/twitter' => sub {
