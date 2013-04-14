@@ -23,7 +23,7 @@ my $quests_data = {
     },
 };
 
-sub setup :Tests(setup) {
+sub setup :Tests(setup => no_plan) {
 
     Dancer::session->destroy;
     reset_db();
