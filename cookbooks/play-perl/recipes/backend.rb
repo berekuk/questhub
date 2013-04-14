@@ -29,8 +29,13 @@ ubic_service "pumper" do
   action [:install, :start]
 end
 
-ubic_service "sendmail" do
-  action [:stop]
+if File.exists?("/etc/ubic/service/sendmail")
+  ubic_service "sendmail" do
+    action [:stop]
+  end
+  file "/etc/ubic/service/sendmail" do
+    action :delete
+  end
 end
 
 # FIXME - copypaste!
