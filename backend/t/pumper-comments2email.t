@@ -10,8 +10,7 @@ use Log::Any qw($log);
 my $pumper = pumper('comments2email');
 
 $pumper->run;
-$log->contains_ok(qr/0 comments processed/);
-$log->clear;
+$log->empty_ok;
 
 db->users->add({ login => 'foo' });
 db->users->add({ login => 'bar' });

@@ -5,7 +5,9 @@ use lib '/play/backend/lib';
 
 use Moo;
 use MooX::Options;
-with 'Moo::Runnable::Looper';
+with
+    'Moo::Runnable::Looper',
+    'Moo::Runnable::WithStat';
 
 use Lock::File 'lockfile';
 use Log::Any '$log';
@@ -70,6 +72,7 @@ sub process_item {
             "$item->{author} commented on '$quest->{name}'",
             $email_body,
         );
+        $self->add_stat('emails sent');
     }
 }
 
@@ -81,15 +84,12 @@ sub run_once {
         $lock = lockfile('/data/pumper/comments2email.lock', { blocking => 0 }) or return;
     }
 
-    my $processed = 0;
-
     while (my $item = $self->in->read) {
         $self->process_item($item);
         $self->in->commit; # it's better to lose the email than to spam a user indefinitely
-        $processed++;
-    }
 
-    $log->info("$processed comments processed");
+        $self->add_stat('comments processed');
+    }
 }
 
 __PACKAGE__->run_script;

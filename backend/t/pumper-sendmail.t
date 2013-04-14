@@ -12,8 +12,7 @@ my $pumper = require 'pumper/sendmail.pl';
 $pumper = $pumper->new;
 
 $pumper->run;
-$log->contains_ok(qr/0 emails sent/);
-$log->clear;
+$log->empty_ok;
 
 my $storage = Play::Flux->email;
 $storage->write(['test@example.com', 'test title', 'test body']);
