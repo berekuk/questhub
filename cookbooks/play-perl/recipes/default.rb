@@ -3,11 +3,13 @@ execute "apt-get-update" do
   ignore_failure true
 end
 
+package 'make' # for building cpan modules
+
 include_recipe "perl"
 include_recipe "play-perl::frontend"
 include_recipe "play-perl::backend"
 
-# for development
+# for development, but listed here and not in dev.rb because these can useful in production too
 package 'vim'
 package 'git'
 package 'screen'
@@ -18,10 +20,6 @@ package 'libssl-dev' # used by Net::Twitter
 # There is a mongodb cookbook, but it's too generic and tries to do too many things to be portable.
 # I think the stock mongodb deb package will suffice for now.
 package 'mongodb'
-
-package 'make' # for compiling MongoDB.pm
-
-package 'sendmail'
 
 # forcing Net-HTTP=6.03 until https://rt.cpan.org/Ticket/Display.html?id=81237 is fixed
 execute "install-Net-HTTP" do
@@ -43,10 +41,6 @@ cpan_module 'Text::Markdown'
 cpan_module 'Clone'
 cpan_module 'Email::Sender'
 cpan_module 'Log::Any'
-
-# needed by Email::Sender::Simple to send Amazon SES emails
-cpan_module 'Authen::SASL'
-cpan_module 'Net::SMTP::SSL'
 
 cpan_module 'Dancer::Serializer::JSON'
 cpan_module 'Dancer::Session::MongoDB'

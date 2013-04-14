@@ -4,6 +4,12 @@ cpan_module 'Log::Any::Adapter'
 cpan_module 'MooX::Options'
 cpan_module 'Package::Variant'
 
+# needed by Email::Sender::Simple to send Amazon SES emails
+cpan_module 'Authen::SASL'
+cpan_module 'Net::SMTP::SSL'
+
+package 'sendmail'
+
 directory "/data/pumper"
 directory "/data/storage"
 
