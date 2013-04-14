@@ -68,9 +68,9 @@ define([
                     "ts" : 1360197975,
                     "status" : "closed",
                     "_id" : "5112f9577a8f1d370b000002",
-                    "team" : ["badger"],
+                    "team" : ["jasmine"],
                     "name" : "Badger Badger",
-                    "author" : "jonti",
+                    "author" : "jasmine",
                     "tags" : ["feature"],
                     "likes": ["mushroom", "snake"]
                 });
@@ -78,7 +78,6 @@ define([
                 view = new QuestBig({ model: model });
                 view.render();
                 return view;
-                console.log(view.$el.find('h2').html());
             };
 
             describe('before edit is clicked', function () {

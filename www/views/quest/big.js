@@ -151,7 +151,11 @@ define([
         },
 
         isOwned: function () {
-            return (currentUser.get('login') == this.model.get('user'));
+            var currentLogin = currentUser.get('login');
+            if (!currentLogin || !currentLogin.length) {
+                return;
+            }
+            return _.contains(this.model.get('team') || [], currentLogin);
         },
 
         serialize: function () {
