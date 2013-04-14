@@ -18,6 +18,7 @@ sub _storage {
     }
     else {
         $storage = Flux::File->new("/data/storage/$name/log");
+        # FIXME - move from Flux::File to more advanced storage with named clients
     }
 
     return Flux::Format::JSON->new->wrap($storage);

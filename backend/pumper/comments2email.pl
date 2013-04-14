@@ -5,11 +5,8 @@ use lib '/play/backend/lib';
 
 use Moo;
 use MooX::Options;
-with
-    'Moo::Runnable::Looper',
-    'Moo::Runnable::WithStat';
+with 'Play::Pumper';
 
-use Lock::File 'lockfile';
 use Log::Any '$log';
 
 use Play::Flux;
@@ -51,9 +48,7 @@ sub process_item {
     @recipients = keys %_uniq_recipients;
     @recipients = grep { $_ ne $item->{author} } @recipients;
 
-
     my $body_html;
-
     for my $recipient (@recipients) {
         my $email = db->users->get_email($recipient, 'notify_comments') or next;
 
@@ -78,11 +73,6 @@ sub process_item {
 
 sub run_once {
     my $self = shift;
-
-    my $lock;
-    unless (setting('test')) {
-        $lock = lockfile('/data/pumper/comments2email.lock', { blocking => 0 }) or return;
-    }
 
     while (my $item = $self->in->read) {
         $self->process_item($item);
