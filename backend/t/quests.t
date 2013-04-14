@@ -42,7 +42,7 @@ sub leave_join :Tests {
     db->quests->join($quest->{_id}, 'foo');
 }
 
-sub join_team :Test {
+sub join_team :Tests {
     local $TODO = 'team quests not implemented';
 
     my $quest = db->quests->add({
