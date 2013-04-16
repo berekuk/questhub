@@ -51,6 +51,7 @@ sub ensure_indices {
     $quests_collection->ensure_index({ 'tags' => 1 });
     $quests_collection->ensure_index({ 'user' => 1 }); # deprecated
     $quests_collection->ensure_index({ 'team' => 1 });
+    $quests_collection->ensure_index({ 'watchers' => 1 });
 }
 
 1;
