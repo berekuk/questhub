@@ -8,8 +8,7 @@ use Play::Flux;
 
 use Log::Any qw($log);
 
-my $pumper = require 'pumper/sendmail.pl';
-$pumper = $pumper->new;
+my $pumper = pumper('sendmail');
 
 $pumper->run;
 $log->empty_ok;

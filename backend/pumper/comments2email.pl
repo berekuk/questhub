@@ -55,9 +55,18 @@ sub process_item {
         $body_html ||= pp_markdown($item->{body});
         # TODO - quoting
         # TODO - unsubscribe link
+
+        my $email_body_address;
+        if (grep { $_ eq $recipient } @{ $quest->{team} }) {
+            $email_body_address = "your quest";
+        }
+        else {
+            $email_body_address = "the quest you're watching,";
+        }
+        my $email_body_header = '<a href="http://'.setting('hostport').qq[/player/$item->{author}">$item->{author}</a> commented on $email_body_address <a href="http://].setting('hostport').qq[/quest/$item->{quest_id}">$quest->{name}</a>:];
         my $email_body = qq[
             <p>
-            <a href="http://].setting('hostport').qq[/player/$item->{author}">$item->{author}</a> commented on your quest <a href="http://].setting('hostport').qq[/quest/$item->{quest_id}">$quest->{name}</a>:
+            $email_body_header
             <hr>
             </p>
             <p>$body_html</p>
