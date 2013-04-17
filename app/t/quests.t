@@ -2,31 +2,40 @@ use lib 'lib';
 use Play::Test::App;
 use parent qw(Test::Class);
 
+use 5.010;
+
 use Play::DB qw(db);
 
-my $quests_data = {
-    1 => {
-        name    => 'name_1',
-        user    => 'user_1',
-        status  => 'open',
-    },
-    2 => {
-        name    => 'name_2',
-        user    => 'user_2',
-        status  => 'open',
-        tags    => ['bug'],
-    },
-    3 => {
-        name    => 'name_3',
-        user    => 'user_3',
-        status  => 'closed',
-    },
-};
-
 sub setup :Tests(setup => no_plan) {
-
     Dancer::session->destroy;
     reset_db();
+}
+
+sub _common_quests {
+    return state $q = {
+        1 => {
+            name    => 'name_1',
+            user    => 'user_1',
+            status  => 'open',
+        },
+        2 => {
+            name    => 'name_2',
+            user    => 'user_2',
+            status  => 'open',
+            tags    => ['bug'],
+        },
+        3 => {
+            name    => 'name_3',
+            user    => 'user_3',
+            status  => 'closed',
+        },
+    };
+}
+
+
+sub _fill_common_quests {
+    my $self = shift;
+    my $quests_data = $self->_common_quests;
 
     # insert quests to DB
     for (keys %$quests_data) {
@@ -40,14 +49,51 @@ sub setup :Tests(setup => no_plan) {
 }
 
 sub quest_list :Tests {
+    my @quests = (
+        {
+            name    => 'name_1',
+            status  => 'open',
+        },
+        {
+            name    => 'name_2',
+            status  => 'open',
+            tags    => ['bug'],
+        },
+        {
+            name    => 'name_3',
+            status  => 'closed',
+        },
+    );
+
+    http_json GET => "/api/fakeuser/foo";
+    http_json POST => '/api/quest', { params => $_ } for @quests;
+
     my $list = http_json GET => '/api/quest';
 
     cmp_deeply
-        [ sort { $a->{_id} cmp $b->{_id} } @$list ],
-        [ map { { %$_, team => [$_->{user}] } } sort { $a->{_id} cmp $b->{_id} } values %$quests_data ];
+        [
+            sort { $a->{_id} cmp $b->{_id} } @$list
+        ],
+        [
+            map {
+                {
+                    %$_,
+                    user => 'foo',
+                    author => 'foo',
+                    team => ['foo'],
+                    _id => ignore,
+                    ts => re('^\d+$'),
+                    status => 'open' # original status is ignored
+                }
+            } @quests
+        ];
 }
 
 sub quest_list_filtering :Tests {
+    my $self = shift;
+    $self->_fill_common_quests;
+    my $quests_data = $self->_common_quests;
+
     my $list = http_json GET => '/api/quest', { params => { status => 'closed' } };
     cmp_deeply $list, [
         {
@@ -66,6 +112,10 @@ sub quest_list_filtering :Tests {
 }
 
 sub quest_sorting :Tests {
+    my $self = shift;
+    $self->_fill_common_quests;
+    my $quests_data = $self->_common_quests;
+
     http_json GET => '/api/fakeuser/user_3';
     http_json POST => '/api/quest/'.$quests_data->{2}{_id}.'/like';
     http_json POST => '/api/quest/'.$quests_data->{1}{_id}.'/comment', { params => { body => 'bah!' } };
@@ -76,6 +126,10 @@ sub quest_sorting :Tests {
 }
 
 sub quest_list_limit_offset :Tests {
+    my $self = shift;
+    $self->_fill_common_quests;
+    my $quests_data = $self->_common_quests;
+
     my $list = http_json GET => '/api/quest?limit=2';
     is scalar @$list, 2;
 
@@ -87,13 +141,21 @@ sub quest_list_limit_offset :Tests {
 }
 
 sub single_quest :Tests {
-    my $id          =  $quests_data->{1}->{_id};
+    my $self = shift;
+    $self->_fill_common_quests;
+    my $quests_data = $self->_common_quests;
+
+    my $id          =  $quests_data->{1}{_id};
     my $quest = http_json GET => '/api/quest/'.$id;
 
     cmp_deeply $quest, { %{ $quests_data->{1} }, team => [$quests_data->{1}{user}] };
 }
 
 sub edit_quest :Tests {
+    my $self = shift;
+    $self->_fill_common_quests;
+    my $quests_data = $self->_common_quests;
+
     my $edited_quest = $quests_data->{1};
     my $id          = $edited_quest->{_id};
     local $edited_quest->{name} = 'name_11'; # Change
@@ -204,6 +266,10 @@ sub quest_events :Tests {
 }
 
 sub delete_quest :Tests {
+    my $self = shift;
+    $self->_fill_common_quests;
+    my $quests_data = $self->_common_quests;
+
     my $id_to_remove;
     my $user;
     {
@@ -246,6 +312,10 @@ sub delete_quest :Tests {
 }
 
 sub points :Tests {
+    my $self = shift;
+    $self->_fill_common_quests;
+    my $quests_data = $self->_common_quests;
+
     my $quest = $quests_data->{1}; # name_2, user_2
 
     http_json GET => "/api/fakeuser/$quest->{user}";
@@ -301,6 +371,10 @@ sub points :Tests {
 }
 
 sub more_points :Tests {
+    my $self = shift;
+    $self->_fill_common_quests;
+    my $quests_data = $self->_common_quests;
+
    my $quest = $quests_data->{1};
     http_json GET => "/api/fakeuser/$quest->{user}";
     Dancer::session login => $quest->{user};
