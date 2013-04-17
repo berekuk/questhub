@@ -102,4 +102,25 @@ sub watch_unwatch :Tests {
     cmp_deeply $quest->{watchers}, [qw( baz )];
 }
 
+sub list_watched :Tests {
+
+    my @quests = map {
+        db->quests->add({
+            name => "q$_",
+            team => ['foo'],
+            status => 'open',
+        })
+    } (1 .. 5);
+
+    db->quests->watch($quests[1]->{_id}, 'irrelevant');
+    db->quests->watch($quests[2]->{_id}, 'bar');
+    db->quests->watch($quests[2]->{_id}, 'baz');
+    db->quests->watch($quests[3]->{_id}, 'baz');
+
+    is_deeply
+        [ map { $_->{_id} } sort { $a->{_id} cmp $b->{_id} } @{ db->quests->list({ watchers => 'baz' }) } ],
+        [ $quests[2]->{_id}, $quests[3]->{_id} ]
+    ;
+}
+
 __PACKAGE__->new->runtests;

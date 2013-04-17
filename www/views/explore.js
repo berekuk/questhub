@@ -3,8 +3,9 @@ define([
     'views/proto/common',
     'models/quest-collection',
     'views/quest/collection',
+    'models/current-user',
     'text!templates/explore.html'
-], function (_, Common, QuestCollectionModel, QuestCollection, html) {
+], function (_, Common, QuestCollectionModel, QuestCollection, currentUser, html) {
     return Common.extend({
         template: _.template(html),
 
@@ -28,11 +29,17 @@ define([
             'latest': { order: 'desc' },
             'unclaimed': { unclaimed: 1, sort: 'leaderboard' },
             'open': { status: 'open', sort: 'leaderboard' },
-            'closed': { status: 'closed', sort: 'leaderboard' }
+            'closed': { status: 'closed', sort: 'leaderboard' },
+            'watched-by-me': { order: 'desc', watchedByMe: true }
         },
 
         tabSubview: function () {
             var options = _.clone(this.name2options[this.tab]);
+
+            if (options.watchedByMe) {
+                options.watchers = currentUser.get('login');
+            }
+
             if (this.tag != undefined) {
                 options.tags = this.tag;
             }
@@ -43,22 +50,7 @@ define([
 
             options.limit = 100;
             var collection = new QuestCollectionModel([], options);
-
-            // duplicates server-side sorting logic!
-            if (options.sort && options.sort == 'leaderboard') {
-                collection.comparator = function(m1, m2) {
-                    if (m1.like_count() > m2.like_count()) return -1; // before
-                    if (m2.like_count() > m1.like_count()) return 1; // after
-
-                    if (m1.comment_count() > m2.comment_count()) return -1;
-                    if (m2.comment_count() > m1.comment_count()) return 1;
-                    return 0; // equal
-                };
-            }
             collection.fetch();
-            if (options.sort) {
-                collection.sort();
-            }
 
             return new QuestCollection({
                 collection: collection,
@@ -84,7 +76,10 @@ define([
         },
 
         serialize: function () {
-            return { tag: this.tag };
+            return {
+                tag: this.tag,
+                currentUser: currentUser.get('login')
+            };
         },
 
         afterRender: function () {

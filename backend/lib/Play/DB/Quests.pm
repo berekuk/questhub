@@ -85,6 +85,7 @@ sub list {
         limit => { type => SCALAR, regex => qr/^\d+$/, optional => 1 },
         offset => { type => SCALAR, regex => qr/^\d+$/, default => 0 },
         tags => { type => SCALAR, optional => 1 },
+        watchers => { type => SCALAR, optional => 1 },
     });
 
     if (($params->{status} || '') eq 'deleted') {
@@ -92,7 +93,7 @@ sub list {
     }
 
     my $query = {
-            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ user status tags /
+            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ user status tags watchers /
     };
     $query->{status} ||= { '$ne' => 'deleted' };
 
