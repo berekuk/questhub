@@ -21,22 +21,22 @@ define([
                     model: this.model
                 }); // TODO - fetch or not?
             },
-            '.open-quests': function () { return this.createQuestSubview('open') },
-            '.closed-quests': function () { return this.createQuestSubview('closed') },
-            '.abandoned-quests': function () { return this.createQuestSubview('abandoned', 5) }
+            '.open-quests': function () {
+                return this.createQuestSubview({ status: 'open', user: this.model.get('login') })
+            },
+            '.closed-quests': function () {
+                return this.createQuestSubview({ status: 'closed', user: this.model.get('login') })
+            },
+            '.abandoned-quests': function () {
+                return this.createQuestSubview({ status: 'abandoned', limit: 5, user: this.model.get('login') })
+            }
         },
 
-        createQuestSubview: function (st, limit) {
-            if (limit === undefined) {
-                limit = 30;
-            }
-            var login = this.model.get('login');
-            var collection = new QuestCollectionModel([], {
-                'user': login,
-                'status': st,
-                'limit': limit,
-                'order': 'desc'
-            });
+        createQuestSubview: function (options) {
+            options.limit = options.limit || 30;
+            options.order = 'desc';
+
+            var collection = new QuestCollectionModel([], options);
             collection.fetch();
 
             return new QuestCollection({

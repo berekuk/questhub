@@ -3,8 +3,9 @@ define([
     'views/proto/common',
     'models/quest-collection',
     'views/quest/collection',
+    'models/current-user',
     'text!templates/explore.html'
-], function (_, Common, QuestCollectionModel, QuestCollection, html) {
+], function (_, Common, QuestCollectionModel, QuestCollection, currentUser, html) {
     return Common.extend({
         template: _.template(html),
 
@@ -28,11 +29,17 @@ define([
             'latest': { order: 'desc' },
             'unclaimed': { unclaimed: 1, sort: 'leaderboard' },
             'open': { status: 'open', sort: 'leaderboard' },
-            'closed': { status: 'closed', sort: 'leaderboard' }
+            'closed': { status: 'closed', sort: 'leaderboard' },
+            'watched-by-me': { order: 'desc', watchedByMe: true }
         },
 
         tabSubview: function () {
             var options = _.clone(this.name2options[this.tab]);
+
+            if (options.watchedByMe) {
+                options.watchers = currentUser.get('login');
+            }
+
             if (this.tag != undefined) {
                 options.tags = this.tag;
             }
@@ -69,7 +76,10 @@ define([
         },
 
         serialize: function () {
-            return { tag: this.tag };
+            return {
+                tag: this.tag,
+                currentUser: currentUser.get('login')
+            };
         },
 
         afterRender: function () {

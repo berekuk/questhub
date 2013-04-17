@@ -4,7 +4,7 @@ define([
     return Parent.extend({
         defaultCgi: ['comment_count=1'],
         baseUrl: '/api/quest',
-        cgi: ['user', 'status', 'limit', 'offset', 'sort', 'order', 'unclaimed', 'tags'],
+        cgi: ['user', 'status', 'limit', 'offset', 'sort', 'order', 'unclaimed', 'tags', 'watchers'],
         model: Quest,
         initialize: function () {
             Parent.prototype.initialize.apply(this, arguments);
