@@ -134,7 +134,7 @@ define([
             }
 
             var collection = new EventCollectionModel([], {
-                'limit': 100,
+                'limit': 50,
                 'types': types
             });
             var view = new NewsFeed({

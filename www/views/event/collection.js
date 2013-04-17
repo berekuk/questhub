@@ -10,6 +10,8 @@ define([
 
         listSelector: '.events-list',
 
+        pageSize: 50,
+
         generateItem: function (model) {
             return new EventBox({ model: model });
         }

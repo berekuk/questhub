@@ -9,7 +9,7 @@ define([
         setTypes: function(types) {
             this.options.types = types;
             this.options.offset = 0;
-            this.options.limit = 101;
+            this.options.limit = 51;
             this.fetch(this.options);
         }
     });
