@@ -32,15 +32,11 @@ define([
             }
             var login = this.model.get('login');
             var collection = new QuestCollectionModel([], {
-               'user': login,
-               'status': st,
-                'limit': limit
+                'user': login,
+                'status': st,
+                'limit': limit,
+                'order': 'desc'
             });
-            collection.comparator = function(m1, m2) {
-                if (m1.id > m2.id) return -1; // before
-                if (m2.id > m1.id) return 1; // after
-                return 0; // equal
-            };
             collection.fetch();
 
             return new QuestCollection({
