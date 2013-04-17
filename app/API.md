@@ -116,14 +116,7 @@ Options:
 * `comment_count`
 * `unclaimed` - if true, return unclaimed quests (user='')
 * `tags` - filter by tag; only one-tag-per-query filtering is supported now
-
-##### GET /api/quest?user={login}
-
-Get all quests of a given user.
-
-##### GET /api/quest?status={status}
-
-Get all quests with a given status.
+* `watchers` - filter by watcher; only one-watcher-per-query filtering is supported
 
 ##### GET /api/quest/{id}
 

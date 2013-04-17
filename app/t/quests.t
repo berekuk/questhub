@@ -91,24 +91,32 @@ sub quest_list :Tests {
 
 sub quest_list_filtering :Tests {
     my $self = shift;
-    $self->_fill_common_quests;
-    my $quests_data = $self->_common_quests;
+
+    http_json GET => "/api/fakeuser/foo";
+    my @quests = map { http_json POST => '/api/quest', { params => { name => "foo-$_" } } } 1..5;
+    http_json PUT => "/api/quest/$quests[$_]->{_id}", { params => { status => 'closed' } } for 3, 4;
+    http_json PUT => "/api/quest/$quests[1]->{_id}", { params => { tags => ['t1'] } };
+    http_json PUT => "/api/quest/$quests[3]->{_id}", { params => { tags => ['t1', 't2'] } };
+
+    http_json GET => "/api/fakeuser/bar";
+    http_json POST => "/api/quest/$quests[$_]->{_id}/watch" for 0, 4;
+    http_json GET => "/api/fakeuser/baz";
+    http_json POST => "/api/quest/$quests[$_]->{_id}/watch" for 2, 4;
 
     my $list = http_json GET => '/api/quest', { params => { status => 'closed' } };
-    cmp_deeply $list, [
-        {
-            %{ $quests_data->{3} },
-            team => [ $quests_data->{3}{user} ],
-        }
-    ];
+    cmp_deeply
+        [ map { $_->{_id} } @$list ],
+        [ map { $_->{_id} } @quests[3,4] ];
 
-    $list = http_json GET => '/api/quest', { params => { tags => 'bug' } };
-    cmp_deeply $list, [
-        {
-            %{ $quests_data->{2} },
-            team => [ $quests_data->{2}{user} ],
-        }
-    ];
+    $list = http_json GET => '/api/quest', { params => { tags => 't1' } };
+    cmp_deeply
+        [ map { $_->{_id} } @$list ],
+        [ map { $_->{_id} } @quests[1,3] ];
+
+    $list = http_json GET => '/api/quest', { params => { watchers => 'bar' } };
+    cmp_deeply
+        [ map { $_->{_id} } @$list ],
+        [ map { $_->{_id} } @quests[0, 4] ];
 }
 
 sub quest_sorting :Tests {
