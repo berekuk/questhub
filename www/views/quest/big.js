@@ -172,5 +172,6 @@ define([
             }
             return params;
         },
+        features: ['tooltip']
     });
 });
