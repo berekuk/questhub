@@ -2,8 +2,9 @@ define([
     'underscore',
     'jquery',
     'views/proto/common',
+    'settings',
     'text!templates/user-settings.html'
-], function (_, $, Common, html) {
+], function (_, $, Common, instanceSettings, html) {
     return Common.extend({
         template: _.template(html),
 
@@ -62,11 +63,16 @@ define([
 
         // i.e., parse the DOM and return the model params
         deserialize: function () {
-            return {
+            var settings = {
                 email: this.$('[name=email]').val(), // TODO - validate email
                 notify_comments: this.$('[name=notify-comments]').is(':checked'),
                 notify_likes: this.$('[name=notify-likes]').is(':checked')
             };
+            if (instanceSettings.instance_name == 'frf-todo') {
+                settings.frf_username = this.$('[name=frf-username]').val();
+                settings.frf_remote_key = this.$('[name=frf-remote-key]').val();
+            }
+            return settings;
         },
 
         save: function(cbOptions) {

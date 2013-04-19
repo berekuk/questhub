@@ -22,4 +22,12 @@
   <label class="checkbox">
       <input name="notify-likes" type="checkbox" <%= (obj.notify_likes > 0) ? 'checked="checked"' : '' %>>likes my quest
   </label>
+
+  <% if (partial.settings.instance_name == 'frf-todo') { %>
+    <hr>
+    <label class="muted">Транслировать мои квесты во френдфид:</label>
+    <input name="frf-username" type="text" placeholder="Nickname" value="<%- obj.frf_username %>">
+    <input name="frf-remote-key" type="text" placeholder="Remote key" value="<%- obj.frf_remote_key %>">
+    <br><span class="muted">(Remote key можно получить <a href="https://friendfeed.com/account/api">тут</a>.)</span>
+  <% } %>
 </div>
