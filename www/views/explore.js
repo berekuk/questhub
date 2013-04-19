@@ -37,6 +37,11 @@ define([
             var options = _.clone(this.name2options[this.tab]);
 
             if (options.watchedByMe) {
+                if (!currentUser.get('login')) {
+                    Backbone.trigger('pp:navigate', '/welcome', { trigger: true, replace: true });
+                    // fake empty collection, just to get us going until navigate event is processed
+                    return new QuestCollection({ collection: new QuestCollection() });
+                }
                 options.watchers = currentUser.get('login');
             }
 
