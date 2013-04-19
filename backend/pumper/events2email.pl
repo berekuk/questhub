@@ -1,5 +1,5 @@
 #!/usr/bin/env perl
-package bin::pumper::comments2email;
+package bin::pumper::events2email;
 
 use lib '/play/backend/lib';
 
