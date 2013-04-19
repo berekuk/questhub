@@ -5,7 +5,7 @@ use Play::DB qw(db);
 use Log::Any::Test;
 use Log::Any qw($log);
 
-my $pumper = pumper('comments2email');
+my $pumper = pumper('events2email');
 
 $pumper->run;
 $log->empty_ok;
@@ -21,15 +21,18 @@ my $quest = db->quests->add({
     status => 'open',
 });
 
+subtest "non-comment event" => sub {
+    $pumper->run;
+    $log->contains_ok(qr/5 events processed/); # quest-add, user-add
+};
+
 my $email_in = Play::Flux->email->in('test');
 
 subtest "comment on other user's quest" => sub {
-    my $storage = Play::Flux->comments;
-    $storage->write({ quest_id => $quest->{_id}, author => 'bar', body => '**strong**' });
-    $storage->commit;
+    db->comments->add({ quest_id => $quest->{_id}, author => 'bar', body => '**strong**' });
 
     $pumper->run;
-    $log->contains_ok(qr/1 comments processed, 1 emails sent/);
+    $log->contains_ok(qr/1 emails sent, 1 events processed/);
 
     my $email = $email_in->read;
     $email_in->commit;
@@ -41,12 +44,10 @@ subtest "comment on other user's quest" => sub {
 };
 
 subtest "comment on her own quest" => sub {
-    my $storage = Play::Flux->comments;
-    $storage->write({ quest_id => $quest->{_id}, author => 'foo', body => 'self-comment' });
-    $storage->commit;
+    db->comments->add({ quest_id => $quest->{_id}, author => 'foo', body => 'self-comment' });
 
     $pumper->run;
-    $log->contains_ok(qr/1 comments processed$/);
+    $log->contains_ok(qr/1 events processed$/);
 
     is $email_in->lag, 0;
 
@@ -62,17 +63,16 @@ subtest "comment on watched quest" => sub {
     db->quests->watch($watched_quest->{_id}, 'baz');
     db->quests->watch($watched_quest->{_id}, 'baz2');
 
-    my $storage = Play::Flux->comments;
-    $storage->write({ quest_id => $watched_quest->{_id}, author => 'baz', body => 'preved!' });
-    $storage->commit;
+    db->comments->add({ quest_id => $watched_quest->{_id}, author => 'baz', body => 'preved!' });
 
     $pumper->run;
-    $log->contains_ok(qr/1 comments processed, 2 emails sent$/);
+    $log->contains_ok(qr/2 emails sent, 2 events processed$/);
 
     my $chunk = $email_in->read_chunk(5);
     $email_in->commit;
 
     $chunk = [ sort { $a->[0] cmp $b->[0] } @$chunk ];
+    is scalar @$chunk, 2;
     is $chunk->[0][0], 'bar@example.com';
     is $chunk->[1][0], 'baz2@example.com';
 
@@ -81,6 +81,31 @@ subtest "comment on watched quest" => sub {
 
     unlike $chunk->[1][2], qr/commented on your quest/;
     like $chunk->[1][2], qr/commented on the quest you're watching/;
+};
+
+subtest "quest completed" => sub {
+    my $q2 = db->quests->add({
+        user => 'bar',
+        name => 'bq2',
+        status => 'open',
+    });
+    db->quests->watch($q2->{_id}, 'baz');
+    db->quests->watch($q2->{_id}, 'baz2');
+
+    db->quests->update($q2->{_id}, { status => 'closed', user => 'bar' });
+
+    $pumper->run;
+    $log->contains_ok(qr/2 emails sent, 2 events processed$/);
+
+    my $chunk = $email_in->read_chunk(5);
+    $email_in->commit;
+    $chunk = [ sort { $a->[0] cmp $b->[0] } @$chunk ];
+    is scalar @$chunk, 2;
+    is $chunk->[0][0], 'baz2@example.com';
+    is $chunk->[1][0], 'baz@example.com';
+
+    like $chunk->[0][2], qr/completed a quest/;
+    like $chunk->[1][2], qr/completed a quest/;
 };
 
 done_testing;

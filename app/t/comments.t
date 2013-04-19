@@ -139,7 +139,7 @@ sub email_comment :Tests {
     http_json GET => "/api/fakeuser/bar";
     http_json POST => "/api/quest/$quest_id/comment", { params => { body => "Hello sweetie." } };
 
-    pumper('comments2email')->run;
+    pumper('events2email')->run;
     my @deliveries = process_email_queue();
     is scalar(@deliveries), 1, '1 email sent';
     cmp_deeply $deliveries[0]{envelope}, {

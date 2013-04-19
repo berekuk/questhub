@@ -585,7 +585,7 @@ sub email_watchers :Tests {
 
     http_json POST => '/api/quest/'.$quest->{_id}.'/comment', { params => { body => 'hello to foo, bar and baz!' } };
 
-    pumper('comments2email')->run;
+    pumper('events2email')->run;
     my @deliveries = process_email_queue();
     is scalar @deliveries, 3;
 

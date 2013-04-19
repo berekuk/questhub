@@ -40,6 +40,11 @@ sub add {
     my ($event) = validate_pos(@_, { type => HASHREF });
 
     my $id = $self->collection->insert($event);
+
+    my $events_queue = Play::Flux->events;
+    $events_queue->write($event);
+    $events_queue->commit;
+
     return 1;
 }
 

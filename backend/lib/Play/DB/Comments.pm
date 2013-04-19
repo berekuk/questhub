@@ -43,10 +43,6 @@ sub add {
         },
     });
 
-    my $comments_queue = Play::Flux->comments;
-    $comments_queue->write(\%params);
-    $comments_queue->commit;
-
     return { _id => $id->to_string };
 }
 

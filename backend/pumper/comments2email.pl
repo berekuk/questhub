@@ -1,6 +1,10 @@
 #!/usr/bin/env perl
 package bin::pumper::comments2email;
 
+##########################################################
+# This pumper is deprecated! events2email superseded it. #
+##########################################################
+
 use lib '/play/backend/lib';
 
 use Moo;
