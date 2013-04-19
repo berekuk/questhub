@@ -61,11 +61,11 @@ sub atom :Tests {
     http_json GET => '/api/fakeuser/Frodo';
 
     # add-quest event
-    my $add_result = http_json POST => '/api/quest', {
+    my $add_result = http_json POST => '/api/quest', { params => {
         user => 'Frodo',
         name => 'Destroy the Ring',
         status => 'open',
-    };
+    } };
 
     # Regular Atom
     my $response = dancer_response GET => '/api/event/atom';
