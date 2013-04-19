@@ -30,12 +30,11 @@ has 'in' => (
     },
 );
 
-sub process_comment_add {
+sub _quest2recipients {
     my $self = shift;
-    my ($event) = @_;
+    my ($quest, $author) = @_;
 
-    my $item = $event->{object};
-    my $quest = $item->{quest};
+    my $result = {};
 
     my @recipients = (
         @{ $quest->{team} },
@@ -43,18 +42,40 @@ sub process_comment_add {
     );
     my %_uniq_recipients = map { $_ => 1 } @recipients;
     @recipients = keys %_uniq_recipients;
-    @recipients = grep { $_ ne $item->{author} } @recipients;
+    @recipients = grep { $_ ne $author } @recipients;
 
-    my $body_html;
     for my $recipient (@recipients) {
         my $email = db->users->get_email($recipient, 'notify_comments') or next;
+        if (grep { $_ eq $recipient } @{ $quest->{team} }) {
+            $result->{$email} = 'team';
+        }
+        else {
+            $result->{$email} = 'watcher';
+        }
+    }
 
-        $body_html ||= pp_markdown($item->{body});
+    return $result;
+}
+
+sub process_add_comment {
+    my $self = shift;
+    my ($event) = @_;
+
+    my $item = $event->{object};
+    my $quest = $item->{quest};
+
+    my $recipients = $self->_quest2recipients($quest, $item->{author});
+    return unless %$recipients;
+
+    my $body_html = pp_markdown($item->{body});
+
+    for my $email (keys %$recipients) {
+
         # TODO - quoting
         # TODO - unsubscribe link
 
         my $email_body_address;
-        if (grep { $_ eq $recipient } @{ $quest->{team} }) {
+        if ($recipients->{$email} eq 'team') {
             $email_body_address = "your quest";
         }
         else {
@@ -77,13 +98,38 @@ sub process_comment_add {
     }
 }
 
+sub process_close_quest {
+    my $self = shift;
+    my ($event) = @_;
+
+    my $quest = $event->{object};
+
+    my $recipients = $self->_quest2recipients($quest, $event->{author});
+    return unless %$recipients;
+
+    for my $email (keys %$recipients) {
+        my $email_body = qq[
+            <p>
+            <a href="http://].setting('hostport').qq[/player/$event->{author}">$event->{author}</a> completed a quest you're watching: <a href="http://].setting('hostport').qq[/quest/$event->{object_id}">$quest->{name}</a>.];
+        db->events->email(
+            $email,
+            "$event->{author} completed a quest: '$quest->{name}'",
+            $email_body,
+        );
+        $self->add_stat('emails sent');
+    }
+}
+
 sub run_once {
     my $self = shift;
 
-    while (my $item = $self->in->read) {
+    while (my $event = $self->in->read) {
         $self->in->commit; # it's better to lose the email than to spam a user indefinitely
-        if ($item->{object_type} eq 'comment' and $item->{action} eq 'add') {
-            $self->process_comment_add($item);
+        if ($event->{object_type} eq 'comment' and $event->{action} eq 'add') {
+            $self->process_add_comment($event);
+        }
+        if ($event->{object_type} eq 'quest' and $event->{action} eq 'close') {
+            $self->process_close_quest($event);
         }
 
         $self->add_stat('events processed');

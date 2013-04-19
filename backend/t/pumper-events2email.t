@@ -72,6 +72,7 @@ subtest "comment on watched quest" => sub {
     $email_in->commit;
 
     $chunk = [ sort { $a->[0] cmp $b->[0] } @$chunk ];
+    is scalar @$chunk, 2;
     is $chunk->[0][0], 'bar@example.com';
     is $chunk->[1][0], 'baz2@example.com';
 
@@ -80,6 +81,31 @@ subtest "comment on watched quest" => sub {
 
     unlike $chunk->[1][2], qr/commented on your quest/;
     like $chunk->[1][2], qr/commented on the quest you're watching/;
+};
+
+subtest "quest completed" => sub {
+    my $q2 = db->quests->add({
+        user => 'bar',
+        name => 'bq2',
+        status => 'open',
+    });
+    db->quests->watch($q2->{_id}, 'baz');
+    db->quests->watch($q2->{_id}, 'baz2');
+
+    db->quests->update($q2->{_id}, { status => 'closed', user => 'bar' });
+
+    $pumper->run;
+    $log->contains_ok(qr/2 emails sent, 2 events processed$/);
+
+    my $chunk = $email_in->read_chunk(5);
+    $email_in->commit;
+    $chunk = [ sort { $a->[0] cmp $b->[0] } @$chunk ];
+    is scalar @$chunk, 2;
+    is $chunk->[0][0], 'baz2@example.com';
+    is $chunk->[1][0], 'baz@example.com';
+
+    like $chunk->[0][2], qr/completed a quest/;
+    like $chunk->[1][2], qr/completed a quest/;
 };
 
 done_testing;
