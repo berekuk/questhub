@@ -25,17 +25,15 @@ sub _storage {
 }
 
 sub email {
-    state $result = _storage('email');
-    return $result;
-}
-
-sub emails {
-    return email();
+    return state $result = _storage('email');
 }
 
 sub comments {
-    state $result = _storage('comments');
-    return $result;
+    return state $result = _storage('comments');
+}
+
+sub events {
+    return state $result = _storage('events');
 }
 
 1;

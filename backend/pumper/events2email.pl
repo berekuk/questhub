@@ -1,10 +1,6 @@
 #!/usr/bin/env perl
 package bin::pumper::comments2email;
 
-##########################################################
-# This pumper is deprecated! events2email superseded it. #
-##########################################################
-
 use lib '/play/backend/lib';
 
 use Moo;
@@ -30,19 +26,16 @@ sub pp_markdown {
 has 'in' => (
     is => 'lazy',
     default => sub {
-        return Play::Flux->comments->in('/data/storage/comments/comments2email.pos');
+        return Play::Flux->events->in('/data/storage/events/events2email.pos');
     },
 );
 
-sub process_item {
+sub process_comment_add {
     my $self = shift;
-    my ($item) = @_;
+    my ($event) = @_;
 
-    my $quest = eval { db->quests->get($item->{quest_id}) };
-    unless ($quest) {
-        $log->warn("quest $item->{quest_id} not found");
-        return;
-    }
+    my $item = $event->{object};
+    my $quest = $item->{quest};
 
     my @recipients = (
         @{ $quest->{team} },
@@ -88,10 +81,12 @@ sub run_once {
     my $self = shift;
 
     while (my $item = $self->in->read) {
-        $self->process_item($item);
         $self->in->commit; # it's better to lose the email than to spam a user indefinitely
+        if ($item->{object_type} eq 'comment' and $item->{action} eq 'add') {
+            $self->process_comment_add($item);
+        }
 
-        $self->add_stat('comments processed');
+        $self->add_stat('events processed');
     }
 }
 
