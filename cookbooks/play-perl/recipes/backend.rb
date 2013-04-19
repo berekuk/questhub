@@ -19,23 +19,16 @@ file "/data/storage/email/log" do
     action :create_if_missing
 end
 
-directory "/data/storage/comments"
-file "/data/storage/comments/log" do
+directory "/data/storage/events"
+file "/data/storage/events/log" do
     action :create_if_missing
 end
 
 include_recipe "ubic"
-ubic_service "pumper" do
-  action [:install, :start]
-end
-
-if File.exists?("/etc/ubic/service/sendmail")
-  ubic_service "sendmail" do
-    action [:stop]
-  end
-  file "/etc/ubic/service/sendmail" do
-    action :delete
-  end
+if not File.exists?("/etc/ubic/service/pumper")
+    ubic_service "pumper" do
+      action [:install, :start]
+    end
 end
 
 # FIXME - copypaste!
@@ -48,11 +41,24 @@ template "/etc/logrotate.d/sendmail-pumper" do
   })
 end
 
-template "/etc/logrotate.d/comments2email-pumper" do
+template "/etc/logrotate.d/events2email-pumper" do
   source "logrotate.conf.erb"
   mode 0644
   variables({
-    :log => '/data/pumper/comments2email.log /data/pumper/comments2email.err.log',
-    :postrotate => 'ubic reload comments2email',
+    :log => '/data/pumper/events2email.log /data/pumper/events2email.err.log',
+    :postrotate => 'ubic reload events2email',
   })
+end
+
+if File.exists?("/etc/logrotate.d/comments2email-pumper")
+  execute "stop comments2email" do
+    command "ubic stop pumper.comments2email"
+  end
+  file "/etc/logrotate.d/comments2email-pumper" do
+    action :delete
+  end
+end
+
+execute "start events2email" do
+  command "ubic start pumper.events2email"
 end
