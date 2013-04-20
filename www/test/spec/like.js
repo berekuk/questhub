@@ -1,9 +1,9 @@
 define([
     'models/current-user',
     'models/quest',
-    'views/like'
+    'views/quest/like'
 ], function (currentUser, QuestModel, Like) {
-    describe('like', function () {
+    describe('like:', function () {
         beforeEach(function () {
             spyOn($, 'ajax');
         });
@@ -18,7 +18,7 @@ define([
         };
 
         describe('quest without likes', function () {
-            var model = new QuestModel(_.extend({}, proto));
+            var model = new QuestModel(_.extend(proto, {}));
             var view = new Like({ model: model });
 
             view.render();
@@ -31,7 +31,7 @@ define([
         });
 
         describe('quest with likes', function () {
-            var model = new QuestModel(_.extend({ likes: ['baz', 'baz2'] }, proto));
+            var model = new QuestModel(_.extend(proto, { likes: ['baz', 'baz2'] }));
             var view = new Like({ model: model });
 
             view.render();
@@ -45,11 +45,11 @@ define([
         });
 
         describe("current user's quest", function () {
-            var model = new QuestModel(_.extend({
+            var model = new QuestModel(_.extend(proto, {
                 likes: ['baz', 'baz2'],
                 team: ['jasmine'],
                 user: 'jasmine'
-            }, proto));
+            }));
             var view = new Like({ model: model });
 
             view.render();
