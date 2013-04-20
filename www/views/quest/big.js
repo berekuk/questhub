@@ -2,7 +2,7 @@ define([
     'underscore',
     'backbone',
     'views/proto/common',
-    'views/like',
+    'views/quest/like',
     'views/quest/watch',
     'views/quest/completed',
     'models/current-user',

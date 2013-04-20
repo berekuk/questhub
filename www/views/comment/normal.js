@@ -1,10 +1,10 @@
 define([
     'underscore',
     'views/proto/common',
-    'views/like',
+    'views/comment/like',
     'models/current-user',
     'text!templates/comment.html'
-], function (_, Common, Like, currentUser, html) {
+], function (_, Common, CommentLike, currentUser, html) {
     return Common.extend({
         template: _.template(html),
 
@@ -22,7 +22,7 @@ define([
 
         subviews: {
             '.likes': function () {
-                return new Like({ model: this.model, showButton: false, ownerField: 'author' });
+                return new CommentLike({ model: this.model });
             }
         },
 
