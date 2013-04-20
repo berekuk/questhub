@@ -1,9 +1,13 @@
 package Play::Route::Quests;
 
 use Dancer ':syntax';
+prefix '/api';
+
 use Play::DB qw(db);
 
-prefix '/api';
+use DateTime;
+use DateTime::Format::RFC3339;
+my $rfc3339 = DateTime::Format::RFC3339->new;
 
 put '/quest/:id' => sub {
     die "not logged in" unless session->{login};
@@ -64,6 +68,12 @@ get '/quest' => sub {
         }
 
         my $atom_tag = join(',', map { "$_=$params->{$_}" } keys %$params);
+
+        for my $quest (@$quests) {
+            $quest->{updated} = $rfc3339->format_datetime(
+                DateTime->from_epoch(epoch => $quest->{ts})
+            );
+        }
 
         template 'quest-atom' => {
             quests => $quests,

@@ -6,7 +6,7 @@
 
 <% FOREACH quest IN quests %>
 <entry>
-    <updated><% event.updated %></updated>
+    <updated><% quest.updated %></updated>
     <id>tag:<% settings.hostport %>,2013-02-15:quest/<% quest.item('_id') %></id>
     <author>
         <name><% quest.author %></name>
