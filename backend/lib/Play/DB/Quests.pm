@@ -81,7 +81,7 @@ sub list {
         comment_count => { type => BOOLEAN, optional => 1 },
         # sorting and paging
         sort => { type => SCALAR, optional => 1, regex => qr/^(leaderboard|ts)$/ },
-        order => { type => SCALAR, regex => qr/^asc|desc$/, default => 'asc' },
+        order => { type => SCALAR, regex => qr/^asc|desc$/, default => 'desc' },
         limit => { type => SCALAR, regex => qr/^\d+$/, optional => 1 },
         offset => { type => SCALAR, regex => qr/^\d+$/, default => 0 },
         tags => { type => SCALAR, optional => 1 },

@@ -110,7 +110,7 @@ Options:
 
 * `limit`
 * `offset`
-* `order` - `asc` or `desc`, with `asc` being the default
+* `order` - `asc` or `desc`, with `desc` being the default
 * `sort` - only `leaderboard` value is supported for now, meaning composite likes_count->comments_count sorting
 * `user`
 * `comment_count`

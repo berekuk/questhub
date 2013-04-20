@@ -107,17 +107,17 @@ sub quest_list_filtering :Tests {
     my $list = http_json GET => '/api/quest', { params => { status => 'closed' } };
     cmp_deeply
         [ map { $_->{_id} } @$list ],
-        [ map { $_->{_id} } @quests[3,4] ];
+        [ map { $_->{_id} } @quests[4,3] ];
 
     $list = http_json GET => '/api/quest', { params => { tags => 't1' } };
     cmp_deeply
         [ map { $_->{_id} } @$list ],
-        [ map { $_->{_id} } @quests[1,3] ];
+        [ map { $_->{_id} } @quests[3,1] ];
 
     $list = http_json GET => '/api/quest', { params => { watchers => 'bar' } };
     cmp_deeply
         [ map { $_->{_id} } @$list ],
-        [ map { $_->{_id} } @quests[0, 4] ];
+        [ map { $_->{_id} } @quests[4,0] ];
 }
 
 sub quest_sorting :Tests {
@@ -434,9 +434,11 @@ sub cc :Tests {
     my $list = http_json GET => "/api/quest?user=$user";
     my $list_with_cc = http_json GET => "/api/quest?user=$user&comment_count=1";
     is $list->[0]{comment_count}, undef;
-    is $list_with_cc->[0]{comment_count}, 2;
+
+    # default order is desc, so $list_with_cc->[0] is q3
+    is $list_with_cc->[0]{comment_count}, 1;
     is $list_with_cc->[1]{comment_count}, undef;
-    is $list_with_cc->[2]{comment_count}, 1;
+    is $list_with_cc->[2]{comment_count}, 2;
 }
 
 sub email_like :Tests {

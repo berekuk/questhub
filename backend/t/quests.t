@@ -78,8 +78,47 @@ sub list :Tests {
     }
 
     cmp_deeply
-        [ sort { $a->{_id} cmp $b->{_id} } @{ db->quests->list({}) } ],
-        [ map { superhashof({ %$_, team => [$_->{user}] }) } sort { $a->{_id} cmp $b->{_id} } @data ];
+        db->quests->list({}),
+        [ reverse map { superhashof({ %$_, team => [$_->{user}] }) } @data ];
+
+    cmp_deeply
+        db->quests->list({ order => 'desc' }),
+        [ reverse map { superhashof({ %$_, team => [$_->{user}] }) } @data ];
+
+    cmp_deeply
+        db->quests->list({ order => 'asc' }),
+        [ map { superhashof({ %$_, team => [$_->{user}] }) } @data ];
+}
+
+sub list_leaderboard :Tests {
+    db->users->add({ login => $_ }) for qw( foo l1 l2 l3 );
+    my @data = (
+        {
+            name => 'q1',
+            user => 'foo',
+            status => 'open',
+        },
+        {
+            name => 'q2',
+            user => 'foo',
+            status => 'open',
+        },
+        {
+            name => 'q3',
+            user => 'foo',
+            status => 'open',
+        },
+    );
+    for (@data) {
+        $_->{_id} = db->quests->add($_)->{_id};
+    }
+    db->quests->like($data[0]->{_id}, 'l1');
+    db->quests->like($data[2]->{_id}, 'l1');
+    db->quests->like($data[2]->{_id}, 'l2');
+
+    cmp_deeply
+        db->quests->list({ sort => 'leaderboard' }),
+        [ map { superhashof({ %$_, team => [$_->{user}] }) } @data[2,0,1] ];
 }
 
 sub watch_unwatch :Tests {
