@@ -600,16 +600,16 @@ sub email_watchers :Tests {
 sub atom :Tests {
     http_json GET => '/api/fakeuser/foo';
 
-    http_json POST => '/api/quest', {
+    http_json POST => '/api/quest', { params => {
         user => 'foo',
         name => 'q1',
         status => 'open',
-    };
-    http_json POST => '/api/quest', {
+    } };
+    http_json POST => '/api/quest', { params => {
         user => 'foo',
         name => 'q2',
         status => 'open',
-    };
+    } };
 
     # Regular Atom
     my $response = dancer_response GET => '/api/quest?fmt=atom&user=foo';
