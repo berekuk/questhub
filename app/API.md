@@ -218,7 +218,8 @@ Quest:
         _id: ...,
         status: 'open', // or 'closed'
         author: 'blah',
-        user: 'blah',   // can be different from author or even empty
+        user: 'blah',   // can be different from author or even empty; deprecated - use 'team' instead
+        team: ['blah'], // can be different from author; can contain multiple people; or can be empty
         name: 'quest title',
         type: 'bug'     // or 'blog', or 'feature'
         likes: [
