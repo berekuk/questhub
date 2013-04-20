@@ -50,7 +50,32 @@ get '/quest' => sub {
         $params->{user} = '';
     }
 
-    return db->quests->list($params);
+    my $quests = db->quests->list($params);
+
+    if (param('fmt') and param('fmt') eq 'atom') {
+        header 'Content-Type' => 'application/xml';
+
+        my $frontend_url = '/';
+        if (param('user')) {
+            $frontend_url = '/player/'.param('user');
+        }
+        elsif (param('tags')) {
+            $frontend_url = '/explore/latest/tag/'.param('tags');
+        }
+
+        my $atom_tag = join(',', map { "$_=$params->{$_}" } keys %$params);
+
+        template 'quest-atom' => {
+            quests => $quests,
+            params => $params,
+            frontend_url => $frontend_url,
+            atom_tag => $atom_tag,
+        };
+    }
+    else {
+        # default is json, as usual
+        return $quests;
+    }
 };
 
 get '/quest/:id' => sub {

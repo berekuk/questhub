@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title><% settings.service_name %> - Quests</title>
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %><% frontend_url %>" />
+    <id>tag:<% settings.hostport %>,2013-02-15:<% atom_tag %></id>
+
+<% FOREACH quest IN quests %>
+<entry>
+    <updated><% event.updated %></updated>
+    <id>tag:<% settings.hostport %>,2013-02-15:quest/<% quest.item('_id') %></id>
+    <author>
+        <name><% quest.author %></name>
+        <uri>http://<% settings.hostport %>/player/<% event.author %></uri>
+    </author>
+
+    <title><% quest.name | xml %></title>
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= quest.item('_id') %>" />
+
+</entry>
+<% END %>
+</feed>

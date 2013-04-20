@@ -6,6 +6,10 @@ cpan_module 'Test::Class'
 cpan_module 'Import::Into'
 cpan_module 'Carp::Always'
 
+# validate atom in tests
+package 'libxml2-dev'
+cpan_module 'XML::LibXML'
+
 directory "/data/dancer-dev"
 ubic_service "dancer-dev" do
   action [:install, :start]

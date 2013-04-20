@@ -117,6 +117,7 @@ Options:
 * `unclaimed` - if true, return unclaimed quests (user='')
 * `tags` - filter by tag; only one-tag-per-query filtering is supported now
 * `watchers` - filter by watcher; only one-watcher-per-query filtering is supported
+* `fmt` - if set to `atom`, return atom instead of json
 
 ##### GET /api/quest/{id}
 

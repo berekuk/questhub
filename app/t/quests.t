@@ -1,10 +1,11 @@
+use 5.010;
+
 use lib 'lib';
 use Play::Test::App;
 use parent qw(Test::Class);
 
-use 5.010;
-
 use Play::DB qw(db);
+use XML::LibXML;
 
 sub setup :Tests(setup => no_plan) {
     Dancer::session->destroy;
@@ -592,6 +593,26 @@ sub email_watchers :Tests {
     cmp_deeply
         [ sort map { $_->{successes}[0] } @deliveries ],
         [ sort map { "$_\@example.com" } qw( foo bar baz ) ];
+}
+
+sub atom :Tests {
+    http_json GET => '/api/fakeuser/foo';
+
+    http_json POST => '/api/quest', {
+        user => 'foo',
+        name => 'q1',
+        status => 'open',
+    };
+    http_json POST => '/api/quest', {
+        user => 'foo',
+        name => 'q2',
+        status => 'open',
+    };
+
+    # Regular Atom
+    my $response = dancer_response GET => '/api/quest?fmt=atom&user=foo';
+    is $response->status, 200;
+    is exception { XML::LibXML->new->parse_string($response->content) }, undef;
 }
 
 __PACKAGE__->new->runtests;
