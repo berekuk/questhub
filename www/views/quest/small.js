@@ -1,7 +1,7 @@
 define([
     'underscore',
     'views/proto/common',
-    'views/like',
+    'views/quest/like',
     'text!templates/quest-small.html'
 ], function (_, Common, Like, html) {
     return Common.extend({
@@ -23,7 +23,7 @@ define([
             '.likes': function () {
                 return new Like({
                     model: this.model,
-                    showButton: false
+                    hidden: true
                 });
             }
         },

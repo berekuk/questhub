@@ -8,6 +8,7 @@ define([
         buttonSelector: undefined,
         ownerField: undefined,
         field: undefined,
+        hidden: false,
 
         push: function () { },
         pull: function () { },
@@ -18,27 +19,20 @@ define([
         },
 
         afterInitialize: function () {
-            if (this.options.showButton == undefined) {
-                this._sb = true;
-            }
-            else {
-                this._sb = this.options.showButton;
-            }
-
-            if (this.options.ownerField != undefined) {
-                this.ownerField = this.options.ownerField;
+            if (this.options.hidden != undefined) {
+                this.hidden = this.options.hidden;
             }
             this.listenTo(this.model, 'change', this.render);
         },
 
         showButton: function () {
             this.$('.push-pull-button').show();
-            this._sb = true;
+            this.hidden = false;
         },
 
         hideButton: function () {
             this.$('.push-pull-button').hide();
-            this._sb = false;
+            this.hidden = true;
         },
 
         serialize: function () {
@@ -46,15 +40,15 @@ define([
 
             var params = {
                 list: this.model.get(this.field),
-                my: (currentLogin == this.model.get(this.ownerField)),
                 currentUser: currentLogin
             };
-            params.meGusta = _.contains(params.list, params.currentUser);
+            params.my = this.my(currentUser);
+            params.meGusta = _.contains(params.list, currentLogin);
             return params;
         },
 
         afterRender: function () {
-            if (!this._sb) {
+            if (this.hidden) {
                 this.hideButton();
             }
         },

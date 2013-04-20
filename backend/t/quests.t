@@ -146,7 +146,7 @@ sub list_watched :Tests {
     my @quests = map {
         db->quests->add({
             name => "q$_",
-            team => ['foo'],
+            user => 'foo',
             status => 'open',
         })
     } (1 .. 5);

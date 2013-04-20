@@ -409,7 +409,7 @@ sub quest_tags :Tests {
         tags => 'invalid',
     } };
     is $unknown_type_response->status, 500;
-    like $unknown_type_response->content, qr/should be arrayref/;
+    like $unknown_type_response->content, qr/not one of the allowed types: arrayref/;
 }
 
 sub cc :Tests {

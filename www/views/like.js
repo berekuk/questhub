@@ -6,7 +6,6 @@ define([
     return PushPull.extend({
         template: _.template(html),
         field: 'likes',
-        ownerField: 'user',
 
         push: function () {
             this.model.like();

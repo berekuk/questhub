@@ -14,7 +14,6 @@ define([
 
         act: function(action) {
             var model = this;
-            console.log(this.url());
             $.post(this.url() + '/' + action)
             .done(function () {
                 model.fetch();

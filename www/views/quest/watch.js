@@ -6,7 +6,12 @@ define([
     return PushPull.extend({
         template: _.template(html),
         field: 'watchers',
-        ownerField: 'user',
+
+        my: function (currentUser) {
+            var team = this.model.get('team');
+            team = team || [];
+            return _.contains(team, currentUser.get('login'));
+        },
 
         push: function () {
             this.model.act('watch');

@@ -147,7 +147,12 @@ sub list {
 
 sub add {
     my $self = shift;
-    my ($params) = validate_pos(@_, { type => HASHREF });
+    my $params = validate(@_, {
+        name => { type => SCALAR },
+        tags => { type => ARRAYREF, optional => 1 },
+        user => { type => SCALAR },
+        status => { type => SCALAR, default => 'open' },
+    });
 
     # validate
     # TODO - do strict validation here instead of dancer route?
