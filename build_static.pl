@@ -10,11 +10,13 @@ use autodie qw(:all);
 
 system('rm -rf www-build');
 system('cp -r www www-build');
-system(q{rm -rf www-build/views www-build/models www-build/test www-build/*.js});
+system(q{rm -rf www-build/views www-build/models www-build/test www-build/*.js www-build/sass www-build/css/.gitignore});
 
 system('cd www && node ./tools/r.js -o name=vendors/almond include=setup mainConfigFile=setup.js out=built.js baseUrl=. wrap=true');
-
 rename 'www/built.js' => 'www-build/built.js';
+
+system('cd www && sass -t compressed sass/main.scss main.min.css');
+rename 'www/main.min.css' => 'www-build/css/main.css';
 
 sub slurp {
     open my $fh, '<', shift;

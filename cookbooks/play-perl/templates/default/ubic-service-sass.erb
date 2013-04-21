@@ -1,0 +1,10 @@
+# vim: ft=perl
+use parent qw(Ubic::Service::SimpleDaemon);
+
+__PACKAGE__->new({
+    bin => 'sass --watch sass/main.scss:css/main.css',
+    cwd => '/play/www',
+    stdout => '/data/sass.log',
+    stderr => '/data/sass.err.log',
+    ubic_log => '/data/sass.ubic.log',
+});

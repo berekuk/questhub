@@ -1,0 +1,142 @@
+.open-quest-count-label {
+    float: right;
+}
+
+.current-user-leaderboard-tip {
+    float: right;
+    position: relative;
+    left: 14px;
+    top: 12px;
+}
+
+.watchers {
+    margin-bottom: 8px;
+}
+.likes {
+    margin-bottom: 8px;
+}
+
+.quest-label {
+    position: relative;
+    top: -5px;
+}
+
+dd {
+    margin-bottom: 20px;
+}
+
+time.timeago {
+    color: #999;
+}
+
+.avatar-mini {
+    width: 24px;
+    height: 24px;
+}
+
+// comment as shown in the News Feed
+.event-comment-well {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    overflow: auto;
+}
+
+// comment as shown on the quest page
+.comment-content {
+    overflow: auto;
+}
+
+// wrapper from comments-page
+.comments {
+    margin-top: 10px;
+}
+
+textarea.comment-edit {
+    width: 95%;
+    height: 100%;
+}
+
+.mini-button-block {
+    a {
+        color: #999;
+    }
+
+    a:hover {
+        text-decoration: none !important;
+        color: #333;
+    }
+}
+
+.modal-quest-add label {
+    cursor: default; // override bootstrap's "pointer" cursor style, it's confusing
+}
+
+input.quest-edit {
+    font-size: 26px;
+    line-height: 26px;
+    height: 35px;
+    width: 95%;
+    font-weight: 200;
+    margin-bottom: 0px;
+}
+
+.quest-tags-edit input {
+    background-color: #fcf8e3;
+}
+
+.quest-big-tags-edit input {
+    padding: 2px;
+    margin-bottom: 0px;
+}
+
+.registration-form {
+    margin-top: 30px;
+}
+
+// trying to reduce the page jerkiness
+.show-more-or-progress {
+    height: 60px;
+}
+
+tbody tr.show-more > td {
+    cursor: pointer;
+}
+
+.current-user-notifications-icon {
+    margin: 10px 0 0 0;
+
+    a {
+        color: #f00;
+    }
+
+    a:hover {
+        text-decoration: none;
+    }
+}
+
+.comment-bottom-line {
+    // fixing the jumping line height on "like" button hide/show
+    line-height: 24px;
+}
+
+.twitter-share-button {
+    vertical-align: middle;
+}
+
+.tag-filter {
+    text-align: center;
+}
+
+ul.nav-filter {
+    margin-bottom: 0px; // accordion around it sets enough padding
+
+    li {
+        display: block;
+        float: none;
+        background-color: #f5f5f5;
+    }
+}
+
+@import 'sass/common.scss';
+@import 'sass/quest-collection.scss';
+@import 'sass/quest-big.scss';

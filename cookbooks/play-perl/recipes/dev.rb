@@ -37,3 +37,11 @@ package "phantomjs"
 
 # used by build_static.pl
 cpan_module "IPC::System::Simple"
+
+gem_package 'sass'
+gem_package 'rb-inotify' do
+  version '0.8.8'
+end
+ubic_service "sass" do
+  action [:install, :start]
+end

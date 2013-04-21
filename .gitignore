@@ -8,3 +8,4 @@ app/twitter.yml
 /dna.json
 /dump
 /.chef
+.sass-cache

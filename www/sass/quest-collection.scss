@@ -1,0 +1,42 @@
+// see views/quest/small.js
+.quest-row td {
+    line-height: 25px;
+}
+
+// based on bootstrap's tr.info
+tbody tr.quest-closed {
+    > td {
+        background-color: #d9edf7;
+    }
+    &:hover > td {
+        background-color: #c4e3f3;
+    }
+}
+
+// based on bootstrap's tr.warning
+tbody tr.quest-open {
+    > td {
+        background-color: #fcf8e3;
+    }
+    &:hover > td {
+        background-color: #faf2cc;
+    }
+}
+
+tbody tr.quest-abandoned {
+    > td {
+        background-color: #dddddd;
+    }
+    &:hover > td {
+        background-color: #d3d3d3;
+    }
+}
+
+tbody tr.quest-unclaimed {
+    > td {
+        background-color: #dff0d8;
+    }
+    &:hover > td {
+        background-color: #d0e9c6;
+    }
+}
