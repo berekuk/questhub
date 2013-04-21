@@ -1,9 +1,8 @@
+// Always show vertical scroll bar in browser. It fixes the issue with jumping buttons.
+html { overflow-y: scroll; }
+
 .brand {
     font-family: berkshire-swash, "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-.comments {
-    margin-top: 10px;
 }
 
 .quest-big-labels {
@@ -52,16 +51,26 @@ time.timeago {
     height: 24px;
 }
 
-/* comment as shown in the News Feed */
+// comment as shown in the News Feed
 .event-comment-well {
     margin-top: 5px;
     margin-bottom: 5px;
     overflow: auto;
 }
 
-/* comment as shown on the quest page */
+// comment as shown on the quest page
 .comment-content {
     overflow: auto;
+}
+
+// wrapper from comments-page
+.comments {
+    margin-top: 10px;
+}
+
+textarea.comment-edit {
+    width: 95%;
+    height: 100%;
 }
 
 .mini-button-block {
@@ -76,7 +85,7 @@ time.timeago {
 }
 
 .modal-quest-add label {
-    cursor: default; /* override bootstrap's "pointer" cursor style, it's confusing */
+    cursor: default; // override bootstrap's "pointer" cursor style, it's confusing
 }
 
 input.quest-edit {
@@ -97,29 +106,22 @@ input.quest-edit {
     margin-bottom: 0px;
 }
 
-textarea.comment-edit {
-    width: 95%;
-    height: 100%;
-}
-
-/*
-* sticky footer, see http://twitter.github.com/bootstrap/
-*/
+//sticky footer, see http://twitter.github.com/bootstrap/
 html, body {
     height: 100%;
-    /* The html and body elements cannot have any padding or margin. */
+    // The html and body elements cannot have any padding or margin.
 }
 
-/* Wrapper for page content to push down footer */
+// Wrapper for page content to push down footer
 #wrap {
     min-height: 100%;
     height: auto !important;
     height: 100%;
-    /* Negative indent footer by it's height */
+    // Negative indent footer by it's height
     margin: 0 auto -60px;
 }
 
-/* Set the fixed height of the footer here */
+// Set the fixed height of the footer here
 #push,
 #footer {
     height: 60px;
@@ -128,7 +130,7 @@ html, body {
     background-color: #f5f5f5;
 }
 
-/* Lastly, apply responsive CSS fixes as necessary */
+// Lastly, apply responsive CSS fixes as necessary
 @media (max-width: 767px) {
     #footer {
         margin-left: -20px;
@@ -150,86 +152,18 @@ html, body {
     margin-top: 30px;
 }
 
-/* see views/quest/small.js */
+// see views/quest/small.js
 .quest-row td {
     line-height: 25px;
 }
 
-/* trying to reduce the page jerkiness */
+// trying to reduce the page jerkiness
 .show-more-or-progress {
     height: 60px;
 }
 
-/* via http://stackoverflow.com/questions/9554724/bootstrap-css-center-span7 */
-/* not used anywhere, though */
-.center {
-    float: none; margin: 0 auto; text-align: center; display: block; width:auto; height:auto;
-}
-
 tbody tr.show-more > td {
     cursor: pointer;
-}
-
-/* Always show vertical scroll bar in browser. It fixes the issue with jumping buttons */
-html { overflow-y: scroll; }
-
-/* based on bootstrap's tr.info */
-tbody tr.quest-closed {
-    > td {
-        background-color: #d9edf7;
-    }
-    &:hover > td {
-        background-color: #c4e3f3;
-    }
-}
-
-/* based on bootstrap's tr.warning */
-tbody tr.quest-open {
-    > td {
-        background-color: #fcf8e3;
-    }
-    &:hover > td {
-        background-color: #faf2cc;
-    }
-}
-
-tbody tr.quest-abandoned {
-    > td {
-        background-color: #dddddd;
-    }
-    &:hover > td {
-        background-color: #d3d3d3;
-    }
-}
-
-tbody tr.quest-unclaimed {
-    > td {
-        background-color: #dff0d8;
-    }
-    &:hover > td {
-        background-color: #d0e9c6;
-    }
-}
-
-div.quest-big-open {
-    position: relative;
-    padding: 9px;
-    background-color: #fcf8e3;
-}
-div.quest-big-closed {
-    position: relative;
-    padding: 9px;
-    background-color: #d9edf7;
-}
-div.quest-big-abandoned {
-    position: relative;
-    padding: 9px;
-    background-color: #dddddd;
-}
-div.quest-big-unclaimed {
-    position: relative;
-    padding: 9px;
-    background-color: #dff0d8;
 }
 
 .current-user-notifications-icon {
@@ -245,7 +179,7 @@ div.quest-big-unclaimed {
 }
 
 .comment-bottom-line {
-    /* fixing the jumping line height on "like" button hide/show */
+    // fixing the jumping line height on "like" button hide/show
     line-height: 24px;
 }
 
@@ -263,7 +197,7 @@ div.quest-big-unclaimed {
     background-color: #ffb91f;
     text-align: center;
 
-    .reward-circle .points {
+    .points {
         display: block;
         font-size: 25px;
     }
@@ -278,7 +212,7 @@ div.quest-big-unclaimed {
 }
 
 ul.nav-filter {
-    margin-bottom: 0px; /* accordion around it sets enough padding */
+    margin-bottom: 0px; // accordion around it sets enough padding
 
     li {
         display: block;
@@ -291,3 +225,6 @@ ul.nav-filter {
     position: relative;
     top: 6px;
 }
+
+@import 'sass/quest-collection.scss';
+@import 'sass/quest-big.scss';
