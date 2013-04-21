@@ -1,3 +1,8 @@
+// see views/quest/small.js
+.quest-row td {
+    line-height: 25px;
+}
+
 // based on bootstrap's tr.info
 tbody tr.quest-closed {
     > td {

@@ -18,3 +18,28 @@ div.quest-big-unclaimed {
     padding: 9px;
     background-color: #dff0d8;
 }
+
+.quest-big-labels {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.reward-block {
+    text-align: center;
+}
+.reward-circle {
+    border-radius: 50%;
+    -moz-border-radius:50%;
+    -webkit-border-radius: 50%;
+
+    padding: 20px;
+    display: inline-block;
+    background-color: #ffb91f;
+    text-align: center;
+
+    .points {
+        display: block;
+        font-size: 25px;
+    }
+}
