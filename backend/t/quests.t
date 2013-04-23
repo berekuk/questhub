@@ -197,4 +197,29 @@ sub list_watched :Tests {
     ;
 }
 
+sub remove :Tests {
+    my @quests = map {
+        db->quests->add({
+            name => "q$_",
+            team => ['foo', 'foo2'],
+            status => 'open',
+        })
+    } (1 .. 3);
+
+    like exception { db->quests->remove($quests[2]->{_id}, {}) }, qr/no user/;
+    like exception { db->quests->remove($quests[2]->{_id}, { user => 'bar' }) }, qr/access denied/;
+    is exception { db->quests->remove($quests[2]->{_id}, { user => 'foo' }) }, undef;
+
+    is scalar @{ db->quests->list }, 2;
+    is_deeply [sort map { $_->{name} } @{ db->quests->list }], ['q1', 'q2'];
+    like exception { db->quests->get($quests[2]->{_id}) }, qr/is deleted/;
+
+    # any team member can remove a quest
+    {
+        local $TODO = 'will work after migration to quest.team';
+        is exception { db->quests->remove($quests[1]->{_id}, { user => 'foo2' }) }, undef;
+        is_deeply [sort map { $_->{name} } @{ db->quests->list }], ['q1'];
+    }
+}
+
 __PACKAGE__->new->runtests;

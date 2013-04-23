@@ -258,7 +258,12 @@ sub update {
     my $quest_after_update = { %$quest, %$params };
     $self->collection->update(
         { _id => MongoDB::OID->new(value => $id) },
-        $quest_after_update
+        {
+            map { $_ => $quest_after_update->{$_} }
+            grep { $_ ne 'team' } # FIXME after migrating to quest.team
+            keys %$quest_after_update
+        },
+        { safe => 1 }
     );
 
     # there are other actions, for example editing the quest description
@@ -337,7 +342,7 @@ sub remove {
 
     # FIXME - rewrite to modifier-based atomic update!
     my $quest = $self->get($id);
-    unless ($quest->{user} eq $user) {
+    unless (grep { $_ eq $user } @{ $quest->{team} }) {
         die "access denied";
     }
 
@@ -348,7 +353,7 @@ sub remove {
     delete $quest->{_id};
     $self->collection->update(
         { _id => MongoDB::OID->new(value => $id) },
-        { %$quest, status => 'deleted' },
+        { '$set' => { status => 'deleted' } },
         { safe => 1 }
     );
 }
