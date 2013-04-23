@@ -38,7 +38,7 @@ post '/quest' => sub {
     die "not logged in" unless session->{login};
 
     my $attributes = {
-        user => session->{login},
+        team => [ session->{login} ],
         name => param('name'),
         status => 'open',
         (param('tags') ? (tags => param('tags')) : ()),

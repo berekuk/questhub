@@ -203,7 +203,7 @@ sub users_list_sort :Tests {
     };
     my $finish_quest = sub {
         my $quest = shift;
-        Dancer::session login => $quest->{user};
+        Dancer::session login => $quest->{team}[0];
         http_json PUT => "/api/quest/$quest->{_id}", { params => {
             status => 'closed',
         } };

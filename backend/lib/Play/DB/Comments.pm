@@ -28,7 +28,7 @@ sub add {
         body => { type => SCALAR },
         author => { type => SCALAR },
     });
-    my $id = $self->collection->insert(\%params);
+    my $id = $self->collection->insert(\%params, { safe => 1 });
 
     my $quest = db->quests->get($params{quest_id});
 

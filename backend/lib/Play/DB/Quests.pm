@@ -149,10 +149,21 @@ sub add {
     my $self = shift;
     my $params = validate(@_, {
         name => { type => SCALAR },
+        team => { type => ARRAYREF, optional => 1 },
+        user => { type => SCALAR, optional => 1 }, # deprecated
         tags => { type => ARRAYREF, optional => 1 },
-        user => { type => SCALAR },
         status => { type => SCALAR, default => 'open' },
     });
+
+    if ($params->{team}) {
+        die "Can't set both team and user at the same time" if defined $params->{user};
+        # temporary measure until we migrate the DB
+        $params->{user} = $params->{team}[0] || '';
+        delete $params->{team};
+    }
+    unless (defined $params->{team} or defined $params->{user}) {
+        die "Either 'team' or 'user' should be set";
+    }
 
     # validate
     # TODO - do strict validation here instead of dancer route?
@@ -200,7 +211,7 @@ sub update {
 
     # FIXME - rewrite to modifier-based atomic update!
     my $quest = $self->get($id);
-    unless ($quest->{user} eq $user) {
+    unless (grep { $_ eq $user } @{$quest->{team}}) {
         die "access denied";
     }
 

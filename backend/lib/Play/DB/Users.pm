@@ -95,9 +95,11 @@ sub list {
     my $quests = db->quests->list({ status => 'open' });
     my %users = map { $_->{login} => $_ } @users;
     for my $quest (@$quests) {
-        my $quser = $users{ $quest->{user} };
-        next unless $quser; # I guess user can be deleted and leave user-less quests behind, that's not a good reason for a failure
-        $quser->{open_quests}++;
+        for my $qlogin (@{ $quest->{team} }) {
+            my $quser = $users{$qlogin};
+            next unless $quser; # I guess user can be deleted and leave user-less quests behind, that's not a good reason for a failure
+            $quser->{open_quests}++;
+        }
     }
 
     # Sorting on the client side, because 'open_quests' is not a user's attribute.
