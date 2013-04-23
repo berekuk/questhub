@@ -120,6 +120,42 @@ sub list_leaderboard :Tests {
         [ map { superhashof($_) } @data[2,0,1] ];
 }
 
+sub list_unclaimed :Tests {
+    my @data = (
+        {
+            name => 'q1',
+            team => ['foo'],
+            status => 'open',
+        },
+        {
+            name => 'q2',
+            team => [],
+            status => 'open',
+        },
+        {
+            name => 'q3',
+            team => [],
+            status => 'open',
+        },
+    );
+    for (@data) {
+        $_->{_id} = db->quests->add($_)->{_id};
+    }
+
+    cmp_deeply
+        db->quests->list({}),
+        [ reverse map { superhashof($_) } @data ];
+
+    cmp_deeply
+        db->quests->list({ user => '' }),
+        [ reverse map { superhashof($_) } @data[1,2] ];
+
+
+    cmp_deeply
+        db->quests->list({ unclaimed => 1 }),
+        [ reverse map { superhashof($_) } @data[1,2] ];
+}
+
 sub watch_unwatch :Tests {
     my $quest = db->quests->add({
         name => 'quest name',

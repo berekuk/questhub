@@ -48,11 +48,8 @@ post '/quest' => sub {
 
 get '/quest' => sub {
     my $params = {
-        map { param($_) ? ($_ => param($_)) : () } qw/ user status comment_count sort order limit offset tags watchers /,
+        map { param($_) ? ($_ => param($_)) : () } qw/ user status comment_count sort order limit offset tags watchers unclaimed /,
     };
-    if (param('unclaimed')) {
-        $params->{user} = '';
-    }
 
     my $quests = db->quests->list($params);
 

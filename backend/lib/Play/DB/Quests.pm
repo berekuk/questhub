@@ -76,6 +76,7 @@ sub list {
     my $params = validate(@_, {
         # find() filters
         user => { type => SCALAR, optional => 1 },
+        unclaimed => { type => BOOLEAN, optional => 1 },
         status => { type => SCALAR, optional => 1 },
         # flag meaning "fetch comment_count too"
         comment_count => { type => BOOLEAN, optional => 1 },
@@ -96,6 +97,11 @@ sub list {
             map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ user status tags watchers /
     };
     $query->{status} ||= { '$ne' => 'deleted' };
+
+    if (delete $params->{unclaimed}) {
+        die "Can't set both 'user' and 'unclaimed' at the same time" if defined $params->{user};
+        $query->{user} = ''; # TODO - replace with team.$size = 0
+    }
 
     my $cursor = $self->collection->query($query);
 
