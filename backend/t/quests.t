@@ -11,7 +11,7 @@ sub setup :Test(setup) {
 sub add :Tests {
     my $quest = db->quests->add({
         name => 'quest name',
-        user => 'foo',
+        team => ['foo'],
         status => 'open',
     });
     cmp_deeply $quest, superhashof({
@@ -27,7 +27,7 @@ sub add :Tests {
 sub leave_join :Tests {
     my $quest = db->quests->add({
         name => 'quest name',
-        user => 'foo',
+        team => ['foo'],
         status => 'open',
     });
 
@@ -36,7 +36,6 @@ sub leave_join :Tests {
     is exception { db->quests->leave($quest->{_id}, 'foo') }, undef;
 
     $quest = db->quests->get($quest->{_id});
-    is $quest->{user}, '';
     cmp_deeply $quest->{team}, [];
 
     db->quests->join($quest->{_id}, 'foo');
@@ -47,7 +46,7 @@ sub join_team :Tests {
 
     my $quest = db->quests->add({
         name => 'quest name',
-        user => 'foo',
+        team => ['foo'],
         status => 'open',
     });
 
@@ -59,17 +58,17 @@ sub list :Tests {
     my @data = (
         {
             name => 'q1',
-            user => 'foo',
+            team => ['foo'],
             status => 'open',
         },
         {
             name => 'q2',
-            user => 'foo',
+            team => ['foo'],
             status => 'open',
         },
         {
             name => 'q3',
-            user => 'foo',
+            team => ['foo'],
             status => 'open',
         },
     );
@@ -79,15 +78,15 @@ sub list :Tests {
 
     cmp_deeply
         db->quests->list({}),
-        [ reverse map { superhashof({ %$_, team => [$_->{user}] }) } @data ];
+        [ reverse map { superhashof($_) } @data ];
 
     cmp_deeply
         db->quests->list({ order => 'desc' }),
-        [ reverse map { superhashof({ %$_, team => [$_->{user}] }) } @data ];
+        [ reverse map { superhashof($_) } @data ];
 
     cmp_deeply
         db->quests->list({ order => 'asc' }),
-        [ map { superhashof({ %$_, team => [$_->{user}] }) } @data ];
+        [ map { superhashof($_) } @data ];
 }
 
 sub list_leaderboard :Tests {
@@ -95,17 +94,17 @@ sub list_leaderboard :Tests {
     my @data = (
         {
             name => 'q1',
-            user => 'foo',
+            team => ['foo'],
             status => 'open',
         },
         {
             name => 'q2',
-            user => 'foo',
+            team => ['foo'],
             status => 'open',
         },
         {
             name => 'q3',
-            user => 'foo',
+            team => ['foo'],
             status => 'open',
         },
     );
@@ -118,13 +117,49 @@ sub list_leaderboard :Tests {
 
     cmp_deeply
         db->quests->list({ sort => 'leaderboard' }),
-        [ map { superhashof({ %$_, team => [$_->{user}] }) } @data[2,0,1] ];
+        [ map { superhashof($_) } @data[2,0,1] ];
+}
+
+sub list_unclaimed :Tests {
+    my @data = (
+        {
+            name => 'q1',
+            team => ['foo'],
+            status => 'open',
+        },
+        {
+            name => 'q2',
+            team => [],
+            status => 'open',
+        },
+        {
+            name => 'q3',
+            team => [],
+            status => 'open',
+        },
+    );
+    for (@data) {
+        $_->{_id} = db->quests->add($_)->{_id};
+    }
+
+    cmp_deeply
+        db->quests->list({}),
+        [ reverse map { superhashof($_) } @data ];
+
+    cmp_deeply
+        db->quests->list({ user => '' }),
+        [ reverse map { superhashof($_) } @data[1,2] ];
+
+
+    cmp_deeply
+        db->quests->list({ unclaimed => 1 }),
+        [ reverse map { superhashof($_) } @data[1,2] ];
 }
 
 sub watch_unwatch :Tests {
     my $quest = db->quests->add({
         name => 'quest name',
-        user => 'foo',
+        team => ['foo'],
         status => 'open',
     });
 
@@ -146,7 +181,7 @@ sub list_watched :Tests {
     my @quests = map {
         db->quests->add({
             name => "q$_",
-            user => 'foo',
+            team => ['foo'],
             status => 'open',
         })
     } (1 .. 5);

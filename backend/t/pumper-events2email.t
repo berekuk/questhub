@@ -16,7 +16,7 @@ for (qw( foo bar baz baz2 )) {
 }
 
 my $quest = db->quests->add({
-    user => 'foo',
+    team => ['foo'],
     name => 'foo quest',
     status => 'open',
 });
@@ -56,7 +56,7 @@ subtest "comment on her own quest" => sub {
 
 subtest "comment on watched quest" => sub {
     my $watched_quest = db->quests->add({
-        user => 'bar',
+        team => ['bar'],
         name => 'bar quest',
         status => 'open',
     });
@@ -85,7 +85,7 @@ subtest "comment on watched quest" => sub {
 
 subtest "quest completed" => sub {
     my $q2 = db->quests->add({
-        user => 'bar',
+        team => ['bar'],
         name => 'bq2',
         status => 'open',
     });

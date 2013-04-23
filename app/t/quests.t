@@ -42,10 +42,11 @@ sub _fill_common_quests {
     for (keys %$quests_data) {
         delete $quests_data->{$_}->{_id};
         my $OID = db->quests->collection->insert( $quests_data->{$_} ); # MongoDB::OID
-        $quests_data->{$_}->{_id} = $OID->to_string;
-        $quests_data->{$_}->{ts} = $OID->get_time;
+        $quests_data->{$_}{_id} = $OID->to_string;
+        $quests_data->{$_}{ts} = $OID->get_time;
+        $quests_data->{$_}{team} = [$quests_data->{$_}{user}];
 
-        http_json GET => "/api/fakeuser/$quests_data->{$_}{user}";
+        http_json GET => "/api/fakeuser/$quests_data->{$_}{team}[0]";
     }
 }
 
@@ -157,7 +158,7 @@ sub single_quest :Tests {
     my $id          =  $quests_data->{1}{_id};
     my $quest = http_json GET => '/api/quest/'.$id;
 
-    cmp_deeply $quest, { %{ $quests_data->{1} }, team => [$quests_data->{1}{user}] };
+    cmp_deeply $quest, superhashof($quests_data->{1});
 }
 
 sub edit_quest :Tests {
@@ -169,13 +170,13 @@ sub edit_quest :Tests {
     my $id          = $edited_quest->{_id};
     local $edited_quest->{name} = 'name_11'; # Change
 
-    Dancer::session login => $edited_quest->{user};
+    Dancer::session login => $edited_quest->{team}[0];
 
     my $put_result = http_json PUT => "/api/quest/$id", { params => { name => $edited_quest->{name} } };
     cmp_deeply $put_result, { _id => $id }, 'put result';
 
     my $got_quest = http_json GET => "/api/quest/$id";
-    cmp_deeply $got_quest, { %$edited_quest, team => [ $edited_quest->{user} ] };
+    cmp_deeply $got_quest, superhashof($edited_quest);
 }
 
 
@@ -286,7 +287,7 @@ sub delete_quest :Tests {
         my $result = decode_json($list_before_resp->content);
         is scalar @$result, 3;
         $id_to_remove = $result->[1]{_id};
-        $user = $result->[1]{user};
+        $user = $result->[1]{team}[0];
         like $id_to_remove, qr/^[0-9a-f]{24}$/; # just an assertion
     }
 
@@ -327,8 +328,8 @@ sub points :Tests {
 
     my $quest = $quests_data->{1}; # name_2, user_2
 
-    http_json GET => "/api/fakeuser/$quest->{user}";
-    Dancer::session login => $quest->{user};
+    http_json GET => "/api/fakeuser/".$quest->{team}[0];
+    Dancer::session login => $quest->{team}[0];
 
     my $user = http_json GET => '/api/current_user';
     is $user->{points}, 0;
@@ -385,8 +386,7 @@ sub more_points :Tests {
     my $quests_data = $self->_common_quests;
 
    my $quest = $quests_data->{1};
-    http_json GET => "/api/fakeuser/$quest->{user}";
-    Dancer::session login => $quest->{user};
+    http_json GET => "/api/fakeuser/$quest->{team}[0]";
 
     my $user = http_json GET => '/api/current_user';
     is $user->{points}, 0, 'zero points initially';
@@ -509,7 +509,6 @@ sub join_leave :Tests {
 
     my $got_quest = http_json GET => "/api/quest/$quest->{_id}";
     is $got_quest->{name}, 'q1', 'name is still untouched';
-    is $got_quest->{user}, '', 'user is now empty';
     is_deeply $got_quest->{team}, [], 'team is empty too';
 
     $response = dancer_response POST => "/api/quest/$quest->{_id}/leave";

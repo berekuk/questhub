@@ -16,7 +16,7 @@ sub like_quest :Tests {
     db->users->add({ login => $_ }) for qw( blah user1 user2 );
 
     my $quest = db->quests->add({
-        user => 'blah',
+        team => ['blah'],
         name => 'foo, foo',
         status => 'open',
     });
@@ -51,7 +51,7 @@ sub self_like_quest :Tests {
     db->users->add({ login => $_ }) for qw( blah );
 
     my $quest = db->quests->add({
-        user => 'blah',
+        team => ['blah'],
         name => 'foo, foo',
         status => 'open',
     });

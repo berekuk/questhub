@@ -38,7 +38,7 @@ post '/quest' => sub {
     die "not logged in" unless session->{login};
 
     my $attributes = {
-        user => session->{login},
+        team => [ session->{login} ],
         name => param('name'),
         status => 'open',
         (param('tags') ? (tags => param('tags')) : ()),
@@ -48,11 +48,8 @@ post '/quest' => sub {
 
 get '/quest' => sub {
     my $params = {
-        map { param($_) ? ($_ => param($_)) : () } qw/ user status comment_count sort order limit offset tags watchers /,
+        map { param($_) ? ($_ => param($_)) : () } qw/ user status comment_count sort order limit offset tags watchers unclaimed /,
     };
-    if (param('unclaimed')) {
-        $params->{user} = '';
-    }
 
     my $quests = db->quests->list($params);
 
