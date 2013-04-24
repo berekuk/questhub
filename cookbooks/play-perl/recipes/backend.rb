@@ -50,13 +50,8 @@ template "/etc/logrotate.d/events2email-pumper" do
   })
 end
 
-if File.exists?("/etc/logrotate.d/comments2email-pumper")
-  execute "stop comments2email" do
-    command "ubic stop pumper.comments2email"
-  end
-  file "/etc/logrotate.d/comments2email-pumper" do
-    action :delete
-  end
+file "/etc/ubic/service/comments2email" do
+  action :delete
 end
 
 execute "start events2email" do
