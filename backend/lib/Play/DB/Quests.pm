@@ -387,6 +387,12 @@ sub remove {
     );
 }
 
+before 'invite' => sub {
+    my $self = shift;
+    my ($id, $user, $actor) = @_;
+    db->users->get_by_login($user) or die "Invitee '$user' not found";
+};
+
 sub join {
     my $self = shift;
     my ($id, $user) = validate_pos(@_,

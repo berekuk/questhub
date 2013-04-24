@@ -480,6 +480,8 @@ sub email_like :Tests {
 }
 
 sub join_leave :Tests {
+    http_json GET => "/api/fakeuser/$_" for qw/ foo foo2 bar /;
+
     http_json GET => "/api/fakeuser/foo";
 
     my $quest = http_json POST => '/api/quest', { params => {
@@ -549,6 +551,13 @@ sub join_leave :Tests {
     $response = dancer_response POST => "/api/quest/$quest->{_id}/join";
     is $response->status, 500, 'invitation was cancelled';
     like $response->content, qr/unable to join a quest/, 'failed /join body';
+
+    Dancer::session login => 'foo';
+    $response = dancer_response POST => "/api/quest/$quest->{_id}/invite", { params => {
+        invitee => 'nosuchuser',
+    } };
+    is $response->status, 500;
+    like $response->content, qr/not found/;
 }
 
 sub watch_unwatch :Tests {

@@ -60,6 +60,8 @@ sub leave_join :Tests {
     is exception { db->quests->join($quest->{_id}, 'bar') }, undef, 'joining after invitation';
     $quest = db->quests->get($quest->{_id});
     cmp_deeply $quest->{team}, ['foo', 'bar'];
+
+    like exception { db->quests->invite($quest->{_id}, 'blah', 'foo') }, qr/Invitee .*not found/;
 }
 
 sub list :Tests {
@@ -205,6 +207,7 @@ sub list_watched :Tests {
 }
 
 sub remove :Tests {
+    db->users->add({ login => $_ }) for qw( foo foo2 );
     my @quests = map {
         db->quests->add({
             name => "q$_",
