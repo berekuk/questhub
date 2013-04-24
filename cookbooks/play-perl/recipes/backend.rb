@@ -50,10 +50,6 @@ template "/etc/logrotate.d/events2email-pumper" do
   })
 end
 
-file "/etc/ubic/service/comments2email" do
-  action :delete
-end
-
 execute "start events2email" do
   command "ubic start pumper.events2email"
 end
