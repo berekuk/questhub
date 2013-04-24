@@ -38,7 +38,7 @@ define([
         // Google Analytics
         initialize: function(appView) {
             this.appView = appView;
-            return this.bind('all', this._trackPageview);
+            return this.bind('route', this._trackPageview);
         },
         _trackPageview: function() {
             var url;
