@@ -24,31 +24,40 @@ sub add :Tests {
 }
 
 sub leave_join :Tests {
+    db->users->add({ login => $_ }) for qw( foo bar baz );
     my $quest = db->quests->add({
         name => 'quest name',
         team => ['foo'],
         status => 'open',
     });
 
-    like exception { db->quests->leave($quest->{_id}, '') }, qr/only non-empty users can/;
-    like exception { db->quests->leave($quest->{_id}, 'bar') }, qr/unable to leave/;
-    is exception { db->quests->leave($quest->{_id}, 'foo') }, undef;
+    like exception { db->quests->leave($quest->{_id}, 'bar') }, qr/unable to leave/, "can't leave the quest you're not in";
+    is exception { db->quests->leave($quest->{_id}, 'foo') }, undef, 'leaving quest with an empty team';
 
     $quest = db->quests->get($quest->{_id});
     cmp_deeply $quest->{team}, [];
 
-    db->quests->join($quest->{_id}, 'foo', 1);
-}
+    is exception { db->quests->join($quest->{_id}, 'foo') }, undef, "joining unclaimed quest doesn't require an invite";
+    $quest = db->quests->get($quest->{_id});
+    cmp_deeply $quest->{team}, ['foo'];
 
-sub join_team :Tests {
-    my $quest = db->quests->add({
-        name => 'quest name',
-        team => ['foo'],
-        status => 'open',
-    });
+    like exception { db->quests->join($quest->{_id}, 'bar') }, qr/unable to join/, "can't join unless you're invited";
+    ok exception { db->quests->invite($quest->{_id}, 'bar', 'bar') }, "bar can't invite himself";
+    ok exception { db->quests->invite($quest->{_id}, 'bar', 'baz') }, "baz can't invite himself";
+    $quest = db->quests->get($quest->{_id});
+    cmp_deeply $quest->{invitee}, undef;
 
-    like exception { db->quests->join($quest->{_id}, 'bar') }, qr/unable to join/;
-    is exception { db->quests->join($quest->{_id}, 'bar', 1) }, undef;
+    db->quests->invite($quest->{_id}, 'bar', 'foo');
+    db->quests->invite($quest->{_id}, 'baz', 'foo');
+    $quest = db->quests->get($quest->{_id});
+    cmp_deeply $quest->{team}, ['foo'];
+    cmp_deeply $quest->{invitee}, ['bar', 'baz'];
+
+    db->quests->uninvite($quest->{_id}, 'baz', 'foo');
+    $quest = db->quests->get($quest->{_id});
+    cmp_deeply $quest->{invitee}, ['bar'];
+
+    is exception { db->quests->join($quest->{_id}, 'bar') }, undef, 'joining after invitation';
     $quest = db->quests->get($quest->{_id});
     cmp_deeply $quest->{team}, ['foo', 'bar'];
 }
@@ -203,7 +212,10 @@ sub remove :Tests {
             status => 'open',
         })
     } (1 .. 3);
-    db->quests->join($_->{_id}, 'foo2', 1) for @quests;
+    for (@quests) {
+        db->quests->invite($_->{_id}, 'foo2', 'foo');
+        db->quests->join($_->{_id}, 'foo2');
+    }
 
     like exception { db->quests->remove($quests[2]->{_id}, {}) }, qr/no user/;
     like exception { db->quests->remove($quests[2]->{_id}, { user => 'bar' }) }, qr/access denied/;

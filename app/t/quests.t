@@ -490,7 +490,7 @@ sub join_leave :Tests {
 
     $response = dancer_response POST => "/api/quest/$quest->{_id}/join";
     is $response->status, 500;
-    like $response->content, qr/unable to join quest/;
+    like $response->content, qr/unable to join a quest/;
 
     http_json POST => "/api/quest/$quest->{_id}/leave";
 

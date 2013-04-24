@@ -7,6 +7,9 @@ package Play::DB::Role::PushPull;
 
 =cut
 
+use strict;
+use warnings;
+
 use Package::Variant
     importing => ['Moo::Role'],
     subs => [qw( with has )];
@@ -25,12 +28,14 @@ sub make_variant {
     my $except_field = $params{except_field};
     my $pull_method = $params{pull_method};
     my $push_method = $params{push_method};
+    my $actor_field = $params{actor_field};
 
     with 'Play::DB::Role::Common';
 
     my $push_or_pull = sub {
         my $self = shift;
-        my ($id, $user, $mode, $method) = @_;
+        my ($params) = @_;
+        my ($id, $user, $mode, $method, $actor) = @$params{qw/ id user mode method actor /};
 
         my $check;
         $check = { '$ne' => $user } if $mode eq '$addToSet';
@@ -40,7 +45,8 @@ sub make_variant {
         my $result = $self->collection->update(
             {
                 _id => MongoDB::OID->new(value => $id),
-                $except_field => { '$ne' => $user },
+                (defined $except_field ? ($except_field => { '$ne' => $user }) : ()),
+                (defined $actor_field ? ($actor_field => $actor) : ()),
                 $field => $check,
             },
             {
@@ -57,17 +63,29 @@ sub make_variant {
 
     install $push_method => sub {
         my $self = shift;
-        my ($id, $user) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+        my ($id, $user, $actor) = validate_pos(@_, { type => SCALAR }, { type => SCALAR }, { type => SCALAR, optional => 1 });
 
-        $push_or_pull->($self, $id, $user, '$addToSet', $push_method);
+        $push_or_pull->($self, {
+            id => $id,
+            user => $user,
+            mode => '$addToSet',
+            method => $push_method,
+            actor => $actor,
+        });
         return;
     };
 
     install $pull_method => sub {
         my $self = shift;
-        my ($id, $user) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+        my ($id, $user, $actor) = validate_pos(@_, { type => SCALAR }, { type => SCALAR }, { type => SCALAR, optional => 1 });
 
-        $push_or_pull->($self, $id, $user, '$pull', $pull_method);
+        $push_or_pull->($self, {
+            id => $id,
+            user => $user,
+            mode => '$pull',
+            method => $pull_method,
+            actor => $actor,
+        });
         return;
     };
 }

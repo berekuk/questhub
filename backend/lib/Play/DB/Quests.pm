@@ -52,8 +52,25 @@ use Play::DB qw(db);
 use Play::DB::Role::PushPull;
 with
     'Play::DB::Role::Common',
-    PushPull(field => 'likes', except_field => 'team', push_method => 'like', pull_method => 'unlike'),
-    PushPull(field => 'watchers', except_field => 'team', push_method => 'watch', pull_method => 'unwatch');
+    PushPull(
+        field => 'likes',
+        except_field => 'team', # team members can't like their own quest
+        push_method => 'like',
+        pull_method => 'unlike',
+    ),
+    PushPull(
+        field => 'watchers',
+        except_field => 'team', # team members are always watching a quest
+        push_method => 'watch',
+        pull_method => 'unwatch',
+    ),
+    PushPull(
+        field => 'invitee',
+        except_field => 'team', # team members can't invite themselves to join a quest
+        actor_field => 'team',  # only team members can invite other players
+        push_method => 'invite',
+        pull_method => 'uninvite',
+    );
 
 sub _prepare_quest {
     my $self = shift;
@@ -63,6 +80,19 @@ sub _prepare_quest {
 
     $quest->{team} ||= [];
 
+    return $quest;
+}
+
+sub get {
+    my $self = shift;
+    my ($id) = validate_pos(@_, { type => SCALAR });
+
+    my $quest = $self->collection->find_one({
+        _id => MongoDB::OID->new(value => $id)
+    });
+    die "quest $id not found" unless $quest;
+    die "quest $id is deleted" if $quest->{status} eq 'deleted';
+    $self->_prepare_quest($quest);
     return $quest;
 }
 
@@ -357,42 +387,34 @@ sub remove {
     );
 }
 
-sub get {
-    my $self = shift;
-    my ($id) = validate_pos(@_, { type => SCALAR });
-
-    my $quest = $self->collection->find_one({
-        _id => MongoDB::OID->new(value => $id)
-    });
-    die "quest $id not found" unless $quest;
-    die "quest $id is deleted" if $quest->{status} eq 'deleted';
-    $self->_prepare_quest($quest);
-    return $quest;
-}
-
 sub join {
     my $self = shift;
-    my ($id, $user, $force_multi) = validate_pos(@_,
+    my ($id, $user) = validate_pos(@_,
         { type => SCALAR },
         { type => SCALAR },
-        { type => BOOLEAN, optional => 1 },
     );
-    die "only non-empty users can join quests" unless length $user;
+    die "only non-empty users can join quests" unless length $user; # FIXME - use Type::Tiny instead
 
     my $result = $self->collection->update(
         {
             _id => MongoDB::OID->new(value => $id),
-            ($force_multi ? () : (team => { '$size' => 0 })),
+            '$or' => [
+                { invitee => $user },
+                { team => { '$size' => 0 } },
+            ],
         },
         {
             '$addToSet' => { team => $user },
-            '$pull' => { likes => $user }, # can't like your own quest
+            '$pull' => {
+                likes => $user, # can't like your own quest
+                invitee => $user,
+            },
         },
         { safe => 1 }
     );
     my $updated = $result->{n};
     unless ($updated) {
-        die "Quest not found or unable to join quest that's already taken";
+        die "Quest not found or unable to join a quest without invitation";
     }
 }
 
