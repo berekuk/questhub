@@ -12,8 +12,9 @@ sub setup :Tests(setup => no_plan) {
     reset_db();
 }
 
-sub _common_quests {
-    return state $q = {
+sub _fill_common_quests {
+    my $self = shift;
+    my $quests_data = {
         1 => {
             name    => 'name_1',
             user    => 'user_1',
@@ -31,23 +32,19 @@ sub _common_quests {
             status  => 'closed',
         },
     };
-}
-
-
-sub _fill_common_quests {
-    my $self = shift;
-    my $quests_data = $self->_common_quests;
 
     # insert quests to DB
     for (keys %$quests_data) {
-        delete $quests_data->{$_}->{_id};
-        my $OID = db->quests->collection->insert( $quests_data->{$_} ); # MongoDB::OID
-        $quests_data->{$_}{_id} = $OID->to_string;
-        $quests_data->{$_}{ts} = $OID->get_time;
-        $quests_data->{$_}{team} = [$quests_data->{$_}{user}];
+        delete $quests_data->{$_}{_id};
+        my $result = db->quests->add($quests_data->{$_});
+        $quests_data->{$_}{_id} = $result->{_id};
+        $quests_data->{$_}{ts} = $result->{ts};
+        $quests_data->{$_}{team} = $result->{team};
+        delete $quests_data->{$_}{user};
 
         http_json GET => "/api/fakeuser/$quests_data->{$_}{team}[0]";
     }
+    return $quests_data;
 }
 
 sub quest_list :Tests {
@@ -80,7 +77,6 @@ sub quest_list :Tests {
             map {
                 {
                     %$_,
-                    user => 'foo',
                     author => 'foo',
                     team => ['foo'],
                     _id => ignore,
@@ -123,8 +119,7 @@ sub quest_list_filtering :Tests {
 
 sub quest_sorting :Tests {
     my $self = shift;
-    $self->_fill_common_quests;
-    my $quests_data = $self->_common_quests;
+    my $quests_data = $self->_fill_common_quests;
 
     http_json GET => '/api/fakeuser/user_3';
     http_json POST => '/api/quest/'.$quests_data->{2}{_id}.'/like';
@@ -137,8 +132,7 @@ sub quest_sorting :Tests {
 
 sub quest_list_limit_offset :Tests {
     my $self = shift;
-    $self->_fill_common_quests;
-    my $quests_data = $self->_common_quests;
+    my $quests_data = $self->_fill_common_quests;
 
     my $list = http_json GET => '/api/quest?limit=2';
     is scalar @$list, 2;
@@ -152,8 +146,7 @@ sub quest_list_limit_offset :Tests {
 
 sub single_quest :Tests {
     my $self = shift;
-    $self->_fill_common_quests;
-    my $quests_data = $self->_common_quests;
+    my $quests_data = $self->_fill_common_quests;
 
     my $id          =  $quests_data->{1}{_id};
     my $quest = http_json GET => '/api/quest/'.$id;
@@ -163,8 +156,7 @@ sub single_quest :Tests {
 
 sub edit_quest :Tests {
     my $self = shift;
-    $self->_fill_common_quests;
-    my $quests_data = $self->_common_quests;
+    my $quests_data = $self->_fill_common_quests;
 
     my $edited_quest = $quests_data->{1};
     my $id          = $edited_quest->{_id};
@@ -183,7 +175,6 @@ sub edit_quest :Tests {
 sub add_quest :Tests {
     my $user = 'user_4';
     my $new_record = {
-        user    => $user,
         name    => 'name_4',
         status  => 'open',
     };
@@ -212,7 +203,6 @@ sub quest_events :Tests {
     http_json GET => "/api/fakeuser/$user";
 
     my $new_record = {
-        user    => $user,
         name    => 'test-quest',
         status  => 'open',
     };
@@ -234,7 +224,7 @@ sub quest_events :Tests {
             action => 'resurrect',
             author => $user,
             object_id => $quest_id,
-            object => superhashof({ name => 'test-quest', status => 'open', user => $user, team => [$user], author => $user }),
+            object => superhashof({ name => 'test-quest', status => 'open', team => [$user], author => $user }),
         },
         {
             _id => re('^\S+$'),
@@ -243,7 +233,7 @@ sub quest_events :Tests {
             action => 'abandon',
             author => $user,
             object_id => $quest_id,
-            object => superhashof({ name => 'test-quest', status => 'abandoned', user => $user, team => [$user], author => $user }),
+            object => superhashof({ name => 'test-quest', status => 'abandoned', team => [$user], author => $user }),
         },
         {
             _id => re('^\S+$'),
@@ -252,7 +242,7 @@ sub quest_events :Tests {
             action => 'reopen',
             author => $user,
             object_id => $quest_id,
-            object => superhashof({ name => 'test-quest', status => 'open', user => $user, team => [$user], author => $user }),
+            object => superhashof({ name => 'test-quest', status => 'open', team => [$user], author => $user }),
         },
         {
             _id => re('^\S+$'),
@@ -261,7 +251,7 @@ sub quest_events :Tests {
             action => 'close',
             author => $user,
             object_id => $quest_id,
-            object => superhashof({ name => 'test-quest', status => 'closed', user => $user, team => [$user], author => $user }),
+            object => superhashof({ name => 'test-quest', status => 'closed', team => [$user], author => $user }),
         },
         {
             _id => re('^\S+$'),
@@ -270,15 +260,14 @@ sub quest_events :Tests {
             action => 'add',
             author => $user,
             object_id => $quest_id,
-            object => superhashof({ name => 'test-quest', status => 'open', user => $user, team => [$user], author => $user }),
+            object => superhashof({ name => 'test-quest', status => 'open', team => [$user], author => $user }),
         },
     ];
 }
 
 sub delete_quest :Tests {
     my $self = shift;
-    $self->_fill_common_quests;
-    my $quests_data = $self->_common_quests;
+    my $quests_data = $self->_fill_common_quests;
 
     my $id_to_remove;
     my $user;
@@ -323,8 +312,7 @@ sub delete_quest :Tests {
 
 sub points :Tests {
     my $self = shift;
-    $self->_fill_common_quests;
-    my $quests_data = $self->_common_quests;
+    my $quests_data = $self->_fill_common_quests;
 
     my $quest = $quests_data->{1}; # name_2, user_2
 
@@ -382,8 +370,7 @@ sub points :Tests {
 
 sub more_points :Tests {
     my $self = shift;
-    $self->_fill_common_quests;
-    my $quests_data = $self->_common_quests;
+    my $quests_data = $self->_fill_common_quests;
 
    my $quest = $quests_data->{1};
     http_json GET => "/api/fakeuser/$quest->{team}[0]";
@@ -600,12 +587,10 @@ sub atom :Tests {
     http_json GET => '/api/fakeuser/foo';
 
     http_json POST => '/api/quest', { params => {
-        user => 'foo',
         name => 'q1',
         status => 'open',
     } };
     http_json POST => '/api/quest', { params => {
-        user => 'foo',
         name => 'q2',
         status => 'open',
     } };

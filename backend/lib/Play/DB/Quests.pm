@@ -18,7 +18,7 @@ package Play::DB::Quests;
 =head1 OBJECT FORMAT
 
   $quest = {
-      user => '...',
+      team => ['...'],
       status => qr/ open | closed | stalled | abandoned /,
       ...
   }
@@ -52,8 +52,8 @@ use Play::DB qw(db);
 use Play::DB::Role::PushPull;
 with
     'Play::DB::Role::Common',
-    PushPull(field => 'likes', except_field => 'user', push_method => 'like', pull_method => 'unlike'),
-    PushPull(field => 'watchers', except_field => 'user', push_method => 'watch', pull_method => 'unwatch');
+    PushPull(field => 'likes', except_field => 'team', push_method => 'like', pull_method => 'unlike'),
+    PushPull(field => 'watchers', except_field => 'team', push_method => 'watch', pull_method => 'unwatch');
 
 sub _prepare_quest {
     my $self = shift;
@@ -61,12 +61,7 @@ sub _prepare_quest {
     $quest->{ts} = $quest->{_id}->get_time;
     $quest->{_id} = $quest->{_id}->to_string;
 
-    if (length $quest->{user}) {
-        $quest->{team} = [$quest->{user}];
-    }
-    else {
-        $quest->{team} = [];
-    }
+    $quest->{team} ||= [];
 
     return $quest;
 }
@@ -94,13 +89,14 @@ sub list {
     }
 
     my $query = {
-            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ user status tags watchers /
+            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ status tags watchers /
     };
+    $query->{team} = $params->{user} if defined $params->{user};
     $query->{status} ||= { '$ne' => 'deleted' };
 
     if (delete $params->{unclaimed}) {
         die "Can't set both 'user' and 'unclaimed' at the same time" if defined $params->{user};
-        $query->{user} = ''; # TODO - replace with team.$size = 0
+        $query->{team} = { '$size' => 0 };
     }
 
     my $cursor = $self->collection->query($query);
@@ -155,20 +151,23 @@ sub add {
     my $self = shift;
     my $params = validate(@_, {
         name => { type => SCALAR },
+        user => { type => SCALAR, optional => 1 },
         team => { type => ARRAYREF, optional => 1 },
-        user => { type => SCALAR, optional => 1 }, # deprecated
         tags => { type => ARRAYREF, optional => 1 },
         status => { type => SCALAR, default => 'open' },
     });
 
-    if ($params->{team}) {
-        die "Can't set both team and user at the same time" if defined $params->{user};
-        # temporary measure until we migrate the DB
-        $params->{user} = $params->{team}[0] || '';
-        delete $params->{team};
+    if (defined $params->{team}) {
+        if (defined $params->{user}) {
+            die "only one of 'user' and 'team' should be set";
+        }
+        die "team size should be 1 on quest creation" unless scalar @{ $params->{team} } == 1;
     }
-    unless (defined $params->{team} or defined $params->{user}) {
-        die "Either 'team' or 'user' should be set";
+    else {
+        if (not defined $params->{user}) {
+            die "one of 'user' and 'team' should be set";
+        }
+        $params->{team} = [ delete $params->{user} ];
     }
 
     # validate
@@ -182,7 +181,7 @@ sub add {
         $params->{tags} = [ sort @{ $params->{tags} } ];
     }
 
-    $params->{author} = $params->{user};
+    $params->{author} = $params->{team}[0];
     my $id = $self->collection->insert($params, { safe => 1 });
 
     my $quest = { %$params, _id => $id };
@@ -191,7 +190,7 @@ sub add {
     db->events->add({
         object_type => 'quest',
         action => 'add',
-        author => $params->{user},
+        author => $params->{author},
         object_id => $id->to_string,
         object => $quest,
     });
@@ -258,11 +257,7 @@ sub update {
     my $quest_after_update = { %$quest, %$params };
     $self->collection->update(
         { _id => MongoDB::OID->new(value => $id) },
-        {
-            map { $_ => $quest_after_update->{$_} }
-            grep { $_ ne 'team' } # FIXME after migrating to quest.team
-            keys %$quest_after_update
-        },
+        $quest_after_update,
         { safe => 1 }
     );
 
@@ -272,7 +267,7 @@ sub update {
         db->events->add({
             object_type => 'quest',
             action => $action,
-            author => $quest_after_update->{user},
+            author => $user,
             object_id => $id,
             object => $quest_after_update,
         });
@@ -294,6 +289,7 @@ after 'like' => sub {
         db->users->add_points($_, 1) for @team;
     }
 
+    # TODO - events2email
     if (my $email = db->users->get_email($team[0], 'notify_likes')) {
         my $email_body = qq[
             <p>
@@ -328,8 +324,11 @@ after 'unlike' => sub {
     my ($id, $user) = @_;
 
     my $quest = $self->get($id);
+    return unless $quest->{team} and scalar @{ $quest->{team} };
+    my @team = @{ $quest->{team} };
+
     if ($quest->{status} eq 'closed') {
-        db->users->add_points($quest->{user}, -1);
+        db->users->add_points($_, -1) for @team;
     }
 };
 
@@ -373,16 +372,20 @@ sub get {
 
 sub join {
     my $self = shift;
-    my ($id, $user) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+    my ($id, $user, $force_multi) = validate_pos(@_,
+        { type => SCALAR },
+        { type => SCALAR },
+        { type => BOOLEAN, optional => 1 },
+    );
     die "only non-empty users can join quests" unless length $user;
 
     my $result = $self->collection->update(
         {
             _id => MongoDB::OID->new(value => $id),
-            user => '',
+            ($force_multi ? () : (team => { '$size' => 0 })),
         },
         {
-            '$set' => { user => $user },
+            '$addToSet' => { team => $user },
             '$pull' => { likes => $user }, # can't like your own quest
         },
         { safe => 1 }
@@ -401,10 +404,10 @@ sub leave {
     my $result = $self->collection->update(
         {
             _id => MongoDB::OID->new(value => $id),
-            user => $user,
+            team => $user,
         },
         {
-            '$set' => { user => '' }
+            '$pull' => { team => $user }
         },
         { safe => 1 }
     );

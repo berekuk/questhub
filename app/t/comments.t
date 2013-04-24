@@ -80,15 +80,14 @@ sub comment_events :Tests {
         object => {
             author => 'blah',
             body => 'cbody, **bold cbody**',
-            quest => {
+            quest => superhashof({
                 _id => $quest_id,
                 ts => re('^\d+'),
                 name => 'foo',
                 status => 'open',
-                user => 'blah',
                 team => ['blah'],
                 author => 'blah',
-            },
+            }),
             quest_id => $quest_id,
         },
     }, 'comment-add event';

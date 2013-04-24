@@ -19,7 +19,6 @@ sub add :Tests {
         ts => re('^\d+$'),
         name => 'quest name',
         status => 'open',
-        user => 'foo',
         team => ['foo'],
     });
 }
@@ -38,19 +37,19 @@ sub leave_join :Tests {
     $quest = db->quests->get($quest->{_id});
     cmp_deeply $quest->{team}, [];
 
-    db->quests->join($quest->{_id}, 'foo');
+    db->quests->join($quest->{_id}, 'foo', 1);
 }
 
 sub join_team :Tests {
-    local $TODO = 'team quests not implemented';
-
     my $quest = db->quests->add({
         name => 'quest name',
         team => ['foo'],
         status => 'open',
     });
 
-    is exception { db->quests->join($quest->{_id}, 'bar') }, undef;
+    like exception { db->quests->join($quest->{_id}, 'bar') }, qr/unable to join/;
+    is exception { db->quests->join($quest->{_id}, 'bar', 1) }, undef;
+    $quest = db->quests->get($quest->{_id});
     cmp_deeply $quest->{team}, ['foo', 'bar'];
 }
 
@@ -129,27 +128,26 @@ sub list_unclaimed :Tests {
         },
         {
             name => 'q2',
-            team => [],
+            team => ['foo'],
             status => 'open',
         },
         {
             name => 'q3',
-            team => [],
+            team => ['foo'],
             status => 'open',
         },
     );
     for (@data) {
         $_->{_id} = db->quests->add($_)->{_id};
     }
+    db->quests->leave($data[1]->{_id}, 'foo');
+    db->quests->leave($data[2]->{_id}, 'foo');
+    $data[1]->{team} = [];
+    $data[2]->{team} = [];
 
     cmp_deeply
         db->quests->list({}),
         [ reverse map { superhashof($_) } @data ];
-
-    cmp_deeply
-        db->quests->list({ user => '' }),
-        [ reverse map { superhashof($_) } @data[1,2] ];
-
 
     cmp_deeply
         db->quests->list({ unclaimed => 1 }),
@@ -201,10 +199,11 @@ sub remove :Tests {
     my @quests = map {
         db->quests->add({
             name => "q$_",
-            team => ['foo', 'foo2'],
+            team => ['foo'],
             status => 'open',
         })
     } (1 .. 3);
+    db->quests->join($_->{_id}, 'foo2', 1) for @quests;
 
     like exception { db->quests->remove($quests[2]->{_id}, {}) }, qr/no user/;
     like exception { db->quests->remove($quests[2]->{_id}, { user => 'bar' }) }, qr/access denied/;
@@ -215,11 +214,8 @@ sub remove :Tests {
     like exception { db->quests->get($quests[2]->{_id}) }, qr/is deleted/;
 
     # any team member can remove a quest
-    {
-        local $TODO = 'will work after migration to quest.team';
-        is exception { db->quests->remove($quests[1]->{_id}, { user => 'foo2' }) }, undef;
-        is_deeply [sort map { $_->{name} } @{ db->quests->list }], ['q1'];
-    }
+    is exception { db->quests->remove($quests[1]->{_id}, { user => 'foo2' }) }, undef;
+    is_deeply [sort map { $_->{name} } @{ db->quests->list }], ['q1'];
 }
 
 __PACKAGE__->new->runtests;
