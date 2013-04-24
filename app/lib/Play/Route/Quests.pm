@@ -100,4 +100,15 @@ for my $method (qw/ like unlike join leave watch unwatch /) {
     };
 }
 
+for my $method (qw/ invite uninvite /) {
+    post "/quest/:id/$method" => sub {
+        die "not logged in" unless session->{login};
+        db->quests->$method(param('id'), param('invitee'), session->{login});
+
+        return {
+            result => 'ok',
+        }
+    };
+}
+
 true;
