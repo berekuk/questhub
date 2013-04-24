@@ -49,3 +49,23 @@ div.quest-big-unclaimed {
         overflow: auto;
     }
 }
+
+.invite-to-team {
+    margin-top: 20px;
+
+    button {
+        margin-left: 0px;
+    }
+
+    ul {
+        list-style-type: none;
+        text-align: left;
+        li {
+            margin-top: 6px;
+        }
+    }
+
+    .invite-dialog {
+        display: none;
+    }
+}

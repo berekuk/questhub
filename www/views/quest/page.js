@@ -11,6 +11,12 @@ define([
 
         template: _.template(html),
 
+        events: {
+            'click button.invite': 'inviteDialog',
+            'click .uninvite': 'uninviteAction',
+            'keyup [name=invitee]': 'inviteAction'
+        },
+
         subviews: {
             '.quest-big': function () {
                 return new QuestBig({
@@ -24,6 +30,24 @@ define([
                     collection: commentsModel
                 });
             },
+        },
+
+        inviteDialog: function () {
+            this.$('.invite-dialog').show();
+        },
+
+        inviteAction: function (e) {
+            if (e.keyCode != 13) {
+                return;
+            }
+            this.model.invite(
+                this.$('[name=invitee]').val()
+            );
+        },
+
+        uninviteAction: function (e) {
+            console.log(e.target);
+            this.model.uninvite($(e.target).parent().attr('data-login'));
         },
 
         serialize: function () {

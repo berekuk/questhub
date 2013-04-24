@@ -56,12 +56,10 @@ textarea.comment-edit {
     height: 100%;
 }
 
-.mini-button-block {
-    a {
-        color: #999;
-    }
+a.mini-button {
+    color: #999;
 
-    a:hover {
+    &:hover {
         text-decoration: none !important;
         color: #333;
     }

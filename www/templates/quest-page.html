@@ -1,9 +1,9 @@
 <!-- quest details page -->
 <div class="container-fluid">
   <div class="row-fluid">
-    <div class="span3">
-      <div class="reward-block">
+    <div class="span3 well">
       <% if (status == 'open') { %>
+      <div class="reward-block">
         <div class="muted">
           Expected reward:
         </div>
@@ -11,8 +11,29 @@
           <span class="points"><%- reward %></span>
           <span class="points-text">points</span>
         </div>
-      <% } %>
       </div>
+      <% if (my) { %>
+      <div class="invite-to-team">
+        <button class="btn invite">
+          <i class="icon-user"></i>
+          Invite
+        </button>
+        <div class="invite-dialog">
+          <input name='invitee' type="text" placeholder="Login">
+        </div>
+        <% if (obj.invitee && obj.invitee.length) { %>
+        <ul>
+          <% _.each(invitee, function (i) { %>
+          <li>
+            <a href="#" class="uninvite mini-button" data-login="<%- i %>"><i class="icon-remove"></i></a>
+            <%= partial.user({ login: i }) %>
+          </li>
+          <% }) %>
+        </ul>
+        <% } %>
+      </div>
+      <% } %>
+      <% } %>
     </div>
     <div class="span9">
       <div class="quest-big"></div>

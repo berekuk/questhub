@@ -154,22 +154,9 @@ define([
             });
         },
 
-        isOwned: function () {
-            var currentLogin = currentUser.get('login');
-            if (!currentLogin || !currentLogin.length) {
-                return;
-            }
-            return _.contains(this.model.get('team') || [], currentLogin);
-        },
-
         serialize: function () {
             var params = this.model.serialize();
-            // TODO - should we move this to model?
             params.currentUser = currentUser.get('login');
-            params.my = this.isOwned();
-            if (!params.likes) {
-                params.likes = [];
-            }
             return params;
         },
         features: ['tooltip']

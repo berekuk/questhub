@@ -14,6 +14,14 @@ define([
             this.act('unlike');
         },
 
+        invite: function(invitee) {
+            this.act('invite', { invitee: invitee });
+        },
+
+        uninvite: function(invitee) {
+            this.act('uninvite', { invitee: invitee });
+        },
+
         join: function() {
             this.act('join');
         },
@@ -53,9 +61,9 @@ define([
             );
         },
 
-        act: function(action) {
+        act: function(action, params) {
             var model = this;
-            $.post(this.url() + '/' + action)
+            $.post(this.url() + '/' + action, params)
                 .success(function () {
                     model.fetch();
                 }); // TODO - error handling?
@@ -84,6 +92,14 @@ define([
             return 1 + (this.get('likes') ? this.get('likes').length : 0);
         },
 
+        isOwned: function () {
+            var currentLogin = currentUser.get('login');
+            if (!currentLogin || !currentLogin.length) {
+                return;
+            }
+            return _.contains(this.get('team') || [], currentLogin);
+        },
+
         // augments attributes with 'ext_status'
         serialize: function () {
             var params = this.toJSON();
@@ -94,6 +110,10 @@ define([
             }
             else {
                 params.tags = [];
+            }
+            params.my = this.isOwned();
+            if (!params.likes) {
+                params.likes = [];
             }
             return params;
         },
