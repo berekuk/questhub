@@ -274,11 +274,14 @@ sub update {
         }
     }
 
-    if ($action eq 'close') {
-        db->users->add_points($user, $self->_quest2points($quest));
-    }
-    elsif ($action eq 'reopen') {
-        db->users->add_points($user, -$self->_quest2points($quest));
+    {
+        my $points = $self->_quest2points($quest);
+        if ($action eq 'close') {
+            db->users->add_points($_, $points) for @{$quest->{team}};
+        }
+        elsif ($action eq 'reopen') {
+            db->users->add_points($_, -$points) for @{$quest->{team}};
+        }
     }
 
     delete $quest->{_id};
@@ -376,7 +379,7 @@ sub remove {
     }
 
     if ($quest->{status} eq 'closed') {
-        db->users->add_points($user, -$self->_quest2points($quest));
+        db->users->add_points($_, -$self->_quest2points($quest)) for @{$quest->{team}};
     }
 
     delete $quest->{_id};

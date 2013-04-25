@@ -233,4 +233,47 @@ sub remove :Tests {
     is_deeply [sort map { $_->{name} } @{ db->quests->list }], ['q1'];
 }
 
+sub update :Tests {
+    db->users->add({ login => 'foo' });
+
+    my $quest = db->quests->add({
+        name => 'q1',
+        user => 'foo',
+        status => 'open',
+    });
+
+    db->quests->update($quest->{_id}, {
+        name => 'q2',
+        tags => ['t1'],
+        user => 'foo',
+    });
+
+    $quest = db->quests->get($quest->{_id});
+    cmp_deeply $quest, superhashof({
+        team => ['foo'],
+        name => 'q2',
+        status => 'open',
+        tags => ['t1'],
+    });
+}
+
+sub scoring :Tests {
+    db->users->add({ login => $_ }) for qw( foo bar baz );
+
+    my $quest = db->quests->add({
+        name => 'q1',
+        user => 'foo',
+        status => 'open',
+    });
+    db->quests->like($quest->{_id}, 'baz');
+    db->quests->invite($quest->{_id}, 'bar', 'foo');
+    db->quests->join($quest->{_id}, 'bar');
+
+    db->quests->update($quest->{_id}, { status => 'closed', user => 'foo' });
+
+    is db->users->get_by_login('foo')->{points}, 2;
+    is db->users->get_by_login('bar')->{points}, 2;
+    is db->users->get_by_login('baz')->{points}, 0;
+}
+
 __PACKAGE__->new->runtests;
