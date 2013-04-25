@@ -3,8 +3,9 @@ define([
     'views/proto/common',
     'views/quest/big', 'views/comment/collection',
     'models/comment-collection',
+    'models/current-user',
     'text!templates/quest-page.html'
-], function (_, Common, QuestBig, CommentCollection, CommentCollectionModel, html) {
+], function (_, Common, QuestBig, CommentCollection, CommentCollectionModel, currentUser, html) {
     return Common.extend({
 
         activated: false,
@@ -12,8 +13,9 @@ define([
         template: _.template(html),
 
         events: {
-            'click button.invite': 'inviteDialog',
+            'click .invite': 'inviteDialog',
             'click .uninvite': 'uninviteAction',
+            'click .join': 'joinAction',
             'keyup [name=invitee]': 'inviteAction'
         },
 
@@ -33,7 +35,11 @@ define([
         },
 
         inviteDialog: function () {
-            this.$('.invite-dialog').show();
+            var that = this;
+            this.$('.invite-dialog').show(100, function () {
+                console.log('focusing');
+                that.$('.invite-dialog input').focus();
+            });
         },
 
         inviteAction: function (e) {
@@ -46,12 +52,23 @@ define([
         },
 
         uninviteAction: function (e) {
-            console.log(e.target);
             this.model.uninvite($(e.target).parent().attr('data-login'));
         },
 
+        joinAction: function () {
+            console.log('joinAction');
+            this.model.join();
+        },
+
         serialize: function () {
-            return this.model.serialize();
+            var params = this.model.serialize();
+            if (_.contains(params.invitee || [], currentUser.get('login'))) {
+                params.invited = true;
+            }
+            else {
+                params.invited = false;
+            }
+            return params;
         },
 
         afterInitialize: function () {

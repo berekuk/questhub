@@ -50,7 +50,7 @@ div.quest-big-unclaimed {
     }
 }
 
-.invite-to-team {
+.quest-team {
     margin-top: 20px;
 
     button {
@@ -60,12 +60,22 @@ div.quest-big-unclaimed {
     ul {
         list-style-type: none;
         text-align: left;
+        margin-left: 28px;
         li {
             margin-top: 6px;
         }
     }
 
-    .invite-dialog {
-        display: none;
+    .invite-block {
+        height: 30px;
+        .invite {
+            float: left;
+        }
+
+        input.invite-dialog {
+            margin-left: 28px;
+            display: none;
+            width: 70%;
+        }
     }
 }
