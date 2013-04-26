@@ -62,6 +62,7 @@ define([
 
         submit: function() {
 
+            ga('send', 'event', 'settings', 'save');
             this.disable();
 
             var that = this;

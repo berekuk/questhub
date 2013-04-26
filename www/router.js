@@ -41,9 +41,9 @@ define([
             return this.bind('route', this._trackPageview);
         },
         _trackPageview: function() {
-            var url;
-            url = Backbone.history.getFragment();
-            return _gaq.push(['_trackPageview', "/" + url]);
+            ga('send', 'pageview', {
+                'page': Backbone.history.getFragment()
+            });
         },
 
         questAdd: function () {

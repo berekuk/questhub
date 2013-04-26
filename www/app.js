@@ -31,6 +31,7 @@ function($, Router, App, currentUser) {
     });
     Backbone.on('pp:settings-dialog', function () {
         appView.currentUser.settingsDialog();
+        ga('send', 'event', 'settings', 'open');
     });
 
     currentUser.fetch({

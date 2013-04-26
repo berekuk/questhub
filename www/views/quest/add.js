@@ -135,6 +135,7 @@ define([
             model.save(model_params, {
                 'success': this.onSuccess
             });
+            ga('send', 'event', 'quest', 'add');
 
             this.submitted = true;
             this.validate();

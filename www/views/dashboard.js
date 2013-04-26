@@ -56,6 +56,7 @@ define([
               collection: this.subview('.open-quests').collection
             });
             this.$el.append(questAdd.$el);
+            ga('send', 'event', 'quest', 'new-dialog');
         },
     });
 });

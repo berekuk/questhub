@@ -79,6 +79,7 @@ define([
                 return;
             }
             this.disableForm();
+            ga('send', 'event', 'comment', 'add');
 
             this.collection.create({
                 'author': currentUser.get('login'),
