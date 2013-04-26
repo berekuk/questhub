@@ -10,6 +10,7 @@ function($, Router, App, currentUser) {
 
     $(document).ajaxError(function () {
         appView.notify('error', 'Internal HTTP error');
+        ga('send', 'event', 'server', 'error');
         //var error;
         //try {
         //    error = $.parseJSON(response.responseText).error;

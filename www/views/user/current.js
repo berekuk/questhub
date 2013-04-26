@@ -116,6 +116,7 @@ define([
 
         checkUser: function () {
             if (this.needsToRegister()) {
+                ga('send', 'event', 'register', 'new-dialog');
                 Backbone.trigger('pp:navigate', "/register", { trigger: true, replace: true });
                 return;
             }

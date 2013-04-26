@@ -88,11 +88,15 @@ define([
 
             var that = this;
 
+            ga('send', 'event', 'register', 'submit');
+
             // TODO - what should we do if login is empty?
             $.post('/api/register', {
                 login: this.getLogin(),
                 settings: JSON.stringify(this.subview('.settings-subview').deserialize())
             }).done(function (model, response) {
+                ga('send', 'event', 'register', 'ok');
+
                 currentUser.fetch({
                     success: function () {
                         Backbone.trigger('pp:navigate', '/', { trigger: true });
@@ -103,6 +107,8 @@ define([
                 });
             })
             .fail(function (response) {
+                ga('send', 'event', 'register', 'fail');
+
                 // TODO - detect "login already taken" exceptions and render them appropriately
 
                 // let's hope that server didn't register the user before it returned a error
