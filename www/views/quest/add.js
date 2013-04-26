@@ -136,6 +136,7 @@ define([
                 'success': this.onSuccess
             });
             ga('send', 'event', 'quest', 'add');
+            mixpanel.track('add quest');
 
             this.submitted = true;
             this.validate();

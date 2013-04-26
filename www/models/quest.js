@@ -55,6 +55,12 @@ define([
 
         act: function(action) {
             var model = this;
+
+            // FIXME - copypasted from models/comment.js
+            // TODO - send only on success?
+            ga('send', 'event', 'quest', action);
+            mixpanel.track(action + ' quest');
+
             $.post(this.url() + '/' + action)
                 .success(function () {
                     model.fetch();
