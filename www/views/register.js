@@ -20,6 +20,7 @@ define([
             '.settings-subview': function () {
                 var model = new UserSettingsModel({
                     notify_likes: 1,
+                    notify_invites: 1,
                     notify_comments: 1
                 });
 

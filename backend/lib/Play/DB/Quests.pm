@@ -52,8 +52,18 @@ use Play::DB qw(db);
 use Play::DB::Role::PushPull;
 with
     'Play::DB::Role::Common',
-    PushPull(field => 'likes', except_field => 'team', push_method => 'like', pull_method => 'unlike'),
-    PushPull(field => 'watchers', except_field => 'team', push_method => 'watch', pull_method => 'unwatch');
+    PushPull(
+        field => 'likes',
+        except_field => 'team', # team members can't like their own quest
+        push_method => 'like',
+        pull_method => 'unlike',
+    ),
+    PushPull(
+        field => 'watchers',
+        except_field => 'team', # team members are always watching a quest
+        push_method => 'watch',
+        pull_method => 'unwatch',
+    );
 
 sub _prepare_quest {
     my $self = shift;
@@ -63,6 +73,19 @@ sub _prepare_quest {
 
     $quest->{team} ||= [];
 
+    return $quest;
+}
+
+sub get {
+    my $self = shift;
+    my ($id) = validate_pos(@_, { type => SCALAR });
+
+    my $quest = $self->collection->find_one({
+        _id => MongoDB::OID->new(value => $id)
+    });
+    die "quest $id not found" unless $quest;
+    die "quest $id is deleted" if $quest->{status} eq 'deleted';
+    $self->_prepare_quest($quest);
     return $quest;
 }
 
@@ -244,17 +267,22 @@ sub update {
         }
     }
 
-    if ($action eq 'close') {
-        db->users->add_points($user, $self->_quest2points($quest));
-    }
-    elsif ($action eq 'reopen') {
-        db->users->add_points($user, -$self->_quest2points($quest));
+    {
+        my $points = $self->_quest2points($quest);
+        if ($action eq 'close') {
+            db->users->add_points($_, $points) for @{$quest->{team}};
+        }
+        elsif ($action eq 'reopen') {
+            db->users->add_points($_, -$points) for @{$quest->{team}};
+        }
     }
 
     delete $quest->{_id};
     delete $quest->{ts};
 
     my $quest_after_update = { %$quest, %$params };
+    delete $quest_after_update->{invitee} if $params->{status} and $params->{status} ne 'open';
+
     $self->collection->update(
         { _id => MongoDB::OID->new(value => $id) },
         $quest_after_update,
@@ -346,7 +374,7 @@ sub remove {
     }
 
     if ($quest->{status} eq 'closed') {
-        db->users->add_points($user, -$self->_quest2points($quest));
+        db->users->add_points($_, -$self->_quest2points($quest)) for @{$quest->{team}};
     }
 
     delete $quest->{_id};
@@ -357,42 +385,102 @@ sub remove {
     );
 }
 
-sub get {
+sub invite {
     my $self = shift;
-    my ($id) = validate_pos(@_, { type => SCALAR });
+    my ($id, $user, $actor) = @_;
+    db->users->get_by_login($user) or die "Invitee '$user' not found";
 
-    my $quest = $self->collection->find_one({
-        _id => MongoDB::OID->new(value => $id)
-    });
-    die "quest $id not found" unless $quest;
-    die "quest $id is deleted" if $quest->{status} eq 'deleted';
-    $self->_prepare_quest($quest);
-    return $quest;
-}
-
-sub join {
-    my $self = shift;
-    my ($id, $user, $force_multi) = validate_pos(@_,
-        { type => SCALAR },
-        { type => SCALAR },
-        { type => BOOLEAN, optional => 1 },
-    );
-    die "only non-empty users can join quests" unless length $user;
+    my $quest = $self->get($id);
 
     my $result = $self->collection->update(
         {
             _id => MongoDB::OID->new(value => $id),
-            ($force_multi ? () : (team => { '$size' => 0 })),
+            '$and' => [
+                { team => { '$ne' => $user } }, # team members can't invite themselves to join a quest
+                { team => $actor },  # only team members can invite other players
+            ],
+            invitee => { '$ne' => $user },
+            status => 'open',
         },
         {
-            '$addToSet' => { team => $user },
-            '$pull' => { likes => $user }, # can't like your own quest
+            '$addToSet' => { invitee => $user },
         },
         { safe => 1 }
     );
     my $updated = $result->{n};
     unless ($updated) {
-        die "Quest not found or unable to join quest that's already taken";
+        die ucfirst($self->entity_name)." not found or unable to invite to your own quest";
+    }
+
+    db->events->add({
+        object_type => 'quest',
+        action => 'invite',
+        author => $actor,
+        object_id => $id,
+        object => {
+            quest => $quest,
+            invitee => $user,
+        },
+    });
+
+    return;
+}
+
+sub uninvite {
+    my $self = shift;
+    my ($id, $user, $actor) = @_;
+    db->users->get_by_login($user) or die "Invitee '$user' not found";
+
+    my $result = $self->collection->update(
+        {
+            _id => MongoDB::OID->new(value => $id),
+            '$and' => [
+                { team => { '$ne' => $user } },
+                { team => $actor },
+            ],
+            invitee => $user,
+        },
+        {
+            '$pull' => { invitee => $user },
+        },
+        { safe => 1 }
+    );
+    my $updated = $result->{n};
+    unless ($updated) {
+        die ucfirst($self->entity_name)." not found or unable to uninvite to your own quest";
+    }
+    return;
+}
+
+sub join {
+    my $self = shift;
+    my ($id, $user) = validate_pos(@_,
+        { type => SCALAR },
+        { type => SCALAR },
+    );
+    die "only non-empty users can join quests" unless length $user; # FIXME - use Type::Tiny instead
+
+    my $result = $self->collection->update(
+        {
+            _id => MongoDB::OID->new(value => $id),
+            '$or' => [
+                { invitee => $user },
+                { team => { '$size' => 0 } },
+            ],
+            status => 'open',
+        },
+        {
+            '$addToSet' => { team => $user },
+            '$pull' => {
+                likes => $user, # can't like your own quest
+                invitee => $user,
+            },
+        },
+        { safe => 1 }
+    );
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "Quest not found or unable to join a quest without invitation";
     }
 }
 

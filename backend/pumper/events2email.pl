@@ -120,6 +120,28 @@ sub process_close_quest {
     }
 }
 
+sub process_invite_quest {
+    my $self = shift;
+    my ($event) = @_;
+
+    my $quest = $event->{object}{quest};
+
+    my $recipient = $event->{object}{invitee};
+    my $email = db->users->get_email($recipient, 'notify_invites') or return;
+
+    {
+        my $email_body = qq[
+            <p>
+            <a href="http://].setting('hostport').qq[/player/$event->{author}">$event->{author}</a> invited you to a quest: <a href="http://].setting('hostport').qq[/quest/$event->{object_id}">$quest->{name}</a>.];
+        db->events->email(
+            $email,
+            "$event->{author} invites you to a quest: '$quest->{name}'",
+            $email_body,
+        );
+        $self->add_stat('emails sent');
+    }
+}
+
 sub run_once {
     my $self = shift;
 
@@ -130,6 +152,9 @@ sub run_once {
         }
         if ($event->{object_type} eq 'quest' and $event->{action} eq 'close') {
             $self->process_close_quest($event);
+        }
+        if ($event->{object_type} eq 'quest' and $event->{action} eq 'invite') {
+            $self->process_invite_quest($event);
         }
 
         $self->add_stat('events processed');

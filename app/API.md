@@ -161,11 +161,19 @@ Stop watching a quest.
 
 ##### POST /api/quest/{id}/join
 
-Join a quest. Quest must be unclaimed.
+Join a quest. User must be invited first using `/api/quest/{id}/invite` method.
 
 ##### POST /api/quest/{id}/leave
 
-Leave a quest. You must have this quest claimed at the moment of leaving.
+Leave a quest. User must be the member of a quest's team.
+
+##### POST /api/quest/{id}/invite
+
+Invite a user (`invitee` param) to the quest.
+
+##### POST /api/quest/{id}/uninvite
+
+Cancel the invitation.
 
 ### Other
 

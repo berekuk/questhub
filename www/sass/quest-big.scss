@@ -1,51 +1,172 @@
-div.quest-big-open {
+div.quest-big-open, div.quest-big-closed, div.quest-big-abandoned, div.quest-big-unclaimed {
     position: relative;
     padding: 9px;
+}
+
+div.quest-big-open {
     background-color: #fcf8e3;
 }
 div.quest-big-closed {
-    position: relative;
-    padding: 9px;
     background-color: #d9edf7;
 }
 div.quest-big-abandoned {
-    position: relative;
-    padding: 9px;
     background-color: #dddddd;
 }
 div.quest-big-unclaimed {
-    position: relative;
-    padding: 9px;
     background-color: #dff0d8;
-}
-
-.quest-big-labels {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-}
-
-.reward-block {
-    text-align: center;
-}
-.reward-circle {
-    border-radius: 50%;
-    -moz-border-radius:50%;
-    -webkit-border-radius: 50%;
-
-    padding: 20px;
-    display: inline-block;
-    background-color: #ffb91f;
-    text-align: center;
-
-    .points {
-        display: block;
-        font-size: 25px;
-    }
 }
 
 .quest-big {
     h2 {
         overflow: auto;
+    }
+
+    .quest-big-labels {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+    }
+}
+
+.quest-page-left {
+    position: relative;
+    @media (min-width: 980px) {
+        > div.reward {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        > div.quest-action {
+            width: 120px;
+            margin-left: auto;
+            margin-right: 0px;
+
+            button {
+                display: block;
+            }
+        }
+
+        > div.invited-list {
+            margin-right: 0px;
+            margin-left: auto;
+            margin-top: 15px;
+        }
+    }
+
+    @media (min-width: 768px) and (max-width: 979px) {
+        > div {
+            width: 120px; // width of an action button
+            float: right;
+            margin-bottom: 20px;
+        }
+
+        > div.reward {
+            text-align: center;
+
+            .reward-circle {
+                margin: 0 auto;
+            }
+        }
+        > div.quest-action {
+
+            button {
+                display: block;
+            }
+        }
+
+        > div.invited-list {
+            margin-top: 15px;
+        }
+    }
+
+    @media (max-width: 767px) {
+
+        > div.reward {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        > div.quest-action {
+            margin-left: 90px;
+            vertical-align: top;
+            float: left;
+        }
+
+        > div.invited-list {
+            margin-left: 18px;
+            float: right;
+        }
+
+        &:after {
+            content: '';
+            display: block;
+            clear: both;
+        }
+    }
+
+    @media (max-width: 660px) {
+        > div.quest-action button {
+            display: block;
+        }
+    }
+
+    .reward {
+        .reward-circle {
+            border-radius: 50%;
+            -moz-border-radius:50%;
+            -webkit-border-radius: 50%;
+
+            padding: 20px;
+            display: inline-block;
+            background-color: #ffb91f;
+            text-align: center;
+
+            .points {
+                display: block;
+                font-size: 25px;
+            }
+        }
+    }
+
+    .quest-action {
+        button {
+            width: 120px;
+            margin-bottom: 7px;
+            text-align: left;
+        }
+
+        .invite-dialog {
+            display: none;
+        }
+    }
+
+    .invited-list {
+        width: 120px;
+
+        h5 {
+            font-weight: 200;
+        }
+
+        ul {
+            list-style-type: none;
+            text-align: left;
+            margin-left: 0px;
+            li {
+                margin-top: 6px;
+                position: relative;
+
+                .uninvite {
+                    position: absolute;
+                    left: -20px;
+                }
+                .join {
+                    position: absolute;
+                    left: -70px;
+                    width: 64px;
+                }
+            }
+        }
     }
 }

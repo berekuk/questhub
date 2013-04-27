@@ -480,6 +480,8 @@ sub email_like :Tests {
 }
 
 sub join_leave :Tests {
+    http_json GET => "/api/fakeuser/$_" for qw/ foo foo2 bar /;
+
     http_json GET => "/api/fakeuser/foo";
 
     my $quest = http_json POST => '/api/quest', { params => {
@@ -490,7 +492,7 @@ sub join_leave :Tests {
 
     $response = dancer_response POST => "/api/quest/$quest->{_id}/join";
     is $response->status, 500;
-    like $response->content, qr/unable to join quest/;
+    like $response->content, qr/unable to join a quest/;
 
     http_json POST => "/api/quest/$quest->{_id}/leave";
 
@@ -521,6 +523,41 @@ sub join_leave :Tests {
 
     $got_quest = http_json GET => "/api/quest/$quest->{_id}";
     is_deeply $got_quest->{likes}, ['bar'], 'joining means unliking';
+
+    Dancer::session login => 'foo2';
+    $response = dancer_response POST => "/api/quest/$quest->{_id}/join";
+    is $response->status, 500;
+    like $response->content, qr/unable to join a quest/;
+
+    Dancer::session login => 'foo';
+    http_json POST => "/api/quest/$quest->{_id}/invite", { params => {
+        invitee => 'foo2',
+    } };
+
+    Dancer::session login => 'foo2';
+    http_json POST => "/api/quest/$quest->{_id}/join";
+
+    $got_quest = http_json GET => "/api/quest/$quest->{_id}";
+    is_deeply $got_quest->{team}, ['foo', 'foo2'], '/join added user to the team';
+
+    http_json POST => "/api/quest/$quest->{_id}/invite", { params => {
+        invitee => 'bar',
+    } };
+    http_json POST => "/api/quest/$quest->{_id}/uninvite", { params => {
+        invitee => 'bar',
+    } };
+
+    Dancer::session login => 'bar';
+    $response = dancer_response POST => "/api/quest/$quest->{_id}/join";
+    is $response->status, 500, 'invitation was cancelled';
+    like $response->content, qr/unable to join a quest/, 'failed /join body';
+
+    Dancer::session login => 'foo';
+    $response = dancer_response POST => "/api/quest/$quest->{_id}/invite", { params => {
+        invitee => 'nosuchuser',
+    } };
+    is $response->status, 500;
+    like $response->content, qr/not found/;
 }
 
 sub watch_unwatch :Tests {

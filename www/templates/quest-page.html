@@ -1,19 +1,87 @@
 <!-- quest details page -->
 <div class="container-fluid">
   <div class="row-fluid">
-    <div class="span3">
-      <div class="reward-block">
-      <% if (status == 'open') { %>
-        <div class="muted">
-          Expected reward:
-        </div>
-        <div class="reward-circle">
+    <div class="span3 quest-page-left">
+
+      <div class="reward">
+        <div class="reward-circle" data-toggle="tooltip" data-placement="right" title="Reward for completing this quest">
           <span class="points"><%- reward %></span>
           <span class="points-text">points</span>
         </div>
-      <% } %>
       </div>
+
+      <div class="quest-action">
+        <% if (my) { %> <!-- quest belongs to the current user -->
+          <% if (status === 'open') { %>
+
+          <button class="complete btn btn-primary" data-toggle="tooltip" data-placement="right" title="Claim your points!">
+            <i class="icon-check"></i>
+            Complete
+          </button>
+
+          <button class="leave btn" data-toggle="tooltip" data-placement="right" title="Leave the quest to the others. Maybe someone else will do it for you.">
+            <i class="icon-minus"></i>
+            Leave
+          </button>
+
+          <button class="abandon btn" data-toggle="tooltip" data-placement="right" title="This will never happen. Let's just forget about it and move on.">
+            <i class="icon-eject"></i>
+            Abandon
+          </button>
+
+          <% } else if (status === 'closed') { %>
+
+            <button class="reopen btn btn-primary">
+              <i class="icon-backward"></i>
+              Reopen
+            </button>
+
+          <% } else if (status === 'abandoned') { %>
+
+            <button class="resurrect btn">
+              <i class="icon-play"></i>
+              Resurrect
+            </button>
+
+          <% } %>
+        <% } %>
+
+        <% if (my) { %>
+        <div class="invite-block">
+          <button class="invite btn">
+            <i class="icon-user"></i>
+            Invite
+          </button>
+          <form class="form-inline invite-dialog" action="#">
+            <label class="muted">Invite:</label>
+            <!-- .input-block-level via http://stackoverflow.com/a/12322087 -->
+            <input id="inputInvitee" type="text" placeholder="Login" class="input-block-level">
+          </form>
+        </div>
+        <% } %>
+      </div>
+
+      <% if (obj.invitee && obj.invitee.length) { %>
+        <div class="invited-list">
+        <div>Invited:</div>
+        <ul>
+          <% _.each(invitee, function (i) { %>
+          <li>
+            <% if (my) { %>
+              <a href="#" class="uninvite mini-button" data-login="<%- i %>"><i class="icon-remove"></i></a>
+            <% } %>
+            <%= partial.user({ login: i }) %>
+            <% if (i == currentUser) { %>
+              <button class='btn btn-danger btn-mini join'>Accept</button>
+            <% } %>
+          </li>
+          <% }) %>
+        </ul>
+        </div>
+      <% } %>
+
     </div>
+
     <div class="span9">
       <div class="quest-big"></div>
       <div class="comments"></div>

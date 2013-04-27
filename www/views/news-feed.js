@@ -88,6 +88,10 @@ define([
                 {
                     value: 'add-comment',
                     description: 'Comments'
+                },
+                {
+                    value: 'invite-quest',
+                    description: 'Invitations'
                 }
             ];
             return { filterList: filterList, types: this.options.types };

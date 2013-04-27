@@ -12,7 +12,11 @@ $log->empty_ok;
 
 for (qw( foo bar baz baz2 )) {
     db->users->add({ login => $_ });
-    db->users->set_settings($_ => { email => "$_\@example.com", notify_comments => 1 }, 1);
+    db->users->set_settings($_ => {
+            email => "$_\@example.com",
+            notify_comments => 1,
+            notify_invites => 1,
+    }, 1);
 }
 
 my $quest = db->quests->add({
@@ -106,6 +110,25 @@ subtest "quest completed" => sub {
 
     like $chunk->[0][2], qr/completed a quest/;
     like $chunk->[1][2], qr/completed a quest/;
+};
+
+subtest "invite" => sub {
+    my $q2 = db->quests->add({
+        team => ['bar'],
+        name => 'bq3',
+        status => 'open',
+    });
+
+    db->quests->invite($q2->{_id}, 'foo', 'bar');
+
+    $pumper->run;
+    $log->contains_ok(qr/1 emails sent, 2 events processed$/);
+
+    my $chunk = $email_in->read_chunk(5);
+    $email_in->commit;
+
+    is $chunk->[0][0], 'foo@example.com';
+    like $chunk->[0][1], qr/bar invites you to a quest/;
 };
 
 done_testing;

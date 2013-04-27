@@ -13,6 +13,11 @@
     <%= partial.user({ login: author }) %> completed a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
   </script>
 
+  <script type="text/template" class="invite-quest">
+    <i class="icon-group"></i>
+    <%= partial.user({ login: author }) %> invited <%= partial.user({ login: object.invitee }) %> to work a quest: <a href="/quest/<%= object_id %>"><%- object.quest.name %></a>.
+  </script>
+
   <script type="text/template" class="reopen-quest">
     <i class="icon-backward"></i>
     <%= partial.user({ login: author }) %> reopened a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.

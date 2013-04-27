@@ -56,12 +56,10 @@ textarea.comment-edit {
     height: 100%;
 }
 
-.mini-button-block {
-    a {
-        color: #999;
-    }
+a.mini-button {
+    color: #999;
 
-    a:hover {
+    &:hover {
         text-decoration: none !important;
         color: #333;
     }
@@ -82,11 +80,6 @@ input.quest-edit {
 
 .quest-tags-edit input {
     background-color: #fcf8e3;
-}
-
-.quest-big-tags-edit input {
-    padding: 2px;
-    margin-bottom: 0px;
 }
 
 .registration-form {
