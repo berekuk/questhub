@@ -16,22 +16,6 @@ div.quest-big-unclaimed {
     background-color: #dff0d8;
 }
 
-.reward-circle {
-    border-radius: 50%;
-    -moz-border-radius:50%;
-    -webkit-border-radius: 50%;
-
-    padding: 20px;
-    display: inline-block;
-    background-color: #ffb91f;
-    text-align: center;
-
-    .points {
-        display: block;
-        font-size: 25px;
-    }
-}
-
 .quest-big {
     h2 {
         overflow: auto;
@@ -44,10 +28,69 @@ div.quest-big-unclaimed {
     }
 }
 
-.quest-invite {
+.quest-page-left {
+    @media (min-width: 480px) and (max-width: 767px) {
+        min-height: 90px;
+    }
 
-    .invite-dialog {
-        display: none;
+    .reward-circle-wrap {
+        @media (min-width: 980px) {
+            float: left;
+        }
+
+        @media (min-width: 768px) and (max-width: 979px) {
+            width: 120px; // width of an action button
+            float: right;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 767px) {
+            float: left;
+        }
+
+        .reward-circle {
+            border-radius: 50%;
+            -moz-border-radius:50%;
+            -webkit-border-radius: 50%;
+
+            padding: 20px;
+            display: inline-block;
+            background-color: #ffb91f;
+            text-align: center;
+
+        @media (min-width: 768px) and (max-width: 979px) {
+            margin: 0 auto;
+        }
+            .points {
+                display: block;
+                font-size: 25px;
+            }
+        }
+    }
+
+    .quest-action {
+        @media (min-width: 480px) and (max-width: 767px) {
+            margin-left: 90px;
+        }
+
+        button {
+            width: 120px;
+            margin-bottom: 7px;
+            margin-left: auto;
+            margin-right: 0px;
+            @media (min-width: 768px) {
+                display: block;
+            }
+            @media (max-width: 479px) {
+                display: block;
+            }
+            text-align: left;
+        }
+
+        .invite-dialog {
+            display: none;
+        }
     }
 
     .invited-list {
@@ -79,17 +122,5 @@ div.quest-big-unclaimed {
                 }
             }
         }
-
-    }
-}
-
-.quest-page-left {
-    button.invite, .quest-action button {
-        width: 120px;
-        margin-bottom: 7px;
-        margin-left: auto;
-        margin-right: 0px;
-        display: block;
-        text-align: left;
     }
 }
