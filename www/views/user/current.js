@@ -72,7 +72,7 @@ define([
                 user = this.model.get('settings').email;
             }
 
-            var that = this;
+            var view = this;
 
             navigator.id.watch({
                 loggedInUser: user,
@@ -85,7 +85,7 @@ define([
                         url: '/auth/persona',
                         data: { assertion: assertion },
                         success: function(res, status, xhr) {
-                            that.model.fetch();
+                            view.model.fetch();
                         },
                         error: function(xhr, status, err) {
                             Backbone.trigger(
@@ -96,7 +96,13 @@ define([
                         }
                     });
                 },
-                onlogout: that.backendLogout
+                onlogout: function () {
+                    // sometimes persona decides that it should log out the twitter user, so we're trying to prevent it here
+                    // it happens often in confusion of localhost:3000 and localhost:3001 in development, since persona only works for :3000
+                    if (view.model.get('settings') && view.model.get('settings').email_confirmed == 'persona') {
+                        view.backendLogout();
+                    }
+                }
             });
         },
 
