@@ -29,49 +29,90 @@ div.quest-big-unclaimed {
 }
 
 .quest-page-left {
-    @media (min-width: 480px) and (max-width: 767px) {
-        min-height: 90px;
-    }
-
-    .reward-circle-wrap {
-        @media (min-width: 980px) {
-            float: left;
+    position: relative;
+    @media (min-width: 980px) {
+        > div.reward {
+            position: absolute;
+            left: 0;
+            top: 0;
         }
 
-        @media (min-width: 768px) and (max-width: 979px) {
+        > div.quest-action {
+            width: 120px;
+            margin-left: auto;
+            margin-right: 0px;
+
+            button {
+                display: block;
+            }
+        }
+
+        > div.invited-list {
+            margin-right: 0px;
+            margin-left: auto;
+            margin-top: 15px;
+        }
+    }
+
+    @media (min-width: 768px) and (max-width: 979px) {
+        > div {
             width: 120px; // width of an action button
             float: right;
             margin-bottom: 20px;
+        }
+
+        > div.reward {
             text-align: center;
 
             .reward-circle {
                 margin: 0 auto;
             }
         }
+        > div.quest-action {
 
-        @media (max-width: 767px) {
+            button {
+                display: block;
+            }
+        }
+
+        > div.invited-list {
+            margin-top: 15px;
+        }
+    }
+
+    @media (max-width: 767px) {
+
+        > div.reward {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        > div.quest-action {
+            margin-left: 90px;
+            vertical-align: top;
             float: left;
         }
-    }
 
-    .quest-action {
-        @media (min-width: 480px) and (max-width: 767px) {
-            margin-left: 90px;
+        > div.invited-list {
+            margin-left: 18px;
+            float: right;
         }
 
-        button {
-            @media (min-width: 768px) {
-                display: block;
-            }
-            @media (max-width: 479px) {
-                display: block;
-            }
+        &:after {
+            content: '';
+            display: block;
+            clear: both;
         }
     }
 
+    @media (max-width: 660px) {
+        > div.quest-action button {
+            display: block;
+        }
+    }
 
-    .reward-circle-wrap {
-
+    .reward {
         .reward-circle {
             border-radius: 50%;
             -moz-border-radius:50%;
@@ -93,8 +134,6 @@ div.quest-big-unclaimed {
         button {
             width: 120px;
             margin-bottom: 7px;
-            margin-left: auto;
-            margin-right: 0px;
             text-align: left;
         }
 
@@ -105,9 +144,6 @@ div.quest-big-unclaimed {
 
     .invited-list {
         width: 120px;
-        margin-right: 0px;
-        margin-left: auto;
-        margin-top: 15px;
 
         h5 {
             font-weight: 200;

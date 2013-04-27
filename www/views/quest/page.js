@@ -23,7 +23,7 @@ define([
             'click .invite': 'inviteDialog',
             'click .uninvite': 'uninviteAction',
             'click .join': 'joinAction',
-            'keyup #inputInvitee': 'inviteAction'
+            'keyup #inputInvitee': 'inviteAction',
         },
 
         subviews: {
@@ -64,6 +64,7 @@ define([
                     this.$('#inputInvitee').val()
                 );
             }
+            return;
         },
 
         uninviteAction: function (e) {
