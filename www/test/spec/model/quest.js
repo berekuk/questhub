@@ -27,7 +27,8 @@ define([
                 ).toEqual(
                     _.extend(modelParams, {
                         'reward': 3,
-                        'ext_status': 'open'
+                        'ext_status': 'open',
+                        'my': false
                     })
                 );
             });

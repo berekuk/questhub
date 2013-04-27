@@ -6,8 +6,7 @@
     <% } else { %>
       <span class="muted">
       <%= _.map(team, function (member) { return partial.user({ login: member }); }).join(', ') %>
-      <%= (team.length == 1 ? 'is' : 'are') %>
-      on a quest<%= (_.first(team) == obj.author) ? '' : ' by ' + partial.user({ login: obj.author }) %>:</span>
+      <%= (team.length == 1 ? 'is' : 'are') %> on a quest<%= (_.first(team) == obj.author) ? '' : ' by ' + partial.user({ login: obj.author }) %>:</span>
       <% if (my) { %>
         <%= partial.edit_tools() %>
       <% } %>
