@@ -16,6 +16,7 @@ define([
         initialize: function() {
             _.bindAll(this);
             this.render();
+            this.$('.icon-spinner').hide();
             this.submitted = false;
             this.validate();
         },
@@ -32,11 +33,11 @@ define([
         },
 
         validate: function() {
-            this.enable();
             if (this.submitted || !this.getDescription()) {
                 this.disable();
+                return;
             }
-
+            this.enable();
 
             var qt = this.$('.quest-tags-edit');
             var tagLine = this.$('[name=tags]').val();
@@ -139,6 +140,7 @@ define([
             mixpanel.track('add quest');
 
             this.submitted = true;
+            this.$('.icon-spinner').show();
             this.validate();
         },
 
