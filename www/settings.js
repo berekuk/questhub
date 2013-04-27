@@ -1,5 +1,5 @@
 define([], function () {
-    if (window.location.host == 'play-perl') {
+    if (window.location.host == 'play-perl.org') {
         return {
             service_name: 'Play Perl',
             instance_name: 'play-perl'
