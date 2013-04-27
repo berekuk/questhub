@@ -47,6 +47,10 @@
         ]]>
     </content>
 
+    <% ELSIF event.object_type == 'quest' && event.action == 'invite' %>
+    <title><% event.author %> invited <% event.object.invitee %> to work on a quest: <% event.object.quest.name | xml %></title>
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object_id %>" />
+
     <% ELSE %>
     <title>Unknown event type (object_type: <% event.object_type %>, action: <% event.action %>)</title>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>" />

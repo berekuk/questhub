@@ -390,6 +390,8 @@ sub invite {
     my ($id, $user, $actor) = @_;
     db->users->get_by_login($user) or die "Invitee '$user' not found";
 
+    my $quest = $self->get($id);
+
     my $result = $self->collection->update(
         {
             _id => MongoDB::OID->new(value => $id),
@@ -409,6 +411,18 @@ sub invite {
     unless ($updated) {
         die ucfirst($self->entity_name)." not found or unable to invite to your own quest";
     }
+
+    db->events->add({
+        object_type => 'quest',
+        action => 'invite',
+        author => $actor,
+        object_id => $id,
+        object => {
+            quest => $quest,
+            invitee => $user,
+        },
+    });
+
     return;
 }
 
