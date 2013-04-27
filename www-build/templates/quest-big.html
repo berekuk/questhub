@@ -1,9 +1,12 @@
 <div class="<%= "quest-big-" + ext_status %> quest-big">
+
   <div>
     <% if (team.length == 0) { %>
       <%= partial.user({ login: obj.author }) %><span class="muted"> suggests a quest:</span>
     <% } else { %>
-      <span class="muted"><%= partial.user({ login: _.first(team) }) %> is on a quest<%= (_.first(team) == obj.author) ? '' : ' by ' + partial.user({ login: obj.author }) %>:</span>
+      <span class="muted">
+      <%= _.map(team, function (member) { return partial.user({ login: member }); }).join(', ') %>
+      <%= (team.length == 1 ? 'is' : 'are') %> on a quest<%= (_.first(team) == obj.author) ? '' : ' by ' + partial.user({ login: obj.author }) %>:</span>
       <% if (my) { %>
         <%= partial.edit_tools() %>
       <% } %>
@@ -12,7 +15,7 @@
 
   <div class="quest-big-labels">
     <span class="muted quest-big-tags-edit control-group" style="display: none">
-      Tags: <input class="quest-big-tags-input" type="text" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
+      <input class="quest-big-tags-input" type="text" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
     </span>
     <%= partial.quest_labels(obj) %>
   </div>
@@ -26,26 +29,14 @@
     <% } %>
   </h2>
 
-  <div class="watchers"></div>
-  <div class="likes"></div>
-
-  <% if (my) { %> <!-- quest belongs to the current user -->
-
-    <div>
-    <!-- close/reopen button -->
-    <% if (status === 'open') { %>
-      <button class="quest-close btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Claim your points!">Complete</button>
-      <button class="quest-leave btn" data-toggle="tooltip" data-placement="bottom" title="Leave the quest to the others. Maybe someone else will do it for you.">Leave</button>
-      <button class="quest-abandon btn" data-toggle="tooltip" data-placement="bottom" title="This will never happen. Let's just forget about it and move on.">Abandon</button>
-    <% } else if (status === 'closed') { %>
-    <button class="quest-reopen btn btn-primary">Reopen</button>
-    <% } else if (status === 'abandoned') { %>
-    <button class="quest-resurrect btn">Resurrect</button>
-    <% } %>
-    </div>
-
-  <% } else if (team.length == 0) { %>
+  <div>
+  <% if (team.length == 0) { %>
     <span class="muted">This quest is not claimed by anybody. Would you like to take it?</span>
     <button class="quest-join btn btn-primary">Take</button>
   <% } %>
+  </div>
+
+  <div class="watchers"></div>
+  <div class="likes"></div>
+
 </div>

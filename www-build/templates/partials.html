@@ -11,15 +11,15 @@
         </a>
       <% }) %>
     <% } %>
-    </span>
     <span class="label label-<%= status === 'open' && 'warning' %>"><%= status === 'closed' ? 'complete' : status %></span>
+    </span>
   </script>
 
   <script type="text/template" class="edit-tools">
-    <div class="pull-right mini-button-block">
+    <div class="pull-right">
       <label> <!-- label fixes the font size, even inside h2 -->
-        <a href="#" class="edit"><i class="icon-pencil"></i></a>
-        <a href="#" class="delete"><i class="icon-remove"></i></a>
+        <a href="#" class="edit mini-button"><i class="icon-pencil"></i></a>
+        <a href="#" class="delete mini-button"><i class="icon-remove"></i></a>
       </label>
     </div>
   </script>
