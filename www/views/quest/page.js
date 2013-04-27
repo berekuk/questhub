@@ -71,7 +71,6 @@ define([
         },
 
         joinAction: function () {
-            console.log('joinAction');
             this.model.join();
         },
 
