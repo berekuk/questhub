@@ -34,7 +34,7 @@ $Term::ANSIColor::AUTORESET = 1;
 my %INSTANCES = (
 # play-perl.org address, as registered in GoDaddy DNS
     'play-perl' => '54.243.208.16',
-    'frf-todo' => '54.225.128.184',
+    'questhub' => '54.225.128.184',
 );
 my $USER = 'ubuntu';
 

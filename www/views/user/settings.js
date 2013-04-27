@@ -68,10 +68,13 @@ define([
                 notify_comments: this.$('[name=notify-comments]').is(':checked'),
                 notify_likes: this.$('[name=notify-likes]').is(':checked')
             };
+
+            // deprecated, nobody uses this feature
             if (instanceSettings.instance_name == 'frf-todo') {
                 settings.frf_username = this.$('[name=frf-username]').val();
                 settings.frf_remote_key = this.$('[name=frf-remote-key]').val();
             }
+
             return settings;
         },
 
