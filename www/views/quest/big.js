@@ -4,22 +4,16 @@ define([
     'views/proto/common',
     'views/quest/like',
     'views/quest/watch',
-    'views/quest/completed',
     'models/current-user',
     'bootbox',
     'text!templates/quest-big.html'
-], function (_, Backbone, Common, Like, Watch, QuestCompleted, currentUser, bootbox, html) {
+], function (_, Backbone, Common, Like, Watch, currentUser, bootbox, html) {
     'use strict';
     return Common.extend({
         template: _.template(html),
 
         events: {
-            "click .quest-close": "close",
-            "click .quest-abandon": "abandon",
-            "click .quest-leave": "leave",
             "click .quest-join": "join",
-            "click .quest-resurrect": "resurrect",
-            "click .quest-reopen": "reopen",
             "click .delete": "destroy",
             "click .edit": "startEdit",
             "keyup input": "edit"
@@ -38,34 +32,12 @@ define([
             this.listenTo(this.model, 'change', this.render);
         },
 
-        close: function () {
-            this.model.close();
-            var modal = new QuestCompleted({ model: this.model });
-            modal.start();
-        },
-
-        abandon: function () {
-            this.model.abandon();
-        },
-
-        leave: function () {
-            this.model.leave();
-        },
-
         join: function () {
             this.model.join();
         },
 
-        resurrect: function () {
-            this.model.resurrect();
-        },
-
-        reopen: function () {
-            this.model.reopen();
-        },
-
         startEdit: function () {
-            if (!this.isOwned()) {
+            if (!this.model.isOwned()) {
                 return;
             }
             this.$('.quest-edit').show();

@@ -1,62 +1,52 @@
-div.quest-big-open {
+div.quest-big-open, div.quest-big-closed, div.quest-big-abandoned, div.quest-big-unclaimed {
     position: relative;
     padding: 9px;
+}
+
+div.quest-big-open {
     background-color: #fcf8e3;
 }
 div.quest-big-closed {
-    position: relative;
-    padding: 9px;
     background-color: #d9edf7;
 }
 div.quest-big-abandoned {
-    position: relative;
-    padding: 9px;
     background-color: #dddddd;
 }
 div.quest-big-unclaimed {
-    position: relative;
-    padding: 9px;
     background-color: #dff0d8;
 }
 
-.quest-big-labels {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-}
-
-.reward-block {
-    text-align: center;
-}
 .reward-circle {
     border-radius: 50%;
+    width: 15px;
+    height: 15px;
     -moz-border-radius:50%;
     -webkit-border-radius: 50%;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    vertical-align: baseline;
 
-    padding: 20px;
-    display: inline-block;
+    padding: 5px;
     background-color: #ffb91f;
     text-align: center;
 
-    .points {
-        display: block;
-        font-size: 25px;
-    }
+    font-size: 14px;
+
+    cursor: pointer;
 }
 
 .quest-big {
     h2 {
         overflow: auto;
     }
+
+    .quest-big-labels {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+    }
 }
 
-.quest-team {
-    margin-top: 20px;
-
-    button {
-        margin-left: 0px;
-    }
-
+.quest-invite {
     ul {
         list-style-type: none;
         text-align: left;
@@ -67,15 +57,21 @@ div.quest-big-unclaimed {
     }
 
     .invite-block {
-        height: 30px;
-        .invite {
-            float: left;
-        }
-
         input.invite-dialog {
             margin-left: 28px;
             display: none;
             width: 70%;
         }
+    }
+}
+
+.quest-page-left {
+    button.invite, .quest-action button {
+        width: 120px;
+        margin-bottom: 7px;
+        margin-left: auto;
+        margin-right: 0px;
+        display: block;
+        text-align: left;
     }
 }

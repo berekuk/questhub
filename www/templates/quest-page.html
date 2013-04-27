@@ -1,56 +1,80 @@
 <!-- quest details page -->
 <div class="container-fluid">
   <div class="row-fluid">
-    <div class="span3">
-      <% if (status == 'open') { %>
-      <% if (my) { %>
-        <div class="quest-team well well-small">
-          <% if (team.length) { %>
-            <div class="muted">Party:</div>
-            <ul>
-              <% _.each(team, function (i) { %>
-              <li>
-                <%= partial.user({ login: i }) %>
-              </li>
-              <% }) %>
-            </ul>
-          <% } %>
-          <% if (obj.invitee && obj.invitee.length) { %>
-            <h5>Invited:</h5>
-            <ul>
-              <% _.each(invitee, function (i) { %>
-              <li>
-                <a href="#" class="uninvite mini-button" data-login="<%- i %>"><i class="icon-remove"></i></a>
-                <%= partial.user({ login: i }) %>
-              </li>
-              <% }) %>
-            </ul>
-          <% } %>
+    <div class="span3 quest-page-left">
 
-          <div class="invite-block">
-            <a href="#" class="invite mini-button">
-              + <i class="icon-user"></i>
-            </a>
-            <input class="invite-dialog" name='invitee' type="text" placeholder="Login">
-          </div>
-        </div>
-      <% } %>
-      <% if (invited) { %>
-      <div>
-        <button class='btn btn-danger join'>You're invited! Accept?</button>
+        <span class="reward-circle pull-left" data-toggle="tooltip" data-placement="right" title="Reward for completing this quest">
+          <%- reward %>
+        </span>
+
+      <% if (my) { %> <!-- quest belongs to the current user -->
+      <div class="quest-action">
+        <% if (status === 'open') { %>
+
+        <button class="complete btn btn-primary" data-toggle="tooltip" data-placement="right" title="Claim your points!">
+          <i class="icon-check"></i>
+          Complete
+        </button>
+
+        <button class="leave btn" data-toggle="tooltip" data-placement="right" title="Leave the quest to the others. Maybe someone else will do it for you.">
+          <i class="icon-minus"></i>
+          Leave
+        </button>
+
+        <button class="abandon btn" data-toggle="tooltip" data-placement="right" title="This will never happen. Let's just forget about it and move on.">
+          <i class="icon-eject"></i>
+          Abandon
+        </button>
+
+        <% } else if (status === 'closed') { %>
+
+          <button class="reopen btn btn-primary">
+            <i class="icon-backward"></i>
+            Reopen
+          </button>
+
+        <% } else if (status === 'abandoned') { %>
+
+          <button class="resurrect btn">
+            <i class="icon-play"></i>
+            Resurrect
+          </button>
+
+        <% } %>
       </div>
       <% } %>
-      <div class="reward-block well">
-        <div class="muted">
-          Expected reward:
+
+      <div class="quest-invite">
+        <% if (my) { %>
+        <div class="invite-block">
+          <button class="invite btn">
+            <i class="icon-user"></i>
+            Invite
+          </button>
+          <input class="invite-dialog" name='invitee' type="text" placeholder="Login">
         </div>
-        <div class="reward-circle">
-          <span class="points"><%- reward %></span>
-          <span class="points-text">points</span>
-        </div>
+        <% } %>
+        <% if (obj.invitee && obj.invitee.length) { %>
+          <h5>Invited:</h5>
+          <ul>
+            <% _.each(invitee, function (i) { %>
+            <li>
+              <% if (my) { %>
+                <a href="#" class="uninvite mini-button" data-login="<%- i %>"><i class="icon-remove"></i></a>
+              <% } %>
+              <%= partial.user({ login: i }) %>
+              <% if (i == currentUser) { %>
+                <button class='btn btn-danger join'>Accept</button>
+              <% } %>
+            </li>
+            <% }) %>
+          </ul>
+        <% } %>
+
       </div>
-      <% } %>
+
     </div>
+
     <div class="span9">
       <div class="quest-big"></div>
       <div class="comments"></div>
