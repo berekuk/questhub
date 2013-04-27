@@ -65,6 +65,32 @@ sub leave_join :Tests {
     like exception { db->quests->invite($quest->{_id}, 'blah', 'foo') }, qr/Invitee .*not found/;
 }
 
+sub invite_non_open :Tests {
+    db->users->add({ login => $_ }) for qw( foo bar );
+    my $quest = db->quests->add({
+        name => 'quest name',
+        team => ['foo'],
+        status => 'open',
+    });
+    db->quests->update($quest->{_id}, { status => 'closed', user => 'foo' });
+
+    ok exception { db->quests->invite($quest->{_id}, 'bar', 'foo') }, "can't invite to non-open quest";
+}
+
+sub join_non_open :Tests {
+    db->users->add({ login => $_ }) for qw( foo bar );
+    my $quest = db->quests->add({
+        name => 'quest name',
+        team => ['foo'],
+        status => 'open',
+    });
+    db->quests->invite($quest->{_id}, 'bar', 'foo');
+    db->quests->update($quest->{_id}, { status => 'closed', user => 'foo' });
+
+    ok exception { db->quests->join($quest->{_id}, 'bar') }, "can't join - quest is closed";
+    is db->quests->get($quest->{_id})->{invitee}, undef, 'invitee list is cleared on quest completion';
+}
+
 sub list :Tests {
     my @data = (
         {
