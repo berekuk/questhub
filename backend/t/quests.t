@@ -42,6 +42,7 @@ sub leave_join :Tests {
     cmp_deeply $quest->{team}, ['foo'];
 
     like exception { db->quests->join($quest->{_id}, 'bar') }, qr/unable to join/, "can't join unless you're invited";
+    ok exception { db->quests->invite($quest->{_id}, 'foo', 'foo') }, "foo can't invite himself";
     ok exception { db->quests->invite($quest->{_id}, 'bar', 'bar') }, "bar can't invite himself";
     ok exception { db->quests->invite($quest->{_id}, 'bar', 'baz') }, "baz can't invite himself";
     $quest = db->quests->get($quest->{_id});

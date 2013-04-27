@@ -63,13 +63,6 @@ with
         except_field => 'team', # team members are always watching a quest
         push_method => 'watch',
         pull_method => 'unwatch',
-    ),
-    PushPull(
-        field => 'invitee',
-        except_field => 'team', # team members can't invite themselves to join a quest
-        actor_field => 'team',  # only team members can invite other players
-        push_method => 'invite',
-        pull_method => 'uninvite',
     );
 
 sub _prepare_quest {
@@ -390,11 +383,57 @@ sub remove {
     );
 }
 
-before 'invite' => sub {
+sub invite {
     my $self = shift;
     my ($id, $user, $actor) = @_;
     db->users->get_by_login($user) or die "Invitee '$user' not found";
-};
+
+    my $result = $self->collection->update(
+        {
+            _id => MongoDB::OID->new(value => $id),
+            '$and' => [
+                { team => { '$ne' => $user } }, # team members can't invite themselves to join a quest
+                { team => $actor },  # only team members can invite other players
+            ],
+            invitee => { '$ne' => $user },
+        },
+        {
+            '$addToSet' => { invitee => $user },
+        },
+        { safe => 1 }
+    );
+    my $updated = $result->{n};
+    unless ($updated) {
+        die ucfirst($self->entity_name)." not found or unable to invite to your own quest";
+    }
+    return;
+}
+
+sub uninvite {
+    my $self = shift;
+    my ($id, $user, $actor) = @_;
+    db->users->get_by_login($user) or die "Invitee '$user' not found";
+
+    my $result = $self->collection->update(
+        {
+            _id => MongoDB::OID->new(value => $id),
+            '$and' => [
+                { team => { '$ne' => $user } },
+                { team => $actor },
+            ],
+            invitee => $user,
+        },
+        {
+            '$pull' => { invitee => $user },
+        },
+        { safe => 1 }
+    );
+    my $updated = $result->{n};
+    unless ($updated) {
+        die ucfirst($self->entity_name)." not found or unable to uninvite to your own quest";
+    }
+    return;
+}
 
 sub join {
     my $self = shift;
