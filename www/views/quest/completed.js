@@ -18,7 +18,6 @@ define([
         start: function () {
             this.render();
             this.$('.modal').modal('show');
-            ga('send', 'event', 'quest', 'close');
 
             $.getScript("http://platform.twitter.com/widgets.js");
             //!function (d,s,id) {
