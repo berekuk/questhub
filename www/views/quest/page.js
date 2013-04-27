@@ -23,7 +23,7 @@ define([
             'click .invite': 'inviteDialog',
             'click .uninvite': 'uninviteAction',
             'click .join': 'joinAction',
-            'keyup [name=invitee]': 'inviteAction'
+            'keyup #inputInvitee': 'inviteAction'
         },
 
         subviews: {
@@ -43,19 +43,27 @@ define([
 
         inviteDialog: function () {
             var that = this;
-            this.$('.invite-dialog').show(100, function () {
-                console.log('focusing');
+            this.$('.invite-block button').hide();
+            this.$('.invite-dialog').show(0, function () {
                 that.$('.invite-dialog input').focus();
             });
         },
 
         inviteAction: function (e) {
-            if (e.keyCode != 13) {
+            // escape
+            if (e.keyCode == 27) {
+                this.$('.invite-dialog').hide();
+                this.$('.invite-dialog input').val('');
+                this.$('.invite-block button').show();
                 return;
             }
-            this.model.invite(
-                this.$('[name=invitee]').val()
-            );
+
+            // enter
+            if (e.keyCode == 13) {
+                this.model.invite(
+                    this.$('#inputInvitee').val()
+                );
+            }
         },
 
         uninviteAction: function (e) {

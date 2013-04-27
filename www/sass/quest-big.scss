@@ -18,20 +18,18 @@ div.quest-big-unclaimed {
 
 .reward-circle {
     border-radius: 50%;
-    width: 15px;
-    height: 15px;
     -moz-border-radius:50%;
     -webkit-border-radius: 50%;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-    vertical-align: baseline;
 
-    padding: 5px;
+    padding: 20px;
+    display: inline-block;
     background-color: #ffb91f;
     text-align: center;
 
-    font-size: 14px;
-
-    cursor: pointer;
+    .points {
+        display: block;
+        font-size: 25px;
+    }
 }
 
 .quest-big {
@@ -47,21 +45,41 @@ div.quest-big-unclaimed {
 }
 
 .quest-invite {
-    ul {
-        list-style-type: none;
-        text-align: left;
-        margin-left: 28px;
-        li {
-            margin-top: 6px;
-        }
+
+    .invite-dialog {
+        display: none;
     }
 
-    .invite-block {
-        input.invite-dialog {
-            margin-left: 28px;
-            display: none;
-            width: 70%;
+    .invited-list {
+        width: 120px;
+        margin-right: 0px;
+        margin-left: auto;
+        margin-top: 15px;
+
+        h5 {
+            font-weight: 200;
         }
+
+        ul {
+            list-style-type: none;
+            text-align: left;
+            margin-left: 0px;
+            li {
+                margin-top: 6px;
+                position: relative;
+
+                .uninvite {
+                    position: absolute;
+                    left: -20px;
+                }
+                .join {
+                    position: absolute;
+                    left: -70px;
+                    width: 64px;
+                }
+            }
+        }
+
     }
 }
 
