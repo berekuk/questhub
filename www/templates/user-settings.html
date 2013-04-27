@@ -22,6 +22,9 @@
   <label class="checkbox">
       <input name="notify-likes" type="checkbox" <%= (obj.notify_likes > 0) ? 'checked="checked"' : '' %>>likes my quest
   </label>
+  <label class="checkbox">
+      <input name="notify-invites" type="checkbox" <%= (obj.notify_invites > 0) ? 'checked="checked"' : '' %>>invites me to a quest
+  </label>
 
   <% if (partial.settings.instance_name == 'frf-todo') { %>
     <!-- deprecated, nobody uses this feature -->

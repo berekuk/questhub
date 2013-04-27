@@ -27,7 +27,8 @@ define([
                 // TODO - fill $created
                 points: result.get('points'),
                 notify_likes: result.get('settings').notify_likes,
-                notify_comments: result.get('settings').notify_comments
+                notify_comments: result.get('settings').notify_comments,
+                notify_invites: result.get('settings').notify_invites
             });
         }
     });

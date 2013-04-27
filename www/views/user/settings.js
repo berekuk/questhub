@@ -42,6 +42,7 @@ define([
             this.$('[name=email]').removeAttr('disabled');
             this.$('[name=notify-comments]').removeAttr('disabled');
             this.$('[name=notify-likes]').removeAttr('disabled');
+            this.$('[name=notify-invites]').removeAttr('disabled');
             this.hideEmailStatus = false;
         },
 
@@ -51,6 +52,7 @@ define([
             this.$('[name=email]').attr({ disabled: 'disabled' });
             this.$('[name=notify-comments]').attr({ disabled: 'disabled' });
             this.$('[name=notify-likes]').attr({ disabled: 'disabled' });
+            this.$('[name=notify-invites]').attr({ disabled: 'disabled' });
         },
 
         typing: function() {
@@ -66,7 +68,8 @@ define([
             var settings = {
                 email: this.$('[name=email]').val(), // TODO - validate email
                 notify_comments: this.$('[name=notify-comments]').is(':checked'),
-                notify_likes: this.$('[name=notify-likes]').is(':checked')
+                notify_likes: this.$('[name=notify-likes]').is(':checked'),
+                notify_invites: this.$('[name=notify-invites]').is(':checked')
             };
 
             // deprecated, nobody uses this feature
