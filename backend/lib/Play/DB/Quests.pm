@@ -281,6 +281,8 @@ sub update {
     delete $quest->{ts};
 
     my $quest_after_update = { %$quest, %$params };
+    delete $quest_after_update->{invitee} if $params->{status} and $params->{status} ne 'open';
+
     $self->collection->update(
         { _id => MongoDB::OID->new(value => $id) },
         $quest_after_update,
@@ -396,6 +398,7 @@ sub invite {
                 { team => $actor },  # only team members can invite other players
             ],
             invitee => { '$ne' => $user },
+            status => 'open',
         },
         {
             '$addToSet' => { invitee => $user },
@@ -450,6 +453,7 @@ sub join {
                 { invitee => $user },
                 { team => { '$size' => 0 } },
             ],
+            status => 'open',
         },
         {
             '$addToSet' => { team => $user },
