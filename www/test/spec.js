@@ -64,6 +64,14 @@
 
         specs.push('spec/model/quest');
 
+        // evil mock
+        mixpanel = {
+            init: function () {},
+            track: function () {},
+            identify: function () {},
+            people: { set: function () {} }
+        };
+
         currentUser.set({
             registered: 1,
             login: 'jasmine',
