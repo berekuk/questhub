@@ -81,6 +81,7 @@ div.quest-big-unclaimed {
     }
 
     @media (max-width: 767px) {
+        min-height: 90px !important;
 
         > div.reward {
             position: absolute;

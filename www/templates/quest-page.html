@@ -3,12 +3,14 @@
   <div class="row-fluid">
     <div class="span3 quest-page-left">
 
+      <% if (status == 'open') { %>
       <div class="reward">
         <div class="reward-circle" data-toggle="tooltip" data-placement="right" title="Reward for completing this quest">
           <span class="points"><%- reward %></span>
           <span class="points-text">points</span>
         </div>
       </div>
+      <% } %>
 
       <div class="quest-action">
         <% if (my) { %> <!-- quest belongs to the current user -->
@@ -45,6 +47,9 @@
 
           <% } %>
         <% } %>
+        <% if (invited) { %>
+        <span>You're invited! <button class="btn btn-danger join">Join this quest</button></span>
+        <% } %>
 
         <% if (my) { %>
         <div class="invite-block">
@@ -52,7 +57,7 @@
             <i class="icon-user"></i>
             Invite
           </button>
-          <form class="form-inline invite-dialog" action="#">
+          <form class="form-inline invite-dialog" onSubmit="return false">
             <label class="muted">Invite:</label>
             <!-- .input-block-level via http://stackoverflow.com/a/12322087 -->
             <input id="inputInvitee" type="text" placeholder="Login" class="input-block-level">
@@ -71,9 +76,6 @@
               <a href="#" class="uninvite mini-button" data-login="<%- i %>"><i class="icon-remove"></i></a>
             <% } %>
             <%= partial.user({ login: i }) %>
-            <% if (i == currentUser) { %>
-              <button class='btn btn-danger btn-mini join'>Accept</button>
-            <% } %>
           </li>
           <% }) %>
         </ul>
