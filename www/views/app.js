@@ -13,6 +13,7 @@ define([
                 partial: this.partial
             }))); // render app just once
             document.title = this.partial.settings.service_name;
+            mixpanel.init(this.partial.settings.mixpanel_id);
 
             this.currentUser = new CurrentUser({ model: currentUserModel });
             this.currentUser.setElement(this.$el.find('.current-user-box'));
