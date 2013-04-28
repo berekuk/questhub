@@ -30,6 +30,7 @@ define([
                 notify_comments: result.get('settings').notify_comments,
                 notify_invites: result.get('settings').notify_invites
             });
+            mixpanel.name_tag(result.get('login'));
         }
     });
     return result; // singleton!
