@@ -3,7 +3,8 @@ define([], function () {
         return {
             service_name: 'Play Perl',
             instance_name: 'play-perl',
-            mixpanel_id: 'de59dd3d112a831233d05a19354b2ba3'
+            mixpanel_id: 'de59dd3d112a831233d05a19354b2ba3',
+            analytics: 'UA-36251424-3'
         };
     }
     else if (window.location.host == 'frf-todo.berekuk.ru') {
@@ -13,7 +14,8 @@ define([], function () {
         return {
             service_name: 'Questhub.io',
             instance_name: 'questhub',
-            mixpanel_id: 'eb4a537d40eb92da515db8c18c415de4'
+            mixpanel_id: 'eb4a537d40eb92da515db8c18c415de4',
+            analytics: 'UA-36251424-2'
         };
     }
     else {

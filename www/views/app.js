@@ -13,7 +13,12 @@ define([
                 partial: this.partial
             }))); // render app just once
             document.title = this.partial.settings.service_name;
+
+            // configure tracking
             mixpanel.init(this.partial.settings.mixpanel_id);
+            if (this.partial.settings.analytics) {  // TODO - configure localhost for debugging?
+                ga('create', this.partial.settings.analytics, window.location.host);
+            }
 
             this.currentUser = new CurrentUser({ model: currentUserModel });
             this.currentUser.setElement(this.$el.find('.current-user-box'));
