@@ -19,13 +19,16 @@ Events can be of different types and contain different loosely-typed fields, but
 
 =cut
 
+use 5.010;
+
 use Moo;
 with 'Play::DB::Role::Common';
 
 use Play::Mongo;
 use Play::Flux;
 
-use Params::Validate qw(:all);
+use Type::Params qw(validate);
+use Types::Standard qw(Undef Int Str Optional HashRef Dict);
 
 sub _prepare_event {
     my $self = shift;
@@ -37,7 +40,7 @@ sub _prepare_event {
 
 sub add {
     my $self = shift;
-    my ($event) = validate_pos(@_, { type => HASHREF });
+    my ($event) = validate(\@_, HashRef);
 
     my $id = $self->collection->insert($event);
 
@@ -50,22 +53,23 @@ sub add {
 
 sub email {
     my $self = shift;
-    my ($address, $subject, $body) = validate_pos(@_, { type => SCALAR }, { type => SCALAR }, { type => SCALAR });
+    my ($address, $subject, $body) = validate(\@_, Str, Str, Str);
 
     my $email_storage = Play::Flux->email;
     $email_storage->write([ $address, $subject, $body ]);
     $email_storage->commit;
 }
 
-# returns last 100 events
-# TODO: pager
 sub list {
     my $self = shift;
-    my $params = validate(@_, {
-        limit => { type => SCALAR, regex => qr/^\d+$/, default => 100 },
-        offset => { type => SCALAR, regex => qr/^\d+$/, default => 0 },
-        types => { type => SCALAR, regex => qr/^.+$/, optional => 1 },
-    });
+    my ($params) = validate(\@_, Undef|Dict[
+        limit => Optional[Int],
+        offset => Optional[Int],
+        types => Optional[Str],
+    ]);
+    $params //= {};
+    $params->{limit} //= 100;
+    $params->{offset} //= 0;
 
     my $search_opt = _build_search_opt($params->{types});
 
@@ -81,7 +85,7 @@ sub list {
 }
 
 sub _build_search_opt {
-    my $types = shift;
+    my ($types) = @_;
 
     return {} unless $types;
 
@@ -89,8 +93,8 @@ sub _build_search_opt {
 
     my @opt = split( /,/, $types );
 
-    foreach( @opt ) {
-        my ( $action, $obj_type ) = split( /-/, $_ );
+    for (@opt) {
+        my ( $action, $obj_type ) = split /-/, $_;
 
         push @$filter, {
             action => $action,
