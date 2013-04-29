@@ -1,15 +1,17 @@
 #!/usr/bin/env perl
 
-use strict;
+use 5.012;
 use warnings;
 
 use lib '/play/app/lib';
 
 use Play::DB qw(db);
-use Params::Validate qw(:all);
+
+use Type::Params qw(validate);
+use Types::Standard qw(Str);
 
 sub main {
-    my ($message) = validate_pos(@_, { type => SCALAR });
+    my ($message) = validate(\@_, Str);
 
     my $users = db->users->list;
 
