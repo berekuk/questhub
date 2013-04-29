@@ -44,9 +44,10 @@ use utf8;
 
 use Moo;
 
-use Params::Validate qw(:all);
-use Play::Config qw(setting);
+use Types::Standard qw(Undef Bool Int Str Optional Dict ArrayRef HashRef);
+use Type::Params qw(validate);
 
+use Play::Config qw(setting);
 use Play::DB qw(db);
 
 use Play::DB::Role::PushPull;
@@ -78,7 +79,7 @@ sub _prepare_quest {
 
 sub get {
     my $self = shift;
-    my ($id) = validate_pos(@_, { type => SCALAR });
+    my ($id) = validate(\@_, Str);
 
     my $quest = $self->collection->find_one({
         _id => MongoDB::OID->new(value => $id)
@@ -91,21 +92,24 @@ sub get {
 
 sub list {
     my $self = shift;
-    my $params = validate(@_, {
+    my ($params) = validate(\@_, Undef|Dict[
         # find() filters
-        user => { type => SCALAR, optional => 1 },
-        unclaimed => { type => BOOLEAN, optional => 1 },
-        status => { type => SCALAR, optional => 1 },
+        user => Optional[Str],
+        unclaimed => Optional[Bool],
+        status => Optional[Str],
         # flag meaning "fetch comment_count too"
-        comment_count => { type => BOOLEAN, optional => 1 },
+        comment_count => Optional[Bool],
         # sorting and paging
-        sort => { type => SCALAR, optional => 1, regex => qr/^(leaderboard|ts)$/ },
-        order => { type => SCALAR, regex => qr/^asc|desc$/, default => 'desc' },
-        limit => { type => SCALAR, regex => qr/^\d+$/, optional => 1 },
-        offset => { type => SCALAR, regex => qr/^\d+$/, default => 0 },
-        tags => { type => SCALAR, optional => 1 },
-        watchers => { type => SCALAR, optional => 1 },
-    });
+        sort => Optional[Str], # regex => qr/^(leaderboard|ts)$/ }
+        order => Optional[Str], # regex => qr/^asc|desc$/, default => 'desc' },
+        limit => Optional[Int],
+        offset => Optional[Int],
+        tags => Optional[Str],
+        watchers => Optional[Str],
+    ]);
+    $params ||= {};
+    $params->{order} //= 'desc';
+    $params->{offset} //= 0;
 
     if (($params->{status} || '') eq 'deleted') {
         die "Can't list deleted quests";
@@ -172,13 +176,14 @@ sub list {
 
 sub add {
     my $self = shift;
-    my $params = validate(@_, {
-        name => { type => SCALAR },
-        user => { type => SCALAR, optional => 1 },
-        team => { type => ARRAYREF, optional => 1 },
-        tags => { type => ARRAYREF, optional => 1 },
-        status => { type => SCALAR, default => 'open' },
-    });
+    my ($params) = validate(\@_, Dict[
+        name => Str,
+        user => Optional[Str],
+        team => Optional[ArrayRef[Str]],
+        tags => Optional[ArrayRef[Str]],
+        status => Optional[Str],
+    ]);
+    $params->{status} //= 'open';
 
     if (defined $params->{team}) {
         if (defined $params->{user}) {
@@ -232,7 +237,7 @@ sub _quest2points {
 
 sub update {
     my $self = shift;
-    my ($id, $params) = validate_pos(@_, { type => SCALAR }, { type => HASHREF });
+    my ($id, $params) = validate(\@_, Str, HashRef);
 
     my $user = $params->{user};
     die 'no user' unless $user;
@@ -362,7 +367,7 @@ after 'unlike' => sub {
 
 sub remove {
     my $self = shift;
-    my ($id, $params) = validate_pos(@_, { type => SCALAR }, { type => HASHREF });
+    my ($id, $params) = validate(\@_, Str, HashRef);
 
     my $user = $params->{user};
     die 'no user' unless $user;
@@ -387,7 +392,7 @@ sub remove {
 
 sub invite {
     my $self = shift;
-    my ($id, $user, $actor) = @_;
+    my ($id, $user, $actor) = validate(\@_, Str, Str, Str);
     db->users->get_by_login($user) or die "Invitee '$user' not found";
 
     my $quest = $self->get($id);
@@ -428,7 +433,7 @@ sub invite {
 
 sub uninvite {
     my $self = shift;
-    my ($id, $user, $actor) = @_;
+    my ($id, $user, $actor) = validate(\@_, Str, Str, Str);
     db->users->get_by_login($user) or die "Invitee '$user' not found";
 
     my $result = $self->collection->update(
@@ -454,9 +459,9 @@ sub uninvite {
 
 sub join {
     my $self = shift;
-    my ($id, $user) = validate_pos(@_,
-        { type => SCALAR },
-        { type => SCALAR },
+    my ($id, $user) = validate(\@_,
+        Str,
+        Str,
     );
     die "only non-empty users can join quests" unless length $user; # FIXME - use Type::Tiny instead
 
@@ -486,7 +491,7 @@ sub join {
 
 sub leave {
     my $self = shift;
-    my ($id, $user) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+    my ($id, $user) = validate(\@_, Str, Str);
     die "only non-empty users can join quests" unless length $user;
 
     my $result = $self->collection->update(

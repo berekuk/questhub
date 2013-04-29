@@ -50,6 +50,8 @@ cpan_module 'Template'
 cpan_module 'DateTime'
 cpan_module 'DateTime::Format::RFC3339'
 
+cpan_module 'TOBYINK/Type-Tiny-0.003_10.tar.gz'
+
 directory '/data' # logs
 
 # dancer config
