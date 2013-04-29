@@ -7,7 +7,7 @@ package Play::DB::Role::PushPull;
 
 =cut
 
-use strict;
+use 5.012;
 use warnings;
 
 use Package::Variant
@@ -15,7 +15,9 @@ use Package::Variant
     subs => [qw( with has )];
 
 use Scalar::Util qw(blessed);
-use Params::Validate qw(:all);
+
+use Type::Params qw(validate);
+use Types::Standard qw(Str Optional);
 
 sub make_variant {
     my ($class, $target_package, %params) = @_;
@@ -63,7 +65,7 @@ sub make_variant {
 
     install $push_method => sub {
         my $self = shift;
-        my ($id, $user, $actor) = validate_pos(@_, { type => SCALAR }, { type => SCALAR }, { type => SCALAR, optional => 1 });
+        my ($id, $user, $actor) = validate(\@_, Str, Str, Optional[Str]);
 
         $push_or_pull->($self, {
             id => $id,
@@ -77,7 +79,7 @@ sub make_variant {
 
     install $pull_method => sub {
         my $self = shift;
-        my ($id, $user, $actor) = validate_pos(@_, { type => SCALAR }, { type => SCALAR }, { type => SCALAR, optional => 1 });
+        my ($id, $user, $actor) = validate(\@_, Str, Str, Optional[Str]);
 
         $push_or_pull->($self, {
             id => $id,
