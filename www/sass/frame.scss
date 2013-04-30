@@ -13,18 +13,39 @@ html, body {
     height: auto !important;
     height: 100%;
     // Negative indent footer by it's height
-    margin: 0 auto -60px;
+    @media (min-width: 980px) {
+        margin: 0 auto -65px;
+    }
+    @media (max-width: 979px) {
+        margin: 0 auto -85px;
+    }
 }
 
 // Set the fixed height of the footer here
 #push,
 #footer {
-    height: 60px;
+    @media (min-width: 980px) {
+        height: 65px;
+    }
+    @media (max-width: 979px) {
+        height: 85px;
+    }
+}
+
+#footer {
+    @media (max-width: 979px) {
+        .footer-separator {
+            display: none;
+        }
+        .footer-line1 {
+            display: block;
+        }
+    }
 }
 
 #wrap > .container {
     @media (min-width: 980px) {
-        padding-top: 60px;
+        padding-top: 65px;
     }
     padding-bottom: 30px;
 }
