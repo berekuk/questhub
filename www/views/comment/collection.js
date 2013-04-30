@@ -79,7 +79,9 @@ define([
                 return;
             }
             this.disableForm();
+
             ga('send', 'event', 'comment', 'add');
+            mixpanel.track('add comment');
 
             this.collection.create({
                 'author': currentUser.get('login'),
