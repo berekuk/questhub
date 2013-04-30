@@ -1,32 +1,5 @@
-.open-quest-count-label {
-    float: right;
-}
-
-.current-user-leaderboard-tip {
-    float: right;
-    position: relative;
-    left: 14px;
-    top: 12px;
-}
-
-.watchers {
-    margin-bottom: 8px;
-}
-.likes {
-    margin-bottom: 8px;
-}
-
-.quest-label {
-    position: relative;
-    top: -5px;
-}
-
 dd {
     margin-bottom: 20px;
-}
-
-time.timeago {
-    color: #999;
 }
 
 .avatar-mini {
@@ -86,34 +59,9 @@ input.quest-edit {
     margin-top: 30px;
 }
 
-// trying to reduce the page jerkiness
-.show-more-or-progress {
-    height: 60px;
-}
-
-tbody tr.show-more > td {
-    cursor: pointer;
-}
-
-.current-user-notifications-icon {
-    margin: 10px 0 0 0;
-
-    a {
-        color: #f00;
-    }
-
-    a:hover {
-        text-decoration: none;
-    }
-}
-
 .comment-bottom-line {
     // fixing the jumping line height on "like" button hide/show
     line-height: 24px;
-}
-
-.twitter-share-button {
-    vertical-align: middle;
 }
 
 .tag-filter {
@@ -133,3 +81,4 @@ ul.nav-filter {
 @import 'sass/common.scss';
 @import 'sass/quest-collection.scss';
 @import 'sass/quest-page.scss';
+@import 'sass/user-collection.scss';
