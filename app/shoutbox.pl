@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use lib '/play/app/lib';
+use lib '/play/backend/lib';
 
 use Play::DB qw(db);
 use Params::Validate qw(:all);

@@ -5,7 +5,7 @@
 
       <% if (status == 'open') { %>
       <div class="reward">
-        <div class="reward-circle" data-toggle="tooltip" data-placement="right" title="Reward for completing this quest">
+        <div class="reward-circle" data-toggle="tooltip" data-placement="right" title="Reward&nbsp;for&nbsp;completing&nbsp;this&nbsp;quest">
           <span class="points"><%- reward %></span>
           <span class="points-text">points</span>
         </div>
@@ -16,17 +16,17 @@
         <% if (my) { %> <!-- quest belongs to the current user -->
           <% if (status === 'open') { %>
 
-          <button class="complete btn btn-primary" data-toggle="tooltip" data-placement="right" title="Claim your points!">
+          <button class="complete btn btn-primary" data-toggle="tooltip" data-placement="right" title="Claim&nbsp;your&nbsp;points!">
             <i class="icon-check"></i>
             Complete
           </button>
 
-          <button class="leave btn" data-toggle="tooltip" data-placement="right" title="Leave the quest to the others. Maybe someone else will do it for you.">
+          <button class="leave btn" data-toggle="tooltip" data-placement="right" title="Leave&nbsp;the&nbsp;quest&nbsp;to&nbsp;the&nbsp;others. Maybe&nbsp;someone&nbsp;else&nbsp;will&nbsp;do&nbsp;it&nbsp;for&nbsp;you.">
             <i class="icon-minus"></i>
             Leave
           </button>
 
-          <button class="abandon btn" data-toggle="tooltip" data-placement="right" title="This will never happen. Let's just forget about it and move on.">
+          <button class="abandon btn" data-toggle="tooltip" data-placement="right" title="This&nbsp;will&nbsp;never&nbsp;happen. Let's&nbsp;just&nbsp;forget&nbsp;about&nbsp;it&nbsp;and&nbsp;move&nbsp;on.">
             <i class="icon-eject"></i>
             Abandon
           </button>
@@ -53,7 +53,7 @@
 
         <% if (my) { %>
         <div class="invite-block">
-          <button class="invite btn">
+          <button class="invite btn" data-toggle="tooltip" data-placement="right" title="Invite&nbsp;another&nbsp;player&nbsp;to&nbsp;work&nbsp;with&nbsp;you.">
             <i class="icon-user"></i>
             Invite
           </button>
