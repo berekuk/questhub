@@ -13,13 +13,6 @@
     <% } %>
   </div>
 
-  <div class="quest-big-labels">
-    <span class="muted quest-big-tags-edit control-group" style="display: none">
-      <input class="quest-big-tags-input" type="text" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
-    </span>
-    <%= partial.quest_labels(obj) %>
-  </div>
-
   <h2>
     <span class="quest-title"><%- name %></span>
     <% if (my) { %>
@@ -28,6 +21,13 @@
       </span>
     <% } %>
   </h2>
+
+  <div class="quest-big-labels">
+    <span class="muted quest-big-tags-edit control-group" style="display: none">
+      <input class="quest-big-tags-input" type="text" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
+    </span>
+    <%= partial.quest_labels(obj) %>
+  </div>
 
   <div>
   <% if (team.length == 0) { %>
