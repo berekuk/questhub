@@ -1,37 +1,39 @@
-<div class="form-horizontal">
-  <% if (obj.email_confirmed == 'persona') { %>
-    <h4><%- obj.email || 'oops' %>
-    <span class="label label-success">Persona</span>
-    </h4>
-  <% } else { %>
-    <input name="email" type="email" placeholder="Email" value="<%- obj.email %>">
-    <span class="email-status <%= (obj.hideEmailStatus || obj.email_confirmed == 'persona') ? "hide" : "" %>">
-      <% if (obj.email_confirmed) { %>
-        <span class="label label-success">Confirmed</span>
-      <% } else if (obj.email) { %>
-        <button class="btn btn-warning resend-email-confirmation">Not confirmed. Resend confirmation key?</button>
-      <% } %>
-    </span>
-  <% } %>
-</div>
-<div>
-  <span class="muted">Notify me by email when someone...</span>
-  <label class="checkbox">
-      <input name="notify-comments" type="checkbox" <%= (obj.notify_comments > 0) ? 'checked="checked"' : '' %>>comments on my quest
-  </label>
-  <label class="checkbox">
-      <input name="notify-likes" type="checkbox" <%= (obj.notify_likes > 0) ? 'checked="checked"' : '' %>>likes my quest
-  </label>
-  <label class="checkbox">
-      <input name="notify-invites" type="checkbox" <%= (obj.notify_invites > 0) ? 'checked="checked"' : '' %>>invites me to a quest
-  </label>
+<div class="user-settings">
+  <div class="form-horizontal email-settings">
+    <% if (obj.email_confirmed == 'persona') { %>
+      <h4><%- obj.email || 'oops' %>
+      <span class="label label-success">Persona</span>
+      </h4>
+    <% } else { %>
+      <input name="email" type="email" placeholder="Email" value="<%- obj.email %>">
+      <span class="email-status <%= (obj.hideEmailStatus || obj.email_confirmed == 'persona') ? "hide" : "" %>">
+        <% if (obj.email_confirmed) { %>
+          <span class="label label-success">Confirmed</span>
+        <% } else if (obj.email) { %>
+          <button class="btn btn-warning resend-email-confirmation">Not confirmed. Resend confirmation key?</button>
+        <% } %>
+      </span>
+    <% } %>
+  </div>
+  <div>
+    <span class="muted">Notify me by email when someone...</span>
+    <label class="checkbox">
+        <input name="notify-comments" type="checkbox" <%= (obj.notify_comments > 0) ? 'checked="checked"' : '' %>>comments on my quest
+    </label>
+    <label class="checkbox">
+        <input name="notify-likes" type="checkbox" <%= (obj.notify_likes > 0) ? 'checked="checked"' : '' %>>likes my quest
+    </label>
+    <label class="checkbox">
+        <input name="notify-invites" type="checkbox" <%= (obj.notify_invites > 0) ? 'checked="checked"' : '' %>>invites me to a quest
+    </label>
 
-  <% if (partial.settings.instance_name == 'frf-todo') { %>
-    <!-- deprecated, nobody uses this feature -->
-    <hr>
-    <label class="muted">Транслировать мои квесты во френдфид:</label>
-    <input name="frf-username" type="text" placeholder="Nickname" value="<%- obj.frf_username %>">
-    <input name="frf-remote-key" type="text" placeholder="Remote key" value="<%- obj.frf_remote_key %>">
-    <br><span class="muted">(Remote key можно получить <a href="https://friendfeed.com/account/api">тут</a>.)</span>
-  <% } %>
+    <% if (partial.settings.instance_name == 'frf-todo') { %>
+      <!-- deprecated, nobody uses this feature -->
+      <hr>
+      <label class="muted">Транслировать мои квесты во френдфид:</label>
+      <input name="frf-username" type="text" placeholder="Nickname" value="<%- obj.frf_username %>">
+      <input name="frf-remote-key" type="text" placeholder="Remote key" value="<%- obj.frf_remote_key %>">
+      <br><span class="muted">(Remote key можно получить <a href="https://friendfeed.com/account/api">тут</a>.)</span>
+    <% } %>
+  </div>
 </div>
