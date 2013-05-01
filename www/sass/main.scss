@@ -7,6 +7,10 @@ dd {
     height: 24px;
 }
 
+.icon-twitter {
+    color: #4099ff;
+}
+
 // comment as shown in the News Feed
 .event-comment-well {
     margin-top: 5px;
@@ -83,3 +87,4 @@ ul.nav-filter {
 @import 'sass/quest-collection.scss';
 @import 'sass/quest-page.scss';
 @import 'sass/user-collection.scss';
+@import 'sass/register.scss';
