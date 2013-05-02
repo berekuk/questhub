@@ -216,7 +216,7 @@ define([
         },
 
         oldAnotherDashboard: function (id) {
-            console.log('todo - cross-realm profile');
+            this.navigate('/chaos/player/' + id, { trigger: true, replace: true });
         },
 
         queryParams: function(name) {
