@@ -53,6 +53,13 @@ for my $realm (@realms) {
     {
         for my $event ($realm_db->get_collection('events')->find->all) {
             $event->{realm} = $realm;
+            if ($event->{object_type} eq 'quest') {
+                $event->{object}{realm} = $realm;
+            }
+            elsif ($event->{object_type} eq 'comment') {
+                $event->{object}{quest}{realm} = $realm;
+
+            }
             push @events, $event;
         }
     }
