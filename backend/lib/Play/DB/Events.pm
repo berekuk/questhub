@@ -24,6 +24,7 @@ with 'Play::DB::Role::Common';
 
 use Play::Mongo;
 use Play::Flux;
+use Play::Config qw(setting);
 
 use Params::Validate qw(:all);
 
@@ -38,7 +39,10 @@ sub _prepare_event {
 sub add {
     my $self = shift;
     my ($event) = validate_pos(@_, { type => HASHREF });
-    $event->{realm} or die "'realm' is not defined";
+
+    my $realm = $event->{realm};
+    die "'realm' is not defined" unless $realm;
+    die "Unknown realm '$realm'" unless grep { $_ eq $realm } @{ setting('realms') };
 
     my $id = $self->collection->insert($event);
 
