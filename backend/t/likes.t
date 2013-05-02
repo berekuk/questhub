@@ -19,6 +19,7 @@ sub like_quest :Tests {
         team => ['blah'],
         name => 'foo, foo',
         status => 'open',
+        realm => 'europe',
     });
     my $id = $quest->{_id};
     db->quests->update($id, { status => 'closed', user => 'blah' });
@@ -42,6 +43,7 @@ sub like_quest :Tests {
             user => 'blah',
             team => ['blah'],
             author => 'blah',
+            realm => 'europe',
         };
 
     is db->users->get_by_login('blah')->{points}, 3;
@@ -54,6 +56,7 @@ sub self_like_quest :Tests {
         team => ['blah'],
         name => 'foo, foo',
         status => 'open',
+        realm => 'europe',
     });
     my $id = $quest->{_id};
 
