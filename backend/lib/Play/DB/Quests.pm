@@ -94,6 +94,7 @@ sub list {
     my $params = validate(@_, {
         # find() filters
         user => { type => SCALAR, optional => 1 },
+        realm => { type => SCALAR },
         unclaimed => { type => BOOLEAN, optional => 1 },
         status => { type => SCALAR, optional => 1 },
         # flag meaning "fetch comment_count too"
@@ -112,7 +113,7 @@ sub list {
     }
 
     my $query = {
-            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ status tags watchers /
+            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ status tags watchers realm /
     };
     $query->{team} = $params->{user} if defined $params->{user};
     $query->{status} ||= { '$ne' => 'deleted' };
@@ -178,6 +179,7 @@ sub add {
         team => { type => ARRAYREF, optional => 1 },
         tags => { type => ARRAYREF, optional => 1 },
         status => { type => SCALAR, default => 'open' },
+        realm => { type => SCALAR },
     });
 
     if (defined $params->{team}) {
@@ -216,6 +218,7 @@ sub add {
         author => $params->{author},
         object_id => $id->to_string,
         object => $quest,
+        realm => $params->{realm},
     });
 
     return $quest;
@@ -298,6 +301,7 @@ sub update {
             author => $user,
             object_id => $id,
             object => $quest_after_update,
+            realm => $quest->{realm}
         });
     }
 
@@ -421,6 +425,7 @@ sub invite {
             quest => $quest,
             invitee => $user,
         },
+        realm => $quest->{realm}
     });
 
     return;

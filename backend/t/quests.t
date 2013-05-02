@@ -13,6 +13,7 @@ sub add :Tests {
         name => 'quest name',
         team => ['foo'],
         status => 'open',
+        realm => 'europe',
     });
     cmp_deeply $quest, superhashof({
         _id => re('^\w+$'),
@@ -20,6 +21,7 @@ sub add :Tests {
         name => 'quest name',
         status => 'open',
         team => ['foo'],
+        realm => 'europe',
     });
 }
 
@@ -29,6 +31,7 @@ sub leave_join :Tests {
         name => 'quest name',
         team => ['foo'],
         status => 'open',
+        realm => 'europe',
     });
 
     like exception { db->quests->leave($quest->{_id}, 'bar') }, qr/unable to leave/, "can't leave the quest you're not in";
@@ -71,6 +74,7 @@ sub invite_non_open :Tests {
         name => 'quest name',
         team => ['foo'],
         status => 'open',
+        realm => 'europe',
     });
     db->quests->update($quest->{_id}, { status => 'closed', user => 'foo' });
 
@@ -83,6 +87,7 @@ sub join_non_open :Tests {
         name => 'quest name',
         team => ['foo'],
         status => 'open',
+        realm => 'europe',
     });
     db->quests->invite($quest->{_id}, 'bar', 'foo');
     db->quests->update($quest->{_id}, { status => 'closed', user => 'foo' });
@@ -97,16 +102,19 @@ sub list :Tests {
             name => 'q1',
             team => ['foo'],
             status => 'open',
+            realm => 'europe',
         },
         {
             name => 'q2',
             team => ['foo'],
             status => 'open',
+            realm => 'europe',
         },
         {
             name => 'q3',
             team => ['foo'],
             status => 'open',
+            realm => 'europe',
         },
     );
     for (@data) {
@@ -114,15 +122,15 @@ sub list :Tests {
     }
 
     cmp_deeply
-        db->quests->list({}),
+        db->quests->list({ realm => 'europe' }),
         [ reverse map { superhashof($_) } @data ];
 
     cmp_deeply
-        db->quests->list({ order => 'desc' }),
+        db->quests->list({ order => 'desc', realm => 'europe' }),
         [ reverse map { superhashof($_) } @data ];
 
     cmp_deeply
-        db->quests->list({ order => 'asc' }),
+        db->quests->list({ order => 'asc', realm => 'europe' }),
         [ map { superhashof($_) } @data ];
 }
 
@@ -133,16 +141,19 @@ sub list_leaderboard :Tests {
             name => 'q1',
             team => ['foo'],
             status => 'open',
+            realm => 'europe',
         },
         {
             name => 'q2',
             team => ['foo'],
             status => 'open',
+            realm => 'europe',
         },
         {
             name => 'q3',
             team => ['foo'],
             status => 'open',
+            realm => 'europe',
         },
     );
     for (@data) {
@@ -153,27 +164,20 @@ sub list_leaderboard :Tests {
     db->quests->like($data[2]->{_id}, 'l2');
 
     cmp_deeply
-        db->quests->list({ sort => 'leaderboard' }),
+        db->quests->list({ sort => 'leaderboard', realm => 'europe' }),
         [ map { superhashof($_) } @data[2,0,1] ];
 }
 
 sub list_unclaimed :Tests {
     my @data = (
-        {
-            name => 'q1',
-            team => ['foo'],
-            status => 'open',
-        },
-        {
-            name => 'q2',
-            team => ['foo'],
-            status => 'open',
-        },
-        {
-            name => 'q3',
-            team => ['foo'],
-            status => 'open',
-        },
+        map {
+            {
+                name => "q$_",
+                team => ['foo'],
+                status => 'open',
+                realm => 'europe',
+            }
+        } 1..3
     );
     for (@data) {
         $_->{_id} = db->quests->add($_)->{_id};
@@ -184,11 +188,11 @@ sub list_unclaimed :Tests {
     $data[2]->{team} = [];
 
     cmp_deeply
-        db->quests->list({}),
+        db->quests->list({ realm => 'europe' }),
         [ reverse map { superhashof($_) } @data ];
 
     cmp_deeply
-        db->quests->list({ unclaimed => 1 }),
+        db->quests->list({ unclaimed => 1, realm => 'europe' }),
         [ reverse map { superhashof($_) } @data[1,2] ];
 }
 
@@ -197,6 +201,7 @@ sub watch_unwatch :Tests {
         name => 'quest name',
         team => ['foo'],
         status => 'open',
+        realm => 'europe',
     });
 
     like exception { db->quests->watch($quest->{_id}, 'foo') }, qr/unable to watch/;
@@ -219,6 +224,7 @@ sub list_watched :Tests {
             name => "q$_",
             team => ['foo'],
             status => 'open',
+            realm => 'europe',
         })
     } (1 .. 5);
 
@@ -228,8 +234,37 @@ sub list_watched :Tests {
     db->quests->watch($quests[3]->{_id}, 'baz');
 
     is_deeply
-        [ map { $_->{_id} } sort { $a->{_id} cmp $b->{_id} } @{ db->quests->list({ watchers => 'baz' }) } ],
+        [ map { $_->{_id} } sort { $a->{_id} cmp $b->{_id} } @{ db->quests->list({ watchers => 'baz', realm => 'europe' }) } ],
         [ $quests[2]->{_id}, $quests[3]->{_id} ]
+    ;
+}
+
+sub list_realm :Tests {
+    my @europe_quests = map {
+        db->quests->add({
+            name => "e$_",
+            team => ['foo'],
+            status => 'open',
+            realm => 'europe',
+        })
+    } (1 .. 3);
+    my @asia_quests = map {
+        db->quests->add({
+            name => "a$_",
+            team => ['foo'],
+            status => 'open',
+            realm => 'asia',
+        })
+    } (1 .. 4);
+
+    is_deeply
+        [ map { $_->{_id} } sort { $a->{_id} cmp $b->{_id} } @{ db->quests->list({ realm => 'europe' }) } ],
+        [ map { $_->{_id} } @europe_quests ]
+    ;
+
+    is_deeply
+        [ map { $_->{_id} } sort { $a->{_id} cmp $b->{_id} } @{ db->quests->list({ realm => 'asia' }) } ],
+        [ map { $_->{_id} } @asia_quests ]
     ;
 }
 
@@ -240,6 +275,7 @@ sub remove :Tests {
             name => "q$_",
             team => ['foo'],
             status => 'open',
+            realm => 'europe',
         })
     } (1 .. 3);
     for (@quests) {
@@ -251,13 +287,19 @@ sub remove :Tests {
     like exception { db->quests->remove($quests[2]->{_id}, { user => 'bar' }) }, qr/access denied/;
     is exception { db->quests->remove($quests[2]->{_id}, { user => 'foo' }) }, undef;
 
-    is scalar @{ db->quests->list }, 2;
-    is_deeply [sort map { $_->{name} } @{ db->quests->list }], ['q1', 'q2'];
+    is scalar @{ db->quests->list({ realm => 'europe' }) }, 2;
+
+    is_deeply
+        [ sort map { $_->{name} } @{ db->quests->list({ realm => 'europe' }) } ],
+        ['q1', 'q2'];
+
     like exception { db->quests->get($quests[2]->{_id}) }, qr/is deleted/;
 
     # any team member can remove a quest
     is exception { db->quests->remove($quests[1]->{_id}, { user => 'foo2' }) }, undef;
-    is_deeply [sort map { $_->{name} } @{ db->quests->list }], ['q1'];
+    is_deeply
+        [sort map { $_->{name} } @{ db->quests->list({ realm => 'europe' }) }],
+        ['q1'];
 }
 
 sub update :Tests {
@@ -267,12 +309,14 @@ sub update :Tests {
         name => 'q1',
         user => 'foo',
         status => 'open',
+        realm => 'europe',
     });
 
     db->quests->update($quest->{_id}, {
         name => 'q2',
         tags => ['t1'],
         user => 'foo',
+        realm => 'europe',
     });
 
     $quest = db->quests->get($quest->{_id});
@@ -281,6 +325,7 @@ sub update :Tests {
         name => 'q2',
         status => 'open',
         tags => ['t1'],
+        realm => 'europe',
     });
 }
 
@@ -291,6 +336,7 @@ sub scoring :Tests {
         name => 'q1',
         user => 'foo',
         status => 'open',
+        realm => 'europe',
     });
     db->quests->like($quest->{_id}, 'baz');
     db->quests->invite($quest->{_id}, 'bar', 'foo');
