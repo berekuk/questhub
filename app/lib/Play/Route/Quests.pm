@@ -36,19 +36,21 @@ del '/quest/:id' => sub {
 
 post '/quest' => sub {
     die "not logged in" unless session->{login};
+    my $realm = param('realm') or die "realm is not set";
 
     my $attributes = {
         team => [ session->{login} ],
         name => param('name'),
         status => 'open',
         (param('tags') ? (tags => param('tags')) : ()),
+        realm => $realm,
     };
     return db->quests->add($attributes);
 };
 
 get '/quest' => sub {
     my $params = {
-        map { param($_) ? ($_ => param($_)) : () } qw/ user status comment_count sort order limit offset tags watchers unclaimed /,
+        map { param($_) ? ($_ => param($_)) : () } qw/ user status comment_count sort order limit offset tags watchers unclaimed realm /,
     };
 
     my $quests = db->quests->list($params);
