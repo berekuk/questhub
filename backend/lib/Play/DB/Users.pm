@@ -181,9 +181,16 @@ sub join_realm {
         { type => SCALAR }
     );
 
+    unless (grep { $realm eq $_ } @{ setting('realms') }) {
+        die "Unknown realm '$realm'";
+    }
+
     my $result = $self->collection->update(
         { login => $login },
-        { '$addToSet' => { realms => $realm } },
+        {
+            '$addToSet' => { realms => $realm },
+            '$set' => { "rp.$realm" => 0 },
+        },
         { safe => 1 }
     );
 
