@@ -41,6 +41,7 @@ sub add {
             %params,
             quest => $quest,
         },
+        realm => $quest->{realm},
     });
 
     return { _id => $id->to_string };

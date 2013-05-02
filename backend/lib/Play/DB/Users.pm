@@ -63,15 +63,20 @@ sub add {
     my $self = shift;
     my ($params) = validate_pos(@_, { type => HASHREF });
 
+    $params->{realm} ||= [];
+
     my $id = $self->collection->insert($params, { safe => 1 });
 
-    db->events->add({
-        object_type => 'user',
-        action => 'add',
-        author => $params->{login},
-        object_id => $id->to_string,
-        object => $params,
-    });
+    for my $realm (@{ $params->{realms} }) {
+        db->events->add({
+            object_type => 'user',
+            action => 'add',
+            author => $params->{login},
+            object_id => $id->to_string,
+            object => $params,
+            realm => $realm,
+        });
+    }
 
     return "$id";
 }
@@ -83,16 +88,17 @@ sub list {
         order => { type => SCALAR, regex => qr/^asc|desc$/, default => 'asc' },
         limit => { type => SCALAR, regex => qr/^\d+$/, optional => 1 },
         offset => { type => SCALAR, regex => qr/^\d+$/, default => 0 },
+        realm => { type => SCALAR },
     });
 
     # fetch everyone
     # note that sorting is always by _id, see the explanation and manual sorting below
-    my @users = $self->collection->find()->sort({ '_id' => 1 })->all;
+    my @users = $self->collection->find({ realms => $params->{realm} })->sort({ '_id' => 1 })->all;
 
     $self->_prepare_user($_) for @users;
 
     # filling 'open_quests' field
-    my $quests = db->quests->list({ status => 'open' });
+    my $quests = db->quests->list({ status => 'open', realm => $params->{realm} });
     my %users = map { $_->{login} => $_ } @users;
     for my $quest (@$quests) {
         for my $qlogin (@{ $quest->{team} }) {
