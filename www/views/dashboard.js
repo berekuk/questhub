@@ -15,6 +15,10 @@ define([
             "click .quest-add-dialog": "newQuestDialog",
         },
 
+        realm: function () {
+            return this.options.realm;
+        },
+
         subviews: {
             '.user': function () {
                 return new UserBig({
@@ -35,7 +39,7 @@ define([
         createQuestSubview: function (options) {
             options.limit = options.limit || 30;
             options.order = 'desc';
-            options.realm = this.options.realm;
+            options.realm = this.realm();
 
             var collection = new QuestCollectionModel([], options);
             collection.fetch();
