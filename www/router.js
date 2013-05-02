@@ -18,7 +18,7 @@ define([
 ], function (Backbone, currentUser, Dashboard, QuestPage, QuestModel, UserCollectionModel, UserCollection, AnotherUserModel, Explore, Home, EventCollectionModel, NewsFeed, QuestAdd, About, Register, ConfirmEmail) {
     return Backbone.Router.extend({
         routes: {
-            "": "dashboard",
+            "": "frontPage",
             "welcome": "welcome",
             "register": "register",
             "register/confirm/:login/:secret": "confirmEmail",
@@ -83,33 +83,43 @@ define([
             this.appView.setActiveMenuItem('home');
         },
 
-        dashboard: function () {
-            throw "main page is temporarily disabled";
-            this.navigate(
-                '/' + this.appView.realm_id + '/player/' + currentUser.get('login'),
-                { trigger: true, replace: true }
-            );
-
+        frontPage: function () {
             if (!currentUser.get('registered')) {
                 this.navigate('/welcome', { trigger: true, replace: true });
                 return;
             }
 
-            var view = new Dashboard({ model: currentUser, current: true });
-            view.activate(); // activate immediately, user is already fetched
-
-            this.appView.setPageView(view);
-            this.appView.setActiveMenuItem('home');
+            this.navigate(
+                '/' + this.appView.realm_id + '/player/' + currentUser.get('login'),
+                { trigger: true, replace: true }
+            );
         },
 
         anotherDashboard: function (realm, login) {
-            var user = new AnotherUserModel({ login: login });
-            var view = new Dashboard({ realm: realm, model: user });
-            user.fetch({
-                success: function () {
-                    view.activate();
-                }
-            });
+            var currentLogin = currentUser.get('login');
+
+            var model;
+            var my;
+            if (currentLogin && currentLogin == login) {
+                model = currentUser;
+                my = true;
+            }
+            else {
+                model = new AnotherUserModel({ login: login });
+            }
+
+            var view = new Dashboard({ realm: realm, model: model });
+
+            if (my) {
+                view.activate(); // activate immediately, user is already fetched
+            }
+            else {
+                model.fetch({
+                    success: function () {
+                        view.activate();
+                    }
+                });
+            }
 
             this.appView.setPageView(view);
             this.appView.setActiveMenuItem('none');
