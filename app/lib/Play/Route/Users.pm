@@ -8,6 +8,7 @@ use JSON qw(decode_json);
 use Dancer::Plugin::Auth::Twitter;
 auth_twitter_init();
 
+use Play::Config;
 use Play::DB qw(db);
 
 get '/auth/twitter' => sub {
@@ -196,7 +197,7 @@ post '/register/confirm_email' => sub {
 
 get '/user' => sub {
     return db->users->list({
-        map { param($_) ? ($_ => param($_)) : () } qw/ sort order limit offset /,
+        map { param($_) ? ($_ => param($_)) : () } qw/ sort order limit offset realm /,
     });
 };
 
@@ -219,7 +220,7 @@ if ($ENV{DEV_MODE}) {
         my $login = param('login');
         session 'login' => $login;
 
-        my $user = { login => $login };
+        my $user = { login => $login, realms => Play::Config::setting('realms') };
 
         unless (param('notwitter')) {
             session 'twitter_user' => { screen_name => $login } unless param('notwitter');
