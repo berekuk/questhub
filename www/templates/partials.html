@@ -6,7 +6,7 @@
     <span class="quest-tags">
     <% if (obj.tags) { %>
       <% _.each(obj.tags, function (tag) { %>
-        <a href="/explore/latest/tag/<%= tag %>" class="label label-inverse">
+        <a href="/<%- realm %>/explore/latest/tag/<%= tag %>" class="label label-inverse">
           <%= tag %>
         </a>
       <% }) %>
