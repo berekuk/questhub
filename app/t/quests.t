@@ -38,14 +38,14 @@ sub _fill_common_quests {
 
     # insert quests to DB
     for (keys %$quests_data) {
+        http_json GET => "/api/fakeuser/$quests_data->{$_}{user}";
+
         delete $quests_data->{$_}{_id};
         my $result = db->quests->add($quests_data->{$_});
         $quests_data->{$_}{_id} = $result->{_id};
         $quests_data->{$_}{ts} = $result->{ts};
         $quests_data->{$_}{team} = $result->{team};
         delete $quests_data->{$_}{user};
-
-        http_json GET => "/api/fakeuser/$quests_data->{$_}{team}[0]";
     }
     return $quests_data;
 }
@@ -186,6 +186,7 @@ sub add_quest :Tests {
         realm => 'europe',
     };
 
+    http_json GET => "/api/fakeuser/$user";
     Dancer::session login => $user;
 
     my $add_result = http_json POST => '/api/quest', { params => $new_record };
@@ -397,7 +398,7 @@ sub more_points :Tests {
 }
 
 sub quest_tags :Tests {
-    Dancer::session login => 'user_1';
+    http_json GET => '/api/fakeuser/user_1';
 
     http_json POST => '/api/quest', { params => {
         name => 'typed-quest',
