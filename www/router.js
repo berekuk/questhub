@@ -24,13 +24,19 @@ define([
             "register/confirm/:login/:secret": "confirmEmail",
             "auth/twitter": "twitterLogin",
             "quest/add": "questAdd",
-            "quest/:id": "questPage",
-            "feed": "eventCollection",
-            "players": "userList",
+            ":realm/quest/:id": "questPage",
+            ":realm/feed": "feed",
+            ":realm/players": "userList",
             "player/:login": "anotherDashboard",
-            "explore(/:tab)": "explore",
-            "explore/:tab/tag/:tag": "explore",
+            ":realm/explore(/:tab)": "explore",
+            ":realm/explore/:tab/tag/:tag": "explore",
             "about": "about",
+
+            "feed": "oldFeed",
+            "players": "oldUserList",
+            "explore(/:tab)": "oldExplore",
+            "explore/:tab/tag/:tag": "oldExplore",
+            "quest/:id": "oldQuestPage"
         },
 
         appView: undefined, // required
@@ -55,8 +61,8 @@ define([
             this.appView.setActiveMenuItem('add-quest');
         },
 
-        questPage: function (id) {
-            var model = new QuestModel({ _id: id });
+        questPage: function (realm, id) {
+            var model = new QuestModel({ realm: realm, _id: id });
             var view = new QuestPage({ model: model });
 
             model.fetch({
@@ -102,8 +108,8 @@ define([
             this.appView.setActiveMenuItem('none');
         },
 
-        explore: function (tab, tag) {
-            var view = new Explore();
+        explore: function (realm, tab, tag) {
+            var view = new Explore({ 'realm': realm });
             if (tab != undefined) {
                 view.tab = tab;
             }
@@ -116,9 +122,10 @@ define([
             this.appView.setActiveMenuItem('explore');
         },
 
-        userList: function () {
+        userList: function (realm) {
             var collection = new UserCollectionModel([], {
-               'sort': 'leaderboard',
+                'realm': realm,
+                'sort': 'leaderboard',
                 'limit': 100,
             });
             var view = new UserCollection({ collection: collection });
@@ -127,7 +134,7 @@ define([
             this.appView.setActiveMenuItem('user-list');
         },
 
-        eventCollection: function () {
+        feed: function (realm) {
             var types = this.queryParams('types');
             if (types == '') {
                 types = [];
@@ -137,6 +144,7 @@ define([
             }
 
             var collection = new EventCollectionModel([], {
+                'realm': realm,
                 'limit': 50,
                 'types': types
             });
@@ -178,6 +186,23 @@ define([
             this.appView.setPageView(new About());
             this.appView.setActiveMenuItem('about');
         },
+
+        oldUserList: function () {
+            this.navigate('/chaos/players', { trigger: true, replace: true });
+        },
+
+        oldFeed: function () {
+            this.navigate('/chaos/feed', { trigger: true, replace: true });
+        },
+
+        oldExplore: function (realm) {
+            this.navigate('/chaos/explore', { trigger: true, replace: true });
+        },
+
+        oldQuestPage: function (id) {
+            this.navigate('/chaos/quest/' + id, { trigger: true, replace: true });
+        },
+
         queryParams: function(name) {
             name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
             var regexS = "[\\?&]" + name + "=([^&#]*)";
