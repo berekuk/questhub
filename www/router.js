@@ -11,11 +11,10 @@ define([
     'views/home',
     'models/event-collection',
     'views/news-feed',
-    'views/quest/add',
     'views/about',
     'views/register',
     'views/confirm-email'
-], function (Backbone, currentUser, Dashboard, QuestPage, QuestModel, UserCollectionModel, UserCollection, AnotherUserModel, Explore, Home, EventCollectionModel, NewsFeed, QuestAdd, About, Register, ConfirmEmail) {
+], function (Backbone, currentUser, Dashboard, QuestPage, QuestModel, UserCollectionModel, UserCollection, AnotherUserModel, Explore, Home, EventCollectionModel, NewsFeed, About, Register, ConfirmEmail) {
     return Backbone.Router.extend({
         routes: {
             "": "frontPage",
@@ -23,7 +22,6 @@ define([
             "register": "register",
             "register/confirm/:login/:secret": "confirmEmail",
             "auth/twitter": "twitterLogin",
-            "quest/add": "questAdd",
             ":realm/quest/:id": "questPage",
             ":realm/feed": "feed",
             ":realm/players": "userList",
@@ -54,12 +52,6 @@ define([
                 'page': url
             });
             mixpanel.track_pageview(url);
-        },
-
-        questAdd: function () {
-            var view = new QuestAdd({ model: new QuestModel() });
-            this.appView.setPageView(view);
-            this.appView.setActiveMenuItem('add-quest');
         },
 
         questPage: function (realm, id) {
