@@ -174,6 +174,25 @@ sub add_points {
     return;
 }
 
+sub join_realm {
+    my $self = shift;
+    my ($login, $realm) = validate_pos(@_,
+        { type => SCALAR },
+        { type => SCALAR }
+    );
+
+    my $result = $self->collection->update(
+        { login => $login },
+        { '$addToSet' => { realms => $realm } },
+        { safe => 1 }
+    );
+
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "User $login not found or unable to join the realm";
+    }
+}
+
 # some settings can't be set by the client
 sub protected_settings {
     qw( email_confirmed );

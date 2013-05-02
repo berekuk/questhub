@@ -198,7 +198,7 @@ sub add {
     for my $team_member (@{ $params->{team} }) {
         my $user = db->users->get_by_login($team_member) or die "User '$team_member' not found";
         unless (grep { $_ eq $params->{realm} } @{ $user->{realms} }) {
-            die "User '$team_member' doesn't belong to the realm $params->{realm}";
+            db->users->join_realm($team_member, $params->{realm});
         }
     }
 
@@ -414,7 +414,7 @@ sub invite {
     );
     my $updated = $result->{n};
     unless ($updated) {
-        die ucfirst($self->entity_name)." not found or unable to invite to your own quest";
+        die "Quest not found or unable to invite to your own quest";
     }
 
     db->events->add({
@@ -453,7 +453,7 @@ sub uninvite {
     );
     my $updated = $result->{n};
     unless ($updated) {
-        die ucfirst($self->entity_name)." not found or unable to uninvite to your own quest";
+        die "Quest not found or unable to uninvite to your own quest";
     }
     return;
 }

@@ -38,14 +38,16 @@ sub add_check_user :Tests {
 
     db->users->add({ login => 'foo', realms => ['asia'] });
 
-    like exception {
+    is exception {
         db->quests->add({
             name => 'quest name',
             team => ['foo'],
             status => 'open',
             realm => 'europe',
         });
-    }, qr/doesn't belong to the realm/;
+    }, undef;
+    my $user = db->users->get_by_login('foo');
+    cmp_deeply $user->{realms}, ['asia', 'europe'];
 
     is exception {
         db->quests->add({
@@ -55,6 +57,8 @@ sub add_check_user :Tests {
             realm => 'asia',
         });
     }, undef;
+    $user = db->users->get_by_login('foo');
+    cmp_deeply $user->{realms}, ['asia', 'europe'];
 }
 
 sub leave_join :Tests {
