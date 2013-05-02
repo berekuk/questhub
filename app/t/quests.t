@@ -334,16 +334,16 @@ sub points :Tests {
     Dancer::session login => $quest->{team}[0];
 
     my $user = http_json GET => '/api/current_user';
-    is $user->{points}, 0;
+    is $user->{rp}{europe}, 0;
 
     http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'closed' } };
 
     $user = http_json GET => '/api/current_user';
-    is $user->{points}, 1, 'got a point';
+    is $user->{rp}{europe}, 1, 'got a point';
 
     http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'open' } };
     $user = http_json GET => '/api/current_user';
-    is $user->{points}, 0, 'lost a point';
+    is $user->{rp}{europe}, 0, 'lost a point';
 
     my $like = sub {
         my ($quest, $user, $action) = @_;
@@ -357,29 +357,29 @@ sub points :Tests {
     $like->($quest, 'other2', 'like');
 
     $user = http_json GET => '/api/current_user';
-    is $user->{points}, 0, 'no points for likes on an open quest';
+    is $user->{rp}{europe}, 0, 'no points for likes on an open quest';
 
     http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'closed' } };
     $user = http_json GET => '/api/current_user';
-    is $user->{points}, 3, '1 + number-of-likes points for a closed quest';
+    is $user->{rp}{europe}, 3, '1 + number-of-likes points for a closed quest';
 
     $like->($quest, 'other', 'unlike');
     $like->($quest, 'other3', 'like');
     $like->($quest, 'other4', 'like');
     $user = http_json GET => '/api/current_user';
-    is $user->{points}, 4, 'likes and unlikes apply to the closed quest, retroactively';
+    is $user->{rp}{europe}, 4, 'likes and unlikes apply to the closed quest, retroactively';
 
     http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'open' } };
     $user = http_json GET => '/api/current_user';
-    is $user->{points}, 0, 'points are taken away if quest is reopened';
+    is $user->{rp}{europe}, 0, 'points are taken away if quest is reopened';
 
     http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'closed' } };
     $user = http_json GET => '/api/current_user';
-    is $user->{points}, 4, 'closed again, got points again...';
+    is $user->{rp}{europe}, 4, 'closed again, got points again...';
 
     http_json DELETE => "/api/quest/$quest->{_id}";
     $user = http_json GET => '/api/current_user';
-    is $user->{points}, 0, 'lost points after delete';
+    is $user->{rp}{europe}, 0, 'lost points after delete';
 }
 
 sub more_points :Tests {
@@ -390,11 +390,11 @@ sub more_points :Tests {
     http_json GET => "/api/fakeuser/$quest->{team}[0]";
 
     my $user = http_json GET => '/api/current_user';
-    is $user->{points}, 0, 'zero points initially';
+    is $user->{rp}{europe}, 0, 'zero points initially';
 
     http_json DELETE => "/api/quest/$quest->{_id}";
     $user = http_json GET => '/api/current_user';
-    is $user->{points}, 0, 'still zero points after removing an open quest';
+    is $user->{rp}{europe}, 0, 'still zero points after removing an open quest';
 }
 
 sub quest_tags :Tests {

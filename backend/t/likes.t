@@ -46,7 +46,7 @@ sub like_quest :Tests {
             realm => 'europe',
         };
 
-    is db->users->get_by_login('blah')->{points}, 3;
+    is db->users->get_by_login('blah')->{rp}{europe}, 3;
 }
 
 sub self_like_quest :Tests {

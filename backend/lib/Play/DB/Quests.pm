@@ -274,10 +274,10 @@ sub update {
     {
         my $points = $self->_quest2points($quest);
         if ($action eq 'close') {
-            db->users->add_points($_, $points) for @{$quest->{team}};
+            db->users->add_points($_, $points, $quest->{realm}) for @{$quest->{team}};
         }
         elsif ($action eq 'reopen') {
-            db->users->add_points($_, -$points) for @{$quest->{team}};
+            db->users->add_points($_, -$points, $quest->{realm}) for @{$quest->{team}};
         }
     }
 
@@ -319,7 +319,7 @@ after 'like' => sub {
     my @team = @{ $quest->{team} };
 
     if ($quest->{status} eq 'closed') {
-        db->users->add_points($_, 1) for @team;
+        db->users->add_points($_, 1, $quest->{realm}) for @team;
     }
 
     # TODO - events2email
@@ -361,7 +361,7 @@ after 'unlike' => sub {
     my @team = @{ $quest->{team} };
 
     if ($quest->{status} eq 'closed') {
-        db->users->add_points($_, -1) for @team;
+        db->users->add_points($_, -1, $quest->{realm}) for @team;
     }
 };
 
@@ -379,7 +379,7 @@ sub remove {
     }
 
     if ($quest->{status} eq 'closed') {
-        db->users->add_points($_, -$self->_quest2points($quest)) for @{$quest->{team}};
+        db->users->add_points($_, -$self->_quest2points($quest), $quest->{realm}) for @{$quest->{team}};
     }
 
     delete $quest->{_id};

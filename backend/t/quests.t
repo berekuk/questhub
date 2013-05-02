@@ -382,9 +382,9 @@ sub scoring :Tests {
 
     db->quests->update($quest->{_id}, { status => 'closed', user => 'foo' });
 
-    is db->users->get_by_login('foo')->{points}, 2;
-    is db->users->get_by_login('bar')->{points}, 2;
-    is db->users->get_by_login('baz')->{points}, 0;
+    is db->users->get_by_login('foo')->{rp}{europe}, 2;
+    is db->users->get_by_login('bar')->{rp}{europe}, 2;
+    is db->users->get_by_login('baz')->{rp}{europe}, 0;
 }
 
 __PACKAGE__->new->runtests;

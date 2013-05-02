@@ -32,7 +32,10 @@ sub current_user :Tests {
         _id => re('\S+'),
         login => 'blah2',
         registered => 1,
-        points => 0,
+        rp => {
+            europe => 0,
+            asia => 0,
+        },
         settings => {},
         notifications => [],
         realms => ['europe', 'asia'],
@@ -47,7 +50,10 @@ sub current_user :Tests {
         _id => re('\S+'),
         login => 'blah2',
         registered => 1,
-        points => 0,
+        rp => {
+            europe => 0,
+            asia => 0,
+        },
         settings => { foo => 'bar' },
         notifications => [],
         realms => ['europe', 'asia'],
@@ -64,7 +70,10 @@ sub current_user :Tests {
         _id => re('\S+'),
         login => 'blah2',
         registered => 1,
-        points => 0,
+        rp => {
+            europe => 0,
+            asia => 0,
+        },
         settings => { foo => 'bar' },
         notifications => [
             superhashof({ params => 'preved' }),
@@ -86,7 +95,10 @@ sub another_user :Tests {
         },
         _id => re('\S+'),
         login => 'blah',
-        points => 0,
+        rp => {
+            europe => 0,
+            asia => 0,
+        },
         realms => ['europe', 'asia'],
     };
 }
@@ -126,7 +138,10 @@ sub users_list :Tests {
                 },
                 _id => re('\S+'),
                 login => $_,
-                points => 0,
+                rp => {
+                    europe => 0,
+                    asia => 0,
+                },
                 realms => ['europe', 'asia'],
             },
         } qw( blah blah2 blah3 )
@@ -149,7 +164,10 @@ sub users_list_limit_offset :Tests {
                     },
                     _id => re('\S+'),
                     login => $_,
-                    points => 0,
+                    rp => {
+                        europe => 0,
+                        asia => 0,
+                    },
                     realms => ['europe', 'asia'],
                 },
             } @_
@@ -194,7 +212,10 @@ sub open_quests_count :Tests {
             },
             _id => re('\S+'),
             login => 'blah',
-            points => 0,
+            rp => {
+                europe => 0,
+                asia => 0,
+            },
             open_quests => 2, # asia quest doesn't count
             realms => ['europe', 'asia'],
         },
@@ -204,7 +225,10 @@ sub open_quests_count :Tests {
             },
             _id => re('\S+'),
             login => 'blah2',
-            points => 0,
+            rp => {
+                europe => 0,
+                asia => 0,
+            },
             realms => ['europe', 'asia'],
         },
     ];
@@ -277,7 +301,7 @@ sub register :Tests {
     cmp_deeply $current_user, {
         registered => 1,
         _id => re('^\S+$'),
-        points => 0,
+        rp => {},
         login => 'blah',
         twitter => {
             screen_name => 'twah',
