@@ -12,6 +12,7 @@ define([
         serialize: function () {
             var params = this.model.toJSON();
             params.currentUser = currentUser.get('login');
+            params.realm = this.options.realm;
             return params;
         },
 

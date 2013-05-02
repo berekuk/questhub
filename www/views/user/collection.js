@@ -12,7 +12,8 @@ define([
 
         generateItem: function (model) {
             return new UserSmall({
-                model: model
+                model: model,
+                realm: this.collection.options.realm
             });
         },
     });
