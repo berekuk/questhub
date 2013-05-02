@@ -74,18 +74,6 @@ Options:
 
 Special `sort` value `leaderboard` can be used for composite points->open_quests sorting. It doesn't support order, i.e. it's always descending.
 
-##### GET /api/user_count
-
-Get a total number of users.
-
-Options:
-
-* `user` - filter by user
-* `status` - filter by status (`deleted` status is forbidden)
-* `comment_count` - add `comment_count` field to each returned quest
-* `limit`
-* `offset`
-
 ### Quests
 
 ##### POST /api/quest

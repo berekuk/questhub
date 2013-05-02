@@ -10,7 +10,7 @@ sub setup :Tests(setup) {
 }
 
 sub users_list_empty :Tests {
-    my $users = http_json GET => '/api/user';
+    my $users = http_json GET => '/api/user?realm=europe';
     cmp_deeply $users, [];
 }
 
@@ -35,6 +35,7 @@ sub current_user :Tests {
         points => 0,
         settings => {},
         notifications => [],
+        realms => ['europe', 'asia'],
     };
 
     http_json PUT => '/api/current_user/settings', { params => { foo => 'bar' } };
@@ -49,6 +50,7 @@ sub current_user :Tests {
         points => 0,
         settings => { foo => 'bar' },
         notifications => [],
+        realms => ['europe', 'asia'],
     };
 
     db->notifications->add('blah2', 'shout', 'preved');
@@ -68,6 +70,7 @@ sub current_user :Tests {
             superhashof({ params => 'preved' }),
             superhashof({ params => 'medved' }),
         ],
+        realms => ['europe', 'asia'],
     };
 
 }
@@ -84,6 +87,7 @@ sub another_user :Tests {
         _id => re('\S+'),
         login => 'blah',
         points => 0,
+        realms => ['europe', 'asia'],
     };
 }
 
@@ -113,7 +117,7 @@ sub users_list :Tests {
         http_json GET => "/api/fakeuser/$user";
     }
 
-    my $user = http_json GET => '/api/user';
+    my $user = http_json GET => '/api/user?realm=europe';
     cmp_deeply $user, [
         map {
             {
@@ -123,6 +127,7 @@ sub users_list :Tests {
                 _id => re('\S+'),
                 login => $_,
                 points => 0,
+                realms => ['europe', 'asia'],
             },
         } qw( blah blah2 blah3 )
     ];
@@ -145,21 +150,19 @@ sub users_list_limit_offset :Tests {
                     _id => re('\S+'),
                     login => $_,
                     points => 0,
+                    realms => ['europe', 'asia'],
                 },
             } @_
         ];
     };
 
     # limit
-    my $user = http_json GET => '/api/user?limit=2';
+    my $user = http_json GET => '/api/user?realm=europe&limit=2';
     cmp_deeply $user, $gen_expected->(qw/ blah1 blah2 /);
 
     # offset
-    $user = http_json GET => '/api/user?limit=3&offset=1';
+    $user = http_json GET => '/api/user?realm=europe&limit=3&offset=1';
     cmp_deeply $user, $gen_expected->(qw/ blah2 blah3 blah4 /);
-
-    my $result = http_json GET => '/api/user_count';
-    cmp_deeply $result, { count => 5 }, 'user_count';
 }
 
 sub open_quests_count :Tests {
@@ -167,10 +170,23 @@ sub open_quests_count :Tests {
     $self->_add_users;
 
     Dancer::session login => 'blah';
-    http_json POST => '/api/quest', { params => { user => 'blah', name => 'q1' } };
-    http_json POST => '/api/quest', { params => { user => 'blah', name => 'q2' } };
+    http_json POST => '/api/quest', { params => {
+        user => 'blah',
+        name => 'q1',
+        realm => 'europe',
+    } };
+    http_json POST => '/api/quest', { params => {
+        user => 'blah',
+        name => 'q2',
+        realm => 'europe',
+    } };
+    http_json POST => '/api/quest', { params => {
+        user => 'blah',
+        name => 'a1',
+        realm => 'asia',
+    } };
 
-    my $user = http_json GET => '/api/user';
+    my $user = http_json GET => '/api/user?realm=europe';
     cmp_deeply $user, [
         {
             twitter => {
@@ -179,7 +195,8 @@ sub open_quests_count :Tests {
             _id => re('\S+'),
             login => 'blah',
             points => 0,
-            open_quests => 2,
+            open_quests => 2, # asia quest doesn't count
+            realms => ['europe', 'asia'],
         },
         {
             twitter => {
@@ -188,6 +205,7 @@ sub open_quests_count :Tests {
             _id => re('\S+'),
             login => 'blah2',
             points => 0,
+            realms => ['europe', 'asia'],
         },
     ];
 }
@@ -199,7 +217,11 @@ sub users_list_sort :Tests {
     my $start_quest = sub {
         my $login = shift;
         Dancer::session login => $login;
-        return http_json POST => '/api/quest', { params => { name => 'build a house' } }; # returns a quest
+        # returns a quest
+        return http_json POST => '/api/quest', { params => {
+            name => 'build a house',
+            realm => 'europe',
+        } };
     };
     my $finish_quest = sub {
         my $quest = shift;
@@ -218,9 +240,20 @@ sub users_list_sort :Tests {
         return [ map { $_->{login} } @$users ];
     };
 
-    is_deeply $get_users->('/api/user'), [ qw/ Helga Marcel Etienne / ], 'default sorting';
-    is $get_users->('/api/user?sort=points&order=desc')[0], 'Etienne', 'Etienne is #1 by points score';
-    is_deeply $get_users->('/api/user?sort=leaderboard'), [qw/ Etienne Helga Marcel /], 'special leaderboard sorting';
+    is_deeply
+        $get_users->('/api/user?realm=europe'),
+        [ qw/ Helga Marcel Etienne / ],
+        'default sorting';
+
+    is
+        $get_users->('/api/user?realm=europe&sort=points&order=desc')[0],
+        'Etienne',
+        'Etienne is #1 by points score';
+
+    is_deeply
+        $get_users->('/api/user?realm=europe&sort=leaderboard'),
+        [qw/ Etienne Helga Marcel /],
+        'special leaderboard sorting';
 }
 
 sub register :Tests {
@@ -251,6 +284,7 @@ sub register :Tests {
         },
         settings => {},
         notifications => [],
+        realms => [],
     };
 }
 
