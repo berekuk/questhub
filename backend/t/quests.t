@@ -26,6 +26,37 @@ sub add :Tests {
     });
 }
 
+sub add_check_user :Tests {
+    like exception {
+        db->quests->add({
+            name => 'quest name',
+            team => ['foo'],
+            status => 'open',
+            realm => 'europe',
+        });
+    }, qr/User .* not found/;
+
+    db->users->add({ login => 'foo', realms => ['asia'] });
+
+    like exception {
+        db->quests->add({
+            name => 'quest name',
+            team => ['foo'],
+            status => 'open',
+            realm => 'europe',
+        });
+    }, qr/doesn't belong to the realm/;
+
+    is exception {
+        db->quests->add({
+            name => 'quest name',
+            team => ['foo'],
+            status => 'open',
+            realm => 'asia',
+        });
+    }, undef;
+}
+
 sub leave_join :Tests {
     db->users->add({ login => $_, realms => ['europe'] }) for qw( foo bar baz );
     my $quest = db->quests->add({
