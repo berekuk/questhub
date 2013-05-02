@@ -9,6 +9,7 @@ sub setup :Test(setup) {
 }
 
 sub add :Tests {
+    db->users->add({ login => $_, realms => ['europe'] }) for qw( foo );
     my $quest = db->quests->add({
         name => 'quest name',
         team => ['foo'],
@@ -26,7 +27,7 @@ sub add :Tests {
 }
 
 sub leave_join :Tests {
-    db->users->add({ login => $_ }) for qw( foo bar baz );
+    db->users->add({ login => $_, realms => ['europe'] }) for qw( foo bar baz );
     my $quest = db->quests->add({
         name => 'quest name',
         team => ['foo'],
@@ -69,7 +70,7 @@ sub leave_join :Tests {
 }
 
 sub invite_non_open :Tests {
-    db->users->add({ login => $_ }) for qw( foo bar );
+    db->users->add({ login => $_, realms => ['europe'] }) for qw( foo bar );
     my $quest = db->quests->add({
         name => 'quest name',
         team => ['foo'],
@@ -82,7 +83,7 @@ sub invite_non_open :Tests {
 }
 
 sub join_non_open :Tests {
-    db->users->add({ login => $_ }) for qw( foo bar );
+    db->users->add({ login => $_, realms => ['europe'] }) for qw( foo bar );
     my $quest = db->quests->add({
         name => 'quest name',
         team => ['foo'],
@@ -97,6 +98,7 @@ sub join_non_open :Tests {
 }
 
 sub list :Tests {
+    db->users->add({ login => 'foo', realms => ['europe'] });
     my @data = (
         {
             name => 'q1',
@@ -135,7 +137,7 @@ sub list :Tests {
 }
 
 sub list_leaderboard :Tests {
-    db->users->add({ login => $_ }) for qw( foo l1 l2 l3 );
+    db->users->add({ login => $_, realms => ['europe'] }) for qw( foo l1 l2 l3 );
     my @data = (
         {
             name => 'q1',
@@ -169,6 +171,7 @@ sub list_leaderboard :Tests {
 }
 
 sub list_unclaimed :Tests {
+    db->users->add({ login => $_, realms => ['europe'] }) for qw( foo );
     my @data = (
         map {
             {
@@ -197,6 +200,7 @@ sub list_unclaimed :Tests {
 }
 
 sub watch_unwatch :Tests {
+    db->users->add({ login => $_, realms => ['europe'] }) for qw( foo );
     my $quest = db->quests->add({
         name => 'quest name',
         team => ['foo'],
@@ -218,6 +222,7 @@ sub watch_unwatch :Tests {
 }
 
 sub list_watched :Tests {
+    db->users->add({ login => $_, realms => ['europe'] }) for qw( foo );
 
     my @quests = map {
         db->quests->add({
@@ -240,6 +245,8 @@ sub list_watched :Tests {
 }
 
 sub list_realm :Tests {
+    db->users->add({ login => $_, realms => ['europe', 'asia'] }) for qw( foo );
+
     my @europe_quests = map {
         db->quests->add({
             name => "e$_",
@@ -269,7 +276,7 @@ sub list_realm :Tests {
 }
 
 sub remove :Tests {
-    db->users->add({ login => $_ }) for qw( foo foo2 );
+    db->users->add({ login => $_, realms => ['europe'] }) for qw( foo foo2 );
     my @quests = map {
         db->quests->add({
             name => "q$_",
@@ -303,7 +310,7 @@ sub remove :Tests {
 }
 
 sub update :Tests {
-    db->users->add({ login => 'foo' });
+    db->users->add({ login => 'foo', realms => ['europe'] });
 
     my $quest = db->quests->add({
         name => 'q1',
@@ -330,7 +337,7 @@ sub update :Tests {
 }
 
 sub scoring :Tests {
-    db->users->add({ login => $_ }) for qw( foo bar baz );
+    db->users->add({ login => $_, realms => ['europe'] }) for qw( foo bar baz );
 
     my $quest = db->quests->add({
         name => 'q1',

@@ -63,7 +63,7 @@ sub add {
     my $self = shift;
     my ($params) = validate_pos(@_, { type => HASHREF });
 
-    $params->{realm} ||= [];
+    $params->{realms} ||= [];
 
     my $id = $self->collection->insert($params, { safe => 1 });
 

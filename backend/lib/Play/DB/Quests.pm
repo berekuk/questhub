@@ -174,12 +174,12 @@ sub list {
 sub add {
     my $self = shift;
     my $params = validate(@_, {
+        realm => { type => SCALAR },
         name => { type => SCALAR },
         user => { type => SCALAR, optional => 1 },
         team => { type => ARRAYREF, optional => 1 },
         tags => { type => ARRAYREF, optional => 1 },
         status => { type => SCALAR, default => 'open' },
-        realm => { type => SCALAR },
     });
 
     if (defined $params->{team}) {
@@ -195,10 +195,11 @@ sub add {
         $params->{team} = [ delete $params->{user} ];
     }
 
-    # validate
-    # TODO - do strict validation here instead of dancer route?
-    if ($params->{type}) {
-        die "Unexpected quest type '$params->{type}'" unless grep { $params->{type} eq $_ } qw/ bug blog feature other /;
+    for my $team_member (@{ $params->{team} }) {
+        my $user = db->users->get_by_login($team_member) or die "User '$team_member' not found";
+        unless (grep { $_ eq $params->{realm} } @{ $user->{realms} }) {
+            die "User '$team_member' doesn't belong to the realm $params->{realm}";
+        }
     }
 
     if ($params->{tags}) {

@@ -13,7 +13,7 @@ sub setup :Tests(setup) {
 }
 
 sub like_quest :Tests {
-    db->users->add({ login => $_ }) for qw( blah user1 user2 );
+    db->users->add({ login => $_, realms => ['europe'] }) for qw( blah user1 user2 );
 
     my $quest = db->quests->add({
         team => ['blah'],
@@ -50,7 +50,7 @@ sub like_quest :Tests {
 }
 
 sub self_like_quest :Tests {
-    db->users->add({ login => $_ }) for qw( blah );
+    db->users->add({ login => $_, realms => ['europe'] }) for qw( blah );
 
     my $quest = db->quests->add({
         team => ['blah'],
