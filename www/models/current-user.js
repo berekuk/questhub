@@ -19,7 +19,7 @@ define([
 
     Backbone.listenTo(result, 'change', function (e) {
         if (result.get('registered')) {
-            mixpanel.identify(result.get('_id'));
+            mixpanel.alias(result.get('_id'));
             mixpanel.people.set({
                 $username: result.get('login'),
                 $name: result.get('login'),

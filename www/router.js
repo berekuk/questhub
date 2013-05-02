@@ -41,9 +41,12 @@ define([
             return this.bind('route', this._trackPageview);
         },
         _trackPageview: function() {
+            var url = Backbone.history.getFragment();
+            url = '/' + url;
             ga('send', 'pageview', {
-                'page': Backbone.history.getFragment()
+                'page': url
             });
+            mixpanel.track_pageview(url);
         },
 
         questAdd: function () {

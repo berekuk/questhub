@@ -15,7 +15,9 @@ define([
             document.title = this.partial.settings.service_name;
 
             // configure tracking
-            mixpanel.init(this.partial.settings.mixpanel_id);
+            mixpanel.init(this.partial.settings.mixpanel_id, {
+                'track_pageview': false
+            });
             if (this.partial.settings.analytics) {  // TODO - configure localhost for debugging?
                 ga('create', this.partial.settings.analytics, window.location.host);
             }
