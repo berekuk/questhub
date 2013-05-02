@@ -19,8 +19,11 @@ my @events;
 
 system('./app/clear_mongo.sh');
 
-for my $realm (qw/ perl qh /) {
+my @realms = qw( perl qh );
+for my $realm (@realms) {
     my $realm_db = $connection->get_database("play-$realm");
+
+    $realm = 'chaos' if $realm eq 'qh';
 
     {
         my @users = $realm_db->get_collection('users')->find->all;
@@ -60,18 +63,6 @@ for my $realm (qw/ perl qh /) {
             push @quests, $quest;
         }
     }
-
-#    $db->get_collection('quests')->update(
-#        {},
-#        { '$set' => { realm => $realm } },
-#        { multi => 1, safe => 1 }
-#    );
-#
-#    db->get_colleciton('events')->update(
-#        { object_type => 'quest' },
-#        { '$set' => { 'object.realm' => $realm } },
-#        { multi => 1, safe => 1 }
-#    );
 }
 
 for my $user (values %users) {
