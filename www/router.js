@@ -66,8 +66,11 @@ define([
             var model = new QuestModel({ realm: realm, _id: id });
             var view = new QuestPage({ model: model });
 
+            var router = this;
+
             model.fetch({
                 success: function () {
+                    router.navigate('/' + model.get('realm') + '/quest/' + model.id, { trigger: true, replace: true });
                     view.activate();
                 }
             });

@@ -13,6 +13,10 @@ define([
             '.subview': 'eventCollection',
         },
 
+        realm: function () {
+            return this.collection.options.realm;
+        },
+
         eventCollection: function () {
             return new EventCollection({ collection: this.collection });
         },

@@ -1,0 +1,34 @@
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <ul class="nav">
+        <li class="dropdown">
+          <a class="brand dropdown-toggle" data-toggle="dropdown" href="#">Questhub: <%- realm.name %></a>
+          <ul class="dropdown-menu">
+            <li>
+              <% _.each(partial.settings.realms, function (r) { %>
+                <a href="/<%- r.id %>/feed"><%- r.name %> realm</a>
+              <% }) %>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <div class="nav-collapse collapse">
+        <ul class="nav">
+          <li class="menu-item-home"><a href="/">Home</a></li>
+          <li class="menu-item-event-list"><a href="/<%- realm.id %>/feed">News Feed</a></li>
+          <li class="menu-item-user-list"><a href="/<%- realm.id %>/players">Players</a></li>
+          <li class="menu-item-explore"><a href="/<%- realm.id %>/explore">Explore</a></li>
+          <li class="menu-item-about"><a href="/about">About</a></li>
+        </ul>
+        <p class="navbar-text pull-right"></p>
+        <div class="pull-right current-user-box"></div>
+      </div>
+    </div>
+  </div>
+</div>
