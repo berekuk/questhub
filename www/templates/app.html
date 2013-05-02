@@ -6,7 +6,18 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <a class="brand" href="/"><%= partial.settings.service_name %></a>
+      <ul class="nav">
+        <li class="dropdown">
+          <a class="brand dropdown-toggle" data-toggle="dropdown" href="#">Questhub: <%- realm.name %></a>
+          <ul class="dropdown-menu">
+            <li>
+              <% _.each(partial.settings.realms, function (r) { %>
+                <a href="#"><%- r.name %> realm</a>
+              <% }) %>
+            </li>
+          </ul>
+        </li>
+      </ul>
       <div class="nav-collapse collapse">
         <ul class="nav">
           <li class="menu-item-home"><a href="/">Home</a></li>

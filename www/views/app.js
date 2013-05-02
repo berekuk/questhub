@@ -1,15 +1,30 @@
 define([
+    'underscore',
     'models/current-user',
     'views/proto/base',
     'views/notify', 'views/user/current',
     'text!templates/app.html'
-], function (currentUserModel, Base, Notify, CurrentUser, html) {
+], function (_, currentUserModel, Base, Notify, CurrentUser, html) {
     return Base.extend({
 
         template: _.template(html),
 
+        realm_id: 'perl',
+
         initialize: function () {
+            var view = this;
+            var realm = _.find(
+                this.partial.settings.realms,
+                function (r) {
+                    return r.id == view.realm_id;
+                }
+            );
+            if (!realm) {
+                throw "Oops";
+            }
+
             this.$el.html($(this.template({
+                realm: realm,
                 partial: this.partial
             }))); // render app just once
             document.title = this.partial.settings.service_name;
