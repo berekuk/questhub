@@ -27,7 +27,7 @@ define([
             ":realm/quest/:id": "questPage",
             ":realm/feed": "feed",
             ":realm/players": "userList",
-            "player/:login": "anotherDashboard",
+            ":realm/player/:login": "anotherDashboard",
             ":realm/explore(/:tab)": "explore",
             ":realm/explore/:tab/tag/:tag": "explore",
             "about": "about",
@@ -36,7 +36,8 @@ define([
             "players": "oldUserList",
             "explore(/:tab)": "oldExplore",
             "explore/:tab/tag/:tag": "oldExplore",
-            "quest/:id": "oldQuestPage"
+            "quest/:id": "oldQuestPage",
+            "player/:login": "oldAnotherDashboard"
         },
 
         appView: undefined, // required
@@ -83,6 +84,12 @@ define([
         },
 
         dashboard: function () {
+            throw "main page is temporarily disabled";
+            this.navigate(
+                '/' + this.appView.realm_id + '/player/' + currentUser.get('login'),
+                { trigger: true, replace: true }
+            );
+
             if (!currentUser.get('registered')) {
                 this.navigate('/welcome', { trigger: true, replace: true });
                 return;
@@ -95,9 +102,9 @@ define([
             this.appView.setActiveMenuItem('home');
         },
 
-        anotherDashboard: function (login) {
+        anotherDashboard: function (realm, login) {
             var user = new AnotherUserModel({ login: login });
-            var view = new Dashboard({ model: user });
+            var view = new Dashboard({ realm: realm, model: user });
             user.fetch({
                 success: function () {
                     view.activate();
@@ -195,12 +202,16 @@ define([
             this.navigate('/chaos/feed', { trigger: true, replace: true });
         },
 
-        oldExplore: function (realm) {
+        oldExplore: function () {
             this.navigate('/chaos/explore', { trigger: true, replace: true });
         },
 
         oldQuestPage: function (id) {
             this.navigate('/chaos/quest/' + id, { trigger: true, replace: true });
+        },
+
+        oldAnotherDashboard: function (id) {
+            console.log('todo - cross-realm profile');
         },
 
         queryParams: function(name) {

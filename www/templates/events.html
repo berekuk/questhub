@@ -5,32 +5,32 @@
 
   <script type="text/template" class="add-quest">
     <i class="icon-plus"></i>
-    <%= partial.user({ login: author }) %> started a new quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
+    <%= partial.user({ login: author }) %> started a new quest: <%= partial.quest_link({ id: object_id, quest: object }) %>.
   </script>
 
   <script type="text/template" class="close-quest">
     <i class="icon-check"></i>
-    <%= partial.user({ login: author }) %> completed a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
+    <%= partial.user({ login: author }) %> completed a quest: <%= partial.quest_link({ id: object_id, quest: object }) %>.
   </script>
 
   <script type="text/template" class="invite-quest">
     <i class="icon-group"></i>
-    <%= partial.user({ login: author }) %> invited <%= partial.user({ login: object.invitee }) %> to work a quest: <a href="/quest/<%= object_id %>"><%- object.quest.name %></a>.
+    <%= partial.user({ login: author }) %> invited <%= partial.user({ login: object.invitee }) %> to work a quest: <%= partial.quest_link({ id: object_id, quest: object }) %>.
   </script>
 
   <script type="text/template" class="reopen-quest">
     <i class="icon-backward"></i>
-    <%= partial.user({ login: author }) %> reopened a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
+    <%= partial.user({ login: author }) %> reopened a quest: <%= partial.quest_link({ id: object_id, quest: object }) %>.
   </script>
 
   <script type="text/template" class="abandon-quest">
     <i class="icon-eject"></i>
-    <%= partial.user({ login: author }) %> abandoned a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
+    <%= partial.user({ login: author }) %> abandoned a quest: <%= partial.quest_link({ id: object_id, quest: object }) %>.
   </script>
 
   <script type="text/template" class="resurrect-quest">
     <i class="icon-play"></i>
-    <%= partial.user({ login: author }) %> resurrected a quest: <a href="/quest/<%= object_id %>"><%- object.name %></a>.
+    <%= partial.user({ login: author }) %> resurrected a quest: <%= partial.quest_link({ id: object_id, quest: object }) %>.
   </script>
 
   <script type="text/template" class="add-user">
@@ -50,7 +50,7 @@
       a
     <% } %>
     quest
-    <a href="/quest/<%= object.quest._id %>"><%- object.quest.name %></a>:
+    <%= partial.quest_link({ id: object.quest._id, quest: object.quest }) %>:
     <div class="well well-small event-comment-well">
       <%= partial.markdown(object.body) %>
     </div>

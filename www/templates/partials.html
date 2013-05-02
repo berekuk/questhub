@@ -1,6 +1,6 @@
 <div>
   <!-- avoiding extra spaces - we need to put an apostrophe after the user's badge sometimes -->
-  <script type="text/template" class="user"><% if (login) { %><a href="/player/<%= login %>" class="label"><%= login + (obj.colon ? ':' : '') %></a><% } %></script>
+  <script type="text/template" class="user"><% if (login) { %><a href="/<%- obj.realm ? (obj.realm + '/') : '' %>player/<%= login %>" class="label"><%= login + (obj.colon ? ':' : '') %></a><% } %></script>
 
   <script type="text/template" class="quest-labels">
     <span class="quest-tags">
@@ -23,4 +23,7 @@
       </label>
     </div>
   </script>
+
+  <script type="text/template" class="quest-link">
+    <a href="/<%- quest.realm %>/quest/<%- id %>"><%- quest.name %></a></script>
 </div>

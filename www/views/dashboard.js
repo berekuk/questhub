@@ -35,6 +35,7 @@ define([
         createQuestSubview: function (options) {
             options.limit = options.limit || 30;
             options.order = 'desc';
+            options.realm = this.options.realm;
 
             var collection = new QuestCollectionModel([], options);
             collection.fetch();

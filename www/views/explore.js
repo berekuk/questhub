@@ -35,6 +35,7 @@ define([
 
         tabSubview: function () {
             var options = _.clone(this.name2options[this.tab]);
+            options.realm = this.options.realm;
 
             if (options.watchedByMe) {
                 if (!currentUser.get('login')) {
