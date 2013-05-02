@@ -36,7 +36,8 @@ define([
                 var commentsModel = new CommentCollectionModel([], { 'quest_id': this.model.id });
                 commentsModel.fetch();
                 return new CommentCollection({
-                    collection: commentsModel
+                    collection: commentsModel,
+                    realm: this.model.get('realm')
                 });
             },
         },

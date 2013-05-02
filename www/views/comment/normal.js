@@ -85,6 +85,7 @@ define([
         serialize: function () {
             var params = this.model.toJSON();
             params.my = this.isOwned();
+            params.realm = this.options.realm;
 
             return params;
         },
