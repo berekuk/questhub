@@ -8,9 +8,9 @@ define([], function () {
     else if (window.location.host == 'questhub.io') {
         return {
             realms: [
-                { id: 'chaos', name: 'Chaotic' },
-                { id: 'perl', name: 'Perl' },
-                { id: 'meta', name: 'Meta' }
+                { id: 'chaos', name: 'Chaotic realm' },
+                { id: 'perl', name: 'Play Perl' },
+                { id: 'meta', name: 'Meta realm' }
             ],
             mixpanel_id: 'eb4a537d40eb92da515db8c18c415de4',
             analytics: 'UA-36251424-2'
@@ -19,9 +19,9 @@ define([], function () {
     else {
         return {
             realms: [
-                { id: 'chaos', name: 'Chaotic' },
-                { id: 'perl', name: 'Perl' },
-                { id: 'meta', name: 'Meta' }
+                { id: 'chaos', name: 'Chaotic realm' },
+                { id: 'perl', name: 'Play Perl' },
+                { id: 'meta', name: 'Meta realm' }
             ],
             service_name: 'Questhub Dev',
             instance_name: 'dev',

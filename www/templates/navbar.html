@@ -8,11 +8,11 @@
       </a>
       <ul class="nav">
         <li class="dropdown">
-          <a class="brand dropdown-toggle" data-toggle="dropdown" href="#">Questhub: <%- realm.name %></a>
+          <a class="brand dropdown-toggle" data-toggle="dropdown" href="#"><%- realm.name %></a>
           <ul class="dropdown-menu">
             <li>
               <% _.each(partial.settings.realms, function (r) { %>
-                <a href="/<%- r.id %>/feed"><%- r.name %> realm</a>
+                <a href="/<%- r.id %>/feed"><%- r.name %></a>
               <% }) %>
             </li>
           </ul>
