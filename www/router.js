@@ -123,7 +123,8 @@ define([
             }
 
             this.appView.setPageView(view);
-            this.appView.setActiveMenuItem('none');
+
+            this.appView.setActiveMenuItem(my ? 'home' : 'none');
         },
 
         explore: function (realm, tab, tag) {

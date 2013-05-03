@@ -1,4 +1,4 @@
-/* Common play-perl view.
+/* Common questhub view.
  * It declares render() itself, you need to declare serialize() instead of render.
  * If you want to do some more work on render(), define afterRender().
  *
