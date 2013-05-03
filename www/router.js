@@ -85,7 +85,13 @@ define([
             }
 
             var realms = currentUser.get('realms');
-            if (realms.length) {
+            if (this.appView.realm_id) {
+                this.navigate(
+                    '/' + this.appView.realm_id + '/player/' + currentUser.get('login'),
+                    { trigger: true, replace: true }
+                );
+            }
+            else if (realms.length) {
                 this.navigate(
                     '/' + realms[0] + '/player/' + currentUser.get('login'),
                     { trigger: true, replace: true }
