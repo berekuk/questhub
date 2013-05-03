@@ -1,24 +1,23 @@
 <div class="container-fluid about">
   <div class="span6 offset3">
-  <h1><%= partial.settings.service_name %></h1>
+  <h1>Questhub.io</h1>
 
-  <% if (partial.settings.instance_name == 'play-perl') { %>
   <div>
-    Play Perl is a new website for Perl developers.
+    Questhub is a new website for open source developers.
   </div>
   <hr>
   <div class="row-fluid">
     <h2>Concepts</h2>
-    <h3>Opensource, gamified</h3>
+    <h3>Open source community, gamified</h3>
     <p>
     Gamification is great for tuning people motivations in a positive way.<br>
-    Play Perl gives you points and achievements to be proud of.
+    Questhub gives you points and achievements to be proud of.
     </p>
   </div>
   <div class='row-fluid'>
     <h3>Social Todo List</h3>
     <p>
-    Play Perl allows you to announce your plans, gather the feedback, and find other people to cooperate with on common goals.
+    Questhub allows you to announce your plans, gather the feedback, and find other people to cooperate with on common goals.
     </p>
   </div>
   <div class="row-fluid">
@@ -50,9 +49,9 @@
     <dl>
       <dt>"Quest"? "Player"? What is this?</dt>
       <dd>Quest is any kind of task you're planning to do. Player is you, and other people are players too. You get 1+{number-of-likes} points for each quest you close.</dd>
-      <dt>There are many other bug trackers! How is Play Perl different?</dt>
+      <dt>There are many other bug trackers! How is Questhub different?</dt>
       <dd>
-      Play Perl considers people to be more important than projects, and fun to be more important than planning. We're going to optimize its mechanics for:
+      Questhub considers people to be more important than projects, and fun to be more important than planning. We're going to optimize its mechanics for:
       <ol>
         <li>People feeling appreciated;</li>
         <li>Praise being granted and received wherever and whenever necessary;</li>
@@ -61,7 +60,7 @@
       There are many more ideas for future features, check out our <a href="https://github.com/berekuk/play-perl/wiki/DesignDraft">DesignDraft</a>.
       </dd>
 
-      <dt>Is this for Perl 5 or for Perl 6?</dt>
+      <dt>Is Play Perl realm for Perl 5 or for Perl 6?</dt>
       <dd>
       Both.<br>
       And also Moe, p2 and anything else that will grow out of Perl community in the future.
@@ -69,18 +68,7 @@
 
       <dt>Can I use this for my non-Perl tasks?</dt>
       <dd>
-      Please don't.<br>
-      Here's the short list of rules for possible quests:
-      <ul>
-        <li>all quests are good if they're related to Perl somehow;</li>
-        <li>self-referential quests such as "get one more point" or "get to the top of players list" are not ok for obvious reasons;</li>
-        <li>quests not relevant to Perl are temporarily discouraged, because I didn't figure out yet how to a) allow them; b) keep the game points meaningful.</li>
-      </ul>
-      <p>
-      On the other hand, don't hesitate to create a quest even if you feel like the task is too small and not worth a point. Anything that helps you to move forward is fine, and points=likes+1 rule ensures that everyone, in theory, will get a fair score in the end.
-      <p>
-      <a href="http://play-perl.org/quest/512382e3e05a54857e000085">More details on the topic of non-perl quests.</a><br>
-      (tl;dr: play-github is going to happen one day.)
+      Yes! Just add them in the <a href="/chaos/feed">Chaotic realm</a>.
       </dd>
 
       <dt>This doesn't motivate me.</dt>
@@ -97,9 +85,9 @@
   <hr>
   <div class="row-fluid">
     <h2>Technology</h2>
-    Play Perl is built with:
+    Questhub is built with:
     <ul>
-      <li><a href="http://perldancer.org/">Dancer</a></li>
+      <li><a href="http://perldancer.org/">Perl Dancer</a></li>
       <li><a href="http://documentcloud.github.com/backbone/">Backbone.js</a></li>
       <li><a href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
       <li><a href="http://www.mongodb.org/">MongoDB</a></li>
@@ -109,28 +97,7 @@
     (But please don't abuse game mechanics or you'll be banned.)
     </p>
     <p>
-    Play Perl sources are open. <a href="https://github.com/berekuk/play-perl">Clone it on GitHub!</a>
+    Questhub sources are open. <a href="https://github.com/berekuk/play-perl">Clone it on GitHub!</a>
     </p>
-  </div>
-  <% } else { %>
-  <p>
-  <h3>Что это?</h3>
-  <p>
-  Это туду-лист с социалочкой и лайками.
-  <p>
-  Вы пишете свои вишлисты, тудулисты, стратегические и тактические, на день, на год, на жизнь или на 10 минут. Вы приглашаете друзей — в это интереснее начинать играть со знакомыми. К тому же, им наверняка интересно, что вы хотите сделать, выучить, получить в подарок и так далее.
-  <p>
-  Люди смотрят на ваши задачи и иногда лайкают их. (За лайки вы получаете поинты, и за завершение задач - тоже. Но лайки все равно, конечно, гораздо круче сами по себе.)
-  <p>
-  Осторожно: пока что все задачи публичны и доступны в <a href="/feed">едином фиде</a>, а также на вашей странице.
-  <p>
-  <h3>Откуда это?</h3>
-  <p>
-  Эта штука уже показала себя в одном узком <a href="http://play-perl.org/">программерском сообществе</a>. С ней весело.
-  <p>
-  Теперь нас вынудили досрочно сделать отдельный инстанс для френдфида, без ограничения на темы. Поэтому тут пока нет подробного faq, about, а также клевого дизайна. В общем, это глубокая бета. Но вы можете <a href="https://github.com/berekuk/play-perl/issues?state=open">репортить баги в github</a>, писать <a href="mailto:me@berekuk.ru">мне на почту</a>, а также обсуждать, просить фичи, хвалить и ругать в <a href="http://friendfeed.com/todoing">группе в френдфиде</a>, а я вам буду отвечать.
-  </p>
-  <% } %>
-  <p>
   </div>
 </div>

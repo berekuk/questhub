@@ -8,7 +8,7 @@ define([
 
         template: _.template(html),
 
-        realm_id: 'perl',
+        realm_id: null,
 
         subviews: {
             '.navbar-subview': function () {
@@ -53,6 +53,9 @@ define([
             // FIXME - this leads to double-rendering navbar on the initial page load
             if (page.realm) {
                 this.setRealm(page.realm());
+            }
+            else {
+                this.setRealm(null);
             }
         },
 

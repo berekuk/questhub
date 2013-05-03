@@ -10,12 +10,17 @@ define([
         serialize: function () {
             return {
                 realm: this.getRealm(),
-                partial: this.partial
+                partial: this.partial,
+                registered: currentUserModel.get('registered')
             };
         },
 
         getRealm: function () {
             var view = this;
+            if (!view.options.realm) {
+                return;
+            }
+
             var realm = _.find(
                 this.partial.settings.realms,
                 function (r) {

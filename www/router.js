@@ -84,10 +84,16 @@ define([
                 return;
             }
 
-            this.navigate(
-                '/' + this.appView.realm_id + '/player/' + currentUser.get('login'),
-                { trigger: true, replace: true }
-            );
+            var realms = currentUser.get('realms');
+            if (realms.length) {
+                this.navigate(
+                    '/' + realms[0] + '/player/' + currentUser.get('login'),
+                    { trigger: true, replace: true }
+                );
+            }
+            else {
+                this.navigate('/welcome', { trigger: true, replace: true });
+            }
         },
 
         anotherDashboard: function (realm, login) {
