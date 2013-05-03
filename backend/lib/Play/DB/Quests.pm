@@ -94,6 +94,7 @@ sub list {
     my $params = validate(@_, {
         # find() filters
         user => { type => SCALAR, optional => 1 },
+        realm => { type => SCALAR },
         unclaimed => { type => BOOLEAN, optional => 1 },
         status => { type => SCALAR, optional => 1 },
         # flag meaning "fetch comment_count too"
@@ -112,7 +113,7 @@ sub list {
     }
 
     my $query = {
-            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ status tags watchers /
+            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ status tags watchers realm /
     };
     $query->{team} = $params->{user} if defined $params->{user};
     $query->{status} ||= { '$ne' => 'deleted' };
@@ -173,6 +174,7 @@ sub list {
 sub add {
     my $self = shift;
     my $params = validate(@_, {
+        realm => { type => SCALAR },
         name => { type => SCALAR },
         user => { type => SCALAR, optional => 1 },
         team => { type => ARRAYREF, optional => 1 },
@@ -193,10 +195,11 @@ sub add {
         $params->{team} = [ delete $params->{user} ];
     }
 
-    # validate
-    # TODO - do strict validation here instead of dancer route?
-    if ($params->{type}) {
-        die "Unexpected quest type '$params->{type}'" unless grep { $params->{type} eq $_ } qw/ bug blog feature other /;
+    for my $team_member (@{ $params->{team} }) {
+        my $user = db->users->get_by_login($team_member) or die "User '$team_member' not found";
+        unless (grep { $_ eq $params->{realm} } @{ $user->{realms} }) {
+            db->users->join_realm($team_member, $params->{realm});
+        }
     }
 
     if ($params->{tags}) {
@@ -216,6 +219,7 @@ sub add {
         author => $params->{author},
         object_id => $id->to_string,
         object => $quest,
+        realm => $params->{realm},
     });
 
     return $quest;
@@ -270,10 +274,10 @@ sub update {
     {
         my $points = $self->_quest2points($quest);
         if ($action eq 'close') {
-            db->users->add_points($_, $points) for @{$quest->{team}};
+            db->users->add_points($_, $points, $quest->{realm}) for @{$quest->{team}};
         }
         elsif ($action eq 'reopen') {
-            db->users->add_points($_, -$points) for @{$quest->{team}};
+            db->users->add_points($_, -$points, $quest->{realm}) for @{$quest->{team}};
         }
     }
 
@@ -298,6 +302,7 @@ sub update {
             author => $user,
             object_id => $id,
             object => $quest_after_update,
+            realm => $quest->{realm}
         });
     }
 
@@ -314,7 +319,7 @@ after 'like' => sub {
     my @team = @{ $quest->{team} };
 
     if ($quest->{status} eq 'closed') {
-        db->users->add_points($_, 1) for @team;
+        db->users->add_points($_, 1, $quest->{realm}) for @team;
     }
 
     # TODO - events2email
@@ -356,7 +361,7 @@ after 'unlike' => sub {
     my @team = @{ $quest->{team} };
 
     if ($quest->{status} eq 'closed') {
-        db->users->add_points($_, -1) for @team;
+        db->users->add_points($_, -1, $quest->{realm}) for @team;
     }
 };
 
@@ -374,7 +379,7 @@ sub remove {
     }
 
     if ($quest->{status} eq 'closed') {
-        db->users->add_points($_, -$self->_quest2points($quest)) for @{$quest->{team}};
+        db->users->add_points($_, -$self->_quest2points($quest), $quest->{realm}) for @{$quest->{team}};
     }
 
     delete $quest->{_id};
@@ -409,7 +414,7 @@ sub invite {
     );
     my $updated = $result->{n};
     unless ($updated) {
-        die ucfirst($self->entity_name)." not found or unable to invite to your own quest";
+        die "Quest not found or unable to invite to your own quest";
     }
 
     db->events->add({
@@ -421,6 +426,7 @@ sub invite {
             quest => $quest,
             invitee => $user,
         },
+        realm => $quest->{realm}
     });
 
     return;
@@ -447,7 +453,7 @@ sub uninvite {
     );
     my $updated = $result->{n};
     unless ($updated) {
-        die ucfirst($self->entity_name)." not found or unable to uninvite to your own quest";
+        die "Quest not found or unable to uninvite to your own quest";
     }
     return;
 }

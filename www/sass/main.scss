@@ -7,6 +7,13 @@ dd {
     height: 24px;
 }
 
+.signin {
+    line-height: 60px;
+    a {
+        width: 200px;
+    }
+}
+
 .icon-twitter {
     color: #4099ff;
 }
@@ -84,7 +91,10 @@ ul.nav-filter {
 
 @import 'sass/common.scss';
 @import 'sass/frame.scss';
+@import 'sass/realm.scss';
+@import 'sass/welcome.scss';
 @import 'sass/quest-collection.scss';
 @import 'sass/quest-page.scss';
+@import 'sass/dashboard.scss';
 @import 'sass/user-collection.scss';
 @import 'sass/register.scss';

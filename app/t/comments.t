@@ -13,7 +13,12 @@ sub add_comment :Tests {
 
     http_json GET => "/api/fakeuser/blah";
 
-    my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'foo', status => 'open' } };
+    my $quest_result = http_json POST => '/api/quest', { params => {
+        user => 'blah',
+        name => 'foo',
+        status => 'open',
+        realm => 'europe',
+    } };
     my $quest_id = $quest_result->{_id};
 
     my $first = http_json POST => "/api/quest/$quest_id/comment", { params => { body => 'first comment!' } };
@@ -37,7 +42,11 @@ sub remove :Tests {
 
     http_json GET => "/api/fakeuser/blah";
 
-    my $quest_result = http_json POST => '/api/quest', { params => { name => 'foo', status => 'open' } };
+    my $quest_result = http_json POST => '/api/quest', { params => {
+        name => 'foo',
+        status => 'open',
+        realm => 'europe',
+    } };
     my $quest_id = $quest_result->{_id};
 
     my $comment = http_json POST => "/api/quest/$quest_id/comment", { params => { body => "I'm just a little comment!" } };
@@ -64,12 +73,17 @@ sub remove :Tests {
 sub comment_events :Tests {
     http_json GET => "/api/fakeuser/blah";
 
-    my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'foo', status => 'open' } };
+    my $quest_result = http_json POST => '/api/quest', { params => {
+        user => 'blah',
+        name => 'foo',
+        status => 'open',
+        realm => 'europe',
+    } };
     my $quest_id = $quest_result->{_id};
 
     my $add_result = http_json POST => "/api/quest/$quest_id/comment", { params => { body => 'cbody, **bold cbody**' } };
 
-    my $events = http_json GET => "/api/event";
+    my $events = http_json GET => "/api/event?realm=europe";
     cmp_deeply $events->[0], {
         _id => re('^\S+$'),
         action => 'add',
@@ -90,6 +104,7 @@ sub comment_events :Tests {
             }),
             quest_id => $quest_id,
         },
+        realm => 'europe',
     }, 'comment-add event';
 }
 
@@ -97,7 +112,12 @@ sub perl_get_one :Tests {
 
     http_json GET => "/api/fakeuser/blah";
 
-    my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'fff', status => 'open' } };
+    my $quest_result = http_json POST => '/api/quest', { params => {
+        user => 'blah',
+        name => 'fff',
+        status => 'open',
+        realm => 'europe',
+    } };
     my $quest_id = $quest_result->{_id};
     my $comment_result = http_json POST => "/api/quest/$quest_id/comment", { params => { body => "Blah" } };
     my $comment_id = $comment_result->{_id};
@@ -110,7 +130,12 @@ sub edit_comment :Tests {
 
     http_json GET => "/api/fakeuser/blah";
 
-    my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'foo', status => 'open' } };
+    my $quest_result = http_json POST => '/api/quest', { params => {
+        user => 'blah',
+        name => 'foo',
+        status => 'open',
+        realm => 'europe',
+    } };
     my $quest_id = $quest_result->{_id};
 
     my $comment_result = http_json POST => "/api/quest/$quest_id/comment", { params => { body => "Commentin" } };
@@ -129,7 +154,12 @@ sub email_comment :Tests {
 
     register_email 'foo' => { email => 'test@example.com', notify_comments => 1, notify_likes => 0 };
 
-    my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => 'foo-quest', status => 'open' } };
+    my $quest_result = http_json POST => '/api/quest', { params => {
+        user => 'blah',
+        name => 'foo-quest',
+        status => 'open',
+        realm => 'europe',
+    } };
     my $quest_id = $quest_result->{_id};
 
     http_json POST => "/api/quest/$quest_id/comment", { params => { body => "self-commenting." } };
@@ -150,7 +180,12 @@ sub email_comment :Tests {
 sub likes :Tests {
     http_json GET => "/api/fakeuser/pink";
 
-    my $quest_result = http_json POST => '/api/quest', { params => { user => 'blah', name => "I've got a little black book", status => 'open' } };
+    my $quest_result = http_json POST => '/api/quest', { params => {
+        user => 'blah',
+        name => "I've got a little black book",
+        status => 'open',
+        realm => 'europe',
+    } };
     my $quest_id = $quest_result->{_id};
 
     http_json GET => "/api/fakeuser/floyd";

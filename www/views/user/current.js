@@ -42,24 +42,6 @@ define([
             this._notificationsBox.start();
         },
 
-        needsToRegister: function () {
-            if (this.model.get("registered")) {
-                return;
-            }
-
-            if (
-                this.model.get("twitter")
-                || (
-                    this.model.get('settings')
-                    && this.model.get('settings').email
-                    && this.model.get('settings').email_confirmed
-                )
-            ) {
-                return true;
-            }
-            return;
-        },
-
         setPersonaWatch: function () {
             var persona = this.model.get('persona');
             var user = null;
@@ -121,7 +103,7 @@ define([
         },
 
         checkUser: function () {
-            if (this.needsToRegister()) {
+            if (this.model.needsToRegister()) {
                 ga('send', 'event', 'register', 'new-dialog');
                 Backbone.trigger('pp:navigate', "/register", { trigger: true, replace: true });
                 return;

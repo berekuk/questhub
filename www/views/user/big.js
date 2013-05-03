@@ -3,12 +3,18 @@ define([
     'underscore',
     'views/proto/common',
     'models/current-user',
+    'views/quest/add',
     'text!templates/user-big.html'
-], function (_, Common, currentUser, html) {
+], function (_, Common, currentUser, QuestAdd, html) {
     return Common.extend({
         template: _.template(html),
 
+        realm: function () {
+            return this.options.realm;
+        },
+
         events: {
+            'click .quest-add-dialog': 'newQuestDialog',
             'click .settings': 'settingsDialog',
         },
 
@@ -21,7 +27,16 @@ define([
 
             var currentLogin = currentUser.get('login');
             params.my = (currentLogin && currentLogin == this.model.get('login'));
+            params.realm = this.realm();
             return params;
+        },
+
+        newQuestDialog: function() {
+            var questAdd = new QuestAdd({
+              collection: this.options.open_quests.collection
+            });
+            this.$el.append(questAdd.$el);
+            ga('send', 'event', 'quest', 'new-dialog');
         },
 
         features: ['tooltip'],

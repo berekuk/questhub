@@ -4,7 +4,7 @@
       <p>
       Everything that happens goes in here.
       <p>
-      <a href="/api/event/atom<%= types ? '?types=' + types.join(',') : '' %>" class="btn btn-warning"><i class="icon-rss"></i> RSS</a>
+      <a href="/api/event/atom?realm=<%- realm %><%= types ? '&types=' + types.join(',') : '' %>" class="btn btn-warning"><i class="icon-rss"></i> RSS</a>
       </p>
     </div>
     <div class="accordion" id="event-filter-accordion">

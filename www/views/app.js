@@ -1,19 +1,24 @@
 define([
-    'models/current-user',
-    'views/proto/base',
-    'views/notify', 'views/user/current',
+    'underscore',
+    'views/proto/common',
+    'views/notify', 'views/navbar',
     'text!templates/app.html'
-], function (currentUserModel, Base, Notify, CurrentUser, html) {
-    return Base.extend({
+], function (_, Common, Notify, Navbar, html) {
+    return Common.extend({
 
         template: _.template(html),
 
-        initialize: function () {
-            this.$el.html($(this.template({
-                partial: this.partial
-            }))); // render app just once
-            document.title = this.partial.settings.service_name;
+        realm_id: null,
 
+        subviews: {
+            '.navbar-subview': function () {
+                return new Navbar({
+                    realm: this.realm_id
+                });
+            }
+        },
+
+        afterInitialize: function () {
             // configure tracking
             mixpanel.init(this.partial.settings.mixpanel_id, {
                 'track_pageview': false
@@ -21,9 +26,10 @@ define([
             if (this.partial.settings.analytics) {  // TODO - configure localhost for debugging?
                 ga('create', this.partial.settings.analytics, window.location.host);
             }
+        },
 
-            this.currentUser = new CurrentUser({ model: currentUserModel });
-            this.currentUser.setElement(this.$el.find('.current-user-box'));
+        afterRender: function () {
+            document.title = this.partial.settings.service_name;
         },
 
         notify: function (type, message) {
@@ -36,8 +42,7 @@ define([
         },
 
         setPageView: function (page) {
-
-            // the explanation of pattern can be found in this article: http://lostechies.com/derickbailey/2011/09/15/zombies-run-managing-page-transitions-in-backbone-apps/
+            // the explanation of this pattern can be found in this article: http://lostechies.com/derickbailey/2011/09/15/zombies-run-managing-page-transitions-in-backbone-apps/
             // (note that the article is dated - it's pre-0.9.2, Backbone didn't have .listenTo() back then
             if (this._page) {
                 this._page.remove(); // TODO - should we remove all subviews too?
@@ -45,11 +50,25 @@ define([
             this._page = page;
             this.$('.app-view-container').append(page.$el);
 
-            // (THIS COMMENT IS DEPRECATED. EVERYTHING HAS CHANGED.)
-            // we don't call page.render() - our pages render themselves, but sometimes they do it in delayed fashion
-            // (i.e., wait for user model to fetch first, and sometimes navigate to the different page based on that)
+            // FIXME - this leads to double-rendering navbar on the initial page load
+            if (page.realm) {
+                this.setRealm(page.realm());
+            }
+            else {
+                this.setRealm(null);
+            }
         },
 
+        setRealm: function (realm) {
+            if (this.realm_id == realm) {
+                return;
+            }
+            this.realm_id = realm;
+            this.subview('.navbar-subview').options.realm = this.realm_id;
+            this.subview('.navbar-subview').render();
+        },
+
+        // FIXME - this should probably be an event
         setActiveMenuItem: function (selector) {
             this.$el
                 .find('.navbar .active')
@@ -57,6 +76,10 @@ define([
                     .end()
                 .find('.menu-item-' + selector)
                     .addClass('active');
+        },
+
+        settingsDialog: function () {
+            this.subview('.navbar-subview').currentUser.settingsDialog();
         }
     });
 });

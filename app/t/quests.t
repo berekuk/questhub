@@ -19,30 +19,33 @@ sub _fill_common_quests {
             name    => 'name_1',
             user    => 'user_1',
             status  => 'open',
+            realm => 'europe',
         },
         2 => {
             name    => 'name_2',
             user    => 'user_2',
             status  => 'open',
             tags    => ['bug'],
+            realm => 'europe',
         },
         3 => {
             name    => 'name_3',
             user    => 'user_3',
             status  => 'closed',
+            realm => 'europe',
         },
     };
 
     # insert quests to DB
     for (keys %$quests_data) {
+        http_json GET => "/api/fakeuser/$quests_data->{$_}{user}";
+
         delete $quests_data->{$_}{_id};
         my $result = db->quests->add($quests_data->{$_});
         $quests_data->{$_}{_id} = $result->{_id};
         $quests_data->{$_}{ts} = $result->{ts};
         $quests_data->{$_}{team} = $result->{team};
         delete $quests_data->{$_}{user};
-
-        http_json GET => "/api/fakeuser/$quests_data->{$_}{team}[0]";
     }
     return $quests_data;
 }
@@ -52,22 +55,25 @@ sub quest_list :Tests {
         {
             name    => 'name_1',
             status  => 'open',
+            realm => 'europe',
         },
         {
             name    => 'name_2',
             status  => 'open',
             tags    => ['bug'],
+            realm => 'europe',
         },
         {
             name    => 'name_3',
             status  => 'closed',
+            realm => 'europe',
         },
     );
 
     http_json GET => "/api/fakeuser/foo";
     http_json POST => '/api/quest', { params => $_ } for @quests;
 
-    my $list = http_json GET => '/api/quest';
+    my $list = http_json GET => '/api/quest', { params => { realm => 'europe' } };
 
     cmp_deeply
         [
@@ -91,7 +97,7 @@ sub quest_list_filtering :Tests {
     my $self = shift;
 
     http_json GET => "/api/fakeuser/foo";
-    my @quests = map { http_json POST => '/api/quest', { params => { name => "foo-$_" } } } 1..5;
+    my @quests = map { http_json POST => '/api/quest', { params => { name => "foo-$_", realm => 'europe' } } } 1..5;
     http_json PUT => "/api/quest/$quests[$_]->{_id}", { params => { status => 'closed' } } for 3, 4;
     http_json PUT => "/api/quest/$quests[1]->{_id}", { params => { tags => ['t1'] } };
     http_json PUT => "/api/quest/$quests[3]->{_id}", { params => { tags => ['t1', 't2'] } };
@@ -101,17 +107,17 @@ sub quest_list_filtering :Tests {
     http_json GET => "/api/fakeuser/baz";
     http_json POST => "/api/quest/$quests[$_]->{_id}/watch" for 2, 4;
 
-    my $list = http_json GET => '/api/quest', { params => { status => 'closed' } };
+    my $list = http_json GET => '/api/quest', { params => { status => 'closed', realm => 'europe' } };
     cmp_deeply
         [ map { $_->{_id} } @$list ],
         [ map { $_->{_id} } @quests[4,3] ];
 
-    $list = http_json GET => '/api/quest', { params => { tags => 't1' } };
+    $list = http_json GET => '/api/quest', { params => { tags => 't1', realm => 'europe' } };
     cmp_deeply
         [ map { $_->{_id} } @$list ],
         [ map { $_->{_id} } @quests[3,1] ];
 
-    $list = http_json GET => '/api/quest', { params => { watchers => 'bar' } };
+    $list = http_json GET => '/api/quest', { params => { watchers => 'bar', realm => 'europe' } };
     cmp_deeply
         [ map { $_->{_id} } @$list ],
         [ map { $_->{_id} } @quests[4,0] ];
@@ -125,7 +131,7 @@ sub quest_sorting :Tests {
     http_json POST => '/api/quest/'.$quests_data->{2}{_id}.'/like';
     http_json POST => '/api/quest/'.$quests_data->{1}{_id}.'/comment', { params => { body => 'bah!' } };
 
-    my $list = http_json GET => '/api/quest?sort=leaderboard';
+    my $list = http_json GET => '/api/quest?sort=leaderboard&realm=europe';
     my @names = map { $_->{name} } @$list;
     is_deeply \@names, [qw/ name_2 name_1 name_3 /];
 }
@@ -134,13 +140,13 @@ sub quest_list_limit_offset :Tests {
     my $self = shift;
     my $quests_data = $self->_fill_common_quests;
 
-    my $list = http_json GET => '/api/quest?limit=2';
+    my $list = http_json GET => '/api/quest?limit=2&realm=europe';
     is scalar @$list, 2;
 
-    $list = http_json GET => '/api/quest?limit=2&offset=2';
+    $list = http_json GET => '/api/quest?limit=2&offset=2&realm=europe';
     is scalar @$list, 1;
 
-    $list = http_json GET => '/api/quest?limit=5';
+    $list = http_json GET => '/api/quest?limit=5&realm=europe';
     is scalar @$list, 3;
 }
 
@@ -177,8 +183,10 @@ sub add_quest :Tests {
     my $new_record = {
         name    => 'name_4',
         status  => 'open',
+        realm => 'europe',
     };
 
+    http_json GET => "/api/fakeuser/$user";
     Dancer::session login => $user;
 
     my $add_result = http_json POST => '/api/quest', { params => $new_record };
@@ -205,6 +213,7 @@ sub quest_events :Tests {
     my $new_record = {
         name    => 'test-quest',
         status  => 'open',
+        realm => 'europe',
     };
 
     Dancer::session login => $user;
@@ -215,7 +224,7 @@ sub quest_events :Tests {
     http_json PUT => "/api/quest/$quest_id", { params => { status => 'abandoned' } };
     http_json PUT => "/api/quest/$quest_id", { params => { status => 'open' } };
 
-    my @events = grep { $_->{object_type} eq 'quest' } @{ db->events->list };
+    my @events = grep { $_->{object_type} eq 'quest' } @{ db->events->list({ realm => 'europe' }) };
     cmp_deeply \@events, [
         {
             _id => re('^\S+$'),
@@ -225,6 +234,7 @@ sub quest_events :Tests {
             author => $user,
             object_id => $quest_id,
             object => superhashof({ name => 'test-quest', status => 'open', team => [$user], author => $user }),
+            realm => 'europe',
         },
         {
             _id => re('^\S+$'),
@@ -234,6 +244,7 @@ sub quest_events :Tests {
             author => $user,
             object_id => $quest_id,
             object => superhashof({ name => 'test-quest', status => 'abandoned', team => [$user], author => $user }),
+            realm => 'europe',
         },
         {
             _id => re('^\S+$'),
@@ -243,6 +254,7 @@ sub quest_events :Tests {
             author => $user,
             object_id => $quest_id,
             object => superhashof({ name => 'test-quest', status => 'open', team => [$user], author => $user }),
+            realm => 'europe',
         },
         {
             _id => re('^\S+$'),
@@ -252,6 +264,7 @@ sub quest_events :Tests {
             author => $user,
             object_id => $quest_id,
             object => superhashof({ name => 'test-quest', status => 'closed', team => [$user], author => $user }),
+            realm => 'europe',
         },
         {
             _id => re('^\S+$'),
@@ -261,6 +274,7 @@ sub quest_events :Tests {
             author => $user,
             object_id => $quest_id,
             object => superhashof({ name => 'test-quest', status => 'open', team => [$user], author => $user }),
+            realm => 'europe',
         },
     ];
 }
@@ -272,7 +286,7 @@ sub delete_quest :Tests {
     my $id_to_remove;
     my $user;
     {
-        my $list_before_resp = dancer_response GET => '/api/quest';
+        my $list_before_resp = dancer_response GET => '/api/quest?realm=europe';
         my $result = decode_json($list_before_resp->content);
         is scalar @$result, 3;
         $id_to_remove = $result->[1]{_id};
@@ -300,7 +314,7 @@ sub delete_quest :Tests {
     }
 
     {
-        my $list_after_resp = dancer_response GET => '/api/quest';
+        my $list_after_resp = dancer_response GET => '/api/quest?realm=europe';
         is scalar @{ decode_json($list_after_resp->content) }, 2, 'deleted quests are not shown in list';
     }
 
@@ -320,16 +334,16 @@ sub points :Tests {
     Dancer::session login => $quest->{team}[0];
 
     my $user = http_json GET => '/api/current_user';
-    is $user->{points}, 0;
+    is $user->{rp}{europe}, 0;
 
     http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'closed' } };
 
     $user = http_json GET => '/api/current_user';
-    is $user->{points}, 1, 'got a point';
+    is $user->{rp}{europe}, 1, 'got a point';
 
     http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'open' } };
     $user = http_json GET => '/api/current_user';
-    is $user->{points}, 0, 'lost a point';
+    is $user->{rp}{europe}, 0, 'lost a point';
 
     my $like = sub {
         my ($quest, $user, $action) = @_;
@@ -343,29 +357,29 @@ sub points :Tests {
     $like->($quest, 'other2', 'like');
 
     $user = http_json GET => '/api/current_user';
-    is $user->{points}, 0, 'no points for likes on an open quest';
+    is $user->{rp}{europe}, 0, 'no points for likes on an open quest';
 
     http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'closed' } };
     $user = http_json GET => '/api/current_user';
-    is $user->{points}, 3, '1 + number-of-likes points for a closed quest';
+    is $user->{rp}{europe}, 3, '1 + number-of-likes points for a closed quest';
 
     $like->($quest, 'other', 'unlike');
     $like->($quest, 'other3', 'like');
     $like->($quest, 'other4', 'like');
     $user = http_json GET => '/api/current_user';
-    is $user->{points}, 4, 'likes and unlikes apply to the closed quest, retroactively';
+    is $user->{rp}{europe}, 4, 'likes and unlikes apply to the closed quest, retroactively';
 
     http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'open' } };
     $user = http_json GET => '/api/current_user';
-    is $user->{points}, 0, 'points are taken away if quest is reopened';
+    is $user->{rp}{europe}, 0, 'points are taken away if quest is reopened';
 
     http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'closed' } };
     $user = http_json GET => '/api/current_user';
-    is $user->{points}, 4, 'closed again, got points again...';
+    is $user->{rp}{europe}, 4, 'closed again, got points again...';
 
     http_json DELETE => "/api/quest/$quest->{_id}";
     $user = http_json GET => '/api/current_user';
-    is $user->{points}, 0, 'lost points after delete';
+    is $user->{rp}{europe}, 0, 'lost points after delete';
 }
 
 sub more_points :Tests {
@@ -376,24 +390,26 @@ sub more_points :Tests {
     http_json GET => "/api/fakeuser/$quest->{team}[0]";
 
     my $user = http_json GET => '/api/current_user';
-    is $user->{points}, 0, 'zero points initially';
+    is $user->{rp}{europe}, 0, 'zero points initially';
 
     http_json DELETE => "/api/quest/$quest->{_id}";
     $user = http_json GET => '/api/current_user';
-    is $user->{points}, 0, 'still zero points after removing an open quest';
+    is $user->{rp}{europe}, 0, 'still zero points after removing an open quest';
 }
 
 sub quest_tags :Tests {
-    Dancer::session login => 'user_1';
+    http_json GET => '/api/fakeuser/user_1';
 
     http_json POST => '/api/quest', { params => {
         name => 'typed-quest',
         tags => ['blog', 'moose'],
+        realm => 'europe',
     } };
 
     my $unknown_type_response = dancer_response POST => '/api/quest', { params => {
         name => 'typed-quest',
         tags => 'invalid',
+        realm => 'europe',
     } };
     is $unknown_type_response->status, 500;
     like $unknown_type_response->content, qr/not one of the allowed types: arrayref/;
@@ -406,20 +422,23 @@ sub cc :Tests {
 
     my $q1_result = http_json POST => '/api/quest', { params => {
         name => 'q1',
+        realm => 'europe',
     } };
     my $q2_result = http_json POST => '/api/quest', { params => {
         name => 'q2',
+        realm => 'europe',
     } };
     my $q3_result = http_json POST => '/api/quest', { params => {
         name => 'q3',
+        realm => 'europe',
     } };
 
     http_json POST => "/api/quest/$q1_result->{_id}/comment", { params => { body => 'first comment!' } };
     http_json POST => "/api/quest/$q1_result->{_id}/comment", { params => { body => 'second comment on first quest!' } };
     http_json POST => "/api/quest/$q3_result->{_id}/comment", { params => { body => 'first comment on third quest!' } };
 
-    my $list = http_json GET => "/api/quest?user=$user";
-    my $list_with_cc = http_json GET => "/api/quest?user=$user&comment_count=1";
+    my $list = http_json GET => "/api/quest?user=$user&realm=europe";
+    my $list_with_cc = http_json GET => "/api/quest?user=$user&comment_count=1&realm=europe";
     is $list->[0]{comment_count}, undef;
 
     # default order is desc, so $list_with_cc->[0] is q3
@@ -436,6 +455,7 @@ sub email_like :Tests {
 
     my $quest = http_json POST => '/api/quest', { params => {
         name => 'q1',
+        realm => 'europe',
     } };
 
     http_json GET => "/api/fakeuser/bar";
@@ -486,6 +506,7 @@ sub join_leave :Tests {
 
     my $quest = http_json POST => '/api/quest', { params => {
         name => 'q1',
+        realm => 'europe',
     } };
 
     my $response;
@@ -504,7 +525,7 @@ sub join_leave :Tests {
     is $response->status, 500;
     like $response->content, qr/unable to leave quest/;
 
-    my $list = http_json GET => "/api/quest?unclaimed=1";
+    my $list = http_json GET => "/api/quest?unclaimed=1&realm=europe";
     cmp_deeply $list, [$got_quest], 'listing unclaimed=1 option';
 
     http_json POST => "/api/quest/$quest->{_id}/like";
@@ -518,7 +539,7 @@ sub join_leave :Tests {
     is_deeply $got_quest->{likes}, ['foo', 'bar'];
 
     http_json POST => "/api/quest/$quest->{_id}/join";
-    $list = http_json GET => "/api/quest?unclaimed=1";
+    $list = http_json GET => "/api/quest?unclaimed=1&realm=europe";
     is scalar @$list, 0;
 
     $got_quest = http_json GET => "/api/quest/$quest->{_id}";
@@ -565,6 +586,7 @@ sub watch_unwatch :Tests {
 
     my $quest = http_json POST => '/api/quest', { params => {
         name => 'q1',
+        realm => 'europe',
     } };
 
     my $response;
@@ -601,6 +623,7 @@ sub email_watchers :Tests {
 
     my $quest = http_json POST => '/api/quest', { params => {
         name => 'q1',
+        realm => 'europe',
     } };
 
     for my $user (qw/ bar baz buzz /) {
@@ -626,14 +649,16 @@ sub atom :Tests {
     http_json POST => '/api/quest', { params => {
         name => 'q1',
         status => 'open',
+        realm => 'europe',
     } };
     http_json POST => '/api/quest', { params => {
         name => 'q2',
         status => 'open',
+        realm => 'europe',
     } };
 
     # Regular Atom
-    my $response = dancer_response GET => '/api/quest?fmt=atom&user=foo';
+    my $response = dancer_response GET => '/api/quest?fmt=atom&user=foo&realm=europe';
     is $response->status, 200;
     is exception { XML::LibXML->new->parse_string($response->content) }, undef;
 }

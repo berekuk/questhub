@@ -14,6 +14,24 @@ define([
         url: function () {
             return '/api/current_user';
         },
+
+        needsToRegister: function () {
+            if (this.get("registered")) {
+                return;
+            }
+
+            if (
+                this.get("twitter")
+                || (
+                    this.get('settings')
+                    && this.get('settings').email
+                    && this.get('settings').email_confirmed
+                )
+            ) {
+                return true;
+            }
+            return;
+        }
     });
     var result = new CurrentUser();
 
@@ -25,7 +43,6 @@ define([
                 $name: result.get('login'),
                 $email: result.get('settings').email,
                 // TODO - fill $created
-                points: result.get('points'),
                 notify_likes: result.get('settings').notify_likes,
                 notify_comments: result.get('settings').notify_comments,
                 notify_invites: result.get('settings').notify_invites

@@ -10,9 +10,14 @@ define([
 
         listSelector: '.users-list',
 
+        realm: function () {
+            return this.collection.options.realm;
+        },
+
         generateItem: function (model) {
             return new UserSmall({
-                model: model
+                model: model,
+                realm: this.realm()
             });
         },
     });

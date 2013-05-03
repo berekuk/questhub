@@ -4,8 +4,8 @@
   <% } else if (obj.image) { %>
     <img src="<%- image %>?s=24" width="24" height="24"/>
   <% } %>
-  <a href="/player/<%= login %>"><%= login %></a>
-  <span class="badge badge-info"><%= points %></span>
+  <a href="/<%= realm %>/player/<%= login %>"><%= login %></a>
+  <span class="badge badge-info"><%= rp[realm] %></span>
 
   <% if (currentUser && login == currentUser) { %>
     <div class="current-user-leaderboard-tip">

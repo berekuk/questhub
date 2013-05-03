@@ -1,4 +1,4 @@
-/* Common play-perl view.
+/* Common questhub view.
  * It declares render() itself, you need to declare serialize() instead of render.
  * If you want to do some more work on render(), define afterRender().
  *
@@ -36,10 +36,6 @@ define([
 
         initialize: function () {
             Base.prototype.initialize.apply(this, arguments);
-
-            if (this['template'] == undefined) {
-                this.template = _.template($('#template-' + this.t).text());
-            }
 
             if (this.activated) {
                 this.initSubviews();

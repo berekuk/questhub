@@ -124,7 +124,8 @@ define([
             }
 
             var model_params = {
-                name: this.getDescription()
+                name: this.getDescription(),
+                realm: this.collection.options.realm
             };
 
             var tags = this.getTags();

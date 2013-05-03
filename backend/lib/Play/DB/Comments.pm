@@ -41,6 +41,7 @@ sub add {
             %params,
             quest => $quest,
         },
+        realm => $quest->{realm},
     });
 
     return { _id => $id->to_string };
@@ -52,10 +53,9 @@ sub get {
     my $self = shift;
     my ($quest_id) = validate_pos(@_, { type => SCALAR });
 
-    my @comments = $self->collection->find({ quest_id => $quest_id })->all;
+    my @comments = $self->collection->find({ quest_id => $quest_id })->sort({ _id => 'asc' })->all;
     $self->_prepare_comment($_) for @comments;
 
-    @comments = sort { $a->{ts} <=> $b->{ts} } @comments; # FIXME - sort on mongodb side
     return \@comments;
 }
 

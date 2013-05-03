@@ -75,7 +75,7 @@
             <% if (my) { %>
               <a href="#" class="uninvite mini-button" data-login="<%- i %>"><i class="icon-remove"></i></a>
             <% } %>
-            <%= partial.user({ login: i }) %>
+            <%= partial.user({ realm: realm, login: i }) %>
           </li>
           <% }) %>
         </ul>

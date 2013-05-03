@@ -65,26 +65,18 @@ Get any user data.
 
 Get the list of all users.
 
+`realm` parameter is required.
+
 Options:
 
-* `sort` - any numerical field, e.g. `open_quests` or `points`
+* `sort` - any numerical field, e.g. `open_quests`
 * `order` - `asc` or `desc`, with `asc` being the default
 * `limit`
 * `offset`
 
 Special `sort` value `leaderboard` can be used for composite points->open_quests sorting. It doesn't support order, i.e. it's always descending.
 
-##### GET /api/user_count
-
-Get a total number of users.
-
-Options:
-
-* `user` - filter by user
-* `status` - filter by status (`deleted` status is forbidden)
-* `comment_count` - add `comment_count` field to each returned quest
-* `limit`
-* `offset`
+Another special `sort` value `points` can be used to sort by `rp.$realm`.
 
 ### Quests
 
@@ -105,6 +97,8 @@ Delete a quest.
 ##### GET /api/quest
 
 Get all quests.
+
+`realm` parameter is required.
 
 Options:
 
@@ -181,6 +175,8 @@ Cancel the invitation.
 
 Get events, starting from the latest.
 
+`realm` parameter is required.
+
 Options:
 
 * `limit` (defaults to 100)
@@ -189,6 +185,8 @@ Options:
 ##### GET /api/event/atom
 
 Get the Atom feed with 100 last events.
+
+`realm` parameter is required.
 
 ##### GET /api/dev/session/{name}
 
@@ -214,9 +212,13 @@ User:
     {
         _id: ...,
         login: 'blah',
-        points: 123,
         twitter: {
             screen_name: 'blah'
+        },
+        realms: ['chaos', 'perl']
+        qp: {
+            'chaos': 3,
+            'perl': 2
         }
     }
 
@@ -226,14 +228,13 @@ Quest:
         _id: ...,
         status: 'open', // or 'closed'
         author: 'blah',
-        user: 'blah',   // can be different from author or even empty; deprecated - use 'team' instead
         team: ['blah'], // can be different from author; can contain multiple people; or can be empty
         name: 'quest title',
-        type: 'bug'     // or 'blog', or 'feature'
         likes: [
             'foo-user',
             'bar-user'
-        ]
+        ],
+        realm: 'chaos'
     }
 
 Comment:

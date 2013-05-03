@@ -28,7 +28,7 @@ define([
         },
 
         generateItem: function (model) {
-            return new Comment({ model: model });
+            return new Comment({ model: model, realm: this.options.realm });
         },
 
         listSelector: '.comments-list',

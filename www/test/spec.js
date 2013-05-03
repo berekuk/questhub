@@ -69,7 +69,9 @@
             init: function () {},
             track: function () {},
             identify: function () {},
-            people: { set: function () {} }
+            people: { set: function () {} },
+            alias: function () {},
+            name_tag: function () {},
         };
         ga = function () {};
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title><% settings.service_name %> - News Feed</title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/feed" />
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% realm %>/feed" />
     <id>tag:<% settings.hostport %>,2013-02-15:global</id>
 
 <% FOREACH event IN events %>
@@ -10,36 +10,36 @@
     <id>tag:<% settings.hostport %>,2013-02-15:<% event.object_type _ '/' _ event.item('_id') %></id>
     <author>
         <name><% event.author %></name>
-        <uri>http://<% settings.hostport %>/player/<% event.author %></uri>
+        <uri>http://<% settings.hostport %>/<% event.realm %>/player/<% event.author %></uri>
     </author>
 
     <% IF event.object_type == 'quest' && event.action == 'add' %>
     <title><% event.author %> is on a new quest: <% event.object.name | xml %></title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object_id %>" />
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.object_id %>" />
 
     <% ELSIF event.object_type == 'quest' && event.action == 'close' %>
     <title><% event.author %> completed a quest: <% event.object.name | xml %></title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object_id %>" />
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.object_id %>" />
 
     <% ELSIF event.object_type == 'quest' && event.action == 'reopen' %>
     <title><% event.author %> reopened a quest: <% event.object.name | xml %></title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object_id %>" />
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.object_id %>" />
 
     <% ELSIF event.object_type == 'quest' && event.action == 'abandon' %>
     <title><% event.author %> abandoned a quest: <% event.object.name | xml %></title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object_id %>" />
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.object_id %>" />
 
     <% ELSIF event.object_type == 'quest' && event.action == 'resurrect' %>
     <title><% event.author %> resurrected a quest: <% event.object.name | xml %></title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object_id %>" />
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.object_id %>" />
 
     <% ELSIF event.object_type == 'user' && event.action == 'add' %>
-    <title><% event.author %> joins <% settings.service_name %>!</title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/player/<%= event.author %>" />
+    <title><% event.author %> joins <% event.realm %> realm</title>
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/player/<%= event.author %>" />
 
     <% ELSIF event.object_type == 'comment' && event.action == 'add' %>
     <title><% event.author %> commented on <% event.object.quest.name | xml %></title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object.quest.item('_id') %>" />
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.object.quest.item('_id') %>" />
 
     <content type="html">
         <![CDATA[
@@ -49,7 +49,7 @@
 
     <% ELSIF event.object_type == 'quest' && event.action == 'invite' %>
     <title><% event.author %> invited <% event.object.invitee %> to work on a quest: <% event.object.quest.name | xml %></title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= event.object_id %>" />
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.object_id %>" />
 
     <% ELSE %>
     <title>Unknown event type (object_type: <% event.object_type %>, action: <% event.action %>)</title>

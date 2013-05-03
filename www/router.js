@@ -8,29 +8,34 @@ define([
     'views/user/collection',
     'models/another-user',
     'views/explore',
-    'views/home',
+    'views/welcome',
     'models/event-collection',
     'views/news-feed',
-    'views/quest/add',
     'views/about',
     'views/register',
     'views/confirm-email'
-], function (Backbone, currentUser, Dashboard, QuestPage, QuestModel, UserCollectionModel, UserCollection, AnotherUserModel, Explore, Home, EventCollectionModel, NewsFeed, QuestAdd, About, Register, ConfirmEmail) {
+], function (Backbone, currentUser, Dashboard, QuestPage, QuestModel, UserCollectionModel, UserCollection, AnotherUserModel, Explore, Welcome, EventCollectionModel, NewsFeed, About, Register, ConfirmEmail) {
     return Backbone.Router.extend({
         routes: {
-            "": "dashboard",
+            "": "frontPage",
             "welcome": "welcome",
             "register": "register",
             "register/confirm/:login/:secret": "confirmEmail",
             "auth/twitter": "twitterLogin",
-            "quest/add": "questAdd",
-            "quest/:id": "questPage",
-            "feed": "eventCollection",
-            "players": "userList",
-            "player/:login": "anotherDashboard",
-            "explore(/:tab)": "explore",
-            "explore/:tab/tag/:tag": "explore",
+            ":realm/quest/:id": "questPage",
+            ":realm/feed": "feed",
+            ":realm/players": "userList",
+            ":realm/player/:login": "anotherDashboard",
+            ":realm/explore(/:tab)": "explore",
+            ":realm/explore/:tab/tag/:tag": "explore",
             "about": "about",
+
+            "feed": "oldFeed",
+            "players": "oldUserList",
+            "explore(/:tab)": "oldExplore",
+            "explore/:tab/tag/:tag": "oldExplore",
+            "quest/:id": "oldQuestPage",
+            "player/:login": "oldAnotherDashboard"
         },
 
         appView: undefined, // required
@@ -49,18 +54,15 @@ define([
             mixpanel.track_pageview(url);
         },
 
-        questAdd: function () {
-            var view = new QuestAdd({ model: new QuestModel() });
-            this.appView.setPageView(view);
-            this.appView.setActiveMenuItem('add-quest');
-        },
-
-        questPage: function (id) {
-            var model = new QuestModel({ _id: id });
+        questPage: function (realm, id) {
+            var model = new QuestModel({ realm: realm, _id: id });
             var view = new QuestPage({ model: model });
+
+            var router = this;
 
             model.fetch({
                 success: function () {
+                    router.navigate('/' + model.get('realm') + '/quest/' + model.id, { trigger: true, replace: true });
                     view.activate();
                 }
             });
@@ -71,39 +73,68 @@ define([
 
         welcome: function () {
             // model is usually empty, but sometimes it's not - logged-in users can see the welcome page too
-            this.appView.setPageView(new Home({ model: currentUser }));
+            this.appView.setPageView(new Welcome({ model: currentUser }));
 
             this.appView.setActiveMenuItem('home');
         },
 
-        dashboard: function () {
+        frontPage: function () {
             if (!currentUser.get('registered')) {
                 this.navigate('/welcome', { trigger: true, replace: true });
                 return;
             }
 
-            var view = new Dashboard({ model: currentUser, current: true });
-            view.activate(); // activate immediately, user is already fetched
-
-            this.appView.setPageView(view);
-            this.appView.setActiveMenuItem('home');
+            var realms = currentUser.get('realms');
+            if (this.appView.realm_id) {
+                this.navigate(
+                    '/' + this.appView.realm_id + '/player/' + currentUser.get('login'),
+                    { trigger: true, replace: true }
+                );
+            }
+            else if (realms.length) {
+                this.navigate(
+                    '/' + realms[0] + '/player/' + currentUser.get('login'),
+                    { trigger: true, replace: true }
+                );
+            }
+            else {
+                this.navigate('/welcome', { trigger: true, replace: true });
+            }
         },
 
-        anotherDashboard: function (login) {
-            var user = new AnotherUserModel({ login: login });
-            var view = new Dashboard({ model: user });
-            user.fetch({
-                success: function () {
-                    view.activate();
-                }
-            });
+        anotherDashboard: function (realm, login) {
+            var currentLogin = currentUser.get('login');
+
+            var model;
+            var my;
+            if (currentLogin && currentLogin == login) {
+                model = currentUser;
+                my = true;
+            }
+            else {
+                model = new AnotherUserModel({ login: login });
+            }
+
+            var view = new Dashboard({ realm: realm, model: model });
+
+            if (my) {
+                view.activate(); // activate immediately, user is already fetched
+            }
+            else {
+                model.fetch({
+                    success: function () {
+                        view.activate();
+                    }
+                });
+            }
 
             this.appView.setPageView(view);
-            this.appView.setActiveMenuItem('none');
+
+            this.appView.setActiveMenuItem(my ? 'home' : 'none');
         },
 
-        explore: function (tab, tag) {
-            var view = new Explore();
+        explore: function (realm, tab, tag) {
+            var view = new Explore({ 'realm': realm });
             if (tab != undefined) {
                 view.tab = tab;
             }
@@ -116,9 +147,10 @@ define([
             this.appView.setActiveMenuItem('explore');
         },
 
-        userList: function () {
+        userList: function (realm) {
             var collection = new UserCollectionModel([], {
-               'sort': 'leaderboard',
+                'realm': realm,
+                'sort': 'leaderboard',
                 'limit': 100,
             });
             var view = new UserCollection({ collection: collection });
@@ -127,7 +159,7 @@ define([
             this.appView.setActiveMenuItem('user-list');
         },
 
-        eventCollection: function () {
+        feed: function (realm) {
             var types = this.queryParams('types');
             if (types == '') {
                 types = [];
@@ -137,6 +169,7 @@ define([
             }
 
             var collection = new EventCollectionModel([], {
+                'realm': realm,
                 'limit': 50,
                 'types': types
             });
@@ -153,7 +186,7 @@ define([
         },
 
         register: function () {
-            if (!this.appView.currentUser.needsToRegister()) {
+            if (!currentUser.needsToRegister()) {
                 this.navigate("/", { trigger: true, replace: true });
                 return;
             }
@@ -178,6 +211,27 @@ define([
             this.appView.setPageView(new About());
             this.appView.setActiveMenuItem('about');
         },
+
+        oldUserList: function () {
+            this.navigate('/chaos/players', { trigger: true, replace: true });
+        },
+
+        oldFeed: function () {
+            this.navigate('/chaos/feed', { trigger: true, replace: true });
+        },
+
+        oldExplore: function () {
+            this.navigate('/chaos/explore', { trigger: true, replace: true });
+        },
+
+        oldQuestPage: function (id) {
+            this.navigate('/chaos/quest/' + id, { trigger: true, replace: true });
+        },
+
+        oldAnotherDashboard: function (id) {
+            this.navigate('/chaos/player/' + id, { trigger: true, replace: true });
+        },
+
         queryParams: function(name) {
             name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
             var regexS = "[\\?&]" + name + "=([^&#]*)";
