@@ -17,6 +17,7 @@ get '/event' => sub {
 };
 
 get '/event/atom' => sub {
+    die "realm not specified" unless param('realm');
     my @events = @{ db->events->list({
         map { param($_) ? ( $_ => param($_) ): () } qw/ types realm /,
     })};
@@ -28,7 +29,7 @@ get '/event/atom' => sub {
     }
 
     header 'Content-Type' => 'application/xml';
-    template 'event-atom' => { events => \@events };
+    template 'event-atom' => { events => \@events, realm => param('realm') };
 };
 
 true;

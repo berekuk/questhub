@@ -98,7 +98,11 @@ define([
                     description: 'Invitations'
                 }
             ];
-            return { filterList: filterList, types: this.options.types };
+            return {
+                filterList: filterList,
+                types: this.options.types,
+                realm: this.realm()
+            };
         }
 
     });

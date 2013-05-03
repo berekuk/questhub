@@ -49,6 +49,7 @@ post '/quest' => sub {
 };
 
 get '/quest' => sub {
+    die "realm not specified" unless param('realm');
     my $params = {
         map { param($_) ? ($_ => param($_)) : () } qw/ user status comment_count sort order limit offset tags watchers unclaimed realm /,
     };
@@ -60,10 +61,10 @@ get '/quest' => sub {
 
         my $frontend_url = '/';
         if (param('user')) {
-            $frontend_url = '/player/'.param('user');
+            $frontend_url = '/'.param('realm').'/player/'.param('user');
         }
         elsif (param('tags')) {
-            $frontend_url = '/explore/latest/tag/'.param('tags');
+            $frontend_url = '/'.param('realm').'/explore/latest/tag/'.param('tags');
         }
 
         my $atom_tag = join(',', map { "$_=$params->{$_}" } keys %$params);

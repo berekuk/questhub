@@ -10,11 +10,11 @@
     <id>tag:<% settings.hostport %>,2013-02-15:quest/<% quest.item('_id') %></id>
     <author>
         <name><% quest.author %></name>
-        <uri>http://<% settings.hostport %>/player/<% event.author %></uri>
+        <uri>http://<% settings.hostport %>/<% quest.realm %>/player/<% quest.author %></uri>
     </author>
 
     <title><% quest.name | xml %></title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/quest/<%= quest.item('_id') %>" />
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% quest.realm %>/quest/<%= quest.item('_id') %>" />
 
 </entry>
 <% END %>
