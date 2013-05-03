@@ -71,12 +71,12 @@ sub atom :Tests {
     # Regular Atom
     my $response = dancer_response GET => '/api/event/atom?realm=europe';
     is $response->status, 200;
-    like $response->content, qr/Frodo joins Play Perl/;
+    like $response->content, qr/Frodo joins europe realm/;
 
     # Atom has filter.
     $response = dancer_response GET => '/api/event/atom?types=add-quest&realm=europe';
     is $response->status, 200;
-    unlike $response->content, qr/Frodo joins Play Perl/;
+    unlike $response->content, qr/Frodo joins europe realm/;
 }
 
 __PACKAGE__->new->runtests;
