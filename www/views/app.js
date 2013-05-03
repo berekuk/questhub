@@ -28,10 +28,6 @@ define([
             }
         },
 
-        afterRender: function () {
-            document.title = this.partial.settings.service_name;
-        },
-
         notify: function (type, message) {
             this.$('.app-view-container').prepend(
                 new Notify({
