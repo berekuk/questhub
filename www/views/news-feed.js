@@ -55,7 +55,7 @@ define([
             this.collection.setTypes(types);
 
             /* Set queryString to URL */
-            var url = '/feed';
+            var url = '/' + this.realm() + '/feed';
             if ( types.length > 0 ) {
                 url += '?types=' + types.join();
             }
