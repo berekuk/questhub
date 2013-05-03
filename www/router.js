@@ -30,8 +30,8 @@ define([
             ":realm/explore/:tab/tag/:tag": "explore",
             "about": "about",
 
-            "perl": "perlFeed",
-            "perl/": "perlFeed",
+            "perl": "playPerlFrontPage",
+            "perl/": "playPerlFrontPage",
             "feed": "oldFeed",
             "players": "oldUserList",
             "explore(/:tab)": "oldExplore",
@@ -218,8 +218,8 @@ define([
             this.navigate('/chaos/players', { trigger: true, replace: true });
         },
 
-        perlFeed: function () {
-            this.navigate('/perl/feed', { trigger: true, replace: true });
+        playPerlFrontPage: function () {
+            this.navigate('/', { trigger: true, replace: true });
         },
 
         oldFeed: function () {
