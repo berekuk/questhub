@@ -1,0 +1,11 @@
+.realms > div {
+    display: inline-block;
+    margin: 0 10px;
+    cursor: pointer;
+    padding: 10px;
+    opacity: 0.8;
+
+    &:hover {
+        opacity: 1;
+    }
+}
