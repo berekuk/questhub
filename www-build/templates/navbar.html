@@ -9,7 +9,7 @@
       <ul class="nav">
         <li class="dropdown">
           <a class="brand dropdown-toggle" data-toggle="dropdown" href="#">
-            <%- realm ? realm.name : 'Questhub.io' %>
+            <%- realm ? realm.name : 'Questhub.io' %> ▾
           </a>
           <ul class="dropdown-menu">
             <li>
@@ -32,6 +32,8 @@
             <li class="menu-item-event-list"><a href="/<%- realm.id %>/feed">News Feed</a></li>
             <li class="menu-item-user-list"><a href="/<%- realm.id %>/players">Players</a></li>
             <li class="menu-item-explore"><a href="/<%- realm.id %>/explore">Explore</a></li>
+          <% } else { %>
+            <li class="menu-item-home"><a href="/welcome">Multiverse</a></li>
           <% } %>
           <li class="menu-item-about"><a href="/about">About</a></li>
         </ul>
