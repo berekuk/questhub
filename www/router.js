@@ -8,13 +8,13 @@ define([
     'views/user/collection',
     'models/another-user',
     'views/explore',
-    'views/home',
+    'views/welcome',
     'models/event-collection',
     'views/news-feed',
     'views/about',
     'views/register',
     'views/confirm-email'
-], function (Backbone, currentUser, Dashboard, QuestPage, QuestModel, UserCollectionModel, UserCollection, AnotherUserModel, Explore, Home, EventCollectionModel, NewsFeed, About, Register, ConfirmEmail) {
+], function (Backbone, currentUser, Dashboard, QuestPage, QuestModel, UserCollectionModel, UserCollection, AnotherUserModel, Explore, Welcome, EventCollectionModel, NewsFeed, About, Register, ConfirmEmail) {
     return Backbone.Router.extend({
         routes: {
             "": "frontPage",
@@ -73,7 +73,7 @@ define([
 
         welcome: function () {
             // model is usually empty, but sometimes it's not - logged-in users can see the welcome page too
-            this.appView.setPageView(new Home({ model: currentUser }));
+            this.appView.setPageView(new Welcome({ model: currentUser }));
 
             this.appView.setActiveMenuItem('home');
         },

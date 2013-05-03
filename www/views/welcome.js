@@ -2,7 +2,7 @@ define([
     'underscore',
     'views/proto/common', 'views/user/signin',
     'models/current-user',
-    'text!templates/home.html'
+    'text!templates/welcome.html'
 ], function (_, Common, Signin, currentUser, html) {
     return Common.extend({
         template: _.template(html),
