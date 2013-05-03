@@ -22,8 +22,9 @@ define([
         subviews: {
             '.user': function () {
                 return new UserBig({
-                    model: this.model
-                }); // TODO - fetch or not?
+                    model: this.model,
+                    realm: this.realm()
+                });
             },
             '.open-quests': function () {
                 return this.createQuestSubview({ status: 'open', user: this.model.get('login') })

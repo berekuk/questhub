@@ -8,6 +8,10 @@ define([
     return Common.extend({
         template: _.template(html),
 
+        realm: function () {
+            return this.options.realm;
+        },
+
         events: {
             'click .settings': 'settingsDialog',
         },
@@ -21,6 +25,7 @@ define([
 
             var currentLogin = currentUser.get('login');
             params.my = (currentLogin && currentLogin == this.model.get('login'));
+            params.realm = this.realm();
             return params;
         },
 

@@ -38,7 +38,7 @@ define([
         serialize: function () {
             var params = this.model.serialize();
             params.gotTwitter = Boolean(currentUser.get('twitter'));
-            params.totalPoints = params.reward + (currentUser.get('points') || 0);
+            params.totalPoints = params.reward + currentUser.get('rp')[this.model.get('realm')];
             return params;
         }
     });

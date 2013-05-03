@@ -19,7 +19,8 @@ define([
                     "name" : "Badger Badger",
                     "author" : "jonti",
                     "tags" : ["feature"],
-                    "likes": ["mushroom", "snake"]
+                    "likes": ["mushroom", "snake"],
+                    "realm": "chaos"
                 });
 
                 var view = new QuestBig({ model: model });
@@ -44,7 +45,8 @@ define([
                     "name" : "Badger Badger",
                     "author" : "jonti",
                     "tags" : ["feature"],
-                    "likes": ["mushroom", "snake"]
+                    "likes": ["mushroom", "snake"],
+                    "realm": "chaos"
                 });
 
                 var view = new QuestBig({ model: model });
@@ -72,7 +74,8 @@ define([
                     "name" : "Badger Badger",
                     "author" : "jasmine",
                     "tags" : ["feature"],
-                    "likes": ["mushroom", "snake"]
+                    "likes": ["mushroom", "snake"],
+                    "realm": "chaos"
                 });
 
                 view = new QuestBig({ model: model });
