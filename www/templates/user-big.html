@@ -1,19 +1,19 @@
-<div class="well">
+<div class="well well-small">
   <div class="avatar">
     <% if (obj.twitter && obj.twitter.screen_name) { %>
-      <img src="http://api.twitter.com/1/users/profile_image?screen_name=<%= twitter.screen_name %>&size=bigger" width="73" height="73"/>
+      <img src="http://api.twitter.com/1/users/profile_image?screen_name=<%= twitter.screen_name %>&size=normal" width="48" height="48"/>
     <% } else if (obj.image) { %>
-      <img src="<%- image %>?s=73" width="73" height="73"/>
+      <img src="<%- image %>?s=48" width="48" height="48"/>
     <% } %>
   </div>
   <div class="names">
-    <h4>
-      <%= login %>
+    <div>
+      <span class="player-login"><%= login %></span>
       <% if (my) { %>
           <span class="mini-button"><a href="#" class="settings mini-button"><i class="icon-wrench"></i></a></span>
       <% } %>
       <span class="badge badge-info" data-toggle="tooltip" title='points are granted for each completed quest and each "like" on those quests'><%= rp[realm] %></span>
-    </h4>
+    </div>
     <% if (obj.twitter) {
       if (twitter.screen_name) { %>
         <i class="icon-twitter"></i>
