@@ -31,6 +31,7 @@ define([
             "about": "about",
 
             "perl": "perlFeed",
+            "perl/": "perlFeed",
             "feed": "oldFeed",
             "players": "oldUserList",
             "explore(/:tab)": "oldExplore",
