@@ -20,6 +20,11 @@ sub join_realm :Tests {
     my $user = db->users->get_by_login('foo');
     cmp_deeply $user->{realms}, ['europe', 'asia'];
     cmp_deeply $user->{rp}, { europe => 0, asia => 0 };
+
+    like
+        exception { db->users->join_realm('foo', 'asia') },
+        qr/unable to join/;
+
 }
 
 __PACKAGE__->new->runtests;

@@ -186,7 +186,10 @@ sub join_realm {
     }
 
     my $result = $self->collection->update(
-        { login => $login },
+        {
+            login => $login,
+            realms => { '$ne' => $realm },
+        },
         {
             '$addToSet' => { realms => $realm },
             '$set' => { "rp.$realm" => 0 },
