@@ -34,7 +34,7 @@
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.object_id %>" />
 
     <% ELSIF event.object_type == 'user' && event.action == 'add' %>
-    <title><% event.author %> joins <% settings.service_name %>!</title>
+    <title><% event.author %> joins <% event.realm %> realm</title>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/player/<%= event.author %>" />
 
     <% ELSIF event.object_type == 'comment' && event.action == 'add' %>
