@@ -14,6 +14,24 @@ define([
         url: function () {
             return '/api/current_user';
         },
+
+        needsToRegister: function () {
+            if (this.get("registered")) {
+                return;
+            }
+
+            if (
+                this.get("twitter")
+                || (
+                    this.get('settings')
+                    && this.get('settings').email
+                    && this.get('settings').email_confirmed
+                )
+            ) {
+                return true;
+            }
+            return;
+        }
     });
     var result = new CurrentUser();
 

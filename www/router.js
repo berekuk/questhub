@@ -173,7 +173,7 @@ define([
         },
 
         register: function () {
-            if (!this.appView.currentUser.needsToRegister()) {
+            if (!currentUser.needsToRegister()) {
                 this.navigate("/", { trigger: true, replace: true });
                 return;
             }
