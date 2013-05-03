@@ -36,7 +36,7 @@
 
   <script type="text/template" class="add-user">
     <i class="icon-user"></i>
-    <%= partial.user({ realm: realm, login: author }) %> joins <%= partial.settings.service_name %>!
+    <%= partial.user({ realm: realm, login: author }) %> joins <%= _.find(partial.settings.realms, function (r) { return (r.id == realm) ? r : undefined }).name %>!
   </script>
 
   <script type="text/template" class="add-comment">
