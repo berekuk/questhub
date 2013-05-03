@@ -133,6 +133,7 @@ sub _expand_settings {
 
 post '/register' => sub {
     my $login = param('login') or die 'no login specified';
+    my $realm = param('realm') or die 'no realm specified';
 
     unless ($login =~ /^\w+$/) {
         status 'bad request';
@@ -143,7 +144,7 @@ post '/register' => sub {
         die "User $login already exists";
     }
 
-    my $user = { login => $login };
+    my $user = { login => $login, realms => [$realm] };
     my $more_settings = {};
 
     my $settings = param('settings') || '{}';

@@ -295,20 +295,21 @@ sub register :Tests {
     };
 
     http_json POST => '/api/register', { params => {
-        login => 'blah'
+        login => 'blah',
+        realm => 'asia',
     } };
     $current_user = http_json GET => '/api/current_user';
     cmp_deeply $current_user, {
         registered => 1,
         _id => re('^\S+$'),
-        rp => {},
+        rp => { asia => 0 },
         login => 'blah',
         twitter => {
             screen_name => 'twah',
         },
         settings => {},
         notifications => [],
-        realms => [],
+        realms => ['asia'],
     };
 }
 
@@ -323,6 +324,7 @@ sub register_settings :Tests {
 
     http_json POST => '/api/register', { params => {
         login => 'foo',
+        realm => 'europe',
         settings => encode_json($settings),
     } };
 
@@ -341,7 +343,8 @@ sub register_persona :Tests {
     Dancer::session persona_email => 'example@mozilla.com';
 
     http_json POST => '/api/register', { params => {
-        login => 'Gary'
+        login => 'Gary',
+        realm => 'europe',
     } };
 
     my $current_user = http_json GET => '/api/current_user';
@@ -358,7 +361,8 @@ sub register_persona :Tests {
 sub register_login_validation :Tests {
     Dancer::session twitter_user => { screen_name => 'twah' };
     my $response = dancer_response POST => '/api/register', { params => {
-        login => 'John Doe'
+        login => 'John Doe',
+        realm => 'europe',
     } };
     is $response->status, 400, 'spaces in logins are forbidden';
 }
@@ -375,6 +379,7 @@ sub perl_get_by_email :Tests {
 
     http_json POST => '/api/register', { params => {
         login => 'jack',
+        realm => 'europe',
         settings => encode_json($settings),
     } };
 
