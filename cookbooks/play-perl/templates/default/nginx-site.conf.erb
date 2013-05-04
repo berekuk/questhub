@@ -2,6 +2,12 @@ server {
   listen       <%= @port %>;
 
   <% if @dev %>
+  server_name localhost;
+  <% else %>
+  server_name questhub.io;
+  <% end %>
+
+  <% if @dev %>
   # Turn sendfile off because it behaves bad with vboxsf
   sendfile off;
   <% end %>
