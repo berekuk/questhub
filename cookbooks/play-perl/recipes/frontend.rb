@@ -19,4 +19,12 @@ template "/etc/nginx/sites-enabled/play-perl.org" do
   notifies :restart, "service[nginx]"
 end
 
+template "/etc/nginx/sites-enabled/old" do
+  source "nginx-site-old.conf.erb"
+  owner "root"
+  group "root"
+  mode 0644
+  notifies :restart, "service[nginx]"
+end
+
 service "nginx"
