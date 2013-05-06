@@ -10,18 +10,18 @@ sub setup :Tests(setup) {
 }
 
 sub limit_offset :Tests {
-    db->events->add({ name => "e$_" }) for (1 .. 200);
+    db->events->add({ name => "e$_", realm => 'europe' }) for (1 .. 200);
 
-    my $list = http_json GET => '/api/event';
+    my $list = http_json GET => '/api/event?realm=europe';
     is scalar @$list, 100;
 
-    $list = http_json GET => '/api/event?limit=30';
+    $list = http_json GET => '/api/event?limit=30&realm=europe';
     is scalar @$list, 30;
     cmp_deeply
         [ map { $_->{name} } @$list ],
         [ map { "e$_" } reverse 171 .. 200 ];
 
-    $list = http_json GET => '/api/event?limit=30&offset=50';
+    $list = http_json GET => '/api/event?limit=30&offset=50&realm=europe';
     is scalar @$list, 30;
     cmp_deeply
         [ map { $_->{name} } @$list ],
@@ -29,30 +29,30 @@ sub limit_offset :Tests {
 }
 
 sub list :Tests {
-    db->events->add({ blah => 5 });
-    db->events->add({ blah => 6 });
+    db->events->add({ blah => 5, realm => 'europe' });
+    db->events->add({ blah => 6, realm => 'europe' });
 
-    my $list = http_json GET => '/api/event';
+    my $list = http_json GET => '/api/event?realm=europe';
     cmp_deeply
         $list,
         [
-            { blah => 6, _id => re('^\S+$'), ts => re('^\d+$') },
-            { blah => 5, _id => re('^\S+$'), ts => re('^\d+$') },
+            { blah => 6, _id => re('^\S+$'), ts => re('^\d+$'), realm => 'europe' },
+            { blah => 5, _id => re('^\S+$'), ts => re('^\d+$'), realm => 'europe' },
         ]
 }
 
 sub filter_list :Tests {
-    db->events->add({ object => 'NEW_QUEST', object_type => 'quest', action => 'add' });
-    db->events->add({ object => 'REOPEN_QUEST', object_type => 'quest', action => 'reopen' });
-    db->events->add({ object => 'OLD_QUEST', object_type => 'comment', action => 'add' });
+    db->events->add({ object => 'NEW_QUEST', object_type => 'quest', action => 'add', realm => 'europe' });
+    db->events->add({ object => 'REOPEN_QUEST', object_type => 'quest', action => 'reopen', realm => 'europe' });
+    db->events->add({ object => 'OLD_QUEST', object_type => 'comment', action => 'add', realm => 'europe' });
 
     # Want add-comment.
-    my $list = http_json GET => '/api/event?types=add-comment,reopen-quest';
+    my $list = http_json GET => '/api/event?types=add-comment,reopen-quest&realm=europe';
     cmp_deeply
         $list,
         [
-            { object => 'OLD_QUEST', object_type => 'comment', action => 'add' , _id => re('^\S+$'), ts => re('^\d+$') },
-            { object => 'REOPEN_QUEST', object_type => 'quest', action => 'reopen' , _id => re('^\S+$'), ts => re('^\d+$') },
+            { object => 'OLD_QUEST', object_type => 'comment', action => 'add' , _id => re('^\S+$'), ts => re('^\d+$'), realm => 'europe' },
+            { object => 'REOPEN_QUEST', object_type => 'quest', action => 'reopen' , _id => re('^\S+$'), ts => re('^\d+$'), realm => 'europe' },
         ]
 }
 
@@ -65,17 +65,18 @@ sub atom :Tests {
         user => 'Frodo',
         name => 'Destroy the Ring',
         status => 'open',
+        realm => 'europe' # FIXME - Middle-earth!
     } };
 
     # Regular Atom
-    my $response = dancer_response GET => '/api/event/atom';
+    my $response = dancer_response GET => '/api/event/atom?realm=europe';
     is $response->status, 200;
-    like $response->content, qr/Frodo joins Play Perl/;
+    like $response->content, qr/Frodo joins europe realm/;
 
     # Atom has filter.
-    $response = dancer_response GET => '/api/event/atom?types=add-quest';
+    $response = dancer_response GET => '/api/event/atom?types=add-quest&realm=europe';
     is $response->status, 200;
-    unlike $response->content, qr/Frodo joins Play Perl/;
+    unlike $response->content, qr/Frodo joins europe realm/;
 }
 
 __PACKAGE__->new->runtests;

@@ -26,6 +26,7 @@ with 'Play::DB::Role::Common';
 
 use Play::Mongo;
 use Play::Flux;
+use Play::Config qw(setting);
 
 use Type::Params qw(validate);
 use Types::Standard qw(Undef Int Str Optional HashRef Dict);
@@ -41,6 +42,10 @@ sub _prepare_event {
 sub add {
     my $self = shift;
     my ($event) = validate(\@_, HashRef);
+
+    my $realm = $event->{realm};
+    die "'realm' is not defined" unless $realm;
+    die "Unknown realm '$realm'" unless grep { $_ eq $realm } @{ setting('realms') };
 
     my $id = $self->collection->insert($event);
 
@@ -66,12 +71,14 @@ sub list {
         limit => Optional[Int],
         offset => Optional[Int],
         types => Optional[Str],
+        realm => Str,
     ]);
     $params //= {};
     $params->{limit} //= 100;
     $params->{offset} //= 0;
 
     my $search_opt = _build_search_opt($params->{types});
+    $search_opt->{realm} = $params->{realm};
 
     my @events = $self->collection->query($search_opt)
         ->sort({ _id => -1 })

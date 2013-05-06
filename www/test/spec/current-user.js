@@ -5,10 +5,13 @@ define(['models/current-user', 'views/user/current'], function (currentUser, Vie
             model.set({
                 registered: 1,
                 login: 'somebody',
-                points: 3,
+                rp: {
+                    chaos: 3
+                },
                 _id: '513b9a2f01e3b87329000000',
                 settings: {},
-                notifications: []
+                notifications: [],
+                realms: ['chaos'],
             });
 
             var view = new View({ model: model });

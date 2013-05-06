@@ -11,7 +11,7 @@ $pumper->run;
 $log->empty_ok;
 
 for (qw( foo bar baz baz2 )) {
-    db->users->add({ login => $_ });
+    db->users->add({ login => $_, realms => ['europe'] });
     db->users->set_settings($_ => {
             email => "$_\@example.com",
             notify_comments => 1,
@@ -23,6 +23,7 @@ my $quest = db->quests->add({
     team => ['foo'],
     name => 'foo quest',
     status => 'open',
+    realm => 'europe',
 });
 
 subtest "non-comment event" => sub {
@@ -63,6 +64,7 @@ subtest "comment on watched quest" => sub {
         team => ['bar'],
         name => 'bar quest',
         status => 'open',
+        realm => 'europe',
     });
     db->quests->watch($watched_quest->{_id}, 'baz');
     db->quests->watch($watched_quest->{_id}, 'baz2');
@@ -92,6 +94,7 @@ subtest "quest completed" => sub {
         team => ['bar'],
         name => 'bq2',
         status => 'open',
+        realm => 'europe',
     });
     db->quests->watch($q2->{_id}, 'baz');
     db->quests->watch($q2->{_id}, 'baz2');
@@ -117,6 +120,7 @@ subtest "invite" => sub {
         team => ['bar'],
         name => 'bq3',
         status => 'open',
+        realm => 'europe',
     });
 
     db->quests->invite($q2->{_id}, 'foo', 'bar');

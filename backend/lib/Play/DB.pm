@@ -49,9 +49,9 @@ sub ensure_indices {
     my $quests_collection = Play::Mongo->db->get_collection('quests');
     $quests_collection->drop_indexes;
     $quests_collection->ensure_index({ 'tags' => 1 });
-    $quests_collection->ensure_index({ 'user' => 1 }); # deprecated
     $quests_collection->ensure_index({ 'team' => 1 });
     $quests_collection->ensure_index({ 'watchers' => 1 });
+    $quests_collection->ensure_index({ 'realm' => 1 });
 }
 
 1;

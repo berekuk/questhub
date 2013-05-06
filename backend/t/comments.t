@@ -14,6 +14,7 @@ sub add :Tests {
     my $quest = db->quests->add({
         user => 'blah',
         name => 'foo',
+        realm => 'europe',
     });
     my $quest_id = $quest->{_id};
 

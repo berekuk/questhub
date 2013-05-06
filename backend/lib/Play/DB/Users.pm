@@ -35,7 +35,8 @@ sub _prepare_user {
     my $self = shift;
     my ($user) = @_;
     $user->{_id} = $user->{_id}->to_string;
-    $user->{points} ||= 0;
+    $user->{rp} //= {};
+    $user->{rp}{$_} //= 0 for @{ $user->{realms} };
 
     if (not $user->{twitter}{screen_name} and $user->{settings}{email}) {
         $user->{image} = 'http://www.gravatar.com/avatar/'.md5_hex(lc($user->{settings}{email}));
@@ -65,15 +66,23 @@ sub add {
     my $self = shift;
     my ($params) = validate(\@_, HashRef);
 
+    $params->{realms} ||= [];
+    $params->{rp} = {
+        map { $_ => 0 } @{ $params->{realms} }
+    };
+
     my $id = $self->collection->insert($params, { safe => 1 });
 
-    db->events->add({
-        object_type => 'user',
-        action => 'add',
-        author => $params->{login},
-        object_id => $id->to_string,
-        object => $params,
-    });
+    for my $realm (@{ $params->{realms} }) {
+        db->events->add({
+            object_type => 'user',
+            action => 'add',
+            author => $params->{login},
+            object_id => $id->to_string,
+            object => $params,
+            realm => $realm,
+        });
+    }
 
     return "$id";
 }
@@ -85,19 +94,22 @@ sub list {
         order => Optional[Str], # regex => qr/^asc|desc$/
         limit => Optional[Int],
         offset => Optional[Int],
+        realm => Str,
     ]);
     $params //= {};
     $params->{order} //= 'asc';
     $params->{offset} //= 0;
 
+    my $realm = $params->{realm};
+
     # fetch everyone
     # note that sorting is always by _id, see the explanation and manual sorting below
-    my @users = $self->collection->find()->sort({ '_id' => 1 })->all;
+    my @users = $self->collection->find({ realms => $realm })->sort({ '_id' => 1 })->all;
 
     $self->_prepare_user($_) for @users;
 
     # filling 'open_quests' field
-    my $quests = db->quests->list({ status => 'open' });
+    my $quests = db->quests->list({ status => 'open', realm => $realm });
     my %users = map { $_->{login} => $_ } @users;
     for my $quest (@$quests) {
         for my $qlogin (@{ $quest->{team} }) {
@@ -113,9 +125,16 @@ sub list {
     if ($params->{sort} and $params->{sort} eq 'leaderboard') {
         # special sorting, composite points->open_quests order
         @users = sort {
-            my $c1 = ($b->{points} || 0) <=> ($a->{points} || 0);
+            my $c1 = ($b->{rp}{$realm} || 0) <=> ($a->{rp}{$realm} || 0);
             return $c1 if $c1;
             return ($b->{open_quests} || 0) <=> ($a->{open_quests} || 0);
+        } @users;
+    }
+    elsif ($params->{sort} and $params->{sort} eq 'points') {
+        my $order_flag = ($params->{order} eq 'asc' ? 1 : -1);
+        @users = sort {
+            my $c = ($a->{rp}{$realm} || 0) <=> ($b->{rp}{$realm} || 0);
+            return $c * $order_flag;
         } @users;
     }
     elsif (defined $params->{sort}) {
@@ -136,21 +155,48 @@ sub list {
 
 sub add_points {
     my $self = shift;
-    my ($login, $amount) = validate(\@_, Str, Int);
+    my ($login, $amount, $realm) = validate(\@_, Str, Int, Str);
 
     my $user = $self->get_by_login($login);
     die "User '$login' not found" unless $user;
+    die "User doesn't belong to the realm $realm" unless grep { $_ eq $realm } @{ $user->{realms} };
 
-    my $points = $user->{points} || 0;
+    my $points = $user->{rp}{$realm} || 0;
     $points += $amount;
 
     my $id = MongoDB::OID->new(value => delete $user->{_id});
     $self->collection->update(
         { _id => $id },
-        { '$set' => { points => $points } },
+        { '$set' => { "rp.$realm" => $points } },
         { safe => 1 }
     );
     return;
+}
+
+sub join_realm {
+    my $self = shift;
+    my ($login, $realm) = validate(\@_, Str, Str);
+
+    unless (grep { $realm eq $_ } @{ setting('realms') }) {
+        die "Unknown realm '$realm'";
+    }
+
+    my $result = $self->collection->update(
+        {
+            login => $login,
+            realms => { '$ne' => $realm },
+        },
+        {
+            '$addToSet' => { realms => $realm },
+            '$set' => { "rp.$realm" => 0 },
+        },
+        { safe => 1 }
+    );
+
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "User $login not found or unable to join the realm";
+    }
 }
 
 # some settings can't be set by the client
@@ -165,7 +211,7 @@ sub secret_settings {
 
 sub get_settings {
     my $self = shift;
-    my ($login, $secret_flag) = validate(\@_, Str, Bool);
+    my ($login, $secret_flag) = validate(\@_, Str, Optional[Bool]);
 
     my $user = $self->collection->find_one({ login => $login });
     die "User '$login' not found" unless $user;

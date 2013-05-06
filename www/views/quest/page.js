@@ -26,6 +26,10 @@ define([
             'keyup #inputInvitee': 'inviteAction',
         },
 
+        realm: function () {
+            return this.model.get('realm');
+        },
+
         subviews: {
             '.quest-big': function () {
                 return new QuestBig({
@@ -36,7 +40,8 @@ define([
                 var commentsModel = new CommentCollectionModel([], { 'quest_id': this.model.id });
                 commentsModel.fetch();
                 return new CommentCollection({
-                    collection: commentsModel
+                    collection: commentsModel,
+                    realm: this.realm(),
                 });
             },
         },

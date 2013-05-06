@@ -2,22 +2,15 @@
 
   <div>
     <% if (team.length == 0) { %>
-      <%= partial.user({ login: obj.author }) %><span class="muted"> suggests a quest:</span>
+      <%= partial.user({ realm: realm, login: obj.author }) %><span class="muted"> suggests a quest:</span>
     <% } else { %>
       <span class="muted">
-      <%= _.map(team, function (member) { return partial.user({ login: member }); }).join(', ') %>
-      <%= (team.length == 1 ? 'is' : 'are') %> on a quest<%= (_.first(team) == obj.author) ? '' : ' by ' + partial.user({ login: obj.author }) %>:</span>
+      <%= _.map(team, function (member) { return partial.user({ realm: realm, login: member }); }).join(', ') %>
+      <%= (team.length == 1 ? 'is' : 'are') %> on a quest<%= (_.first(team) == obj.author) ? '' : ' by ' + partial.user({ realm: realm, login: obj.author }) %>:</span>
       <% if (my) { %>
         <%= partial.edit_tools() %>
       <% } %>
     <% } %>
-  </div>
-
-  <div class="quest-big-labels">
-    <span class="muted quest-big-tags-edit control-group" style="display: none">
-      <input class="quest-big-tags-input" type="text" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
-    </span>
-    <%= partial.quest_labels(obj) %>
   </div>
 
   <h2>
@@ -28,6 +21,13 @@
       </span>
     <% } %>
   </h2>
+
+  <div class="quest-big-labels">
+    <span class="muted quest-big-tags-edit control-group" style="display: none">
+      <input class="quest-big-tags-input" type="text" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
+    </span>
+    <%= partial.quest_labels(obj) %>
+  </div>
 
   <div>
   <% if (team.length == 0) { %>

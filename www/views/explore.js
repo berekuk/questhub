@@ -33,8 +33,13 @@ define([
             'watched-by-me': { order: 'desc', watchedByMe: true }
         },
 
+        realm: function () {
+            return this.options.realm;
+        },
+
         tabSubview: function () {
             var options = _.clone(this.name2options[this.tab]);
+            options.realm = this.realm();
 
             if (options.watchedByMe) {
                 if (!currentUser.get('login')) {
@@ -67,7 +72,7 @@ define([
             var tab = $(e.target).attr('data-explore-tab');
             this.switchTabByName(tab);
 
-            var url = '/explore/' + tab;
+            var url = '/' + this.realm() + '/explore/' + tab;
             if (this.tag != undefined) {
                 url += '/tag/' + this.tag;
             }
@@ -92,7 +97,7 @@ define([
         },
 
         removeFilter: function () {
-            Backbone.trigger('pp:navigate', '/explore/' + this.tab, { trigger: true });
+            Backbone.trigger('pp:navigate', '/' + this.realm() + '/explore/' + this.tab, { trigger: true });
         }
     });
 });

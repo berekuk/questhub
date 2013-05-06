@@ -118,6 +118,7 @@ sub email_confirmation :Tests {
     {
         my $quest = http_json POST => '/api/quest', { params => {
             name => 'q1',
+            realm => 'europe',
         } };
         http_json GET => "/api/fakeuser/bar";
         Dancer::session login => 'bar';
@@ -141,6 +142,7 @@ sub email_confirmation :Tests {
     {
         my $quest = http_json POST => '/api/quest', { params => {
             name => 'q2',
+            realm => 'europe',
         } };
         Dancer::session login => 'bar';
 

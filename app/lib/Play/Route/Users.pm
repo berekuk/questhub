@@ -8,6 +8,7 @@ use JSON qw(decode_json);
 use Dancer::Plugin::Auth::Twitter;
 auth_twitter_init();
 
+use Play::Config;
 use Play::DB qw(db);
 
 get '/auth/twitter' => sub {
@@ -132,6 +133,7 @@ sub _expand_settings {
 
 post '/register' => sub {
     my $login = param('login') or die 'no login specified';
+    my $realm = param('realm') or die 'no realm specified';
 
     unless ($login =~ /^\w+$/) {
         status 'bad request';
@@ -142,7 +144,7 @@ post '/register' => sub {
         die "User $login already exists";
     }
 
-    my $user = { login => $login };
+    my $user = { login => $login, realms => [$realm] };
     my $more_settings = {};
 
     my $settings = param('settings') || '{}';
@@ -196,13 +198,8 @@ post '/register/confirm_email' => sub {
 
 get '/user' => sub {
     return db->users->list({
-        map { param($_) ? ($_ => param($_)) : () } qw/ sort order limit offset /,
+        map { param($_) ? ($_ => param($_)) : () } qw/ sort order limit offset realm /,
     });
-};
-
-get '/user_count' => sub {
-    my $count = scalar @{ db->users->list };
-    return { count => $count };
 };
 
 post '/logout' => sub {
@@ -219,7 +216,7 @@ if ($ENV{DEV_MODE}) {
         my $login = param('login');
         session 'login' => $login;
 
-        my $user = { login => $login };
+        my $user = { login => $login, realms => Play::Config::setting('realms') };
 
         unless (param('notwitter')) {
             session 'twitter_user' => { screen_name => $login } unless param('notwitter');

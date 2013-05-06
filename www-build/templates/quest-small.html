@@ -1,12 +1,12 @@
 <td>
   <% if (obj.showAuthor) { %>
-    <%= partial.user({ login: _.first(team), colon: true }) %>
+    <%= partial.user({ realm: realm, login: _.first(team), colon: true }) %>
   <% } %>
-  <a href="/quest/<%- _id %>"><%- name %></a>
+  <%= partial.quest_link({ id: _id, quest: obj }) %>
 
   <% if (obj.comment_count) { %>
-    <a href="/quest/<%= _id %>"><span class="badge badge-info"><i class="icon-comment"></i> <%= comment_count %></span></a>
-    <% } %>
+    <a href="/<%- realm %>/quest/<%= _id %>"><span class="badge badge-info"><i class="icon-comment"></i> <%= comment_count %></span></a>
+  <% } %>
 
   <span class="likes"></span>
 

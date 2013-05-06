@@ -1,0 +1,76 @@
+// Always show vertical scroll bar in browser. It fixes the issue with jumping buttons.
+html { overflow-y: scroll; }
+
+//sticky footer, see http://twitter.github.com/bootstrap/
+html, body {
+    height: 100%;
+    // The html and body elements cannot have any padding or margin.
+}
+
+// Wrapper for page content to push down footer
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    // Negative indent footer by it's height
+    @media (min-width: 980px) {
+        margin: 0 auto -65px;
+    }
+    @media (max-width: 979px) {
+        margin: 0 auto -85px;
+    }
+}
+
+// Set the fixed height of the footer here
+#push,
+#footer {
+    @media (min-width: 980px) {
+        height: 65px;
+    }
+    @media (max-width: 979px) {
+        height: 85px;
+    }
+}
+
+#footer {
+    @media (max-width: 979px) {
+        .footer-separator {
+            display: none;
+        }
+        .footer-line1 {
+            display: block;
+        }
+    }
+}
+
+#wrap > .container {
+    @media (min-width: 767px) {
+        padding-top: 65px;
+    }
+    padding-bottom: 30px;
+}
+
+#footer {
+    background-color: #f5f5f5;
+    .credit {
+        margin: 20px 0;
+        text-align: center;
+    }
+    .flattr-wrapper {
+        position: relative;
+        top: 6px;
+    }
+}
+
+.current-user-box {
+    .current-user-notifications-icon {
+        margin: 10px 0 0 0;
+
+        a {
+            color: #f00;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+}

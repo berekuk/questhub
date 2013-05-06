@@ -5,8 +5,10 @@ define([
     'models/user-settings',
     'models/current-user',
     'views/user/settings',
+    'views/realm/picker',
+    'models/realm-collection',
     'text!templates/register.html'
-], function (_, $, Common, UserSettingsModel, currentUser, UserSettings, html) {
+], function (_, $, Common, UserSettingsModel, currentUser, UserSettings, RealmPicker, RealmCollectionModel, html) {
     return Common.extend({
         template: _.template(html),
 
@@ -30,6 +32,13 @@ define([
                 }
 
                 return new UserSettings({ model: model });
+            },
+            '.realm-picker-subview': function () {
+                var picker = new RealmPicker({ collection: new RealmCollectionModel() });
+                this.listenTo(picker, 'pick', function () {
+                    this.validate();
+                });
+                return picker;
             }
         },
 
@@ -53,7 +62,7 @@ define([
 
         disable: function() {
             this.$('.submit').addClass('disabled');
-            this.$('.progress').toggle(this.submitted);
+            this.$('.progress').toggle(Boolean(this.submitted));
             this.enabled = false;
         },
 
@@ -72,6 +81,11 @@ define([
             else {
                 this.$('.login').addClass('error');
                 login = undefined;
+            }
+
+            if (!this.subview('.realm-picker-subview').realm()) {
+                this.disable();
+                return;
             }
 
             if (this.submitted || !login) {
@@ -94,6 +108,7 @@ define([
             // TODO - what should we do if login is empty?
             $.post('/api/register', {
                 login: this.getLogin(),
+                realm: this.subview('.realm-picker-subview').realm().id,
                 settings: JSON.stringify(this.subview('.settings-subview').deserialize())
             }).done(function (model, response) {
                 ga('send', 'event', 'register', 'ok');

@@ -7,6 +7,7 @@ require([
 function($, Router, App, currentUser) {
 
     var appView = new App({ el: $('#wrap') });
+    appView.render();
 
     $(document).ajaxError(function () {
         appView.notify('error', 'Internal HTTP error');
@@ -31,7 +32,7 @@ function($, Router, App, currentUser) {
         appView.notify(type, message);
     });
     Backbone.on('pp:settings-dialog', function () {
-        appView.currentUser.settingsDialog();
+        appView.settingsDialog();
         ga('send', 'event', 'settings', 'open');
     });
 

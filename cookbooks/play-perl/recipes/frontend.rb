@@ -19,4 +19,31 @@ template "/etc/nginx/sites-enabled/play-perl.org" do
   notifies :restart, "service[nginx]"
 end
 
+template "/etc/nginx/sites-enabled/old" do
+  source "nginx-site-old.conf.erb"
+  owner "root"
+  group "root"
+  mode 0644
+  notifies :restart, "service[nginx]"
+end
+
+include_recipe "play-perl::node"
+include_recipe "phantomjs"
+
+execute "install-seoserver" do
+  command "npm install -g seoserver"
+end
+directory '/data/seoserver' # logs
+ubic_service "seoserver" do
+  action [:install, :start]
+end
+template "/etc/logrotate.d/seoserver" do
+  source "logrotate.conf.erb"
+  mode 0644
+  variables({
+    :log => '/data/seoserver/seoserver.log /data/seoserver/seoserver.err.log',
+    :postrotate => 'ubic reload seoserver',
+  })
+end
+
 service "nginx"

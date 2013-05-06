@@ -13,12 +13,13 @@ sub setup :Tests(setup) {
 }
 
 sub like_quest :Tests {
-    db->users->add({ login => $_ }) for qw( blah user1 user2 );
+    db->users->add({ login => $_, realms => ['europe'] }) for qw( blah user1 user2 );
 
     my $quest = db->quests->add({
         team => ['blah'],
         name => 'foo, foo',
         status => 'open',
+        realm => 'europe',
     });
     my $id = $quest->{_id};
     db->quests->update($id, { status => 'closed', user => 'blah' });
@@ -42,18 +43,20 @@ sub like_quest :Tests {
             user => 'blah',
             team => ['blah'],
             author => 'blah',
+            realm => 'europe',
         };
 
-    is db->users->get_by_login('blah')->{points}, 3;
+    is db->users->get_by_login('blah')->{rp}{europe}, 3;
 }
 
 sub self_like_quest :Tests {
-    db->users->add({ login => $_ }) for qw( blah );
+    db->users->add({ login => $_, realms => ['europe'] }) for qw( blah );
 
     my $quest = db->quests->add({
         team => ['blah'],
         name => 'foo, foo',
         status => 'open',
+        realm => 'europe',
     });
     my $id = $quest->{_id};
 

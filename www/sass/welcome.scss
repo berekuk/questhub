@@ -1,0 +1,26 @@
+.welcome {
+    h1, h2, h3 {
+        text-align: center;
+    }
+
+    .info-blocks .row-fluid {
+        margin: 35px 0;
+        font-size: 16px;
+        color: #666;
+        strong {
+            color: #000;
+        }
+        i {
+            color: #2c3e50;
+            float: left;
+            font-size: 20px;
+        }
+        div {
+            margin-left: 30px;
+        }
+    }
+
+    .realms-subview {
+        margin: 0px auto 15px;
+    }
+}

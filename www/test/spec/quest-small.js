@@ -12,7 +12,8 @@ define([
             "name" : "Fix Google Analytics code on play-perl.org",
             "author" : "mmcleric",
             "tags" : ["bug"],
-            "likes": ["bessarabov", "kappa"]
+            "likes": ["bessarabov", "kappa"],
+            "realm": "europe"
         });
 
         describe('render', function () {

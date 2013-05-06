@@ -28,7 +28,7 @@ define([
         },
 
         generateItem: function (model) {
-            return new Comment({ model: model });
+            return new Comment({ model: model, realm: this.options.realm });
         },
 
         listSelector: '.comments-list',
@@ -79,7 +79,9 @@ define([
                 return;
             }
             this.disableForm();
+
             ga('send', 'event', 'comment', 'add');
+            mixpanel.track('add comment');
 
             this.collection.create({
                 'author': currentUser.get('login'),

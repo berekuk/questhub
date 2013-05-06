@@ -2,6 +2,12 @@ server {
   listen       <%= @port %>;
 
   <% if @dev %>
+  server_name localhost;
+  <% else %>
+  server_name questhub.io;
+  <% end %>
+
+  <% if @dev %>
   # Turn sendfile off because it behaves bad with vboxsf
   sendfile off;
   <% end %>
@@ -34,7 +40,13 @@ server {
   }
 
   location / {
+    proxy_set_header X-Forwarded-Host localhost;
+    if ($args ~ "^_escaped_fragment_=$") {
+        proxy_pass       http://127.0.0.1:4000;
+    }
+
     root <%= @static_root %>;
+
     expires 0;
     add_header        Cache-Control private;
     try_files $uri /index.html;

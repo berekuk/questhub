@@ -13,6 +13,7 @@ sub like_quest :Tests {
     http_json GET => "/api/fakeuser/blah";
     my $result = http_json POST => '/api/quest', { params => {
         name => 'foo',
+        realm => 'europe',
     } };
     my $id = $result->{_id};
     like $id, qr/^\S+$/, 'quest add id';

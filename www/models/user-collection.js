@@ -3,7 +3,7 @@ define([
 ], function (Parent, AnotherUser) {
     return Parent.extend({
 
-        cgi: ['sort', 'order', 'limit', 'offset'],
+        cgi: ['sort', 'order', 'limit', 'offset', 'realm'],
 
         baseUrl: '/api/user',
 

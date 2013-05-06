@@ -13,6 +13,10 @@ define([
             '.subview': 'eventCollection',
         },
 
+        realm: function () {
+            return this.collection.options.realm;
+        },
+
         eventCollection: function () {
             return new EventCollection({ collection: this.collection });
         },
@@ -51,7 +55,7 @@ define([
             this.collection.setTypes(types);
 
             /* Set queryString to URL */
-            var url = '/feed';
+            var url = '/' + this.realm() + '/feed';
             if ( types.length > 0 ) {
                 url += '?types=' + types.join();
             }
@@ -94,7 +98,11 @@ define([
                     description: 'Invitations'
                 }
             ];
-            return { filterList: filterList, types: this.options.types };
+            return {
+                filterList: filterList,
+                types: this.options.types,
+                realm: this.realm()
+            };
         }
 
     });

@@ -36,19 +36,22 @@ del '/quest/:id' => sub {
 
 post '/quest' => sub {
     die "not logged in" unless session->{login};
+    my $realm = param('realm') or die "realm is not set";
 
     my $attributes = {
         team => [ session->{login} ],
         name => param('name'),
         status => 'open',
         (param('tags') ? (tags => param('tags')) : ()),
+        realm => $realm,
     };
     return db->quests->add($attributes);
 };
 
 get '/quest' => sub {
+    die "realm not specified" unless param('realm');
     my $params = {
-        map { param($_) ? ($_ => param($_)) : () } qw/ user status comment_count sort order limit offset tags watchers unclaimed /,
+        map { param($_) ? ($_ => param($_)) : () } qw/ user status comment_count sort order limit offset tags watchers unclaimed realm /,
     };
 
     my $quests = db->quests->list($params);
@@ -58,10 +61,10 @@ get '/quest' => sub {
 
         my $frontend_url = '/';
         if (param('user')) {
-            $frontend_url = '/player/'.param('user');
+            $frontend_url = '/'.param('realm').'/player/'.param('user');
         }
         elsif (param('tags')) {
-            $frontend_url = '/explore/latest/tag/'.param('tags');
+            $frontend_url = '/'.param('realm').'/explore/latest/tag/'.param('tags');
         }
 
         my $atom_tag = join(',', map { "$_=$params->{$_}" } keys %$params);
