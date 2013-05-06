@@ -34,7 +34,6 @@ cpan_module 'YAML'
 cpan_module 'Module::Install' # needed by MongoDB due to packaging issues - see https://github.com/berekuk/play-perl/issues/70
 cpan_module 'MongoDB'
 cpan_module 'JSON'
-cpan_module 'Params::Validate'
 cpan_module 'Moo'
 cpan_module 'Starman'
 cpan_module 'Text::Markdown'
@@ -49,6 +48,8 @@ cpan_module 'LWP::Protocol::https'
 cpan_module 'Template'
 cpan_module 'DateTime'
 cpan_module 'DateTime::Format::RFC3339'
+
+cpan_module 'Type::Tiny'
 
 directory '/data' # logs
 

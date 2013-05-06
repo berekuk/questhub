@@ -7,11 +7,11 @@ use Play::DB qw(db);
 
 post '/quest/:quest_id/comment' => sub {
     die "not logged in" unless session->{login};
-    return db->comments->add(
+    return db->comments->add({
         quest_id => param('quest_id'),
         body => param('body'),
         author => session->{login},
-    );
+    });
 };
 
 get '/quest/:quest_id/comment' => sub {
@@ -24,11 +24,11 @@ get '/quest/:quest_id/comment/:id' => sub {
 
 del '/quest/:quest_id/comment/:id' => sub {
     die "not logged in" unless session->{login};
-    db->comments->remove(
+    db->comments->remove({
         quest_id => param('quest_id'),
         id => param('id'),
         user => session->{login}
-    );
+    });
     return {
         result => 'ok',
     }
@@ -36,12 +36,12 @@ del '/quest/:quest_id/comment/:id' => sub {
 
 put '/quest/:quest_id/comment/:id' => sub {
     die "not logged in" unless session->{login};
-    my $updated_id = db->comments->update(
+    my $updated_id = db->comments->update({
         quest_id => param('quest_id'),
         id => param('id'),
         body => param('body'),
         user => session->{login}
-    );
+    });
     return {
         _id => $updated_id,
     }

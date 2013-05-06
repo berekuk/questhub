@@ -5,7 +5,9 @@ use Moo;
 use Play::Mongo;
 use Play::DB qw(db);
 
-use Params::Validate qw(:all);
+use Types::Standard qw(Str Dict ArrayRef);
+use Type::Params qw(validate);
+
 use Play::Config qw(setting);
 
 use Play::DB::Role::PushPull;
@@ -23,22 +25,22 @@ sub _prepare_comment {
 
 sub add {
     my $self = shift;
-    my %params = validate(@_, {
-        quest_id => { type => SCALAR },
-        body => { type => SCALAR },
-        author => { type => SCALAR },
-    });
-    my $id = $self->collection->insert(\%params, { safe => 1 });
+    my ($params) = validate(\@_, Dict[
+        quest_id => Str,
+        body => Str,
+        author => Str,
+    ]);
+    my $id = $self->collection->insert($params, { safe => 1 });
 
-    my $quest = db->quests->get($params{quest_id});
+    my $quest = db->quests->get($params->{quest_id});
 
     db->events->add({
         object_type => 'comment',
         action => 'add',
-        author => $params{author},
+        author => $params->{author},
         object_id => $id->to_string,
         object => {
-            %params,
+            %$params,
             quest => $quest,
         },
         realm => $quest->{realm},
@@ -51,7 +53,7 @@ sub add {
 # TODO - pager?
 sub get {
     my $self = shift;
-    my ($quest_id) = validate_pos(@_, { type => SCALAR });
+    my ($quest_id) = validate(\@_, Str);
 
     my @comments = $self->collection->find({ quest_id => $quest_id })->sort({ _id => 'asc' })->all;
     $self->_prepare_comment($_) for @comments;
@@ -61,7 +63,7 @@ sub get {
 
 sub get_one {
     my $self = shift;
-    my ($comment_id) = validate_pos(@_, { type => SCALAR });
+    my ($comment_id) = validate(\@_, Str);
 
     my $comment = $self->collection->find_one({
         _id => MongoDB::OID->new(value => $comment_id)
@@ -74,7 +76,7 @@ sub get_one {
 # get number of comments for each quest in given set
 sub bulk_count {
     my $self = shift;
-    my ($ids) = validate_pos(@_, { type => ARRAYREF });
+    my ($ids) = validate(\@_, ArrayRef[Str]);
 
     # TODO - upgrade MongoDB to 2.2+ and use aggregation
     my @comments = $self->collection->find({ quest_id => { '$in' => $ids } })->all;
@@ -87,11 +89,11 @@ sub bulk_count {
 
 sub remove {
     my $self = shift;
-    my $params = validate(@_, {
-        quest_id => { type => SCALAR },
-        id => { type => SCALAR },
-        user => { type => SCALAR }
-    });
+    my ($params) = validate(\@_, Dict[
+        quest_id => Str,
+        id => Str,
+        user => Str
+    ]);
 
     my $result = $self->collection->remove(
         {
@@ -107,12 +109,12 @@ sub remove {
 
 sub update {
     my $self = shift;
-    my $params = validate(@_, {
-        quest_id => { type => SCALAR },
-        id => { type => SCALAR },
-        body => { type => SCALAR },
-        user => { type => SCALAR }
-    });
+    my ($params) = validate(\@_, Dict[
+        quest_id => Str,
+        id => Str,
+        body => Str,
+        user => Str
+    ]);
     my $id = delete $params->{id};
     delete $params->{quest_id}; # ignore it for now
 

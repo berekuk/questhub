@@ -4,27 +4,27 @@ use 5.010;
 
 use Moo;
 
-use Params::Validate qw(:all);
-use Play::Config qw(setting);
 use Log::Any qw($log);
-
 use Digest::MD5 qw(md5_hex);
 
-use Play::Mongo;
+use Type::Params qw(validate);
+use Types::Standard qw(Str Int Bool Dict Undef Optional HashRef);
+
+use Play::Config qw(setting);
 use Play::DB qw(db);
 
 with 'Play::DB::Role::Common';
 
 sub get_by_twitter_login {
     my $self = shift;
-    my ($login) = validate_pos(@_, { type => SCALAR });
+    my ($login) = validate(\@_, Str);
 
     return $self->get({ twitter => { screen_name => $login } });
 }
 
 sub get_by_email {
     my $self = shift;
-    my ($email) = validate_pos(@_, { type => SCALAR });
+    my ($email) = validate(\@_, Str);
 
     my $user = $self->collection->find_one({ 'settings.email' => $email });
     return unless $user;
@@ -47,7 +47,7 @@ sub _prepare_user {
 
 sub get {
     my $self = shift;
-    my ($params) = validate_pos(@_, { type => HASHREF });
+    my ($params) = validate(\@_, HashRef);
 
     my $user = $self->collection->find_one($params);
     return unless $user;
@@ -58,13 +58,13 @@ sub get {
 
 sub get_by_login {
     my $self = shift;
-    my ($login) = validate_pos(@_, { type => SCALAR });
+    my ($login) = validate(\@_, Str);
     return $self->get({ login => $login });
 }
 
 sub add {
     my $self = shift;
-    my ($params) = validate_pos(@_, { type => HASHREF });
+    my ($params) = validate(\@_, HashRef);
 
     $params->{realms} ||= [];
     $params->{rp} = {
@@ -89,13 +89,16 @@ sub add {
 
 sub list {
     my $self = shift;
-    my $params = validate(@_, {
-        sort => { type => SCALAR, optional => 1 },
-        order => { type => SCALAR, regex => qr/^asc|desc$/, default => 'asc' },
-        limit => { type => SCALAR, regex => qr/^\d+$/, optional => 1 },
-        offset => { type => SCALAR, regex => qr/^\d+$/, default => 0 },
-        realm => { type => SCALAR },
-    });
+    my ($params) = validate(\@_, Undef|Dict[
+        sort => Optional[Str],
+        order => Optional[Str], # regex => qr/^asc|desc$/
+        limit => Optional[Int],
+        offset => Optional[Int],
+        realm => Str,
+    ]);
+    $params //= {};
+    $params->{order} //= 'asc';
+    $params->{offset} //= 0;
 
     my $realm = $params->{realm};
 
@@ -152,11 +155,7 @@ sub list {
 
 sub add_points {
     my $self = shift;
-    my ($login, $amount, $realm) = validate_pos(@_,
-        { type => SCALAR },
-        { type => SCALAR, regex => qr/^-?\d+$/, default => 1 },
-        { type => SCALAR },
-    );
+    my ($login, $amount, $realm) = validate(\@_, Str, Int, Str);
 
     my $user = $self->get_by_login($login);
     die "User '$login' not found" unless $user;
@@ -176,10 +175,7 @@ sub add_points {
 
 sub join_realm {
     my $self = shift;
-    my ($login, $realm) = validate_pos(@_,
-        { type => SCALAR },
-        { type => SCALAR }
-    );
+    my ($login, $realm) = validate(\@_, Str, Str);
 
     unless (grep { $realm eq $_ } @{ setting('realms') }) {
         die "Unknown realm '$realm'";
@@ -215,7 +211,7 @@ sub secret_settings {
 
 sub get_settings {
     my $self = shift;
-    my ($login, $secret_flag) = validate_pos(@_, { type => SCALAR }, { type => BOOLEAN, default => 0 });
+    my ($login, $secret_flag) = validate(\@_, Str, Optional[Bool]);
 
     my $user = $self->collection->find_one({ login => $login });
     die "User '$login' not found" unless $user;
@@ -231,7 +227,7 @@ sub get_settings {
 
 sub confirm_email {
     my $self = shift;
-    my ($login, $secret) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+    my ($login, $secret) = validate(\@_, Str, Str);
 
     my $settings = $self->get_settings($login, 1);
     unless ($settings->{email_confirmation_secret}) {
@@ -273,7 +269,7 @@ sub confirm_email {
 
 sub _send_email_confirmation {
     my $self = shift;
-    my ($login, $email) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+    my ($login, $email) = validate(\@_, Str, Str);
 
     # need email confirmation
     my $secret = int rand(100000000000);
@@ -295,7 +291,7 @@ sub _send_email_confirmation {
 
 sub resend_email_confirmation {
     my $self = shift;
-    my ($login) = validate_pos(@_, { type => SCALAR });
+    my ($login) = validate(\@_, Str);
 
     my $settings = $self->get_settings($login);
     unless ($settings->{email}) {
@@ -311,7 +307,7 @@ sub resend_email_confirmation {
 
 sub set_settings {
     my $self = shift;
-    my ($login, $settings, $persona) = validate_pos(@_, { type => SCALAR }, { type => HASHREF }, { type => BOOLEAN, optional => 1 });
+    my ($login, $settings, $persona) = validate(\@_, Str, HashRef, Optional[Bool]);
 
     # some settings can't be set by the client
     delete $settings->{$_} for secret_settings, protected_settings;
@@ -348,7 +344,7 @@ sub set_settings {
 
 sub get_email {
     my $self = shift;
-    my ($login, $notify_field) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+    my ($login, $notify_field) = validate(\@_, Str, Str);
 
     my $settings = $self->get_settings($login);
     return unless $settings->{$notify_field};

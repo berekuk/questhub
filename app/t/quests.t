@@ -412,7 +412,7 @@ sub quest_tags :Tests {
         realm => 'europe',
     } };
     is $unknown_type_response->status, 500;
-    like $unknown_type_response->content, qr/not one of the allowed types: arrayref/;
+    like $unknown_type_response->content, qr/does not meet type constraint/;
 }
 
 sub cc :Tests {

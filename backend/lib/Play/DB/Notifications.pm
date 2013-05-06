@@ -1,8 +1,11 @@
 package Play::DB::Notifications;
 
+use 5.010;
+
 use Moo;
 
-use Params::Validate qw(:all);
+use Types::Standard qw(Str HashRef Any);
+use Type::Params qw(validate);
 
 use Play::DB;
 
@@ -18,7 +21,7 @@ sub _prepare {
 
 sub add {
     my $self = shift;
-    my ($login, $type, $params) = validate_pos(@_, { type => SCALAR }, { type => SCALAR }, 1);
+    my ($login, $type, $params) = validate(\@_, Str, Str, Any);
     # TODO - stricter notification types
 
     my $id = $self->collection->insert({
@@ -31,7 +34,7 @@ sub add {
 
 sub list {
     my $self = shift;
-    my ($login) = validate_pos(@_, { type => SCALAR });
+    my ($login) = validate(\@_, Str);
 
     my @notifications = $self->collection->find({ user => $login })->all;
     $self->_prepare($_) for @notifications;
@@ -41,7 +44,7 @@ sub list {
 
 sub remove {
     my $self = shift;
-    my ($id, $login) = validate_pos(@_, { type => SCALAR }, { type => SCALAR });
+    my ($id, $login) = validate(\@_, Str, Str);
 
     my $result = $self->collection->remove(
         {
