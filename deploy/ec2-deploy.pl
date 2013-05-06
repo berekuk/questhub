@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-ec2-deploy.pl - deploy play-perl.org code to Amazon EC2
+ec2-deploy.pl - deploy questhub.io code to Amazon EC2
 
 =head1 SYNOPSIS
 
@@ -13,7 +13,7 @@ ec2-deploy.pl - deploy play-perl.org code to Amazon EC2
 
 =head1 DESCRIPTION
 
-Generally, only C<cpan:MMCLERIC> uses this script for deploying play-perl.org to production. All other contributors should use local vagrant VM instead, as described in README.
+Generally, only C<cpan:MMCLERIC> uses this script for deploying questhub.io to production. All other contributors should use local vagrant VM instead, as described in README.
 
 =cut
 
@@ -32,9 +32,7 @@ use Term::ANSIColor qw(:constants);
 $Term::ANSIColor::AUTORESET = 1;
 
 my %INSTANCES = (
-# play-perl.org address, as registered in GoDaddy DNS
-    'play-perl' => '54.243.208.16',
-    'questhub' => '54.225.128.184',
+    'questhub.io' => '54.225.128.184',
 );
 my $USER = 'ubuntu';
 
@@ -154,8 +152,11 @@ sub main {
         'm|magic' => \$magic,
     ) or pod2usage(2);
 
-    pod2usage(2) unless @ARGV == 1;
+    pod2usage(2) unless @ARGV == 1 or @ARGV == 0;
+
+    # there's only once instance now, but there were two, so why should I remove the perfectly working code?
     my $name = shift @ARGV;
+    $name ||= 'questhub.io';
 
     $IP = $INSTANCES{$name} or die "Unknown instance '$name'";
 

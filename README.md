@@ -1,7 +1,7 @@
-play-perl.org
+Questhub.io
 =========
 
-http://play-perl.org sources.
+http://questhub.io sources.
 
 Quick start
 =========
