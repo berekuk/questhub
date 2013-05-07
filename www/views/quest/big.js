@@ -129,6 +129,7 @@ define([
         serialize: function () {
             var params = this.model.serialize();
             params.currentUser = currentUser.get('login');
+            params.showStatus = true;
             return params;
         },
         features: ['tooltip']

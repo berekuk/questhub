@@ -11,7 +11,9 @@
         </a>
       <% }) %>
     <% } %>
+    <% if (obj.showStatus) { %>
     <span class="label label-<%= status === 'open' && 'warning' %>"><%= status === 'closed' ? 'complete' : status %></span>
+    <% } %>
     </span>
   </script>
 
