@@ -26,11 +26,11 @@ define([
         },
 
         name2options: {
-            'latest': { order: 'desc' },
+            'latest': { order: 'desc', showStatus: true },
             'unclaimed': { unclaimed: 1, sort: 'leaderboard' },
             'open': { status: 'open', sort: 'leaderboard' },
             'closed': { status: 'closed', sort: 'leaderboard' },
-            'watched-by-me': { order: 'desc', watchedByMe: true }
+            'watched-by-me': { order: 'desc', watchedByMe: true, showStatus: true }
         },
 
         realm: function () {
@@ -64,7 +64,8 @@ define([
 
             return new QuestCollection({
                 collection: collection,
-                showAuthor: true
+                showAuthor: true,
+                showStatus: options.showStatus
             });
         },
 

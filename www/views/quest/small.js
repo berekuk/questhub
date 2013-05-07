@@ -30,9 +30,8 @@ define([
 
         serialize: function () {
             var params = this.model.serialize();
-            if (this.options.showAuthor) {
-                params.showAuthor = true;
-            }
+            params.showAuthor = this.options.showAuthor;
+            params.showStatus = this.options.showStatus;
             return params;
         },
 
