@@ -66,12 +66,7 @@ define([
 
         // FIXME - this should probably be an event
         setActiveMenuItem: function (selector) {
-            this.$el
-                .find('.navbar .active')
-                    .removeClass('active')
-                    .end()
-                .find('.menu-item-' + selector)
-                    .addClass('active');
+            this.subview('.navbar-subview').setActiveMenuItem(selector);
         },
 
         settingsDialog: function () {
