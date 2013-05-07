@@ -14,7 +14,7 @@
           <ul class="dropdown-menu">
             <li>
               <% _.each(partial.settings.realms, function (r) { %>
-                <a href="/<%- r.id %>/feed"><%- r.name %></a>   <!-- TODO - grep out current realm -->
+                <a href="/<%- r.id %>/<%- url %>"><%- r.name %></a>   <!-- TODO - grep out current realm -->
               <% }) %>
             </li>
             <li>
