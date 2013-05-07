@@ -6,7 +6,11 @@
     <span class="quest-tags">
     <% if (obj.tags) { %>
       <% _.each(obj.tags, function (tag) { %>
-        <a href="/<%- realm %>/explore/latest/tag/<%= tag %>" class="label label-inverse">
+        <% var isTime = (tag.match(/^\d+[mhdw]$/)); %>
+        <a href="/<%- realm %>/explore/latest/tag/<%= tag %>" class="label <%= (isTime ? 'label-info' : 'label-inverse') %>">
+          <% if (isTime) { %>
+            <i class="icon-time"></i>
+          <% } %>
           <%= tag %>
         </a>
       <% }) %>
