@@ -17,6 +17,9 @@ define([
             if (this.options.realm) {
                 params.url = Backbone.history.getFragment();
                 params.url = params.url.replace(/^\w+\//, '');
+                if (params.url.match('^quest/')) {
+                    params.url = 'feed';
+                }
             }
             else {
                 params.url = 'feed';
