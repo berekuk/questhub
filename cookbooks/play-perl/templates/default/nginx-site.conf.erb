@@ -16,8 +16,6 @@ server {
   gzip_min_length  1000;
   gzip_types text/css text/javascript application/x-javascript;
 
-  rewrite  ^/api/event/atom$  /api/event/atom?realm=chaos permanent;
-
   access_log /data/access.log;
   error_log  /data/error.log info;
 

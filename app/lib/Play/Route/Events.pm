@@ -17,7 +17,9 @@ get '/event' => sub {
 };
 
 get '/event/atom' => sub {
-    die "realm not specified" unless param('realm');
+    unless (param('realm')) {
+        return redirect '/api/event/atom?realm=chaos', 301;
+    }
     my @events = @{ db->events->list({
         map { param($_) ? ( $_ => param($_) ): () } qw/ types realm /,
     })};

@@ -37,7 +37,8 @@ define([
             "explore(/:tab)": "oldExplore",
             "explore/:tab/tag/:tag": "oldExplore",
             "quest/:id": "oldQuestPage",
-            "player/:login": "oldAnotherDashboard"
+            "player/:login": "oldAnotherDashboard",
+            "perl/api/event/atom": "oldAtomFeedFix"
         },
 
         appView: undefined, // required
@@ -236,6 +237,10 @@ define([
 
         oldAnotherDashboard: function (id) {
             this.navigate('/chaos/player/' + id, { trigger: true, replace: true });
+        },
+
+        oldAtomFeedFix: function (id) {
+            window.location = '/api/event/atom?realm=perl';
         },
 
         queryParams: function(name) {
