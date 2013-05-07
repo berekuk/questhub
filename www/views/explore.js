@@ -80,6 +80,7 @@ define([
                 url += '/tag/' + this.tag;
             }
             Backbone.trigger('pp:navigate', url);
+            Backbone.trigger('pp:quiet-url-update');
         },
 
         switchTabByName: function(tab) {

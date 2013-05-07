@@ -8,6 +8,12 @@ define([
     return Common.extend({
         template: _.template(html),
 
+        afterInitialize: function () {
+            this.listenTo(Backbone, 'pp:quiet-url-update', function () {
+                this.render();
+            });
+        },
+
         serialize: function () {
             var params = {
                 realm: this.getRealm(),
