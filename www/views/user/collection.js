@@ -8,6 +8,8 @@ define([
 
         template: _.template(html),
 
+        activeMenuItem: 'user-list',
+
         listSelector: '.users-list',
 
         realm: function () {

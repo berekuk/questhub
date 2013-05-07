@@ -71,14 +71,11 @@ define([
             });
 
             this.appView.setPageView(view);
-            this.appView.setActiveMenuItem('none');
         },
 
         welcome: function () {
             // model is usually empty, but sometimes it's not - logged-in users can see the welcome page too
             this.appView.setPageView(new Welcome({ model: currentUser }));
-
-            this.appView.setActiveMenuItem('home');
         },
 
         frontPage: function () {
@@ -132,8 +129,6 @@ define([
             }
 
             this.appView.setPageView(view);
-
-            this.appView.setActiveMenuItem(my ? 'home' : 'none');
         },
 
         explore: function (realm, tab, tag) {
@@ -147,7 +142,6 @@ define([
             view.activate();
 
             this.appView.setPageView(view);
-            this.appView.setActiveMenuItem('explore');
         },
 
         userList: function (realm) {
@@ -159,7 +153,6 @@ define([
             var view = new UserCollection({ collection: collection });
             collection.fetch();
             this.appView.setPageView(view);
-            this.appView.setActiveMenuItem('user-list');
         },
 
         feed: function (realm) {
@@ -185,7 +178,6 @@ define([
             view.render();
 
             this.appView.setPageView(view);
-            this.appView.setActiveMenuItem('event-list');
         },
 
         register: function () {
@@ -196,14 +188,12 @@ define([
 
             var view = new Register({ model: currentUser });
             this.appView.setPageView(view); // not rendered yet
-            this.appView.setActiveMenuItem('home');
             view.render();
         },
 
         confirmEmail: function (login, secret) {
             var view = new ConfirmEmail({ login: login, secret: secret });
             this.appView.setPageView(view);
-            this.appView.setActiveMenuItem('none');
         },
 
         twitterLogin: function () {
@@ -212,7 +202,6 @@ define([
 
         about: function () {
             this.appView.setPageView(new About());
-            this.appView.setActiveMenuItem('about');
         },
 
         oldUserList: function () {

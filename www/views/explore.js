@@ -9,6 +9,8 @@ define([
     return Common.extend({
         template: _.template(html),
 
+        activeMenuItem: 'explore',
+
         events: {
             'click ul.explore-nav a': 'switchTab',
             'click .remove-filter': 'removeFilter'

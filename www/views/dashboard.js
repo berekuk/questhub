@@ -12,6 +12,10 @@ define([
 
         activated: false,
 
+        activeMenuItem: function () {
+            return (this.my() ? 'home' : 'none');
+        },
+
         realm: function () {
             return this.options.realm;
         },

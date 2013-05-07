@@ -58,9 +58,8 @@ define([
             }
         },
 
-        setActiveMenuItem: function (selector) {
-            this.active = selector;
-            this.render();
+        setActive: function (selector) {
+            this.active = selector; // don't render - views/app will call render() itself soon
         }
     });
 });

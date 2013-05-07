@@ -46,27 +46,26 @@ define([
             this._page = page;
             this.$('.app-view-container').append(page.$el);
 
+
+            var menuItem = _.result(page, 'activeMenuItem') || 'none';
+            this.subview('.navbar-subview').setActive(menuItem);
+
             // FIXME - this leads to double-rendering navbar on the initial page load
             if (page.realm) {
-                this.setRealm(page.realm());
+                this._setRealm(page.realm());
             }
             else {
-                this.setRealm(null);
+                this._setRealm(null);
             }
+            this.subview('.navbar-subview').render();
         },
 
-        setRealm: function (realm) {
+        _setRealm: function (realm) {
             if (this.realm_id == realm) {
                 return;
             }
             this.realm_id = realm;
             this.subview('.navbar-subview').options.realm = this.realm_id;
-            this.subview('.navbar-subview').render();
-        },
-
-        // FIXME - this should probably be an event
-        setActiveMenuItem: function (selector) {
-            this.subview('.navbar-subview').setActiveMenuItem(selector);
         },
 
         settingsDialog: function () {
