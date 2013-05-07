@@ -5,6 +5,8 @@ define([
 ], function (_, Common, html) {
     return Common.extend({
         template: _.template(html),
-        selfRender: true
+        selfRender: true,
+
+        activeMenuItem: 'about'
     });
 });

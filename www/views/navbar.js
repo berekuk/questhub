@@ -1,18 +1,27 @@
 define([
+    'backbone',
     'views/proto/common',
     'models/current-user',
     'views/user/current',
     'text!templates/navbar.html'
-], function (Common, currentUserModel, CurrentUser, html) {
+], function (Backbone, Common, currentUserModel, CurrentUser, html) {
     return Common.extend({
         template: _.template(html),
 
         serialize: function () {
-            return {
+            var params = {
                 realm: this.getRealm(),
                 partial: this.partial,
                 registered: currentUserModel.get('registered')
             };
+            if (this.options.realm) {
+                params.url = Backbone.history.getFragment();
+                params.url = params.url.replace(/^\w+\//, '');
+            }
+            else {
+                params.url = 'feed';
+            }
+            return params;
         },
 
         getRealm: function () {
@@ -41,6 +50,16 @@ define([
             else {
                 this.currentUser.setElement(this.$el.find('.current-user-box')).render();
             }
+
+            if (this.active) {
+                this.$el
+                    .find('.menu-item-' + this.active)
+                    .addClass('active');
+            }
+        },
+
+        setActive: function (selector) {
+            this.active = selector; // don't render - views/app will call render() itself soon
         }
     });
 });

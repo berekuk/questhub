@@ -9,6 +9,8 @@ define([
     return Common.extend({
         template: _.template(html),
 
+        activeMenuItem: 'event-list',
+
         subviews: {
             '.subview': 'eventCollection',
         },

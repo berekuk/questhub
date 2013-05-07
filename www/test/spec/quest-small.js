@@ -17,7 +17,7 @@ define([
         });
 
         describe('render', function () {
-            var view = new QuestSmall({ model: model });
+            var view = new QuestSmall({ model: model, showStatus: true });
             view.render();
 
             it('small quest is a table row', function () {

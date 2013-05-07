@@ -12,6 +12,8 @@ define([
     return Common.extend({
         template: _.template(html),
 
+        activeMenuItem: 'home',
+
         events: {
            'click .submit': 'doRegister',
            'keydown [name=login]': 'checkEnter',
