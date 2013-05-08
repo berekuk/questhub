@@ -61,8 +61,10 @@
         specs.push('spec/quest-big');
         specs.push('spec/quest-add');
         specs.push('spec/like');
+        specs.push('spec/event-box');
 
         specs.push('spec/model/quest');
+        specs.push('spec/model/event');
 
         // evil mocks
         mixpanel = {

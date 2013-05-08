@@ -27,6 +27,7 @@ with 'Play::DB::Role::Common';
 use Play::Mongo;
 use Play::Flux;
 use Play::Config qw(setting);
+use Play::DB qw(db);
 
 use Type::Params qw(validate);
 use Types::Standard qw(Undef Int Str Optional HashRef Dict);
@@ -87,6 +88,26 @@ sub list {
         ->all;
 
     $self->_prepare_event($_) for @events;
+
+    # fetch quests
+    {
+        my @quest_events = grep {
+            $_->{object_type} eq 'quest'
+            and $_->{action} ne 'invite'
+        } @events;
+        my @quest_ids = map { $_->{object_id} } @quest_events;
+
+        if (@quest_ids) {
+            my $quests = db->quests->bulk_get(\@quest_ids);
+
+            for my $event (@quest_events) {
+                $event->{object} = $quests->{$event->{object_id}};
+                $event->{deleted} = 1 unless $event->{object};
+            }
+        }
+    }
+
+    @events = grep { not $_->{deleted} } @events;
 
     return \@events;
 }

@@ -391,4 +391,28 @@ sub scoring :Tests {
     is db->users->get_by_login('baz')->{rp}{europe}, 0;
 }
 
+sub bulk_get :Tests {
+    db->users->add({ login => $_, realms => ['europe'] }) for qw( foo );
+
+    my @quests = map {
+        db->quests->add({
+            name => "q$_",
+            user => 'foo',
+            status => 'open',
+            realm => 'europe',
+        })
+    } 1..5;
+
+    my $bulk_get_result = db->quests->bulk_get([ map { $quests[$_]{_id} } qw( 0 2 3 ) ]);
+    cmp_deeply $bulk_get_result, {
+        map { $quests[$_]{_id} => $quests[$_] } qw( 0 2 3 )
+    };
+
+    db->quests->remove($quests[2]{_id}, { user => 'foo' });
+    $bulk_get_result = db->quests->bulk_get([ map { $quests[$_]{_id} } qw( 0 2 3 ) ]);
+    cmp_deeply $bulk_get_result, {
+        map { $quests[$_]{_id} => $quests[$_] } qw( 0 3 )
+    }, 'removed quest is unobtainable via bulk_get';
+}
+
 __PACKAGE__->new->runtests;

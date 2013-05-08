@@ -90,6 +90,27 @@ sub get {
     return $quest;
 }
 
+sub bulk_get {
+    my $self = shift;
+    my ($ids) = validate(\@_, ArrayRef[Str]);
+
+    my @quests = $self->collection->find({
+        '_id' => {
+            '$in' => [
+                map { MongoDB::OID->new(value => $_) } @$ids
+            ]
+        }
+    })->all;
+    @quests = grep { $_->{status} ne 'deleted' } @quests;
+    $self->_prepare_quest($_) for @quests;
+
+    return {
+        map {
+            $_->{_id} => $_
+        } @quests
+    };
+}
+
 sub list {
     my $self = shift;
     my ($params) = validate(\@_, Undef|Dict[
@@ -223,7 +244,6 @@ sub add {
         action => 'add',
         author => $params->{author},
         object_id => $id->to_string,
-        object => $quest,
         realm => $params->{realm},
     });
 
@@ -306,7 +326,6 @@ sub update {
             action => $action,
             author => $user,
             object_id => $id,
-            object => $quest_after_update,
             realm => $quest->{realm}
         });
     }

@@ -1,10 +1,11 @@
 define([
     'jquery',
     'underscore',
+    'views/proto/any-collection',
     'views/proto/paged-collection',
     'views/event/box',
     'text!templates/event-collection.html'
-], function ($, _, PagedCollection, EventBox, html) {
+], function ($, _, AnyCollection, PagedCollection, EventBox, html) {
     return PagedCollection.extend({
         template: _.template(html),
 
