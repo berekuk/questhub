@@ -391,4 +391,24 @@ sub scoring :Tests {
     is db->users->get_by_login('baz')->{rp}{europe}, 0;
 }
 
+sub bulk_get :Tests {
+    db->users->add({ login => $_, realms => ['europe'] }) for qw( foo );
+
+    my @quests = map {
+        db->quests->add({
+            name => "q$_",
+            user => 'foo',
+            status => 'open',
+            realm => 'europe',
+        })
+    } 1..5;
+
+    my $bulk_get_result = db->quests->bulk_get([ $quests[0]{_id}, $quests[2]{_id} ]);
+    cmp_deeply $bulk_get_result, {
+        $quests[0]{_id} => $quests[0],
+        $quests[2]{_id} => $quests[2],
+
+    };
+}
+
 __PACKAGE__->new->runtests;
