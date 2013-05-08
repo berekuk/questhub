@@ -99,7 +99,7 @@ sub list {
 
             for my $event (@quest_events) {
                 $event->{object} = $quests->{$event->{object_id}};
-                $_->{deleted} = 1 unless $event->{object};
+                $event->{deleted} = 1 unless $event->{object};
             }
         }
     }
