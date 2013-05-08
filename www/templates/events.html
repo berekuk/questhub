@@ -1,57 +1,102 @@
 <div>
   <script type="text/template" class="unknown">
-    <em>Unknown event type. Try to refresh the page.</em>
+    <div>
+      <em>Unknown event type. Try to refresh the page.</em>
+    </div>
+    <div class="object-bottom-line">
+      <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
+    </div>
   </script>
 
   <script type="text/template" class="add-quest">
-    <i class="icon-plus"></i>
-    <%= partial.user({ realm: realm, login: author }) %> started a new quest: <%= partial.quest_link({ id: object_id, quest: object }) %>.
+    <div>
+      <i class="icon-plus"></i>
+      <%= partial.user({ realm: realm, login: author }) %> started a new quest: <%= partial.quest_link({ id: object_id, quest: object }) %>.
+    </div>
+    <div class="object-bottom-line">
+      <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
+      <span class="likes"></span>
+    </div>
   </script>
 
   <script type="text/template" class="close-quest">
-    <i class="icon-check"></i>
-    <%= partial.user({ realm: realm, login: author }) %> completed a quest: <%= partial.quest_link({ id: object_id, quest: object }) %>.
+    <div>
+      <i class="icon-check"></i>
+      <%= partial.user({ realm: realm, login: author }) %> completed a quest: <%= partial.quest_link({ id: object_id, quest: object }) %>.
+    </div>
+    <div class="object-bottom-line">
+      <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
+      <span class="likes"></span>
+    </div>
   </script>
 
   <script type="text/template" class="invite-quest">
-    <i class="icon-group"></i>
-    <%= partial.user({ realm: realm, login: author }) %> invited <%= partial.user({ realm: realm, login: object.invitee }) %>
-    to work a quest: <%= partial.quest_link({ id: object_id, quest: object }) %>.
+    <div>
+      <i class="icon-group"></i>
+      <%= partial.user({ realm: realm, login: author }) %> invited <%= partial.user({ realm: realm, login: object.invitee }) %>
+      to work a quest: <%= partial.quest_link({ id: object_id, quest: object.quest }) %>.
+    </div>
+    <div class="object-bottom-line">
+      <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
+    </div>
   </script>
 
   <script type="text/template" class="reopen-quest">
-    <i class="icon-backward"></i>
-    <%= partial.user({ realm: realm, login: author }) %> reopened a quest: <%= partial.quest_link({ id: object_id, quest: object }) %>.
+    <div>
+      <i class="icon-backward"></i>
+      <%= partial.user({ realm: realm, login: author }) %> reopened a quest: <%= partial.quest_link({ id: object_id, quest: object }) %>.
+    </div>
+    <div class="object-bottom-line">
+      <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
+    </div>
   </script>
 
   <script type="text/template" class="abandon-quest">
-    <i class="icon-eject"></i>
-    <%= partial.user({ realm: realm, login: author }) %> abandoned a quest: <%= partial.quest_link({ id: object_id, quest: object }) %>.
+    <div>
+      <i class="icon-eject"></i>
+      <%= partial.user({ realm: realm, login: author }) %> abandoned a quest: <%= partial.quest_link({ id: object_id, quest: object }) %>.
+    </div>
+    <div class="object-bottom-line">
+      <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
+    </div>
   </script>
 
   <script type="text/template" class="resurrect-quest">
-    <i class="icon-play"></i>
-    <%= partial.user({ realm: realm, login: author }) %> resurrected a quest: <%= partial.quest_link({ id: object_id, quest: object }) %>.
+    <div>
+      <i class="icon-play"></i>
+      <%= partial.user({ realm: realm, login: author }) %> resurrected a quest: <%= partial.quest_link({ id: object_id, quest: object }) %>.
+    </div>
+    <div class="object-bottom-line">
+      <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
+    </div>
   </script>
 
   <script type="text/template" class="add-user">
-    <i class="icon-user"></i>
-    <%= partial.user({ realm: realm, login: author }) %> joins <%= _.find(partial.settings.realms, function (r) { return (r.id == realm) ? r : undefined }).name %>!
+    <div>
+      <i class="icon-user"></i>
+      <%= partial.user({ realm: realm, login: author }) %> joins <%= _.find(partial.settings.realms, function (r) { return (r.id == realm) ? r : undefined }).name %>!
+    </div>
+    <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
   </script>
 
   <script type="text/template" class="add-comment">
-    <i class="icon-comment"></i>
-    <%= partial.user({ realm: realm, login: author }) %>
-    commented on
-    <% if (object.quest.team && object.quest.team.length > 0) { %>
-      <%= partial.user({ realm: realm, login: _.first(object.quest.team) }) %>'s
-    <% } else { %>
-      a
-    <% } %>
-    quest
-    <%= partial.quest_link({ id: object.quest._id, quest: object.quest }) %>:
-    <div class="well well-small event-comment-well">
-      <%= partial.markdown(object.body) %>
+    <div>
+      <i class="icon-comment"></i>
+      <%= partial.user({ realm: realm, login: author }) %>
+      commented on
+      <% if (object.quest.team && object.quest.team.length > 0) { %>
+        <%= partial.user({ realm: realm, login: _.first(object.quest.team) }) %>'s
+      <% } else { %>
+        a
+      <% } %>
+      quest
+      <%= partial.quest_link({ id: object.quest._id, quest: object.quest }) %>:
+      <div class="well well-small event-comment-well">
+        <%= partial.markdown(object.body) %>
+      </div>
+    </div>
+    <div class="object-bottom-line">
+      <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
     </div>
   </script>
 </div>

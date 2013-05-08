@@ -10,8 +10,6 @@ define([
                 var View = eventViews[this.model.name()];
                 return new View({ model: this.model });
             },
-        },
-
-        features: ['timeago'],
+        }
     });
 });

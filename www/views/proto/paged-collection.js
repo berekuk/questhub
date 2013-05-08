@@ -58,12 +58,6 @@ define([
             .always(function () {
                 that.noProgress();
             });
-        },
-
-        afterRender: function () {
-            AnyCollection.prototype.afterRender.apply(this, arguments);
-            this.$el.find('[data-toggle=tooltip]').tooltip('show');
         }
-
     });
 });
