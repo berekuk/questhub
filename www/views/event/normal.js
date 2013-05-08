@@ -13,8 +13,7 @@ define([
 
     return Base.extend({
         template: function () {
-            var eventName = this.model.get('action') + '-' + this.model.get('object_type');
-            var templateElem = $('#template-event-' + this.model.get('action') + '-' + this.model.get('object_type'));
+            var eventName = this.model.name();
             if (templates[eventName]) {
                 return templates[eventName];
             }
