@@ -101,7 +101,7 @@ sub bulk_get {
             ]
         }
     })->all;
-    @quests = grep { $_ ne 'deleted' } @quests;
+    @quests = grep { $_->{status} ne 'deleted' } @quests;
     $self->_prepare_quest($_) for @quests;
 
     return {
