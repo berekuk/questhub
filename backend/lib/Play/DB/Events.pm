@@ -91,7 +91,10 @@ sub list {
 
     # fetch quests
     {
-        my @quest_events = grep { $_->{object_type} eq 'quest' } @events;
+        my @quest_events = grep {
+            $_->{object_type} eq 'quest'
+            and $_->{action} ne 'invite'
+        } @events;
         my @quest_ids = map { $_->{object_id} } @quest_events;
 
         if (@quest_ids) {

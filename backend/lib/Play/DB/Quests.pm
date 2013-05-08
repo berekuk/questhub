@@ -326,7 +326,6 @@ sub update {
             action => $action,
             author => $user,
             object_id => $id,
-            object => $quest_after_update,
             realm => $quest->{realm}
         });
     }

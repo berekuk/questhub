@@ -102,7 +102,7 @@ sub process_close_quest {
     my $self = shift;
     my ($event) = @_;
 
-    my $quest = $event->{object};
+    my $quest = db->quests->get($event->{object_id});
 
     my $recipients = $self->_quest2recipients($quest, $event->{author});
     return unless %$recipients;
