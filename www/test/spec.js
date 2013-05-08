@@ -63,6 +63,7 @@
         specs.push('spec/like');
 
         specs.push('spec/model/quest');
+        specs.push('spec/model/event');
 
         // evil mocks
         mixpanel = {
