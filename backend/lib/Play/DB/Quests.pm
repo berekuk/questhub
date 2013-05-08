@@ -244,7 +244,6 @@ sub add {
         action => 'add',
         author => $params->{author},
         object_id => $id->to_string,
-        object => $quest,
         realm => $params->{realm},
     });
 
