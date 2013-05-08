@@ -1,12 +1,11 @@
 define([
-    'models/event'
-], function (EventModel) {
-    describe('model/event', function () {
-
-        describe('name', function () {
-
-            var model;
-            var modelParams = {
+    'views/event/box',
+    'models/event',
+    'jasmine-jquery'
+], function (EventBox, EventModel) {
+    describe('event-box', function () {
+        describe('render', function () {
+            var model = new EventModel({
                 "object" : {
                     "body" : "body text",
                     "quest" : {
@@ -38,18 +37,15 @@ define([
                 "realm" : "chaos",
                 "action" : "add",
                 "object_id" : "5187d5eb9174e8db1000001e"
-            };
-            beforeEach(function () {
-                model = new EventModel(modelParams);
             });
 
-            it('name', function () {
-                expect(
-                    model.name()
-                ).toEqual(
-                    'add-comment'
-                );
+            var view = new EventBox({ model: model });
+            view.render();
+
+            it('quest name in event html', function () {
+                expect(view.$el.html()).toContain('quest name');
             });
         });
+
     });
 });
