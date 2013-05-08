@@ -89,14 +89,18 @@ sub list {
 
     $self->_prepare_event($_) for @events;
 
+    # fetch quests
     {
         my @quest_events = grep { $_->{object_type} eq 'quest' } @events;
         my @quest_ids = map { $_->{object_id} } @quest_events;
-        my $quests = db->quests->bulk_get(\@quest_ids);
 
-        for my $event (@quest_events) {
-            $event->{object} = $quests->{$event->{object_id}};
-            $_->{deleted} = 1 unless $event->{object};
+        if (@quest_ids) {
+            my $quests = db->quests->bulk_get(\@quest_ids);
+
+            for my $event (@quest_events) {
+                $event->{object} = $quests->{$event->{object_id}};
+                $_->{deleted} = 1 unless $event->{object};
+            }
         }
     }
 

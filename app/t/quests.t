@@ -243,7 +243,7 @@ sub quest_events :Tests {
             action => 'abandon',
             author => $user,
             object_id => $quest_id,
-            object => superhashof({ name => 'test-quest', status => 'abandoned', team => [$user], author => $user }),
+            object => superhashof({ name => 'test-quest', status => 'open', team => [$user], author => $user }),
             realm => 'europe',
         },
         {
@@ -263,7 +263,7 @@ sub quest_events :Tests {
             action => 'close',
             author => $user,
             object_id => $quest_id,
-            object => superhashof({ name => 'test-quest', status => 'closed', team => [$user], author => $user }),
+            object => superhashof({ name => 'test-quest', status => 'open', team => [$user], author => $user }),
             realm => 'europe',
         },
         {
