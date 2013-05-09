@@ -73,6 +73,27 @@ sub get_one {
     return $comment;
 }
 
+sub bulk_get {
+    my $self = shift;
+    my ($ids) = validate(\@_, ArrayRef[Str]);
+
+    my @comments = $self->collection->find({
+        '_id' => {
+            '$in' => [
+                map { MongoDB::OID->new(value => $_) } @$ids
+            ]
+        }
+    })->all;
+    $self->_prepare_comment($_) for @comments;
+
+    return {
+        map {
+            $_->{_id} => $_
+        } @comments
+    };
+}
+
+
 # get number of comments for each quest in given set
 sub bulk_count {
     my $self = shift;

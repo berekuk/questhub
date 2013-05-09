@@ -33,7 +33,30 @@ sub add :Tests {
             { _id => $first->{_id}, ts => re('^\d+$'), body => 'first comment!', author => 'blah', quest_id => $quest_id },
             { _id => $second->{_id}, ts => re('^\d+$'), body => 'second comment!', author => 'blah', quest_id => $quest_id },
         ]
+}
 
+sub bulk_get :Tests {
+    db->users->add({ login => 'foo' });
+
+    my $quest = db->quests->add({
+        user => 'foo',
+        name => 'q1',
+        realm => 'europe',
+    });
+    my $quest_id = $quest->{_id};
+
+    my @c = map {
+        db->comments->add({ quest_id => $quest->{_id}, author => 'foo', body => "c$_" });
+    } 0..4;
+
+    my $comments = db->comments->bulk_get([ map { $_->{_id} } @c[0,2,3] ]);
+    cmp_deeply $comments, {
+        map {
+            $c[$_]{_id} => superhashof({
+                body => "c$_"
+            })
+        } (0,2,3)
+    };
 }
 
 __PACKAGE__->new->runtests;
