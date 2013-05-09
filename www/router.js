@@ -13,15 +13,19 @@ define([
     'views/news-feed',
     'views/about',
     'views/register',
-    'views/confirm-email'
-], function (Backbone, currentUser, Dashboard, QuestPage, QuestModel, UserCollectionModel, UserCollection, AnotherUserModel, Explore, Welcome, EventCollectionModel, NewsFeed, About, Register, ConfirmEmail) {
+    'views/confirm-email',
+    'views/user/unsubscribe'
+], function (Backbone, currentUser, Dashboard, QuestPage, QuestModel, UserCollectionModel, UserCollection, AnotherUserModel, Explore, Welcome, EventCollectionModel, NewsFeed, About, Register, ConfirmEmail, Unsubscribe) {
     return Backbone.Router.extend({
         routes: {
             "": "frontPage",
             "welcome": "welcome",
+
             "register": "register",
             "register/confirm/:login/:secret": "confirmEmail",
             "auth/twitter": "twitterLogin",
+            "player/:login/unsubscribe/:field/:status": "unsubscribeResult",
+
             ":realm/quest/:id": "questPage",
             ":realm/feed": "feed",
             ":realm/players": "userList",
@@ -193,6 +197,12 @@ define([
 
         confirmEmail: function (login, secret) {
             var view = new ConfirmEmail({ login: login, secret: secret });
+            this.appView.setPageView(view);
+        },
+
+        unsubscribeResult: function (login, field, status) {
+            this.navigate("/", { replace: true }); // so that nobody links to unsubscribe page - this would be confusing
+            var view = new Unsubscribe({ login: login, field: field, status: status });
             this.appView.setPageView(view);
         },
 
