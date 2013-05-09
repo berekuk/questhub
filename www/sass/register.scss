@@ -1,5 +1,17 @@
 .register {
+    .registration-form {
+        margin-top: 15px;
+    }
+
     .twitter-login {
         white-space: nowrap;
+    }
+
+    .buttons {
+        margin-top: 20px;
+
+        button.cancel {
+            margin-left: 10px;
+        }
     }
 }

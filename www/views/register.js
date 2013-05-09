@@ -6,9 +6,10 @@ define([
     'models/current-user',
     'views/user/settings',
     'views/realm/picker',
+    'views/progress/big',
     'models/realm-collection',
     'text!templates/register.html'
-], function (_, $, Common, UserSettingsModel, currentUser, UserSettings, RealmPicker, RealmCollectionModel, html) {
+], function (_, $, Common, UserSettingsModel, currentUser, UserSettings, RealmPicker, ProgressBig, RealmCollectionModel, html) {
     return Common.extend({
         template: _.template(html),
 
@@ -16,6 +17,7 @@ define([
 
         events: {
            'click .submit': 'doRegister',
+           'click .cancel': 'cancel',
            'keydown [name=login]': 'checkEnter',
            'keyup [name=login]': 'validate'
         },
@@ -41,6 +43,9 @@ define([
                     this.validate();
                 });
                 return picker;
+            },
+            '.progress-subview': function () {
+                return new ProgressBig();
             }
         },
 
@@ -64,15 +69,23 @@ define([
 
         disable: function() {
             this.$('.submit').addClass('disabled');
-            this.$('.progress').toggle(Boolean(this.submitted));
             this.enabled = false;
         },
 
         enable: function() {
             this.$('.submit').removeClass('disabled');
-            this.$('.progress').hide();
             this.enabled = true;
             this.submitted = false;
+        },
+
+        disableForm: function () {
+            this.$('[name=login]').attr({ disabled: 'disabled' });
+            this.subview('.settings-subview').stop();
+        },
+
+        enableForm: function () {
+            this.$('[name=login]').removeAttr('disabled');
+            this.subview('.settings-subview').start();
         },
 
         validate: function() {
@@ -108,6 +121,8 @@ define([
             ga('send', 'event', 'register', 'submit');
             mixpanel.track('register submit');
 
+            this.subview('.progress-subview').on();
+
             // TODO - what should we do if login is empty?
             $.post('/api/register', {
                 login: this.getLogin(),
@@ -130,6 +145,8 @@ define([
                 ga('send', 'event', 'register', 'fail');
                 mixpanel.track('register fail');
 
+                that.subview('.progress-subview').off();
+
                 // TODO - detect "login already taken" exceptions and render them appropriately
 
                 // let's hope that server didn't register the user before it returned a error
@@ -139,6 +156,29 @@ define([
 
             this.submitted = true;
             this.validate();
+        },
+
+        cancel: function () {
+            this.disable();
+            this.disableForm();
+            this.$('.cancel').addClass('disabled');
+            var that = this;
+
+            ga('send', 'event', 'register', 'cancel');
+            mixpanel.track('register cancel');
+
+            this.subview('.progress-subview').on();
+
+            $.post('/api/register/cancel')
+                .done(function (model, response) {
+                    Backbone.trigger('pp:navigate', '/', { trigger: true });
+                })
+                .fail(function () {
+                    that.$('.cancel').removeClass('disabled');
+                    that.enableForm();
+                    that.validate();
+                    that.subview('.progress-subview').off();
+                });
         }
     });
 });
