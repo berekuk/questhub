@@ -13,6 +13,8 @@ use 5.010;
 use Moo;
 with 'Play::DB::Role::Common';
 
+use Log::Any qw($log);
+
 use Play::Mongo;
 use Play::Flux;
 use Play::Config qw(setting);
@@ -119,15 +121,35 @@ sub list {
     } if $params->{types};
     $search_opt->{realm} = $params->{realm};
 
-    my @events = $self->collection->query($search_opt)
-        ->sort({ _id => -1 })
-        ->limit($params->{limit})
-        ->skip($params->{offset})
-        ->all;
+    my ($limit, $offset) = ($params->{limit}, $params->{offset});
 
-    $self->_prepare_event($_) for @events;
+    my $got_more = 1;
+    my @result;
+    my $trials = 0;
 
-    return $self->expand_events(\@events);
+    # expand_events can filter out some events, but we need to return *exactly* $limit queries
+    # so we're increasing $offset and fetching more if necessary
+    while (@result < $limit and $got_more) {
+        my @events = $self->collection->query($search_opt)
+            ->sort({ _id => -1 })
+            ->limit($limit) # TODO - fetch more than necessary to reduce the chance of follow-up queries
+            ->skip($offset)
+            ->all;
+
+        $got_more = 0 if @events < $limit;
+
+        $self->_prepare_event($_) for @events;
+        $offset += @events;
+        push @result, @{ $self->expand_events(\@events) }; # TODO - filter possible duplicates?
+
+        $trials++;
+        if ($trials > 10) {
+            $log->warn('events->list tried to refetch events too many times');
+            last;
+        }
+    }
+
+    return \@result;
 }
 
 1;
