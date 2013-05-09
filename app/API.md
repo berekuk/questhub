@@ -27,6 +27,14 @@ Register the new user login, associate it with the current twitter user, save to
 
 Resend email confirmation link, duh.
 
+##### GET /api/user/{login}/unsubscribe/{field}
+
+Unset the notification flag `field`.
+
+Requires a `secret` parameter.
+
+Redirects to `/unsubscribe/ok` (or to `/unsubscribe/fail` if secret or something else is wrong).
+
 ##### POST /api/register/confirm_email
 
 Params: `login`, `secret`.

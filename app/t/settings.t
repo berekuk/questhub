@@ -4,6 +4,7 @@ use parent qw(Test::Class);
 
 sub setup :Tests(setup) {
     reset_db();
+    process_email_queue();
     Dancer::session->destroy;
 }
 
@@ -155,7 +156,6 @@ sub email_confirmation :Tests {
 
 sub resend_email_confirmation :Tests {
     http_json GET => "/api/fakeuser/foo";
-    Dancer::session login => 'foo';
 
     http_json PUT => '/api/current_user/settings', { params => {
         email => 'someone@somewhere.com',
@@ -177,4 +177,34 @@ sub resend_email_confirmation :Tests {
     $response = dancer_response POST => '/api/register/confirm_email', { params => { login => 'foo', secret => $secret } };
     is $response->status, 200, 'new secret is fine';
 }
+
+sub unsubscribe :Tests {
+    http_json GET => "/api/fakeuser/foo";
+
+    http_json PUT => '/api/current_user/settings', { params => {
+        email => 'someone@somewhere.com',
+        notify_comments => 1,
+        notify_likes => 1,
+    } };
+
+    my @deliveries = process_email_queue();
+    is scalar(@deliveries), 1;
+    my ($secret) = _email_to_secret($deliveries[0]);
+
+    my $response = dancer_response GET => '/api/user/foo/unsubscribe/notify_likes';
+    is $response->status, 500, "can't unsubscribe without a secret key";
+    like $response->content, qr/secret is not set/;
+
+    $response = dancer_response GET => '/api/user/foo/unsubscribe/notify_likes?secret=123';
+    is $response->status, 302, "wrong unsubscribe redirects";
+    like $response->header('location'), qr{/unsubscribe/fail$}, '...to the fail page';
+
+    my $settings = http_json GET => '/api/current_user/settings';
+    is $settings->{notify_likes}, 1;
+
+    $response = dancer_response GET => "/api/user/foo/unsubscribe/notify_likes?secret=$secret";
+    is $response->status, 302, "correct unsubscribe redirects too";
+    like $response->header('location'), qr{/unsubscribe/ok$}, '...to the ok page';
+}
+
 __PACKAGE__->new->runtests;

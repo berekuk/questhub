@@ -211,6 +211,25 @@ get '/user' => sub {
     });
 };
 
+get '/user/:login/unsubscribe/:field' => sub {
+    my $secret = param('secret') or die "secret is not set";
+
+    eval {
+        db->users->unsubscribe({
+            login => param('login'),
+            notify_field => param('field'),
+            secret => $secret,
+        });
+    };
+
+    if ($@) {
+        redirect '/unsubscribe/fail';
+    }
+    else {
+        redirect '/unsubscribe/ok';
+    }
+};
+
 post '/logout' => sub {
 
     session->destroy(session); #FIXME: workaround a buggy Dancer::Session::MongoDB
