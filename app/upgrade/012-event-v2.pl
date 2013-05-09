@@ -10,6 +10,8 @@ use Play::Mongo;
 my $ec = Play::Mongo->db->get_collection('events');
 my @events = $ec->find->all;
 for my $event (@events) {
+    next if defined $event->{type}; # already upgraded
+
     $event->{type} = "$event->{action}-$event->{object_type}";
 
     if ($event->{object_type} eq 'comment') {
