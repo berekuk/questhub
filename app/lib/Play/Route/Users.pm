@@ -182,6 +182,15 @@ post '/register' => sub {
     return { status => "ok", user => $user };
 };
 
+post '/register/cancel' => sub {
+    if (session('login')) {
+        die "too late, you're already logged in";
+    }
+    session 'twitter_user' => undef;
+    session 'persona_email' => undef;
+    return { status => 'ok' };
+};
+
 post '/register/resend_email_confirmation' => sub {
     my $login = session('login');
     die "not logged in" unless session->{login};

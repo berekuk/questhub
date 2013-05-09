@@ -358,6 +358,14 @@ sub register_persona :Tests {
     });
 }
 
+sub register_cancel :Tests {
+    Dancer::session persona_email => 'example@mozilla.com';
+    is Dancer::session('persona_email'), 'example@mozilla.com';
+
+    http_json POST => '/api/register/cancel';
+    is Dancer::session('persona_email'), undef;
+}
+
 sub register_login_validation :Tests {
     Dancer::session twitter_user => { screen_name => 'twah' };
     my $response = dancer_response POST => '/api/register', { params => {
