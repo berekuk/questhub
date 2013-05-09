@@ -26,7 +26,7 @@ define([
         if (name == 'add-quest') {
             view.prototype.subviews = {
                 '.likes': function () {
-                    var questModel = new QuestModel(this.model.get('object'));
+                    var questModel = new QuestModel(this.model.get('quest'));
                     return new QuestLike({ model: questModel, hidden: true });
                 }
             }

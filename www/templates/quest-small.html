@@ -2,7 +2,7 @@
   <% if (obj.showAuthor) { %>
     <%= partial.user({ realm: realm, login: _.first(team), colon: true }) %>
   <% } %>
-  <%= partial.quest_link({ id: _id, quest: obj }) %>
+  <%= partial.quest_link(obj) %>
 
   <% if (obj.comment_count) { %>
     <a href="/<%- realm %>/quest/<%= _id %>"><span class="badge badge-info"><i class="icon-comment"></i> <%= comment_count %></span></a>
