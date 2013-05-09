@@ -106,6 +106,7 @@ define([
             var that = this;
 
             ga('send', 'event', 'register', 'submit');
+            mixpanel.track('register submit');
 
             // TODO - what should we do if login is empty?
             $.post('/api/register', {
@@ -114,6 +115,7 @@ define([
                 settings: JSON.stringify(this.subview('.settings-subview').deserialize())
             }).done(function (model, response) {
                 ga('send', 'event', 'register', 'ok');
+                mixpanel.track('register ok');
 
                 currentUser.fetch({
                     success: function () {
@@ -126,6 +128,7 @@ define([
             })
             .fail(function (response) {
                 ga('send', 'event', 'register', 'fail');
+                mixpanel.track('register fail');
 
                 // TODO - detect "login already taken" exceptions and render them appropriately
 
