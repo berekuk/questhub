@@ -30,8 +30,8 @@ sub basic :Tests {
     cmp_deeply(
         db->events->list({ realm => 'europe' }),
         [
-            superhashof({ type => 'a2-t2', object_type => 't2', action => 'a2' }), # last in, first out
-            superhashof({ type => 'a1-t1', object_type => 't1', action => 'a1' }),
+            superhashof({ type => 'a2-t2' }), # last in, first out
+            superhashof({ type => 'a1-t1' }),
         ]
     );
 }
