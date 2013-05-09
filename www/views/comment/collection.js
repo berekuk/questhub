@@ -49,7 +49,7 @@ define([
             if (text) {
                 this.$('.submit').removeClass('disabled');
                 this.$('.comment-preview').show();
-                this.$('.comment-preview').html(markdown(text));
+                this.$('.comment-preview').html(markdown(text, this.options.realm));
             }
             else {
                 this.$('.submit').addClass('disabled');
