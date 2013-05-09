@@ -4,7 +4,7 @@
   <% } %>
 
   <div class="comment-content">
-    <%= partial.markdown(body) %>
+    <%= partial.markdown(body, realm) %>
   </div>
   <% if (my) { %>
       <textarea class="comment-edit" style="display: none"><%- body %></textarea>
