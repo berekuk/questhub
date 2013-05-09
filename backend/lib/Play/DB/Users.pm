@@ -335,8 +335,8 @@ sub set_settings {
     $self->collection->update(
         { login => $login },
         { '$set' => { settings => $settings } },
-        { safe => 1, upsert => 1 }
-    );
+        { safe => 1 }
+    ); # FIXME - check result!
     return;
 }
 
@@ -348,6 +348,29 @@ sub get_email {
     return unless $settings->{$notify_field};
     return unless $settings->{email_confirmed};
     return $settings->{email};
+}
+
+sub unsubscribe {
+    my $self = shift;
+    my ($params) = validate(\@_, Dict[
+        login => Str,
+        notify_field => Str,
+        secret => Int,
+    ]);
+
+    my $result = $self->collection->update(
+        {
+            login => $params->{login},
+            'settings.email_confirmation_secret' => int($params->{secret}),
+        },
+        { '$set' => { "settings.$params->{notify_field}" => 0 } },
+        { safe => 1 }
+    );
+    unless ($result->{n}) {
+        die "User $params->{login} not found or secret key is wrong";
+    }
+
+    return;
 }
 
 1;
