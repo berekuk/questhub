@@ -2,7 +2,9 @@
 
 =head1 SYNOPSIS
 
-    pull-db.pl
+    pull-db.pl [--production]
+    options:
+      --production      Pull from questhub.io instead of dropbox backup
 
 =cut
 
@@ -18,16 +20,32 @@ use IPC::System::Simple;
 use autodie qw(system);
 
 sub main {
-    GetOptions() or pod2usage(2);
+    my $from_production;
+    GetOptions(
+        'p|production!' => \$from_production,
+    ) or pod2usage(2);
     pod2usage(2) if @ARGV;
+
+    my $HOST = 'questhub.io';
 
     system(q{vagrant ssh -c 'cd /play/app && ./clear_mongo.sh'});
 
     system('rm -rf dump');
     system('mkdir dump');
 
-    system(q{ssh ubuntu@questhub.io "sh -c 'rm -rf dump && mongodump -d play'"});
-    system(q{scp -r ubuntu@questhub.io:dump/play ./dump/play});
+    if ($from_production) {
+        system(qq{ssh ubuntu\@$HOST "sh -c 'rm -rf dump && mongodump -d play'"});
+        system(qq{scp -r ubuntu\@$HOST:dump/play ./dump/play});
+    }
+    else {
+        my $backup_file = qx(ls -t1 ~/Dropbox/backup/$HOST/ | head -1);
+        unless (defined $backup_file) {
+            die "backup file not found: $!";
+        }
+        chomp $backup_file;
+
+        system("tar xfvz ~/Dropbox/backup/$HOST/$backup_file");
+    }
 
     system(q{vagrant ssh -c 'cd /play && mongorestore'});
 
