@@ -26,14 +26,5 @@
     <label class="checkbox">
         <input name="notify-invites" type="checkbox" <%= (obj.notify_invites > 0) ? 'checked="checked"' : '' %>>invites me to a quest
     </label>
-
-    <% if (partial.settings.instance_name == 'frf-todo') { %>
-      <!-- deprecated, nobody uses this feature -->
-      <hr>
-      <label class="muted">Транслировать мои квесты во френдфид:</label>
-      <input name="frf-username" type="text" placeholder="Nickname" value="<%- obj.frf_username %>">
-      <input name="frf-remote-key" type="text" placeholder="Remote key" value="<%- obj.frf_remote_key %>">
-      <br><span class="muted">(Remote key можно получить <a href="https://friendfeed.com/account/api">тут</a>.)</span>
-    <% } %>
   </div>
 </div>
