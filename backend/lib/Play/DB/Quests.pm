@@ -196,6 +196,18 @@ sub list {
     return \@quests;
 }
 
+sub _update_user_realms {
+    my $self = shift;
+    my ($quest) = validate(\@_, HashRef);
+
+    for my $team_member (@{ $quest->{team} }) {
+        my $user = db->users->get_by_login($team_member) or die "User '$team_member' not found";
+        unless (grep { $_ eq $quest->{realm} } @{ $user->{realms} }) {
+            db->users->join_realm($team_member, $quest->{realm});
+        }
+    }
+}
+
 sub add {
     my $self = shift;
     my ($params) = validate(\@_, Dict[
@@ -221,12 +233,7 @@ sub add {
         $params->{team} = [ delete $params->{user} ];
     }
 
-    for my $team_member (@{ $params->{team} }) {
-        my $user = db->users->get_by_login($team_member) or die "User '$team_member' not found";
-        unless (grep { $_ eq $params->{realm} } @{ $user->{realms} }) {
-            db->users->join_realm($team_member, $params->{realm});
-        }
-    }
+    $self->_update_user_realms($params);
 
     if ($params->{tags}) {
         die "Tags should be arrayref" unless ref($params->{tags}) eq 'ARRAY';
@@ -527,6 +534,43 @@ sub leave {
     unless ($updated) {
         die "Quest not found or unable to leave quest you don't own";
     }
+}
+
+sub move_to_realm {
+    my $self = shift;
+    my ($id, $realm, $user) = validate(\@_, Str, Str, Str);
+
+    my $quest = $self->get($id);
+    my $old_realm = $quest->{realm};
+    if ($old_realm eq $realm) {
+        die "Quest $id is already in realm $realm";
+    }
+
+    unless (grep { $_ eq $user } @{ $quest->{team} }) {
+        die "Access denied to user $user to move the $id quest";
+    }
+    $quest->{realm} = $realm;
+
+    my $result = $self->collection->update(
+        {
+            _id => MongoDB::OID->new(value => $id),
+        },
+        {
+            '$set' => { realm => $realm }
+        },
+        { safe => 1 }
+    );
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "Can't move quest - race condition?";
+    }
+
+    if ($quest->{status} eq 'closed') {
+        db->users->add_points($_, -$self->_quest2points($quest), $old_realm) for @{$quest->{team}};
+        db->users->add_points($_, $self->_quest2points($quest), $realm) for @{$quest->{team}};
+    }
+
+    $self->_update_user_realms($quest);
 }
 
 1;

@@ -415,4 +415,43 @@ sub bulk_get :Tests {
     }, 'removed quest is unobtainable via bulk_get';
 }
 
+sub move_to_realm :Tests {
+    db->users->add({ login => $_, realms => ['europe'] }) for qw( foo bar );
+
+    my @quests = map {
+        db->quests->add({
+            name => "q$_",
+            user => 'foo',
+            realm => 'europe',
+        })
+    } 1..5;
+
+    like exception {
+        db->quests->move_to_realm($quests[0]{_id}, 'asia', 'bar')
+    }, qr/Access denied/, "wrong user can't move";
+
+    is db->quests->get($quests[0]{_id})->{realm}, 'europe', 'realm not changed after access denied';
+
+    db->quests->move_to_realm($quests[0]{_id}, 'asia', 'foo');
+    is db->quests->get($quests[0]{_id})->{realm}, 'asia', 'realm changed';
+
+    cmp_deeply db->users->get_by_login('foo')->{realms}, ['europe', 'asia'], 'user joins the realm if quest is moved';
+
+    db->quests->update($quests[1]{_id}, { status => 'closed', user => 'foo' });
+    db->quests->update($quests[2]{_id}, { status => 'closed', user => 'foo' });
+    cmp_deeply
+        db->users->get_by_login('foo')->{rp},
+        { europe => 2, asia => 0 };
+
+    db->quests->move_to_realm($quests[1]{_id}, 'asia', 'foo');
+    cmp_deeply
+        db->users->get_by_login('foo')->{rp},
+        { europe => 1, asia => 1 };
+
+    db->quests->move_to_realm($quests[1]{_id}, 'europe', 'foo');
+    cmp_deeply
+        db->users->get_by_login('foo')->{rp},
+        { europe => 2, asia => 0 };
+}
+
 __PACKAGE__->new->runtests;
