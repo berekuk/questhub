@@ -222,11 +222,12 @@ get '/user/:login/unsubscribe/:field' => sub {
         });
     };
 
+    my $redirect = '/player/' . param('login') . '/unsubscribe/' . param('field');
     if ($@) {
-        redirect '/unsubscribe/fail';
+        redirect "$redirect/fail";
     }
     else {
-        redirect '/unsubscribe/ok';
+        redirect "$redirect/ok";
     }
 };
 

@@ -197,14 +197,17 @@ sub unsubscribe :Tests {
 
     $response = dancer_response GET => '/api/user/foo/unsubscribe/notify_likes?secret=123';
     is $response->status, 302, "wrong unsubscribe redirects";
-    like $response->header('location'), qr{/unsubscribe/fail$}, '...to the fail page';
+    like $response->header('location'), qr{/player/foo/unsubscribe/notify_likes/fail$}, '...to the fail page';
 
     my $settings = http_json GET => '/api/current_user/settings';
     is $settings->{notify_likes}, 1;
 
     $response = dancer_response GET => "/api/user/foo/unsubscribe/notify_likes?secret=$secret";
     is $response->status, 302, "correct unsubscribe redirects too";
-    like $response->header('location'), qr{/unsubscribe/ok$}, '...to the ok page';
+    like $response->header('location'), qr{/player/foo/unsubscribe/notify_likes/ok$}, '...to the ok page';
+
+    $settings = http_json GET => '/api/current_user/settings';
+    is $settings->{notify_likes}, 0;
 }
 
 __PACKAGE__->new->runtests;
