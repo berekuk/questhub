@@ -84,14 +84,27 @@ sub comment_events :Tests {
     my $add_result = http_json POST => "/api/quest/$quest_id/comment", { params => { body => 'cbody, **bold cbody**' } };
 
     my $events = http_json GET => "/api/event?realm=europe";
-    cmp_deeply $events->[0], {
-        _id => re('^\S+$'),
+    cmp_deeply $events->[0], superhashof({
         action => 'add',
         object_type => 'comment',
+        type => 'add-comment',
         author => 'blah',
         object_id => $add_result->{_id},
+        comment_id => $add_result->{_id},
         ts => re('^\d+$'),
-        object => {
+        comment => superhashof({
+            author => 'blah',
+            body => 'cbody, **bold cbody**',
+        }),
+        quest => superhashof({
+            _id => $quest_id,
+            ts => re('^\d+'),
+            name => 'foo',
+            status => 'open',
+            team => ['blah'],
+            author => 'blah',
+        }),
+        object => superhashof({
             author => 'blah',
             body => 'cbody, **bold cbody**',
             quest => superhashof({
@@ -103,9 +116,9 @@ sub comment_events :Tests {
                 author => 'blah',
             }),
             quest_id => $quest_id,
-        },
+        }),
         realm => 'europe',
-    }, 'comment-add event';
+    }), 'comment-add event';
 }
 
 sub perl_get_one :Tests {

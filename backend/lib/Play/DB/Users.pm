@@ -75,11 +75,9 @@ sub add {
 
     for my $realm (@{ $params->{realms} }) {
         db->events->add({
-            object_type => 'user',
-            action => 'add',
+            type => 'add-user',
             author => $params->{login},
-            object_id => $id->to_string,
-            object => $params,
+            user_id => $id->to_string,
             realm => $realm,
         });
     }

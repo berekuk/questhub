@@ -61,13 +61,13 @@ sub process_add_comment {
     my $self = shift;
     my ($event) = @_;
 
-    my $item = $event->{object};
-    my $quest = $item->{quest};
+    my $comment = $event->{comment};
+    my $quest = $event->{quest};
 
-    my $recipients = $self->_quest2recipients($quest, $item->{author});
+    my $recipients = $self->_quest2recipients($quest, $comment->{author});
     return unless %$recipients;
 
-    my $body_html = pp_markdown($item->{body});
+    my $body_html = pp_markdown($comment->{body});
 
     for my $email (keys %$recipients) {
 
@@ -81,7 +81,7 @@ sub process_add_comment {
         else {
             $email_body_address = "the quest you're watching,";
         }
-        my $email_body_header = '<a href="http://'.setting('hostport').qq[/player/$item->{author}">$item->{author}</a> commented on $email_body_address <a href="http://].setting('hostport').qq[/quest/$item->{quest_id}">$quest->{name}</a>:];
+        my $email_body_header = '<a href="http://'.setting('hostport').qq[/player/$comment->{author}">$comment->{author}</a> commented on $email_body_address <a href="http://].setting('hostport').qq[/quest/$comment->{quest_id}">$quest->{name}</a>:];
         my $email_body = qq[
             <p>
             $email_body_header
@@ -91,7 +91,7 @@ sub process_add_comment {
         ];
         db->events->email(
             $email,
-            "$item->{author} commented on '$quest->{name}'",
+            "$comment->{author} commented on '$quest->{name}'",
             $email_body,
         );
         $self->add_stat('emails sent');
@@ -102,7 +102,7 @@ sub process_close_quest {
     my $self = shift;
     my ($event) = @_;
 
-    my $quest = db->quests->get($event->{object_id});
+    my $quest = $event->{quest};
 
     my $recipients = $self->_quest2recipients($quest, $event->{author});
     return unless %$recipients;
@@ -110,7 +110,7 @@ sub process_close_quest {
     for my $email (keys %$recipients) {
         my $email_body = qq[
             <p>
-            <a href="http://].setting('hostport').qq[/player/$event->{author}">$event->{author}</a> completed a quest you're watching: <a href="http://].setting('hostport').qq[/quest/$event->{object_id}">$quest->{name}</a>.];
+            <a href="http://].setting('hostport').qq[/player/$event->{author}">$event->{author}</a> completed a quest you're watching: <a href="http://].setting('hostport').qq[/quest/$event->{quest_id}">$quest->{name}</a>.];
         db->events->email(
             $email,
             "$event->{author} completed a quest: '$quest->{name}'",
@@ -124,15 +124,15 @@ sub process_invite_quest {
     my $self = shift;
     my ($event) = @_;
 
-    my $quest = $event->{object}{quest};
+    my $quest = $event->{quest};
 
-    my $recipient = $event->{object}{invitee};
+    my $recipient = $event->{invitee};
     my $email = db->users->get_email($recipient, 'notify_invites') or return;
 
     {
         my $email_body = qq[
             <p>
-            <a href="http://].setting('hostport').qq[/player/$event->{author}">$event->{author}</a> invited you to a quest: <a href="http://].setting('hostport').qq[/quest/$event->{object_id}">$quest->{name}</a>.];
+            <a href="http://].setting('hostport').qq[/player/$event->{author}">$event->{author}</a> invited you to a quest: <a href="http://].setting('hostport').qq[/quest/$event->{quest_id}">$quest->{name}</a>.];
         db->events->email(
             $email,
             "$event->{author} invites you to a quest: '$quest->{name}'",
@@ -147,13 +147,20 @@ sub run_once {
 
     while (my $event = $self->in->read) {
         $self->in->commit; # it's better to lose the email than to spam a user indefinitely
-        if ($event->{object_type} eq 'comment' and $event->{action} eq 'add') {
+
+        ($event) = @{ db->events->expand_events([$event]) };
+        unless ($event) {
+            $log->warn("Can't expand event (already deleted?)");
+            next;
+        }
+
+        if ($event->{type} eq 'add-comment') {
             $self->process_add_comment($event);
         }
-        if ($event->{object_type} eq 'quest' and $event->{action} eq 'close') {
+        if ($event->{type} eq 'close-quest') {
             $self->process_close_quest($event);
         }
-        if ($event->{object_type} eq 'quest' and $event->{action} eq 'invite') {
+        if ($event->{type} eq 'invite-quest') {
             $self->process_invite_quest($event);
         }
 

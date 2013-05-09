@@ -226,7 +226,7 @@ sub quest_events :Tests {
 
     my @events = grep { $_->{object_type} eq 'quest' } @{ db->events->list({ realm => 'europe' }) };
     cmp_deeply \@events, [
-        {
+        superhashof({
             _id => re('^\S+$'),
             ts => re('^\d+$'),
             object_type => 'quest',
@@ -235,8 +235,8 @@ sub quest_events :Tests {
             object_id => $quest_id,
             object => superhashof({ name => 'test-quest', status => 'open', team => [$user], author => $user }),
             realm => 'europe',
-        },
-        {
+        }),
+        superhashof({
             _id => re('^\S+$'),
             ts => re('^\d+$'),
             object_type => 'quest',
@@ -245,8 +245,8 @@ sub quest_events :Tests {
             object_id => $quest_id,
             object => superhashof({ name => 'test-quest', status => 'open', team => [$user], author => $user }),
             realm => 'europe',
-        },
-        {
+        }),
+        superhashof({
             _id => re('^\S+$'),
             ts => re('^\d+$'),
             object_type => 'quest',
@@ -255,8 +255,8 @@ sub quest_events :Tests {
             object_id => $quest_id,
             object => superhashof({ name => 'test-quest', status => 'open', team => [$user], author => $user }),
             realm => 'europe',
-        },
-        {
+        }),
+        superhashof({
             _id => re('^\S+$'),
             ts => re('^\d+$'),
             object_type => 'quest',
@@ -265,8 +265,8 @@ sub quest_events :Tests {
             object_id => $quest_id,
             object => superhashof({ name => 'test-quest', status => 'open', team => [$user], author => $user }),
             realm => 'europe',
-        },
-        {
+        }),
+        superhashof({
             _id => re('^\S+$'),
             ts => re('^\d+$'),
             object_type => 'quest',
@@ -275,7 +275,7 @@ sub quest_events :Tests {
             object_id => $quest_id,
             object => superhashof({ name => 'test-quest', status => 'open', team => [$user], author => $user }),
             realm => 'europe',
-        },
+        }),
     ];
 }
 

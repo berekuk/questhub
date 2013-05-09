@@ -257,3 +257,15 @@ Settings:
         user: "barack",
         result: "ok"
     }
+
+Event:
+    {
+        type: 'add-comment', # presence of other fields depend on event type
+        author: 'foo',  # event initiator - quest author, comment author, etc.
+        realm: 'europe',
+        comment_id: 111,
+        quest_id: 222,
+        comment: { ... },
+        quest: { ... },
+        invitee: 'bar' # only for 'invite-quest' type
+    }
