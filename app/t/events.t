@@ -63,8 +63,8 @@ sub filter_list :Tests {
     cmp_deeply
         $list,
         [
-            superhashof({ object_type => 'comment', action => 'add', type => 'add-comment', _id => re('^\S+$'), ts => re('^\d+$'), realm => 'europe' }),
-            superhashof({ object_type => 'quest', action => 'reopen', type => 'reopen-quest', _id => re('^\S+$'), ts => re('^\d+$'), realm => 'europe' }),
+            superhashof({ type => 'add-comment', _id => re('^\S+$'), ts => re('^\d+$'), realm => 'europe' }),
+            superhashof({ type => 'reopen-quest', _id => re('^\S+$'), ts => re('^\d+$'), realm => 'europe' }),
         ]
 }
 

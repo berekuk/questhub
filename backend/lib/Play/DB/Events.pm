@@ -2,20 +2,9 @@ package Play::DB::Events;
 
 =head1 FORMAT
 
-Events can be of different types and contain different loosely-typed fields, but they all follow the same structure:
+Events can be of different types and contain different loosely-typed fields.
 
-    {
-        # required fields:
-        object_type => 'quest', # possible values: 'quest', 'user', 'comment'...
-        action => 'add', # 'close', 'reopen'...
-        author => 'berekuk', # it's usually contained in other fields as well, but is kept here for consistency and simplifying further rendering
-
-        # optional
-        object_id => '123456789000000',
-        object => {
-            ... # anything goes, but usually an object of 'object_type'
-        }
-    }
+See C<API.md> for the description of its structure.
 
 =cut
 
@@ -107,26 +96,6 @@ sub expand_events {
     }
 
     @events = grep { not $_->{deleted} } @events;
-
-    # backward compatibility for frontend
-    for my $event (@events) {
-        next unless defined $event->{type}; # old event format
-        my ($action, $object_type) = split /-/, $event->{type};
-        $event->{action} = $action;
-        $event->{object_type} = $object_type;
-        $event->{object} = $event->{$object_type};
-        $event->{object_id} = $event->{$object_type.'_id'};
-
-        if ($action eq 'invite') {
-            $event->{object} = {
-                quest => $event->{object},
-                invitee => $event->{invitee},
-            };
-        }
-        if ($object_type eq 'comment') {
-            $event->{object}{quest} = $event->{quest};
-        }
-    }
 
     return \@events;
 }
