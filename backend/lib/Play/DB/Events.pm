@@ -30,7 +30,7 @@ use Play::Config qw(setting);
 use Play::DB qw(db);
 
 use Type::Params qw(validate);
-use Types::Standard qw(Undef Int Str Optional HashRef Dict);
+use Types::Standard qw(Undef Int Str Optional HashRef ArrayRef Dict);
 
 sub _prepare_event {
     my $self = shift;
@@ -66,6 +66,71 @@ sub email {
     $email_storage->commit;
 }
 
+sub expand_events {
+    my $self = shift;
+    my ($events) = validate(\@_, ArrayRef);
+
+    my @events = @$events;
+
+    # fetch quests
+    {
+        my @quest_events = grep {
+            defined $_->{quest_id}
+        } @events;
+        my @quest_ids = map { $_->{quest_id} } @quest_events;
+
+        if (@quest_ids) {
+            my $quests = db->quests->bulk_get(\@quest_ids);
+
+            for my $event (@quest_events) {
+                $event->{quest} = $quests->{$event->{quest_id}};
+                $event->{deleted} = 1 unless $event->{quest};
+            }
+        }
+    }
+
+    # fetch comments
+    {
+        my @comment_events = grep {
+            defined $_->{comment_id}
+        } @events;
+        my @comment_ids = map { $_->{comment_id} } @comment_events;
+
+        if (@comment_ids) {
+            my $comments = db->comments->bulk_get(\@comment_ids);
+
+            for my $event (@comment_events) {
+                $event->{comment} = $comments->{$event->{comment_id}};
+                $event->{deleted} = 1 unless $event->{comment};
+            }
+        }
+    }
+
+    @events = grep { not $_->{deleted} } @events;
+
+    # backward compatibility for frontend
+    for my $event (@events) {
+        next unless defined $event->{type}; # old event format
+        my ($action, $object_type) = split /-/, $event->{type};
+        $event->{action} = $action;
+        $event->{object_type} = $object_type;
+        $event->{object} = $event->{$object_type};
+        $event->{object_id} = $event->{$object_type.'_id'};
+
+        if ($action eq 'invite') {
+            $event->{object} = {
+                quest => $event->{object},
+                invitee => $event->{invitee},
+            };
+        }
+        if ($object_type eq 'comment') {
+            $event->{object}{quest} = $event->{quest};
+        }
+    }
+
+    return \@events;
+}
+
 sub list {
     my $self = shift;
     my ($params) = validate(\@_, Undef|Dict[
@@ -78,7 +143,11 @@ sub list {
     $params->{limit} //= 100;
     $params->{offset} //= 0;
 
-    my $search_opt = _build_search_opt($params->{types});
+    my $search_opt = {};
+
+    $search_opt->{type} = {
+        '$in' => [ split /,/, $params->{types} ]
+    } if $params->{types};
     $search_opt->{realm} = $params->{realm};
 
     my @events = $self->collection->query($search_opt)
@@ -89,48 +158,7 @@ sub list {
 
     $self->_prepare_event($_) for @events;
 
-    # fetch quests
-    {
-        my @quest_events = grep {
-            $_->{object_type} eq 'quest'
-            and $_->{action} ne 'invite'
-        } @events;
-        my @quest_ids = map { $_->{object_id} } @quest_events;
-
-        if (@quest_ids) {
-            my $quests = db->quests->bulk_get(\@quest_ids);
-
-            for my $event (@quest_events) {
-                $event->{object} = $quests->{$event->{object_id}};
-                $event->{deleted} = 1 unless $event->{object};
-            }
-        }
-    }
-
-    @events = grep { not $_->{deleted} } @events;
-
-    return \@events;
-}
-
-sub _build_search_opt {
-    my ($types) = @_;
-
-    return {} unless $types;
-
-    my $filter = [];
-
-    my @opt = split( /,/, $types );
-
-    for (@opt) {
-        my ( $action, $obj_type ) = split /-/, $_;
-
-        push @$filter, {
-            action => $action,
-            object_type => $obj_type,
-        };
-    }
-
-    return { '$or' => $filter };
+    return $self->expand_events(\@events);
 }
 
 1;

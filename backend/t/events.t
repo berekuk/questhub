@@ -11,22 +11,34 @@ sub setup :Test(setup) {
 }
 
 sub basic :Tests {
-    db->events->add({ blah => 5, boo => 6, object_type => 'test', realm => 'europe' });
-    db->events->add({ foo => 'bar', object_type => 'test', realm => 'europe' });
-    db->events->add({ foo => 'baz', object_type => 'test', realm => 'asia' });
+    db->events->add({
+        type => 'a1-t1',
+        author => 'foo',
+        realm => 'europe',
+    });
+    db->events->add({
+        type => 'a2-t2',
+        author => 'foo',
+        realm => 'europe',
+    });
+    db->events->add({
+        type => 'a3-t3',
+        author => 'foo',
+        realm => 'asia',
+    });
 
     cmp_deeply(
         db->events->list({ realm => 'europe' }),
         [
-            { foo => 'bar', ts => re('^\d+$'), _id => re('^\S+$'), object_type => 'test', realm => 'europe' }, # last in, first out
-            { blah => 5, boo => 6, ts => re('^\d+$'), _id => re('^\S+$'), object_type => 'test', realm => 'europe' },
+            superhashof({ type => 'a2-t2', object_type => 't2', action => 'a2' }), # last in, first out
+            superhashof({ type => 'a1-t1', object_type => 't1', action => 'a1' }),
         ]
     );
 }
 
 sub realm_validation :Tests {
-    like exception { db->events->add({ foo => 'bar', object_type => 'test' }) }, qr/not defined/;
-    like exception { db->events->add({ foo => 'bar', object_type => 'test', realm => 'africa' }) }, qr/Unknown realm/;
+    like exception { db->events->add({ type => 'foo-bar', foo => 'bar', type => 'test' }) }, qr/not defined/;
+    like exception { db->events->add({ type => 'foo-bar', foo => 'bar', type => 'test', realm => 'africa' }) }, qr/Unknown realm/;
 }
 
 sub load_quests :Tests {
@@ -41,9 +53,9 @@ sub load_quests :Tests {
     my $events = db->events->list({ realm => 'europe' });
     cmp_deeply $events, [
         superhashof({
-            object_type => 'quest',
-            action => 'add',
-            object => superhashof({
+            type => 'add-quest',
+            quest_id => $quest->{_id},
+            quest => superhashof({
                 name => 'q1'
             })
         })
@@ -53,7 +65,7 @@ sub load_quests :Tests {
     $events = db->events->list({ realm => 'europe' });
     cmp_deeply $events, [
         superhashof({
-            object => superhashof({
+            quest => superhashof({
                 name => 'q1-revised'
             })
         })

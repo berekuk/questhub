@@ -10,7 +10,7 @@ sub setup :Tests(setup) {
 }
 
 sub limit_offset :Tests {
-    db->events->add({ name => "e$_", object_type => 'test', realm => 'europe' }) for (1 .. 200);
+    db->events->add({ name => "e$_", type => 'add-test', realm => 'europe' }) for (1 .. 200);
 
     my $list = http_json GET => '/api/event?realm=europe';
     is scalar @$list, 100;
@@ -29,15 +29,15 @@ sub limit_offset :Tests {
 }
 
 sub list :Tests {
-    db->events->add({ blah => 5, object_type => 'test', realm => 'europe' });
-    db->events->add({ blah => 6, object_type => 'test', realm => 'europe' });
+    db->events->add({ blah => 5, type => 'add-test', realm => 'europe' });
+    db->events->add({ blah => 6, type => 'add-test', realm => 'europe' });
 
     my $list = http_json GET => '/api/event?realm=europe';
     cmp_deeply
         $list,
         [
-            { blah => 6, _id => re('^\S+$'), ts => re('^\d+$'), object_type => 'test', realm => 'europe' },
-            { blah => 5, _id => re('^\S+$'), ts => re('^\d+$'), object_type => 'test', realm => 'europe' },
+            superhashof({ blah => 6, _id => re('^\S+$'), ts => re('^\d+$'), type => 'add-test', realm => 'europe' }),
+            superhashof({ blah => 5, _id => re('^\S+$'), ts => re('^\d+$'), type => 'add-test', realm => 'europe' }),
         ]
 }
 
@@ -63,8 +63,8 @@ sub filter_list :Tests {
     cmp_deeply
         $list,
         [
-            superhashof({ object_type => 'comment', action => 'add' , _id => re('^\S+$'), ts => re('^\d+$'), realm => 'europe' }),
-            superhashof({ object_type => 'quest', action => 'reopen' , _id => re('^\S+$'), ts => re('^\d+$'), realm => 'europe' }),
+            superhashof({ object_type => 'comment', action => 'add', type => 'add-comment', _id => re('^\S+$'), ts => re('^\d+$'), realm => 'europe' }),
+            superhashof({ object_type => 'quest', action => 'reopen', type => 'reopen-quest', _id => re('^\S+$'), ts => re('^\d+$'), realm => 'europe' }),
         ]
 }
 

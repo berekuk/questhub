@@ -30,19 +30,16 @@ sub add {
         body => Str,
         author => Str,
     ]);
+
+    my $quest = db->quests->get($params->{quest_id}) or die "quest '$params->{quest_id}' not found";
+
     my $id = $self->collection->insert($params, { safe => 1 });
 
-    my $quest = db->quests->get($params->{quest_id});
-
     db->events->add({
-        object_type => 'comment',
-        action => 'add',
+        type => 'add-comment',
         author => $params->{author},
-        object_id => $id->to_string,
-        object => {
-            %$params,
-            quest => $quest,
-        },
+        comment_id => $id->to_string,
+        quest_id => $params->{quest_id},
         realm => $quest->{realm},
     });
 

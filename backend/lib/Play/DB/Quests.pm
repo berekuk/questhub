@@ -240,10 +240,9 @@ sub add {
     $self->_prepare_quest($quest);
 
     db->events->add({
-        object_type => 'quest',
-        action => 'add',
+        type => 'add-quest',
         author => $params->{author},
-        object_id => $id->to_string,
+        quest_id => $id->to_string,
         realm => $params->{realm},
     });
 
@@ -322,10 +321,9 @@ sub update {
     # TODO - should we split the update() method into several, more semantic methods?
     if ($action) {
         db->events->add({
-            object_type => 'quest',
-            action => $action,
+            type => "$action-quest",
             author => $user,
-            object_id => $id,
+            quest_id => $id,
             realm => $quest->{realm}
         });
     }
@@ -442,14 +440,10 @@ sub invite {
     }
 
     db->events->add({
-        object_type => 'quest',
-        action => 'invite',
+        type => 'invite-quest',
         author => $actor,
-        object_id => $id,
-        object => {
-            quest => $quest,
-            invitee => $user,
-        },
+        quest_id => $id,
+        invitee => $user,
         realm => $quest->{realm}
     });
 
