@@ -6,7 +6,7 @@ use strict;
 use warnings;
 
 use parent qw(Exporter);
-our @EXPORT = qw( reset_db pumper );
+our @EXPORT = qw( reset_db pumper process_email_queue );
 
 use Log::Any::Test;
 use Import::Into;
@@ -30,6 +30,16 @@ sub pumper {
         $cache->{$name} = (require "/play/backend/pumper/$name.pl")->new;
     }
     return $cache->{$name};
+}
+
+sub process_email_queue {
+
+    Email::Sender::Simple->default_transport->clear_deliveries;
+    my @t = Email::Sender::Simple->default_transport->deliveries;
+    Play::Test::pumper('sendmail')->run;
+
+    my @deliveries = Email::Sender::Simple->default_transport->deliveries;
+    return @deliveries;
 }
 
 sub import {
