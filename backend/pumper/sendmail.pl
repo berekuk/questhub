@@ -25,7 +25,14 @@ sub run_once {
     my $self = shift;
 
     while (my $item = $self->in->read) {
-        my ($address, $subject, $body) = @$item;
+
+        my ($address, $subject, $body);
+        if (ref $item eq 'ARRAY') {
+            ($address, $subject, $body) = @$item;
+        }
+        else {
+            ($address, $subject, $body) = @$item{qw/ address subject body /}; # TODO - validate?
+        }
 
         my $email = Email::Simple->create(
             header => [
