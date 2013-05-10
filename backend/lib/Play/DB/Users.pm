@@ -248,10 +248,10 @@ sub confirm_email {
     my $bool2str = sub {
         $settings->{$_[0]} ? 'enabled' : 'disabled';
     };
-    db->events->email(
-        $settings->{email},
-        "Your email at ".setting('service_name')." is confirmed, $login",
-        qq[
+    db->events->email({
+        address => $settings->{email},
+        subject => "Your email at ".setting('service_name')." is confirmed, $login",
+        body => qq[
             <p>
             Login: $login<br>
             Email: $settings->{email}<br>
@@ -261,8 +261,8 @@ sub confirm_email {
             <p>
             You can customize your email notifications <a href="http://].setting('hostport').qq[">at the website</a>.
             </p>
-        ]
-    );
+        ],
+    });
 }
 
 sub _send_email_confirmation {
@@ -272,18 +272,18 @@ sub _send_email_confirmation {
     # need email confirmation
     my $secret = int rand(100000000000);
     my $link = "http://".setting('hostport')."/register/confirm/$login/$secret";
-    db->events->email(
-        $email,
-        "Your ".setting('service_name')." email confirmation link, $login",
-        qq{
+    db->events->email({
+        address => $email,
+        subject => "Your ".setting('service_name')." email confirmation link, $login",
+        body => qq{
             <p>
             Click this if you registered on }.setting('service_name').qq{ recently: <a href="$link">$link</a>.
             </p>
             <p>
             If you think this is a mistake, just ignore this message.
             </p>
-        }
-    );
+        },
+    });
     return $secret;
 }
 

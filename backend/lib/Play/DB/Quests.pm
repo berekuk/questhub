@@ -352,6 +352,7 @@ after 'like' => sub {
     }
 
     # TODO - events2email
+    # FIXME - send to everyone, not just the first team member
     if (my $email = db->users->get_email($team[0], 'notify_likes')) {
         my $email_body = qq[
             <p>
@@ -374,11 +375,13 @@ after 'like' => sub {
         }
 
         # TODO - different bodies depending on quest status
-        db->events->email(
-            $email,
-            "$user likes your quest '$quest->{name}'!",
-            $email_body,
-        );
+        db->events->email({
+            address => $email,
+            subject => "$user likes your quest '$quest->{name}'!",
+            body => $email_body,
+            notify_field => 'notify_likes',
+            login => $team[0],
+        });
     }
 };
 after 'unlike' => sub {
