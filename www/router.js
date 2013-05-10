@@ -201,6 +201,18 @@ define([
         },
 
         unsubscribeResult: function (login, field, status) {
+
+            if (status != 'ok') {
+                mixpanel.track('unsubscribe fail');
+            }
+            else {
+                mixpanel.track('unsubscribe', {
+                    login: login,
+                    field: field,
+                    via: 'email'
+                });
+            }
+
             this.navigate("/", { replace: true }); // so that nobody links to unsubscribe page - this would be confusing
             var view = new Unsubscribe({ login: login, field: field, status: status });
             this.appView.setPageView(view);
