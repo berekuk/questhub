@@ -27,4 +27,35 @@ sub join_realm :Tests {
 
 }
 
+sub unsubscribe :Tests {
+    db->users->add({ login => 'foo', realms => ['europe'] });
+
+    db->users->set_settings(foo => {
+        email => 'test@example.com',
+        notify_likes => 1,
+        notify_comments => 1,
+    });
+
+    my @deliveries = process_email_queue();
+    my ($secret) = @deliveries[0]->{email}->get_body =~ qr/(\d+)</;
+
+    like exception {
+        db->users->unsubscribe({
+            login => 'foo',
+            notify_field => 'notify_likes',
+            secret => '123',
+        })
+    }, qr/secret key is wrong/, 'unsubscribe requires a secret key';
+
+    is db->users->get_settings('foo')->{notify_likes}, 1, 'notify_likes is still on';
+
+    db->users->unsubscribe({
+        login => 'foo',
+        notify_field => 'notify_likes',
+        secret => $secret,
+    });
+
+    is db->users->get_settings('foo')->{notify_likes}, 0, 'notify_likes is off';
+}
+
 __PACKAGE__->new->runtests;

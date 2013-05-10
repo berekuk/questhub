@@ -6,7 +6,7 @@ use warnings;
 use 5.010;
 
 use parent qw(Exporter);
-our @EXPORT = qw( http_json register_email process_email_queue );
+our @EXPORT = qw( http_json register_email );
 
 use lib '../backend/lib';
 
@@ -38,21 +38,11 @@ sub register_email {
 
     http_json PUT => '/api/current_user/settings', { params => $settings };
 
-    my @deliveries = process_email_queue();
+    my @deliveries = Play::Test::process_email_queue();
     my ($secret) = $deliveries[0]->{email}->get_body =~ qr/(\d+)</;
     http_json POST => "/api/register/confirm_email", { params => { login => $user, secret => $secret } };
-    process_email_queue();
+    Play::Test::process_email_queue();
     return;
-}
-
-sub process_email_queue {
-
-    Email::Sender::Simple->default_transport->clear_deliveries;
-    my @t = Email::Sender::Simple->default_transport->deliveries;
-    Play::Test::pumper('sendmail')->run;
-
-    my @deliveries = Email::Sender::Simple->default_transport->deliveries;
-    return @deliveries;
 }
 
 sub import {
