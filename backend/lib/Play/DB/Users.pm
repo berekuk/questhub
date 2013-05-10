@@ -373,4 +373,12 @@ sub unsubscribe {
     return;
 }
 
+sub unsubscribe_secret {
+    my $self = shift;
+    my ($login) = @_;
+
+    my $row = $self->collection->find_one({ login => $login }, { 'settings.email_confirmation_secret' => 1 });
+    return $row->{settings}{email_confirmation_secret};
+}
+
 1;

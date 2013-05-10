@@ -85,9 +85,10 @@ sub process_add_comment {
         my $email_body = qq[
             <p>
             $email_body_header
-            <hr>
             </p>
+            <div style="margin-left: 20px">
             <p>$body_html</p>
+            </div>
         ];
         db->events->email(
             $email,
@@ -110,7 +111,10 @@ sub process_close_quest {
     for my $email (keys %$recipients) {
         my $email_body = qq[
             <p>
-            <a href="http://].setting('hostport').qq[/player/$event->{author}">$event->{author}</a> completed a quest you're watching: <a href="http://].setting('hostport').qq[/quest/$event->{quest_id}">$quest->{name}</a>.];
+            <a href="http://].setting('hostport').qq[/player/$event->{author}">$event->{author}</a>
+            completed a quest you're watching: <a href="http://].setting('hostport').qq[/quest/$event->{quest_id}">$quest->{name}</a>.
+            </p>
+        ];
         db->events->email(
             $email,
             "$event->{author} completed a quest: '$quest->{name}'",
@@ -132,7 +136,10 @@ sub process_invite_quest {
     {
         my $email_body = qq[
             <p>
-            <a href="http://].setting('hostport').qq[/player/$event->{author}">$event->{author}</a> invited you to a quest: <a href="http://].setting('hostport').qq[/quest/$event->{quest_id}">$quest->{name}</a>.];
+            <a href="http://].setting('hostport').qq[/player/$event->{author}">$event->{author}</a>
+            invited you to a quest: <a href="http://].setting('hostport').qq[/quest/$event->{quest_id}">$quest->{name}</a>.
+            </p>
+        ];
         db->events->email(
             $email,
             "$event->{author} invites you to a quest: '$quest->{name}'",
