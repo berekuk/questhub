@@ -32,7 +32,8 @@ get '/event/atom' => sub {
         return redirect '/api/event/atom?realm=chaos', 301;
     }
     my @events = @{ db->events->list({
-        map { param($_) ? ( $_ => param($_) ): () } qw/ types realm /,
+        limit => 30,
+        map { param($_) ? ( $_ => param($_) ): () } qw/ types realm limit /,
     })};
 
     for my $event (@events) {
