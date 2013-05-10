@@ -355,7 +355,7 @@ after 'like' => sub {
     if (my $email = db->users->get_email($team[0], 'notify_likes')) {
         my $email_body = qq[
             <p>
-            <a href="http://].setting('hostport').qq[/player/$user">$user</a> likes your quest <a href="http://].setting('hostport').qq[/quest/$quest->{_id}">$quest->{name}</a>!<br>
+            <a href="http://].setting('hostport').qq[/player/$user">$user</a> likes your quest <a href="http://].setting('hostport').qq[/quest/$quest->{_id}">$quest->{name}</a>.<br>
             </p>
         ];
         if ($quest->{status} eq 'open') {
