@@ -75,7 +75,8 @@ template "/data/config.yml" do
   mode 0644
   variables({
       :hostport => node['play_perl']['hostport'],
-      :service_name => node['play_perl']['service_name']
+      :service_name => node['play_perl']['service_name'],
+      :unsubscribe_salt => node['play_perl']['unsubscribe_salt']
   })
   # TODO - notify ubic service restart
 end

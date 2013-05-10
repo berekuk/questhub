@@ -34,7 +34,7 @@ sub _quest2recipients {
     my $self = shift;
     my ($quest, $author) = @_;
 
-    my $result = {};
+    my @result;
 
     my @recipients = (
         @{ $quest->{team} },
@@ -46,15 +46,18 @@ sub _quest2recipients {
 
     for my $recipient (@recipients) {
         my $email = db->users->get_email($recipient, 'notify_comments') or next;
-        if (grep { $_ eq $recipient } @{ $quest->{team} }) {
-            $result->{$email} = 'team';
-        }
-        else {
-            $result->{$email} = 'watcher';
-        }
+        push @result, {
+            email => $email,
+            login => $recipient,
+            reason => (
+                scalar(grep { $_ eq $recipient } @{ $quest->{team} })
+                ? 'team'
+                : 'watcher'
+            ),
+        };
     }
 
-    return $result;
+    return @result;
 }
 
 sub process_add_comment {
@@ -64,18 +67,17 @@ sub process_add_comment {
     my $comment = $event->{comment};
     my $quest = $event->{quest};
 
-    my $recipients = $self->_quest2recipients($quest, $comment->{author});
-    return unless %$recipients;
+    my @recipients = $self->_quest2recipients($quest, $comment->{author});
+    return unless @recipients;
 
     my $body_html = pp_markdown($comment->{body});
 
-    for my $email (keys %$recipients) {
+    for my $recipient (@recipients) {
 
         # TODO - quoting
-        # TODO - unsubscribe link
 
         my $email_body_address;
-        if ($recipients->{$email} eq 'team') {
+        if ($recipient->{reason} eq 'team') {
             $email_body_address = "your quest";
         }
         else {
@@ -85,15 +87,18 @@ sub process_add_comment {
         my $email_body = qq[
             <p>
             $email_body_header
-            <hr>
             </p>
+            <div style="margin-left: 20px">
             <p>$body_html</p>
+            </div>
         ];
-        db->events->email(
-            $email,
-            "$comment->{author} commented on '$quest->{name}'",
-            $email_body,
-        );
+        db->events->email({
+            address => $recipient->{email},
+            subject => "$comment->{author} commented on '$quest->{name}'",
+            body => $email_body,
+            notify_field => 'notify_comments',
+            login => $recipient->{login},
+        });
         $self->add_stat('emails sent');
     }
 }
@@ -104,18 +109,23 @@ sub process_close_quest {
 
     my $quest = $event->{quest};
 
-    my $recipients = $self->_quest2recipients($quest, $event->{author});
-    return unless %$recipients;
+    my @recipients = $self->_quest2recipients($quest, $event->{author});
+    return unless @recipients;
 
-    for my $email (keys %$recipients) {
+    for my $recipient (@recipients) {
         my $email_body = qq[
             <p>
-            <a href="http://].setting('hostport').qq[/player/$event->{author}">$event->{author}</a> completed a quest you're watching: <a href="http://].setting('hostport').qq[/quest/$event->{quest_id}">$quest->{name}</a>.];
-        db->events->email(
-            $email,
-            "$event->{author} completed a quest: '$quest->{name}'",
-            $email_body,
-        );
+            <a href="http://].setting('hostport').qq[/player/$event->{author}">$event->{author}</a>
+            completed a quest you're watching: <a href="http://].setting('hostport').qq[/quest/$event->{quest_id}">$quest->{name}</a>.
+            </p>
+        ];
+        db->events->email({
+            address => $recipient->{email},
+            subject => "$event->{author} completed a quest: '$quest->{name}'",
+            body => $email_body,
+            notify_field => 'notify_comments', # TODO - invent another field?
+            login => $recipient->{login},
+        });
         $self->add_stat('emails sent');
     }
 }
@@ -132,12 +142,17 @@ sub process_invite_quest {
     {
         my $email_body = qq[
             <p>
-            <a href="http://].setting('hostport').qq[/player/$event->{author}">$event->{author}</a> invited you to a quest: <a href="http://].setting('hostport').qq[/quest/$event->{quest_id}">$quest->{name}</a>.];
-        db->events->email(
-            $email,
-            "$event->{author} invites you to a quest: '$quest->{name}'",
-            $email_body,
-        );
+            <a href="http://].setting('hostport').qq[/player/$event->{author}">$event->{author}</a>
+            invited you to a quest: <a href="http://].setting('hostport').qq[/quest/$event->{quest_id}">$quest->{name}</a>.
+            </p>
+        ];
+        db->events->email({
+            address => $email,
+            subject => "$event->{author} invites you to a quest: '$quest->{name}'",
+            body => $email_body,
+            notify_field => 'notify_invites',
+            login => $recipient,
+        });
         $self->add_stat('emails sent');
     }
 }

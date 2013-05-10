@@ -10,6 +10,8 @@ with 'Play::Pumper';
 use Play::Flux;
 use Play::Config qw(setting);
 
+use Play::DB qw(db);
+
 use Email::Simple;
 use Email::Sender::Simple qw(sendmail);
 use Encode qw(encode_utf8);
@@ -26,12 +28,26 @@ sub run_once {
 
     while (my $item = $self->in->read) {
 
-        my ($address, $subject, $body);
+        $self->in->commit; # it's better to lose the email than to spam a user indefinitely
+
+        my ($address, $subject, $body, $notify_field);
         if (ref $item eq 'ARRAY') {
             ($address, $subject, $body) = @$item;
         }
         else {
             ($address, $subject, $body) = @$item{qw/ address subject body /}; # TODO - validate?
+
+            if ($item->{login} and $item->{notify_field}) {
+                my $secret = db->users->unsubscribe_secret($item->{login});
+                $body .= q{
+                <div style="margin-top: 30px; text-align: center; margin-bottom: 30px;">
+                  <hr>
+                  <span style="font-size: 12px">
+                    Don't want to receive these emails? <a href="http://}.setting('hostport').qq[/api/user/$item->{login}/unsubscribe/$item->{notify_field}?secret=$secret">Unsubscribe</a> at any time.
+                  </span>
+                </div>
+                ];
+            }
         }
 
         my $email = Email::Simple->create(
@@ -44,7 +60,7 @@ sub run_once {
             ],
             body => encode_utf8($body),
         );
-        $self->in->commit; # it's better to lose the email than to spam a user indefinitely
+
         sendmail($email);
         $self->add_stat('emails sent');
     }

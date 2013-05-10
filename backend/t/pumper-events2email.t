@@ -41,7 +41,7 @@ subtest "comment on other user's quest" => sub {
 
     my $email = $email_in->read;
     $email_in->commit;
-    like $email->[2], qr/commented on your quest/;
+    like $email->{body}, qr/commented on your quest/;
 
     is $email_in->read, undef;
 
@@ -63,7 +63,6 @@ subtest "comment on watched quest" => sub {
     my $watched_quest = db->quests->add({
         team => ['bar'],
         name => 'bar quest',
-        status => 'open',
         realm => 'europe',
     });
     db->quests->watch($watched_quest->{_id}, 'baz');
@@ -77,16 +76,16 @@ subtest "comment on watched quest" => sub {
     my $chunk = $email_in->read_chunk(5);
     $email_in->commit;
 
-    $chunk = [ sort { $a->[0] cmp $b->[0] } @$chunk ];
+    $chunk = [ sort { $a->{address} cmp $b->{address} } @$chunk ];
     is scalar @$chunk, 2;
-    is $chunk->[0][0], 'bar@example.com';
-    is $chunk->[1][0], 'baz2@example.com';
+    is $chunk->[0]{address}, 'bar@example.com';
+    is $chunk->[1]{address}, 'baz2@example.com';
 
-    like $chunk->[0][2], qr/commented on your quest/;
-    unlike $chunk->[0][2], qr/commented on the quest you're watching/;
+    like $chunk->[0]{body}, qr/commented on your quest/;
+    unlike $chunk->[0]{body}, qr/commented on the quest you're watching/;
 
-    unlike $chunk->[1][2], qr/commented on your quest/;
-    like $chunk->[1][2], qr/commented on the quest you're watching/;
+    unlike $chunk->[1]{body}, qr/commented on your quest/;
+    like $chunk->[1]{body}, qr/commented on the quest you're watching/;
 };
 
 subtest "quest completed" => sub {
@@ -106,13 +105,13 @@ subtest "quest completed" => sub {
 
     my $chunk = $email_in->read_chunk(5);
     $email_in->commit;
-    $chunk = [ sort { $a->[0] cmp $b->[0] } @$chunk ];
+    $chunk = [ sort { $a->{address} cmp $b->{address} } @$chunk ];
     is scalar @$chunk, 2;
-    is $chunk->[0][0], 'baz2@example.com';
-    is $chunk->[1][0], 'baz@example.com';
+    is $chunk->[0]{address}, 'baz2@example.com';
+    is $chunk->[1]{address}, 'baz@example.com';
 
-    like $chunk->[0][2], qr/completed a quest/;
-    like $chunk->[1][2], qr/completed a quest/;
+    like $chunk->[0]{body}, qr/completed a quest/;
+    like $chunk->[1]{body}, qr/completed a quest/;
 };
 
 subtest "invite" => sub {
@@ -131,8 +130,8 @@ subtest "invite" => sub {
     my $chunk = $email_in->read_chunk(5);
     $email_in->commit;
 
-    is $chunk->[0][0], 'foo@example.com';
-    like $chunk->[0][1], qr/bar invites you to a quest/;
+    is $chunk->[0]{address}, 'foo@example.com';
+    like $chunk->[0]{subject}, qr/bar invites you to a quest/;
 };
 
 done_testing;

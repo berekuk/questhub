@@ -50,10 +50,16 @@ sub add {
 
 sub email {
     my $self = shift;
-    my ($address, $subject, $body) = validate(\@_, Str, Str, Str);
+    my ($item) = validate(\@_, Dict[
+        address => Str,
+        subject => Str,
+        body => Str,
+        notify_field => Optional[Str],
+        login => Optional[Str],
+    ]);
 
     my $email_storage = Play::Flux->email;
-    $email_storage->write([ $address, $subject, $body ]);
+    $email_storage->write($item);
     $email_storage->commit;
 }
 

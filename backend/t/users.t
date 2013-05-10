@@ -36,9 +36,6 @@ sub unsubscribe :Tests {
         notify_comments => 1,
     });
 
-    my @deliveries = process_email_queue();
-    my ($secret) = @deliveries[0]->{email}->get_body =~ qr/(\d+)</;
-
     like exception {
         db->users->unsubscribe({
             login => 'foo',
@@ -49,6 +46,7 @@ sub unsubscribe :Tests {
 
     is db->users->get_settings('foo')->{notify_likes}, 1, 'notify_likes is still on';
 
+    my $secret = db->users->unsubscribe_secret('foo');
     db->users->unsubscribe({
         login => 'foo',
         notify_field => 'notify_likes',

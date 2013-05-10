@@ -6,6 +6,7 @@ use Moo;
 
 use Log::Any qw($log);
 use Digest::MD5 qw(md5_hex);
+use Digest::SHA1 qw(sha1_hex);
 
 use Type::Params qw(validate);
 use Types::Standard qw(Str Int Bool Dict Undef Optional HashRef);
@@ -248,10 +249,10 @@ sub confirm_email {
     my $bool2str = sub {
         $settings->{$_[0]} ? 'enabled' : 'disabled';
     };
-    db->events->email(
-        $settings->{email},
-        "Your email at ".setting('service_name')." is confirmed, $login",
-        qq[
+    db->events->email({
+        address => $settings->{email},
+        subject => "Your email at ".setting('service_name')." is confirmed, $login",
+        body => qq[
             <p>
             Login: $login<br>
             Email: $settings->{email}<br>
@@ -261,8 +262,8 @@ sub confirm_email {
             <p>
             You can customize your email notifications <a href="http://].setting('hostport').qq[">at the website</a>.
             </p>
-        ]
-    );
+        ],
+    });
 }
 
 sub _send_email_confirmation {
@@ -272,18 +273,18 @@ sub _send_email_confirmation {
     # need email confirmation
     my $secret = int rand(100000000000);
     my $link = "http://".setting('hostport')."/register/confirm/$login/$secret";
-    db->events->email(
-        $email,
-        "Your ".setting('service_name')." email confirmation link, $login",
-        qq{
+    db->events->email({
+        address => $email,
+        subject => "Your ".setting('service_name')." email confirmation link, $login",
+        body => qq{
             <p>
             Click this if you registered on }.setting('service_name').qq{ recently: <a href="$link">$link</a>.
             </p>
             <p>
             If you think this is a mistake, just ignore this message.
             </p>
-        }
-    );
+        },
+    });
     return $secret;
 }
 
@@ -355,22 +356,28 @@ sub unsubscribe {
     my ($params) = validate(\@_, Dict[
         login => Str,
         notify_field => Str,
-        secret => Int,
+        secret => Str,
     ]);
 
+    die "secret key is wrong" unless $params->{secret} eq $self->unsubscribe_secret($params->{login});
+
     my $result = $self->collection->update(
-        {
-            login => $params->{login},
-            'settings.email_confirmation_secret' => int($params->{secret}),
-        },
+        { login => $params->{login} },
         { '$set' => { "settings.$params->{notify_field}" => 0 } },
         { safe => 1 }
     );
     unless ($result->{n}) {
-        die "User $params->{login} not found or secret key is wrong";
+        die "User $params->{login} not found or already unsubscribed";
     }
 
     return;
+}
+
+sub unsubscribe_secret {
+    my $self = shift;
+    my ($login) = @_;
+
+    return sha1_hex(setting('unsubscribe_salt').':'.$login);
 }
 
 1;
