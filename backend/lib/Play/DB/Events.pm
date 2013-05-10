@@ -132,7 +132,7 @@ sub list {
     while (@result < $limit and $got_more) {
         my @events = $self->collection->query($search_opt)
             ->sort({ _id => -1 })
-            ->limit($limit) # TODO - fetch more than necessary to reduce the chance of follow-up queries
+            ->limit($limit - scalar @result) # TODO - fetch more than necessary to reduce the chance of follow-up queries
             ->skip($offset)
             ->all;
 
@@ -140,7 +140,9 @@ sub list {
 
         $self->_prepare_event($_) for @events;
         $offset += @events;
-        push @result, @{ $self->expand_events(\@events) }; # TODO - filter possible duplicates?
+        @events = @{ $self->expand_events(\@events) };
+
+        push @result, @events; # TODO - filter possible duplicates?
 
         $trials++;
         if ($trials > 10) {
