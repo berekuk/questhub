@@ -2,6 +2,8 @@ use lib 'lib';
 use Play::Test::App;
 use parent qw(Test::Class);
 
+use Play::DB qw(db);
+
 sub setup :Tests(setup) {
     reset_db();
     process_email_queue();
@@ -187,9 +189,7 @@ sub unsubscribe :Tests {
         notify_likes => 1,
     } };
 
-    my @deliveries = process_email_queue();
-    is scalar(@deliveries), 1;
-    my ($secret) = _email_to_secret($deliveries[0]);
+    my $secret = db->users->unsubscribe_secret('foo');
 
     my $response = dancer_response GET => '/api/user/foo/unsubscribe/notify_likes';
     is $response->status, 500, "can't unsubscribe without a secret key";

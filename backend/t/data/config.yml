@@ -4,3 +4,4 @@ test: 1
 realms:
 - europe
 - asia
+unsubscribe_salt: '42'

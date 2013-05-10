@@ -6,6 +6,7 @@ use Moo;
 
 use Log::Any qw($log);
 use Digest::MD5 qw(md5_hex);
+use Digest::SHA1 qw(sha1_hex);
 
 use Type::Params qw(validate);
 use Types::Standard qw(Str Int Bool Dict Undef Optional HashRef);
@@ -355,19 +356,18 @@ sub unsubscribe {
     my ($params) = validate(\@_, Dict[
         login => Str,
         notify_field => Str,
-        secret => Int,
+        secret => Str,
     ]);
 
+    die "secret key is wrong" unless $params->{secret} eq $self->unsubscribe_secret($params->{login});
+
     my $result = $self->collection->update(
-        {
-            login => $params->{login},
-            'settings.email_confirmation_secret' => int($params->{secret}),
-        },
+        { login => $params->{login} },
         { '$set' => { "settings.$params->{notify_field}" => 0 } },
         { safe => 1 }
     );
     unless ($result->{n}) {
-        die "User $params->{login} not found or secret key is wrong";
+        die "User $params->{login} not found or already unsubscribed";
     }
 
     return;
@@ -377,8 +377,7 @@ sub unsubscribe_secret {
     my $self = shift;
     my ($login) = @_;
 
-    my $row = $self->collection->find_one({ login => $login }, { 'settings.email_confirmation_secret' => 1 });
-    return $row->{settings}{email_confirmation_secret};
+    return sha1_hex(setting('unsubscribe_salt').':'.$login);
 }
 
 1;

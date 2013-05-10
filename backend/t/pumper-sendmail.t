@@ -13,18 +13,6 @@ my $pumper = pumper('sendmail');
 $pumper->run;
 $log->empty_ok;
 
-use Play::DB qw(db);
-
-# prepare the user
-{
-    db->users->add({ login => 'test3' });
-    db->users->set_settings('test3', { notify_likes => 1, email => 'test3+setting@example.com' });
-
-    # we're not interested in user emails, we're testing genertic email functionality, but we need the user to check notify_field feature
-    $pumper->run; $log->clear;
-    Email::Sender::Simple->default_transport->clear_deliveries;
-}
-
 my $storage = Play::Flux->email;
 
 # legacy item format
