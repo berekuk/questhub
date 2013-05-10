@@ -53,7 +53,11 @@ sub email {
     my ($address, $subject, $body) = validate(\@_, Str, Str, Str);
 
     my $email_storage = Play::Flux->email;
-    $email_storage->write([ $address, $subject, $body ]);
+    $email_storage->write({
+        address => $address,
+        subject => $subject,
+        body => $body,
+    });
     $email_storage->commit;
 }
 

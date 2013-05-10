@@ -37,7 +37,7 @@ sub unsubscribe :Tests {
     });
 
     my @deliveries = process_email_queue();
-    my ($secret) = @deliveries[0]->{email}->get_body =~ qr/(\d+)</;
+    my ($secret) = $deliveries[0]->{email}->get_body =~ qr/(\d+)</;
 
     like exception {
         db->users->unsubscribe({

@@ -14,8 +14,12 @@ $pumper->run;
 $log->empty_ok;
 
 my $storage = Play::Flux->email;
+
+# legacy item format
 $storage->write(['test@example.com', 'test title', 'test body 1']);
 $storage->write(['test2@example.com', 'test title 2', 'test body 2']);
+
+# modern format
 $storage->write({
     address => 'test3@example.com',
     subject => 'test title 3',
