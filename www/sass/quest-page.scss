@@ -130,11 +130,17 @@ div.quest-big-unclaimed {
             padding: 20px;
             display: inline-block;
             background-color: #ffb91f;
+            border: 3px #ffb91f solid;
+            transition: border 0.2s ease;
             text-align: center;
 
             .points {
                 display: block;
                 font-size: 25px;
+            }
+
+            &:hover {
+                border: 3px #CC9419 solid;
             }
         }
     }
