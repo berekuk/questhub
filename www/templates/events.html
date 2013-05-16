@@ -11,7 +11,8 @@
   <script type="text/template" class="add-quest">
     <div>
       <i class="icon-plus"></i>
-      <%= partial.user({ realm: realm, login: author }) %> started a new quest: <%= partial.quest_link(quest) %>.
+      <%= partial.user({ realm: realm, login: author }) %> started a new quest:<br>
+      <%= partial.quest_link(quest) %>.
     </div>
     <div class="object-bottom-line">
       <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
@@ -22,7 +23,8 @@
   <script type="text/template" class="close-quest">
     <div>
       <i class="icon-check"></i>
-      <%= partial.user({ realm: realm, login: author }) %> completed a quest: <%= partial.quest_link(quest) %>.
+      <%= partial.user({ realm: realm, login: author }) %> completed a quest:<br>
+      <%= partial.quest_link(quest) %>.
     </div>
     <div class="object-bottom-line">
       <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
@@ -33,8 +35,8 @@
   <script type="text/template" class="invite-quest">
     <div>
       <i class="icon-group"></i>
-      <%= partial.user({ realm: realm, login: author }) %> invited <%= partial.user({ realm: realm, login: invitee }) %>
-      to work a quest: <%= partial.quest_link(quest) %>.
+      <%= partial.user({ realm: realm, login: author }) %> invited <%= partial.user({ realm: realm, login: invitee }) %> to work a quest:<br>
+      <%= partial.quest_link(quest) %>.
     </div>
     <div class="object-bottom-line">
       <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
@@ -44,7 +46,8 @@
   <script type="text/template" class="reopen-quest">
     <div>
       <i class="icon-backward"></i>
-      <%= partial.user({ realm: realm, login: author }) %> reopened a quest: <%= partial.quest_link(quest) %>.
+      <%= partial.user({ realm: realm, login: author }) %> reopened a quest:<br>
+      <%= partial.quest_link(quest) %>.
     </div>
     <div class="object-bottom-line">
       <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
@@ -54,7 +57,8 @@
   <script type="text/template" class="abandon-quest">
     <div>
       <i class="icon-eject"></i>
-      <%= partial.user({ realm: realm, login: author }) %> abandoned a quest: <%= partial.quest_link(quest) %>.
+      <%= partial.user({ realm: realm, login: author }) %> abandoned a quest:<br>
+      <%= partial.quest_link(quest) %>.
     </div>
     <div class="object-bottom-line">
       <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
@@ -64,7 +68,8 @@
   <script type="text/template" class="resurrect-quest">
     <div>
       <i class="icon-play"></i>
-      <%= partial.user({ realm: realm, login: author }) %> resurrected a quest: <%= partial.quest_link(quest) %>.
+      <%= partial.user({ realm: realm, login: author }) %> resurrected a quest:<br>
+      <%= partial.quest_link(quest) %>.
     </div>
     <div class="object-bottom-line">
       <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
@@ -89,8 +94,8 @@
       <% } else { %>
         a
       <% } %>
-      quest
-      <%= partial.quest_link(quest) %>:
+      quest:<br>
+      <%= partial.quest_link(quest) %>
       <div class="well well-small event-comment-well">
         <%= partial.markdown(comment.body, realm) %>
       </div>
