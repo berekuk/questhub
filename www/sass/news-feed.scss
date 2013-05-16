@@ -6,20 +6,42 @@
         }
     }
 
-    .event-box-view > hr {
-        margin-top: 5px;
-        margin-bottom: 25px;
+    .event-box-view {
+        position: relative;
+        > hr {
+            margin-top: 5px;
+            margin-bottom: 25px;
+
+            position: relative;
+            left: -27px;
+        }
     }
 
     .event-header {
         position: relative;
 
-        i {
-            display: inline-block;
-            position: absolute;
-            left: -18px;
-            top: 3px;
+        @media (min-width: 768px) {
+            i {
+                display: inline-block;
+                position: absolute;
+                left: -27px;
+                top: 1px;
+
+                font-size: 20px;
+                color: #999;
+            }
         }
+        @media (max-width: 767px) {
+            i {
+                display: inline-block;
+                position: absolute;
+                left: -18px;
+                top: 3px;
+
+                color: #999;
+            }
+        }
+
         margin-bottom: 4px;
     }
 
