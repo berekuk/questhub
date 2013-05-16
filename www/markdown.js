@@ -25,8 +25,8 @@ define([
 
         var html = _markdownConverter.makeHtml(source);
         var el = $('<div>' + html + '</div>');
-        el.find("a[href^='/player/']").attr('class', 'label');
-        el.find("a[href^='" + realm_prefix + "/player/']").attr('class', 'label');
+        el.find("a[href^='/player/']").attr('class', 'user-link');
+        el.find("a[href^='" + realm_prefix + "/player/']").attr('class', 'user-link');
         return el.html();
     };
 });
