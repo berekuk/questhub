@@ -1,6 +1,6 @@
 <div>
   <script type="text/template" class="unknown">
-    <div>
+    <div class="event-header">
       <em>Unknown event type. Try to refresh the page.</em>
     </div>
     <div class="object-bottom-line">
@@ -9,9 +9,12 @@
   </script>
 
   <script type="text/template" class="add-quest">
-    <div>
+    <div class="event-header">
       <i class="icon-plus"></i>
-      <%= partial.user({ realm: realm, login: author }) %> started a new quest: <%= partial.quest_link(quest) %>.
+      <%= partial.user({ realm: realm, login: author }) %> started a new quest:
+    </div>
+    <div class="event-quest-title">
+      <%= partial.quest_link(quest) %>.
     </div>
     <div class="object-bottom-line">
       <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
@@ -20,9 +23,12 @@
   </script>
 
   <script type="text/template" class="close-quest">
-    <div>
+    <div class="event-header">
       <i class="icon-check"></i>
-      <%= partial.user({ realm: realm, login: author }) %> completed a quest: <%= partial.quest_link(quest) %>.
+      <%= partial.user({ realm: realm, login: author }) %> completed a quest:
+    </div>
+    <div class="event-quest-title">
+      <%= partial.quest_link(quest) %>.
     </div>
     <div class="object-bottom-line">
       <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
@@ -31,10 +37,12 @@
   </script>
 
   <script type="text/template" class="invite-quest">
-    <div>
+    <div class="event-header">
       <i class="icon-group"></i>
-      <%= partial.user({ realm: realm, login: author }) %> invited <%= partial.user({ realm: realm, login: invitee }) %>
-      to work a quest: <%= partial.quest_link(quest) %>.
+      <%= partial.user({ realm: realm, login: author }) %> invited <%= partial.user({ realm: realm, login: invitee }) %> to work a quest:
+    </div>
+    <div class="event-quest-title">
+      <%= partial.quest_link(quest) %>.
     </div>
     <div class="object-bottom-line">
       <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
@@ -42,9 +50,12 @@
   </script>
 
   <script type="text/template" class="reopen-quest">
-    <div>
+    <div class="event-header">
       <i class="icon-backward"></i>
-      <%= partial.user({ realm: realm, login: author }) %> reopened a quest: <%= partial.quest_link(quest) %>.
+      <%= partial.user({ realm: realm, login: author }) %> reopened a quest:
+    </div>
+    <div class="event-quest-title">
+      <%= partial.quest_link(quest) %>.
     </div>
     <div class="object-bottom-line">
       <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
@@ -52,9 +63,12 @@
   </script>
 
   <script type="text/template" class="abandon-quest">
-    <div>
+    <div class="event-header">
       <i class="icon-eject"></i>
-      <%= partial.user({ realm: realm, login: author }) %> abandoned a quest: <%= partial.quest_link(quest) %>.
+      <%= partial.user({ realm: realm, login: author }) %> abandoned a quest:
+    </div>
+    <div class="event-quest-title">
+      <%= partial.quest_link(quest) %>.
     </div>
     <div class="object-bottom-line">
       <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
@@ -62,9 +76,12 @@
   </script>
 
   <script type="text/template" class="resurrect-quest">
-    <div>
+    <div class="event-header">
       <i class="icon-play"></i>
-      <%= partial.user({ realm: realm, login: author }) %> resurrected a quest: <%= partial.quest_link(quest) %>.
+      <%= partial.user({ realm: realm, login: author }) %> resurrected a quest:
+    </div>
+    <div class="event-quest-title">
+      <%= partial.quest_link(quest) %>.
     </div>
     <div class="object-bottom-line">
       <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
@@ -72,15 +89,17 @@
   </script>
 
   <script type="text/template" class="add-user">
-    <div>
+    <div class="event-header">
       <i class="icon-user"></i>
       <%= partial.user({ realm: realm, login: author }) %> joins <%= _.find(partial.settings.realms, function (r) { return (r.id == realm) ? r : undefined }).name %>!
     </div>
-    <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
+    <div class="object-bottom-line">
+      <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
+    </div>
   </script>
 
   <script type="text/template" class="add-comment">
-    <div>
+    <div class="event-header">
       <i class="icon-comment"></i>
       <%= partial.user({ realm: realm, login: author }) %>
       commented on
@@ -89,11 +108,13 @@
       <% } else { %>
         a
       <% } %>
-      quest
-      <%= partial.quest_link(quest) %>:
-      <div class="well well-small event-comment-well">
-        <%= partial.markdown(comment.body, realm) %>
-      </div>
+      quest:
+    </div>
+    <div class="event-quest-title">
+      <%= partial.quest_link(quest) %>
+    </div>
+    <div class="well well-small event-comment-well">
+      <%= partial.markdown(comment.body, realm) %>
     </div>
     <div class="object-bottom-line">
       <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
