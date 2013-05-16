@@ -5,6 +5,7 @@ define([
 ], function (Common, eventViews, html) {
     return Common.extend({
         template: _.template(html),
+        className: 'event-box-view',
         subviews: {
             '.subview': function () {
                 var View = eventViews[this.model.name()];

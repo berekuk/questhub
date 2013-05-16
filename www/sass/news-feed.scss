@@ -1,0 +1,38 @@
+.news-feed-view {
+
+    @media (min-width: 768px) {
+        .events-list {
+            padding-left: 20px;
+        }
+    }
+
+    .event-box-view > hr {
+        margin-top: 5px;
+        margin-bottom: 25px;
+    }
+
+    .event-header {
+        position: relative;
+
+        i {
+            display: inline-block;
+            position: absolute;
+            left: -18px;
+            top: 3px;
+        }
+        margin-bottom: 4px;
+    }
+
+    .object-bottom-line time {
+//        font-size: 11.844px; // same as badges font size
+    }
+
+    .event-comment-well {
+        p:last-child, ul:last-child {
+            margin-bottom: 0px;
+        }
+        margin-top: 5px;
+        margin-bottom: 5px;
+        overflow: auto;
+    }
+}

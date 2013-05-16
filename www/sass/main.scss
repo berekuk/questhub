@@ -16,17 +16,11 @@ dd {
 
 .user-link {
     font-weight: bold;
+    color: #333;
 }
 
 .icon-twitter {
     color: #4099ff;
-}
-
-// comment as shown in the News Feed
-.event-comment-well {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    overflow: auto;
 }
 
 // comment as shown on the quest page
@@ -73,7 +67,7 @@ input.quest-edit {
 
 .object-bottom-line {
     // fixing the jumping line height on "like" button hide/show
-    line-height: 24px;
+    line-height: 22px;
 }
 
 .tag-filter {
@@ -97,6 +91,7 @@ ul.nav-filter {
 @import 'sass/quest-collection.scss';
 @import 'sass/quest-page.scss';
 @import 'sass/dashboard.scss';
+@import 'sass/news-feed.scss';
 @import 'sass/user-collection.scss';
 @import 'sass/register.scss';
 @import 'sass/unsubscribe.scss';
