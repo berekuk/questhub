@@ -23,9 +23,10 @@ dd {
     color: #4099ff;
 }
 
-// comment as shown on the quest page
+// comment as shown on the quest page or news feed
 .comment-content {
     overflow: auto;
+//    line-height: 1.75; TODO - our lines are too long and this would be useful, but only on wide screens, so we need to add a media query here
 }
 
 // wrapper from comments-page
