@@ -40,7 +40,19 @@ sub _prepare_user {
     $user->{rp}{$_} //= 0 for @{ $user->{realms} };
 
     if (not $user->{twitter}{screen_name} and $user->{settings}{email}) {
-        $user->{image} = 'http://www.gravatar.com/avatar/'.md5_hex(lc($user->{settings}{email}));
+        my $pic = 'http://www.gravatar.com/avatar/'.md5_hex(lc($user->{settings}{email}));
+        $user->{image} = $pic;
+        $user->{pic} = {
+            small => "$pic?s=24",
+            normal => "$pic?s=48",
+        };
+    }
+    elsif ($user->{twitter}{screen_name}) {
+        my $pic = "http://api.twitter.com/1/users/profile_image?screen_name=$user->{twitter}{screen_name}";
+        $user->{pic} = {
+            small => "$pic?size=mini",
+            normal => "$pic?s=normal",
+        };
     }
     delete $user->{settings};
     return $user;
