@@ -25,7 +25,7 @@ sub current_user :Tests {
     $self->_add_users;
 
     my $user = http_json GET => '/api/current_user';
-    cmp_deeply $user, {
+    cmp_deeply $user, superhashof({
         twitter => {
             screen_name => 'blah2',
         },
@@ -39,11 +39,11 @@ sub current_user :Tests {
         settings => {},
         notifications => [],
         realms => ['europe', 'asia'],
-    };
+    });
 
     http_json PUT => '/api/current_user/settings', { params => { foo => 'bar' } };
     $user = http_json GET => '/api/current_user';
-    cmp_deeply $user, {
+    cmp_deeply $user, superhashof({
         twitter => {
             screen_name => 'blah2',
         },
@@ -57,13 +57,13 @@ sub current_user :Tests {
         settings => { foo => 'bar' },
         notifications => [],
         realms => ['europe', 'asia'],
-    };
+    });
 
     db->notifications->add('blah2', 'shout', 'preved');
     db->notifications->add('blah2', 'shout', 'medved');
 
     $user = http_json GET => '/api/current_user';
-    cmp_deeply $user, {
+    cmp_deeply $user, superhashof({
         twitter => {
             screen_name => 'blah2',
         },
@@ -80,7 +80,7 @@ sub current_user :Tests {
             superhashof({ params => 'medved' }),
         ],
         realms => ['europe', 'asia'],
-    };
+    });
 
 }
 
@@ -89,7 +89,7 @@ sub another_user :Tests {
     $self->_add_users;
 
     my $user = http_json GET => '/api/user/blah';
-    cmp_deeply $user, {
+    cmp_deeply $user, superhashof({
         twitter => {
             screen_name => 'blah',
         },
@@ -100,7 +100,7 @@ sub another_user :Tests {
             asia => 0,
         },
         realms => ['europe', 'asia'],
-    };
+    });
 }
 
 sub nonexistent_user :Tests {
@@ -143,6 +143,7 @@ sub users_list :Tests {
                     asia => 0,
                 },
                 realms => ['europe', 'asia'],
+                pic => ignore,
             },
         } qw( blah blah2 blah3 )
     ];
@@ -169,6 +170,10 @@ sub users_list_limit_offset :Tests {
                         asia => 0,
                     },
                     realms => ['europe', 'asia'],
+                    pic => {
+                        small => ignore,
+                        normal => ignore,
+                    },
                 },
             } @_
         ];
@@ -206,7 +211,7 @@ sub open_quests_count :Tests {
 
     my $user = http_json GET => '/api/user?realm=europe';
     cmp_deeply $user, [
-        {
+        superhashof({
             twitter => {
                 screen_name => 'blah',
             },
@@ -218,8 +223,8 @@ sub open_quests_count :Tests {
             },
             open_quests => 2, # asia quest doesn't count
             realms => ['europe', 'asia'],
-        },
-        {
+        }),
+        superhashof({
             twitter => {
                 screen_name => 'blah2',
             },
@@ -230,7 +235,7 @@ sub open_quests_count :Tests {
                 asia => 0,
             },
             realms => ['europe', 'asia'],
-        },
+        }),
     ];
 }
 
@@ -299,7 +304,7 @@ sub register :Tests {
         realm => 'asia',
     } };
     $current_user = http_json GET => '/api/current_user';
-    cmp_deeply $current_user, {
+    cmp_deeply $current_user, superhashof({
         registered => 1,
         _id => re('^\S+$'),
         rp => { asia => 0 },
@@ -310,7 +315,7 @@ sub register :Tests {
         settings => {},
         notifications => [],
         realms => ['asia'],
-    };
+    });
 }
 
 sub register_settings :Tests {
