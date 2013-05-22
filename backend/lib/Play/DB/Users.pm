@@ -50,8 +50,14 @@ sub _prepare_user {
     elsif ($user->{twitter}{screen_name}) {
         my $pic = "http://api.twitter.com/1/users/profile_image?screen_name=$user->{twitter}{screen_name}";
         $user->{pic} = {
-            small => "$pic?size=mini",
-            normal => "$pic?s=normal",
+            small => "$pic&size=mini",
+            normal => "$pic&size=normal",
+        };
+    }
+    else {
+        $user->{pic} = {
+            small => "http://www.gravatar.com/avatar/00000000000000000000000000000000?s=24",
+            normal => "http://www.gravatar.com/avatar/00000000000000000000000000000000?s=48",
         };
     }
     delete $user->{settings};
