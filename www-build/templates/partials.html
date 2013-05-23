@@ -32,4 +32,20 @@
 
   <script type="text/template" class="quest-link">
     <a href="/<%- realm %>/quest/<%- _id %>"><%- name %></a></script>
+
+  <script type="text/template" class="likes">
+    <% if (obj.likes && likes.length) { %>
+      <span class="badge badge-success" data-toggle="tooltip" title="<%= likes.slice(0, 10).join(', ') %><%= (likes.length <= 10) ? '' : ' and ' + (likes.length - 10) + ' more' %>">
+        <i class="icon-thumbs-up"></i> <%= likes.length %>
+      </span>
+    <% } %>
+  </script>
+
+  <script type="text/template" class="watchers">
+    <% if (obj.watchers && watchers.length) { %>
+      <span class="badge badge-warning" data-toggle="tooltip" title="<%= watchers.slice(0, 10).join(', ') %><%= (watchers.length <= 10) ? '' : ' and ' + (watchers.length - 10) + ' more' %>">
+        <i class="icon-eye-open"></i> <%= watchers.length %>
+      </span>
+    <% } %>
+  </script>
 </div>
