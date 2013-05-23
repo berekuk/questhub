@@ -4,19 +4,36 @@ div.quest-big-open, div.quest-big-closed, div.quest-big-abandoned, div.quest-big
 }
 
 div.quest-big-open {
-    background-color: #fcf8e3;
+    background-color: $open-quest-color;
 }
 div.quest-big-closed {
-    background-color: #d9edf7;
+    background-color: $closed-quest-color;
 }
 div.quest-big-abandoned {
-    background-color: #dddddd;
+    background-color: $abandoned-quest-color;
 }
 div.quest-big-unclaimed {
-    background-color: #dff0d8;
+    background-color: $unclaimed-quest-color;
 }
 
 .quest-big {
+    h2 {
+        overflow: auto;
+    }
+
+    .quest-tags {
+        display: block;
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+    }
+
+    .object-bottom-line {
+        margin-top: 20px;
+    }
+}
+
+.quest-page-left {
     .watchers {
         margin-bottom: 8px;
     }
@@ -24,19 +41,6 @@ div.quest-big-unclaimed {
         margin-bottom: 8px;
     }
 
-    h2 {
-        overflow: auto;
-        margin-bottom: 20px;
-    }
-
-    .quest-tags {
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-    }
-}
-
-.quest-page-left {
     position: relative;
     @media (min-width: 980px) {
         > div.reward {
@@ -129,8 +133,9 @@ div.quest-big-unclaimed {
 
             padding: 20px;
             display: inline-block;
-            background-color: #ffb91f;
-            border: 3px #ffb91f solid;
+            cursor: pointer;
+            background-color: $open-quest-color;
+            border: 3px $open-quest-color solid;
             transition: border 0.2s ease;
             text-align: center;
 
@@ -140,7 +145,7 @@ div.quest-big-unclaimed {
             }
 
             &:hover {
-                border: 3px #CC9419 solid;
+                border: 3px #ffb91f solid;
             }
         }
     }

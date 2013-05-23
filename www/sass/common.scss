@@ -1,3 +1,7 @@
+$open-quest-color: #fcf8e3;
+$closed-quest-color: #d9edf7;
+$abandoned-quest-color: #dddddd;
+$unclaimed-quest-color: #dff0d8;
 .brand {
     font-family: doppio-one, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -34,10 +38,4 @@ tbody tr.show-more > td {
 time.timeago {
     color: #999;
     font-style: italic;
-}
-
-.object-bottom-line {
-    time, .user-link {
-        font-size: 11.844px; // same as badges font size
-    }
 }

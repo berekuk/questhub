@@ -30,13 +30,17 @@
   </div>
 
   <div>
-  <% if (team.length == 0) { %>
+  <% if (team.length == 0 && currentUser) { %>
     <span class="muted">This quest is not claimed by anybody. Would you like to take it?</span>
     <button class="quest-join btn btn-primary">Take</button>
   <% } %>
   </div>
 
-  <div class="watchers"></div>
-  <div class="likes"></div>
+
+  <div class="object-bottom-line">
+    <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
+    <%= partial.likes(obj) %>
+    <%= partial.watchers(obj) %>
+  </div>
 
 </div>

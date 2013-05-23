@@ -5,7 +5,7 @@
 
       <% if (status == 'open') { %>
       <div class="reward">
-        <div class="reward-circle" data-toggle="tooltip" data-placement="right" title="Reward&nbsp;for&nbsp;completing&nbsp;this&nbsp;quest">
+        <div class="reward-circle" data-toggle="tooltip" data-placement="bottom" title="Reward&nbsp;for&nbsp;completing&nbsp;this&nbsp;quest">
           <span class="points"><%- reward %></span>
           <span class="points-text">points</span>
         </div>
@@ -46,13 +46,45 @@
             </button>
 
           <% } %>
+        <% } else { %>
+          <% if (currentUser) { %>
+            <!-- watch, like -->
+            <% if (obj.likes && _.contains(likes, currentUser)) { %>
+              <button class="btn unlike">
+                <span class="muted">
+                <i class="icon-thumbs-up"></i>
+                Unlike
+                </span>
+              </button>
+            <% } else { %>
+              <button class="btn btn-success like">
+                <i class="icon-thumbs-up"></i>
+                Like
+              </button>
+            <% } %>
+
+            <% if (obj.watchers && _.contains(watchers, currentUser)) { %>
+              <button class="btn unwatch muted">
+                <span class="muted">
+                <i class="icon-eye-close"></i>
+                Unwatch
+                </span>
+              </button>
+            <% } else { %>
+              <button class="btn watch">
+                <i class="icon-eye-open"></i>
+                Watch
+              </button>
+            <% } %>
+          <% } %>
+
         <% } %>
+
         <% if (invited) { %>
         <span>You're invited! <button class="btn btn-danger join">Join this quest</button></span>
         <% } %>
 
         <% if (my) { %>
-        <div class="invite-block">
           <button class="invite btn" data-toggle="tooltip" data-placement="right" title="Invite&nbsp;another&nbsp;player&nbsp;to&nbsp;work&nbsp;with&nbsp;you.">
             <i class="icon-user"></i>
             Invite
@@ -62,7 +94,6 @@
             <!-- .input-block-level via http://stackoverflow.com/a/12322087 -->
             <input id="inputInvitee" type="text" placeholder="Login" class="input-block-level">
           </form>
-        </div>
         <% } %>
       </div>
 

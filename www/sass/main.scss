@@ -69,6 +69,10 @@ input.quest-edit {
 .object-bottom-line {
     // fixing the jumping line height on "like" button hide/show
     line-height: 22px;
+
+    time, .user-link {
+        font-size: 11.844px; // same as badges font size
+    }
 }
 
 .tag-filter {

@@ -23,6 +23,10 @@ define([
             'click .invite': 'inviteDialog',
             'click .uninvite': 'uninviteAction',
             'click .join': 'joinAction',
+            'click .like': function () { this.model.like(); },
+            'click .unlike': function () { this.model.unlike(); },
+            'click .watch': function () { this.model.act('watch'); },
+            'click .unwatch': function () { this.model.act('unwatch'); },
             'keyup #inputInvitee': 'inviteAction',
         },
 
@@ -43,12 +47,12 @@ define([
                     collection: commentsModel,
                     realm: this.realm(),
                 });
-            },
+            }
         },
 
         inviteDialog: function () {
             var that = this;
-            this.$('.invite-block button').hide();
+            this.$('.invite.button').hide();
             this.$('.invite-dialog').show(0, function () {
                 that.$('.invite-dialog input').focus();
             });
@@ -59,7 +63,7 @@ define([
             if (e.keyCode == 27) {
                 this.$('.invite-dialog').hide();
                 this.$('.invite-dialog input').val('');
-                this.$('.invite-block button').show();
+                this.$('.invite.button').show();
                 return;
             }
 
