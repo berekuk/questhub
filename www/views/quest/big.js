@@ -2,12 +2,10 @@ define([
     'underscore',
     'backbone',
     'views/proto/common',
-    'views/quest/like',
-    'views/quest/watch',
     'models/current-user',
     'bootbox',
     'text!templates/quest-big.html'
-], function (_, Backbone, Common, Like, Watch, currentUser, bootbox, html) {
+], function (_, Backbone, Common, currentUser, bootbox, html) {
     'use strict';
     return Common.extend({
         template: _.template(html),
@@ -20,12 +18,6 @@ define([
         },
 
         subviews: {
-            '.likes': function () {
-                return new Like({ model: this.model });
-            },
-            '.watchers': function () {
-                return new Watch({ model: this.model });
-            }
         },
 
         afterInitialize: function () {
@@ -41,7 +33,7 @@ define([
                 return;
             }
             this.$('.quest-edit').show();
-            this.$('.quest-big-labels .quest-big-tags-edit').show();
+            this.$('.quest-big-tags-edit').show();
 
             this.backup = _.clone(this.model.attributes);
 
@@ -108,7 +100,7 @@ define([
             }
 
             this.$('.quest-edit').hide();
-            this.$('.quest-big-labels .quest-big-tags-edit').hide();
+            this.$('.quest-big-tags-edit').hide();
             this.$('.quest-title').show();
             this.$('.quest-tags').show();
         },
@@ -132,6 +124,6 @@ define([
             params.showStatus = true;
             return params;
         },
-        features: ['tooltip']
+        features: ['tooltip', 'timeago']
     });
 });
