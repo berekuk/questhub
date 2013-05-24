@@ -6,37 +6,37 @@
 // based on bootstrap's tr.info
 tbody tr.quest-closed {
     > td {
-        background-color: #d9edf7;
+        background-color: $closed-quest-color;
     }
     &:hover > td {
-        background-color: #c4e3f3;
+        background-color: darken($closed-quest-color, 5%);
     }
 }
 
 // based on bootstrap's tr.warning
 tbody tr.quest-open {
     > td {
-        background-color: #fcf8e3;
+        background-color: $open-quest-color;
     }
     &:hover > td {
-        background-color: #faf2cc;
+        background-color: darken($open-quest-color, 5%);
     }
 }
 
 tbody tr.quest-abandoned {
     > td {
-        background-color: #dddddd;
+        background-color: $abandoned-quest-color;
     }
     &:hover > td {
-        background-color: #d3d3d3;
+        background-color: darken($abandoned-quest-color, 5%);
     }
 }
 
 tbody tr.quest-unclaimed {
     > td {
-        background-color: #dff0d8;
+        background-color: $unclaimed-quest-color;
     }
     &:hover > td {
-        background-color: #d0e9c6;
+        background-color: darken($unclaimed-quest-color, 5%);
     }
 }
