@@ -73,7 +73,7 @@ sub process_add_comment {
             address => $recipient->{email},
             subject => "$comment->{author} commented on '$quest->{name}'",
             body => $email_body,
-            notify_field => 'notify_comments',
+            notify_field => $recipient->{notify_field},
             login => $recipient->{login},
         });
         $self->add_stat('emails sent');
@@ -107,7 +107,7 @@ sub process_close_quest {
             address => $recipient->{email},
             subject => "$event->{author} completed a quest: '$quest->{name}'",
             body => $email_body,
-            notify_field => 'notify_comments', # TODO - invent another field?
+            notify_field => $recipient->{notify_field},
             login => $recipient->{login},
         });
         $self->add_stat('emails sent');

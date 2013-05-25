@@ -35,9 +35,9 @@ sub composite :Tests {
     cmp_deeply
         [ sort { $a->{login} cmp $b->{login} } $er->get_all ],
         [
-            { login => 'bar', email => 'bar@example.com', reason => 'team' },
-            { login => 'baz', email => 'baz@example.com', reason => 'watcher' },
-            { login => 'foo', email => 'foo@example.com', reason => 'team' },
+            { login => 'bar', email => 'bar@example.com', reason => 'team', notify_field => 'notify_comments' },
+            { login => 'baz', email => 'baz@example.com', reason => 'watcher', notify_field => 'notify_comments' },
+            { login => 'foo', email => 'foo@example.com', reason => 'team', notify_field => 'notify_comments' },
         ];
 }
 

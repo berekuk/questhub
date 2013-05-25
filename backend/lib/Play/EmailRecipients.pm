@@ -81,6 +81,7 @@ sub get_all {
                 login => $recipient->{login},
                 reason => $reason,
                 email => $settings->{email},
+                notify_field => $reason2setting{$reason},
             };
             last;
         }
