@@ -22,43 +22,6 @@ has 'in' => (
     },
 );
 
-sub _fill_emails {
-    my $self = shift;
-    my ($recipients) = @_;
-
-    my @result;
-    for my $recipient (@$recipients) {
-        my $email = db->users->get_email($recipient->{login}, 'notify_comments') or next;
-
-        push @result, {
-            %$recipient,
-            email => $email
-        };
-    }
-
-    return \@result;
-}
-
-sub _quest2recipients {
-    my $self = shift;
-    my ($quest, $author) = @_;
-
-    my $er = Play::EmailRecipients->new;
-    $er->add_logins($quest->{team}, 'team');
-
-    if ($quest->{watchers}) {
-        $er->add_logins($quest->{watchers}, 'watcher');
-    }
-
-    $er->exclude($author);
-
-    return @{
-        $self->_fill_emails([
-            $er->get_all
-        ])
-    };
-}
-
 sub process_add_comment {
     my $self = shift;
     my ($event) = @_;
@@ -68,21 +31,36 @@ sub process_add_comment {
 
     my ($body_html, $markdown_extra) = db->comments->body2html($comment->{body}, $quest->{realm});
 
-    my @recipients = $self->_quest2recipients($quest, $comment->{author});
-    return unless @recipients;
+    my @recipients;
+    {
+        my $er = Play::EmailRecipients->new;
+
+        $er->add_logins($quest->{team}, 'team');
+        $er->add_logins($quest->{watchers}, 'watcher') if $quest->{watchers};
+        $er->add_logins($markdown_extra->{mentions}, 'mention') if $markdown_extra->{mentions};
+
+        $er->exclude($comment->{author});
+
+        @recipients = $er->get_all;
+    }
 
     for my $recipient (@recipients) {
 
-        # TODO - quoting
+        # TODO - quote quest name!
 
-        my $email_body_address;
-        if ($recipient->{reason} eq 'team') {
-            $email_body_address = "your quest";
+        my $reason = $recipient->{reason};
+
+        my $appeal;
+        if ($reason eq 'watcher') {
+            $appeal = "commented on a quest you're watching,";
+        }
+        elsif ($reason eq 'mention') {
+            $appeal = "mentioned you in a quest";
         }
         else {
-            $email_body_address = "the quest you're watching,";
+            $appeal = "commented on your quest";
         }
-        my $email_body_header = '<a href="http://'.setting('hostport').qq[/player/$comment->{author}">$comment->{author}</a> commented on $email_body_address <a href="http://].setting('hostport').qq[/quest/$comment->{quest_id}">$quest->{name}</a>:];
+        my $email_body_header = '<a href="http://'.setting('hostport').qq[/player/$comment->{author}">$comment->{author}</a> $appeal <a href="http://].setting('hostport').qq[/quest/$comment->{quest_id}">$quest->{name}</a>:];
         my $email_body = qq[
             <p>
             $email_body_header
@@ -108,8 +86,15 @@ sub process_close_quest {
 
     my $quest = $event->{quest};
 
-    my @recipients = $self->_quest2recipients($quest, $event->{author});
-    return unless @recipients;
+    my @recipients;
+    {
+        my $er = Play::EmailRecipients->new;
+        $er->add_logins($quest->{team}, 'team');
+        $er->add_logins($quest->{watchers}, 'watcher') if $quest->{watchers};
+        $er->exclude($event->{author});
+
+        @recipients = $er->get_all;
+    }
 
     for my $recipient (@recipients) {
         my $email_body = qq[
