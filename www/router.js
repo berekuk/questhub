@@ -190,6 +190,8 @@ define([
                 return;
             }
 
+            mixpanel.track('register form');
+
             var view = new Register({ model: currentUser });
             this.appView.setPageView(view); // not rendered yet
             view.render();
