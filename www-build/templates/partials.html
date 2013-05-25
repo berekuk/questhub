@@ -7,7 +7,7 @@
     <% if (obj.tags) { %>
       <% _.each(obj.tags, function (tag) { %>
         <% var isTime = (tag.match(/^\d+[mhdw]$/)); %>
-        <a href="/<%- realm %>/explore/latest/tag/<%= tag %>" class="label <%= (isTime ? 'label-info' : 'label-inverse') %>">
+        <a href="/<%- realm %>/explore/latest/tag/<%= tag %>" class="tag <%= (isTime ? 'tag-time' : '') %>">
           <% if (isTime) { %>
             <i class="icon-time"></i>
           <% } %>
