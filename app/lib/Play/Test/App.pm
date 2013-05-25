@@ -53,6 +53,8 @@ sub import {
 
     # the order is important
     require Dancer; Dancer->import::into($target);
+    Dancer::set(log => 'info');
+
     require Play; Play->import::into($target);
     require Dancer::Test; Dancer::Test->import::into($target);
 
