@@ -60,21 +60,28 @@ sub bulk_get :Tests {
 }
 
 sub body2html :Tests {
+    my ($html, $other) = db->comments->body2html('**bold**', 'europe');
     is
-        db->comments->body2html({
-            body => '**bold**',
-            realm => 'europe',
-        }),
+        $html,
         "<strong>bold</strong>\n",
         'basic markdown';
+    cmp_deeply $other, { mentions => [] }, 'mentions are empty';
 
+
+    ($html, $other) = db->comments->body2html('@berekuk, hello', 'europe');
     is
-        db->comments->body2html({
-            body => '@berekuk, hello',
-            realm => 'europe',
-        }),
+        $html,
         qq{<a href="http://localhost:3000/europe/player/berekuk">berekuk</a>, hello\n},
         'expand @name';
+    cmp_deeply $other, { mentions => ['berekuk'] }, 'mentions';
+
+    ($html, $other) = db->comments->body2html('**bold**', 'europe');
+    is
+        $html,
+        "<strong>bold</strong>\n",
+        'basic markdown again';
+    cmp_deeply $other, { mentions => [] }, 'mentions are reset';
+
 }
 
 __PACKAGE__->new->runtests;

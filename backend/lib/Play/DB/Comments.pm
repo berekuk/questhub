@@ -24,14 +24,15 @@ sub _prepare_comment {
 
 sub body2html {
     my $self = shift;
-    my ($comment) = validate(\@_, HashRef);
+    my ($body, $realm) = validate(\@_, Str, Str);
 
-    local $Play::Markdown::REALM = $comment->{realm};
+    local $Play::Markdown::REALM = $realm;
+    local @Play::Markdown::MENTIONS = ();
 
-    my $html = markdown($comment->{body});
-    $html =~ s{^<p>}{};
-    $html =~ s{</p>$}{};
-    return $html;
+    my $html = markdown($body);
+
+    my @mentions = @Play::Markdown::MENTIONS;
+    return $html, { mentions => \@mentions };
 }
 
 sub add {
