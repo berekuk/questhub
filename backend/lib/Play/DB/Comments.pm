@@ -1,19 +1,19 @@
 package Play::DB::Comments;
 
 use Moo;
-
-use Play::Mongo;
-use Play::DB qw(db);
-
-use Types::Standard qw(Str Dict ArrayRef);
-use Type::Params qw(validate);
-
-use Play::Config qw(setting);
-
 use Play::DB::Role::PushPull;
 with
     'Play::DB::Role::Common',
     PushPull(field => 'likes', except_field => 'author', push_method => 'like', pull_method => 'unlike');
+
+use Play::Mongo;
+use Play::DB qw(db);
+use Play::Config qw(setting);
+
+use Types::Standard qw(Str Dict ArrayRef);
+use Type::Params qw(validate);
+
+use Text::Markdown qw(markdown);
 
 sub _prepare_comment {
     my $self = shift;
@@ -21,6 +21,16 @@ sub _prepare_comment {
     $comment->{ts} = $comment->{_id}->get_time;
     $comment->{_id} = $comment->{_id}->to_string;
     return $comment;
+}
+
+sub body2html {
+    my $self = shift;
+    my ($body) = validate(\@_, Str);
+
+    my $html = markdown($body);
+    $html =~ s{^<p>}{};
+    $html =~ s{</p>$}{};
+    return $html;
 }
 
 sub add {

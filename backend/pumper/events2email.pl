@@ -13,16 +13,6 @@ use Play::Flux;
 use Play::DB qw(db);
 use Play::Config qw(setting);
 
-use Text::Markdown qw(markdown);
-
-sub pp_markdown {
-    my ($body) = @_;
-    my $html = markdown($body);
-    $html =~ s{^<p>}{};
-    $html =~ s{</p>$}{};
-    return $html;
-}
-
 has 'in' => (
     is => 'lazy',
     default => sub {
@@ -70,7 +60,7 @@ sub process_add_comment {
     my @recipients = $self->_quest2recipients($quest, $comment->{author});
     return unless @recipients;
 
-    my $body_html = pp_markdown($comment->{body});
+    my $body_html = db->comments->body2html($comment->{body});
 
     for my $recipient (@recipients) {
 
