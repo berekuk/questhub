@@ -13,6 +13,8 @@ use Play::Flux;
 use Play::DB qw(db);
 use Play::Config qw(setting);
 
+use Play::EmailRecipients;
+
 has 'in' => (
     is => 'lazy',
     default => sub {
@@ -41,28 +43,20 @@ sub _quest2recipients {
     my $self = shift;
     my ($quest, $author) = @_;
 
-    my @result;
-
-    my %_uniq_recipients;
-    for my $user (@{ $quest->{team} }) {
-        $_uniq_recipients{$user} ||= {
-            login => $user,
-            reason => 'team',
-        };
-    }
+    my $er = Play::EmailRecipients->new;
+    $er->add_logins($quest->{team}, 'team');
 
     if ($quest->{watchers}) {
-        for my $user (@{ $quest->{watchers} }) {
-            $_uniq_recipients{$user} ||= {
-                login => $user,
-                reason => 'watcher',
-            };
-        }
+        $er->add_logins($quest->{watchers}, 'watcher');
     }
 
-    delete $_uniq_recipients{$author};
+    $er->exclude($author);
 
-    return @{ $self->_fill_emails([ values %_uniq_recipients ]) };
+    return @{
+        $self->_fill_emails([
+            $er->get_all
+        ])
+    };
 }
 
 sub process_add_comment {
