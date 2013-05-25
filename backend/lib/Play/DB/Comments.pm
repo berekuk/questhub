@@ -10,7 +10,7 @@ use Play::Mongo;
 use Play::DB qw(db);
 use Play::Config qw(setting);
 
-use Types::Standard qw(Str Dict ArrayRef);
+use Types::Standard qw(Str Dict HashRef ArrayRef);
 use Type::Params qw(validate);
 
 use Text::Markdown qw(markdown);
@@ -25,9 +25,9 @@ sub _prepare_comment {
 
 sub body2html {
     my $self = shift;
-    my ($body) = validate(\@_, Str);
+    my ($comment) = validate(\@_, HashRef);
 
-    my $html = markdown($body);
+    my $html = markdown($comment->{body});
     $html =~ s{^<p>}{};
     $html =~ s{</p>$}{};
     return $html;

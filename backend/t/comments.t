@@ -59,4 +59,23 @@ sub bulk_get :Tests {
     };
 }
 
+sub body2html :Tests {
+    is
+        db->comments->body2html({
+            body => '**bold**',
+            realm => 'europe',
+        }),
+        "<strong>bold</strong>\n";
+
+    TODO: {
+        local $TODO = 'markdown extensions';
+        is
+            db->comments->body2html({
+                body => '@berekuk, hello',
+                realm => 'europe',
+            }),
+            qq{<a href="http://localhost:3000/europe/player/berekuk">berekuk</a>, hello\n};
+    }
+}
+
 __PACKAGE__->new->runtests;

@@ -60,7 +60,7 @@ sub process_add_comment {
     my @recipients = $self->_quest2recipients($quest, $comment->{author});
     return unless @recipients;
 
-    my $body_html = db->comments->body2html($comment->{body});
+    my $body_html = db->comments->body2html($comment);
 
     for my $recipient (@recipients) {
 
