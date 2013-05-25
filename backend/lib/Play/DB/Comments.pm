@@ -8,12 +8,11 @@ with
 
 use Play::Mongo;
 use Play::DB qw(db);
-use Play::Config qw(setting);
 
 use Types::Standard qw(Str Dict HashRef ArrayRef);
 use Type::Params qw(validate);
 
-use Text::Markdown qw(markdown);
+use Play::Markdown qw(markdown);
 
 sub _prepare_comment {
     my $self = shift;
@@ -26,6 +25,8 @@ sub _prepare_comment {
 sub body2html {
     my $self = shift;
     my ($comment) = validate(\@_, HashRef);
+
+    local $Play::Markdown::REALM = $comment->{realm};
 
     my $html = markdown($comment->{body});
     $html =~ s{^<p>}{};

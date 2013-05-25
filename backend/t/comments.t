@@ -65,17 +65,16 @@ sub body2html :Tests {
             body => '**bold**',
             realm => 'europe',
         }),
-        "<strong>bold</strong>\n";
+        "<strong>bold</strong>\n",
+        'basic markdown';
 
-    TODO: {
-        local $TODO = 'markdown extensions';
-        is
-            db->comments->body2html({
-                body => '@berekuk, hello',
-                realm => 'europe',
-            }),
-            qq{<a href="http://localhost:3000/europe/player/berekuk">berekuk</a>, hello\n};
-    }
+    is
+        db->comments->body2html({
+            body => '@berekuk, hello',
+            realm => 'europe',
+        }),
+        qq{<a href="http://localhost:3000/europe/player/berekuk">berekuk</a>, hello\n},
+        'expand @name';
 }
 
 __PACKAGE__->new->runtests;
