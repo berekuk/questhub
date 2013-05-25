@@ -299,10 +299,12 @@ sub register :Tests {
         },
     };
 
-    http_json POST => '/api/register', { params => {
+    my $result = http_json POST => '/api/register', { params => {
         login => 'blah',
         realm => 'asia',
     } };
+    cmp_deeply $result, superhashof({ status => 'ok' });
+
     $current_user = http_json GET => '/api/current_user';
     cmp_deeply $current_user, superhashof({
         registered => 1,
@@ -316,6 +318,37 @@ sub register :Tests {
         notifications => [],
         realms => ['asia'],
     });
+}
+
+sub register_dups :Tests {
+    Dancer::session twitter_user => { screen_name => 'foo' };
+
+    my $result = http_json POST => '/api/register', { params => {
+        login => 'blah',
+        realm => 'asia',
+        settings => encode_json({ email => 'foo@example.com' }),
+    } };
+    http_json POST => '/api/logout';
+
+    Dancer::session twitter_user => { screen_name => 'foo2' };
+
+    $result = http_json POST => '/api/register', { params => {
+        login => 'blah',
+        realm => 'asia',
+        settings => encode_json({ email => 'foo@example.com' }),
+    } };
+
+    cmp_deeply $result, superhashof({ status => 'conflict', reason => 'login' });
+    cmp_deeply http_json(GET => '/api/current_user'), superhashof({ registered => 0 });
+
+    $result = http_json POST => '/api/register', { params => {
+        login => 'blah2',
+        realm => 'asia',
+        settings => encode_json({ email => 'foo@example.com' }),
+    } };
+
+    cmp_deeply $result, superhashof({ status => 'conflict', reason => 'email' });
+    cmp_deeply http_json(GET => '/api/current_user'), superhashof({ registered => 0 });
 }
 
 sub register_settings :Tests {

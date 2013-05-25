@@ -141,11 +141,10 @@ post '/register' => sub {
     }
 
     if (db->users->get_by_login($login)) {
-        die "User $login already exists";
+        return { status => 'conflict', reason => 'login', message => "User $login already exists" };
     }
 
     my $user = { login => $login, realms => [$realm] };
-    my $more_settings = {};
 
     my $settings = param('settings') || '{}';
     $settings = decode_json($settings);
@@ -159,11 +158,13 @@ post '/register' => sub {
 
         $user->{twitter} = { screen_name => $twitter_login };
     }
-    elsif (session('persona_email')) {
-        $more_settings->{email} = session('persona_email');
-    }
-    else {
+    elsif (not session('persona_email')) {
         die "not authorized by any 3rd party (either twitter or persona)";
+    }
+
+    $settings = _expand_settings($settings);
+    if ($settings->{email} and db->users->get_by_email($settings->{email})) {
+        return { status => 'conflict', reason => 'email', message => "Someone already uses this email" };
     }
 
     # note that race condition is still possible after these checks
@@ -172,8 +173,7 @@ post '/register' => sub {
     db->users->add($user);
 
     db->users->set_settings(
-        $login => _expand_settings($settings),
-        # TODO - copypasted from /register, refactor!
+        $login => $settings,
         (session('persona_email') ? 1 : 0) # force 'email_confirmed' setting
     );
 
