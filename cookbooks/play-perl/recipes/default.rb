@@ -43,7 +43,7 @@ cpan_module 'Log::Any'
 
 cpan_module 'Dancer::Serializer::JSON'
 cpan_module 'Dancer::Session::MongoDB'
-cpan_module 'Dancer::Plugin::Auth::Twitter'
+cpan_module 'YANICK/Dancer-Plugin-Auth-Twitter-0.03.tar.gz'
 cpan_module 'LWP::Protocol::https'
 cpan_module 'Template'
 cpan_module 'DateTime'
