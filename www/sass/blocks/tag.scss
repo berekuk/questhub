@@ -1,0 +1,35 @@
+.tag {
+    background-color: $abandoned-quest-color;
+    color: #333;
+    border: darken($abandoned-quest-color, 20%) solid 1px;
+
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+
+    line-height: 14px;
+    font-size: 11.844px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    whitespace: nowrap;
+    vertical-align: baseline;
+
+    padding: 2px 4px;
+    display: inline-block;
+
+    &:hover {
+        color: #333;
+        background-color: darken($abandoned-quest-color, 5%);
+        text-decoration: none;
+    }
+}
+
+.tag-time {
+    background-color: #3a87ad;
+    color: white;
+    border: none;
+
+    &:hover {
+        color: white;
+        background-color: darken(#3a87ad, 5%);
+    }
+}

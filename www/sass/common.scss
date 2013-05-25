@@ -14,17 +14,6 @@ h2, h3 {
     font-weight: normal;
 }
 
-.label-inverse {
-    background-color: $abandoned-quest-color !important;
-    color: #333;
-    border: darken($abandoned-quest-color, 20%) solid 1px;
-
-    &:hover {
-        color: #333 !important;
-        background-color: darken($abandoned-quest-color, 5%) !important;
-    }
-}
-
 // pagers
 .show-more-or-progress {
     // trying to reduce the page jerkiness
