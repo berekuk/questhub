@@ -19,7 +19,8 @@ define([
            'click .submit': 'doRegister',
            'click .cancel': 'cancel',
            'keydown [name=login]': 'checkEnter',
-           'keyup [name=login]': 'validate'
+           'keyup [name=login]': 'editLogin',
+           'keyup [name=email]': 'editEmail'
         },
 
         subviews: {
@@ -103,12 +104,22 @@ define([
                 return;
             }
 
+
             if (this.submitted || !login) {
                 this.disable();
             }
             else {
                 this.enable();
             }
+        },
+
+        editLogin: function () {
+            this.$('.settings-conflict-login').hide();
+            this.validate();
+        },
+
+        editEmail: function () {
+            this.$('.settings-conflict-email').hide();
         },
 
         doRegister: function () {
@@ -128,31 +139,42 @@ define([
                 login: this.getLogin(),
                 realm: this.subview('.realm-picker-subview').realm().id,
                 settings: JSON.stringify(this.subview('.settings-subview').deserialize())
-            }).done(function (model, response) {
-                ga('send', 'event', 'register', 'ok');
-                mixpanel.track('register ok');
+            }).done(function (data) {
+                if (data.status == 'ok') {
+                    ga('send', 'event', 'register', 'ok');
+                    mixpanel.track('register ok');
 
-                currentUser.fetch({
-                    success: function () {
-                        Backbone.trigger('pp:navigate', '/', { trigger: true });
-                    },
-                    error: function (model, response) {
-                        Backbone.trigger('pp:navigate', '/welcome', { trigger: true });
-                    }
-                });
+                    currentUser.fetch({
+                        success: function () {
+                            Backbone.trigger('pp:navigate', '/', { trigger: true });
+                        },
+                        error: function () {
+                            Backbone.trigger('pp:navigate', '/welcome', { trigger: true });
+                        }
+                    });
+                }
+                else if (data.status == 'conflict') {
+                    ga('send', 'event', 'register', 'conflict');
+                    mixpanel.track('register conflict');
+                    that.$('.settings-conflict-' + data.reason).show();
+
+                    that.subview('.progress-subview').off();
+                    that.submitted = false;
+                    that.validate();
+                }
+                else {
+                    alert('unknown backend /register status: ' + data.status);
+                }
             })
             .fail(function (response) {
                 ga('send', 'event', 'register', 'fail');
                 mixpanel.track('register fail');
 
-                that.subview('.progress-subview').off();
-
-                // TODO - detect "login already taken" exceptions and render them appropriately
-
                 // let's hope that server didn't register the user before it returned a error
+                that.subview('.progress-subview').off();
                 that.submitted = false;
                 that.validate();
-            })
+            });
 
             this.submitted = true;
             this.validate();
