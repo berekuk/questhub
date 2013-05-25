@@ -22,6 +22,16 @@ has 'in' => (
     },
 );
 
+sub _quest_url {
+    my ($quest) = @_;
+    return "http://".setting('hostport')."/$quest->{realm}/quest/$quest->{_id}";
+}
+
+sub _player_url {
+    my ($login, $realm) = @_;
+    return "http://".setting('hostport')."/$realm/player/$login";
+}
+
 sub process_add_comment {
     my $self = shift;
     my ($event) = @_;
@@ -60,7 +70,11 @@ sub process_add_comment {
         else {
             $appeal = "commented on your quest";
         }
-        my $email_body_header = '<a href="http://'.setting('hostport').qq[/player/$comment->{author}">$comment->{author}</a> $appeal <a href="http://].setting('hostport').qq[/quest/$comment->{quest_id}">$quest->{name}</a>:];
+
+        my $email_body_header =
+            '<a href="' . _player_url($comment->{author}, $event->{realm}) . qq[">$comment->{author}</a> ]
+            .$appeal.' <a href="' . _quest_url($quest). qq[">$quest->{name}</a>:];
+
         my $email_body = qq[
             <p>
             $email_body_header
@@ -99,8 +113,8 @@ sub process_close_quest {
     for my $recipient (@recipients) {
         my $email_body = qq[
             <p>
-            <a href="http://].setting('hostport').qq[/player/$event->{author}">$event->{author}</a>
-            completed a quest you're watching: <a href="http://].setting('hostport').qq[/quest/$event->{quest_id}">$quest->{name}</a>.
+            <a href="] . _player_url($event->{author}, $event->{realm}) . qq[">$event->{author}</a>
+            completed a quest you're watching: <a href="]. _quest_url($quest) . qq[">$quest->{name}</a>.
             </p>
         ];
         db->events->email({
@@ -126,8 +140,8 @@ sub process_invite_quest {
     {
         my $email_body = qq[
             <p>
-            <a href="http://].setting('hostport').qq[/player/$event->{author}">$event->{author}</a>
-            invited you to a quest: <a href="http://].setting('hostport').qq[/quest/$event->{quest_id}">$quest->{name}</a>.
+            <a href="] . _player_url($event->{author}, $event->{realm}) . qq[">$event->{author}</a>
+            invited you to a quest: <a href="] . _quest_url($quest) .qq[">$quest->{name}</a>.
             </p>
         ];
         db->events->email({
