@@ -20,34 +20,49 @@ has 'in' => (
     },
 );
 
+sub _fill_emails {
+    my $self = shift;
+    my ($recipients) = @_;
+
+    my @result;
+    for my $recipient (@$recipients) {
+        my $email = db->users->get_email($recipient->{login}, 'notify_comments') or next;
+
+        push @result, {
+            %$recipient,
+            email => $email
+        };
+    }
+
+    return \@result;
+}
+
 sub _quest2recipients {
     my $self = shift;
     my ($quest, $author) = @_;
 
     my @result;
 
-    my @recipients = (
-        @{ $quest->{team} },
-        ($quest->{watchers} ? @{ $quest->{watchers} } : ()),
-    );
-    my %_uniq_recipients = map { $_ => 1 } @recipients;
-    @recipients = keys %_uniq_recipients;
-    @recipients = grep { $_ ne $author } @recipients;
-
-    for my $recipient (@recipients) {
-        my $email = db->users->get_email($recipient, 'notify_comments') or next;
-        push @result, {
-            email => $email,
-            login => $recipient,
-            reason => (
-                scalar(grep { $_ eq $recipient } @{ $quest->{team} })
-                ? 'team'
-                : 'watcher'
-            ),
+    my %_uniq_recipients;
+    for my $user (@{ $quest->{team} }) {
+        $_uniq_recipients{$user} ||= {
+            login => $user,
+            reason => 'team',
         };
     }
 
-    return @result;
+    if ($quest->{watchers}) {
+        for my $user (@{ $quest->{watchers} }) {
+            $_uniq_recipients{$user} ||= {
+                login => $user,
+                reason => 'watcher',
+            };
+        }
+    }
+
+    delete $_uniq_recipients{$author};
+
+    return @{ $self->_fill_emails([ values %_uniq_recipients ]) };
 }
 
 sub process_add_comment {
@@ -57,10 +72,10 @@ sub process_add_comment {
     my $comment = $event->{comment};
     my $quest = $event->{quest};
 
+    my ($body_html, $markdown_extra) = db->comments->body2html($comment->{body}, $quest->{realm});
+
     my @recipients = $self->_quest2recipients($quest, $comment->{author});
     return unless @recipients;
-
-    my $body_html = db->comments->body2html($comment);
 
     for my $recipient (@recipients) {
 
