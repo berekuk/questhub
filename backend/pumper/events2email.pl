@@ -13,15 +13,7 @@ use Play::Flux;
 use Play::DB qw(db);
 use Play::Config qw(setting);
 
-use Text::Markdown qw(markdown);
-
-sub pp_markdown {
-    my ($body) = @_;
-    my $html = markdown($body);
-    $html =~ s{^<p>}{};
-    $html =~ s{</p>$}{};
-    return $html;
-}
+use Play::EmailRecipients;
 
 has 'in' => (
     is => 'lazy',
@@ -30,34 +22,14 @@ has 'in' => (
     },
 );
 
-sub _quest2recipients {
-    my $self = shift;
-    my ($quest, $author) = @_;
+sub _quest_url {
+    my ($quest) = @_;
+    return "http://".setting('hostport')."/$quest->{realm}/quest/$quest->{_id}";
+}
 
-    my @result;
-
-    my @recipients = (
-        @{ $quest->{team} },
-        ($quest->{watchers} ? @{ $quest->{watchers} } : ()),
-    );
-    my %_uniq_recipients = map { $_ => 1 } @recipients;
-    @recipients = keys %_uniq_recipients;
-    @recipients = grep { $_ ne $author } @recipients;
-
-    for my $recipient (@recipients) {
-        my $email = db->users->get_email($recipient, 'notify_comments') or next;
-        push @result, {
-            email => $email,
-            login => $recipient,
-            reason => (
-                scalar(grep { $_ eq $recipient } @{ $quest->{team} })
-                ? 'team'
-                : 'watcher'
-            ),
-        };
-    }
-
-    return @result;
+sub _player_url {
+    my ($login, $realm) = @_;
+    return "http://".setting('hostport')."/$realm/player/$login";
 }
 
 sub process_add_comment {
@@ -67,23 +39,42 @@ sub process_add_comment {
     my $comment = $event->{comment};
     my $quest = $event->{quest};
 
-    my @recipients = $self->_quest2recipients($quest, $comment->{author});
-    return unless @recipients;
+    my ($body_html, $markdown_extra) = db->comments->body2html($comment->{body}, $quest->{realm});
 
-    my $body_html = pp_markdown($comment->{body});
+    my @recipients;
+    {
+        my $er = Play::EmailRecipients->new;
+
+        $er->add_logins($quest->{team}, 'team');
+        $er->add_logins($quest->{watchers}, 'watcher') if $quest->{watchers};
+        $er->add_logins($markdown_extra->{mentions}, 'mention') if $markdown_extra->{mentions};
+
+        $er->exclude($comment->{author});
+
+        @recipients = $er->get_all;
+    }
 
     for my $recipient (@recipients) {
 
-        # TODO - quoting
+        # TODO - quote quest name!
 
-        my $email_body_address;
-        if ($recipient->{reason} eq 'team') {
-            $email_body_address = "your quest";
+        my $reason = $recipient->{reason};
+
+        my $appeal;
+        if ($reason eq 'watcher') {
+            $appeal = "commented on a quest you're watching,";
+        }
+        elsif ($reason eq 'mention') {
+            $appeal = "mentioned you in a quest";
         }
         else {
-            $email_body_address = "the quest you're watching,";
+            $appeal = "commented on your quest";
         }
-        my $email_body_header = '<a href="http://'.setting('hostport').qq[/player/$comment->{author}">$comment->{author}</a> commented on $email_body_address <a href="http://].setting('hostport').qq[/quest/$comment->{quest_id}">$quest->{name}</a>:];
+
+        my $email_body_header =
+            '<a href="' . _player_url($comment->{author}, $event->{realm}) . qq[">$comment->{author}</a> ]
+            .$appeal.' <a href="' . _quest_url($quest). qq[">$quest->{name}</a>:];
+
         my $email_body = qq[
             <p>
             $email_body_header
@@ -96,7 +87,7 @@ sub process_add_comment {
             address => $recipient->{email},
             subject => "$comment->{author} commented on '$quest->{name}'",
             body => $email_body,
-            notify_field => 'notify_comments',
+            notify_field => $recipient->{notify_field},
             login => $recipient->{login},
         });
         $self->add_stat('emails sent');
@@ -109,21 +100,28 @@ sub process_close_quest {
 
     my $quest = $event->{quest};
 
-    my @recipients = $self->_quest2recipients($quest, $event->{author});
-    return unless @recipients;
+    my @recipients;
+    {
+        my $er = Play::EmailRecipients->new;
+        $er->add_logins($quest->{team}, 'team');
+        $er->add_logins($quest->{watchers}, 'watcher') if $quest->{watchers};
+        $er->exclude($event->{author});
+
+        @recipients = $er->get_all;
+    }
 
     for my $recipient (@recipients) {
         my $email_body = qq[
             <p>
-            <a href="http://].setting('hostport').qq[/player/$event->{author}">$event->{author}</a>
-            completed a quest you're watching: <a href="http://].setting('hostport').qq[/quest/$event->{quest_id}">$quest->{name}</a>.
+            <a href="] . _player_url($event->{author}, $event->{realm}) . qq[">$event->{author}</a>
+            completed a quest you're watching: <a href="]. _quest_url($quest) . qq[">$quest->{name}</a>.
             </p>
         ];
         db->events->email({
             address => $recipient->{email},
             subject => "$event->{author} completed a quest: '$quest->{name}'",
             body => $email_body,
-            notify_field => 'notify_comments', # TODO - invent another field?
+            notify_field => $recipient->{notify_field},
             login => $recipient->{login},
         });
         $self->add_stat('emails sent');
@@ -142,8 +140,8 @@ sub process_invite_quest {
     {
         my $email_body = qq[
             <p>
-            <a href="http://].setting('hostport').qq[/player/$event->{author}">$event->{author}</a>
-            invited you to a quest: <a href="http://].setting('hostport').qq[/quest/$event->{quest_id}">$quest->{name}</a>.
+            <a href="] . _player_url($event->{author}, $event->{realm}) . qq[">$event->{author}</a>
+            invited you to a quest: <a href="] . _quest_url($quest) .qq[">$quest->{name}</a>.
             </p>
         ];
         db->events->email({
