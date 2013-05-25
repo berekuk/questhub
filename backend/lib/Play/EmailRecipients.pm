@@ -20,7 +20,7 @@ has 'reason2setting' => (
         {
             'team' => 'notify_comments',
             'watcher' => 'notify_comments',
-            'mention' => 'notify_mentions',
+            'mention' => 'notify_comments',
         };
     },
 );
