@@ -14,18 +14,6 @@ h2, h3 {
     font-weight: normal;
 }
 
-.user-settings {
-    margin-bottom: 10px;
-    .email-settings {
-        margin-bottom: 20px;
-    }
-
-    // insert a gap before "Not confirmed" button when it's under the email input
-    input[name="email"], button {
-        margin-bottom: 8px;
-    }
-}
-
 // pagers
 .show-more-or-progress {
     // trying to reduce the page jerkiness
