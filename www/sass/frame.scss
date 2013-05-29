@@ -74,3 +74,12 @@ html, body {
         }
     }
 }
+
+.main {
+    @media (min-width: 980px) {
+        width: 650px;
+    }
+    @media (max-width: 979px) {
+        width: 100%;
+    }
+}
