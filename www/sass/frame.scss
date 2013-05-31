@@ -13,41 +13,48 @@ html, body {
     height: auto !important;
     height: 100%;
     // Negative indent footer by it's height
-    @media (min-width: 980px) {
-        margin: 0 auto -65px;
-    }
-    @media (max-width: 979px) {
-        margin: 0 auto -85px;
+    margin: 0 auto -85px;
+    @include breakpoint(C) {
+        margin-bottom: -65px;
     }
 }
 
 // Set the fixed height of the footer here
 #push,
 #footer {
-    @media (min-width: 980px) {
+    height: 85px;
+    @include breakpoint(C) {
         height: 65px;
-    }
-    @media (max-width: 979px) {
-        height: 85px;
     }
 }
 
 #footer {
-    @media (max-width: 979px) {
+    .footer-separator {
+        visibility: hidden;
+    }
+    .footer-line1 {
+        display: block;
+    }
+    @include breakpoint(C) {
         .footer-separator {
-            display: none;
+            visibility: visible;
         }
         .footer-line1 {
-            display: block;
+            display: inline;
         }
     }
 }
 
 #wrap > .app-view-container {
-    @media (min-width: 767px) {
+    max-width: 980px;
+    margin: 0 auto;
+    padding-left: 3px;
+    padding-right: 3px;
+    margin-bottom: 20px;
+
+    @include breakpoint(B) {
         padding-top: 65px;
     }
-    padding-bottom: 30px;
 }
 
 #footer {
@@ -60,11 +67,4 @@ html, body {
         position: relative;
         top: 6px;
     }
-}
-
-.app-view-container {
-    max-width: 980px;
-    margin: 0 auto;
-    padding-left: 10px;
-    padding-right: 10px;
 }
