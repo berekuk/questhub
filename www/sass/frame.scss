@@ -43,7 +43,7 @@ html, body {
     }
 }
 
-#wrap > .container {
+#wrap > .app-view-container {
     @media (min-width: 767px) {
         padding-top: 65px;
     }
@@ -62,24 +62,9 @@ html, body {
     }
 }
 
-.current-user-box {
-    .current-user-notifications-icon {
-        margin: 10px 0 0 0;
-
-        a {
-            color: #f00;
-            &:hover {
-                text-decoration: none;
-            }
-        }
-    }
-}
-
-.main {
-    @media (min-width: 980px) {
-        width: 650px;
-    }
-    @media (max-width: 979px) {
-        width: 100%;
-    }
+.app-view-container {
+    max-width: 980px;
+    margin: 0 auto;
+    padding-left: 10px;
+    padding-right: 10px;
 }
