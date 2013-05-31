@@ -1,0 +1,13 @@
+.current-user-box {
+    .current-user-notifications-icon {
+        margin: 10px 0 0 0;
+
+        a {
+            color: #f00;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+}
+

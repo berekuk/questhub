@@ -89,13 +89,18 @@ ul.nav-filter {
     }
 }
 
+@import 'mixin';
+
 @import 'sass/common.scss';
 
 @import 'sass/blocks/tag.scss';
 
 @import 'sass/frame.scss';
+@import 'sass/navbar.scss';
+
 @import 'sass/realm.scss';
 @import 'sass/welcome.scss';
+@import 'sass/about.scss';
 @import 'sass/quest-collection.scss';
 @import 'sass/quest-page.scss';
 @import 'sass/dashboard.scss';
