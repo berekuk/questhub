@@ -4,6 +4,10 @@ define([
     return Backbone.Model.extend({
         idAttribute: '_id',
 
+        urlRoot: function () {
+            return '/api/quest/' + this.get('quest_id') + '/comment';
+        },
+
         like: function() {
             this.act('like');
         },

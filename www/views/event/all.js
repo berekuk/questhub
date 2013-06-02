@@ -3,9 +3,11 @@ define([
     'underscore', 'jquery',
     'views/proto/common',
     'views/quest/like',
+    'views/comment/like',
     'models/quest',
+    'models/comment',
     'text!templates/events.html'
-], function (Backbone, _, $, Common, QuestLike, QuestModel, html) {
+], function (Backbone, _, $, Common, QuestLike, CommentLike, QuestModel, CommentModel, html) {
 
     var el = $(html);
     var eventViews = {};
@@ -28,6 +30,22 @@ define([
                 '.likes': function () {
                     var questModel = new QuestModel(this.model.get('quest'));
                     return new QuestLike({ model: questModel, hidden: true });
+                }
+            }
+            view.prototype.events = {
+                'mouseenter': function (e) {
+                    this.subview('.likes').showButton();
+                },
+                'mouseleave': function (e) {
+                    this.subview('.likes').hideButton();
+                }
+            };
+        }
+        else if (name == 'add-comment') {
+            view.prototype.subviews = {
+                '.likes': function () {
+                    var commentModel = new CommentModel(this.model.get('comment'));
+                    return new CommentLike({ model: commentModel });
                 }
             }
             view.prototype.events = {
