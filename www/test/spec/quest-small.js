@@ -29,7 +29,7 @@ define([
             });
 
             it('quest tag badge', function () {
-                expect(view.$el.find('.pull-right .label-inverse')).toHaveText('bug');
+                expect(view.$el.find('.pull-right .tag')).toHaveText('bug');
             });
         });
 
