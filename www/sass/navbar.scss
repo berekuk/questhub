@@ -71,26 +71,26 @@ nav {
         }
     }
 
-    .nav-realm-picker, .nav-menu {
+    .top-nav {
         display: inline-block;
-    }
-    .nav-realm-list {
-        display: none;
     }
 
     .current-user-box {
         float: right;
-        font-weight: bold;
-
         .dropdown-menu {
             left: auto;
             right: 0;
         }
+        .current-user-notifications-icon a {
+            padding: 0 10px;
+        }
+    }
+
+    .current-user-box {
+        font-weight: bold;
 
         .current-user-notifications-icon {
-            margin: 10px 0 0 0;
-
-            a {
+            a, a:hover {
                 color: #f00;
                 &:hover {
                     text-decoration: none;
