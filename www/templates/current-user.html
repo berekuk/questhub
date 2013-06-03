@@ -2,23 +2,24 @@
 <% if (obj.notifications && obj.notifications.length) { %>
   <span class="pull-left current-user-notifications-icon"><a href="#" class="notifications"><i class="icon-envelope-alt icon-large"></i></a></span>
 <% } %>
-<ul>
+<ul class="top-nav">
   <li class="dropdown">
     <% if (registered === 1) { %>
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= login %></a>
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="icon-user"></i>
+        <span class="nav-text">
+          <%= login %>
+        </span>
+      </a>
       <ul class="dropdown-menu">
         <li>
         <a href="#" class="settings">
           <i class="icon-wrench"></i>
-          <span class="nav-text">
-            Settings
-          </span>
+          Settings
         </a>
         <a href="#" class="logout">
           <i class="icon-signout"></i>
-          <span class="nav-text">
-            Logout
-          </span>
+          Logout
         </a>
         </li>
       </ul>
@@ -26,9 +27,7 @@
       <!-- TODO: refactor to use views/user/signin.js -->
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         <i class="icon-signin"></i>
-        <span class="nav-text">
-          Sign In
-        </span>
+        Sign In
       </a>
       <ul class="dropdown-menu">
         <li>

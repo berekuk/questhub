@@ -1,51 +1,66 @@
 nav {
     position: fixed;
     width: 100%;
-    background-color: #f5f5f5;
+    z-index: 5;
+
+    @include breakpoint(B) {
+        .nav-inner {
+            max-width: 980px;
+            margin: 0 auto;
+        }
+    }
+
+    background-color: $light-grey;
     border-bottom: 1px solid #ddd;
-//    font-family: doppio-one, "Helvetica Neue", Helvetica, Arial, sans-serif;
 
     .dropdown-menu {
         min-width: 0px;
     }
 
-//    font-size: 18px;
-    @include breakpoint(B) {
-//        font-size: 14px;
-    }
-//    font-weight: bold;
-    z-index: 5;
-
-    line-height: 30px;
-
     ul {
-        margin: 0 5px;
+        margin: 0;
         padding: 0;
         list-style-type: none;
     }
 
-    .nav-menu li {
-        display: inline-block;
-        padding: 0 5px;
-        @include breakpoint(B) {
-            padding: 0 15px;
+    .nav-realm-picker {
+        margin-right: 5px;
+    }
+
+    @mixin nav-underline($color) {
+        border-bottom: {
+            color: $color;
+            width: 3px;
+            style: solid;
         }
     }
 
-    li {
+    .top-nav > li {
+        display: inline-block;
         margin: 0;
-        line-height: 30px;
-        a {
-            color: #333;
+
+        > a, > .dropdown > a {
+            padding: 0 10px;
+            @include breakpoint(C) {
+                padding: 0 18px;
+            }
+
+            display: inline-block;
+            line-height: 30px;
+            color: $text-color;
+            text-decoration: none;
 
             &:hover {
-                color: black;
+                color: $text-color;
+                background-color: $grey;
                 text-decoration: none;
+                @include nav-underline($text-color);
             }
+            @include nav-underline($light-grey);
         }
 
-        &.active {
-            border-bottom: 3px red solid;
+        &.active a {
+            @include nav-underline($highlight);
         }
     }
 
@@ -53,14 +68,6 @@ nav {
         display: none;
         @include breakpoint(B) {
             display: inline;
-        }
-    }
-
-    .nav-realm-picker {
-        margin-left: 15px;
-
-        @include breakpoint(B) {
-            margin-left: 40px;
         }
     }
 
@@ -73,12 +80,13 @@ nav {
 
     .current-user-box {
         float: right;
-
-        margin-right: 15px;
-        @include breakpoint(B) {
-            margin-right: 40px;
-        }
         font-weight: bold;
+
+        .dropdown-menu {
+            left: auto;
+            right: 0;
+        }
+
         .current-user-notifications-icon {
             margin: 10px 0 0 0;
 

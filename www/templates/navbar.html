@@ -1,6 +1,6 @@
 <nav>
-
-  <ul class="nav-realm-picker">
+  <div class="nav-inner">
+  <ul class="nav-realm-picker top-nav">
     <li>
       <div class="dropdown">
         <a class="brand dropdown-toggle" data-toggle="dropdown" href="#">
@@ -20,45 +20,54 @@
     </li>
   </ul>
 
-  <ul class="nav-menu">
+  <ul class="nav-menu top-nav">
     <% if (realm) { %>
       <% if (registered) { %>
       <li class="menu-item-home"><a href="/">
-        <i class="icon-user"></i>
+        <i class="icon-list-ul"></i>
         <span class="nav-text">
-          Home
+          Quests
         </span>
-      </a></li>
-      <% } %>
-      <li class="menu-item-event-list"><a href="/<%- realm.id %>/feed">
-        <i class="icon-asterisk"></i>
+      </a>
+    </li><% } %><li class="menu-item-event-list">
+      <a href="/<%- realm.id %>/feed">
+        <i class="icon-rss"></i>
         <span class="nav-text">
           News Feed
         </span>
-      </a></li>
-      <li class="menu-item-user-list"><a href="/<%- realm.id %>/players">
+      </a>
+    </li><li class="menu-item-user-list">
+      <a href="/<%- realm.id %>/players">
         <i class="icon-group"></i>
         <span class="nav-text">
           Players
         </span>
-      </a></li>
-      <li class="menu-item-explore"><a href="/<%- realm.id %>/explore">
-        <i class="icon-sitemap"></i>
+      </a>
+    </li><li class="menu-item-explore">
+      <a href="/<%- realm.id %>/explore">
+        <i class="icon-book"></i>
         <span class="nav-text">
           Explore
         </span>
-      </a></li>
-    <% } else { %>
-      <li class="menu-item-home"><a href="/welcome">Multiverse</a></li>
-    <% } %>
-    <li class="menu-item-about"><a href="/about">
-      <i class="icon-question-sign"></i>
-      <span class="nav-text">
-        About
-      </span>
-    </a></li>
+      </a>
+    </li><% } else { %><li class="menu-item-home">
+      <a href="/welcome">
+        <i class="icon-puzzle-piece"></i>
+        <span class="nav-text">
+          Multiverse
+        </span>
+      </a>
+    </li><% } %><li class="menu-item-about">
+      <a href="/about">
+        <i class="icon-question-sign"></i>
+        <span class="nav-text">
+          About
+        </span>
+      </a>
+    </li>
   </ul>
 
   <div class="current-user-box"></div>
 
+  </div>
 </nav>
