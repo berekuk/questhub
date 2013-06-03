@@ -1,45 +1,64 @@
-<div class="navbar navbar-inverse navbar-fixed-top">
-  <div class="navbar-inner">
-    <div class="container-fluid">
-      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
-      <ul class="nav">
-        <li class="dropdown">
-          <a class="brand dropdown-toggle" data-toggle="dropdown" href="#">
-            <%- realm ? realm.name : 'Questhub.io' %> ▾
-          </a>
-          <ul class="dropdown-menu">
-            <li>
-              <% _.each(partial.settings.realms, function (r) { %>
-                <a href="/<%- r.id %>/<%- url %>"><%- r.name %></a>   <!-- TODO - grep out current realm -->
-              <% }) %>
-            </li>
-            <li>
-              <a href="/welcome">All realms</a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-      <div class="nav-collapse collapse">
-        <ul class="nav">
-          <% if (realm) { %>
-            <% if (registered) { %>
-              <li class="menu-item-home"><a href="/">Home</a></li>
-            <% } %>
-            <li class="menu-item-event-list"><a href="/<%- realm.id %>/feed">News Feed</a></li>
-            <li class="menu-item-user-list"><a href="/<%- realm.id %>/players">Players</a></li>
-            <li class="menu-item-explore"><a href="/<%- realm.id %>/explore">Explore</a></li>
-          <% } else { %>
-            <li class="menu-item-home"><a href="/welcome">Multiverse</a></li>
-          <% } %>
-          <li class="menu-item-about"><a href="/about">About</a></li>
+<nav>
+
+  <ul class="nav-realm-picker">
+    <li>
+      <div class="dropdown">
+        <a class="brand dropdown-toggle" data-toggle="dropdown" href="#">
+          <%- realm ? realm.name : 'Questhub.io' %> ▾
+        </a>
+        <ul class="dropdown-menu nav-realm-list">
+          <li>
+          <% _.each(partial.settings.realms, function (r) { %>
+          <a href="/<%- r.id %>/<%- url %>"><%- r.name %></a>   <!-- TODO - grep out current realm -->
+          <% }) %>
+          </li>
+          <li>
+          <a href="/welcome">All realms</a>
+          </li>
         </ul>
-        <p class="navbar-text pull-right"></p>
-        <div class="pull-right current-user-box"></div>
       </div>
-    </div>
-  </div>
-</div>
+    </li>
+  </ul>
+
+  <ul class="nav-menu">
+    <% if (realm) { %>
+      <% if (registered) { %>
+      <li class="menu-item-home"><a href="/">
+        <i class="icon-user"></i>
+        <span class="nav-text">
+          Home
+        </span>
+      </a></li>
+      <% } %>
+      <li class="menu-item-event-list"><a href="/<%- realm.id %>/feed">
+        <i class="icon-asterisk"></i>
+        <span class="nav-text">
+          News Feed
+        </span>
+      </a></li>
+      <li class="menu-item-user-list"><a href="/<%- realm.id %>/players">
+        <i class="icon-group"></i>
+        <span class="nav-text">
+          Players
+        </span>
+      </a></li>
+      <li class="menu-item-explore"><a href="/<%- realm.id %>/explore">
+        <i class="icon-sitemap"></i>
+        <span class="nav-text">
+          Explore
+        </span>
+      </a></li>
+    <% } else { %>
+      <li class="menu-item-home"><a href="/welcome">Multiverse</a></li>
+    <% } %>
+    <li class="menu-item-about"><a href="/about">
+      <i class="icon-question-sign"></i>
+      <span class="nav-text">
+        About
+      </span>
+    </a></li>
+  </ul>
+
+  <div class="current-user-box"></div>
+
+</nav>
