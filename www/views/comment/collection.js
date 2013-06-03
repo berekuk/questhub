@@ -85,7 +85,8 @@ define([
 
             this.collection.create({
                 'author': currentUser.get('login'),
-                'body': this.celem().val()
+                'body': this.celem().val(),
+                'quest_id': this.collection.quest_id
             },
             {
                 'wait': true,
