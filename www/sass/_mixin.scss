@@ -12,3 +12,9 @@
         @media (max-width: 767px)  { @content; }
     }
 }
+
+@mixin box-sizing($bs) {
+    box-sizing: $bs;
+    -moz-box-sizing: $bs;
+    -webkit-box-sizing: $bs;
+}

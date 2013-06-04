@@ -6,8 +6,11 @@ html, body {
     height: 100%;
 }
 
-* {
-    box-sizing: border-box;
+*, *:before, *:after {
+    @include box-sizing(border-box);
+}
+input {
+    @include box-sizing(content-box);
 }
 
 // Wrapper for page content to push down footer
