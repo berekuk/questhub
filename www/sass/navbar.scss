@@ -1,13 +1,101 @@
-.current-user-box {
-    .current-user-notifications-icon {
-        margin: 10px 0 0 0;
+nav {
+    position: fixed;
+    width: 100%;
+    z-index: 5;
 
-        a {
-            color: #f00;
+    @include breakpoint(B) {
+        .nav-inner {
+            max-width: 980px;
+            margin: 0 auto;
+        }
+    }
+
+    background-color: $light-grey;
+    border-bottom: 1px solid #ddd;
+
+    .dropdown-menu {
+        min-width: 0px;
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    .nav-realm-picker {
+        margin-right: 5px;
+    }
+
+    @mixin nav-underline($color) {
+        border-bottom: {
+            color: $color;
+            width: 3px;
+            style: solid;
+        }
+    }
+
+    .top-nav > li {
+        display: inline-block;
+        margin: 0;
+
+        > a, > .dropdown > a {
+            padding: 0 10px;
+            @include breakpoint(C) {
+                padding: 0 18px;
+            }
+
+            display: inline-block;
+            line-height: 30px;
+            color: $text-color;
+            text-decoration: none;
+
             &:hover {
+                color: $text-color;
+                background-color: $grey;
                 text-decoration: none;
+                @include nav-underline($text-color);
+            }
+            @include nav-underline($light-grey);
+        }
+
+        &.active a {
+            @include nav-underline($highlight);
+        }
+    }
+
+    .nav-text {
+        display: none;
+        @include breakpoint(B) {
+            display: inline;
+        }
+    }
+
+    .top-nav {
+        display: inline-block;
+    }
+
+    .current-user-box {
+        float: right;
+        .dropdown-menu {
+            left: auto;
+            right: 0;
+        }
+        .current-user-notifications-icon a {
+            padding: 0 10px;
+        }
+    }
+
+    .current-user-box {
+        font-weight: bold;
+
+        .current-user-notifications-icon {
+            a, a:hover {
+                color: #f00;
+                &:hover {
+                    text-decoration: none;
+                }
             }
         }
     }
 }
-

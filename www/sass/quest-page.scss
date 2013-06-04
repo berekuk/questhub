@@ -42,7 +42,7 @@ div.quest-big-unclaimed {
     }
 
     position: relative;
-    @media (min-width: 980px) {
+    @include breakpoint(C) {
         > div.reward {
             position: absolute;
             right: 130px;

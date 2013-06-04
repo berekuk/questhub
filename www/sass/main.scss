@@ -79,16 +79,6 @@ input.quest-edit {
     text-align: center;
 }
 
-ul.nav-filter {
-    margin-bottom: 0px; // accordion around it sets enough padding
-
-    li {
-        display: block;
-        float: none;
-        background-color: #f5f5f5;
-    }
-}
-
 @import 'mixin';
 
 @import 'sass/common.scss';

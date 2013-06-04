@@ -38,8 +38,8 @@
     });
 
     require([
-        'underscore', 'jquery', 'jasmine-html', 'models/current-user'
-    ], function(_, $, jasmine, currentUser) {
+        'underscore', 'backbone', 'jquery', 'jasmine-html', 'models/current-user'
+    ], function(_, Backbone, $, jasmine, currentUser) {
 
         var jasmineEnv = jasmine.getEnv();
         jasmineEnv.updateInterval = 1000;
@@ -62,6 +62,7 @@
         specs.push('spec/quest-add');
         specs.push('spec/like');
         specs.push('spec/event-box');
+        specs.push('spec/navbar');
 
         specs.push('spec/model/quest');
         specs.push('spec/model/event');
@@ -76,6 +77,8 @@
             name_tag: function () {},
         };
         ga = function () {};
+
+        Backbone.history.start();
 
         currentUser.set({
             registered: 1,
