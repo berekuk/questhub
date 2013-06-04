@@ -67,8 +67,9 @@ input.quest-edit {
 
 
 .object-bottom-line {
-    // fixing the jumping line height on "like" button hide/show
-    line-height: 22px;
+    // Fixing the jumping line height on "like" button hide/show.
+    // Note: 22 is enough for Chrome, but not enough for Firefox.
+    line-height: 23px;
 
     time, .user-link {
         font-size: 11.844px; // same as badges font size
