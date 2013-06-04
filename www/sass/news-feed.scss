@@ -30,25 +30,16 @@
     .event-header {
         position: relative;
 
-        @media (min-width: 768px) {
-            i {
-                display: inline-block;
-                position: absolute;
+        i {
+            display: inline-block;
+            position: absolute;
+            left: -18px;
+            top: 3px;
+            color: $dark-grey;
+            @media (min-width: 768px) {
                 left: -27px;
                 top: 1px;
-
                 font-size: 20px;
-                color: #999;
-            }
-        }
-        @media (max-width: 767px) {
-            i {
-                display: inline-block;
-                position: absolute;
-                left: -18px;
-                top: 3px;
-
-                color: #999;
             }
         }
 

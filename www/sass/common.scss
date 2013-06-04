@@ -4,6 +4,7 @@ $abandoned-quest-color: #dddddd;
 $unclaimed-quest-color: #dff0d8;
 $light-grey: #f5f5f5; // the same as bootstrap's well color
 $grey: #eee; // the same as bootstrap's well color
+$dark-grey: #999; // same as bootstrap's .muted color
 $text-color: #333;
 $highlight: #ffc400; // brighter version of qh logo background color
 .brand {
@@ -32,6 +33,15 @@ tbody tr.show-more > td {
 }
 
 time.timeago {
-    color: #999;
+    color: $dark-grey;
     font-style: italic;
+}
+
+a.mini-button {
+    color: $dark-grey;
+
+    &:hover {
+        text-decoration: none !important;
+        color: #333;
+    }
 }
