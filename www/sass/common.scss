@@ -42,6 +42,11 @@ a.mini-button {
 
     &:hover {
         text-decoration: none !important;
-        color: #333;
+        color: $text-color;
     }
+}
+
+.user-link {
+    font-weight: bold;
+    color: $text-color;
 }
