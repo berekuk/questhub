@@ -39,23 +39,6 @@ textarea.comment-edit {
     height: 100%;
 }
 
-.modal-quest-add label {
-    cursor: default; // override bootstrap's "pointer" cursor style, it's confusing
-}
-
-input.quest-edit {
-    font-size: 26px;
-    line-height: 26px;
-    height: 35px;
-    width: 95%;
-    font-weight: 200;
-    margin-bottom: 0px;
-}
-
-.quest-tags-edit input {
-    background-color: #fcf8e3;
-}
-
 
 .object-bottom-line {
     // Fixing the jumping line height on "like" button hide/show.
@@ -85,6 +68,7 @@ input.quest-edit {
 @import 'sass/about.scss';
 @import 'sass/quest-collection.scss';
 @import 'sass/quest-page.scss';
+@import 'sass/quest-add.scss';
 @import 'sass/dashboard.scss';
 @import 'sass/news-feed.scss';
 @import 'sass/user-collection.scss';
