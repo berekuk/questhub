@@ -127,9 +127,7 @@ div.quest-big-unclaimed {
 
     .reward {
         .reward-circle {
-            border-radius: 50%;
-            -moz-border-radius:50%;
-            -webkit-border-radius: 50%;
+            @include border-radius(50%);
 
             padding: 20px;
             display: inline-block;
