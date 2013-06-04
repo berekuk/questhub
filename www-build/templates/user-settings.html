@@ -6,7 +6,7 @@
       </h4>
     <% } else { %>
       <input name="email" type="email" placeholder="Email" value="<%- obj.email %>">
-      <span class="settings-conflict-email alert alert-error">&larr; Email is already in use.</label>
+      <span class="settings-conflict-email alert alert-error">&larr; Email is already in use.</span>
       <span class="email-status <%= (obj.hideEmailStatus || obj.email_confirmed == 'persona') ? "hide" : "" %>">
         <% if (obj.email_confirmed) { %>
           <span class="label label-success">Confirmed</span>
