@@ -23,10 +23,6 @@ nav {
         list-style-type: none;
     }
 
-    .nav-realm-picker {
-        margin-right: 5px;
-    }
-
     @mixin nav-underline($color) {
         border-bottom: {
             color: $color;
@@ -40,7 +36,7 @@ nav {
         margin: 0;
 
         > a, > .dropdown > a {
-            padding: 0 10px;
+            padding: 0 9px;
             @include breakpoint(C) {
                 padding: 0 18px;
             }
