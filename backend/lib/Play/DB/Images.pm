@@ -13,16 +13,21 @@ use autodie qw(open close);
 use LWP::UserAgent;
 
 use Play::Flux;
+use Play::Config qw(setting);
 
 has 'storage_dir' => (
     is => 'ro',
     isa => Str,
-    default => sub { '/data/images' },
+    default => sub { setting('data_dir').'/images' },
 );
 
 has 'ua' => (
     is => 'lazy',
-    default => sub { LWP::UserAgent->new(timeout => 5) },
+    default => sub {
+        my $ua = LWP::UserAgent->new(timeout => 5);
+        $ua->protocols_allowed([qw/ http https /]);
+        return $ua;
+    },
 );
 
 sub upic_by_email {

@@ -6,10 +6,12 @@ use strict;
 use warnings;
 
 use parent qw(Exporter);
-our @EXPORT = qw( reset_db pumper process_email_queue );
+our @EXPORT = qw( reset_db pumper process_email_queue prepare_data_dir );
 
 use Log::Any::Test;
 use Import::Into;
+
+use autodie qw(system);
 
 BEGIN {
     $ENV{PLAY_CONFIG_FILE} = '/play/backend/t/data/config.yml';
@@ -40,6 +42,11 @@ sub process_email_queue {
 
     my @deliveries = Email::Sender::Simple->default_transport->deliveries;
     return @deliveries;
+}
+
+sub prepare_data_dir {
+    system('rm -rf tfiles');
+    system('mkdir -p tfiles/images/pic');
 }
 
 sub import {

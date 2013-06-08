@@ -37,22 +37,31 @@ sub upic :Tests {
 }
 
 sub fetch :Tests {
-    system 'rm -rf tfiles';
-    mkdir 'tfiles';
-    mkdir 'tfiles/storage';
-    mkdir 'tfiles/storage/pic';
-    my $images = Play::DB::Images->new(storage_dir => 'tfiles/storage');
-    $images->fetch_upic(
-        $images->upic_default,
+    prepare_data_dir();
+
+    db->images->fetch_upic(
+        db->images->upic_default,
         'berekuk'
     );
 
-    ok -e 'tfiles/storage/pic/berekuk.small';
+    ok -e 'tfiles/images/pic/berekuk.small';
 
-    is $images->upic_file('berekuk', 'small'), 'tfiles/storage/pic/berekuk.small';
-    is $images->upic_file('berekuk', 'normal'), 'tfiles/storage/pic/berekuk.normal';
-    is $images->upic_file('nazer', 'normal'), '/play/backend/pic/default/normal';
+    is db->images->upic_file('berekuk', 'small'), 'tfiles/images/pic/berekuk.small';
+    is db->images->upic_file('berekuk', 'normal'), 'tfiles/images/pic/berekuk.normal';
+    is db->images->upic_file('nazer', 'normal'), '/play/backend/pic/default/normal';
     like exception { db->images->upic_file('berekuk', 'blah') }, qr/type constraint/;
+}
+
+sub fetch_schema :Tests {
+    prepare_data_dir();
+
+    like exception {
+        db->images->fetch_upic(
+            { normal => 'file://etc/passwd', small => 'file://etc/passwd' },
+            'berekuk'
+        );
+    }, qr/Access to 'file' URIs has been disabled/;
+
 }
 
 sub enqueue :Tests {
