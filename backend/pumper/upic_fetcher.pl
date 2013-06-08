@@ -11,6 +11,7 @@ use Try::Tiny;
 use Log::Any '$log';
 
 use Play::DB qw(db);
+use Play::Flux;
 
 has 'in' => (
     is => 'lazy',
