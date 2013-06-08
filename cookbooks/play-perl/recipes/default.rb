@@ -40,6 +40,7 @@ cpan_module 'Text::Markdown'
 cpan_module 'Clone'
 cpan_module 'Email::Sender'
 cpan_module 'Log::Any'
+cpan_module 'Try::Tiny'
 
 cpan_module 'Dancer::Serializer::JSON'
 cpan_module 'Dancer::Session::MongoDB'
