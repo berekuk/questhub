@@ -121,6 +121,13 @@ get '/user/:login' => sub {
     return $user;
 };
 
+get '/user/:login/pic' => sub {
+    my $size = param('s');
+    my $file = db->images->upic_file(param('login'), $size);
+    send_file($file, content_type => 'image/jpg', system_path => 1);
+};
+
+
 sub _expand_settings {
     my ($settings) = @_;
 
