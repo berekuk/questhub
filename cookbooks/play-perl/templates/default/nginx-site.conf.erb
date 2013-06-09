@@ -22,13 +22,13 @@ server {
   location /api {
     try_files $uri @proxy;
     access_log off;
-    expires max;
+    expires 0;
   }
 
   location /auth {
     try_files $uri @proxy;
     access_log off;
-    expires max;
+    expires 0;
   }
 
   location @proxy {
