@@ -163,7 +163,10 @@ post '/register' => sub {
             die "Twitter login $twitter_login is already bound";
         }
 
-        $user->{twitter} = { screen_name => $twitter_login };
+        $user->{twitter} = {
+            screen_name => $twitter_login,
+            profile_image_url => session('twitter_user')->{profile_image_url},
+        };
     }
     elsif (not session('persona_email')) {
         die "not authorized by any 3rd party (either twitter or persona)";
