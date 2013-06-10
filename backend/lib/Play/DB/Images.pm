@@ -3,7 +3,7 @@ package Play::DB::Images;
 use Moo;
 
 use Type::Params qw(validate);
-use Types::Standard qw(Str Dict);
+use Types::Standard qw( Str Dict HashRef );
 use Play::Types qw( Login ImageSize ImageUpic );
 
 use Digest::MD5 qw(md5_hex);
@@ -41,15 +41,16 @@ sub upic_by_email {
     };
 }
 
-sub upic_by_twitter_login {
+sub upic_by_twitter_data {
     my $self = shift;
-    my ($login) = validate(\@_, Login);
+    my ($twitter_data) = validate(\@_, HashRef);
 
-    # TODO - fetch the right login from twitter
-    my $pic = "http://api.twitter.com/1/users/profile_image?screen_name=$login";
+    my $url = $twitter_data->{profile_image_url};
+    my $small_url = $url;
+    $small_url =~ s{(normal)(\.\w+)$}{mini$2} or die "Unexpected twitter url '$url'";
     return {
-        small => "$pic&size=mini",
-        normal => "$pic&size=normal",
+        small => $small_url,
+        normal => $url,
     };
 }
 

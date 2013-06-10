@@ -38,11 +38,11 @@ sub _prepare_user {
     $user->{rp} //= {};
     $user->{rp}{$_} //= 0 for @{ $user->{realms} };
 
-    if (not $user->{twitter}{screen_name} and $user->{settings}{email}) {
+    if (not $user->{twitter}{profile_image_url} and $user->{settings}{email}) {
         $user->{pic} = db->images->upic_by_email($user->{settings}{email});
     }
-    elsif ($user->{twitter}{screen_name}) {
-        $user->{pic} = db->images->upic_by_twitter_login($user->{twitter}{screen_name});
+    elsif ($user->{twitter}{profile_image_url}) {
+        $user->{pic} = db->images->upic_by_twitter_data($user->{twitter});
     }
     else {
         $user->{pic} = db->images->upic_default();
