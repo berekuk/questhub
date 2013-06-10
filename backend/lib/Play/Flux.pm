@@ -24,16 +24,11 @@ sub _storage {
     return Flux::Format::JSON->new->wrap($storage);
 }
 
-sub email {
-    return state $result = _storage('email');
-}
-
-sub comments {
-    return state $result = _storage('comments');
-}
-
-sub events {
-    return state $result = _storage('events');
+for my $name (qw( email comments events upic )) {
+    no strict 'refs';
+    *{$name} = sub {
+        return state $result = _storage($name);
+    };
 }
 
 1;

@@ -121,6 +121,13 @@ get '/user/:login' => sub {
     return $user;
 };
 
+get '/user/:login/pic' => sub {
+    my $size = param('s');
+    my $file = db->images->upic_file(param('login'), $size);
+    send_file($file, content_type => 'image/jpg', system_path => 1);
+};
+
+
 sub _expand_settings {
     my ($settings) = @_;
 
@@ -156,7 +163,10 @@ post '/register' => sub {
             die "Twitter login $twitter_login is already bound";
         }
 
-        $user->{twitter} = { screen_name => $twitter_login };
+        $user->{twitter} = {
+            screen_name => $twitter_login,
+            profile_image_url => session('twitter_user')->{profile_image_url},
+        };
     }
     elsif (not session('persona_email')) {
         die "not authorized by any 3rd party (either twitter or persona)";

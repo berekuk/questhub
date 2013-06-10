@@ -39,6 +39,11 @@ sub notifications {
     return Play::DB::Notifications->new;
 }
 
+sub images {
+    require Play::DB::Images;
+    return Play::DB::Images->new;
+}
+
 sub ensure_indices {
     my $users_collection = Play::Mongo->db->get_collection('users');
     $users_collection->drop_indexes; # yeah! (FIXME)

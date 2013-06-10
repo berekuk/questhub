@@ -69,6 +69,12 @@ Dismiss notification.
 
 Get any user data.
 
+##### GET /api/user/{login}/pic?s={size}
+
+Get any user's picture.
+
+`size` should be either `small` (24x24) or `normal` (48x48).
+
 ##### GET /api/user
 
 Get the list of all users.

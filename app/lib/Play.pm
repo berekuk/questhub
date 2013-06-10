@@ -9,4 +9,8 @@ use Play::Route::Comments;
 use Play::Route::Events;
 use Play::Route::Dev;
 
+hook after => sub {
+    header 'Cache-Control' => 'max-age=0, private';
+};
+
 true;

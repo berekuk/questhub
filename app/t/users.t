@@ -452,4 +452,10 @@ sub dismiss_notification :Tests {
     });
 }
 
+sub pic :Tests {
+    my $response = dancer_response GET => '/api/user/foo/pic?s=normal';
+    is $response->status, 200;
+    is $response->content_type, 'image/jpg';
+}
+
 __PACKAGE__->new->runtests;

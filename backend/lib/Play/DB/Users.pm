@@ -5,7 +5,6 @@ use 5.010;
 use Moo;
 
 use Log::Any qw($log);
-use Digest::MD5 qw(md5_hex);
 use Digest::SHA1 qw(sha1_hex);
 
 use Type::Params qw(validate);
@@ -39,27 +38,16 @@ sub _prepare_user {
     $user->{rp} //= {};
     $user->{rp}{$_} //= 0 for @{ $user->{realms} };
 
-    if (not $user->{twitter}{screen_name} and $user->{settings}{email}) {
-        my $pic = 'http://www.gravatar.com/avatar/'.md5_hex(lc($user->{settings}{email}));
-        $user->{image} = $pic;
-        $user->{pic} = {
-            small => "$pic?s=24",
-            normal => "$pic?s=48",
-        };
+    if (not $user->{twitter}{profile_image_url} and $user->{settings}{email}) {
+        $user->{pic} = db->images->upic_by_email($user->{settings}{email});
     }
-    elsif ($user->{twitter}{screen_name}) {
-        my $pic = "http://api.twitter.com/1/users/profile_image?screen_name=$user->{twitter}{screen_name}";
-        $user->{pic} = {
-            small => "$pic&size=mini",
-            normal => "$pic&size=normal",
-        };
+    elsif ($user->{twitter}{profile_image_url}) {
+        $user->{pic} = db->images->upic_by_twitter_data($user->{twitter});
     }
     else {
-        $user->{pic} = {
-            small => "http://www.gravatar.com/avatar/00000000000000000000000000000000?s=24",
-            normal => "http://www.gravatar.com/avatar/00000000000000000000000000000000?s=48",
-        };
+        $user->{pic} = db->images->upic_default();
     }
+
     delete $user->{settings};
     return $user;
 }
