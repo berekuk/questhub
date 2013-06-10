@@ -31,8 +31,11 @@ sub upic :Tests {
     );
 
     cmp_deeply(
-        db->images->upic_by_twitter_login('berekuk'),
-        { small => ignore, normal => ignore }
+        db->images->upic_by_twitter_data({ screen_name => 'berekuk', profile_image_url => 'http://example.com/normal.jpg' }),
+        {
+            small => 'http://example.com/mini.jpg',
+            normal => 'http://example.com/normal.jpg',
+        }
     );
 }
 
