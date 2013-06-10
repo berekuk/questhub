@@ -47,7 +47,7 @@ sub upic_by_twitter_data {
 
     my $url = $twitter_data->{profile_image_url};
     my $small_url = $url;
-    $small_url =~ s{(normal)(\.\w+)$}{mini$2} or die "Unexpected twitter url '$url'";
+    $small_url =~ s{(normal)(\.\w+)$}{mini$2} or $small_url =~ s{normal$}{mini} or die "Unexpected twitter url '$url'";
     return {
         small => $small_url,
         normal => $url,

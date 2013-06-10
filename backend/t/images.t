@@ -37,6 +37,21 @@ sub upic :Tests {
             normal => 'http://example.com/normal.jpg',
         }
     );
+
+    cmp_deeply(
+        db->images->upic_by_twitter_data({ screen_name => 'berekuk', profile_image_url => 'http://example.com/normal' }),
+        {
+            small => 'http://example.com/mini',
+            normal => 'http://example.com/normal',
+        }
+    );
+
+    like(
+        exception {
+            db->images->upic_by_twitter_data({ screen_name => 'berekuk', profile_image_url => 'http://example.com/blah' })
+        },
+        qr/Unexpected twitter url/
+    );
 }
 
 sub fetch :Tests {
