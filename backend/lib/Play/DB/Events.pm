@@ -37,7 +37,7 @@ sub add {
 
     my $realm = $event->{realm};
     die "'realm' is not defined" unless $realm;
-    die "Unknown realm '$realm'" unless grep { $_ eq $realm } @{ setting('realms') };
+    db->realms->validate_name($realm);
 
     my $id = $self->collection->insert($event);
 

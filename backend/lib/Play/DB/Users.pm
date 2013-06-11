@@ -221,14 +221,14 @@ sub add_points {
 
 Join a new realm.
 
+Joining adds the realm to I<user.realms> list. The only effect of this action is that this user will be displayed in players list.
+
 =cut
 sub join_realm {
     my $self = shift;
     my ($login, $realm) = validate(\@_, Str, Str);
 
-    unless (grep { $realm eq $_ } @{ setting('realms') }) {
-        die "Unknown realm '$realm'";
-    }
+    db->realms->validate_name($realm);
 
     my $result = $self->collection->update(
         {
