@@ -248,6 +248,36 @@ sub join_realm {
     }
 }
 
+=item B<follow_realm($login, $realm)>
+
+Subscribe to a realm.
+
+This is not the same as joining a realm. "User follows a realm" means that he or she sees its events in the news feed.
+
+=cut
+sub follow_realm {
+    my $self = shift;
+    my ($login, $realm) = validate(\@_, Str, Str);
+
+    db->realms->validate_name($realm);
+
+    my $result = $self->collection->update(
+        {
+            login => $login,
+            fr => { '$ne' => $realm },
+        },
+        {
+            '$addToSet' => { fr => $realm }
+        },
+        { safe => 1 }
+    );
+
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "User $login not found or unable to follow the realm";
+    }
+}
+
 # some settings can't be set by the client
 sub protected_settings {
     qw( email_confirmed );

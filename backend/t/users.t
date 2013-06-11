@@ -27,6 +27,26 @@ sub join_realm :Tests {
 
 }
 
+sub follow_realm :Tests {
+    db->users->add({ login => 'foo', realms => ['europe'] });
+
+    like
+        exception { db->users->follow_realm('foo', 'unknown') },
+        qr/Unknown realm 'unknown'/;
+
+    db->users->follow_realm('foo', 'asia');
+
+    my $user = db->users->get_by_login('foo');
+    cmp_deeply $user->{realms}, ['europe'];
+    cmp_deeply $user->{rp}, { europe => 0 };
+    cmp_deeply $user->{fr}, ['asia'];
+
+    like
+        exception { db->users->follow_realm('foo', 'asia') },
+        qr/unable to follow/;
+
+}
+
 sub unsubscribe :Tests {
     db->users->add({ login => 'foo', realms => ['europe'] });
 
