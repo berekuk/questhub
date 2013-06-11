@@ -12,6 +12,6 @@ define([
             return new Realm({ model: model });
         },
 
-        listSelector: '.realms'
+        listSelector: '.realm-collection'
     });
 });

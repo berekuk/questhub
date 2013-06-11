@@ -1,0 +1,12 @@
+<div class="well well-small">
+  <div class="pull-left">
+    <div class="realm-logo">
+      <a href="/<%- id %>/feed"><img src="/i/<%- id %>.png"/></a><br>
+      <span><%- name %></span>
+    </div>
+  </div>
+  <div class="realm-detail-description">
+    <%= partial.markdown(obj.description || '') %>
+  </div>
+  <div style="clear:both"> </div>
+</div>

@@ -2,20 +2,25 @@ define([
     'backbone',
     'models/current-user',
     'views/dashboard',
-    'views/quest/page',
-    'models/quest',
-    'models/user-collection',
-    'views/user/collection',
-    'models/another-user',
-    'views/explore',
-    'views/welcome',
-    'models/event-collection',
-    'views/news-feed',
-    'views/about',
-    'views/register',
-    'views/confirm-email',
-    'views/user/unsubscribe'
-], function (Backbone, currentUser, Dashboard, QuestPage, QuestModel, UserCollectionModel, UserCollection, AnotherUserModel, Explore, Welcome, EventCollectionModel, NewsFeed, About, Register, ConfirmEmail, Unsubscribe) {
+    'views/quest/page', 'models/quest',
+    'models/user-collection', 'views/user/collection', 'models/another-user',
+    'views/explore', 'views/welcome',
+    'models/event-collection', 'views/news-feed',
+    'views/about', 'views/register',
+    'views/realm/detail-collection', 'models/realm-collection',
+    'views/confirm-email', 'views/user/unsubscribe'
+], function (
+    Backbone,
+    currentUser,
+    Dashboard,
+    QuestPage, QuestModel,
+    UserCollectionModel, UserCollection, AnotherUserModel,
+    Explore, Welcome,
+    EventCollectionModel, NewsFeed,
+    About, Register,
+    RealmDetailCollection, RealmCollectionModel,
+    ConfirmEmail, Unsubscribe
+) {
     return Backbone.Router.extend({
         routes: {
             "": "frontPage",
@@ -33,7 +38,9 @@ define([
             ":realm/explore(/:tab)": "explore",
             ":realm/explore/:tab/tag/:tag": "explore",
             "about": "about",
+            "realms": "realms",
 
+            // legacy
             "perl": "playPerlFrontPage",
             "perl/": "playPerlFrontPage",
             "feed": "oldFeed",
@@ -226,6 +233,14 @@ define([
 
         about: function () {
             this.appView.setPageView(new About());
+        },
+
+        realms: function () {
+            var view = new RealmDetailCollection({
+                collection: new RealmCollectionModel()
+            });
+            view.render();
+            this.appView.setPageView(view);
         },
 
         oldUserList: function () {

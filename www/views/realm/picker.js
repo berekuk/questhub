@@ -33,6 +33,6 @@ define([
             return realm;
         },
 
-        listSelector: '.realms'
+        listSelector: '.realm-collection'
     });
 });

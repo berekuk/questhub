@@ -63,6 +63,7 @@
         specs.push('spec/like');
         specs.push('spec/event-box');
         specs.push('spec/navbar');
+        specs.push('spec/realm');
 
         specs.push('spec/model/quest');
         specs.push('spec/model/event');
