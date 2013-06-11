@@ -19,7 +19,7 @@ sub get_by_twitter_login {
     my $self = shift;
     my ($login) = validate(\@_, Str);
 
-    return $self->get({ twitter => { screen_name => $login } });
+    return $self->get({ 'twitter.screen_name' => $login });
 }
 
 sub get_by_email {

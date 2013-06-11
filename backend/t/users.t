@@ -56,4 +56,18 @@ sub unsubscribe :Tests {
     is db->users->get_settings('foo')->{notify_likes}, 0, 'notify_likes is off';
 }
 
+sub get_by_twitter_login :Tests {
+    db->users->add({
+        login => 'foo',
+        twitter => { screen_name => 'tfoo', profile_image_url => 'http://example.com/foo/normal' },
+        realms => ['europe'],
+    });
+
+    cmp_deeply
+        scalar(db->users->get_by_twitter_login('tfoo')),
+        superhashof({
+            login => 'foo',
+        });
+}
+
 __PACKAGE__->new->runtests;
