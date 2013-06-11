@@ -31,6 +31,13 @@ define([
                 return true;
             }
             return;
+        },
+
+        followRealm: function (id) {
+            return $.post('/api/follow_realm/' + id);
+        },
+        unfollowRealm: function (id) {
+            return $.post('/api/unfollow_realm/' + id);
         }
     });
     var result = new CurrentUser();
