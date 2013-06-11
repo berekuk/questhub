@@ -474,4 +474,17 @@ sub follow_realm :Tests {
     });
 }
 
+sub unfollow_realm :Tests {
+    http_json GET => "/api/fakeuser/foo";
+
+    http_json POST => "/api/follow_realm/europe";
+    http_json POST => "/api/follow_realm/asia";
+    http_json POST => "/api/unfollow_realm/asia";
+
+    my $current_user = http_json GET => '/api/current_user';
+    cmp_deeply $current_user, superhashof({
+        fr => ['europe'],
+    });
+}
+
 __PACKAGE__->new->runtests;

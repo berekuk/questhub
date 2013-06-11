@@ -67,6 +67,10 @@ Dismiss notification.
 
 Follow a realm (i.e., subscribe to it in news feed).
 
+##### POST /api/unfollow_realm/{realm}
+
+Unfollow a realm.
+
 ### Players
 
 ##### GET /api/user/{login}

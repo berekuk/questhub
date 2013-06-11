@@ -250,6 +250,14 @@ post '/follow_realm/:realm' => sub {
     return { status => 'ok' };
 };
 
+post '/unfollow_realm/:realm' => sub {
+    my $login = session('login');
+    die "not logged in" unless $login;
+    db->users->unfollow_realm($login, param('realm'));
+
+    return { status => 'ok' };
+};
+
 post '/logout' => sub {
     session->destroy(session); #FIXME: workaround a buggy Dancer::Session::MongoDB
     return { status => 'ok' };
