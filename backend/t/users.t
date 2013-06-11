@@ -47,6 +47,32 @@ sub follow_realm :Tests {
 
 }
 
+sub unfollow_realm :Tests {
+    db->users->add({ login => 'foo', realms => ['europe'] });
+
+    like
+        exception { db->users->unfollow_realm('foo', 'unknown') },
+        qr/Unknown realm 'unknown'/;
+
+    like
+        exception { db->users->unfollow_realm('foo', 'asia') },
+        qr/unable to unfollow/;
+
+    db->users->follow_realm('foo', 'asia');
+    db->users->unfollow_realm('foo', 'asia');
+
+    like
+        exception { db->users->unfollow_realm('foo', 'asia') },
+        qr/unable to unfollow/;
+
+    db->users->follow_realm('foo', 'asia');
+    db->users->follow_realm('foo', 'europe');
+    db->users->unfollow_realm('foo', 'asia');
+
+    my $user = db->users->get_by_login('foo');
+    cmp_deeply $user->{fr}, ['europe'];
+}
+
 sub unsubscribe :Tests {
     db->users->add({ login => 'foo', realms => ['europe'] });
 

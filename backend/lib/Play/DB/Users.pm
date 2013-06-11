@@ -274,7 +274,35 @@ sub follow_realm {
 
     my $updated = $result->{n};
     unless ($updated) {
-        die "User $login not found or unable to follow the realm";
+        die "User $login not found or unable to follow the realm $realm";
+    }
+}
+
+=item B<unfollow_realm($login, $realm)>
+
+Unsubscribe from a realm.
+
+=cut
+sub unfollow_realm {
+    my $self = shift;
+    my ($login, $realm) = validate(\@_, Str, Str);
+
+    db->realms->validate_name($realm);
+
+    my $result = $self->collection->update(
+        {
+            login => $login,
+            fr => $realm,
+        },
+        {
+            '$pull' => { fr => $realm }
+        },
+        { safe => 1 }
+    );
+
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "User $login not found or unable to unfollow the realm $realm";
     }
 }
 
