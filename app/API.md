@@ -63,6 +63,10 @@ Same as `PUT` - both rewrite settings entirely.
 
 Dismiss notification.
 
+##### POST /api/follow_realm/{realm}
+
+Follow a realm (i.e., subscribe to it in news feed).
+
 ### Players
 
 ##### GET /api/user/{login}

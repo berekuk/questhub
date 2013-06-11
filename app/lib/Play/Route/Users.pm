@@ -91,14 +91,15 @@ get '/current_user' => sub {
 # user settings are private; you can't get settings of other users
 get '/current_user/settings' => sub {
     my $login = session('login');
-    die "not logged in" unless session->{login};
+    die "not logged in" unless $login;
     return db->users->get_settings($login);
 };
 
 any ['put', 'post'] => '/current_user/settings' => sub {
-    die "not logged in" unless session->{login};
+    my $login = session('login');
+    die "not logged in" unless $login;
     db->users->set_settings(
-        session->{login} => _expand_settings(scalar params()),
+        $login => _expand_settings(scalar params()),
         (session('persona_email') ? 1 : 0) # force 'email_confirmed' setting
     );
     return { result => 'ok' };
@@ -106,7 +107,7 @@ any ['put', 'post'] => '/current_user/settings' => sub {
 
 post '/current_user/dismiss_notification/:id' => sub {
     my $login = session('login');
-    die "not logged in" unless session->{login};
+    die "not logged in" unless $login;
     db->notifications->remove(param('id'), $login);
     return { result => 'ok' };
 };
@@ -203,7 +204,7 @@ post '/register/cancel' => sub {
 
 post '/register/resend_email_confirmation' => sub {
     my $login = session('login');
-    die "not logged in" unless session->{login};
+    die "not logged in" unless $login;
     db->users->resend_email_confirmation($login);
     return { result => 'ok' };
 };
@@ -241,13 +242,17 @@ get '/user/:login/unsubscribe/:field' => sub {
     }
 };
 
+post '/follow_realm/:realm' => sub {
+    my $login = session('login');
+    die "not logged in" unless $login;
+    db->users->follow_realm($login, param('realm'));
+
+    return { status => 'ok' };
+};
+
 post '/logout' => sub {
-
     session->destroy(session); #FIXME: workaround a buggy Dancer::Session::MongoDB
-
-    return {
-        status => 'ok'
-    };
+    return { status => 'ok' };
 };
 
 if ($ENV{DEV_MODE}) {

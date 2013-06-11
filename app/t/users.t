@@ -458,4 +458,20 @@ sub pic :Tests {
     is $response->content_type, 'image/jpg';
 }
 
+sub follow_realm :Tests {
+    http_json GET => "/api/fakeuser/$_" for qw/ foo bar /;
+
+    my $current_user = http_json GET => '/api/current_user';
+    cmp_deeply $current_user, superhashof({
+        login => 'bar',
+    });
+    ok not $current_user->{fr};
+
+    http_json POST => "/api/follow_realm/europe";
+    $current_user = http_json GET => '/api/current_user';
+    cmp_deeply $current_user, superhashof({
+        fr => ['europe'],
+    });
+}
+
 __PACKAGE__->new->runtests;
