@@ -25,29 +25,16 @@
     }
 }
 
-.realm-pick {
-
-    .realm-logo {
-        opacity: 0.3;
-        &:hover {
-            opacity: 0.8;
-        }
-    }
-    .realm-logo-selected {
-        opacity: 1;
-        &:hover {
-            opacity: 1;
-        }
-    }
-}
-
 .realm-detail {
     position: relative;
 
-    .realm-detail-logo {
-        float: left;
-        margin-bottom: 15px;
-        margin-right: 30px;
+    .controls-subview {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        @include breakpoint(B) {
+            position: static;
+        }
     }
 
     .realm-controls {
@@ -57,8 +44,15 @@
         }
     }
 
-    .realm-detail-description {
-        margin-right: 30px;
+    @include breakpoint(B) {
+        .realm-detail-description {
+            margin-right: 30px;
+        }
+        .realm-detail-logo {
+            float: left;
+            margin-bottom: 15px;
+            margin-right: 30px;
+        }
     }
 }
 

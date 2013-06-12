@@ -34,9 +34,11 @@ define([
         },
 
         followRealm: function (id) {
+            mixpanel.track('follow realm', { realm_id: id })
             return $.post('/api/follow_realm/' + id);
         },
         unfollowRealm: function (id) {
+            mixpanel.track('unfollow realm', { realm_id: id });
             return $.post('/api/unfollow_realm/' + id);
         }
     });
