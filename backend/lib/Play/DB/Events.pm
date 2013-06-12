@@ -114,18 +114,29 @@ sub list {
         limit => Optional[Int],
         offset => Optional[Int],
         types => Optional[Str],
-        realm => Str,
+        realm => Optional[Str],
+        for => Optional[Str],
     ]);
     $params //= {};
     $params->{limit} //= 100;
     $params->{offset} //= 0;
+
+    die "One of 'realm' and 'for' should be set" if not defined $params->{for} and not defined $params->{realm};
+    die "Only one of 'realm' and 'for' should be set" if defined $params->{for} and defined $params->{realm};
 
     my $search_opt = {};
 
     $search_opt->{type} = {
         '$in' => [ split /,/, $params->{types} ]
     } if $params->{types};
-    $search_opt->{realm} = $params->{realm};
+
+    if (defined $params->{realm}) {
+        $search_opt->{realm} = $params->{realm};
+    }
+    else {
+        my $user = db->users->get_by_login($params->{for}) or die "User '$params->{for}' not found";
+        $search_opt->{realm} = { '$in' => $user->{fr} || [] };
+    }
 
     my ($limit, $offset) = ($params->{limit}, $params->{offset});
 

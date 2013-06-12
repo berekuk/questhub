@@ -116,7 +116,7 @@ sub list {
     my ($params) = validate(\@_, Undef|Dict[
         # find() filters
         user => Optional[Str],
-        realm => Str,
+        realm => Optional[Str],
         unclaimed => Optional[Bool],
         status => Optional[Str],
         # flag meaning "fetch comment_count too"

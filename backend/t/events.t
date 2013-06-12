@@ -34,6 +34,16 @@ sub basic :Tests {
             superhashof({ type => 'a1-t1' }),
         ]
     );
+
+    db->users->add({ login => 'foo', fr => ['europe'] });
+
+    cmp_deeply(
+        db->events->list({ for => 'foo' }),
+        [
+            superhashof({ type => 'a2-t2' }),
+            superhashof({ type => 'a1-t1' }),
+        ]
+    );
 }
 
 sub realm_validation :Tests {
