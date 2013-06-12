@@ -40,13 +40,23 @@ sub list {
     return $_list;
 }
 
+sub get {
+    my $self = shift;
+    my ($id) = validate(\@_, Str);
+
+    my ($realm) = grep { $id eq $_->{id} } @{ $self->list };
+    unless ($realm) {
+        die "Unknown realm '$id'";
+    }
+    return $realm;
+}
+
 sub validate_name {
     my $self = shift;
-    my ($realm) = validate(\@_, Str);
+    my ($id) = validate(\@_, Str);
 
-    unless (grep { $realm eq $_->{id} } @{ $self->list }) {
-        die "Unknown realm '$realm'";
-    }
+    $self->get($id);
+    return;
 }
 
 1;
