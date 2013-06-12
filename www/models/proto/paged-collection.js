@@ -42,7 +42,7 @@ define([
             if (options.parse === void 0) options.parse = true;
             var success = options.success;
             var collection = this;
-            options.success = function(resp, options) {
+            options.success = function(resp) {
                 if (collection.options.limit) {
                     collection.gotMore = (resp.length >= collection.options.limit);
                     if (collection.gotMore) {
