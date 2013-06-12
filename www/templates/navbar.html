@@ -2,15 +2,18 @@
   <div class="nav-inner">
   <ul class="nav-realm-picker top-nav">
     <li class="menu-item-feed">
-      <div class="dropdown">
-        <a class="brand" href="/">
+      <a class="brand" href="/">
+        <% if (registered) { %>
+          <i class="icon-rss"></i>
+        <% } else { %>
+          QH
+        <% } %>
+        <span class="desktop-text">
           Questhub.io
-        </a>
-      </div>
+        </span>
+      </a>
     </li>
-  </ul>
-
-  <ul class="nav-menu top-nav">
+  </ul><ul class="nav-menu top-nav">
     <% if (registered) { %>
     <li class="menu-item-my-quests"><a href="/player/<%- currentUser %>">
         <i class="icon-list-ul"></i>
@@ -29,13 +32,13 @@
   </ul>
 
   <% if (realm) { %>
-  &#10148;
+  <span class="nav-menu-separator">&#10148;</span>
   <ul class="nav-realm top-nav">
     <li class="menu-item-realm-page">
       <a href="/realm/<%- realm.id %>">
         <b><%- realm.name %></b>
      </a>
-     &#10148;
+     <span class="nav-menu-separator">&#10148;</span>
     </li>
     </li><li class="menu-item-user-list">
       <a href="/<%- realm.id %>/players">

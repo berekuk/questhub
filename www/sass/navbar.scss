@@ -13,14 +13,14 @@ nav {
     background-color: $light-grey;
     border-bottom: 1px solid #ddd;
 
-    .dropdown-menu {
-        min-width: 0px;
-    }
-
     ul {
         margin: 0;
         padding: 0;
         list-style-type: none;
+    }
+
+    .nav-menu-separator {
+        color: $dark-grey;
     }
 
     @mixin nav-underline($color) {
@@ -35,8 +35,8 @@ nav {
         display: inline-block;
         margin: 0;
 
-        > a, > .dropdown > a {
-            padding: 0 9px;
+        > a, {
+            padding: 0 8px;
             @include breakpoint(C) {
                 padding: 0 18px;
             }
@@ -67,6 +67,7 @@ nav {
     .current-user-box {
         float: right;
         .dropdown-menu {
+            min-width: 0px;
             left: auto;
             right: 0;
         }
