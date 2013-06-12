@@ -241,13 +241,15 @@ User:
         _id: ...,
         login: 'blah',
         twitter: {
-            screen_name: 'blah'
+            screen_name: 'blah',
+            profile_image_url: '...'
         },
-        realms: ['chaos', 'perl']
-        qp: {
+        realms: ['chaos', 'perl']   # active realms - at least one open or completed quest, populated automatically
+        rp: {           # realm points
             'chaos': 3,
             'perl': 2
-        }
+        },
+        fr: ['chaos']   # following realms
     }
 
 Quest:
