@@ -5,7 +5,7 @@
         <p>
         Your personal news feed.
         <p>
-        <a href="/api/event/atom?for=<%- login %><%= types ? '&types=' + types.join(',') : '' %>" class="btn btn-warning"><i class="icon-rss"></i> RSS</a>
+        <a href="http://<%= window.location.host %>/api/event/atom?for=<%- login %><%= (types && types.length) ? '&types=' + types.join(',') : '' %>" class="btn btn-warning"><i class="icon-rss"></i> RSS</a>
         </p>
       </div>
       <div class="accordion" id="event-filter-accordion">

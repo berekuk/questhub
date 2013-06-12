@@ -5,7 +5,10 @@
     <div class="row-fluid">
       <div class="span3">
         <div class="well well-small">
-          <%= partial.markdown(description) %>
+          <p>
+            <%= partial.markdown(description) %>
+          </p>
+          <a href="http://<%= window.location.host %>/api/event/atom?realm=<%- id %>" class="btn btn-warning"><i class="icon-rss"></i> RSS</a>
         </div>
       </div>
       <div class="span9">
