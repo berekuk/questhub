@@ -4,15 +4,7 @@
       <a href="/<%- id %>/feed"><img src="/i/<%- id %>.png"/></a><br>
       <span><%- name %></span>
     </div>
-    <% if (currentUser.get('registered')) { %>
-      <div class="realm-detail-controls">
-        <% if (currentUser.get('fr') && _.contains(currentUser.get('fr'), id)) { %>
-          <button class="btn realm-unfollow">Unfollow</button>
-        <% } else { %>
-          <button class="btn btn-primary realm-follow">Follow</button>
-        <% } %>
-      </div>
-    <% } %>
+    <div class="controls-subview"></div>
   </div>
 
   <div class="realm-detail-description">

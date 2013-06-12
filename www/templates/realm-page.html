@@ -1,5 +1,8 @@
 <div class="realm-page">
-  <h2><%- name %></h2>
+  <h2>
+    <img src="/i/<%- id %>.png"/>
+    <%- name %>
+  </h2>
   <hr>
   <div class="container-fluid">
     <div class="row-fluid">
@@ -8,7 +11,8 @@
           <p>
             <%= partial.markdown(description) %>
           </p>
-          <a href="http://<%= window.location.host %>/api/event/atom?realm=<%- id %>" class="btn btn-warning"><i class="icon-rss"></i> RSS</a>
+          <div class="realm-controls-subview"></div>
+          <a href="http://<%= window.location.host %>/api/event/atom?realm=<%- id %>" class="btn btn-warning realm-rss-button"><i class="icon-rss"></i> RSS</a>
         </div>
       </div>
       <div class="span9">

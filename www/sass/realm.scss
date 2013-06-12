@@ -49,12 +49,14 @@
         margin-bottom: 15px;
         margin-right: 30px;
     }
-    .realm-detail-controls {
+
+    .realm-controls {
         button {
             display: block;
             margin: 0 auto;
         }
     }
+
     .realm-detail-description {
         margin-right: 30px;
     }
@@ -63,11 +65,20 @@
 .realm-page {
     > h2 {
         text-align: center;
+        img {
+            display: inline-block;
+            padding-right: 15px;
+        }
     }
 
     > hr {
         width: 60%;
         min-width: 400px;
-        margin: 30px auto;
+        margin: 15px auto 30px;
+    }
+
+    .realm-controls {
+        margin-top: 10px;
+        margin-bottom: 10px;
     }
 }

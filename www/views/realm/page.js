@@ -1,9 +1,10 @@
 define([
     'underscore',
     'views/proto/common',
+    'views/realm/controls',
     'models/event-collection', 'views/event/collection',
     'text!templates/realm-page.html'
-], function (_, Common, EventCollectionModel, EventCollection, html) {
+], function (_, Common, RealmControls, EventCollectionModel, EventCollection, html) {
     return Common.extend({
         template: _.template(html),
 
@@ -13,6 +14,9 @@ define([
 
         subviews: {
             '.subview': 'eventCollection',
+            '.realm-controls-subview': function () {
+                return new RealmControls({ model: this.model });
+            }
         },
 
         realm: function () {
