@@ -1,9 +1,10 @@
 define([
     'underscore', 'jquery',
+    'models/shared-models',
     'views/proto/base',
     'text!templates/quest-add.html',
     'bootstrap'
-], function (_, $, Base, html) {
+], function (_, $, sharedModels, Base, html) {
     return Base.extend({
         template: _.template(html),
 
@@ -16,9 +17,6 @@ define([
         initialize: function() {
             _.bindAll(this);
             this.render();
-            this.$('.icon-spinner').hide();
-            this.submitted = false;
-            this.validate();
         },
 
         disable: function() {
@@ -100,22 +98,44 @@ define([
             }
         },
 
-        getDescription: function() {
+        getDescription: function () {
             return this.$('[name=name]').val();
         },
 
-        getTags: function() {
+        getTags: function () {
             var tagLine = this.$('[name=tags]').val();
             return this.collection.model.prototype.tagline2tags(tagLine);
         },
 
+        getRealm: function () {
+            return this.$('.add-quest-realm .active').attr('data-realm-id');
+        },
+
         render: function () {
-            this.setElement($(this.template()));
+            if (!sharedModels.realms.length) {
+                var that = this;
+                sharedModels.realms.fetch()
+                .success(function () {
+                    that.render();
+                });
+                return;
+            }
+            this.$el.html(
+                $(this.template({
+                    realms: sharedModels.realms.toJSON()
+                }))
+            );
 
             var qe = this.$('.quest-edit');
             this.$('#addQuest').modal().on('shown', function () {
                 qe.focus();
             });
+
+            this.$('.btn-group').button();
+
+            this.$('.icon-spinner').hide();
+            this.submitted = false;
+            this.validate();
         },
 
         submit: function() {
@@ -125,7 +145,7 @@ define([
 
             var model_params = {
                 name: this.getDescription(),
-                realm: this.collection.options.realm
+                realm: this.getRealm()
             };
 
             var tags = this.getTags();
