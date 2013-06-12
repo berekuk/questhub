@@ -57,3 +57,10 @@ a.mini-button {
         display: inline;
     }
 }
+
+.mobile-text {
+    display: inline;
+    @include breakpoint(B) {
+        display: none;
+    }
+}
