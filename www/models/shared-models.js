@@ -1,9 +1,11 @@
 define([
     'backbone',
-    'models/realm-collection'
-], function (Backbone, RealmCollectionModel) {
+    'models/realm-collection',
+    'models/current-user'
+], function (Backbone, RealmCollectionModel, currentUser) {
     var realms = new RealmCollectionModel();
     return {
-        realms: realms
+        realms: realms,
+        currentUser: currentUser
     };
 });

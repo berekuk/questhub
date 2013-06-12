@@ -19,3 +19,13 @@ input.quest-edit {
 .quest-add-row {
     margin-bottom: 8px;
 }
+
+.add-quest-realm {
+    button {
+        color: $dark-grey;
+        font-size: 12px !important;
+    }
+    button.active {
+        font-weight: bold;
+    }
+}

@@ -9,8 +9,8 @@
     </div>
     <div class="modal-body modal-quest-add">
 
-      <div class="quest-add-row">
-        <div class="btn-group add-quest-realm" data-toggle="buttons-radio">
+      <div class="quest-add-row add-quest-realm">
+        <div class="btn-group" data-toggle="buttons-radio">
           <% _.each(realms, function(r) { %>
           <button class="btn <%- r.id == 'chaos' ? 'active' : '' %>" data-realm-id="<%- r.id %>"><%- r.name %></button>
           <% }) %>
