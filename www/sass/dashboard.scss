@@ -1,26 +1,4 @@
 .dashboard {
-    .user {
-        .avatar {
-            float: left;
-        }
-        .names {
-            float: left;
-            margin-left: 20px;
-            .player-login {
-                font-size: 18px;
-                vertical-align: middle;
-                line-height: 30px;
-            }
-        }
-        .new-quest {
-            float: right;
-            margin-top: 10px;
-            margin-right: 10px;
-        }
-        .user-big-terminator {
-            clear: both;
-        }
-    }
     .quests-header {
         margin-top: 8px;
         font-size: 24px;

@@ -65,7 +65,7 @@ define([
             "explore": redirect('realm/chaos/explore'),
             "explore/:tab": redirect('realm/chaos/explore/:1'),
             "explore/:tab/tag/:tag": redirect('realm/chaos/explore/:1/tag/:2'),
-            ":realm/player/:login": redirect('realm/:1/player/:2'),
+            ":realm/player/:login": redirect('player/:2'),
             ":realm/explore": redirect('realm/:1/explore'),
             ":realm/explore/:tab": redirect('realm/:1/explore/:2'),
             ":realm/explore/:tab/tag/:tag": redirect('realm/:1/explore/:2/tag/:3'),

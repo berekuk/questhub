@@ -23,7 +23,7 @@ define([
         progress: 0,
 
         subviews: {
-            '.user': function () {
+            '.user-subview': function () {
                 return new UserBig({
                     model: this.model,
                     open_quests: this.subview('.open-quests'),

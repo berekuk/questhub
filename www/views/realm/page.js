@@ -16,7 +16,6 @@ define([
         },
 
         realm: function () {
-            console.log(this.model);
             return this.model.get('id');
         },
 

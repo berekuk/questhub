@@ -60,13 +60,6 @@ nav {
         }
     }
 
-    .nav-text {
-        display: none;
-        @include breakpoint(B) {
-            display: inline;
-        }
-    }
-
     .top-nav {
         display: inline-block;
     }
