@@ -6,8 +6,6 @@ define([
     return AnyCollection.extend({
         template: _.template(html),
 
-        activated: true,
-
         generateItem: function(model) {
             return new RealmBig({ model: model });
         },

@@ -2,34 +2,29 @@ define([
     'jquery',
     'underscore',
     'views/proto/common',
-    'views/event/collection',
+    'models/event-collection', 'views/event/collection',
     'text!templates/news-feed.html',
     'bootstrap'
-], function ($, _, Common, EventCollection, html) {
+], function ($, _, Common, EventCollectionModel, EventCollection, html) {
     return Common.extend({
         template: _.template(html),
 
         className: 'news-feed-view',
 
-        activeMenuItem: function () {
-            if (this.realm()) {
-                return 'realm-feed';
-            }
-            else {
-                return 'feed';
-            }
-        },
+        activeMenuItem: 'feed',
 
         subviews: {
             '.subview': 'eventCollection',
         },
 
-        realm: function () {
-            return this.collection.options.realm;
-        },
-
         eventCollection: function () {
-            return new EventCollection({ collection: this.collection });
+            var collection = new EventCollectionModel([], {
+                limit: 50,
+                types: this.options.types,
+                'for': this.model.get('login')
+            });
+            collection.fetch();
+            return new EventCollection({ collection: collection });
         },
 
         events: function(){
@@ -63,10 +58,10 @@ define([
 
             this.options.types = types;
 
-            this.collection.setTypes(types);
+            this.subview('.subview').collection.setTypes(types);
 
             /* Set queryString to URL */
-            var url = '/' + this.realm() + '/feed';
+            var url = '/';
             if ( types.length > 0 ) {
                 url += '?types=' + types.join();
             }
@@ -112,7 +107,7 @@ define([
             return {
                 filterList: filterList,
                 types: this.options.types,
-                realm: this.realm()
+                login: this.model.get('login')
             };
         }
 

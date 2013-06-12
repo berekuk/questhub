@@ -9,7 +9,7 @@ define([
     return PagedCollection.extend({
         template: _.template(html),
 
-        listSelector: '.events-list',
+        listSelector: '.event-collection',
 
         pageSize: 50,
 

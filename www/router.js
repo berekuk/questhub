@@ -6,8 +6,9 @@ define([
     'models/user-collection', 'views/user/collection', 'models/another-user',
     'views/explore', 'views/welcome',
     'models/event-collection', 'views/news-feed',
+    'views/realm/page',
     'views/about', 'views/register',
-    'views/realm/detail-collection', 'models/realm-collection',
+    'views/realm/detail-collection', 'models/realm-collection', 'models/realm',
     'views/confirm-email', 'views/user/unsubscribe'
 ], function (
     Backbone,
@@ -17,8 +18,9 @@ define([
     UserCollectionModel, UserCollection, AnotherUserModel,
     Explore, Welcome,
     EventCollectionModel, NewsFeed,
+    RealmPage,
     About, Register,
-    RealmDetailCollection, RealmCollectionModel,
+    RealmDetailCollection, RealmCollectionModel, RealmModel,
     ConfirmEmail, Unsubscribe
 ) {
 
@@ -47,7 +49,7 @@ define([
             "feed": "feed",
 
             "quest/:id": "questPage",
-            "realm/:realm": "realmFeed",
+            "realm/:realm": "realmPage",
             "player/:login": "dashboard",
             "about": "about",
             "realms": "realms",
@@ -191,7 +193,21 @@ define([
             this.appView.setPageView(view);
         },
 
-        _feed: function (params) {
+        realmPage: function (realm) {
+            var model = new RealmModel({ id: realm });
+            var view = new RealmPage({ model: model });
+            model.fetch().success(function () {
+                view.activate();
+            });
+            this.appView.setPageView(view);
+        },
+
+        feed: function () {
+            if (!currentUser.get('registered')) {
+                this.navigate('/welcome', { trigger: true, replace: true });
+                return;
+            }
+
             var types = this.queryParams('types');
             if (types == '') {
                 types = [];
@@ -199,33 +215,14 @@ define([
             else {
                 types = types.split(',');
             }
-            params.limit = 50;
-            params.types = types;
 
-            var collection = new EventCollectionModel([], params);
             var view = new NewsFeed({
-                collection: collection,
+                model: currentUser,
                 types: types
             });
-
-            collection.fetch();
             view.render();
 
             this.appView.setPageView(view);
-        },
-
-        realmFeed: function (realm) {
-            this._feed({ realm: realm });
-        },
-
-        feed: function () {
-            // copypaste, TODO - extract this into a common function
-            if (!currentUser.get('registered')) {
-                this.navigate('/welcome', { trigger: true, replace: true });
-                return;
-            }
-            var login = currentUser.get('login');
-            this._feed({ 'for': login });
         },
 
         register: function () {
@@ -276,7 +273,7 @@ define([
             var view = new RealmDetailCollection({
                 collection: new RealmCollectionModel()
             });
-            view.render();
+            view.collection.fetch();
             this.appView.setPageView(view);
         },
 

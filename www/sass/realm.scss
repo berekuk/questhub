@@ -41,6 +41,33 @@
     }
 }
 
-.realm-detail-controls {
-    float: right;
+.realm-detail {
+    position: relative;
+
+    .realm-detail-logo {
+        float: left;
+        margin-bottom: 15px;
+        margin-right: 30px;
+    }
+    .realm-detail-controls {
+        button {
+            display: block;
+            margin: 0 auto;
+        }
+    }
+    .realm-detail-description {
+        margin-right: 30px;
+    }
+}
+
+.realm-page {
+    > h2 {
+        text-align: center;
+    }
+
+    > hr {
+        width: 60%;
+        min-width: 400px;
+        margin: 30px auto;
+    }
 }
