@@ -32,6 +32,7 @@ define([
             var params = this.model.serialize();
             params.showAuthor = this.options.showAuthor;
             params.showStatus = this.options.showStatus;
+            params.showRealm = this.options.showRealm;
             return params;
         },
 
