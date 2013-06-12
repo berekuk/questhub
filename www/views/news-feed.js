@@ -11,7 +11,14 @@ define([
 
         className: 'news-feed-view',
 
-        activeMenuItem: 'event-list',
+        activeMenuItem: function () {
+            if (this.realm()) {
+                return 'realm-feed';
+            }
+            else {
+                return 'feed';
+            }
+        },
 
         subviews: {
             '.subview': 'eventCollection',

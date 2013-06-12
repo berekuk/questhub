@@ -13,7 +13,7 @@ define([
         activated: false,
 
         activeMenuItem: function () {
-            return (this.my() ? 'home' : 'none');
+            return (this.my() ? 'my-quests' : 'none');
         },
 
         realm: function () {
@@ -63,7 +63,6 @@ define([
 
             options.limit = options.limit || 30;
             options.order = 'desc';
-            options.realm = this.realm();
 
             var collection = new QuestCollectionModel([], options);
             this.moreProgress();

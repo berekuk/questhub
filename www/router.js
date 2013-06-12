@@ -21,9 +21,22 @@ define([
     RealmDetailCollection, RealmCollectionModel,
     ConfirmEmail, Unsubscribe
 ) {
+
+    var router;
+
+    var redirect = function (tmpl) {
+        return function () {
+            var newRoute = tmpl;
+            newRoute = newRoute.replace(':1', arguments[0]);
+            newRoute = newRoute.replace(':2', arguments[1]);
+            newRoute = newRoute.replace(':3', arguments[2]);
+            router.navigate('/' + newRoute, { trigger: true, replace: true });
+        }
+    };
+
     return Backbone.Router.extend({
         routes: {
-            "": "frontPage",
+            "": "feed",
             "welcome": "welcome",
 
             "register": "register",
@@ -31,25 +44,32 @@ define([
             "auth/twitter": "twitterLogin",
             "player/:login/unsubscribe/:field/:status": "unsubscribeResult",
 
-            ":realm/quest/:id": "questPage",
-            ":realm/feed": "feed",
-            ":realm/players": "userList",
-            ":realm/player/:login": "anotherDashboard",
-            ":realm/explore(/:tab)": "explore",
-            ":realm/explore/:tab/tag/:tag": "explore",
+            "feed": "feed",
+
+            "quest/:id": "questPage",
+            "realm/:realm": "realmFeed",
+            "player/:login": "dashboard",
             "about": "about",
             "realms": "realms",
+            "realm/:realm/players": "userList",
+            "realm/:realm/explore(/:tab)": "explore",
+            "realm/:realm/explore/:tab/tag/:tag": "explore",
+            "realm/:realm/quest/:id": "realmQuestPage",
 
             // legacy
-            "perl": "playPerlFrontPage",
-            "perl/": "playPerlFrontPage",
-            "feed": "oldFeed",
-            "players": "oldUserList",
-            "explore(/:tab)": "oldExplore",
-            "explore/:tab/tag/:tag": "oldExplore",
-            "quest/:id": "oldQuestPage",
-            "player/:login": "oldAnotherDashboard",
-            "perl/api/event/atom": "oldAtomFeedFix"
+            "perl": redirect('realm/perl'),
+            "perl/": redirect('realm/perl'),
+            "players": redirect(''),
+            "explore": redirect('realm/chaos/explore'),
+            "explore/:tab": redirect('realm/chaos/explore/:1'),
+            "explore/:tab/tag/:tag": redirect('realm/chaos/explore/:1/tag/:2'),
+            ":realm/player/:login": redirect('realm/:1/player/:2'),
+            ":realm/explore": redirect('realm/:1/explore'),
+            ":realm/explore/:tab": redirect('realm/:1/explore/:2'),
+            ":realm/explore/:tab/tag/:tag": redirect('realm/:1/explore/:2/tag/:3'),
+            ":realm/players": redirect('realm/:1/players'),
+            ":realm/feed": redirect('realm/:1'),
+            ":realm/quest/:id": redirect('quest/:2')
         },
 
         appView: undefined, // required
@@ -57,7 +77,8 @@ define([
         // Google Analytics
         initialize: function(appView) {
             this.appView = appView;
-            return this.bind('route', this._trackPageview);
+            this.bind('route', this._trackPageview);
+            router = this;
         },
         _trackPageview: function() {
             var url = Backbone.history.getFragment();
@@ -68,20 +89,24 @@ define([
             mixpanel.track_pageview(url);
         },
 
-        questPage: function (realm, id) {
-            var model = new QuestModel({ realm: realm, _id: id });
+        questPage: function (id) {
+            var model = new QuestModel({ _id: id });
             var view = new QuestPage({ model: model });
 
             var router = this;
 
             model.fetch({
                 success: function () {
-                    router.navigate('/' + model.get('realm') + '/quest/' + model.id, { trigger: true, replace: true });
+                    router.navigate('/realm/' + model.get('realm') + '/quest/' + model.id, { trigger: true, replace: true });
                     view.activate();
                 }
             });
 
             this.appView.setPageView(view);
+        },
+
+        realmQuestPage: function (realm, id) {
+            this.questPage(id);
         },
 
         welcome: function () {
@@ -113,7 +138,7 @@ define([
             }
         },
 
-        anotherDashboard: function (realm, login) {
+        dashboard: function (login) {
             var currentLogin = currentUser.get('login');
 
             var model;
@@ -126,7 +151,7 @@ define([
                 model = new AnotherUserModel({ login: login });
             }
 
-            var view = new Dashboard({ realm: realm, model: model });
+            var view = new Dashboard({ model: model });
 
             if (my) {
                 view.activate(); // activate immediately, user is already fetched
@@ -166,7 +191,7 @@ define([
             this.appView.setPageView(view);
         },
 
-        feed: function (realm) {
+        _feed: function (params) {
             var types = this.queryParams('types');
             if (types == '') {
                 types = [];
@@ -174,12 +199,10 @@ define([
             else {
                 types = types.split(',');
             }
+            params.limit = 50;
+            params.types = types;
 
-            var collection = new EventCollectionModel([], {
-                'realm': realm,
-                'limit': 50,
-                'types': types
-            });
+            var collection = new EventCollectionModel([], params);
             var view = new NewsFeed({
                 collection: collection,
                 types: types
@@ -189,6 +212,20 @@ define([
             view.render();
 
             this.appView.setPageView(view);
+        },
+
+        realmFeed: function (realm) {
+            this._feed({ realm: realm });
+        },
+
+        feed: function () {
+            // copypaste, TODO - extract this into a common function
+            if (!currentUser.get('registered')) {
+                this.navigate('/welcome', { trigger: true, replace: true });
+                return;
+            }
+            var login = currentUser.get('login');
+            this._feed({ 'for': login });
         },
 
         register: function () {
@@ -241,34 +278,6 @@ define([
             });
             view.render();
             this.appView.setPageView(view);
-        },
-
-        oldUserList: function () {
-            this.navigate('/chaos/players', { trigger: true, replace: true });
-        },
-
-        playPerlFrontPage: function () {
-            this.navigate('/', { trigger: true, replace: true });
-        },
-
-        oldFeed: function () {
-            this.navigate('/chaos/feed', { trigger: true, replace: true });
-        },
-
-        oldExplore: function () {
-            this.navigate('/chaos/explore', { trigger: true, replace: true });
-        },
-
-        oldQuestPage: function (id) {
-            this.navigate('/chaos/quest/' + id, { trigger: true, replace: true });
-        },
-
-        oldAnotherDashboard: function (id) {
-            this.navigate('/chaos/player/' + id, { trigger: true, replace: true });
-        },
-
-        oldAtomFeedFix: function (id) {
-            window.location = '/api/event/atom?realm=perl';
         },
 
         queryParams: function(name) {

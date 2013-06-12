@@ -10,7 +10,7 @@ define([
         template: _.template(html),
         selfRender: true,
 
-        activeMenuItem: 'home',
+        activeMenuItem: 'none',
 
         events: {
             'click .login-with-persona': 'personaLogin',

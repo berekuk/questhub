@@ -15,6 +15,7 @@ define([
         activated: false,
 
         afterInitialize: function () {
+            this.listenTo(this.collection, 'sync', this.activate);
             this.listenTo(this.collection, 'reset', this.activate);
             this.listenTo(this.collection, 'add', this.onAdd);
             this.listenTo(this.collection, 'remove', this.render); // TODO: optimize
