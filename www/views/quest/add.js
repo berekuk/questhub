@@ -87,6 +87,7 @@ define([
             }
 
             tester.css('fontSize', input.css('fontSize'));
+            tester.css('lineHeight', input.css('lineHeight'));
             tester.text(input.val());
 
             if (tester.width() > input.width()) {
@@ -94,6 +95,7 @@ define([
                 if (newFontSize > 14) {
                     newFontSize += 'px';
                     input.css('fontSize', newFontSize);
+                    input.css('lineHeight', newFontSize);
                 }
             }
         },
