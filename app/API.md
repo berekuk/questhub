@@ -197,9 +197,9 @@ Cancel the invitation.
 
 Get events, starting from the latest.
 
-`realm` parameter is required.
+`realm` or `for` parameter is required. `realm` filters by realm; `for` gives the personal feed of one user (i.e., list of all events this user is subscribed to).
 
-Options:
+Other options:
 
 * `limit` (defaults to 100)
 * `offset`

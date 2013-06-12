@@ -49,7 +49,6 @@ post '/quest' => sub {
 };
 
 get '/quest' => sub {
-    die "realm not specified" unless param('realm');
     my $params = {
         map { param($_) ? ($_ => param($_)) : () } qw/ user status comment_count sort order limit offset tags watchers unclaimed realm /,
     };
@@ -57,6 +56,7 @@ get '/quest' => sub {
     my $quests = db->quests->list($params);
 
     if (param('fmt') and param('fmt') eq 'atom') {
+        die "realm not specified" unless param('realm');
         header 'Content-Type' => 'application/xml';
 
         my $frontend_url = '/';

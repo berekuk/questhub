@@ -23,7 +23,7 @@ sub _pp_markdown {
 
 get '/event' => sub {
     return db->events->list({
-        map { param($_) ? ($_ => param($_)) : () } qw/ limit offset types realm /,
+        map { param($_) ? ($_ => param($_)) : () } qw/ limit offset types realm for /,
     });
 };
 
