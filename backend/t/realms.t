@@ -11,4 +11,13 @@ sub validate_name :Tests {
     ok exception { db->realms->validate_name('blah') };
 }
 
+sub list :Tests {
+    cmp_deeply
+        db->realms->list,
+        [
+            superhashof({ id => 'europe' }),
+            superhashof({ id => 'asia' }),
+        ];
+}
+
 __PACKAGE__->new->runtests;

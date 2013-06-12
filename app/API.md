@@ -191,6 +191,12 @@ Invite a user (`invitee` param) to the quest.
 
 Cancel the invitation.
 
+### Realms
+
+##### GET /realm
+
+Get the list of realms.
+
 ### Other
 
 ##### GET /api/event

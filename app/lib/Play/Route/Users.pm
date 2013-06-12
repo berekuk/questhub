@@ -268,7 +268,7 @@ if ($ENV{DEV_MODE}) {
         my $login = param('login');
         session 'login' => $login;
 
-        my $user = { login => $login, realms => Play::Config::setting('realms') };
+        my $user = { login => $login, realms => [map { $_->{id} } @{ db->realms->list }] };
 
         unless (param('notwitter')) {
             session 'twitter_user' => { screen_name => $login } unless param('notwitter');
