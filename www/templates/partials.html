@@ -15,6 +15,7 @@
         </a>
       <% }) %>
     <% } %>
+    <a href="/realm/<%- realm %>"  class="tag tag-realm"><%- realm %></a>
     <% if (obj.showStatus) { %>
     <span class="label label-<%= status === 'open' && 'warning' %>"><%= status === 'closed' ? 'complete' : status %></span>
     <% } %>
