@@ -58,6 +58,7 @@ define([
                 if (success) {
                     success(collection, resp, options);
                 }
+                collection.trigger('fetch-page');
             };
             return this.sync('read', this, options);
         },
