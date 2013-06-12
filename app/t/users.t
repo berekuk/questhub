@@ -300,8 +300,7 @@ sub register :Tests {
     };
 
     my $result = http_json POST => '/api/register', { params => {
-        login => 'blah',
-        realm => 'asia',
+        login => 'blah'
     } };
     cmp_deeply $result, superhashof({ status => 'ok' });
 
@@ -309,14 +308,14 @@ sub register :Tests {
     cmp_deeply $current_user, superhashof({
         registered => 1,
         _id => re('^\S+$'),
-        rp => { asia => 0 },
+        rp => {},
         login => 'blah',
         twitter => {
             screen_name => 'twah',
         },
         settings => {},
         notifications => [],
-        realms => ['asia'],
+        realms => [],
     });
 }
 
