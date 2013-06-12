@@ -33,7 +33,7 @@ sub list {
         {
             id => 'meta',
             name => 'Meta hub',
-            description => "Questhub development center. \@berekuk is dogfooding here, mostly alone. Join to follow questhub development and encourage me to add new features and fix bugs.",
+            description => "Questhub development center. \@berekuk is dogfooding here, mostly alone.\n\nYou can follow questhub development here and encourage me to work on new features and fix bugs.",
             pic => '/i/meta.png',
         },
     ];
