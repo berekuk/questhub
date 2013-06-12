@@ -214,7 +214,7 @@ Other options:
 
 Get the Atom feed with 100 last events.
 
-`realm` parameter is required.
+Either `realm` or `for` parameter should be set.
 
 ##### GET /api/dev/session/{name}
 
