@@ -24,7 +24,7 @@ define([
                 'for': this.model.get('login')
             });
             collection.fetch();
-            return new EventCollection({ collection: collection });
+            return new EventCollection({ collection: collection, showRealm: true });
         },
 
         events: function(){

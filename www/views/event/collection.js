@@ -14,7 +14,7 @@ define([
         pageSize: 50,
 
         generateItem: function (model) {
-            return new EventBox({ model: model });
+            return new EventBox({ model: model, showRealm: this.options.showRealm });
         }
     });
 });
