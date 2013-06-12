@@ -116,30 +116,6 @@ define([
             this.appView.setPageView(new Welcome({ model: currentUser }));
         },
 
-        frontPage: function () {
-            if (!currentUser.get('registered')) {
-                this.navigate('/welcome', { trigger: true, replace: true });
-                return;
-            }
-
-            var realms = currentUser.get('realms');
-            if (this.appView.realm_id) {
-                this.navigate(
-                    '/' + this.appView.realm_id + '/player/' + currentUser.get('login'),
-                    { trigger: true, replace: true }
-                );
-            }
-            else if (realms.length) {
-                this.navigate(
-                    '/' + realms[0] + '/player/' + currentUser.get('login'),
-                    { trigger: true, replace: true }
-                );
-            }
-            else {
-                this.navigate('/welcome', { trigger: true, replace: true });
-            }
-        },
-
         dashboard: function (login) {
             var currentLogin = currentUser.get('login');
 
