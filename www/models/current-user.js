@@ -17,8 +17,10 @@ define([
         },
 
         onTour: function (page) {
-            mixpanel.track(page + ' tour')
             var result = this._tour[page];
+            if (result) {
+                mixpanel.track(page + ' tour')
+            }
             this._tour[page] = false; // you can go on each tour only once; let's hope views code is sensible and doesn't call serialize() twice
             return result;
         },
@@ -62,7 +64,7 @@ define([
 
     Backbone.listenTo(result, 'change', function (e) {
         if (result.get('registered')) {
-            mixpanel.alias(result.get('_id'));
+            mixpanel.identify(result.get('_id'));
             mixpanel.people.set({
                 $username: result.get('login'),
                 $name: result.get('login'),
