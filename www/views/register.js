@@ -130,7 +130,8 @@ define([
 
                     currentUser.fetch({
                         success: function () {
-                            Backbone.trigger('pp:navigate', '/', { trigger: true });
+                            currentUser.startTour();
+                            Backbone.trigger('pp:navigate', '/realms', { trigger: true });
                         },
                         error: function () {
                             Backbone.trigger('pp:navigate', '/welcome', { trigger: true });

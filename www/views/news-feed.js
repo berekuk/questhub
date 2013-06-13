@@ -3,9 +3,10 @@ define([
     'underscore',
     'views/proto/common',
     'models/event-collection', 'views/event/collection',
+    'models/current-user',
     'text!templates/news-feed.html',
     'bootstrap'
-], function ($, _, Common, EventCollectionModel, EventCollection, html) {
+], function ($, _, Common, EventCollectionModel, EventCollection, currentUser, html) {
     return Common.extend({
         template: _.template(html),
 
@@ -107,9 +108,9 @@ define([
             return {
                 filterList: filterList,
                 types: this.options.types,
-                login: this.model.get('login')
+                login: this.model.get('login'),
+                tour: currentUser.onTour('feed')
             };
         }
-
     });
 });

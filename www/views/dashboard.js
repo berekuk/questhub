@@ -20,8 +20,6 @@ define([
             return this.options.realm;
         },
 
-        progress: 0,
-
         subviews: {
             '.user-subview': function () {
                 return new UserBig({
@@ -43,6 +41,8 @@ define([
                 return this.createQuestSubview('Abandoned', { status: 'abandoned', limit: 5, user: this.model.get('login') })
             }
         },
+
+        progress: 0,
 
         moreProgress: function () {
             this.progress++;
@@ -86,9 +86,25 @@ define([
             return false;
         },
 
+        tourGotQuest: function () {
+            this.$('.newbie-tour-expect-quest').hide();
+            this.$('.newbie-tour-got-quest').show();
+
+        },
+
+        onTour: function () {
+            return this.my() && currentUser.onTour('profile');
+        },
+
         serialize: function () {
+            var my = this.my();
+            var tour = (my && currentUser.onTour('profile'));
+            if (tour) {
+                this.listenToOnce(Backbone, 'pp:add-quest', this.tourGotQuest);
+            }
             return {
-                my: this.my()
+                my: my,
+                tour: tour
             };
         }
     });

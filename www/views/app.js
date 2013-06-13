@@ -29,7 +29,8 @@ define([
         },
 
         notify: function (type, message) {
-            this.$('.app-view-container').prepend(
+            this.$('.app-view-notifies').html('');
+            this.$('.app-view-notifies').append(
                 new Notify({
                     type: type,
                     message: message

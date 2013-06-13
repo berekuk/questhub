@@ -5,6 +5,21 @@ define([
     var CurrentUser = User.extend({
 
         initialize: function () {
+            this._tour = {};
+        },
+
+        startTour: function () {
+            this._tour = {
+                'realms': true,
+                'profile': true,
+                'feed': true
+            };
+        },
+
+        onTour: function (page) {
+            var result = this._tour[page];
+            this._tour[page] = false; // you can go on each tour only once; let's hope views code is sensible and doesn't call serialize() twice
+            return result;
         },
 
         dismissNotification: function (_id) {

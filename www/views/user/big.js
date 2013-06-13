@@ -15,7 +15,7 @@ define([
 
         events: {
             'click .quest-add-dialog': 'newQuestDialog',
-            'click .settings': 'settingsDialog',
+            'click .settings': 'settingsDialog'
         },
 
         settingsDialog: function () {

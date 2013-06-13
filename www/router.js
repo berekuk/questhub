@@ -46,11 +46,10 @@ define([
             "auth/twitter": "twitterLogin",
             "player/:login/unsubscribe/:field/:status": "unsubscribeResult",
 
-            "feed": "feed",
-
             "quest/:id": "questPage",
             "realm/:realm": "realmPage",
             "player/:login": "dashboard",
+            "me": "myDashboard",
             "about": "about",
             "realms": "realms",
             "realm/:realm/players": "userList",
@@ -59,6 +58,7 @@ define([
             "realm/:realm/quest/:id": "realmQuestPage",
 
             // legacy
+            "feed": redirect(''),
             "perl": redirect('realm/perl'),
             "perl/": redirect('realm/perl'),
             "players": redirect(''),
@@ -143,6 +143,14 @@ define([
             }
 
             this.appView.setPageView(view);
+        },
+
+        myDashboard: function () {
+            if (!currentUser.get('registered')) {
+                this.navigate('/welcome', { trigger: true, replace: true });
+                return;
+            }
+            router.navigate('/player/' + currentUser.get('login'), { trigger: true, replace: true });
         },
 
         explore: function (realm, tab, tag) {

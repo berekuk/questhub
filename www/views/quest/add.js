@@ -175,6 +175,7 @@ define([
 
         onSuccess: function (model) {
             this.collection.add(model, { prepend: true });
+            Backbone.trigger('pp:add-quest');
             this.$('#addQuest').modal('hide');
         }
     });
