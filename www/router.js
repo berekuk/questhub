@@ -1,6 +1,7 @@
 define([
     'backbone',
     'models/current-user',
+    'models/shared-models',
     'views/dashboard',
     'views/quest/page', 'models/quest',
     'models/user-collection', 'views/user/collection', 'models/another-user',
@@ -8,11 +9,12 @@ define([
     'models/event-collection', 'views/news-feed',
     'views/realm/page',
     'views/about', 'views/register',
-    'views/realm/detail-collection', 'models/realm-collection', 'models/realm',
+    'views/realm/detail-collection', 'models/realm',
     'views/confirm-email', 'views/user/unsubscribe'
 ], function (
     Backbone,
     currentUser,
+    sharedModels,
     Dashboard,
     QuestPage, QuestModel,
     UserCollectionModel, UserCollection, AnotherUserModel,
@@ -20,7 +22,7 @@ define([
     EventCollectionModel, NewsFeed,
     RealmPage,
     About, Register,
-    RealmDetailCollection, RealmCollectionModel, RealmModel,
+    RealmDetailCollection, RealmModel,
     ConfirmEmail, Unsubscribe
 ) {
 
@@ -261,7 +263,7 @@ define([
 
         realms: function () {
             var view = new RealmDetailCollection({
-                collection: new RealmCollectionModel()
+                collection: sharedModels.realms
             });
             view.collection.fetch();
             this.appView.setPageView(view);

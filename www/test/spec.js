@@ -38,8 +38,8 @@
     });
 
     require([
-        'underscore', 'backbone', 'jquery', 'jasmine-html', 'models/current-user'
-    ], function(_, Backbone, $, jasmine, currentUser) {
+        'underscore', 'backbone', 'jquery', 'jasmine-html', 'models/current-user', 'models/shared-models'
+    ], function(_, Backbone, $, jasmine, currentUser, sharedModels) {
 
         var jasmineEnv = jasmine.getEnv();
         jasmineEnv.updateInterval = 1000;
@@ -88,6 +88,11 @@
             settings: {},
             notifications: []
         });
+
+        sharedModels.realms.set([
+            { id: 'europe', name: 'Europe', description: 'europe-europe', pic: 'europe.jpg' },
+            { id: 'asia', name: 'Asia', description: 'asia-asia', pic: 'asia.jpg' }
+        ]);
 
         $(function(){
             require(specs, function(){

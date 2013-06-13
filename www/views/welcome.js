@@ -2,10 +2,9 @@ define([
     'underscore',
     'views/proto/common', 'views/user/signin',
     'views/realm/collection',
-    'models/realm-collection',
-    'models/current-user',
+    'models/current-user', 'models/shared-models',
     'text!templates/welcome.html'
-], function (_, Common, Signin, RealmCollection, RealmCollectionModel, currentUser, html) {
+], function (_, Common, Signin, RealmCollection, currentUser, sharedModels, html) {
     return Common.extend({
         template: _.template(html),
         selfRender: true,
@@ -21,7 +20,7 @@ define([
                 return new Signin();
             },
             '.realms-subview': function () {
-                var collection = new RealmCollectionModel();
+                var collection = sharedModels.realms;
                 collection.fetch();
                 return new RealmCollection({ collection: collection });
             }

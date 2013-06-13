@@ -1,10 +1,10 @@
 define([
     'backbone',
     'views/proto/common',
-    'models/current-user',
+    'models/current-user', 'models/shared-models',
     'views/user/current',
     'text!templates/navbar.html'
-], function (Backbone, Common, currentUserModel, CurrentUser, html) {
+], function (Backbone, Common, currentUserModel, sharedModels, CurrentUser, html) {
     return Common.extend({
         template: _.template(html),
 
@@ -21,35 +21,33 @@ define([
                 registered: currentUserModel.get('registered'),
                 currentUser: currentUserModel.get('login')
             };
-            if (this.options.realm) {
-                params.url = Backbone.history.getFragment();
-                params.url = params.url.replace(/^\w+\//, '');
-                if (params.url.match('^quest/')) {
-                    params.url = 'feed';
-                }
-            }
-            else {
-                params.url = 'feed';
-            }
             return params;
         },
 
         getRealm: function () {
-            var view = this;
-            if (!view.options.realm) {
+            if (!this.options.realm) {
                 return;
             }
 
-            var realm = _.find(
-                this.partial.settings.realms,
-                function (r) {
-                    return r.id == view.options.realm;
-                }
-            );
+            var realm = sharedModels.realms.findWhere({ id: this.options.realm });
             if (!realm) {
                 throw "Oops";
             }
-            return realm;
+            return realm.toJSON();
+        },
+
+        render: function () {
+            // wait for realms data; copy-paste from views/quest/add
+            if (!sharedModels.realms.length) {
+                var that = this;
+                sharedModels.realms.fetch()
+                .success(function () {
+                    that.render();
+                });
+                return;
+            }
+
+            Common.prototype.render.apply(this, arguments);
         },
 
         afterRender: function () {

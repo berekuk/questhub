@@ -1,17 +1,18 @@
 define([
     'views/realm/detail-collection',
-    'models/realm-collection'
-], function (RealmDetailCollection, RealmCollectionModel) {
+    'models/shared-models'
+], function (RealmDetailCollection, sharedModels) {
     describe('realms list', function () {
 
         describe('when rendered', function () {
+            var collection = sharedModels.realms;
             var view = new RealmDetailCollection({
-                collection: new RealmCollectionModel()
+                collection: collection
             });
-            view.render();
+            collection.trigger('sync'); // mocked by spec.js, firing the event to cause rendering
 
-            it("lists play perl realm", function () {
-                expect(view.$el.html()).toContain('Play Perl');
+            it("lists realm descriptions", function () {
+                expect(view.$el.html()).toContain('asia-asia');
             });
         });
     });

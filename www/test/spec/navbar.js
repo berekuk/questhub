@@ -4,7 +4,7 @@ define([
     describe('navbar', function () {
 
         describe('when rendered', function () {
-            var view = new Navbar({ realm: 'chaos' });
+            var view = new Navbar({ realm: 'asia' });
             view.render();
 
             it("is a nav", function () {
@@ -13,7 +13,7 @@ define([
         });
 
         describe('active', function () {
-            var view = new Navbar({ realm: 'chaos' });
+            var view = new Navbar({ realm: 'asia' });
 
             it('is empty by default', function () {
                 view.render();
@@ -21,7 +21,7 @@ define([
             });
 
             it('is set by setActive', function () {
-                view.setActive('home');
+                view.setActive('realms');
                 view.render();
                 expect(view.$el).toContain('.active');
             });

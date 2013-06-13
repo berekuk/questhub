@@ -16,7 +16,6 @@ define([
         listSelector: '.realm-detail-collection-list',
         activeMenuItem: 'realms',
         serialize: function () {
-            console.log(currentUser);
             return {
                 tour: currentUser.onTour('realms')
             }
