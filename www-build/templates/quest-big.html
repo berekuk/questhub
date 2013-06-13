@@ -22,13 +22,9 @@
     <% } %>
   </h2>
 
-  <div class="quest-big-labels">
-    <span class="muted quest-big-tags-edit control-group" style="display: none">
-      <input class="quest-big-tags-input" type="text" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
-    </span>
-    <%= partial.quest_labels(obj) %>
-  </div>
-
+  <span class="muted quest-big-tags-edit control-group" style="display: none">
+    <input class="quest-big-tags-input" type="text" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
+  </span>
   <div>
   <% if (team.length == 0 && currentUser) { %>
     <span class="muted">This quest is not claimed by anybody. Would you like to take it?</span>
@@ -41,6 +37,12 @@
     <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
     <%= partial.likes(obj) %>
     <%= partial.watchers(obj) %>
+
+  <div class="quest-big-labels">
+    <%= partial.quest_labels(obj) %>
   </div>
+  </div>
+
+  <div style="clear:both"> </div>
 
 </div>
