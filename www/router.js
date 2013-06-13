@@ -45,6 +45,7 @@ define([
             "register/confirm/:login/:secret": "confirmEmail",
             "auth/twitter": "twitterLogin",
             "player/:login/unsubscribe/:field/:status": "unsubscribeResult",
+            "start-tour": "startTour",
 
             "quest/:id": "questPage",
             "realm/:realm": "realmPage",
@@ -220,6 +221,11 @@ define([
             var view = new Register({ model: currentUser });
             this.appView.setPageView(view); // not rendered yet
             view.render();
+        },
+
+        startTour: function () {
+            currentUser.startTour();
+            Backbone.trigger('pp:navigate', '/realms', { trigger: true, replace: true });
         },
 
         confirmEmail: function (login, secret) {

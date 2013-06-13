@@ -131,8 +131,7 @@ define([
                     currentUser.fetch({
                         success: function () {
                             mixpanel.alias(currentUser.get('_id'));
-                            currentUser.startTour();
-                            Backbone.trigger('pp:navigate', '/realms', { trigger: true });
+                            Backbone.trigger('pp:navigate', '/start-tour', { trigger: true, replace: true });
                         },
                         error: function () {
                             Backbone.trigger('pp:navigate', '/welcome', { trigger: true });
