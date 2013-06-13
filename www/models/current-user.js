@@ -17,6 +17,7 @@ define([
         },
 
         onTour: function (page) {
+            mixpanel.track(page + ' tour')
             var result = this._tour[page];
             this._tour[page] = false; // you can go on each tour only once; let's hope views code is sensible and doesn't call serialize() twice
             return result;

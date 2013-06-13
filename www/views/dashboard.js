@@ -89,7 +89,7 @@ define([
         tourGotQuest: function () {
             this.$('.newbie-tour-expect-quest').hide();
             this.$('.newbie-tour-got-quest').show();
-
+            mixpanel.track('first quest on tour');
         },
 
         onTour: function () {
