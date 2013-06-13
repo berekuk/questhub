@@ -226,6 +226,15 @@ define([
         },
 
         startTour: function () {
+            if (!currentUser.get('registered')) {
+                Backbone.trigger(
+                    'pp:notify',
+                    'error',
+                    'You need to be signed in to take a tour, sorry.'
+                );
+                this.navigate('/welcome', { trigger: true, replace: true });
+                return;
+            }
             currentUser.startTour();
             Backbone.trigger('pp:navigate', '/realms', { trigger: true, replace: true });
         },
