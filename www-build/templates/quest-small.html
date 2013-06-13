@@ -5,7 +5,7 @@
   <%= partial.quest_link(obj) %>
 
   <% if (obj.comment_count) { %>
-    <a href="/<%- realm %>/quest/<%= _id %>"><span class="badge badge-info"><i class="icon-comment"></i> <%= comment_count %></span></a>
+    <a href="/realm/<%- realm %>/quest/<%= _id %>"><span class="badge badge-info"><i class="icon-comment"></i> <%= comment_count %></span></a>
   <% } %>
 
   <span class="likes"></span>

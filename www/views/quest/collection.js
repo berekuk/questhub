@@ -13,7 +13,8 @@ define([
             return new QuestSmall({
                 model: quest,
                 showAuthor: this.options.showAuthor,
-                showStatus: this.options.showStatus
+                showStatus: this.options.showStatus,
+                showRealm: this.options.showRealm
             });
         },
 

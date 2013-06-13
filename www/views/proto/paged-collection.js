@@ -33,9 +33,12 @@ define([
         pageSize: 100,
 
         noProgress: function () {
-            this.$('.show-more').toggle(this.collection.gotMore);
             this.$('.show-more').removeClass('disabled');
             this.subview('.progress-spin').off();
+        },
+
+        updateShowMore: function () {
+            this.$('.show-more').toggle(this.collection.gotMore);
         },
 
         afterInitialize: function () {
@@ -43,8 +46,9 @@ define([
 
             this.subview('.progress-spin').on(); // app.js fetches the collection for the first time immediately
 
-            this.collection.once('reset', this.noProgress, this);
+            this.listenTo(this.collection, 'error fetch-page', this.noProgress);
             this.listenTo(this.collection, 'error', this.noProgress);
+            this.listenTo(this.collection, 'fetch-page sync reset', this.updateShowMore);
             this.render();
         },
 
@@ -54,10 +58,7 @@ define([
             this.$('.show-more').addClass('disabled');
             this.subview('.progress-spin').on();
 
-            this.collection.fetchMore(this.pageSize)
-            .always(function () {
-                that.noProgress();
-            });
+            this.collection.fetchMore(this.pageSize);
         }
     });
 });

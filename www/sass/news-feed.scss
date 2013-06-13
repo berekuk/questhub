@@ -1,11 +1,5 @@
 .news-feed-view {
 
-    @media (min-width: 768px) {
-        .events-list {
-            padding-left: 20px;
-        }
-    }
-
     ul.nav-filter {
         margin-bottom: 0px; // accordion around it sets enough padding
 
@@ -14,43 +8,5 @@
             float: none;
             background-color: $light-grey;
         }
-    }
-
-    .event-box-view {
-        position: relative;
-        > hr {
-            margin-top: 5px;
-            margin-bottom: 25px;
-
-            position: relative;
-            left: -27px;
-        }
-    }
-
-    .event-header {
-        position: relative;
-
-        i {
-            display: inline-block;
-            position: absolute;
-            left: -18px;
-            top: 3px;
-            color: $dark-grey;
-            @media (min-width: 768px) {
-                left: -27px;
-                top: 1px;
-                font-size: 20px;
-            }
-        }
-
-        margin-bottom: 4px;
-    }
-
-    .event-comment-well {
-        p:last-child, ul:last-child {
-            margin-bottom: 0px;
-        }
-        margin-top: 5px;
-        margin-bottom: 5px;
     }
 }

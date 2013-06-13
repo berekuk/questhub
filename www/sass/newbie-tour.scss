@@ -1,0 +1,26 @@
+.newbie-tour {
+    border: 1px solid #fbeed5;
+    background-color: #fcf8e3; // from alert-warning
+    color: #c09853;
+    padding: 10px;
+    @include border-radius(4px);
+    max-width: 700px;
+    margin: 0px auto 20px;
+
+    h2 {
+        text-align: center;
+    }
+    h3 {
+        text-align: center;
+    }
+    h4 {
+        font-weight: 200;
+        text-align: center;
+    }
+}
+
+.newbie-tour-expect-quest {
+    @include breakpoint(B) {
+        margin-top: 80px;
+    }
+}

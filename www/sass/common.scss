@@ -50,3 +50,17 @@ a.mini-button {
     font-weight: bold;
     color: $text-color;
 }
+
+.desktop-text {
+    display: none;
+    @include breakpoint(B) {
+        display: inline;
+    }
+}
+
+.mobile-text {
+    display: inline;
+    @include breakpoint(B) {
+        display: none;
+    }
+}

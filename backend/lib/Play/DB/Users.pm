@@ -15,6 +15,15 @@ use Play::DB qw(db);
 
 with 'Play::DB::Role::Common';
 
+=head1 METHODS
+
+=over
+
+=item B<get_by_twitter_login($login)>
+
+Get a user by twitter login.
+
+=cut
 sub get_by_twitter_login {
     my $self = shift;
     my ($login) = validate(\@_, Str);
@@ -22,6 +31,11 @@ sub get_by_twitter_login {
     return $self->get({ 'twitter.screen_name' => $login });
 }
 
+=item B<get_by_email($email)>
+
+Get a user by email address.
+
+=cut
 sub get_by_email {
     my $self = shift;
     my ($email) = validate(\@_, Str);
@@ -52,6 +66,11 @@ sub _prepare_user {
     return $user;
 }
 
+=item B<get($params_hashref)>
+
+Get a user by any any parameters. Parameters are passed to mongodb as-is, beware, this method is TOO flexible.
+
+=cut
 sub get {
     my $self = shift;
     my ($params) = validate(\@_, HashRef);
@@ -63,12 +82,22 @@ sub get {
     return $user;
 }
 
+=item B<get_by_login($login)>
+
+Get a user by questhub login.
+
+=cut
 sub get_by_login {
     my $self = shift;
     my ($login) = validate(\@_, Str);
     return $self->get({ login => $login });
 }
 
+=item B<add($params)>
+
+Add a new user.
+
+=cut
 sub add {
     my $self = shift;
     my ($params) = validate(\@_, HashRef);
@@ -92,6 +121,11 @@ sub add {
     return "$id";
 }
 
+=item B<list($params)>
+
+Get the list of users matching the params. The only required param is I<realm>.
+
+=cut
 sub list {
     my $self = shift;
     my ($params) = validate(\@_, Undef|Dict[
@@ -158,6 +192,11 @@ sub list {
     return \@users;
 }
 
+=item B<add_points($login, $amount, $realm)>
+
+Add C<$amount> points to C<$login> on realm C<$realm>.
+
+=cut
 sub add_points {
     my $self = shift;
     my ($login, $amount, $realm) = validate(\@_, Str, Int, Str);
@@ -178,13 +217,18 @@ sub add_points {
     return;
 }
 
+=item B<join_realm($login, $realm)>
+
+Join a new realm.
+
+Joining adds the realm to I<user.realms> list. The only effect of this action is that this user will be displayed in players list.
+
+=cut
 sub join_realm {
     my $self = shift;
     my ($login, $realm) = validate(\@_, Str, Str);
 
-    unless (grep { $realm eq $_ } @{ setting('realms') }) {
-        die "Unknown realm '$realm'";
-    }
+    db->realms->validate_name($realm);
 
     my $result = $self->collection->update(
         {
@@ -201,6 +245,64 @@ sub join_realm {
     my $updated = $result->{n};
     unless ($updated) {
         die "User $login not found or unable to join the realm";
+    }
+}
+
+=item B<follow_realm($login, $realm)>
+
+Subscribe to a realm.
+
+This is not the same as joining a realm. "User follows a realm" means that he or she sees its events in the news feed.
+
+=cut
+sub follow_realm {
+    my $self = shift;
+    my ($login, $realm) = validate(\@_, Str, Str);
+
+    db->realms->validate_name($realm);
+
+    my $result = $self->collection->update(
+        {
+            login => $login,
+            fr => { '$ne' => $realm },
+        },
+        {
+            '$addToSet' => { fr => $realm }
+        },
+        { safe => 1 }
+    );
+
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "User $login not found or unable to follow the realm $realm";
+    }
+}
+
+=item B<unfollow_realm($login, $realm)>
+
+Unsubscribe from a realm.
+
+=cut
+sub unfollow_realm {
+    my $self = shift;
+    my ($login, $realm) = validate(\@_, Str, Str);
+
+    db->realms->validate_name($realm);
+
+    my $result = $self->collection->update(
+        {
+            login => $login,
+            fr => $realm,
+        },
+        {
+            '$pull' => { fr => $realm }
+        },
+        { safe => 1 }
+    );
+
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "User $login not found or unable to unfollow the realm $realm";
     }
 }
 
@@ -385,5 +487,9 @@ sub unsubscribe_secret {
 
     return sha1_hex(setting('unsubscribe_salt').':'.$login);
 }
+
+=back
+
+=cut
 
 1;

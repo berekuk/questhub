@@ -15,7 +15,7 @@ define([
 
         events: {
             'click .quest-add-dialog': 'newQuestDialog',
-            'click .settings': 'settingsDialog',
+            'click .settings': 'settingsDialog'
         },
 
         settingsDialog: function () {
@@ -33,9 +33,9 @@ define([
 
         newQuestDialog: function() {
             var questAdd = new QuestAdd({
-              collection: this.options.open_quests.collection
+                collection: this.options.open_quests.collection
             });
-            this.$el.append(questAdd.$el);
+            this.$el.append(questAdd.$el); // FIXME - DOM memory leak
             ga('send', 'event', 'quest', 'new-dialog');
         },
 

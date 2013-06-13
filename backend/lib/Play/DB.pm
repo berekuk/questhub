@@ -44,6 +44,11 @@ sub images {
     return Play::DB::Images->new;
 }
 
+sub realms {
+    require Play::DB::Realms;
+    return Play::DB::Realms->new;
+}
+
 sub ensure_indices {
     my $users_collection = Play::Mongo->db->get_collection('users');
     $users_collection->drop_indexes; # yeah! (FIXME)

@@ -1,0 +1,51 @@
+.user-big {
+    .user-big-avatar {
+        float: left;
+    }
+    .user-big-names {
+        float: left;
+        margin-left: 20px;
+        .user-big-player-login {
+            font-size: 18px;
+            vertical-align: middle;
+            line-height: 30px;
+        }
+    }
+
+    .user-big-points {
+        clear: both;
+        ul, li {
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+        }
+        ul {
+            margin-top: 10px;
+            list-style-type: none;
+            li {
+                margin-bottom: 7px;
+                text-align: right;
+            }
+        }
+        @include breakpoint(B) {
+            clear: none;
+            ul {
+                margin-top: 4px;
+                margin-left: 20px;
+            }
+        }
+
+        .icon-question-sign {
+            color: $dark-grey;
+        }
+    }
+
+    .user-big-new-quest {
+        float: right;
+        margin-top: 10px;
+        margin-right: 10px;
+    }
+    .user-big-terminator {
+        clear: both;
+    }
+}

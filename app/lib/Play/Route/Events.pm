@@ -23,17 +23,19 @@ sub _pp_markdown {
 
 get '/event' => sub {
     return db->events->list({
-        map { param($_) ? ($_ => param($_)) : () } qw/ limit offset types realm /,
+        map { param($_) ? ($_ => param($_)) : () } qw/ limit offset types realm for /,
     });
 };
 
 get '/event/atom' => sub {
-    unless (param('realm')) {
-        return redirect '/api/event/atom?realm=chaos', 301;
+    unless (param('realm') or param('for')) {
+        status 'not_found';
+        return "one of 'realm' or 'for' is necessary";
     }
+
     my @events = @{ db->events->list({
         limit => 30,
-        map { param($_) ? ( $_ => param($_) ): () } qw/ types realm limit /,
+        map { param($_) ? ( $_ => param($_) ): () } qw/ types realm limit for /,
     })};
 
     for my $event (@events) {
@@ -46,6 +48,7 @@ get '/event/atom' => sub {
     template 'event-atom' => {
         events => \@events,
         realm => param('realm'),
+        for => param('for'),
         markdown => \&_pp_markdown,
     };
 };

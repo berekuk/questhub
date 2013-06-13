@@ -2,17 +2,10 @@
     <h1>Questhub.io</h1>
 
     <div>
-      Questhub is a new website for open source developers.
+      Questhub is a public to-do list with social features and game points.
     </div>
     <hr>
-    <div>
-      <h2>Concepts</h2>
-      <h3>Open source, gamified</h3>
-      <p>
-      Gamification is great for tuning people motivations in a positive way.<br>
-      Questhub gives you points and achievements to be proud of.
-      </p>
-    </div>
+    <h2>Concepts</h2>
     <div>
       <h3>Social Todo List</h3>
       <p>
@@ -20,10 +13,17 @@
       </p>
     </div>
     <div>
+      <h3>Tasks, gamified</h3>
+      <p>
+      Gamification is great for tuning people motivations in a positive way.<br>
+      Questhub gives you points and achievements for each task you complete.
+      </p>
+    </div>
+    <div>
       <h3>Collaborative prioritization</h3>
       <p>
-      By liking other people's quests, you promise them points, — or give them points right now if they already completed the quest.<br>
-      So you can quickly gather opinions on what the community would like to be see more - new feature, internals refactoring, or new blog post.
+      By liking other people's quests, you promise them points, — or give them points immediately if they already completed the quest.<br>
+      So they can quickly gather opinions on what the community would like to be see more — new feature, internals refactoring, or new blog post.
       </p>
     </div>
     <hr>
@@ -48,7 +48,7 @@
       <dl>
         <dt>"Quest"? "Player"? What is this?</dt>
         <dd>Quest is the any kind of task you're planning to do. Player is you, and other people are players too. You get 1+{number-of-likes} points for each quest you close.</dd>
-        <dt>There are many other bug trackers! How is Questhub different?</dt>
+        <dt>There are many other bug trackers and to-do lists! How is Questhub different?</dt>
         <dd>
         Questhub considers people to be more important than projects, and fun to be more important than planning. We're going to optimize its mechanics for:
         <ol>
@@ -67,17 +67,21 @@
 
         <dt>Can I use this for my non-Perl tasks?</dt>
         <dd>
-        Yes! Just add them in the <a href="/chaos/feed">Chaotic realm</a>.
+        Yes! Just add them in the <a href="/realm/chaos">Chaotic realm</a>.
         </dd>
 
         <dt>This doesn't motivate me.</dt>
         <dd>That's ok. <a href="http://berekuk.github.com/perl-motivation-survey/">People are different.</a></dd>
 
         <dt>I can't use this without feature X.</dt>
-        <dd>Why don't you <a href="https://github.com/berekuk/play-perl">implement it yourself?</a></dd>
+        <dd>
+        Create a quest on <a href="/realm/meta">Meta hub</a> and unclaim it. I'll pick it up if I like your idea.<br>
+        Alternatively, report it <a href="https://github.com/berekuk/play-perl/issues/new">on Github</a>.<br>
+        Or, maybe, why don't you <a href="https://github.com/berekuk/play-perl">implement it yourself?</a>
+        </dd>
 
         <dt>How can I add a link to a CPAN module in comments easily?</dt>
-        <dd>If your module name contains <code>::</code>, it'll turn into the link to MetaCPAN automatically. Use <code>cpan:Foo</code> syntax for one-word module names.</dd>
+        <dd>If your Perl module name contains <code>::</code>, and you're on Play Perl realm, it'll turn into the link to MetaCPAN automatically. Use <code>cpan:Foo</code> syntax for one-word module names.</dd>
       </dl>
 
     </div>

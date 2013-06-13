@@ -3,8 +3,17 @@
         text-align: center;
     }
 
+    hr {
+        width: 70%;
+        min-width: 450px;
+        margin: 20px auto;
+    }
+
+    .info-blocks .row-fluid:first-child {
+        margin-top: 10px;
+    }
     .info-blocks .row-fluid {
-        margin: 35px 0;
+        margin: 25px 0;
         font-size: 16px;
         color: #666;
         strong {

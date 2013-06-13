@@ -153,6 +153,12 @@ sub list :Tests {
             status => 'open',
             realm => 'europe',
         },
+        {
+            name => 'q4',
+            team => ['foo'],
+            status => 'open',
+            realm => 'asia',
+        },
     );
     for (@data) {
         $_->{_id} = db->quests->add($_)->{_id};
@@ -160,15 +166,19 @@ sub list :Tests {
 
     cmp_deeply
         db->quests->list({ realm => 'europe' }),
+        [ reverse map { superhashof($_) } @data[0..2] ];
+
+    cmp_deeply
+        db->quests->list({}),
         [ reverse map { superhashof($_) } @data ];
 
     cmp_deeply
         db->quests->list({ order => 'desc', realm => 'europe' }),
-        [ reverse map { superhashof($_) } @data ];
+        [ reverse map { superhashof($_) } @data[0..2] ];
 
     cmp_deeply
         db->quests->list({ order => 'asc', realm => 'europe' }),
-        [ map { superhashof($_) } @data ];
+        [ map { superhashof($_) } @data[0..2] ];
 }
 
 sub list_leaderboard :Tests {

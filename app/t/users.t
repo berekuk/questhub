@@ -300,8 +300,7 @@ sub register :Tests {
     };
 
     my $result = http_json POST => '/api/register', { params => {
-        login => 'blah',
-        realm => 'asia',
+        login => 'blah'
     } };
     cmp_deeply $result, superhashof({ status => 'ok' });
 
@@ -309,14 +308,14 @@ sub register :Tests {
     cmp_deeply $current_user, superhashof({
         registered => 1,
         _id => re('^\S+$'),
-        rp => { asia => 0 },
+        rp => {},
         login => 'blah',
         twitter => {
             screen_name => 'twah',
         },
         settings => {},
         notifications => [],
-        realms => ['asia'],
+        realms => [],
     });
 }
 
@@ -456,6 +455,35 @@ sub pic :Tests {
     my $response = dancer_response GET => '/api/user/foo/pic?s=normal';
     is $response->status, 200;
     is $response->content_type, 'image/jpg';
+}
+
+sub follow_realm :Tests {
+    http_json GET => "/api/fakeuser/$_" for qw/ foo bar /;
+
+    my $current_user = http_json GET => '/api/current_user';
+    cmp_deeply $current_user, superhashof({
+        login => 'bar',
+    });
+    ok not $current_user->{fr};
+
+    http_json POST => "/api/follow_realm/europe";
+    $current_user = http_json GET => '/api/current_user';
+    cmp_deeply $current_user, superhashof({
+        fr => ['europe'],
+    });
+}
+
+sub unfollow_realm :Tests {
+    http_json GET => "/api/fakeuser/foo";
+
+    http_json POST => "/api/follow_realm/europe";
+    http_json POST => "/api/follow_realm/asia";
+    http_json POST => "/api/unfollow_realm/asia";
+
+    my $current_user = http_json GET => '/api/current_user';
+    cmp_deeply $current_user, superhashof({
+        fr => ['europe'],
+    });
 }
 
 __PACKAGE__->new->runtests;

@@ -11,6 +11,12 @@ define([
                 var View = eventViews[this.model.name()];
                 return new View({ model: this.model });
             },
+        },
+
+        serialize: function () {
+            var params = this.model.toJSON();
+            params.showRealm = this.options.showRealm;
+            return params;
         }
     });
 });

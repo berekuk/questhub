@@ -91,7 +91,7 @@
   <script type="text/template" class="add-user">
     <div class="event-header">
       <i class="icon-user"></i>
-      <%= partial.user({ realm: realm, login: author }) %> joins <%= _.find(partial.settings.realms, function (r) { return (r.id == realm) ? r : undefined }).name %>!
+      <%= partial.user({ realm: realm, login: author }) %> joins <a href="/realm/<%- realm %>"><%- realm %></a> realm.
     </div>
     <div class="object-bottom-line">
       <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>

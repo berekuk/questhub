@@ -91,14 +91,15 @@ get '/current_user' => sub {
 # user settings are private; you can't get settings of other users
 get '/current_user/settings' => sub {
     my $login = session('login');
-    die "not logged in" unless session->{login};
+    die "not logged in" unless $login;
     return db->users->get_settings($login);
 };
 
 any ['put', 'post'] => '/current_user/settings' => sub {
-    die "not logged in" unless session->{login};
+    my $login = session('login');
+    die "not logged in" unless $login;
     db->users->set_settings(
-        session->{login} => _expand_settings(scalar params()),
+        $login => _expand_settings(scalar params()),
         (session('persona_email') ? 1 : 0) # force 'email_confirmed' setting
     );
     return { result => 'ok' };
@@ -106,7 +107,7 @@ any ['put', 'post'] => '/current_user/settings' => sub {
 
 post '/current_user/dismiss_notification/:id' => sub {
     my $login = session('login');
-    die "not logged in" unless session->{login};
+    die "not logged in" unless $login;
     db->notifications->remove(param('id'), $login);
     return { result => 'ok' };
 };
@@ -140,7 +141,6 @@ sub _expand_settings {
 
 post '/register' => sub {
     my $login = param('login') or die 'no login specified';
-    my $realm = param('realm') or die 'no realm specified';
 
     unless ($login =~ /^\w+$/) {
         status 'bad request';
@@ -151,7 +151,7 @@ post '/register' => sub {
         return { status => 'conflict', reason => 'login', message => "User $login already exists" };
     }
 
-    my $user = { login => $login, realms => [$realm] };
+    my $user = { login => $login };
 
     my $settings = param('settings') || '{}';
     $settings = decode_json($settings);
@@ -203,7 +203,7 @@ post '/register/cancel' => sub {
 
 post '/register/resend_email_confirmation' => sub {
     my $login = session('login');
-    die "not logged in" unless session->{login};
+    die "not logged in" unless $login;
     db->users->resend_email_confirmation($login);
     return { result => 'ok' };
 };
@@ -241,13 +241,25 @@ get '/user/:login/unsubscribe/:field' => sub {
     }
 };
 
+post '/follow_realm/:realm' => sub {
+    my $login = session('login');
+    die "not logged in" unless $login;
+    db->users->follow_realm($login, param('realm'));
+
+    return { status => 'ok' };
+};
+
+post '/unfollow_realm/:realm' => sub {
+    my $login = session('login');
+    die "not logged in" unless $login;
+    db->users->unfollow_realm($login, param('realm'));
+
+    return { status => 'ok' };
+};
+
 post '/logout' => sub {
-
     session->destroy(session); #FIXME: workaround a buggy Dancer::Session::MongoDB
-
-    return {
-        status => 'ok'
-    };
+    return { status => 'ok' };
 };
 
 if ($ENV{DEV_MODE}) {
@@ -255,7 +267,7 @@ if ($ENV{DEV_MODE}) {
         my $login = param('login');
         session 'login' => $login;
 
-        my $user = { login => $login, realms => Play::Config::setting('realms') };
+        my $user = { login => $login, realms => [map { $_->{id} } @{ db->realms->list }] };
 
         unless (param('notwitter')) {
             session 'twitter_user' => { screen_name => $login } unless param('notwitter');

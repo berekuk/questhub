@@ -63,6 +63,14 @@ Same as `PUT` - both rewrite settings entirely.
 
 Dismiss notification.
 
+##### POST /api/follow_realm/{realm}
+
+Follow a realm (i.e., subscribe to it in news feed).
+
+##### POST /api/unfollow_realm/{realm}
+
+Unfollow a realm.
+
 ### Players
 
 ##### GET /api/user/{login}
@@ -183,15 +191,21 @@ Invite a user (`invitee` param) to the quest.
 
 Cancel the invitation.
 
+### Realms
+
+##### GET /realm
+
+Get the list of realms.
+
 ### Other
 
 ##### GET /api/event
 
 Get events, starting from the latest.
 
-`realm` parameter is required.
+`realm` or `for` parameter is required. `realm` filters by realm; `for` gives the personal feed of one user (i.e., list of all events this user is subscribed to).
 
-Options:
+Other options:
 
 * `limit` (defaults to 100)
 * `offset`
@@ -200,7 +214,7 @@ Options:
 
 Get the Atom feed with 100 last events.
 
-`realm` parameter is required.
+Either `realm` or `for` parameter should be set.
 
 ##### GET /api/dev/session/{name}
 
@@ -227,13 +241,15 @@ User:
         _id: ...,
         login: 'blah',
         twitter: {
-            screen_name: 'blah'
+            screen_name: 'blah',
+            profile_image_url: '...'
         },
-        realms: ['chaos', 'perl']
-        qp: {
+        realms: ['chaos', 'perl']   # active realms - at least one open or completed quest, populated automatically
+        rp: {           # realm points
             'chaos': 3,
             'perl': 2
-        }
+        },
+        fr: ['chaos']   # following realms
     }
 
 Quest:

@@ -1,0 +1,15 @@
+<div class="well well-small realm-detail">
+  <div class="realm-detail-logo">
+    <div class="realm-logo">
+      <a href="/realm/<%- id %>"><img src="/i/<%- id %>.png"/></a><br>
+      <span><%- name %></span>
+    </div>
+    <div class="controls-subview"></div>
+  </div>
+
+  <div class="realm-detail-description">
+    <%= partial.markdown(description) %>
+  </div>
+
+  <div style="clear:both"> </div>
+</div>

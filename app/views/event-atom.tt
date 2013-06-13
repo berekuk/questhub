@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title><% settings.service_name %> - News Feed</title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% realm %>/feed" />
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %><% realm ? ('/realm/' _ realm) : '' %>" />
     <id>tag:<% settings.hostport %>,2013-02-15:global</id>
 
 <% FOREACH event IN events %>

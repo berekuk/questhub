@@ -18,7 +18,8 @@ define([
             var params = {
                 realm: this.getRealm(),
                 partial: this.partial,
-                registered: currentUserModel.get('registered')
+                registered: currentUserModel.get('registered'),
+                currentUser: currentUserModel.get('login')
             };
             if (this.options.realm) {
                 params.url = Backbone.history.getFragment();

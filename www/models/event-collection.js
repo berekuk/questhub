@@ -4,7 +4,7 @@ define([
 ], function (Backbone, Parent, Event) {
     return Parent.extend({
         baseUrl: '/api/event',
-        cgi: ['limit', 'offset', 'types', 'realm'],
+        cgi: ['limit', 'offset', 'types', 'realm', 'for'],
         model: Event,
         setTypes: function(types) {
             this.options.types = types;

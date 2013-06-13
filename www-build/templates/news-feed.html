@@ -1,11 +1,17 @@
 <div class="container-fluid">
+  <% if (tour) { %>
+  <div class="newbie-tour">
+    <h3>Here you can see all activity from realms you followed earlier.</h3>
+    <h4>Don't hesitate to interact with other people, they probably posted their quests because they wanted to share :)</h4>
+  </div>
+  <% } %>
   <div class="row-fluid">
     <div class="span3">
       <div class="well well-small">
         <p>
-        News of the realm.
+        Your personal news feed.
         <p>
-        <a href="/api/event/atom?realm=<%- realm %><%= types ? '&types=' + types.join(',') : '' %>" class="btn btn-warning"><i class="icon-rss"></i> RSS</a>
+        <a href="http://<%= window.location.host %>/api/event/atom?for=<%- login %><%= (types && types.length) ? '&types=' + types.join(',') : '' %>" class="btn btn-warning"><i class="icon-rss"></i> RSS</a>
         </p>
       </div>
       <div class="accordion" id="event-filter-accordion">
@@ -28,6 +34,14 @@
       </div>
     </div>
     <div class="span9">
+      <% if (!followingRealms || !followingRealms.length) { %>
+      <div class="alert alert-warning">
+      <h3>
+        Your news feed is empty.<br>
+        Go to <a href="/realms">Multiverse</a> tab and follow some realms.
+      </h3>
+      </div>
+      <% } %>
       <div class="main subview">
       </div>
     </div>

@@ -13,17 +13,15 @@ define([
         activated: false,
 
         activeMenuItem: function () {
-            return (this.my() ? 'home' : 'none');
+            return (this.my() ? 'my-quests' : 'none');
         },
 
         realm: function () {
             return this.options.realm;
         },
 
-        progress: 0,
-
         subviews: {
-            '.user': function () {
+            '.user-subview': function () {
                 return new UserBig({
                     model: this.model,
                     open_quests: this.subview('.open-quests'),
@@ -44,6 +42,8 @@ define([
             }
         },
 
+        progress: 0,
+
         moreProgress: function () {
             this.progress++;
             if (this.progress == 1) {
@@ -63,7 +63,6 @@ define([
 
             options.limit = options.limit || 30;
             options.order = 'desc';
-            options.realm = this.realm();
 
             var collection = new QuestCollectionModel([], options);
             this.moreProgress();
@@ -87,9 +86,25 @@ define([
             return false;
         },
 
+        tourGotQuest: function () {
+            this.$('.newbie-tour-expect-quest').hide();
+            this.$('.newbie-tour-got-quest').show();
+            mixpanel.track('first quest on tour');
+        },
+
+        onTour: function () {
+            return this.my() && currentUser.onTour('profile');
+        },
+
         serialize: function () {
+            var my = this.my();
+            var tour = (my && currentUser.onTour('profile'));
+            if (tour) {
+                this.listenToOnce(Backbone, 'pp:add-quest', this.tourGotQuest);
+            }
             return {
-                my: this.my()
+                my: my,
+                tour: tour
             };
         }
     });

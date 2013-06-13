@@ -75,7 +75,7 @@ define([
             var tab = $(e.target).attr('data-explore-tab');
             this.switchTabByName(tab);
 
-            var url = '/' + this.realm() + '/explore/' + tab;
+            var url = '/realm/' + this.realm() + '/explore/' + tab;
             if (this.tag != undefined) {
                 url += '/tag/' + this.tag;
             }
@@ -101,7 +101,7 @@ define([
         },
 
         removeFilter: function () {
-            Backbone.trigger('pp:navigate', '/' + this.realm() + '/explore/' + this.tab, { trigger: true });
+            Backbone.trigger('pp:navigate', '/realm/' + this.realm() + '/explore/' + this.tab, { trigger: true });
         }
     });
 });

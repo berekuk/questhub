@@ -41,7 +41,8 @@ define([
             options = options ? _.clone(options) : {};
             if (options.parse === void 0) options.parse = true;
             var success = options.success;
-            options.success = function(collection, resp, options) {
+            var collection = this;
+            options.success = function(resp) {
                 if (collection.options.limit) {
                     collection.gotMore = (resp.length >= collection.options.limit);
                     if (collection.gotMore) {
@@ -52,11 +53,12 @@ define([
                     collection.gotMore = false; // there was no limit, so we got everything there is
                 }
 
-                var method = options.update ? 'update' : 'reset';
+                var method = options.update ? 'set' : 'reset';
                 collection[method](resp, options);
                 if (success) {
                     success(collection, resp, options);
                 }
+                collection.trigger('fetch-page');
             };
             return this.sync('read', this, options);
         },

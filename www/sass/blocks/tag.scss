@@ -31,3 +31,10 @@
         background-color: darken(#3a87ad, 5%);
     }
 }
+
+.tag-realm {
+    background-color: $closed-quest-color;
+    &:hover {
+        background-color: darken($closed-quest-color, 5%);
+    }
+}

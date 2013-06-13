@@ -10,7 +10,7 @@ define([
         template: _.template(html),
         selfRender: true,
 
-        activeMenuItem: 'home',
+        activeMenuItem: 'none',
 
         events: {
             'click .login-with-persona': 'personaLogin',
@@ -21,7 +21,9 @@ define([
                 return new Signin();
             },
             '.realms-subview': function () {
-                return new RealmCollection({ collection: new RealmCollectionModel() });
+                var collection = new RealmCollectionModel();
+                collection.fetch();
+                return new RealmCollection({ collection: collection });
             }
         },
 

@@ -5,8 +5,9 @@
 input.quest-edit {
     font-size: 26px;
     line-height: 26px;
-    height: 35px;
-    width: 95%;
+    height: 43px;
+    @include box-sizing(border-box);
+    width: 100%;
     font-weight: 200;
     margin-bottom: 0px;
 }
@@ -15,3 +16,16 @@ input.quest-edit {
     background-color: $open-quest-color;
 }
 
+.quest-add-row {
+    margin-bottom: 8px;
+}
+
+.add-quest-realm {
+    button {
+        color: $dark-grey;
+        font-size: 12px !important;
+    }
+    button.active {
+        font-weight: bold;
+    }
+}
