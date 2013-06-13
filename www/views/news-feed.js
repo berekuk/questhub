@@ -109,7 +109,8 @@ define([
                 filterList: filterList,
                 types: this.options.types,
                 login: this.model.get('login'),
-                tour: currentUser.onTour('feed')
+                tour: currentUser.onTour('feed'),
+                followingRealms: currentUser.get('fr')
             };
         }
     });

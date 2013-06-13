@@ -34,6 +34,14 @@
       </div>
     </div>
     <div class="span9">
+      <% if (!followingRealms || !followingRealms.length) { %>
+      <div class="alert alert-warning">
+      <h3>
+        Your news feed is empty.<br>
+        Go to <a href="/realms">Multiverse</a> tab and follow some realms.
+      </h3>
+      </div>
+      <% } %>
       <div class="main subview">
       </div>
     </div>
