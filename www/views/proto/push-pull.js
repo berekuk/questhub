@@ -26,12 +26,12 @@ define([
         },
 
         showButton: function () {
-            this.$('.push-pull-button').show();
+            this.$('.like-button').removeClass('like-button-hide');
             this.hidden = false;
         },
 
         hideButton: function () {
-            this.$('.push-pull-button').hide();
+            this.$('.like-button').addClass('like-button-hide');
             this.hidden = true;
         },
 

@@ -64,3 +64,23 @@ a.mini-button {
         display: none;
     }
 }
+
+.desktop-inline-block {
+    display: none;
+    @include breakpoint(B) {
+        display: inline-block;
+    }
+}
+
+.mobile-inline-block {
+    display: inline-block;
+    @include breakpoint(B) {
+        display: none;
+    }
+}
+
+@include breakpoint(B) {
+    .like-button-hide {
+        visibility: hidden;
+    }
+}
