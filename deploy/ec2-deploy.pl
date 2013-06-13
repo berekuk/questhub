@@ -146,10 +146,12 @@ sub main {
     my $create;
     my $provision;
     my $magic;
+    my $restart = 1;
     GetOptions(
         'create!' => \$create,
         'p|provision!' => \$provision,
         'm|magic' => \$magic,
+        'r|restart!' => \$restart,
     ) or pod2usage(2);
 
     pod2usage(2) unless @ARGV == 1 or @ARGV == 0;
@@ -193,7 +195,7 @@ sub main {
         provision();
     }
 
-    system(qq{ssh -t $USER\@$IP "sudo ubic try-restart dancer"});
+    system(qq{ssh -t $USER\@$IP "sudo ubic try-restart dancer"}) if $restart;
 }
 
 main unless caller;
