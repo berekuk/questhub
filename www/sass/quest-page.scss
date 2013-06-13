@@ -21,16 +21,14 @@ div.quest-big-unclaimed {
         overflow: auto;
     }
 
-    .quest-tags {
-        display: block;
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-    }
-
     .object-bottom-line {
         margin-top: 20px;
     }
+}
+
+.quest-big-labels {
+    display: block;
+    float: right;
 }
 
 .quest-page-left {
