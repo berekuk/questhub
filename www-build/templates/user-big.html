@@ -1,14 +1,13 @@
-<div class="well well-small">
-  <div class="avatar">
+<div class="well well-small user-big">
+  <div class="user-big-avatar">
     <img src="<%- pic.normal %>" width="48" height="48"/>
   </div>
-  <div class="names">
+  <div class="user-big-names">
     <div>
-      <span class="player-login"><%= login %></span>
+      <span class="user-big-player-login"><%= login %></span>
       <% if (my) { %>
           <span class="mini-button"><a href="#" class="settings mini-button"><i class="icon-wrench"></i></a></span>
       <% } %>
-      <span class="badge badge-info" data-toggle="tooltip" title='points are granted for each completed quest and each "like" on those quests'><%= rp[realm] %></span>
     </div>
     <% if (obj.twitter) {
       if (twitter.screen_name) { %>
@@ -18,13 +17,30 @@
         </a>
     <% } } %>
   </div>
+
   <% if (my) { %>
-  <div class="new-quest">
+  <div class="user-big-new-quest">
     <button type="button" class="btn btn-primary quest-add-dialog">
       <i class="icon-plus"></i>
-      New quest
+        New quest
     </button>
   </div>
   <% } %>
+
+  <div class="user-big-points">
+    <% if (obj.rp && obj.rp.length) { %>
+      <ul>
+      <% _.each(rp, function (points, realm) { %>
+        <li>
+          <span class="badge badge-info">
+            <%- realm %>:
+            <%- points %>
+          </span>
+        </li>
+      <% }) %>
+      </ul>
+      <i class="icon-question-sign" data-toggle="tooltip" title='points are granted for each completed quest and each "like" on those quests'></i>
+    <% } %>
+  </div>
   <div class="user-big-terminator"></div>
 </div>
