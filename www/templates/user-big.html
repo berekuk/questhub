@@ -28,7 +28,7 @@
   <% } %>
 
   <div class="user-big-points">
-    <% if (obj.rp && obj.rp.length) { %>
+    <% if (obj.rp && _.size(obj.rp)) { %>
       <ul>
       <% _.each(rp, function (points, realm) { %>
         <li>
