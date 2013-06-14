@@ -26,7 +26,7 @@ define([
                 expect(view.$el).not.toContain('.badge-success');
             });
             it("contains 'like' button", function () {
-                expect(view.$el).toContain('button');
+                expect(view.$el).toContain('a.btn');
             });
         });
 
@@ -40,7 +40,7 @@ define([
                 expect(view.$('.badge-success').text()).toContain('2');
             });
             it("contains 'like' button", function () {
-                expect(view.$el).toContain('button');
+                expect(view.$el).toContain('a.btn');
             });
         });
 
