@@ -109,13 +109,10 @@ define([
 
         serialize: function () {
             var params = this.model.serialize();
-            if (_.contains(params.invitee || [], currentUser.get('login'))) {
-                params.invited = true;
-            }
-            else {
-                params.invited = false;
-            }
             params.currentUser = currentUser.get('login');
+            params.invited = _.contains(params.invitee || [], params.currentUser);
+            params.meGusta = _.contains(params.likes || [], params.currentUser);
+            console.log(params);
             return params;
         },
 

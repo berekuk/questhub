@@ -121,6 +121,7 @@ define([
         serialize: function () {
             var params = this.model.serialize();
             params.currentUser = currentUser.get('login');
+            params.meGusta = _.contains(params.likes || [], params.currentUser);
             params.showStatus = true;
             return params;
         },
