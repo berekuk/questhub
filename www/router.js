@@ -104,6 +104,7 @@ define([
                 success: function () {
                     router.navigate('/realm/' + model.get('realm') + '/quest/' + model.id, { trigger: true, replace: true });
                     view.activate();
+                    router.appView.updateRealm();
                 }
             });
 

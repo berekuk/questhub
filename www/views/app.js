@@ -52,21 +52,15 @@ define([
             this.subview('.navbar-subview').setActive(menuItem);
 
             // FIXME - this leads to double-rendering navbar on the initial page load
-            if (page.realm) {
-                this._setRealm(page.realm());
-            }
-            else {
-                this._setRealm(null);
-            }
-            this.subview('.navbar-subview').render();
+            this.updateRealm();
         },
 
-        _setRealm: function (realm) {
-            if (this.realm_id == realm) {
-                return;
-            }
+        updateRealm: function () {
+            var realm = (this._page.realm ? this._page.realm() : null);
+
             this.realm_id = realm;
             this.subview('.navbar-subview').options.realm = this.realm_id;
+            this.subview('.navbar-subview').render();
         },
 
         settingsDialog: function () {
