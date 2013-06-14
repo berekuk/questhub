@@ -78,9 +78,3 @@ a.mini-button {
         display: none;
     }
 }
-
-@include breakpoint(B) {
-    .like-button-hide {
-        visibility: hidden;
-    }
-}

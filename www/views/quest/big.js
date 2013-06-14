@@ -2,10 +2,11 @@ define([
     'underscore',
     'backbone',
     'views/proto/common',
+    'views/quest/like',
     'models/current-user',
     'bootbox',
     'text!templates/quest-big.html'
-], function (_, Backbone, Common, currentUser, bootbox, html) {
+], function (_, Backbone, Common, Like, currentUser, bootbox, html) {
     'use strict';
     return Common.extend({
         template: _.template(html),
@@ -14,10 +15,22 @@ define([
             "click .quest-join": "join",
             "click .delete": "destroy",
             "click .edit": "startEdit",
-            "keyup input": "edit"
+            "keyup input": "edit",
+            'mouseenter': function (e) {
+                this.subview('.likes-subview').showButton();
+            },
+            'mouseleave': function (e) {
+                this.subview('.likes-subview').hideButton();
+            }
         },
 
         subviews: {
+            '.likes-subview': function () {
+                return new Like({
+                    model: this.model,
+                    hidden: true
+                });
+            }
         },
 
         afterInitialize: function () {

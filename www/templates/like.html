@@ -1,12 +1,18 @@
-<%= partial.likes({ likes: list, meGusta: meGusta }) %>
-<% if (currentUser && !my) { %>
-  <span class="like-button">
-    <% if (meGusta) { %>
-      <a class="desktop-inline-block btn btn-mini pull-self" href="#">Unlike</a>
-      <a class="mobile-inline-block mobile-btn-mini pull-self" href="#">Unlike</a>
-    <% } else { %>
-      <a class="desktop-inline-block btn btn-mini btn-success push-self" href="#">Like</a>
-      <a class="mobile-inline-block mobile-btn-mini push-self" href="#">Like</a>
+<% if (obj.list.length || !my) { %>
+    <% if (currentUser && !my) { %>
+      <% if (meGusta) { %>
+        <a class="pull-self" href="#">
+      <% } else { %>
+        <a class="push-self" href="#">
+      <% } %>
     <% } %>
+
+    <span class="like-button badge badge-success" data-toggle="tooltip" title="<%= list.slice(0, 10).join(', ') %><%= (list.length <= 10) ? '' : ' and ' + (list.length - 10) + ' more' %>">
+      <i class="<%- (obj.meGusta || my) ? 'icon-thumbs-up' : 'icon-thumbs-up-alt' %>"></i>
+      <%= list.length %>
   </span>
+
+    <% if (currentUser && !my) { %>
+      </a>
+    <% } %>
 <% } %>

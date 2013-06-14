@@ -1,11 +1,5 @@
-// TODO - turn button into link and vice versa via media queries.
-// See copy-paste in templates/like.html to see what I mean.
-.mobile-btn-mini {
-    font-size: 12px;
-    color: #468847;
-
-    &:hover {
-        color: #468847;
-        text-decoration: underline;
+@include breakpoint(B) {
+    .like-button-hide {
+        visibility: hidden;
     }
 }

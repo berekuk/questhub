@@ -35,7 +35,8 @@
 
   <div class="object-bottom-line">
     <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
-    <%= partial.likes(obj) %>
+
+    <span class="likes-subview"></span>
     <%= partial.watchers(obj) %>
 
   <div class="quest-big-labels">
