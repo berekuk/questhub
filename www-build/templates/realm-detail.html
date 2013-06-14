@@ -1,13 +1,17 @@
 <div class="well well-small realm-detail">
+
   <div class="realm-detail-logo">
     <div class="realm-logo">
       <a href="/realm/<%- id %>">
         <img src="/i/<%- id %>.png"/><br>
-        <span><%- name %></span>
       </a>
     </div>
     <div class="controls-subview"></div>
   </div>
+
+  <a href="/realm/<%- id %>" class="realm-detail-link">
+    <h3><%- name %></h3>
+  </a>
 
   <div class="realm-detail-description">
     <%= partial.markdown(description) %>
