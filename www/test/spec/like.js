@@ -22,11 +22,14 @@ define([
             var view = new Like({ model: model });
 
             view.render();
-            it("doesn't contain likes badge", function () {
-                expect(view.$el).not.toContain('.badge-success');
+            it("contains likes badge", function () {
+                expect(view.$el).toContain('.badge-success');
             });
-            it("contains 'like' button", function () {
-                expect(view.$el).toContain('a.btn');
+            it("badge value is 0", function () {
+                expect(view.$el.find('.like-button')).toHaveText('0');
+            });
+            it("is clickable", function () {
+                expect(view.$el).toContain('a');
             });
         });
 
@@ -37,10 +40,10 @@ define([
             view.render();
             it("contains likes badge", function () {
                 expect(view.$el).toContain('.badge-success');
-                expect(view.$('.badge-success').text()).toContain('2');
+                expect(view.$('.badge-success')).toHaveText('2');
             });
-            it("contains 'like' button", function () {
-                expect(view.$el).toContain('a.btn');
+            it("is clickable", function () {
+                expect(view.$el).toContain('a');
             });
         });
 
@@ -56,8 +59,8 @@ define([
             it("contains likes badge", function () {
                 expect(view.$el).toContain('.badge-success');
             });
-            it("doesn't contain 'like' button", function () {
-                expect(view.$el).not.toContain('button');
+            it("not clickable", function () {
+                expect(view.$el).not.toContain('a');
             });
         });
     });

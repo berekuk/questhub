@@ -25,11 +25,11 @@ define([
             });
 
             it('quest status badge', function () {
-                expect(view.$el.find('.pull-right .label-false')).toHaveText('complete');
+                expect(view.$el.find('.label-false')).toHaveText('complete');
             });
 
             it('quest tag badge', function () {
-                expect(view.$el.find('.pull-right .tag')).toHaveText('bug');
+                expect(view.$el.find('.tag')).toHaveText('bug');
             });
         });
 
