@@ -1,4 +1,4 @@
-<%= partial.likes({ likes: list }) %>
+<%= partial.likes({ likes: list, meGusta: meGusta }) %>
 <% if (currentUser && !my) { %>
   <span class="like-button">
     <% if (meGusta) { %>
