@@ -31,15 +31,21 @@ define([
         },
 
         hideButton: function () {
-            this.$('.like-button').addClass('like-button-hide');
-            this.hidden = true;
+            if (!this.list().length) {
+                this.$('.like-button').addClass('like-button-hide');
+                this.hidden = true;
+            }
+        },
+
+        list: function () {
+            return this.model.get(this.field) || [];
         },
 
         serialize: function () {
             var currentLogin = currentUser.get('login');
 
             var params = {
-                list: this.model.get(this.field),
+                list: this.list(),
                 currentUser: currentLogin
             };
             params.my = this.my(currentUser);
