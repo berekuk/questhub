@@ -1,6 +1,13 @@
 <!-- current user widget from right-top corner -->
 <ul class="top-nav">
-  <% if (obj.notifications && obj.notifications.length) { %>
+  <% if (registered === 1) { %><li>
+    <a href="#" class="quest-add-nav-button">
+      <i class="icon-plus"></i>
+      <span class="desktop-text">
+        New quest
+      </span>
+    </a>
+  </li><% } %><% if (obj.notifications && obj.notifications.length) { %>
   <li class="current-user-notifications-icon">
     <a href="#" class="notifications">
       <i class="icon-envelope-alt icon-large"></i>
