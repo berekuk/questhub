@@ -24,7 +24,6 @@ define([
             '.user-subview': function () {
                 return new UserBig({
                     model: this.model,
-                    open_quests: this.subview('.open-quests'),
                     realm: this.realm()
                 });
             },
@@ -70,6 +69,12 @@ define([
                 that.lessProgress();
             });
 
+            if (options.status == 'open' && this.my()) {
+                this.listenTo(Backbone, 'pp:quest-add', function (model) {
+                    collection.add(model, { prepend: true });
+                });
+            }
+
             var collectionView = new DashboardQuestCollection({
                 collection: collection,
                 caption: caption
@@ -100,7 +105,7 @@ define([
             var my = this.my();
             var tour = (my && currentUser.onTour('profile'));
             if (tour) {
-                this.listenToOnce(Backbone, 'pp:add-quest', this.tourGotQuest);
+                this.listenToOnce(Backbone, 'pp:quest-add', this.tourGotQuest);
             }
             return {
                 my: my,

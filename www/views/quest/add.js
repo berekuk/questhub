@@ -1,10 +1,11 @@
 define([
     'underscore', 'jquery',
     'models/shared-models',
+    'models/quest',
     'views/proto/base',
     'text!templates/quest-add.html',
     'bootstrap'
-], function (_, $, sharedModels, Base, html) {
+], function (_, $, sharedModels, QuestModel, Base, html) {
     return Base.extend({
         template: _.template(html),
 
@@ -14,8 +15,11 @@ define([
             'keyup [name=tags]': 'tagsEdit'
         },
 
+        el: $('#quest-add'),
+
         initialize: function() {
             _.bindAll(this);
+            this.$el.html('');
             this.render();
         },
 
@@ -39,7 +43,7 @@ define([
 
             var qt = this.$('.quest-tags-edit');
             var tagLine = this.$('[name=tags]').val();
-            if (this.collection.model.prototype.validateTagline(tagLine)) {
+            if (QuestModel.prototype.validateTagline(tagLine)) {
                 qt.removeClass('error');
                 qt.find('input').tooltip('hide');
             }
@@ -106,11 +110,11 @@ define([
 
         getTags: function () {
             var tagLine = this.$('[name=tags]').val();
-            return this.collection.model.prototype.tagline2tags(tagLine);
+            return QuestModel.prototype.tagline2tags(tagLine);
         },
 
         getRealm: function () {
-            return this.$('.add-quest-realm .active').attr('data-realm-id');
+            return this.$('.quest-add-realm .active').attr('data-realm-id');
         },
 
         render: function () {
@@ -122,6 +126,7 @@ define([
                 });
                 return;
             }
+
             this.$el.html(
                 $(this.template({
                     realms: sharedModels.realms.toJSON()
@@ -129,7 +134,7 @@ define([
             );
 
             var qe = this.$('.quest-edit');
-            this.$('#addQuest').modal().on('shown', function () {
+            this.$('.modal').modal().on('shown', function () {
                 qe.focus();
             });
 
@@ -155,7 +160,7 @@ define([
                 model_params.tags = tags;
             }
 
-            var model = new this.collection.model();
+            var model = new QuestModel();
             model.save(model_params, {
                 'success': this.onSuccess
             });
@@ -174,9 +179,8 @@ define([
         },
 
         onSuccess: function (model) {
-            this.collection.add(model, { prepend: true });
-            Backbone.trigger('pp:add-quest');
-            this.$('#addQuest').modal('hide');
+            Backbone.trigger('pp:quest-add', model);
+            this.$('.quest-add-modal').modal('hide');
         }
     });
 });

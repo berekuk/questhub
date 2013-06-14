@@ -3,10 +3,17 @@ define([
     'views/proto/common',
     'models/current-user', 'models/shared-models',
     'views/user/current',
+    'views/quest/add',
     'text!templates/navbar.html'
-], function (Backbone, Common, currentUserModel, sharedModels, CurrentUser, html) {
+], function (Backbone, Common, currentUserModel, sharedModels, CurrentUser, QuestAdd, html) {
     return Common.extend({
         template: _.template(html),
+
+        events: {
+            'click .quest-add-nav-button': function () {
+                return new QuestAdd();
+            }
+        },
 
         afterInitialize: function () {
             this.listenTo(Backbone, 'pp:quiet-url-update', function () {
