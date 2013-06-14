@@ -31,17 +31,16 @@
         </span>
       </a>
     </li>
-  </ul>
+  </ul><!--
 
-  <% if (realm) { %>
-  <span class="nav-menu-separator">&#10148;</span>
-  <ul class="nav-realm top-nav">
+  --><% if (realm) { %><!--
+  --><span class="desktop-text nav-menu-separator">&#10148;</span><!--
+  --><ul class="nav-realm top-nav">
     <li class="menu-item-realm-page">
-      <a href="/realm/<%- realm.id %>">
-        <b><%- realm.name %></b>
+      <a href="/realm/<%- realm.id %>" class="nav-realm-title">
+        <%- realm.name %>
      </a>
-     <span class="nav-menu-separator">&#10148;</span>
-    </li>
+     <span class="desktop-text nav-menu-separator">&#10148;</span>
     </li><li class="menu-item-user-list">
       <a href="/realm/<%- realm.id %>/players">
         <i class="icon-group"></i>
@@ -57,10 +56,10 @@
         </span>
       </a>
     </li>
-  </ul>
-  <% } %>
+  </ul><!--
+  --><% } %><!--
 
-  <p class="navbar-text pull-right"></p>
+  --><p class="navbar-text pull-right"></p>
 
   <div class="current-user-box"></div>
 

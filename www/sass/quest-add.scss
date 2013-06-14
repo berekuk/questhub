@@ -1,4 +1,4 @@
-.modal-quest-add label {
+.quest-add-body label {
     cursor: default; // override bootstrap's "pointer" cursor style, it's confusing
 }
 
@@ -20,7 +20,7 @@ input.quest-edit {
     margin-bottom: 8px;
 }
 
-.add-quest-realm {
+.quest-add-realm {
     button {
         color: $dark-grey;
         font-size: 12px !important;

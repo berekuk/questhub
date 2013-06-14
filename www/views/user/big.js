@@ -32,9 +32,7 @@ define([
         },
 
         newQuestDialog: function() {
-            var questAdd = new QuestAdd({
-                collection: this.options.open_quests.collection
-            });
+            var questAdd = new QuestAdd();
             this.$el.append(questAdd.$el); // FIXME - DOM memory leak
             ga('send', 'event', 'quest', 'new-dialog');
         },
