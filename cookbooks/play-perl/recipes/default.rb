@@ -35,6 +35,7 @@ cpan_module 'Module::Install' # needed by MongoDB due to packaging issues - see 
 cpan_module 'MongoDB'
 cpan_module 'JSON'
 cpan_module 'Moo'
+cpan_module 'Class::XSAccessor' # speeds up Moo
 cpan_module 'Starman'
 cpan_module 'Text::Markdown'
 cpan_module 'Clone'
