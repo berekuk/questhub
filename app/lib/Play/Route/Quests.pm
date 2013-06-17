@@ -36,16 +36,22 @@ del '/quest/:id' => sub {
 
 post '/quest' => sub {
     die "not logged in" unless session->{login};
-    my $realm = param('realm') or die "realm is not set";
 
-    my $attributes = {
-        team => [ session->{login} ],
-        name => param('name'),
-        status => 'open',
-        (param('tags') ? (tags => param('tags')) : ()),
-        realm => $realm,
+    # optional fields
+    my $params = {
+        map { param($_) ? ($_ => param($_)) : () } qw/ tags description /,
     };
-    return db->quests->add($attributes);
+
+    # required fields
+    for (qw/ realm name /) {
+        my $value = param($_) or die "'$_' is not set";
+        $params->{$_} = $value;
+    }
+
+    $params->{status} = 'open';
+    $params->{team} = [ session->{login} ];
+
+    return db->quests->add($params);
 };
 
 get '/quest' => sub {

@@ -106,6 +106,16 @@ Another special `sort` value `points` can be used to sort by `rp.$realm`.
 
 Add a new quest for the current user.
 
+Parameters:
+
+* `realm`
+* `name`
+
+Optional parameters:
+
+* `description`
+* `tags`
+
 ##### PUT /api/quest/{id}
 
 Update a quest.
@@ -260,6 +270,7 @@ Quest:
         author: 'blah',
         team: ['blah'], // can be different from author; can contain multiple people; or can be empty
         name: 'quest title',
+        description: 'quest description',
         likes: [
             'foo-user',
             'bar-user'

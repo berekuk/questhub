@@ -184,6 +184,7 @@ sub add_quest :Tests {
         name    => 'name_4',
         status  => 'open',
         realm => 'europe',
+        description => "Description.\n\nMore description.",
     };
 
     http_json GET => "/api/fakeuser/$user";
