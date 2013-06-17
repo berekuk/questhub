@@ -14,6 +14,13 @@
     </author>
 
     <title><% quest.name | xml %></title>
+    <% IF quest.description %>
+        <content type="html">
+            <![CDATA[
+            <% markdown(quest.description) %>
+            ]]>
+        </content>
+    <% END %>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% quest.realm %>/quest/<%= quest.item('_id') %>" />
 
 </entry>

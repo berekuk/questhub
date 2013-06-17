@@ -4,6 +4,7 @@ use Dancer ':syntax';
 prefix '/api';
 
 use Play::DB qw(db);
+use Play::Markdown qw(markdown);
 
 use DateTime;
 use DateTime::Format::RFC3339;
@@ -86,6 +87,7 @@ get '/quest' => sub {
             params => $params,
             frontend_url => $frontend_url,
             atom_tag => $atom_tag,
+            markdown => \&markdown,
         };
     }
     else {
