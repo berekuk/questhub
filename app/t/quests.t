@@ -165,12 +165,18 @@ sub edit_quest :Tests {
     my $quests_data = $self->_fill_common_quests;
 
     my $edited_quest = $quests_data->{1};
-    my $id          = $edited_quest->{_id};
-    local $edited_quest->{name} = 'name_11'; # Change
+    my $id = $edited_quest->{_id};
+
+    # Change
+    local $edited_quest->{name} = 'name_11';
+    local $edited_quest->{description} = 'description_11';
 
     Dancer::session login => $edited_quest->{team}[0];
 
-    my $put_result = http_json PUT => "/api/quest/$id", { params => { name => $edited_quest->{name} } };
+    my $put_result = http_json PUT => "/api/quest/$id", { params => {
+        name => $edited_quest->{name},
+        description => $edited_quest->{description},
+    } };
     cmp_deeply $put_result, { _id => $id }, 'put result';
 
     my $got_quest = http_json GET => "/api/quest/$id";

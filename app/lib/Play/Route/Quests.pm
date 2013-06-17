@@ -16,7 +16,7 @@ put '/quest/:id' => sub {
         param('id'),
         {
             user => session->{login},
-            map { param($_) ? ($_ => param($_)) : () } qw/ name status type tags /, # type is deprecated, TODO - remove
+            map { param($_) ? ($_ => param($_)) : () } qw/ name status tags description /,
         }
     );
     return {
