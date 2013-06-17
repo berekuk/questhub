@@ -13,6 +13,13 @@ define([
 
         pageSize: 50,
 
+        afterInitialize: function () {
+            PagedCollection.prototype.afterInitialize.apply(this, arguments);
+            this.listenTo(Backbone, 'pp:quest-add', function (model) {
+                this.collection.fetch();
+            });
+        },
+
         generateItem: function (model) {
             return new EventBox({ model: model, showRealm: this.options.showRealm });
         }
