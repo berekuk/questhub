@@ -15,11 +15,28 @@ sub add :Tests {
         team => ['foo'],
         status => 'open',
         realm => 'europe',
+        description => "Blah\n\nBlah.",
     });
     cmp_deeply $quest, superhashof({
         _id => re('^\w+$'),
         ts => re('^\d+$'),
         name => 'quest name',
+        status => 'open',
+        team => ['foo'],
+        realm => 'europe',
+        description => "Blah\n\nBlah.",
+    });
+
+    # no description, no status
+    $quest = db->quests->add({
+        name => 'quest name 2',
+        team => ['foo'],
+        realm => 'europe',
+    });
+    cmp_deeply $quest, superhashof({
+        _id => re('^\w+$'),
+        ts => re('^\d+$'),
+        name => 'quest name 2',
         status => 'open',
         team => ['foo'],
         realm => 'europe',
@@ -335,7 +352,7 @@ sub remove :Tests {
         db->quests->join($_->{_id}, 'foo2');
     }
 
-    like exception { db->quests->remove($quests[2]->{_id}, {}) }, qr/no user/;
+    like exception { db->quests->remove($quests[2]->{_id}, {}) }, qr/type constraint/;
     like exception { db->quests->remove($quests[2]->{_id}, { user => 'bar' }) }, qr/access denied/;
     is exception { db->quests->remove($quests[2]->{_id}, { user => 'foo' }) }, undef;
 

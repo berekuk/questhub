@@ -4,6 +4,7 @@ use Dancer ':syntax';
 prefix '/api';
 
 use Play::DB qw(db);
+use Play::Markdown qw(markdown);
 
 use DateTime;
 use DateTime::Format::RFC3339;
@@ -15,7 +16,7 @@ put '/quest/:id' => sub {
         param('id'),
         {
             user => session->{login},
-            map { param($_) ? ($_ => param($_)) : () } qw/ name status type tags /, # type is deprecated, TODO - remove
+            map { param($_) ? ($_ => param($_)) : () } qw/ name status tags description /,
         }
     );
     return {
@@ -36,16 +37,22 @@ del '/quest/:id' => sub {
 
 post '/quest' => sub {
     die "not logged in" unless session->{login};
-    my $realm = param('realm') or die "realm is not set";
 
-    my $attributes = {
-        team => [ session->{login} ],
-        name => param('name'),
-        status => 'open',
-        (param('tags') ? (tags => param('tags')) : ()),
-        realm => $realm,
+    # optional fields
+    my $params = {
+        map { param($_) ? ($_ => param($_)) : () } qw/ tags description /,
     };
-    return db->quests->add($attributes);
+
+    # required fields
+    for (qw/ realm name /) {
+        my $value = param($_) or die "'$_' is not set";
+        $params->{$_} = $value;
+    }
+
+    $params->{status} = 'open';
+    $params->{team} = [ session->{login} ];
+
+    return db->quests->add($params);
 };
 
 get '/quest' => sub {
@@ -80,6 +87,7 @@ get '/quest' => sub {
             params => $params,
             frontend_url => $frontend_url,
             atom_tag => $atom_tag,
+            markdown => \&markdown,
         };
     }
     else {

@@ -1,0 +1,13 @@
+.markdown-preview {
+    margin-bottom: 8px;
+    ._label {
+        color: $dark-grey;
+        float: right;
+        margin-right: 5px;
+    }
+    ._content {
+        min-height: 30px;
+        border: dashed 1px $dark-grey;
+        padding: 5px;
+    }
+}

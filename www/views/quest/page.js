@@ -112,7 +112,6 @@ define([
             params.currentUser = currentUser.get('login');
             params.invited = _.contains(params.invitee || [], params.currentUser);
             params.meGusta = _.contains(params.likes || [], params.currentUser);
-            console.log(params);
             return params;
         },
 

@@ -15,6 +15,13 @@
 
     <% IF event.type == 'add-quest' %>
     <title><% event.author %> is on a new quest: <% event.quest.name | xml %></title>
+    <% IF event.quest.description %>
+        <content type="html">
+            <![CDATA[
+            <% markdown(event.quest.description) %>
+            ]]>
+        </content>
+    <% END %>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest_id %>" />
 
     <% ELSIF event.type == 'close-quest' %>

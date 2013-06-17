@@ -20,6 +20,8 @@ package Play::DB::Quests;
   $quest = {
       team => ['...'],
       status => qr/ open | closed | stalled | abandoned /,
+      name => 'quest name',
+      description => 'markdown text',
       ...
   }
 
@@ -36,6 +38,10 @@ Allowed status transitions:
     abandoned => open
 
     * => deleted
+
+=head1 METHODS
+
+=over
 
 =cut
 
@@ -77,6 +83,9 @@ sub _prepare_quest {
     return $quest;
 }
 
+=item B<get($id)>
+
+=cut
 sub get {
     my $self = shift;
     my ($id) = validate(\@_, Str);
@@ -90,6 +99,9 @@ sub get {
     return $quest;
 }
 
+=item B<bulk_get(\@ids)>
+
+=cut
 sub bulk_get {
     my $self = shift;
     my ($ids) = validate(\@_, ArrayRef[Str]);
@@ -111,6 +123,9 @@ sub bulk_get {
     };
 }
 
+=item B<list($filter_hashref)>
+
+=cut
 sub list {
     my $self = shift;
     my ($params) = validate(\@_, Undef|Dict[
@@ -208,11 +223,15 @@ sub _update_user_realms {
     }
 }
 
+=item B<add($quest_parameters)>
+
+=cut
 sub add {
     my $self = shift;
     my ($params) = validate(\@_, Dict[
         realm => Str,
         name => Str,
+        description => Optional[Str],
         user => Optional[Str],
         team => Optional[ArrayRef[Str]],
         tags => Optional[ArrayRef[Str]],
@@ -265,6 +284,9 @@ sub _quest2points {
     return $points;
 }
 
+=item B<update($id, $fields_to_update_hashref)>
+
+=cut
 sub update {
     my $self = shift;
     my ($id, $params) = validate(\@_, Str, HashRef);
@@ -338,6 +360,11 @@ sub update {
     return $id;
 }
 
+=item B<like(...), unlike(...)>
+
+(Implemented by PushPull role, with some method modifiers)
+
+=cut
 after 'like' => sub {
     my $self = shift;
     my ($id, $user) = @_;
@@ -397,9 +424,12 @@ after 'unlike' => sub {
     }
 };
 
+=item B<remove($id, { user => $user })>
+
+=cut
 sub remove {
     my $self = shift;
-    my ($id, $params) = validate(\@_, Str, HashRef);
+    my ($id, $params) = validate(\@_, Str, Dict[ user => Str ]);
 
     my $user = $params->{user};
     die 'no user' unless $user;
@@ -422,6 +452,9 @@ sub remove {
     );
 }
 
+=item B<invite($id, $user, $actor)>
+
+=cut
 sub invite {
     my $self = shift;
     my ($id, $user, $actor) = validate(\@_, Str, Str, Str);
@@ -460,6 +493,9 @@ sub invite {
     return;
 }
 
+=item B<uninvite($id, $user, $actor)>
+
+=cut
 sub uninvite {
     my $self = shift;
     my ($id, $user, $actor) = validate(\@_, Str, Str, Str);
@@ -486,6 +522,9 @@ sub uninvite {
     return;
 }
 
+=item B<join($id, $user)>
+
+=cut
 sub join {
     my $self = shift;
     my ($id, $user) = validate(\@_,
@@ -518,6 +557,9 @@ sub join {
     }
 }
 
+=item B<leave($id, $user)>
+
+=cut
 sub leave {
     my $self = shift;
     my ($id, $user) = validate(\@_, Str, Str);
@@ -539,6 +581,9 @@ sub leave {
     }
 }
 
+=item B<move_to_realm($id, $realm, $user)>
+
+=cut
 sub move_to_realm {
     my $self = shift;
     my ($id, $realm, $user) = validate(\@_, Str, Str, Str);

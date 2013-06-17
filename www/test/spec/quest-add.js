@@ -15,7 +15,10 @@ define([
 
             beforeEach(function () {
                 // it's self-rendering, not calling render()
-                view = new QuestAdd({ collection: new QuestCollection() });
+                view = new QuestAdd({
+                    collection: new QuestCollection(),
+                    el: document.createElement('div')
+                });
             });
 
             it('not clickable initially', function () {
@@ -38,7 +41,10 @@ define([
             var view;
 
             beforeEach(function () {
-                view = new QuestAdd({ collection: new QuestCollection() });
+                view = new QuestAdd({
+                    collection: new QuestCollection(),
+                    el: document.createElement('div')
+                });
             });
 
             it('trimmed tag values sent to server', function () {

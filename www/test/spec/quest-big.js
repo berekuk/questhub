@@ -9,7 +9,7 @@ define([
             spyOn($, 'ajax');
         });
 
-        describe('render', function () {
+        describe('render: ', function () {
             describe('non-empty team', function () {
                 var model = new QuestModel({
                     "ts" : 1360197975,
@@ -63,7 +63,7 @@ define([
 
         });
 
-        describe('edit', function () {
+        describe('edit: ', function () {
 
             var createView = function () {
                 model = new QuestModel({
@@ -87,11 +87,7 @@ define([
                 var view = createView();
 
                 it('title is visible', function () {
-                    expect(view.$el.find('h2 .quest-title')).not.toHaveCss({ display: 'none' });
-                });
-
-                it('input is hidden', function () {
-                    expect(view.$el.find('h2 input')).toHaveCss({ display: 'none' });
+                    expect(view.$el.find('h2 .quest-big-editable')).not.toHaveCss({ display: 'none' });
                 });
             });
 
@@ -104,11 +100,7 @@ define([
                 });
 
                 it('title is hidden', function () {
-                    expect(view.$el.find('h2 .quest-title')).toHaveCss({ display: 'none' });
-                });
-
-                it('input is visible', function () {
-                    expect(view.$el.find('h2 input')).not.toHaveCss({ display: 'none' });
+                    expect(view.$el.find('h2 .quest-big-editable')).toHaveCss({ display: 'none' });
                 });
             });
 
@@ -121,19 +113,23 @@ define([
                     view.$('.edit').click();
                     spyOn(view.model, 'save');
 
-                    view.$('.quest-edit').val('Mushroom! Mushroom!');
+                    view.$('[name=name]').val('Mushroom! Mushroom!');
 
                     var e = $.Event('keyup');
                     e.which = 13; // enter
-                    view.$('.quest-edit').trigger(e);
+                    view.$('[name=name]').trigger(e);
                 });
 
                 it('title is visible', function () {
-                    expect(view.$el.find('h2 .quest-title')).not.toHaveCss({ display: 'none' });
+                    expect(view.$el.find('h2 .quest-big-editable')).not.toHaveCss({ display: 'none' });
                 });
 
                 it('model is saved', function () {
-                    expect(view.model.save).toHaveBeenCalledWith({ 'name': 'Mushroom! Mushroom!', tags: ['feature'] });
+                    expect(view.model.save).toHaveBeenCalledWith({
+                        'name': 'Mushroom! Mushroom!',
+                        tags: ['feature'],
+                        description: ''
+                    });
                 });
             });
 
@@ -146,15 +142,15 @@ define([
                     view.$('.edit').click();
                     spyOn(view.model, 'save');
 
-                    view.$('.quest-big-tags-input').val('a,,,,,,,,b');
+                    view.$('[name=tags]').val('a,,,,,,,,b');
 
                     var e = $.Event('keyup');
                     e.which = 13; // enter
-                    view.$('.quest-edit').trigger(e);
+                    view.$('[name=tags]').trigger(e);
                 });
 
                 it('title is hidden', function () {
-                    expect(view.$el.find('h2 .quest-title')).toHaveCss({ display: 'none' });
+                    expect(view.$el.find('h2 .quest-big-editable')).toHaveCss({ display: 'none' });
                 });
 
                 it('model is not saved', function () {
@@ -171,15 +167,15 @@ define([
                     view.$('.edit').click();
                     spyOn(view.model, 'save');
 
-                    view.$('.quest-edit').val('Mushroom! Mushroom!');
+                    view.$('[name=name]').val('Mushroom! Mushroom!');
 
                     var e = $.Event('keyup');
                     e.which = 27; // escape
-                    view.$('.quest-edit').trigger(e);
+                    view.$('[name=name]').trigger(e);
                 });
 
                 it('title is visible', function () {
-                    expect(view.$el.find('h2 .quest-title')).not.toHaveCss({ display: 'none' });
+                    expect(view.$el.find('h2 .quest-big-editable')).not.toHaveCss({ display: 'none' });
                 });
 
                 it('model is not saved', function () {
@@ -187,7 +183,7 @@ define([
                 });
 
                 it('title is not changed', function () {
-                    expect(view.$el.find('h2 .quest-title').text()).toEqual('Badger Badger');
+                    expect(view.$el.find('h2 .quest-big-editable').text()).toEqual('Badger Badger');
                 });
             });
 
@@ -200,15 +196,15 @@ define([
                     view.$('.edit').click();
                     spyOn(view.model, 'save');
 
-                    view.$('.quest-big-tags-input').val('a,,,,,,,,b');
+                    view.$('[name=tags]').val('a,,,,,,,,b');
 
                     var e = $.Event('keyup');
                     e.which = 27; // escape
-                    view.$('.quest-edit').trigger(e);
+                    view.$('[name=tags]').trigger(e);
                 });
 
                 it('title is visible', function () {
-                    expect(view.$el.find('h2 .quest-title')).not.toHaveCss({ display: 'none' });
+                    expect(view.$el.find('h2 .quest-big-editable')).not.toHaveCss({ display: 'none' });
                 });
 
                 it('model is not saved', function () {
@@ -216,7 +212,7 @@ define([
                 });
 
                 it('title is not changed', function () {
-                    expect(view.$el.find('h2 .quest-title').text()).toEqual('Badger Badger');
+                    expect(view.$el.find('h2 .quest-big-editable').text()).toEqual('Badger Badger');
                 });
             });
         });

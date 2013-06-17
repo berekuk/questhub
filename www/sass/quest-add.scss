@@ -2,14 +2,19 @@
     cursor: default; // override bootstrap's "pointer" cursor style, it's confusing
 }
 
-input.quest-edit {
-    font-size: 26px;
-    line-height: 26px;
-    height: 43px;
+input.quest-edit-name {
+    font-size: 22px;
+    line-height: 32px;
+    height: 38px;
     @include box-sizing(border-box);
     width: 100%;
     font-weight: 200;
     margin-bottom: 0px;
+}
+
+textarea.quest-edit-description {
+    @include box-sizing(border-box);
+    width: 100%;
 }
 
 .quest-tags-edit input {

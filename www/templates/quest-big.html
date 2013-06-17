@@ -14,23 +14,40 @@
   </div>
 
   <h2>
-    <span class="quest-title"><%- name %></span>
+    <span class="quest-big-editable"><%- name %></span>
     <% if (my) { %>
-      <span class="control-group">
-        <input class="quest-edit" type="text" style="display: none">
+      <span class="control-group quest-big-edit">
+        <input class="quest-edit-name" name="name" type="text" placeholder="Quest title is required!">
       </span>
     <% } %>
   </h2>
 
-  <span class="muted quest-big-tags-edit control-group" style="display: none">
-    <input class="quest-big-tags-input" type="text" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
-  </span>
-  <div>
-  <% if (team.length == 0 && currentUser) { %>
-    <span class="muted">This quest is not claimed by anybody. Would you like to take it?</span>
-    <button class="quest-join btn btn-primary">Take</button>
+  <% if (obj.description && description) { %>
+    <div class="quest-big-editable">
+      <%= partial.markdown(description) %>
+    </div>
   <% } %>
-  </div>
+  <% if (my) { %>
+    <div class="quest-big-edit">
+      <textarea name="description" class="span12" placeholder="Quest description"></textarea>
+      <div class="quest-big-description-preview markdown-preview">
+        <div class="_label">Description preview</div>
+        <div class="_content"></div>
+      </div>
+    </div>
+  <% } %>
+
+  <span class="muted quest-big-edit control-group">
+    <input name="tags" type="text" placeholder="Tags" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
+
+    <button class="btn btn-primary save pull-right">Save</button>
+  </span>
+  <% if (team.length == 0 && currentUser) { %>
+    <div>
+      <span class="muted">This quest is not claimed by anybody. Would you like to take it?</span>
+      <button class="quest-join btn btn-primary">Take</button>
+    </div>
+  <% } %>
 
 
   <div class="object-bottom-line">

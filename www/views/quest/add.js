@@ -4,7 +4,7 @@ define([
     'models/quest',
     'views/proto/base',
     'text!templates/quest-add.html',
-    'bootstrap'
+    'bootstrap', 'jquery.autosize'
 ], function (_, $, sharedModels, QuestModel, Base, html) {
     return Base.extend({
         template: _.template(html),
@@ -35,7 +35,7 @@ define([
         },
 
         validate: function() {
-            if (this.submitted || !this.getDescription()) {
+            if (this.submitted || !this.getName()) {
                 this.disable();
                 return;
             }
@@ -79,7 +79,7 @@ define([
 
         optimizeNameFont: function () {
 
-            var input = this.$('.quest-edit');
+            var input = this.$('.quest-edit-name');
 
             var testerId = '#quest-add-test-span';
             var tester = $(testerId);
@@ -104,8 +104,12 @@ define([
             }
         },
 
-        getDescription: function () {
+        getName: function () {
             return this.$('[name=name]').val();
+        },
+
+        getDescription: function () {
+            return this.$('[name=description]').val();
         },
 
         getTags: function () {
@@ -133,7 +137,7 @@ define([
                 }))
             );
 
-            var qe = this.$('.quest-edit');
+            var qe = this.$('.quest-edit-name');
             this.$('.modal').modal().on('shown', function () {
                 qe.focus();
             });
@@ -143,6 +147,8 @@ define([
             this.$('.icon-spinner').hide();
             this.submitted = false;
             this.validate();
+
+            this.$('.quest-edit-description').autosize({ append: "\n" });
         },
 
         submit: function() {
@@ -151,9 +157,14 @@ define([
             }
 
             var model_params = {
-                name: this.getDescription(),
+                name: this.getName(),
                 realm: this.getRealm()
             };
+
+            var description = this.getDescription();
+            if (description) {
+                model_params.description = description;
+            }
 
             var tags = this.getTags();
             if (tags) {

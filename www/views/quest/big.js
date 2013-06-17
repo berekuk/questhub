@@ -1,12 +1,12 @@
 define([
-    'underscore',
+    'underscore', 'jquery', 'markdown',
     'backbone',
     'views/proto/common',
     'views/quest/like',
     'models/current-user',
     'bootbox',
     'text!templates/quest-big.html'
-], function (_, Backbone, Common, Like, currentUser, bootbox, html) {
+], function (_, $, markdown, Backbone, Common, Like, currentUser, bootbox, html) {
     'use strict';
     return Common.extend({
         template: _.template(html),
@@ -15,7 +15,9 @@ define([
             "click .quest-join": "join",
             "click .delete": "destroy",
             "click .edit": "startEdit",
+            "click button.save": "saveEdit",
             "keyup input": "edit",
+            "keyup [name=description]": "edit",
             'mouseenter': function (e) {
                 this.subview('.likes-subview').showButton();
             },
@@ -45,33 +47,45 @@ define([
             if (!this.model.isOwned()) {
                 return;
             }
-            this.$('.quest-edit').show();
-            this.$('.quest-big-tags-edit').show();
+            this.$('.quest-big-edit').show();
 
             this.backup = _.clone(this.model.attributes);
 
             var tags = this.model.get('tags') || [];
-            this.$('.quest-big-tags-input').val(tags.join(', '));
-            this.$('.quest-edit').val(this.model.get('name'));
+            this.$('[name=tags]').val(tags.join(', '));
+            this.$('[name=name]').val(this.model.get('name'));
+            this.$('[name=description]').val(this.model.get('description')).trigger('autosize');
             this.validateForm();
 
-            this.$('.quest-title').hide();
-            this.$('.quest-tags').hide();
-            this.$('.quest-edit').focus();
+            this.$('.quest-big-editable').hide();
+            this.$('[name=name]').focus();
+            this.updateDescriptionPreview();
+        },
+
+        updateDescriptionPreview: function () {
+            var text = this.$('[name=description]').val();
+            var preview = this.$('.quest-big-description-preview');
+            if (text) {
+                preview.show();
+                preview.find('._content').html(markdown(text, this.model.get('realm')));
+            }
+            else {
+                preview.hide();
+            }
         },
 
         // check if edit form is valid, and also highlight invalid fiels appropriately
         validateForm: function () {
             var ok = true;
-            if (this.$('.quest-edit').val().length) {
-                this.$('.quest-edit').parent().removeClass('error');
+            if (this.$('[name=name]').val().length) {
+                this.$('[name=name]').parent().removeClass('error');
             }
             else {
-                this.$('.quest-edit').parent().addClass('error');
+                this.$('[name=name]').parent().addClass('error');
                 ok = false;
             }
 
-              var cg = this.$('.quest-big-tags-input').parent(); // control-group
+              var cg = this.$('[name=tags]').parent(); // control-group
             if (this.model.validateTagline(cg.find('input').val())) {
                 cg.removeClass('error');
                 cg.find('input').tooltip('hide');
@@ -87,35 +101,51 @@ define([
                 }
                 ok = false;
             }
+
+            if (ok) {
+                this.$('button.save').removeClass('disabled');
+            }
+            else {
+                this.$('button.save').addClass('disabled');
+            }
             return ok;
         },
 
         edit: function (e) {
-            if (this.validateForm() && e.which == 13) {
-                this.closeEdit(true);
+            var target = $(e.target);
+            if (this.validateForm() && e.which == 13 && target.is('input')) {
+                this.saveEdit();
             }
             else if (e.which == 27) {
-                this.closeEdit(false);
+                this.closeEdit();
+            }
+            else if (target.is('textarea')) {
+                this.updateDescriptionPreview();
             }
         },
 
-        closeEdit: function(save) {
+        closeEdit: function() {
+            this.$('.quest-big-edit').hide();
+            this.$('.quest-big-editable').show();
+        },
 
-            if (save) {
-                // form is validated already by edit() method
-                var value = this.$('.quest-edit').val();
-                var tagline = this.$('.quest-big-tags-input').val();
-
-                this.model.save({
-                    name: value,
-                    tags: this.model.tagline2tags(tagline)
-                });
+        saveEdit: function () {
+            // so, we're using DOM data to cache validation status... this is a slippery slope.
+            if (this.$('button.save').hasClass('disabled')) {
+                return;
             }
 
-            this.$('.quest-edit').hide();
-            this.$('.quest-big-tags-edit').hide();
-            this.$('.quest-title').show();
-            this.$('.quest-tags').show();
+            // form is validated already by edit() method
+            var name = this.$('[name=name]').val();
+            var description = this.$('[name=description]').val();
+            var tagline = this.$('[name=tags]').val();
+
+            this.model.save({
+                name: name,
+                description: description,
+                tags: this.model.tagline2tags(tagline)
+            });
+            this.closeEdit();
         },
 
         destroy: function () {
@@ -138,6 +168,11 @@ define([
             params.showStatus = true;
             return params;
         },
+
+        afterRender: function () {
+            this.$('[name=description]').autosize({ append: "\n" });
+        },
+
         features: ['tooltip', 'timeago']
     });
 });
