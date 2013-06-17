@@ -20,6 +20,8 @@ package Play::DB::Quests;
   $quest = {
       team => ['...'],
       status => qr/ open | closed | stalled | abandoned /,
+      name => 'quest name',
+      description => 'markdown text',
       ...
   }
 
@@ -213,6 +215,7 @@ sub add {
     my ($params) = validate(\@_, Dict[
         realm => Str,
         name => Str,
+        description => Optional[Str],
         user => Optional[Str],
         team => Optional[ArrayRef[Str]],
         tags => Optional[ArrayRef[Str]],

@@ -15,6 +15,7 @@ sub add :Tests {
         team => ['foo'],
         status => 'open',
         realm => 'europe',
+        description => "Blah\n\nBlah.",
     });
     cmp_deeply $quest, superhashof({
         _id => re('^\w+$'),
@@ -23,6 +24,7 @@ sub add :Tests {
         status => 'open',
         team => ['foo'],
         realm => 'europe',
+        description => "Blah\n\nBlah.",
     });
 }
 
