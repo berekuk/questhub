@@ -8,18 +8,9 @@ use DateTime::Format::RFC3339;
 
 use Play::DB qw(db);
 
-use Text::Markdown qw(markdown);
+use Play::Markdown qw(markdown);
 
 my $rfc3339 = DateTime::Format::RFC3339->new;
-
-# copy-pasted from backend/pumper/events2email.pl
-sub _pp_markdown {
-    my ($body) = @_;
-    my $html = markdown($body);
-    $html =~ s{^<p>}{};
-    $html =~ s{</p>$}{};
-    return $html;
-}
 
 get '/event' => sub {
     return db->events->list({
@@ -49,7 +40,7 @@ get '/event/atom' => sub {
         events => \@events,
         realm => param('realm'),
         for => param('for'),
-        markdown => \&_pp_markdown,
+        markdown => \&markdown,
     };
 };
 
