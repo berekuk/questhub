@@ -33,6 +33,19 @@ div.quest-big-unclaimed {
 
 .quest-big-edit {
     display: none;
+    margin-bottom: 5px;
+}
+.quest-big-description-preview {
+    margin-bottom: 8px;
+    ._content {
+        border: dashed 1px $dark-grey;
+        padding: 5px;
+    }
+    ._label {
+        color: $dark-grey;
+        float: right;
+        margin-right: 5px;
+    }
 }
 
 .quest-page-left {

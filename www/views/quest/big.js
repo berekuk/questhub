@@ -1,12 +1,12 @@
 define([
-    'underscore', 'jquery',
+    'underscore', 'jquery', 'markdown',
     'backbone',
     'views/proto/common',
     'views/quest/like',
     'models/current-user',
     'bootbox',
     'text!templates/quest-big.html'
-], function (_, $, Backbone, Common, Like, currentUser, bootbox, html) {
+], function (_, $, markdown, Backbone, Common, Like, currentUser, bootbox, html) {
     'use strict';
     return Common.extend({
         template: _.template(html),
@@ -59,6 +59,19 @@ define([
 
             this.$('.quest-big-editable').hide();
             this.$('[name=name]').focus();
+            this.updateDescriptionPreview();
+        },
+
+        updateDescriptionPreview: function () {
+            var text = this.$('[name=description]').val();
+            var preview = this.$('.quest-big-description-preview');
+            if (text) {
+                preview.show();
+                preview.find('._content').html(markdown(text, this.model.get('realm')));
+            }
+            else {
+                preview.hide();
+            }
         },
 
         // check if edit form is valid, and also highlight invalid fiels appropriately
@@ -107,7 +120,7 @@ define([
                 this.closeEdit();
             }
             else if (target.is('textarea')) {
-                this.$('.comment-preview').html(markdown(text, this.options.realm));
+                this.updateDescriptionPreview();
             }
         },
 

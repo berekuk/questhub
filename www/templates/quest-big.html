@@ -22,14 +22,18 @@
     <% } %>
   </h2>
 
-  <% if (description) { %>
+  <% if (obj.description && description) { %>
     <div class="quest-big-editable">
       <%= partial.markdown(description) %>
     </div>
   <% } %>
   <% if (my) { %>
     <div class="quest-big-edit">
-      <textarea name="description" class="span12" placeholder="Quest details"></textarea>
+      <textarea name="description" class="span12" placeholder="Quest description"></textarea>
+      <div class="quest-big-description-preview">
+        <div class="_label">Description preview</div>
+        <div class="_content"></div>
+      </div>
     </div>
   <% } %>
 

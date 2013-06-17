@@ -4,7 +4,7 @@ define([
     'models/quest',
     'views/proto/base',
     'text!templates/quest-add.html',
-    'bootstrap'
+    'bootstrap', 'jquery.autosize'
 ], function (_, $, sharedModels, QuestModel, Base, html) {
     return Base.extend({
         template: _.template(html),
