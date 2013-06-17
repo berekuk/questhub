@@ -337,7 +337,7 @@ sub remove :Tests {
         db->quests->join($_->{_id}, 'foo2');
     }
 
-    like exception { db->quests->remove($quests[2]->{_id}, {}) }, qr/no user/;
+    like exception { db->quests->remove($quests[2]->{_id}, {}) }, qr/type constraint/;
     like exception { db->quests->remove($quests[2]->{_id}, { user => 'bar' }) }, qr/access denied/;
     is exception { db->quests->remove($quests[2]->{_id}, { user => 'foo' }) }, undef;
 
