@@ -24,8 +24,12 @@ sub markdown {
         $result = $obj->markdown(@_);
     }
 
-    $result =~ s{^<p>}{};
-    $result =~ s{</p>$}{};
+    my ($original_text) = $_[0];
+    if ($original_text !~ /\n/) {
+        # remove surrounding <p>, but only if text is a single line
+        $result =~ s{^<p>}{};
+        $result =~ s{</p>$}{};
+    }
     return $result;
 }
 
