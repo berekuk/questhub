@@ -16,6 +16,11 @@
     <div class="event-quest-title">
       <%= partial.quest_link(quest) %>.
     </div>
+    <% if (quest.description) { %>
+      <div class="well well-small event-comment-well comment-content"> <!-- not really a comment, but quest description is really similar -->
+        <%= partial.markdown(quest.description) %>
+      </div>
+    <% } %>
     <div class="object-bottom-line">
       <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
       <span class="likes"></span>
