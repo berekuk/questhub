@@ -26,6 +26,21 @@ sub add :Tests {
         realm => 'europe',
         description => "Blah\n\nBlah.",
     });
+
+    # no description, no status
+    $quest = db->quests->add({
+        name => 'quest name 2',
+        team => ['foo'],
+        realm => 'europe',
+    });
+    cmp_deeply $quest, superhashof({
+        _id => re('^\w+$'),
+        ts => re('^\d+$'),
+        name => 'quest name 2',
+        status => 'open',
+        team => ['foo'],
+        realm => 'europe',
+    });
 }
 
 sub add_check_user :Tests {
