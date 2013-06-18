@@ -34,7 +34,7 @@ define([
                 return this.createQuestSubview('Open', { status: 'open', user: this.model.get('login') })
             },
             '.closed-quests': function () {
-                return this.createQuestSubview('Completed', { status: 'closed', user: this.model.get('login') })
+                return this.createQuestSubview('Completed', { status: 'closed', limit: 5, user: this.model.get('login') })
             },
             '.abandoned-quests': function () {
                 return this.createQuestSubview('Abandoned', { status: 'abandoned', limit: 5, user: this.model.get('login') })
