@@ -20,6 +20,7 @@ sub _prepare_comment {
     my ($comment) = @_;
     $comment->{ts} = $comment->{_id}->get_time;
     $comment->{_id} = $comment->{_id}->to_string;
+    $comment->{type} ||= 'text';
     return $comment;
 }
 

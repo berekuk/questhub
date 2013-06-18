@@ -22,10 +22,24 @@ declare ImageUpic,
     as Dict[small => Str, normal => Str];
 
 declare CommentParams,
-    as Dict[
-        quest_id => Id,
-        body => Str,
-        author => Login,
-    ];
+    as (
+        Dict[
+            quest_id => Id,
+            author => Login,
+#            type => enum['text'], # default?
+            body => Str,
+        ] |
+        Dict[
+            quest_id => Id,
+            author => Login,
+            type => enum[qw( like open close abandon resurrect leave reopen )],
+        ] |
+        Dict[
+            quest_id => Id,
+            author => Login,
+            type => enum[qw( invite )],
+            invitee => Login,
+        ]
+    );
 
 1;
