@@ -122,4 +122,15 @@ for my $method (qw/ invite uninvite /) {
     };
 }
 
+for my $method (qw/ close reopen abandon resurrect /) {
+    post "/quest/:id/$method" => sub {
+        die "not logged in" unless session->{login};
+        db->quests->$method(param('id'), session->{login});
+
+        return {
+            result => 'ok',
+        }
+    };
+}
+
 true;
