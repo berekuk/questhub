@@ -50,8 +50,9 @@ use utf8;
 
 use Moo;
 
-use Types::Standard qw(Undef Bool Int Str Optional Dict ArrayRef HashRef);
 use Type::Params qw(validate);
+use Types::Standard qw(Undef Bool Int Str Optional Dict ArrayRef HashRef);
+use Play::Types qw(Login);
 
 use Play::Config qw(setting);
 use Play::DB qw(db);
@@ -360,6 +361,121 @@ sub update {
     return $id;
 }
 
+sub _set_status {
+    my $self = shift;
+    my ($params) = validate(\@_, Dict[
+        id => Str,
+        user => Str,
+        new_status => Str,
+        old_status => Str,
+        event_type => Optional[Str],
+        points => Optional[Int], # possible values: 1, -1
+        clear_invitees => Optional[Bool],
+    ]);
+
+    my $quest = $self->get($params->{id});
+    unless (grep { $_ eq $params->{user} } @{$quest->{team}}) {
+        die "access denied";
+    }
+
+    if ($quest->{status} ne $params->{old_status}) {
+        die "Expected quest with status '$params->{old_status}', $params->{id} has status '$quest->{status}'";
+    }
+
+    if ($params->{points}) {
+        my $points = $self->_quest2points($quest);
+        $points = -$points if $params->{points} == -1;
+        db->users->add_points($_, $points, $quest->{realm}) for @{$quest->{team}};
+    }
+
+    $self->collection->update(
+        { _id => MongoDB::OID->new(value => $params->{id}) },
+        {
+            '$set' => { status => $params->{new_status} },
+            ($params->{clear_invitees} ? ('$unset' => { 'invitee' => '' }) : ()),
+        },
+        { safe => 1 }
+    );
+
+    if ($params->{event_type}) {
+        db->events->add({
+            type => $params->{event_type},
+            author => $params->{user},
+            quest_id => $params->{id},
+            realm => $quest->{realm}
+        });
+    }
+    return;
+}
+
+=item B<close($id, $user)>
+
+=cut
+sub close {
+    my $self = shift;
+    my ($id, $user) = validate(\@_, Str, Str);
+
+    $self->_set_status({
+        id => $id,
+        user => $user,
+        old_status => 'open',
+        new_status => 'closed',
+        event_type => 'close-quest',
+        points => 1,
+        clear_invitees => 1,
+    });
+}
+
+=item B<reopen($id, $user)>
+
+=cut
+sub reopen {
+    my $self = shift;
+    my ($id, $user) = validate(\@_, Str, Str);
+
+    $self->_set_status({
+        id => $id,
+        user => $user,
+        old_status => 'closed',
+        new_status => 'open',
+        event_type => 'reopen-quest',
+        points => -1,
+    });
+}
+
+=item B<abandon($id, $user)>
+
+=cut
+sub abandon {
+    my $self = shift;
+    my ($id, $user) = validate(\@_, Str, Str);
+
+    $self->_set_status({
+        id => $id,
+        user => $user,
+        old_status => 'open',
+        new_status => 'abandoned',
+        event_type => 'abandon-quest',
+        clear_invitees => 1,
+    });
+}
+
+=item B<resurrect($id, $user)>
+
+=cut
+sub resurrect {
+    my $self = shift;
+    my ($id, $user) = validate(\@_, Str, Str);
+
+    $self->_set_status({
+        id => $id,
+        user => $user,
+        old_status => 'abandoned',
+        new_status => 'open',
+        event_type => 'resurrect-quest',
+    });
+}
+
 =item B<like(...), unlike(...)>
 
 (Implemented by PushPull role, with some method modifiers)
@@ -527,10 +643,7 @@ sub uninvite {
 =cut
 sub join {
     my $self = shift;
-    my ($id, $user) = validate(\@_,
-        Str,
-        Str,
-    );
+    my ($id, $user) = validate(\@_, Str, Str);
     die "only non-empty users can join quests" unless length $user; # FIXME - use Type::Tiny instead
 
     my $result = $self->collection->update(
