@@ -129,7 +129,7 @@ sub invite_non_open :Tests {
         status => 'open',
         realm => 'europe',
     });
-    db->quests->update($quest->{_id}, { status => 'closed', user => 'foo' });
+    db->quests->close($quest->{_id}, 'foo');
 
     ok exception { db->quests->invite($quest->{_id}, 'bar', 'foo') }, "can't invite to non-open quest";
 }
@@ -143,7 +143,7 @@ sub join_non_open :Tests {
         realm => 'europe',
     });
     db->quests->invite($quest->{_id}, 'bar', 'foo');
-    db->quests->update($quest->{_id}, { status => 'closed', user => 'foo' });
+    db->quests->close($quest->{_id}, 'foo');
 
     ok exception { db->quests->join($quest->{_id}, 'bar') }, "can't join - quest is closed";
     is db->quests->get($quest->{_id})->{invitee}, undef, 'invitee list is cleared on quest completion';
@@ -398,6 +398,40 @@ sub update :Tests {
     });
 }
 
+sub close :Tests {
+    db->users->add({ login => 'foo', realms => ['europe'] });
+
+    my $quest = db->quests->add({
+        name => 'q1',
+        user => 'foo',
+        status => 'open',
+        realm => 'europe',
+    });
+
+    like exception { db->quests->close($quest->{_id}, 'bar') }, qr/access denied/;
+    $quest = db->quests->get($quest->{_id});
+    cmp_deeply $quest, superhashof({
+        team => ['foo'],
+        name => 'q1',
+        status => 'open',
+        realm => 'europe',
+    });
+    is db->users->get_by_login('foo')->{rp}{europe}, 0;
+
+    db->quests->close($quest->{_id}, 'foo');
+
+    $quest = db->quests->get($quest->{_id});
+    cmp_deeply $quest, superhashof({
+        team => ['foo'],
+        name => 'q1',
+        status => 'closed',
+        realm => 'europe',
+    });
+
+    like exception { db->quests->close($quest->{_id}, 'foo') }, qr/Expected quest with status 'open'/;
+    is db->users->get_by_login('foo')->{rp}{europe}, 1;
+}
+
 sub scoring :Tests {
     db->users->add({ login => $_, realms => ['europe'] }) for qw( foo bar baz );
 
@@ -411,7 +445,7 @@ sub scoring :Tests {
     db->quests->invite($quest->{_id}, 'bar', 'foo');
     db->quests->join($quest->{_id}, 'bar');
 
-    db->quests->update($quest->{_id}, { status => 'closed', user => 'foo' });
+    db->quests->close($quest->{_id}, 'foo');
 
     is db->users->get_by_login('foo')->{rp}{europe}, 2;
     is db->users->get_by_login('bar')->{rp}{europe}, 2;
@@ -464,8 +498,7 @@ sub move_to_realm :Tests {
 
     cmp_deeply db->users->get_by_login('foo')->{realms}, ['europe', 'asia'], 'user joins the realm if quest is moved';
 
-    db->quests->update($quests[1]{_id}, { status => 'closed', user => 'foo' });
-    db->quests->update($quests[2]{_id}, { status => 'closed', user => 'foo' });
+    db->quests->close($_->{_id}, 'foo') for @quests[1, 2];
     cmp_deeply
         db->users->get_by_login('foo')->{rp},
         { europe => 2, asia => 0 };

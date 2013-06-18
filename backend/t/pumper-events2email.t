@@ -125,7 +125,7 @@ sub quest_completed :Tests {
     db->quests->watch($q2->{_id}, 'baz');
     db->quests->watch($q2->{_id}, 'baz2');
 
-    db->quests->update($q2->{_id}, { status => 'closed', user => 'bar' });
+    db->quests->close($q2->{_id}, 'bar');
 
     $pumper->run;
     $log->contains_ok(qr/2 emails sent, 2 events processed$/);

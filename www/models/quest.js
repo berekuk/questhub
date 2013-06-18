@@ -31,34 +31,19 @@ define([
         },
 
         close: function() {
-            this._setStatus('closed');
+            this.act('close');
         },
 
         abandon: function() {
-            this._setStatus('abandoned');
+            this.act('abandon');
         },
 
         resurrect: function() {
-            this._setStatus('open');
+            this.act('resurrect');
         },
 
         reopen: function() {
-            this._setStatus('open');
-        },
-
-        _setStatus: function(st) {
-            var model = this.model;
-            this.save(
-                { "status": st },
-                {
-                    success: function (model) {
-                        if (_.contains(model.get('team'), currentUser.get('login'))) {
-                            // update of the current user's quest causes update in points
-                            currentUser.fetch();
-                        }
-                    }
-                }
-            );
+            this.act('reopen');
         },
 
         act: function(action, params) {
@@ -72,6 +57,10 @@ define([
             $.post(this.url() + '/' + action, params)
                 .success(function () {
                     model.fetch();
+                    if (_.contains(model.get('team'), currentUser.get('login'))) {
+                        // update of the current user's quest causes update in points
+                        currentUser.fetch();
+                    }
                 }); // TODO - error handling?
         },
 

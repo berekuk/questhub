@@ -5,13 +5,12 @@ use warnings;
 
 use Type::Library
     -base,
-    -declare => qw( Login ImageSize ImageUpic );
+    -declare => qw( Id Login ImageSize ImageUpic );
 use Type::Utils;
-use Types::Standard qw( Str Dict );
+use Types::Standard qw( Str StrMatch Dict );
 
-declare Login,
-    as Str,
-    where { /^\w+$/ }; # TODO - limit max size?
+declare Login, as StrMatch[ qr/^\w+$/ ]; # TODO - limit max size?
+declare Id, as StrMatch[ qr/^[0-9a-f]{24}$/ ];
 
 declare ImageSize, as enum [qw/ small normal /];
 

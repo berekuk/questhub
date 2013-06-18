@@ -408,13 +408,16 @@ sub quest_tags :Tests {
         realm => 'europe',
     } };
 
-    my $unknown_type_response = dancer_response POST => '/api/quest', { params => {
-        name => 'typed-quest',
-        tags => 'invalid',
-        realm => 'europe',
-    } };
-    is $unknown_type_response->status, 500;
-    like $unknown_type_response->content, qr/does not meet type constraint/;
+    {
+        local $TODO = 'Waiting for Type::Tiny fix - RT#86239';
+        my $unknown_type_response = dancer_response POST => '/api/quest', { params => {
+            name => 'typed-quest',
+            tags => 'invalid',
+            realm => 'europe',
+        } };
+        is $unknown_type_response->status, 500;
+        like $unknown_type_response->content, qr/does not meet type constraint/;
+    }
 }
 
 sub cc :Tests {

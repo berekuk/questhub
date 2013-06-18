@@ -96,7 +96,7 @@ Options:
 * `limit`
 * `offset`
 
-Special `sort` value `leaderboard` can be used for composite points->open_quests sorting. It doesn't support order, i.e. it's always descending.
+Special `sort` value `leaderboard` can be used for composite points->open\_quests sorting. It doesn't support order, i.e. it's always descending.
 
 Another special `sort` value `points` can be used to sort by `rp.$realm`.
 
@@ -119,6 +119,28 @@ Optional parameters:
 ##### PUT /api/quest/{id}
 
 Update a quest.
+
+Updating quest status with this route is deprecated. Use `POST /api/quest/{id}/{action}` routes instead.
+
+##### POST /api/quest/{id}/close
+
+Complete a quest.
+
+Everyone on a team gets points.
+
+##### POST /api/quest/{id}/reopen
+
+Reopen a quest.
+
+Everyone on a team lose points.
+
+##### POST /api/quest/{id}/abandon
+
+Set open quest's status to `abandoned`.
+
+##### POST /api/quest/{id}/resurrect
+
+Set abandoned quest's status back to `open`.
 
 ##### DELETE /api/quest/{id}
 

@@ -22,7 +22,7 @@ sub like_quest :Tests {
         realm => 'europe',
     });
     my $id = $quest->{_id};
-    db->quests->update($id, { status => 'closed', user => 'blah' });
+    db->quests->close($id, 'blah');
 
     db->quests->like($id, 'user1');
     db->quests->like($id, 'user2');
@@ -40,7 +40,6 @@ sub like_quest :Tests {
             ],
             name => 'foo, foo',
             status => 'closed',
-            user => 'blah',
             team => ['blah'],
             author => 'blah',
             realm => 'europe',
