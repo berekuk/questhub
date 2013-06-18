@@ -50,9 +50,9 @@ use utf8;
 
 use Moo;
 
-use Type::Params qw(validate);
-use Types::Standard qw(Undef Bool Int Str Optional Dict ArrayRef HashRef);
-use Play::Types qw(Login);
+use Type::Params qw( compile validate );
+use Types::Standard qw( Undef Bool Int Str Optional Dict ArrayRef HashRef );
+use Play::Types qw( Id Login );
 
 use Play::Config qw(setting);
 use Play::DB qw(db);
@@ -89,7 +89,8 @@ sub _prepare_quest {
 =cut
 sub get {
     my $self = shift;
-    my ($id) = validate(\@_, Str);
+    state $check = compile(Id);
+    my ($id) = $check->(@_);
 
     my $quest = $self->collection->find_one({
         _id => MongoDB::OID->new(value => $id)
@@ -105,7 +106,8 @@ sub get {
 =cut
 sub bulk_get {
     my $self = shift;
-    my ($ids) = validate(\@_, ArrayRef[Str]);
+    state $check = compile(ArrayRef[Id]);
+    my ($ids) = $check->(@_);
 
     my @quests = $self->collection->find({
         '_id' => {
@@ -129,9 +131,9 @@ sub bulk_get {
 =cut
 sub list {
     my $self = shift;
-    my ($params) = validate(\@_, Undef|Dict[
+    state $check = compile(Undef|Dict[
         # find() filters
-        user => Optional[Str],
+        user => Optional[Login],
         realm => Optional[Str],
         unclaimed => Optional[Bool],
         status => Optional[Str],
@@ -145,6 +147,7 @@ sub list {
         tags => Optional[Str],
         watchers => Optional[Str],
     ]);
+    my ($params) = $check->(@_);
     $params ||= {};
     $params->{order} //= 'desc';
     $params->{offset} //= 0;
@@ -214,7 +217,8 @@ sub list {
 
 sub _update_user_realms {
     my $self = shift;
-    my ($quest) = validate(\@_, HashRef);
+    state $check = compile(HashRef);
+    my ($quest) = $check->(@_);
 
     for my $team_member (@{ $quest->{team} }) {
         my $user = db->users->get_by_login($team_member) or die "User '$team_member' not found";
@@ -229,15 +233,16 @@ sub _update_user_realms {
 =cut
 sub add {
     my $self = shift;
-    my ($params) = validate(\@_, Dict[
+    state $check = compile(Dict[
         realm => Str,
         name => Str,
         description => Optional[Str],
-        user => Optional[Str],
-        team => Optional[ArrayRef[Str]],
+        user => Optional[Login],
+        team => Optional[ArrayRef[Login]],
         tags => Optional[ArrayRef[Str]],
         status => Optional[Str],
     ]);
+    my ($params) = $check->(@_);
     $params->{status} //= 'open';
 
     if (defined $params->{team}) {
@@ -290,7 +295,8 @@ sub _quest2points {
 =cut
 sub update {
     my $self = shift;
-    my ($id, $params) = validate(\@_, Str, HashRef);
+    state $check = compile(Id, HashRef);
+    my ($id, $params) = $check->(@_);
 
     my $user = $params->{user};
     die 'no user' unless $user;
@@ -363,15 +369,16 @@ sub update {
 
 sub _set_status {
     my $self = shift;
-    my ($params) = validate(\@_, Dict[
-        id => Str,
-        user => Str,
+    state $check = compile(Dict[
+        id => Id,
+        user => Login,
         new_status => Str,
         old_status => Str,
         event_type => Optional[Str],
         points => Optional[Int], # possible values: 1, -1
         clear_invitees => Optional[Bool],
     ]);
+    my ($params) = $check->(@_);
 
     my $quest = $self->get($params->{id});
     unless (grep { $_ eq $params->{user} } @{$quest->{team}}) {
@@ -413,7 +420,8 @@ sub _set_status {
 =cut
 sub close {
     my $self = shift;
-    my ($id, $user) = validate(\@_, Str, Str);
+    state $check = compile(Id, Login);
+    my ($id, $user) = $check->(@_);
 
     $self->_set_status({
         id => $id,
@@ -431,7 +439,8 @@ sub close {
 =cut
 sub reopen {
     my $self = shift;
-    my ($id, $user) = validate(\@_, Str, Str);
+    state $check = compile(Id, Login);
+    my ($id, $user) = $check->(@_);
 
     $self->_set_status({
         id => $id,
@@ -448,7 +457,8 @@ sub reopen {
 =cut
 sub abandon {
     my $self = shift;
-    my ($id, $user) = validate(\@_, Str, Str);
+    state $check = compile(Id, Login);
+    my ($id, $user) = $check->(@_);
 
     $self->_set_status({
         id => $id,
@@ -465,7 +475,8 @@ sub abandon {
 =cut
 sub resurrect {
     my $self = shift;
-    my ($id, $user) = validate(\@_, Str, Str);
+    state $check = compile(Id, Login);
+    my ($id, $user) = $check->(@_);
 
     $self->_set_status({
         id => $id,
@@ -545,7 +556,8 @@ after 'unlike' => sub {
 =cut
 sub remove {
     my $self = shift;
-    my ($id, $params) = validate(\@_, Str, Dict[ user => Str ]);
+    state $check = compile(Id, Dict[ user => Login ]);
+    my ($id, $params) = $check->(@_);
 
     my $user = $params->{user};
     die 'no user' unless $user;
@@ -573,7 +585,9 @@ sub remove {
 =cut
 sub invite {
     my $self = shift;
-    my ($id, $user, $actor) = validate(\@_, Str, Str, Str);
+    state $check = compile(Id, Login, Login);
+    my ($id, $user, $actor) = $check->(@_);
+
     db->users->get_by_login($user) or die "Invitee '$user' not found";
 
     my $quest = $self->get($id);
@@ -614,7 +628,9 @@ sub invite {
 =cut
 sub uninvite {
     my $self = shift;
-    my ($id, $user, $actor) = validate(\@_, Str, Str, Str);
+    state $check = compile(Id, Login, Login);
+    my ($id, $user, $actor) = $check->(@_);
+
     db->users->get_by_login($user) or die "Invitee '$user' not found";
 
     my $result = $self->collection->update(
@@ -643,8 +659,8 @@ sub uninvite {
 =cut
 sub join {
     my $self = shift;
-    my ($id, $user) = validate(\@_, Str, Str);
-    die "only non-empty users can join quests" unless length $user; # FIXME - use Type::Tiny instead
+    state $check = compile(Id, Login);
+    my ($id, $user) = $check->(@_);
 
     my $result = $self->collection->update(
         {
@@ -675,8 +691,8 @@ sub join {
 =cut
 sub leave {
     my $self = shift;
-    my ($id, $user) = validate(\@_, Str, Str);
-    die "only non-empty users can join quests" unless length $user;
+    state $check = compile(Id, Login);
+    my ($id, $user) = $check->(@_);
 
     my $result = $self->collection->update(
         {
@@ -699,7 +715,8 @@ sub leave {
 =cut
 sub move_to_realm {
     my $self = shift;
-    my ($id, $realm, $user) = validate(\@_, Str, Str, Str);
+    state $check = compile(Id, Str, Login);
+    my ($id, $realm, $user) = $check->(@_);
 
     my $quest = $self->get($id);
     my $old_realm = $quest->{realm};
