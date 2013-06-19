@@ -4,15 +4,9 @@
     border: darken($abandoned-quest-color, 20%) solid 1px;
 
     @include border-radius(3px);
-
-    line-height: 14px;
-    font-size: 11.844px;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-    whitespace: nowrap;
-    vertical-align: baseline;
+    @include badge;
 
     padding: 2px 4px;
-    display: inline-block;
 
     &:hover {
         color: $text-color;

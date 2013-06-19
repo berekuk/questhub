@@ -7,7 +7,7 @@
       <% } %>
     <% } %>
 
-    <span class="like-button badge badge-success" data-toggle="tooltip" title="<%= list.slice(0, 10).join(', ') %><%= (list.length <= 10) ? '' : ' and ' + (list.length - 10) + ' more' %>">
+    <span class="like-button <%- (obj.meGusta || my) ? 'like-button-liked' : '' %>" data-toggle="tooltip" title="<%= list.slice(0, 10).join(', ') %><%= (list.length <= 10) ? '' : ' and ' + (list.length - 10) + ' more' %>">
       <i class="<%- (obj.meGusta || my) ? 'icon-thumbs-up' : 'icon-thumbs-up-alt' %>"></i>
       <%= list.length %>
   </span>
