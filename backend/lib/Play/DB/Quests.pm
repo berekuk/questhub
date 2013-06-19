@@ -633,6 +633,13 @@ sub invite {
         realm => $quest->{realm}
     });
 
+#    db->comments->add({
+#        quest_id => $id,
+#        author => $actor,
+#        type => 'invite',
+#        invitee => $user,
+#    });
+
     return;
 }
 
@@ -697,6 +704,12 @@ sub join {
     unless ($updated) {
         die "Quest not found or unable to join a quest without invitation";
     }
+
+    db->comments->add({
+        type => 'join',
+        author => $user,
+        quest_id => $id,
+    });
 }
 
 =item B<leave($id, $user)>
@@ -721,6 +734,12 @@ sub leave {
     unless ($updated) {
         die "Quest not found or unable to leave quest you don't own";
     }
+
+    db->comments->add({
+        type => 'leave',
+        author => $user,
+        quest_id => $id,
+    });
 }
 
 =item B<move_to_realm($id, $realm, $user)>
