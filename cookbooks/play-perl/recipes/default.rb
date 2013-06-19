@@ -32,7 +32,7 @@ end
 cpan_module 'Dancer'
 cpan_module 'YAML'
 cpan_module 'Module::Install' # needed by MongoDB due to packaging issues - see https://github.com/berekuk/play-perl/issues/70
-cpan_module 'MongoDB'
+cpan_module 'http://cpan.metacpan.org/authors/id/F/FR/FRIEDO/MongoDB-0.503.3.tar.gz'
 cpan_module 'JSON'
 cpan_module 'Moo'
 cpan_module 'Class::XSAccessor' # speeds up Moo
@@ -51,7 +51,7 @@ cpan_module 'Template'
 cpan_module 'DateTime'
 cpan_module 'DateTime::Format::RFC3339'
 
-cpan_module 'T/TO/TOBYINK/Type-Tiny-0.007_08.tar.gz'
+cpan_module 'T/TO/TOBYINK/Type-Tiny-0.007_09.tar.gz'
 
 directory '/data' # logs
 
