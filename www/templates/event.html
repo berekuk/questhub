@@ -64,14 +64,14 @@
 
 <% if (type == 'add-quest' && quest.description) { %>
   <% if (quest.description) { %>
-    <div class="well event-comment-well">
+    <div class="well event-well event-well-quest-description widetext">
       <%= partial.markdown(quest.description) %>
     </div>
   <% } %>
 <% } %>
 
 <% if (obj.comment && (comment.type == undefined || comment.type == 'text')) { %>
-  <div class="well event-comment-well">
+  <div class="well event-well widetext">
     <%= partial.markdown(comment.body, realm) %>
   </div>
 <% } %>
