@@ -16,7 +16,7 @@ use Types::Standard qw( Str StrMatch Dict );
 declare Login, as StrMatch[ qr/^\w+$/ ]; # TODO - limit max size?
 declare Id, as StrMatch[ qr/^[0-9a-f]{24}$/ ];
 
-declare ImageSize, as enum [qw/ small normal /];
+declare ImageSize, as enum([qw/ small normal /]);
 
 declare ImageUpic,
     as Dict[small => Str, normal => Str];
@@ -32,12 +32,12 @@ declare CommentParams,
         Dict[
             quest_id => Id,
             author => Login,
-            type => enum[qw( like close reopen abandon resurrect leave join )],
+            type => enum([qw( like close reopen abandon resurrect leave join )]),
         ] |
         Dict[
             quest_id => Id,
             author => Login,
-            type => enum( [qw( invite )] ),
+            type => enum([qw( invite )]),
             invitee => Login,
         ]
     );
