@@ -62,6 +62,8 @@ define([
                         currentUser.fetch();
                     }
                 }); // TODO - error handling?
+
+            this.trigger('act');
         },
 
         comment_count: function () {

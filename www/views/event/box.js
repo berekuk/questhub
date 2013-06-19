@@ -1,15 +1,14 @@
 define([
     'views/proto/common',
-    'views/event/all',
+    'views/event/any',
     'text!templates/event-box.html'
-], function (Common, eventViews, html) {
+], function (Common, Event, html) {
     return Common.extend({
         template: _.template(html),
         className: 'event-box-view',
         subviews: {
             '.subview': function () {
-                var View = eventViews[this.model.name()];
-                return new View({ model: this.model });
+                return new Event({ model: this.model });
             },
         },
 

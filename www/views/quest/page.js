@@ -117,7 +117,11 @@ define([
 
         afterInitialize: function () {
             this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model, 'act', function () {
+                this.subview('.comments').collection.fetch();
+            });
         },
+
         features: ['tooltip']
     });
 });

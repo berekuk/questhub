@@ -1,0 +1,37 @@
+// comment as shown on the quest page or news feed
+.comment-content {
+    overflow: auto;
+//    line-height: 1.75; TODO - our lines are too long and this would be useful, but only on wide screens, so we need to add a media query here
+}
+
+// wrapper from comments-page
+.comments {
+    margin-top: 10px;
+}
+
+textarea.comment-edit {
+    width: 95%;
+    height: 100%;
+}
+
+.comment-type-close {
+    background-color: darken($closed-quest-color, 10%);
+}
+
+.comment-type-reopen {
+    background-color: darken($open-quest-color, 10%);
+}
+
+.comment-type-abandon {
+    background-color: $abandoned-quest-color;
+}
+
+.comment-type-resurrect {
+    background-color: white;
+}
+
+.comment-type-close, .comment-type-reopen, .comment-type-abandon, .comment-type-resurrect {
+    .comment-content {
+//        font-size: 16px;
+    }
+}
