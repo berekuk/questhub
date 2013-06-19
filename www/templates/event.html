@@ -33,16 +33,24 @@
       <i class="icon-play"></i>
       <%= partial.user({ realm: realm, login: author }) %> resurrected a quest:
 
+    <% } else if (type == 'invite-quest' || (type == 'add-comment' && comment.type == 'invite')) { %>
+      <i class="icon-group"></i>
+      <%= partial.user({ realm: realm, login: author }) %> invited <%= partial.user({ realm: realm, login: obj.invitee || obj.comment.invitee }) %> to work a quest:
+
+    <% } else if (type == 'add-comment' && comment.type == 'leave') { %>
+      <i class="icon-signout"></i>
+      <%= partial.user({ realm: realm, login: author }) %> left a quest:
+
+    <% } else if (type == 'add-comment' && comment.type == 'join') { %>
+      <i class="icon-signin"></i>
+      <%= partial.user({ realm: realm, login: author }) %> joined a quest:
+
     <% } else if (type == 'add-user') { %>
       <i class="icon-user"></i>
       <%= partial.user({ realm: realm, login: author }) %> joins <a href="/realm/<%- realm %>"><%- realm %></a> realm.
 
-    <% } else if (type == 'invite-quest') { %>
-      <i class="icon-group"></i>
-      <%= partial.user({ realm: realm, login: author }) %> invited <%= partial.user({ realm: realm, login: invitee }) %> to work a quest:
-
     <% } else { %>
-      <em>Unknown event type. Try to refresh the page.</em>
+      <em>Unknown event type <%- type %> <%- obj.comment.type ? '(comment type ' + obj.comment.type + ')' : '' %>. Try to refresh the page.</em>
 
     <% } %>
   </div>

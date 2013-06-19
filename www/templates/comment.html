@@ -18,6 +18,16 @@
     <% } else if (type == 'resurrect') { %>
       <i class="icon-play"></i>
       Quest resurrected.
+    <% } else if (type == 'leave') { %>
+      <i class="icon-signout"></i>
+      Leaving the quest.
+    <% } else if (type == 'join') { %>
+      <i class="icon-signin"></i>
+      Joining the quest.
+    <% } else if (type == 'invite') { %>
+      <i class="icon-group"></i>
+      Invited:
+      <%= partial.user({ realm: realm, login: invitee }) %>
     <% } else { %>
       Unknown quest type! Please report this bug.
     <% } %>

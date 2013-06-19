@@ -26,6 +26,18 @@ textarea.comment-edit {
     background-color: $abandoned-quest-color;
 }
 
+.comment-type-join {
+    background-color: darken($unclaimed-quest-color, 10%);
+}
+
+.comment-type-invite {
+    background-color: darken($unclaimed-quest-color, 10%);
+}
+
+.comment-type-leave {
+    background-color: $abandoned-quest-color;
+}
+
 .comment-type-resurrect {
     background-color: white;
 }
