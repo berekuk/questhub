@@ -295,11 +295,15 @@ sub _quest2points {
 =cut
 sub update {
     my $self = shift;
-    state $check = compile(Id, HashRef);
+    state $check = compile(Id, Dict[
+        user => Login,
+        tags => Optional[ArrayRef[Str]],
+        name => Optional[Str],
+        description => Optional[Str],
+    ]);
     my ($id, $params) = $check->(@_);
 
-    my $user = $params->{user};
-    die 'no user' unless $user;
+    my $user = delete $params->{user};
 
     # FIXME - rewrite to modifier-based atomic update!
     my $quest = $self->get($id);
@@ -311,58 +315,16 @@ sub update {
         $params->{tags} = [ sort @{ $params->{tags} } ];
     }
 
-    my $action = '';
-
-    if ($params->{status} and $params->{status} ne $quest->{status}) {
-        if ($quest->{status} eq 'open' and $params->{status} eq 'closed') {
-            $action = 'close';
-        }
-        elsif ($quest->{status} eq 'closed' and $params->{status} eq 'open') {
-            $action = 'reopen';
-        }
-        elsif ($quest->{status} eq 'open' and $params->{status} eq 'abandoned') {
-            $action = 'abandon';
-        }
-        elsif ($quest->{status} eq 'abandoned' and $params->{status} eq 'open') {
-            $action = 'resurrect';
-        }
-        else {
-            die "quest status transition $quest->{status} => $params->{status} is forbidden";
-        }
-    }
-
-    {
-        my $points = $self->_quest2points($quest);
-        if ($action eq 'close') {
-            db->users->add_points($_, $points, $quest->{realm}) for @{$quest->{team}};
-        }
-        elsif ($action eq 'reopen') {
-            db->users->add_points($_, -$points, $quest->{realm}) for @{$quest->{team}};
-        }
-    }
-
     delete $quest->{_id};
     delete $quest->{ts};
 
     my $quest_after_update = { %$quest, %$params };
-    delete $quest_after_update->{invitee} if $params->{status} and $params->{status} ne 'open';
 
     $self->collection->update(
         { _id => MongoDB::OID->new(value => $id) },
         $quest_after_update,
         { safe => 1 }
     );
-
-    # there are other actions, for example editing the quest description
-    # TODO - should we split the update() method into several, more semantic methods?
-    if ($action) {
-        db->events->add({
-            type => "$action-quest",
-            author => $user,
-            quest_id => $id,
-            realm => $quest->{realm}
-        });
-    }
 
     return $id;
 }
@@ -374,7 +336,6 @@ sub _set_status {
         user => Login,
         new_status => Str,
         old_status => Str,
-        event_type => Optional[Str],
         comment_type => Optional[Str],
         points => Optional[Int], # possible values: 1, -1
         clear_invitees => Optional[Bool],
@@ -405,15 +366,6 @@ sub _set_status {
         { safe => 1 }
     );
 
-    if ($params->{event_type}) {
-        db->events->add({
-            type => $params->{event_type},
-            author => $params->{user},
-            quest_id => $params->{id},
-            realm => $quest->{realm}
-        });
-    }
-
     if ($params->{comment_type}) {
         db->comments->add({
             type => $params->{comment_type},
@@ -437,8 +389,7 @@ sub close {
         user => $user,
         old_status => 'open',
         new_status => 'closed',
-        event_type => 'close-quest',
-#        comment_type => 'close',
+        comment_type => 'close',
         points => 1,
         clear_invitees => 1,
     });
@@ -457,8 +408,7 @@ sub reopen {
         user => $user,
         old_status => 'closed',
         new_status => 'open',
-        event_type => 'reopen-quest',
-#        comment_type => 'reopen',
+        comment_type => 'reopen',
         points => -1,
     });
 }
@@ -476,8 +426,7 @@ sub abandon {
         user => $user,
         old_status => 'open',
         new_status => 'abandoned',
-        event_type => 'abandon-quest',
-#        comment_type => 'abandon',
+        comment_type => 'abandon',
         clear_invitees => 1,
     });
 }
@@ -495,8 +444,7 @@ sub resurrect {
         user => $user,
         old_status => 'abandoned',
         new_status => 'open',
-        event_type => 'resurrect-quest',
-#        comment_type => "resurrect",
+        comment_type => "resurrect",
     });
 }
 
@@ -625,20 +573,12 @@ sub invite {
         die "Quest not found or unable to invite to your own quest";
     }
 
-    db->events->add({
-        type => 'invite-quest',
-        author => $actor,
+    db->comments->add({
         quest_id => $id,
+        author => $actor,
+        type => 'invite',
         invitee => $user,
-        realm => $quest->{realm}
     });
-
-#    db->comments->add({
-#        quest_id => $id,
-#        author => $actor,
-#        type => 'invite',
-#        invitee => $user,
-#    });
 
     return;
 }

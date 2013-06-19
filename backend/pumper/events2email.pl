@@ -39,8 +39,7 @@ sub process_add_comment {
     my $comment = $event->{comment};
     my $quest = $event->{quest};
 
-    # TODO - send emails on join, leave and other comment types
-    return unless $comment->{type} eq 'text';
+    return unless $comment->{type} eq 'text'; # just a precaution, run_once() should filter other comments anyway
 
     my ($body_html, $markdown_extra) = db->comments->body2html($comment->{body}, $quest->{realm});
 
@@ -137,7 +136,7 @@ sub process_invite_quest {
 
     my $quest = $event->{quest};
 
-    my $recipient = $event->{invitee};
+    my $recipient = $event->{comment}{invitee};
     my $email = db->users->get_email($recipient, 'notify_invites') or return;
 
     {
@@ -171,13 +170,16 @@ sub run_once {
         }
 
         if ($event->{type} eq 'add-comment') {
-            $self->process_add_comment($event);
-        }
-        if ($event->{type} eq 'close-quest') {
-            $self->process_close_quest($event);
-        }
-        if ($event->{type} eq 'invite-quest') {
-            $self->process_invite_quest($event);
+            if ($event->{comment}{type} eq 'text') {
+                $self->process_add_comment($event);
+            }
+            elsif ($event->{comment}{type} eq 'close') {
+                $self->process_close_quest($event);
+            }
+            elsif ($event->{comment}{type} eq 'invite') {
+                $self->process_invite_quest($event);
+            }
+            # TODO - send emails on join, leave and other comment types
         }
 
         $self->add_stat('events processed');

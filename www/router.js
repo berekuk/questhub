@@ -196,17 +196,8 @@ define([
                 return;
             }
 
-            var types = this.queryParams('types');
-            if (types == '') {
-                types = [];
-            }
-            else {
-                types = types.split(',');
-            }
-
             var view = new NewsFeed({
-                model: currentUser,
-                types: types
+                model: currentUser
             });
             view.render();
 

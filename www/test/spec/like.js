@@ -23,7 +23,7 @@ define([
 
             view.render();
             it("contains likes badge", function () {
-                expect(view.$el).toContain('.badge-success');
+                expect(view.$el).toContain('.like-button');
             });
             it("badge value is 0", function () {
                 expect(view.$el.find('.like-button')).toHaveText('0');
@@ -39,8 +39,8 @@ define([
 
             view.render();
             it("contains likes badge", function () {
-                expect(view.$el).toContain('.badge-success');
-                expect(view.$('.badge-success')).toHaveText('2');
+                expect(view.$el).toContain('.like-button');
+                expect(view.$('.like-button')).toHaveText('2');
             });
             it("is clickable", function () {
                 expect(view.$el).toContain('a');
@@ -57,7 +57,7 @@ define([
 
             view.render();
             it("contains likes badge", function () {
-                expect(view.$el).toContain('.badge-success');
+                expect(view.$el).toContain('.like-button');
             });
             it("not clickable", function () {
                 expect(view.$el).not.toContain('a');

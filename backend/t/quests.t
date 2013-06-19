@@ -385,7 +385,6 @@ sub update :Tests {
         name => 'q2',
         tags => ['t1'],
         user => 'foo',
-        realm => 'europe',
     });
 
     $quest = db->quests->get($quest->{_id});

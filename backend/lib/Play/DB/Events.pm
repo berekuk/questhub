@@ -113,7 +113,6 @@ sub list {
     my ($params) = validate(\@_, Undef|Dict[
         limit => Optional[Int],
         offset => Optional[Int],
-        types => Optional[Str],
         realm => Optional[Str],
         for => Optional[Str],
     ]);
@@ -125,10 +124,6 @@ sub list {
     die "Only one of 'realm' and 'for' should be set" if defined $params->{for} and defined $params->{realm};
 
     my $search_opt = {};
-
-    $search_opt->{type} = {
-        '$in' => [ split /,/, $params->{types} ]
-    } if $params->{types};
 
     if (defined $params->{realm}) {
         $search_opt->{realm} = $params->{realm};

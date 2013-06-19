@@ -16,7 +16,7 @@ put '/quest/:id' => sub {
         param('id'),
         {
             user => session->{login},
-            map { param($_) ? ($_ => param($_)) : () } qw/ name status tags description /,
+            map { param($_) ? ($_ => param($_)) : () } qw/ name tags description /,
         }
     );
     return {
