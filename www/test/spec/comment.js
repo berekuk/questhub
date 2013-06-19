@@ -1,6 +1,6 @@
 define([
     'models/comment',
-    'views/comment/text'
+    'views/comment/any'
 ], function (CommentModel, CommentText) {
     describe('comments render', function () {
         var model = new CommentModel({
