@@ -7,30 +7,12 @@
   <% } %>
   <div class="row-fluid">
     <div class="span3">
-      <div class="well well-small">
+      <div class="well">
         <p>
         Your personal news feed.
         <p>
-        <a href="http://<%= window.location.host %>/api/event/atom?for=<%- login %><%= (types && types.length) ? '&types=' + types.join(',') : '' %>" class="btn btn-warning"><i class="icon-rss"></i> RSS</a>
+        <a href="http://<%= window.location.host %>/api/event/atom?for=<%- login %>" class="btn btn-warning"><i class="icon-rss"></i> RSS</a>
         </p>
-      </div>
-      <div class="accordion" id="event-filter-accordion">
-        <div class="accordion-group">
-          <div class="accordion-heading">
-            <a href="#event-filter-inner" class="accordion-toggle" data-toggle="collapse" data-parent="#event-filter-accordion">Filter by event type</a>
-          </div>
-          <div id="event-filter-inner" class="accordion-body collapse">
-            <div class="accordion-inner">
-              <ul class="nav nav-pills nav-filter">
-              <% _.each( filterList, function(i) { %>
-              <li class="filter<%= _.contains(types, i.value) ? ' active' : '' %>" data-type="<%= i.value %>"><a href="#">
-                  <%= i.description %>
-              </a></li>
-              <% }); %>
-              </ul>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
     <div class="span9">
