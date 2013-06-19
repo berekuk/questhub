@@ -98,7 +98,7 @@ sub quest_list_filtering :Tests {
 
     http_json GET => "/api/fakeuser/foo";
     my @quests = map { http_json POST => '/api/quest', { params => { name => "foo-$_", realm => 'europe' } } } 1..5;
-    http_json PUT => "/api/quest/$quests[$_]->{_id}", { params => { status => 'closed' } } for 3, 4;
+    http_json POST => "/api/quest/$quests[$_]->{_id}/close" for 3, 4;
     http_json PUT => "/api/quest/$quests[1]->{_id}", { params => { tags => ['t1'] } };
     http_json PUT => "/api/quest/$quests[3]->{_id}", { params => { tags => ['t1', 't2'] } };
 
@@ -226,10 +226,10 @@ sub quest_events :Tests {
     Dancer::session login => $user;
     my $add_result = http_json POST => '/api/quest', { params => $new_record }; # create
     my $quest_id = $add_result->{_id};
-    http_json PUT => "/api/quest/$quest_id", { params => { status => 'closed' } }; # close
-    http_json PUT => "/api/quest/$quest_id", { params => { status => 'open' } }; # and reopen again
-    http_json PUT => "/api/quest/$quest_id", { params => { status => 'abandoned' } };
-    http_json PUT => "/api/quest/$quest_id", { params => { status => 'open' } };
+    http_json POST => "/api/quest/$quest_id/close";
+    http_json POST => "/api/quest/$quest_id/reopen";
+    http_json POST => "/api/quest/$quest_id/abandon";
+    http_json POST => "/api/quest/$quest_id/resurrect";
 
     my @events = grep { $_->{type} =~ /quest/ } @{ db->events->list({ realm => 'europe' }) };
     cmp_deeply \@events, [
@@ -338,12 +338,12 @@ sub points :Tests {
     my $user = http_json GET => '/api/current_user';
     is $user->{rp}{europe}, 0;
 
-    http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'closed' } };
+    http_json POST => "/api/quest/$quest->{_id}/close";
 
     $user = http_json GET => '/api/current_user';
     is $user->{rp}{europe}, 1, 'got a point';
 
-    http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'open' } };
+    http_json POST => "/api/quest/$quest->{_id}/reopen";
     $user = http_json GET => '/api/current_user';
     is $user->{rp}{europe}, 0, 'lost a point';
 
@@ -361,7 +361,7 @@ sub points :Tests {
     $user = http_json GET => '/api/current_user';
     is $user->{rp}{europe}, 0, 'no points for likes on an open quest';
 
-    http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'closed' } };
+    http_json POST => "/api/quest/$quest->{_id}/close";
     $user = http_json GET => '/api/current_user';
     is $user->{rp}{europe}, 3, '1 + number-of-likes points for a closed quest';
 
@@ -371,11 +371,11 @@ sub points :Tests {
     $user = http_json GET => '/api/current_user';
     is $user->{rp}{europe}, 4, 'likes and unlikes apply to the closed quest, retroactively';
 
-    http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'open' } };
+    http_json POST => "/api/quest/$quest->{_id}/reopen";
     $user = http_json GET => '/api/current_user';
     is $user->{rp}{europe}, 0, 'points are taken away if quest is reopened';
 
-    http_json PUT => "/api/quest/$quest->{_id}", { params => { status => 'closed' } };
+    http_json POST => "/api/quest/$quest->{_id}/close";
     $user = http_json GET => '/api/current_user';
     is $user->{rp}{europe}, 4, 'closed again, got points again...';
 
@@ -480,9 +480,7 @@ sub email_like :Tests {
     # now let's close the quest and like it once more
 
     Dancer::session login => 'foo';
-    $quest = http_json PUT => "/api/quest/$quest->{_id}", { params => {
-        status => 'closed',
-    } };
+    http_json POST => "/api/quest/$quest->{_id}/close";
 
     http_json GET => "/api/fakeuser/bar2";
 

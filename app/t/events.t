@@ -49,12 +49,8 @@ sub filter_list :Tests {
         name => 'q1',
         realm => 'europe'
     } };
-    http_json PUT => "/api/quest/$q1->{_id}", { params => {
-        status => 'closed',
-    } };
-    http_json PUT => "/api/quest/$q1->{_id}", { params => {
-        status => 'open',
-    } };
+    http_json POST => "/api/quest/$q1->{_id}/close";
+    http_json POST => "/api/quest/$q1->{_id}/reopen";
     http_json POST => "/api/quest/$q1->{_id}/comment", { params => {
         body => 'c1',
     } };

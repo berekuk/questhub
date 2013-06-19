@@ -255,9 +255,7 @@ sub users_list_sort :Tests {
     my $finish_quest = sub {
         my $quest = shift;
         Dancer::session login => $quest->{team}[0];
-        http_json PUT => "/api/quest/$quest->{_id}", { params => {
-            status => 'closed',
-        } };
+        http_json POST => "/api/quest/$quest->{_id}/close";
     };
 
     $start_quest->('Helga');
