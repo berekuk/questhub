@@ -24,19 +24,19 @@
     <% END %>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest_id %>" />
 
-    <% ELSIF event.type == 'close-quest' %>
+    <% ELSIF event.type == 'close-quest' || (event.type == 'add-comment' && event.comment.type == 'close') %>
     <title><% event.author %> completed a quest: <% event.quest.name | xml %></title>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest_id %>" />
 
-    <% ELSIF event.type == 'reopen-quest' %>
+    <% ELSIF event.type == 'reopen-quest' || (event.type == 'add-comment' && event.comment.type == 'reopen') %>
     <title><% event.author %> reopened a quest: <% event.quest.name | xml %></title>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest_id %>" />
 
-    <% ELSIF event.type == 'abandon-quest' %>
+    <% ELSIF event.type == 'abandon-quest' || (event.type == 'add-comment' && event.comment.type == 'abandon') %>
     <title><% event.author %> abandoned a quest: <% event.quest.name | xml %></title>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest_id %>" />
 
-    <% ELSIF event.type == 'resurrect-quest' %>
+    <% ELSIF event.type == 'resurrect-quest' || (event.type == 'add-comment' && event.comment.type == 'resurrect') %>
     <title><% event.author %> resurrected a quest: <% event.quest.name | xml %></title>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest_id %>" />
 
@@ -44,7 +44,7 @@
     <title><% event.author %> joins <% event.realm %> realm</title>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/player/<%= event.author %>" />
 
-    <% ELSIF event.type == 'add-comment' %>
+    <% ELSIF event.type == 'add-comment' && event.comment.type == 'text' %>
     <title><% event.author %> commented on <% event.quest.name | xml %></title>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest.item('_id') %>" />
 
@@ -54,8 +54,16 @@
         ]]>
     </content>
 
-    <% ELSIF event.type == 'invite-quest' %>
-    <title><% event.author %> invited <% event.invitee %> to work on a quest: <% event.quest.name | xml %></title>
+    <% ELSIF event.type == 'add-comment' && event.comment.type == 'leave' %>
+    <title><% event.author %> left a quest: <% event.quest.name | xml %></title>
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest_id %>" />
+
+    <% ELSIF event.type == 'add-comment' && event.comment.type == 'join' %>
+    <title><% event.author %> joined a quest: <% event.quest.name | xml %></title>
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest_id %>" />
+
+    <% ELSIF event.type == 'invite-quest' || (event.type == 'add-comment' && event.comment.type == 'invite') %>
+    <title><% event.author %> invited <% event.invitee || event.comment.invitee %> to work on a quest: <% event.quest.name | xml %></title>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest_id %>" />
 
     <% ELSE %>

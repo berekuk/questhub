@@ -39,6 +39,9 @@ sub process_add_comment {
     my $comment = $event->{comment};
     my $quest = $event->{quest};
 
+    # TODO - send emails on join, leave and other comment types
+    return unless $comment->{type} eq 'text';
+
     my ($body_html, $markdown_extra) = db->comments->body2html($comment->{body}, $quest->{realm});
 
     my @recipients;

@@ -54,7 +54,7 @@ define([
             }
             this._subviewInstances = {};
             var that = this;
-            _.each(_.keys(this.subviews), function(key) {
+            _.each(_.keys(_.result(this, 'subviews')), function(key) {
                 that.subview(key); // will perform the lazy init
             });
         },
@@ -62,7 +62,7 @@ define([
         // get a subview from cache, lazily instantiate it if necessary
         subview: function (key) {
             if (!this._subviewInstances[key]) {
-                var value = this.subviews[key];
+                var value = _.result(this, 'subviews')[key];
 
                 var method = value;
                 if (!_.isFunction(method)) method = this[value];

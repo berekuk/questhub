@@ -3,9 +3,16 @@ define([
     'views/proto/any-collection',
     'models/current-user',
     'views/user/signin',
-    'views/comment/normal',
+    'views/comment/any',
     'text!templates/comment-collection.html'
-], function (_, markdown, AnyCollection, currentUser, Signin, Comment, html) {
+], function (
+    _, markdown,
+    AnyCollection,
+    currentUser,
+    Signin,
+    Comment,
+    html
+) {
     return AnyCollection.extend({
 
         template: _.template(html),
@@ -83,17 +90,14 @@ define([
             ga('send', 'event', 'comment', 'add');
             mixpanel.track('add comment');
 
-            this.collection.create({
-                'author': currentUser.get('login'),
-                'body': this.celem().val(),
-                'quest_id': this.collection.quest_id
-            },
-            {
-                'wait': true,
-                'error': this.enableForm,
-                // on success, 'add' will fire and form will be resetted
-                // NB: if we'll implement streaming comments loading, this will need to be fixed
-            });
+            this.collection.createTextComment(
+                this.celem().val(),
+                {
+                    'wait': true,
+                    'error': this.enableForm,
+                    // on success, 'add' will fire and form will be resetted
+                }
+            );
         },
     });
 });

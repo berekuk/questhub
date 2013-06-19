@@ -33,8 +33,8 @@ sub add_comment :Tests {
     cmp_deeply
         $list,
         [
-            { _id => $first->{_id}, ts => re('^\d+$'), body => 'first comment!', author => 'blah', quest_id => $quest_id },
-            { _id => $second->{_id}, ts => re('^\d+$'), body => 'second comment!', author => 'blah', quest_id => $quest_id },
+            { _id => $first->{_id}, ts => re('^\d+$'), body => 'first comment!', author => 'blah', quest_id => $quest_id, type => 'text' },
+            { _id => $second->{_id}, ts => re('^\d+$'), body => 'second comment!', author => 'blah', quest_id => $quest_id, type => 'text' },
         ]
 }
 
@@ -52,7 +52,7 @@ sub remove :Tests {
     my $comment = http_json POST => "/api/quest/$quest_id/comment", { params => { body => "I'm just a little comment!" } };
     my $second_comment = http_json POST => "/api/quest/$quest_id/comment", { params => { body => "another one" } };
 
-    http_json GET => "/api/fakeuser/other-user";
+    http_json GET => "/api/fakeuser/other_user";
 
     my $response = dancer_response DELETE => "/api/quest/$quest_id/comment/$comment->{_id}";
     is $response->status, 500, "can't delete another user's comment";

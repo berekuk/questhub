@@ -18,23 +18,6 @@ dd {
     color: #4099ff;
 }
 
-// comment as shown on the quest page or news feed
-.comment-content {
-    overflow: auto;
-//    line-height: 1.75; TODO - our lines are too long and this would be useful, but only on wide screens, so we need to add a media query here
-}
-
-// wrapper from comments-page
-.comments {
-    margin-top: 10px;
-}
-
-textarea.comment-edit {
-    width: 95%;
-    height: 100%;
-}
-
-
 .object-bottom-line {
     // Fixing the jumping line height on "like" button hide/show.
     // Note: 22 is enough for Chrome, but not enough for Firefox.
@@ -61,17 +44,24 @@ textarea.comment-edit {
 @import 'sass/navbar.scss';
 
 @import 'sass/realm.scss';
-@import 'sass/newbie-tour.scss';
-@import 'sass/welcome.scss';
 @import 'sass/about.scss';
-@import 'sass/quest-collection.scss';
-@import 'sass/quest-page.scss';
-@import 'sass/quest-add.scss';
-@import 'sass/dashboard.scss';
-@import 'sass/news-feed.scss';
-@import 'sass/event-collection.scss';
-@import 'sass/user-collection.scss';
-@import 'sass/user-big.scss';
+@import 'sass/welcome.scss';
+
+@import 'sass/newbie-tour.scss';
 @import 'sass/register.scss';
 @import 'sass/settings.scss';
 @import 'sass/unsubscribe.scss';
+
+@import 'sass/quest-collection.scss';
+@import 'sass/quest-page.scss';
+
+@import 'sass/quest-add.scss';
+@import 'sass/dashboard.scss';
+
+@import 'sass/news-feed.scss';
+@import 'sass/event-collection.scss';
+
+@import 'sass/user-collection.scss';
+@import 'sass/user-big.scss';
+
+@import 'sass/comment.scss';

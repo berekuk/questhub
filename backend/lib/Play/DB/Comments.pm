@@ -10,7 +10,8 @@ use Play::Mongo;
 use Play::DB qw(db);
 
 use Types::Standard qw(Str Dict HashRef ArrayRef);
-use Type::Params qw(validate);
+use Type::Params qw(compile);
+use Play::Types qw(Id Login CommentParams);
 
 use Play::Markdown qw(markdown);
 
@@ -19,12 +20,14 @@ sub _prepare_comment {
     my ($comment) = @_;
     $comment->{ts} = $comment->{_id}->get_time;
     $comment->{_id} = $comment->{_id}->to_string;
+    $comment->{type} ||= 'text';
     return $comment;
 }
 
 sub body2html {
     my $self = shift;
-    my ($body, $realm) = validate(\@_, Str, Str);
+    my $check = compile(Str, Str);
+    my ($body, $realm) = $check->(@_);
 
     local $Play::Markdown::REALM = $realm;
     local @Play::Markdown::MENTIONS = ();
@@ -37,11 +40,8 @@ sub body2html {
 
 sub add {
     my $self = shift;
-    my ($params) = validate(\@_, Dict[
-        quest_id => Str,
-        body => Str,
-        author => Str,
-    ]);
+    my $check = compile(CommentParams);
+    my ($params) = $check->(@_);
 
     my $quest = db->quests->get($params->{quest_id}) or die "quest '$params->{quest_id}' not found";
 
@@ -62,7 +62,8 @@ sub add {
 # TODO - pager?
 sub get {
     my $self = shift;
-    my ($quest_id) = validate(\@_, Str);
+    my $check = compile(Id);
+    my ($quest_id) = $check->(@_);
 
     my @comments = $self->collection->find({ quest_id => $quest_id })->sort({ _id => 'asc' })->all;
     $self->_prepare_comment($_) for @comments;
@@ -72,7 +73,8 @@ sub get {
 
 sub get_one {
     my $self = shift;
-    my ($comment_id) = validate(\@_, Str);
+    my $check = compile(Id);
+    my ($comment_id) = $check->(@_);
 
     my $comment = $self->collection->find_one({
         _id => MongoDB::OID->new(value => $comment_id)
@@ -84,7 +86,8 @@ sub get_one {
 
 sub bulk_get {
     my $self = shift;
-    my ($ids) = validate(\@_, ArrayRef[Str]);
+    my $check = compile(ArrayRef[Id]);
+    my ($ids) = $check->(@_);
 
     my @comments = $self->collection->find({
         '_id' => {
@@ -106,7 +109,8 @@ sub bulk_get {
 # get number of comments for each quest in given set
 sub bulk_count {
     my $self = shift;
-    my ($ids) = validate(\@_, ArrayRef[Str]);
+    my $check = compile(ArrayRef[Id]);
+    my ($ids) = $check->(@_);
 
     # TODO - upgrade MongoDB to 2.2+ and use aggregation
     my @comments = $self->collection->find({ quest_id => { '$in' => $ids } })->all;
@@ -119,11 +123,12 @@ sub bulk_count {
 
 sub remove {
     my $self = shift;
-    my ($params) = validate(\@_, Dict[
-        quest_id => Str,
-        id => Str,
-        user => Str
+    my $check = compile(Dict[
+        quest_id => Id,
+        id => Id,
+        user => Login,
     ]);
+    my ($params) = $check->(@_);
 
     my $result = $self->collection->remove(
         {
@@ -139,12 +144,14 @@ sub remove {
 
 sub update {
     my $self = shift;
-    my ($params) = validate(\@_, Dict[
-        quest_id => Str,
-        id => Str,
+    my $check = compile(Dict[
+        quest_id => Id,
+        id => Id,
         body => Str,
-        user => Str
+        user => Login,
     ]);
+    my ($params) = $check->(@_);
+
     my $id = delete $params->{id};
     delete $params->{quest_id}; # ignore it for now
 
