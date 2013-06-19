@@ -37,7 +37,7 @@ declare CommentParams,
         Dict[
             quest_id => Id,
             author => Login,
-            type => enum[qw( invite )],
+            type => enum( [qw( invite )] ),
             invitee => Login,
         ]
     );
