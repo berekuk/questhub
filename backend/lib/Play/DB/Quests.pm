@@ -375,6 +375,7 @@ sub _set_status {
         new_status => Str,
         old_status => Str,
         event_type => Optional[Str],
+        comment_type => Optional[Str],
         points => Optional[Int], # possible values: 1, -1
         clear_invitees => Optional[Bool],
     ]);
@@ -412,6 +413,14 @@ sub _set_status {
             realm => $quest->{realm}
         });
     }
+
+    if ($params->{comment_type}) {
+        db->comments->add({
+            type => $params->{comment_type},
+            author => $params->{user},
+            quest_id => $params->{id},
+        });
+    }
     return;
 }
 
@@ -429,6 +438,7 @@ sub close {
         old_status => 'open',
         new_status => 'closed',
         event_type => 'close-quest',
+#        comment_type => 'close',
         points => 1,
         clear_invitees => 1,
     });
@@ -448,6 +458,7 @@ sub reopen {
         old_status => 'closed',
         new_status => 'open',
         event_type => 'reopen-quest',
+#        comment_type => 'reopen',
         points => -1,
     });
 }
@@ -466,6 +477,7 @@ sub abandon {
         old_status => 'open',
         new_status => 'abandoned',
         event_type => 'abandon-quest',
+#        comment_type => 'abandon',
         clear_invitees => 1,
     });
 }
@@ -484,6 +496,7 @@ sub resurrect {
         old_status => 'abandoned',
         new_status => 'open',
         event_type => 'resurrect-quest',
+#        comment_type => "resurrect",
     });
 }
 

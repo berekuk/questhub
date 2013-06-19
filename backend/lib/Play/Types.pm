@@ -32,7 +32,7 @@ declare CommentParams,
         Dict[
             quest_id => Id,
             author => Login,
-            type => enum[qw( like open close abandon resurrect leave reopen )],
+            type => enum[qw( like close reopen abandon resurrect leave join )],
         ] |
         Dict[
             quest_id => Id,
