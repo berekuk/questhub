@@ -231,41 +231,45 @@ sub quest_events :Tests {
     http_json POST => "/api/quest/$quest_id/abandon";
     http_json POST => "/api/quest/$quest_id/resurrect";
 
-    my @events = grep { $_->{type} =~ /quest/ } @{ db->events->list({ realm => 'europe' }) };
+    my @events = @{ db->events->list({ realm => 'europe' }) };
     cmp_deeply \@events, [
         superhashof({
             _id => re('^\S+$'),
             ts => re('^\d+$'),
-            type => 'resurrect-quest',
+            type => 'add-comment',
             author => $user,
             quest_id => $quest_id,
+            comment => superhashof({ type => 'resurrect' }),
             quest => superhashof({ name => 'test-quest', status => 'open', team => [$user], author => $user }),
             realm => 'europe',
         }),
         superhashof({
             _id => re('^\S+$'),
             ts => re('^\d+$'),
-            type => 'abandon-quest',
+            type => 'add-comment',
             author => $user,
             quest_id => $quest_id,
+            comment => superhashof({ type => 'abandon' }),
             quest => superhashof({ name => 'test-quest', status => 'open', team => [$user], author => $user }),
             realm => 'europe',
         }),
         superhashof({
             _id => re('^\S+$'),
             ts => re('^\d+$'),
-            type => 'reopen-quest',
+            type => 'add-comment',
             author => $user,
             quest_id => $quest_id,
+            comment => superhashof({ type => 'reopen' }),
             quest => superhashof({ name => 'test-quest', status => 'open', team => [$user], author => $user }),
             realm => 'europe',
         }),
         superhashof({
             _id => re('^\S+$'),
             ts => re('^\d+$'),
-            type => 'close-quest',
+            type => 'add-comment',
             author => $user,
             quest_id => $quest_id,
+            comment => superhashof({ type => 'close' }),
             quest => superhashof({ name => 'test-quest', status => 'open', team => [$user], author => $user }),
             realm => 'europe',
         }),
@@ -277,6 +281,9 @@ sub quest_events :Tests {
             quest_id => $quest_id,
             quest => superhashof({ name => 'test-quest', status => 'open', team => [$user], author => $user }),
             realm => 'europe',
+        }),
+        superhashof({
+            type => 'add-user',
         }),
     ];
 }

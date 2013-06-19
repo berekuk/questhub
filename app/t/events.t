@@ -41,7 +41,7 @@ sub list :Tests {
         ]
 }
 
-sub filter_list :Tests {
+sub various_events :Tests {
     http_json GET => "/api/fakeuser/foo";
 
     my $q1 = http_json POST => '/api/quest', { params => {
@@ -55,17 +55,55 @@ sub filter_list :Tests {
         body => 'c1',
     } };
 
-    my $list = http_json GET => '/api/event?types=add-comment,reopen-quest&realm=europe';
+    my $list = http_json GET => '/api/event?realm=europe';
     cmp_deeply
         $list,
         [
-            superhashof({ type => 'add-comment', _id => re('^\S+$'), ts => re('^\d+$'), realm => 'europe' }),
-            superhashof({ type => 'reopen-quest', _id => re('^\S+$'), ts => re('^\d+$'), realm => 'europe' }),
+            superhashof({
+                type => 'add-comment',
+                _id => re('^\S+$'),
+                ts => re('^\d+$'),
+                realm => 'europe',
+                comment => superhashof({
+                    type => 'text',
+                }),
+            }),
+            superhashof({
+                type => 'add-comment',
+                _id => re('^\S+$'),
+                ts => re('^\d+$'),
+                realm => 'europe',
+                comment => superhashof({
+                    type => 'reopen',
+                }),
+            }),
+            superhashof({
+                type => 'add-comment',
+                _id => re('^\S+$'),
+                ts => re('^\d+$'),
+                realm => 'europe',
+                comment => superhashof({
+                    type => 'close',
+                }),
+            }),,
+            superhashof({
+                type => 'add-quest',
+                _id => re('^\S+$'),
+                ts => re('^\d+$'),
+                realm => 'europe',
+                quest => superhashof({
+                }),
+            }),
+            superhashof({
+                type => 'add-user',
+                _id => re('^\S+$'),
+                ts => re('^\d+$'),
+                realm => 'europe',
+            }),
         ]
 }
 
 sub atom :Tests {
-    # add-user event
     http_json GET => '/api/fakeuser/Frodo';
 
     # add-quest event
@@ -80,10 +118,16 @@ sub atom :Tests {
     is $response->status, 200;
     like $response->content, qr/Frodo joins europe realm/;
 
-    # Atom has filter.
-    $response = dancer_response GET => '/api/event/atom?types=add-quest&realm=europe';
+    http_json POST => "/api/quest/$add_result->{_id}/abandon";
+    http_json POST => "/api/quest/$add_result->{_id}/resurrect";
+
+    $response = dancer_response GET => '/api/event/atom?realm=europe';
     is $response->status, 200;
-    unlike $response->content, qr/Frodo joins europe realm/;
+    like $response->content, qr/Frodo abandoned a quest/;
+
+    $response = dancer_response GET => '/api/event/atom?realm=europe';
+    is $response->status, 200;
+    like $response->content, qr/Frodo resurrected a quest/;
 }
 
 __PACKAGE__->new->runtests;

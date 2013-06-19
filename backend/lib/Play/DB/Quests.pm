@@ -336,7 +336,6 @@ sub _set_status {
         user => Login,
         new_status => Str,
         old_status => Str,
-        event_type => Optional[Str],
         comment_type => Optional[Str],
         points => Optional[Int], # possible values: 1, -1
         clear_invitees => Optional[Bool],
@@ -367,15 +366,6 @@ sub _set_status {
         { safe => 1 }
     );
 
-    if ($params->{event_type}) {
-        db->events->add({
-            type => $params->{event_type},
-            author => $params->{user},
-            quest_id => $params->{id},
-            realm => $quest->{realm}
-        });
-    }
-
     if ($params->{comment_type}) {
         db->comments->add({
             type => $params->{comment_type},
@@ -399,8 +389,7 @@ sub close {
         user => $user,
         old_status => 'open',
         new_status => 'closed',
-        event_type => 'close-quest',
-#        comment_type => 'close',
+        comment_type => 'close',
         points => 1,
         clear_invitees => 1,
     });
@@ -419,8 +408,7 @@ sub reopen {
         user => $user,
         old_status => 'closed',
         new_status => 'open',
-        event_type => 'reopen-quest',
-#        comment_type => 'reopen',
+        comment_type => 'reopen',
         points => -1,
     });
 }
@@ -438,8 +426,7 @@ sub abandon {
         user => $user,
         old_status => 'open',
         new_status => 'abandoned',
-        event_type => 'abandon-quest',
-#        comment_type => 'abandon',
+        comment_type => 'abandon',
         clear_invitees => 1,
     });
 }
@@ -457,8 +444,7 @@ sub resurrect {
         user => $user,
         old_status => 'abandoned',
         new_status => 'open',
-        event_type => 'resurrect-quest',
-#        comment_type => "resurrect",
+        comment_type => "resurrect",
     });
 }
 
@@ -587,20 +573,12 @@ sub invite {
         die "Quest not found or unable to invite to your own quest";
     }
 
-    db->events->add({
-        type => 'invite-quest',
-        author => $actor,
+    db->comments->add({
         quest_id => $id,
+        author => $actor,
+        type => 'invite',
         invitee => $user,
-        realm => $quest->{realm}
     });
-
-#    db->comments->add({
-#        quest_id => $id,
-#        author => $actor,
-#        type => 'invite',
-#        invitee => $user,
-#    });
 
     return;
 }
