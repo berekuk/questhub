@@ -9,7 +9,7 @@
       <div class="span3">
         <div class="well">
           <p>
-            <%= partial.markdown(description) %>
+            <%= partial.markdown(description, id) %>
           </p>
           <div class="realm-controls-subview"></div>
           <a href="http://<%= window.location.host %>/api/event/atom?realm=<%- id %>" class="btn btn-warning realm-rss-button"><i class="icon-rss"></i> RSS</a>
