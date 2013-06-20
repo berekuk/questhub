@@ -26,6 +26,13 @@ textarea.quest-edit-description {
 }
 
 .quest-add-realm {
+    text-align: center;
+    .btn-group {
+        display: block;
+        @include breakpoint(B) {
+            display: inline-block;
+        }
+    }
     button {
         color: $dark-grey;
         font-size: 12px !important;
@@ -33,4 +40,9 @@ textarea.quest-edit-description {
     button.active {
         font-weight: bold;
     }
+}
+
+.quest-add-realm-reminder {
+    margin-bottom: 5px;
+    display: inline-block;
 }

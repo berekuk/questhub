@@ -11,7 +11,9 @@ define([
 
         events: {
             'click .quest-add-nav-button': function () {
-                return new QuestAdd();
+                return new QuestAdd({
+                    realm: this.options.realm
+                });
             }
         },
 

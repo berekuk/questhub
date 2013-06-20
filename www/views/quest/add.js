@@ -12,7 +12,10 @@ define([
         events: {
             'click .quest-add': 'submit',
             'keyup [name=name]': 'nameEdit',
-            'keyup [name=tags]': 'tagsEdit'
+            'keyup [name=tags]': 'tagsEdit',
+            'click .quest-add-realm button': function () {
+                this.validate({ checkRealm: false });
+            }
         },
 
         initialize: function() {
@@ -32,7 +35,17 @@ define([
             this.submitted = false;
         },
 
-        validate: function() {
+        validate: function(options) {
+            if (
+                (!options || options.checkRealm !== false)
+                && !this.getRealm()
+            ) {
+                this.disable();
+                return;
+            }
+
+            this.$('.quest-add-realm-reminder').hide();
+
             if (this.submitted || !this.getName()) {
                 this.disable();
                 return;
@@ -130,9 +143,16 @@ define([
                 return;
             }
 
+            var defaultRealm = this.options.realm;
+            if (!defaultRealm) {
+                if (sharedModels.currentUser.get('realms').length == 1) {
+                    defaultRealm = sharedModels.currentUser.get('realms')[0];
+                }
+            }
             this.$el.html(
                 $(this.template({
-                    realms: sharedModels.realms.toJSON()
+                    realms: sharedModels.realms.toJSON(),
+                    defaultRealm: defaultRealm
                 }))
             );
 
