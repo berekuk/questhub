@@ -1,5 +1,4 @@
-// see also for the similar code: views/quest/add
-// TODO - refactor them both into views/proto/form
+// TODO - refactor into views/proto/form
 define([
     'underscore', 'jquery', 'views/proto/common',
     'models/user-settings',

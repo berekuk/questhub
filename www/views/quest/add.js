@@ -15,11 +15,9 @@ define([
             'keyup [name=tags]': 'tagsEdit'
         },
 
-        el: $('#quest-add'),
-
         initialize: function() {
             _.bindAll(this);
-            this.$el.html('');
+            $('#modal-storage').append(this.$el);
             this.render();
         },
 
@@ -122,8 +120,9 @@ define([
         },
 
         render: function () {
+            var that = this;
+
             if (!sharedModels.realms.length) {
-                var that = this;
                 sharedModels.realms.fetch()
                 .success(function () {
                     that.render();
@@ -140,6 +139,14 @@ define([
             var qe = this.$('.quest-edit-name');
             this.$('.modal').modal().on('shown', function () {
                 qe.focus();
+            });
+            this.$('.modal').modal().on('hidden', function (e) {
+                if (!$(e.target).hasClass('modal')) {
+                    // modal includes items with tooltip, which can fire "hidden" too,
+                    // and these events bubble up DOM tree, ending here
+                    return;
+                }
+                that.remove();
             });
 
             this.$('.btn-group').button();
