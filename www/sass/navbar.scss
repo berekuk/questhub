@@ -77,8 +77,8 @@ nav {
         }
     }
 
-    .nav-realm-title {
-        @include breakpoint(B) {
+    @include breakpoint(B) {
+        .nav-realm-title, .menu-item-my-quests, .quest-add-nav-button, .menu-item-realms, .dropdown-toggle {
             font-weight: bold;
         }
     }
@@ -86,7 +86,9 @@ nav {
     .current-user-box {
 
         @include breakpoint(B) {
-            font-weight: bold;
+            .icon-cog {
+                font-size: 15px;
+            }
         }
 
         .current-user-notifications-icon {
