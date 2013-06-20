@@ -8,7 +8,7 @@ define([
             "ts" : 1360197975,
             "status" : "closed",
             "_id" : "5112f9577a8f1d370b000002",
-            "team" : ["berekuk"],
+            "team" : ["berekuk", "bessarabov"],
             "name" : "Fix Google Analytics code on play-perl.org",
             "author" : "mmcleric",
             "tags" : ["bug"],
@@ -33,18 +33,22 @@ define([
             });
         });
 
-        describe('showAuthor', function () {
+        describe('teammates', function () {
 
-            it('no team by default', function () {
+            it('show team by default', function () {
                 var view = new QuestSmall({ model: model });
                 view.render();
-                expect(view.$el.html()).not.toContain('berekuk');
+                expect(view.$el.html()).toContain('berekuk');
+                expect(view.$el.html()).toContain('bessarabov');
+                expect(view.$el.html()).not.toContain('with');
             });
 
-            it('show team when showAuthor is on', function () {
-                var view = new QuestSmall({ model: model, showAuthor: true });
+            it('show only teammates when user is set', function () {
+                var view = new QuestSmall({ model: model, user: 'berekuk' });
                 view.render();
-                expect(view.$el.html()).toContain('berekuk');
+                expect(view.$el.html()).not.toContain('berekuk');
+                expect(view.$el.html()).toContain('bessarabov');
+                expect(view.$el.html()).toContain('with');
             });
 
         });

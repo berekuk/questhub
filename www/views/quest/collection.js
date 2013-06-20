@@ -12,7 +12,7 @@ define([
         generateItem: function (quest) {
             return new QuestSmall({
                 model: quest,
-                showAuthor: this.options.showAuthor,
+                user: this.options.user,
                 showStatus: this.options.showStatus,
                 showRealm: this.options.showRealm
             });

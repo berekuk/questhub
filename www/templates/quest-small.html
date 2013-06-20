@@ -1,12 +1,15 @@
 <td>
-  <% if (obj.showAuthor) { %>
-    <%= partial.user({ realm: realm, login: _.first(team), colon: true }) %>
-  <% } %>
   <span class="pull-right">
     <span class="likes"></span>
   </span>
 
   <%= partial.quest_link(obj) %>
+  <% var others = _.filter(team, function (u) { return u != user }) %>
+  <% if (others.length) { %>
+    <span>(<%- user ? 'with ' : '' %></span><!--
+    --><%= _.map(others, function (u) { return partial.user({ realm: realm, login: u }) }).join(', ') %><!--
+    --><span>)</span>
+  <% } %>
 
   <br>
   <span>

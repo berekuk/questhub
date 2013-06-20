@@ -30,7 +30,7 @@ define([
 
         serialize: function () {
             var params = this.model.serialize();
-            params.showAuthor = this.options.showAuthor;
+            params.user = this.options.user;
             params.showStatus = this.options.showStatus;
             params.showRealm = this.options.showRealm;
             return params;

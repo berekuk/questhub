@@ -77,7 +77,8 @@ define([
 
             var collectionView = new DashboardQuestCollection({
                 collection: collection,
-                caption: caption
+                caption: caption,
+                user: options.user
             });
 
             return collectionView;

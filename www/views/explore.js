@@ -66,7 +66,6 @@ define([
 
             return new QuestCollection({
                 collection: collection,
-                showAuthor: true,
                 showStatus: options.showStatus
             });
         },

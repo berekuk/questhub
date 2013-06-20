@@ -10,7 +10,11 @@ define([
 
         subviews: {
             '.quests': function () {
-                return new QuestCollection({ collection: this.collection, showRealm: true });
+                return new QuestCollection({
+                    collection: this.collection,
+                    showRealm: true,
+                    user: this.options.user
+                });
             }
         },
 
