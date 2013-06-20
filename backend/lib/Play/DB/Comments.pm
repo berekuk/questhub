@@ -113,7 +113,10 @@ sub bulk_count {
     my ($ids) = $check->(@_);
 
     # TODO - upgrade MongoDB to 2.2+ and use aggregation
-    my @comments = $self->collection->find({ quest_id => { '$in' => $ids } })->all;
+    my @comments = $self->collection->find({
+        quest_id => { '$in' => $ids },
+        body => { '$exists' => 1 },
+    })->all;
     my %stat;
     for (@comments) {
         $stat{ $_->{quest_id} }++;

@@ -84,4 +84,32 @@ sub body2html :Tests {
 
 }
 
+sub bulk_count :Tests {
+    db->users->add({ login => 'foo' });
+    my $q1 = db->quests->add({
+        user => 'foo',
+        name => 'q1',
+        realm => 'europe',
+    });
+    my $q2 = db->quests->add({
+        user => 'foo',
+        name => 'q2',
+        realm => 'europe',
+    });
+
+    db->comments->add({ quest_id => $q1->{_id}, author => 'foo', body => "c1" });
+    db->comments->add({ quest_id => $q1->{_id}, author => 'foo', body => "c2" });
+    db->comments->add({ quest_id => $q2->{_id}, author => 'foo', body => "c3" });
+    db->comments->add({ quest_id => $q1->{_id}, author => 'foo', type => 'close' });
+
+    my $result = db->comments->bulk_count([ $q1->{_id}, $q2->{_id} ]);
+    cmp_deeply(
+        $result,
+        {
+            $q1->{_id} => 2,
+            $q2->{_id} => 1,
+        }
+    );
+}
+
 __PACKAGE__->new->runtests;
