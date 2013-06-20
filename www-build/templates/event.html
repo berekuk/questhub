@@ -65,7 +65,7 @@
 <% if (type == 'add-quest' && quest.description) { %>
   <% if (quest.description) { %>
     <div class="well event-well event-well-quest-description widetext">
-      <%= partial.markdown(quest.description) %>
+      <%= partial.markdown(quest.description, realm) %>
     </div>
   <% } %>
 <% } %>
