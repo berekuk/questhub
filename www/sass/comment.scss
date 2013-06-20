@@ -9,11 +9,11 @@ textarea.comment-edit {
 }
 
 .comment-type-close {
-    background-color: darken($closed-quest-color, 10%);
+    background-color: $closed-quest-color;
 }
 
 .comment-type-reopen {
-    background-color: darken($open-quest-color, 10%);
+    background-color: $open-quest-color;
 }
 
 .comment-type-abandon {
@@ -21,11 +21,11 @@ textarea.comment-edit {
 }
 
 .comment-type-join {
-    background-color: darken($unclaimed-quest-color, 10%);
+    background-color: $unclaimed-quest-color;
 }
 
 .comment-type-invite {
-    background-color: darken($unclaimed-quest-color, 10%);
+    background-color: $unclaimed-quest-color;
 }
 
 .comment-type-leave {
