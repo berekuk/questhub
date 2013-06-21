@@ -1,16 +1,20 @@
-<td>
-  <img src="<%- pic.small %>" width="24" height="24"/>
-  <a href="/player/<%= login %>"><%= login %></a>
-  <span class="badge badge-info"><%= rp[realm] %></span>
+<td class="user-small">
+  <div class="user-small-inner <%- (currentUser && login == currentUser) ? 'user-small-current' : '' %>">
+    <img src="<%- pic.small %>" width="24" height="24"/>
+    <a href="/player/<%= login %>"><%= login %></a>
+    <span class="badge badge-info"><%= rp[realm] %></span>
 
-  <% if (currentUser && login == currentUser) { %>
-    <div class="current-user-leaderboard-tip">
-      <!-- Bootstrap 2.3.0 tries to line up the text vertically, so we have to use &nbsp; -->
-      <span data-toggle="tooltip" data-trigger="manual" data-placement="right" title="This&nbsp;is&nbsp;you.&nbsp;Climb&nbsp;up!"></span>
-    </div>
-  <% } %>
+    <% if (currentUser && login == currentUser) { %>
+      <div class="current-user-leaderboard-tip">
+        <!-- Bootstrap 2.3.0 tries to line up the text vertically, so we have to use &nbsp; -->
+        <span data-toggle="tooltip" data-trigger="manual" data-placement="right" title="This&nbsp;is&nbsp;you.&nbsp;Climb&nbsp;up!"></span>
+      </div>
+    <% } %>
 
-  <% if (obj.open_quests) { %>
-    <span class="label label-inverse open-quest-count-label"><%= obj.open_quests %> quest<%= obj.open_quests > 1 ? 's' : '' %></span>
-  <% } %>
+    <% if (obj.open_quests) { %>
+      <a href="/player/<%= login %>">
+        <span class="label label-inverse open-quest-count-label"><%= obj.open_quests %> quest<%= obj.open_quests > 1 ? 's' : '' %></span>
+      </a>
+    <% } %>
+  </div>
 </td>

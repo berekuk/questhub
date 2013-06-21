@@ -3,40 +3,31 @@
     line-height: 25px;
 }
 
-// based on bootstrap's tr.info
-tbody tr.quest-closed {
+@mixin quest-row($color) {
     > td {
-        background-color: $closed-quest-color;
+        background-color: $mat;
+        border-left: $color 5px solid;
     }
     &:hover > td {
-        background-color: darken($closed-quest-color, 5%);
+        background-color: $mat;
+        border-left: darken($color, 20%) 5px solid;
     }
+}
+
+// based on bootstrap's tr.info
+tbody tr.quest-closed {
+    @include quest-row($closed-quest-color);
 }
 
 // based on bootstrap's tr.warning
 tbody tr.quest-open {
-    > td {
-        background-color: $open-quest-color;
-    }
-    &:hover > td {
-        background-color: darken($open-quest-color, 5%);
-    }
+    @include quest-row($open-quest-color);
 }
 
 tbody tr.quest-abandoned {
-    > td {
-        background-color: $abandoned-quest-color;
-    }
-    &:hover > td {
-        background-color: darken($abandoned-quest-color, 5%);
-    }
+    @include quest-row($abandoned-quest-color);
 }
 
 tbody tr.quest-unclaimed {
-    > td {
-        background-color: $unclaimed-quest-color;
-    }
-    &:hover > td {
-        background-color: darken($unclaimed-quest-color, 5%);
-    }
+    @include quest-row($unclaimed-quest-color);
 }

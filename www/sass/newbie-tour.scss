@@ -1,9 +1,4 @@
 .newbie-tour {
-    border: 1px solid #fbeed5;
-    background-color: #fcf8e3; // from alert-warning
-    color: #c09853;
-    padding: 10px;
-    @include border-radius(4px);
     max-width: 700px;
     margin: 0px auto 20px;
 
@@ -17,6 +12,10 @@
         font-weight: 200;
         text-align: center;
     }
+    padding: 10px;
+    background-color: lighten($open-quest-color, 10%);
+    border: 1px solid darken($grey, 5%);
+    @include box-shadow(0 5px 13px rgba(0, 0, 0, 0.2));
 }
 
 .newbie-tour-expect-quest {

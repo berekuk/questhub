@@ -1,4 +1,14 @@
 .register {
+    max-width: 850px;
+    margin: 0 auto;
+
+    @include breakpoint(B) {
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-bottom: 50px;
+        padding-top: 20px;
+    }
+
     .registration-form {
         margin-top: 15px;
     }

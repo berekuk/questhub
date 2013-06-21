@@ -3,17 +3,22 @@ div.quest-big-open, div.quest-big-closed, div.quest-big-abandoned, div.quest-big
     padding: 9px;
 }
 
+@mixin quest-big($color) {
+    background-color: $mat;
+    border-left: 5px solid $color;
+}
+
 div.quest-big-open {
-    background-color: $open-quest-color;
+    @include quest-big($open-quest-color);
 }
 div.quest-big-closed {
-    background-color: $closed-quest-color;
+    @include quest-big($closed-quest-color);
 }
 div.quest-big-abandoned {
-    background-color: $abandoned-quest-color;
+    @include quest-big($abandoned-quest-color);
 }
 div.quest-big-unclaimed {
-    background-color: $unclaimed-quest-color;
+    @include quest-big($unclaimed-quest-color);
 }
 
 .quest-big {
@@ -135,9 +140,9 @@ div.quest-big-unclaimed {
             padding: 20px;
             display: inline-block;
             cursor: pointer;
-            background-color: $open-quest-color;
-            border: 3px $open-quest-color solid;
-            transition: border 0.2s ease;
+            background-color: $mat;
+            border: 3px $highlight solid;
+            transition: background-color 0.5s ease;
             text-align: center;
 
             .points {
@@ -146,7 +151,7 @@ div.quest-big-unclaimed {
             }
 
             &:hover {
-                border: 3px #ffb91f solid;
+                background-color: $highlight;
             }
         }
     }

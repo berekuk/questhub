@@ -1,11 +1,19 @@
 .about {
-    max-width: 500px;
+    max-width: 600px;
     margin: 0 auto;
+
+    @include breakpoint(B) {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
     h2 {
         font-weight: normal;
     }
 
     dt {
         margin-bottom: 14px;
+    }
+    dd {
+        margin-bottom: 20px;
     }
 }

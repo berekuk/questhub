@@ -46,6 +46,7 @@ define([
 
         afterRender: function () {
             this.validate();
+            this.$('[name=login]').focus();
         },
 
         checkEnter: function (e) {

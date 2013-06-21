@@ -39,3 +39,18 @@
     vertical-align: baseline;
     display: inline-block;
 }
+
+@mixin well {
+    min-height: 20px;
+    padding: 9px;
+    margin-bottom: 12px;
+    background-color: $mat;
+    border: 1px solid darken($grey, 5%);
+    @include border-radius(3px);
+    @include box-shadow(0 0 4px 2px $grey);
+
+    blockquote {
+        border-color: #ddd;
+        border-color: rgba(0,0,0,.15);
+    }
+}

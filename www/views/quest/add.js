@@ -145,8 +145,9 @@ define([
 
             var defaultRealm = this.options.realm;
             if (!defaultRealm) {
-                if (sharedModels.currentUser.get('realms').length == 1) {
-                    defaultRealm = sharedModels.currentUser.get('realms')[0];
+                var userRealms = sharedModels.currentUser.get('realms');
+                if (userRealms && userRealms.length == 1) {
+                    defaultRealm = userRealms[0];
                 }
             }
             this.$el.html(

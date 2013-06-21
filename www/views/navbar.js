@@ -1,11 +1,11 @@
 define([
-    'backbone',
+    'jquery', 'backbone',
     'views/proto/common',
     'models/current-user', 'models/shared-models',
     'views/user/current',
     'views/quest/add',
     'text!templates/navbar.html'
-], function (Backbone, Common, currentUserModel, sharedModels, CurrentUser, QuestAdd, html) {
+], function ($, Backbone, Common, currentUserModel, sharedModels, CurrentUser, QuestAdd, html) {
     return Common.extend({
         template: _.template(html),
 
@@ -21,6 +21,22 @@ define([
             this.listenTo(Backbone, 'pp:quiet-url-update', function () {
                 this.render();
             });
+
+            var that = this;
+            $(window).on('scroll.navbar-sticked', function () {
+                if ($(window).scrollTop() > 10) {
+                    that.$el.find('nav').addClass('sticked');
+                }
+                else {
+                    that.$el.find('nav').removeClass('sticked');
+                }
+            });
+        },
+
+        // navbar usually don't get removed, but just to be safe...
+        remove: function () {
+            $(window).off('.navbar-sticked');
+            Common.prototype.remove.apply(this, arguments);
         },
 
         serialize: function () {
@@ -73,6 +89,7 @@ define([
                     .find('.menu-item-' + this.active)
                     .addClass('active');
             }
+
         },
 
         setActive: function (selector) {
