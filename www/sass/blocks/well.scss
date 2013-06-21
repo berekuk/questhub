@@ -1,0 +1,14 @@
+$well-background: $light-grey;
+.well {
+    min-height: 20px;
+    padding: 9px;
+    margin-bottom: 20px;
+    background-color: $well-background;
+    border: 1px solid darken($well-background, 7%);
+    @include border-radius(3px);
+    @include box-shadow(inset 0 1px 1px rgba(0,0,0,.05));
+    blockquote {
+        border-color: #ddd;
+        border-color: rgba(0,0,0,.15);
+    }
+}
