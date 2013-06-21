@@ -30,9 +30,9 @@
             left: -18px;
             top: 3px;
             color: $dark-grey;
-            @media (min-width: 768px) {
-                left: -27px;
-                top: 1px;
+            @include breakpoint(B) {
+                left: -36px;
+                top: -3px;
                 font-size: 20px;
             }
         }
