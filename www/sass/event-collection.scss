@@ -30,14 +30,21 @@
                 font-size: 20px;
             }
         }
+    }
 
-        margin-bottom: 4px;
+    .event-quest-title {
+//        margin-bottom: 3px;
     }
 
     .event-well {
         p:last-child, ul:last-child {
             margin-bottom: 0px;
         }
+    }
+
+    .widetext {
+        margin-top: 8px;
+        margin-bottom: 8px;
     }
 }
 
@@ -46,13 +53,4 @@
 }
 .event-type-add-quest {
     @include event-box($open-quest-color);
-}
-.event-comment-type-close {
-    @include event-box($closed-quest-color);
-}
-.event-comment-type-join {
-    @include event-box($unclaimed-quest-color);
-}
-.event-comment-type-invite {
-    @include event-box($unclaimed-quest-color);
 }

@@ -31,6 +31,11 @@ h2, h3 {
 }
 tbody tr.show-more > td {
     cursor: pointer;
+    background-color: lighten($unclaimed-quest-color, 10%);
+    a {
+        color: $text-color;
+    }
+    border-top: $text-color dashed 1px;
 }
 
 .twitter-share-button {
@@ -93,7 +98,6 @@ a.mini-button {
 }
 
 .object-bottom-line {
-    line-height: 23px;
     time, .user-link {
         font-size: 11.844px; // same as badges font size
     }
