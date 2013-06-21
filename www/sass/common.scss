@@ -1,15 +1,16 @@
-$open-quest-color: darken(#fcf8e3, 15%);
-$closed-quest-color: darken(#d9edf7, 15%);
+$open-quest-color: hsl(35, 85%, 75%);
+$closed-quest-color: hsl(200, 65%, 75%);
 $abandoned-quest-color: #dddddd;
-$unclaimed-quest-color: darken(#dff0d8, 15%);
+$unclaimed-quest-color: hsl(120, 65%, 75%);
 $mat: white;
 $grey: #eee;
 $dark-grey: #999; // same as bootstrap's .muted color
 $text-color: #333;
-$highlight: #ffc400; // brighter version of qh logo background color
-$like-color: #468847;
+$highlight: hsl(45, 100%, 50%);
+$like-color: hsl(120, 30%, 40%);
+$ground-color: #f5f5f5;
 
-body { background-color: #f5f5f5 }
+body { background-color: $ground-color }
 
 .brand {
     font-family: doppio-one, "Helvetica Neue", Helvetica, Arial, sans-serif;
