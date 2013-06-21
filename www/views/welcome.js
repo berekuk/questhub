@@ -30,6 +30,7 @@ define([
             this.listenTo(currentUser, 'change:registered', function () {
                 Backbone.trigger('pp:navigate', "/", { trigger: true, replace: true });
             });
+            mixpanel.track('visit /welcome');
         },
 
         personaLogin: function () {
