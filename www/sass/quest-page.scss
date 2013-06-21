@@ -4,7 +4,7 @@ div.quest-big-open, div.quest-big-closed, div.quest-big-abandoned, div.quest-big
 }
 
 @mixin quest-big($color) {
-    background-color: white;
+    background-color: $mat;
     border-left: 5px solid $color;
 }
 

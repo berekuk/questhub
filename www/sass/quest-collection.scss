@@ -5,11 +5,11 @@
 
 @mixin quest-row($color) {
     > td {
-        background-color: white;
+        background-color: $mat;
         border-left: $color 5px solid;
     }
     &:hover > td {
-        background-color: white;
+        background-color: $mat;
         border-left: darken($color, 20%) 5px solid;
     }
 }
