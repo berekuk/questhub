@@ -1,39 +1,4 @@
-dd {
-    margin-bottom: 20px;
-}
-
-.avatar-mini {
-    width: 24px;
-    height: 24px;
-}
-
-.signin {
-    line-height: 60px;
-    a {
-        width: 200px;
-    }
-}
-
-.icon-twitter {
-    color: #4099ff;
-}
-
-.object-bottom-line {
-    // Fixing the jumping line height on "like" button hide/show.
-    // Note: 22 is enough for Chrome, but not enough for Firefox.
-    line-height: 23px;
-
-    time, .user-link {
-        font-size: 11.844px; // same as badges font size
-    }
-}
-
-.tag-filter {
-    text-align: center;
-}
-
-@import 'mixin';
-
+@import 'sass/mixin';
 @import 'sass/common.scss';
 
 @import 'sass/blocks/tag.scss';
@@ -53,6 +18,7 @@ dd {
 @import 'sass/settings.scss';
 @import 'sass/unsubscribe.scss';
 
+@import 'sass/explore.scss';
 @import 'sass/quest-collection.scss';
 @import 'sass/quest-page.scss';
 

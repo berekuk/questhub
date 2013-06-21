@@ -10,6 +10,7 @@ define([
         template: _.template(html),
 
         activeMenuItem: 'explore',
+        className: 'explore',
 
         events: {
             'click ul.explore-nav a': 'switchTab',
