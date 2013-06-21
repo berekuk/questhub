@@ -15,15 +15,5 @@ define([
             params.realm = this.options.realm;
             return params;
         },
-
-        afterRender: function () {
-            var currentLogin = currentUser.get('login');
-            if (currentLogin && this.model.get("login") == currentLogin) {
-                className = 'success';
-            } else {
-                className = 'warning';
-            }
-            this.$el.addClass(className);
-        },
     });
 });

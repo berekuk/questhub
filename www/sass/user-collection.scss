@@ -12,7 +12,17 @@
         top: 3px;
     }
 
-    td {
-        line-height: 25px;
+    td.user-small {
+        padding: 0px;
     }
+}
+
+.user-small-inner {
+    border-left: 3px solid $mat;
+    line-height: 25px;
+    padding: 8px;
+}
+
+.user-small-current {
+    border-left: 3px solid $highlight;
 }
