@@ -140,9 +140,9 @@ div.quest-big-unclaimed {
             padding: 20px;
             display: inline-block;
             cursor: pointer;
-            background-color: $open-quest-color;
-            border: 3px $open-quest-color solid;
-            transition: border 0.2s ease;
+            background-color: $mat;
+            border: 3px $highlight solid;
+            transition: background-color 0.5s ease;
             text-align: center;
 
             .points {
@@ -151,7 +151,7 @@ div.quest-big-unclaimed {
             }
 
             &:hover {
-                border: 3px #ffb91f solid;
+                background-color: $highlight;
             }
         }
     }
