@@ -5,7 +5,7 @@
       <h3><%- login %> unsubscribed from <%- field %>.</h3>
       <% if (current_user.registered) { %>
         <h3>Go to <button class="settings btn btn-primary">settings</button> if you want to tune your notifications further.</h3>
-        <h3>Or go to your <a href="/" class="btn btn-primary">profile</a>.</h3>
+        <h3>Or go to your <a href="/player/<%- login %>" class="btn btn-primary">profile</a>.</h3>
       <% } %>
 
     <% } else { %>
