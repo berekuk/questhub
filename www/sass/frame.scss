@@ -46,7 +46,7 @@ input {
     margin-bottom: 20px;
     padding-left: 23px;
     padding-right: 23px;
-    padding-top: 65px;
+    padding-top: 55px;
 
     @include breakpoint(B) {
         padding-left: 0px;
@@ -56,7 +56,7 @@ input {
 
 #footer {
     font-size: 11.844px;
-    background-color: $light-grey;
+    background-color: $mat;
     padding-left: 10px;
     padding-right: 10px;
 

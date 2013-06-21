@@ -1,5 +1,5 @@
 <!-- common box for any event type -->
-<div class="well subview <%- 'event-type-' + type %>">
+<div class="event-well well subview <%- 'event-type-' + type %> <%- obj.comment ? 'event-comment-type-' + obj.comment.type : '' %>">
 </div>
 <% if (showRealm) { %>
 <a href="/realm/<%- realm %>" class="tag tag-realm event-box-realm-label"><%- realm %></a>

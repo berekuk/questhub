@@ -10,7 +10,7 @@ nav {
         }
     }
 
-    background-color: $light-grey;
+    background-color: $mat;
     border-bottom: 1px solid #ddd;
 
     ul {
@@ -53,7 +53,7 @@ nav {
                 text-decoration: none;
                 @include nav-underline($text-color);
             }
-            @include nav-underline($light-grey);
+            @include nav-underline($mat);
         }
 
         &.active a {
@@ -79,7 +79,7 @@ nav {
 
     @include breakpoint(B) {
         .nav-realm-title, .menu-item-my-quests, .quest-add-nav-button, .menu-item-realms, .dropdown-toggle {
-            font-weight: bold;
+//            font-weight: bold;
         }
     }
 
