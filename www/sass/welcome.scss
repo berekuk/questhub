@@ -3,10 +3,18 @@
         text-align: center;
     }
 
-    hr {
-        width: 70%;
-        min-width: 450px;
-        margin: 20px auto;
+    @include breakpoint(B) {
+        padding-left: 30px;
+        padding-right: 30px;
+        hr {
+            width: 70%;
+            min-width: 450px;
+            margin: 20px auto;
+        }
+
+        .welcome-signin {
+            text-align: center;
+        }
     }
 
     .info-blocks .row-fluid:first-child {
