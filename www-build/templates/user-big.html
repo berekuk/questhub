@@ -23,10 +23,10 @@
       <ul>
       <% _.each(rp, function (points, realm) { %>
         <li>
-          <span class="badge badge-info">
+          <a class="badge badge-info" href="/realm/<%- realm %>/players">
             <%- realm %>:
             <%- points %>
-          </span>
+          </a>
         </li>
       <% }) %>
       </ul>
