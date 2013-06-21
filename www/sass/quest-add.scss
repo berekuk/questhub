@@ -18,7 +18,7 @@ textarea.quest-edit-description {
 }
 
 .quest-tags-edit input {
-    background-color: $open-quest-color;
+    background-color: lighten($open-quest-color, 20%);
 }
 
 .quest-add-row {
