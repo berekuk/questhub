@@ -127,6 +127,11 @@ define(function () {
         // called with the final cooked HTML code. The result of this plugin hook is the actual output of makeHtml
         pluginHooks.addNoop("postConversion");
 
+        // makes converter instance aviable in private methods
+        var converter = this;
+        this.autoNewLine = false;  // when true, RETURN becomes a literal newline
+                                   // WARNING: this is a significant deviation from the markdown spec
+
         //
         // Private state of the converter instance:
         //
@@ -464,7 +469,12 @@ define(function () {
 
             // Do hard breaks:
             text = text.replace(/  +\n/g, " <br>\n");
-            
+            if(converter.autoNewLine) {
+                text = text.replace(/\n/g, " <br>\n");
+            } else {
+                text = text.replace(/  +\n/g, " <br>\n");
+            }
+
             text = pluginHooks.postSpanGamut(text);
 
             return text;
