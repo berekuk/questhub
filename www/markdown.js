@@ -8,6 +8,7 @@ define([
     var realm_id;
 
     var _markdownConverter = new Markdown.getSanitizingConverter();
+    _markdownConverter.autoNewLine = true;
     _markdownConverter.hooks.chain('postSpanGamut', function (text) {
 
         if (realm_id == 'perl') {
