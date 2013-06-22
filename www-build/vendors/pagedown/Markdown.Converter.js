@@ -127,6 +127,11 @@ define(function () {
         // called with the final cooked HTML code. The result of this plugin hook is the actual output of makeHtml
         pluginHooks.addNoop("postConversion");
 
+        // makes converter instance aviable in private methods
+        var converter = this;
+        this.autoNewLine = false;  // when true, RETURN becomes a literal newline
+                                   // WARNING: this is a significant deviation from the markdown spec
+
         //
         // Private state of the converter instance:
         //
@@ -464,7 +469,12 @@ define(function () {
 
             // Do hard breaks:
             text = text.replace(/  +\n/g, " <br>\n");
-            
+            if(converter.autoNewLine) {
+                text = text.replace(/\n/g, " <br>\n");
+            } else {
+                text = text.replace(/  +\n/g, " <br>\n");
+            }
+
             text = pluginHooks.postSpanGamut(text);
 
             return text;
@@ -787,7 +797,7 @@ define(function () {
             return text;
         }
 
-        function _DoLists(text) {
+        function _DoLists(text, isInsideParagraphlessListItem) {
             //
             // Form HTML ordered (numbered) and unordered (bulleted) lists.
             //
@@ -827,7 +837,7 @@ define(function () {
                     var list = m1;
                     var list_type = (m2.search(/[*+-]/g) > -1) ? "ul" : "ol";
 
-                    var result = _ProcessListItems(list, list_type);
+                    var result = _ProcessListItems(list, list_type, isInsideParagraphlessListItem);
 
                     // Trim any trailing whitespace, to put the closing `</$list_type>`
                     // up on the preceding line, to get it past the current stupid
@@ -858,7 +868,7 @@ define(function () {
 
         var _listItemMarkers = { ol: "\\d+[.]", ul: "[*+-]" };
 
-        function _ProcessListItems(list_str, list_type) {
+        function _ProcessListItems(list_str, list_type, isInsideParagraphlessListItem) {
             //
             //  Process the contents of a single ordered or unordered list, splitting it
             //  into individual list items.
@@ -934,9 +944,10 @@ define(function () {
                     }
                     else {
                         // Recursion for sub-lists:
-                        item = _DoLists(_Outdent(item));
+                        item = _DoLists(_Outdent(item), /* isInsideParagraphlessListItem= */ true);
                         item = item.replace(/\n$/, ""); // chomp(item)
-                        item = _RunSpanGamut(item);
+                        if (!isInsideParagraphlessListItem) // only the outer-most item should run this, otherwise it's run multiple times for the inner ones
+                            item = _RunSpanGamut(item);
                     }
                     last_item_had_a_double_newline = ends_with_double_newline;
                     return "<li>" + item + "</li>\n";
@@ -971,7 +982,7 @@ define(function () {
             // attacklab: sentinel workarounds for lack of \A and \Z, safari\khtml bug
             text += "~0";
 
-            text = text.replace(/(?:\n\n|^)((?:(?:[ ]{4}|\t).*\n+)+)(\n*[ ]{0,3}[^ \t\n]|(?=~0))/g,
+            text = text.replace(/(?:\n\n|^\n?)((?:(?:[ ]{4}|\t).*\n+)+)(\n*[ ]{0,3}[^ \t\n]|(?=~0))/g,
                 function (wholeMatch, m1, m2) {
                     var codeblock = m1;
                     var nextChar = m2;
@@ -1227,7 +1238,12 @@ define(function () {
             text = text.replace(/\\([`*_{}\[\]()>#+-.!])/g, escapeCharacters_callback);
             return text;
         }
-        
+
+        var charInsideUrl = "[-A-Z0-9+&@#/%?=~_|[\\]()!:,.;]",
+            charEndingUrl = "[-A-Z0-9+&@#/%=~_|[\\])]",
+            autoLinkRegex = new RegExp("(=\"|<)?\\b(https?|ftp)(://" + charInsideUrl + "*" + charEndingUrl + ")(?=$|\\W)", "gi"),
+            endCharRegex = new RegExp(charEndingUrl, "i");
+
         function handleTrailingParens(wholeMatch, lookbehind, protocol, link) {
             if (lookbehind)
                 return wholeMatch;
@@ -1254,7 +1270,13 @@ define(function () {
                     return "";
                 });
             }
-            
+            if (tail) {
+                var lastChar = link.charAt(link.length - 1);
+                if (!endCharRegex.test(lastChar)) {
+                    tail = lastChar + tail;
+                    link = link.substr(0, link.length - 1);
+                }
+            }
             return "<" + protocol + link + ">" + tail;
         }
 
@@ -1267,7 +1289,7 @@ define(function () {
             // must be preceded by a non-word character (and not by =" or <) and followed by non-word/EOF character
             // simulating the lookbehind in a consuming way is okay here, since a URL can neither and with a " nor
             // with a <, so there is no risk of overlapping matches.
-            text = text.replace(/(="|<)?\b(https?|ftp)(:\/\/[-A-Z0-9+&@#\/%?=~_|\[\]\(\)!:,\.;]*[-A-Z0-9+&@#\/%=~_|\[\])])(?=$|\W)/gi, handleTrailingParens);
+            text = text.replace(autoLinkRegex, handleTrailingParens);
 
             //  autolink anything like <http://example.com>
             
