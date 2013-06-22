@@ -13,5 +13,10 @@ define([
             expect(markdown('Moose', 'perl')).not.toMatch('<a href="http://metacpan.org/module/Moose">Moose</a>');
             expect(markdown('cpan:Moose', 'perl')).toMatch('<a href="http://metacpan.org/module/Moose">Moose</a>');
         });
+
+        it('line breaks', function () {
+            expect(markdown('Foo\nBar')).toMatch(/Foo\s*<br>\s*Bar/);
+        });
+
     });
 });
