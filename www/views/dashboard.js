@@ -34,7 +34,7 @@ define([
             },
             '.quests-subview': function () {
                 if (this.tab == 'open') {
-                    return this.createQuestSubview('open', { status: 'open' });
+                    return this.createQuestSubview('open', { sort: 'manual', status: 'open' });
                 }
                 else if (this.tab == 'closed') {
                     return this.createQuestSubview('completed', { status: 'closed' })
@@ -66,24 +66,29 @@ define([
         createQuestSubview: function (caption, options) {
             var that = this;
 
-            options.limit = 100;
+            if (options.status != 'open') { // open quests are always displayed in their entirety
+                options.limit = 100;
+            }
             options.order = 'desc';
             options.user = this.model.get('login');
 
             var collection = new QuestCollectionModel([], options);
+            collection.fetch();
+
+            var viewOptions = {
+                collection: collection,
+                caption: caption,
+                user: this.model.get('login')
+            };
 
             if (options.status == 'open' && this.my()) {
                 this.listenTo(Backbone, 'pp:quest-add', function (model) {
                     collection.add(model, { prepend: true });
                 });
+                viewOptions.sortable = true;
             }
 
-            var collectionView = new DashboardQuestCollection({
-                collection: collection,
-                caption: caption,
-                user: this.model.get('login')
-            });
-            collection.fetch();
+            var collectionView = new DashboardQuestCollection(viewOptions);
 
             return collectionView;
         },

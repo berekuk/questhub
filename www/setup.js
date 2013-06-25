@@ -6,7 +6,8 @@ requirejs.config({
         'jquery.autosize': 'vendors/autosize/jquery.autosize',
         'jquery.timeago': 'vendors/jquery.timeago',
         'bootstrap': 'vendors/bootstrap/js/bootstrap',
-        'bootbox': 'vendors/bootbox'
+        'bootbox': 'vendors/bootbox',
+        'jquery-ui': 'vendors/jquery-ui/js/jquery-ui-1.10.3.custom'
     },
     deps: ['app'],
     shim: {
@@ -14,15 +15,20 @@ requirejs.config({
             deps: ["underscore", "jquery"],
             exports: "Backbone"
         },
-
         underscore: {
             exports: "_"
         },
-        bootbox: {
-            exports: "bootbox"
-        },
+
         'jquery.autosize': ['jquery'],
         'jquery.timeago': ['jquery'],
-        'bootstrap': ['jquery']
+        'jquery-ui': {
+            exports: '$',
+            deps: ['jquery']
+        },
+
+        'bootstrap': ['jquery'],
+        bootbox: {
+            exports: "bootbox"
+        }
     }
 });

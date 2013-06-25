@@ -15,7 +15,8 @@ define([
                 return new QuestCollection({
                     collection: this.collection,
                     showRealm: true,
-                    user: this.options.user // FIXME - get this from collection instead?
+                    user: this.options.user, // FIXME - get this from collection instead?
+                    sortable: this.options.sortable
                 });
             },
             '.progress-subview': function () {
