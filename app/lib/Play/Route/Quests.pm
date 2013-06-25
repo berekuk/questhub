@@ -125,4 +125,13 @@ for my $method (qw/ invite uninvite /) {
     };
 }
 
+post '/quest/set_manual_order' => sub {
+    die "not logged in" unless session->{login};
+    db->quests->set_manual_order(session->{login}, param('quest_ids[]'));
+
+    return {
+        result => 'ok'
+    }
+};
+
 true;

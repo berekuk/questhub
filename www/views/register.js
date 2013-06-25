@@ -71,12 +71,12 @@ define([
         },
 
         disableForm: function () {
-            this.$('[name=login]').attr({ disabled: 'disabled' });
+            this.$('[name=login]').prop('disabled', true);
             this.subview('.settings-subview').stop();
         },
 
         enableForm: function () {
-            this.$('[name=login]').removeAttr('disabled');
+            this.$('[name=login]').prop('disabled', false);
             this.subview('.settings-subview').start();
         },
 

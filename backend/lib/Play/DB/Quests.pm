@@ -56,6 +56,7 @@ use Play::Types qw( Id Login );
 
 use Play::Config qw(setting);
 use Play::DB qw(db);
+use Play::Mongo;
 
 use Play::DB::Role::PushPull;
 with
@@ -140,7 +141,7 @@ sub list {
         # flag meaning "fetch comment_count too"
         comment_count => Optional[Bool],
         # sorting and paging
-        sort => Optional[Str], # regex => qr/^(leaderboard|ts)$/ }
+        sort => Optional[Str], # regex => qr/^(leaderboard|ts|manual)$/ }
         order => Optional[Str], # regex => qr/^asc|desc$/, default => 'desc' },
         limit => Optional[Int],
         offset => Optional[Int],
@@ -177,6 +178,13 @@ sub list {
         $cursor = $cursor->limit($params->{limit}) if $params->{limit};
         $cursor = $cursor->skip($params->{offset}) if $params->{offset};
     }
+    elsif ($params->{sort} eq 'manual') {
+        # there's no order=ask in manual
+        $cursor = $cursor->sort({ order => 1 });
+
+        $cursor = $cursor->limit($params->{limit}) if $params->{limit};
+        $cursor = $cursor->skip($params->{offset}) if $params->{offset};
+    }
 
     my @quests = $cursor->all;
     $self->_prepare_quest($_) for @quests;
@@ -203,13 +211,35 @@ sub list {
             return $c1 if $c1;
             return ($b->{comment_count} || 0) <=> ($a->{comment_count} || 0);
         } @quests;
-    }
 
-    if ($params->{sort}) {
         # manual limit/offset
         if ($params->{limit} and @quests > $params->{limit}) {
             @quests = splice @quests, $params->{offset}, $params->{limit};
         }
+    }
+
+    if ($params->{sort} and $params->{sort} eq 'manual') {
+        # Manual sorting uses additional sorting by timestamp, since it's a good default.
+        # Which means we could avoid sorting on DB side at all, because manual sorting
+        # is used only on per-user basis, and "open quests" in profiles always fetch everything... oh well.
+        use sort 'stable';
+        @quests = sort {
+            # un-ordered is higher than ordered
+            # un-ordered are sorted by timestamp, decreasing
+            # everything else is sorted by order, increasing
+            if (defined $a->{order} and defined $b->{order}) {
+                return 0; # already sorted by MongoDB
+            }
+            elsif (defined $a->{order}) {
+                return 1;
+            }
+            elsif (defined $b->{order}) {
+                return -1;
+            }
+            else {
+                return $b->{_id} cmp $a->{_id};
+            }
+        } @quests;
     }
 
     return \@quests;
@@ -327,6 +357,32 @@ sub update {
     );
 
     return $id;
+}
+
+sub set_manual_order {
+    my $self = shift;
+    state $check = compile(
+        Login,
+        ArrayRef[Id],
+    );
+    my ($user, $quest_ids) = $check->(@_);
+
+    my $i = 0;
+    for my $id (@$quest_ids) {
+        $i++;
+        $self->collection->update(
+            {
+                _id => MongoDB::OID->new(value => $id),
+                team => $user,
+            },
+            {
+                '$set' => { order => $i }
+            }
+        );
+    }
+
+    Play::Mongo->db->last_error; # assuming it will wait until all queries are completed - is this true?
+    return;
 }
 
 sub _set_status {

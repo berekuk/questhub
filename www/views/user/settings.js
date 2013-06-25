@@ -38,21 +38,16 @@ define([
         start: function () {
             this.running = true;
             this.render();
+
             this.$('.email-status').show();
-            this.$('[name=email]').removeAttr('disabled');
-            this.$('[name=notify-comments]').removeAttr('disabled');
-            this.$('[name=notify-likes]').removeAttr('disabled');
-            this.$('[name=notify-invites]').removeAttr('disabled');
+            this.$('input').prop('disabled', false);
             this.hideEmailStatus = false;
         },
 
         stop: function () {
             this.running = false;
             this.$('.email-status').hide();
-            this.$('[name=email]').attr({ disabled: 'disabled' });
-            this.$('[name=notify-comments]').attr({ disabled: 'disabled' });
-            this.$('[name=notify-likes]').attr({ disabled: 'disabled' });
-            this.$('[name=notify-invites]').attr({ disabled: 'disabled' });
+            this.$('input').prop('disabled', true);
         },
 
         typing: function() {
