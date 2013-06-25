@@ -2,10 +2,9 @@ define([
     'underscore',
     'views/proto/common',
     'views/user/big', 'views/quest/dashboard-collection',
-    'views/progress/big',
     'models/quest-collection', 'models/current-user',
     'text!templates/dashboard.html'
-], function (_, Common, UserBig, DashboardQuestCollection, ProgressBig, QuestCollectionModel, currentUser, html) {
+], function (_, Common, UserBig, DashboardQuestCollection, QuestCollectionModel, currentUser, html) {
 
     return Common.extend({
         template: _.template(html),

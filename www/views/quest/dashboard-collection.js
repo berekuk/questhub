@@ -3,8 +3,9 @@ define([
     'views/proto/common',
     'models/current-user',
     'views/quest/collection',
+    'views/progress/big',
     'text!templates/dashboard-quest-collection.html'
-], function (_, Common, currentUser, QuestCollection, html) {
+], function (_, Common, currentUser, QuestCollection, ProgressBig, html) {
 
     return Common.extend({
         template: _.template(html),
@@ -16,6 +17,9 @@ define([
                     showRealm: true,
                     user: this.options.user // FIXME - get this from collection instead?
                 });
+            },
+            '.progress-subview': function () {
+                return new ProgressBig();
             }
         },
 
@@ -39,16 +43,26 @@ define([
         afterInitialize: function () {
             var view = this;
             this.listenTo(this.collection, 'reset add remove', function () {
+                this.subview('.progress-subview').off();
+                this.fetched = true;
                 view.showOrHide();
             });
+            this.subview('.progress-subview').on();
         },
 
         showOrHide: function () {
-            if (this.collection.length) {
-                this.$el.show();
+            var innerEl = this.$el.find('.quest-collection-inner');
+            if (this.fetched) {
+                innerEl.show();
+                if (!this.collection.length) {
+                    this.$('.quest-filter').hide();
+                }
+                else {
+                    this.$('.quest-filter').show();
+                }
             }
             else {
-                this.$el.hide();
+                innerEl.hide();
             }
 
             var length = this.collection.length;
