@@ -59,6 +59,10 @@ Update current user's settings.
 
 Same as `PUT` - both rewrite settings entirely.
 
+##### POST /api/setting/set/{name}/{value}
+
+Set one key/value setting, leaving others intact.
+
 ##### POST /api/current_user/dismiss_notification/{id}
 
 Dismiss notification.
