@@ -9,6 +9,7 @@ use Digest::SHA1 qw(sha1_hex);
 
 use Type::Params qw(validate);
 use Types::Standard qw(Str Int Bool Dict Undef Optional HashRef);
+use Play::Types qw(Login);
 
 use Play::Config qw(setting);
 use Play::DB qw(db);
@@ -412,6 +413,11 @@ sub resend_email_confirmation {
     );
 }
 
+=item B<set_settings($login, $settings, $persona_flag)>
+
+Set C<$login>'s settings to C<$settings>. Auto-confirm email if C<$persona_flag> is set.
+
+=cut
 sub set_settings {
     my $self = shift;
     my ($login, $settings, $persona) = validate(\@_, Str, HashRef, Optional[Bool]);
@@ -446,6 +452,25 @@ sub set_settings {
         { '$set' => { settings => $settings } },
         { safe => 1 }
     ); # FIXME - check result!
+    return;
+}
+
+sub set_setting {
+    my $self = shift;
+    my ($login, $setting, $value) = validate(\@_, Login, Str, Str);
+    $setting =~ /^\w+$/ or die "Invalid setting name '$setting'"; # preventing mongo injections - special values such as '$unset'
+
+    die "Forbidden setting '$setting'" if grep { $_ eq $setting } (secret_settings, protected_settings);
+
+    my $result = $self->collection->update(
+        { login => $login },
+        { '$set' => { "settings.$setting" => $value } },
+        { safe => 1 }
+    );
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "User $login not found?";
+    }
     return;
 }
 

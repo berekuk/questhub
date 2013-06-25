@@ -116,4 +116,32 @@ sub get_by_twitter_login :Tests {
         });
 }
 
+sub settings :Tests {
+    db->users->add({ login => 'foo' });
+    cmp_deeply
+        scalar(db->users->get_settings('foo')),
+        {},
+        'initial settings are empty';
+
+    db->users->set_settings('foo', { blah => 5, duh => 6 });
+    cmp_deeply
+        scalar(db->users->get_settings('foo')),
+        { blah => 5, duh => 6 },
+        'set_settings can set multiple settings at once';
+
+    db->users->set_settings('foo', { blah => 7 });
+    cmp_deeply
+        scalar(db->users->get_settings('foo')),
+        { blah => 7 },
+        'set_settings overwrites all settings';
+
+    # TODO - test email and email_confirmed fields and $persona flag
+
+    db->users->set_setting('foo', 'duh', 8);
+    cmp_deeply
+        scalar(db->users->get_settings('foo')),
+        { blah => 7, duh => 8 },
+        'set_setting updates settings';
+}
+
 __PACKAGE__->new->runtests;
