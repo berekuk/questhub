@@ -3,6 +3,12 @@
     line-height: 25px;
 }
 
+.quests-list-tagless {
+    .quest-small-tags {
+        display: none;
+    }
+}
+
 @mixin quest-row($color) {
     > td {
         background-color: $mat;

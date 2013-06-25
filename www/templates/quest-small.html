@@ -1,6 +1,9 @@
 <td>
   <span class="pull-right">
     <span class="likes"></span>
+    <% if (obj.comment_count) { %>
+      <a href="/realm/<%- realm %>/quest/<%= _id %>"><span class="badge badge-info"><i class="icon-comment"></i> <%= comment_count %></span></a>
+    <% } %>
   </span>
 
   <%= partial.quest_link(obj) %>
@@ -12,14 +15,8 @@
   <% } %>
 
   <br>
-  <span>
+  <div class="quest-small-tags">
     <%= partial.quest_labels(obj) %>&nbsp;
-
-    <span class="pull-right">
-      <% if (obj.comment_count) { %>
-        <a href="/realm/<%- realm %>/quest/<%= _id %>"><span class="badge badge-info"><i class="icon-comment"></i> <%= comment_count %></span></a>
-      <% } %>
-    </span>
-  </span>
+  </div>
 
 </td>

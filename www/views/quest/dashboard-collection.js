@@ -18,6 +18,17 @@ define([
             }
         },
 
+        events: {
+            'click .show-tags': function (e) {
+                if (e.currentTarget.checked) {
+                    this.$('.quests-list').removeClass('quests-list-tagless');
+                }
+                else {
+                    this.$('.quests-list').addClass('quests-list-tagless');
+                }
+            },
+        },
+
         afterInitialize: function () {
             var view = this;
             this.listenTo(this.collection, 'reset add remove', function () {
