@@ -11,6 +11,10 @@
     }
 }
 
+.quest-row.ui-sortable-helper td {
+    background-color: lighten($highlight, 45%) !important;
+}
+
 .quests-list-tagless {
     .quest-small-tags {
         display: none;

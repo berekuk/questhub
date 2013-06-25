@@ -48,7 +48,14 @@ define([
         // evil hack - ignore PagedCollection's afterRender, i.e. disable tooltip code
         afterRender: function () {
             if (this.options.sortable) {
-                this.$('tbody').sortable().disableSelection();
+                this.$('tbody').sortable({
+                    helper: function (e, ui) {
+                        ui.children().each(function() {
+                            $(this).width($(this).width());
+                        });
+                        return ui;
+                    }
+                }).disableSelection();
                 var that = this;
                 this.$('tbody').on('sortupdate', function () {
                     that.saveManualOrder();
