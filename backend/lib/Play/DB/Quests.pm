@@ -211,13 +211,35 @@ sub list {
             return $c1 if $c1;
             return ($b->{comment_count} || 0) <=> ($a->{comment_count} || 0);
         } @quests;
-    }
 
-    if ($params->{sort}) {
         # manual limit/offset
         if ($params->{limit} and @quests > $params->{limit}) {
             @quests = splice @quests, $params->{offset}, $params->{limit};
         }
+    }
+
+    if ($params->{sort} and $params->{sort} eq 'manual') {
+        # Manual sorting uses additional sorting by timestamp, since it's a good default.
+        # Which means we could avoid sorting on DB side at all, because manual sorting
+        # is used only on per-user basis, and "open quests" in profiles always fetch everything... oh well.
+        use sort 'stable';
+        @quests = sort {
+            # un-ordered is higher than ordered
+            # un-ordered are sorted by timestamp, decreasing
+            # everything else is sorted by order, increasing
+            if (defined $a->{order} and defined $b->{order}) {
+                return 0; # already sorted by MongoDB
+            }
+            elsif (defined $a->{order}) {
+                return 1;
+            }
+            elsif (defined $b->{order}) {
+                return -1;
+            }
+            else {
+                return $b->{_id} cmp $a->{_id};
+            }
+        } @quests;
     }
 
     return \@quests;

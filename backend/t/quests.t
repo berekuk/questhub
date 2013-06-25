@@ -524,6 +524,13 @@ sub manual_order :Tests {
         })
     } 1..5;
 
+    my $not_sorted_yet = db->quests->list({ user => 'foo', sort => 'manual' });
+    cmp_deeply
+        [map { $_->{name} } @$not_sorted_yet],
+        [qw( q5 q4 q3 q2 q1 )],
+        'sort=manual defaults to sort=ts, order=desc if not yet sorted'
+    ;
+
     db->quests->set_manual_order(
         'foo',
         [ map { $quests[$_]->{_id} } (3,2,4,0,1) ]
@@ -536,10 +543,23 @@ sub manual_order :Tests {
         'sort=manual returns quests in sorted order'
     ;
 
+    db->quests->add({
+        name => "q6",
+        user => 'foo',
+        realm => 'europe',
+    });
+
+    my $mixed = db->quests->list({ user => 'foo', sort => 'manual' });
+    cmp_deeply
+        [map { $_->{name} } @$mixed],
+        [qw( q6 q4 q3 q5 q1 q2 )],
+        'sort=manual puts unsorted quests on top'
+    ;
+
     my $unsorted = db->quests->list({ user => 'foo' });
     cmp_deeply
         [map { $_->{name} } @$unsorted],
-        [qw( q5 q4 q3 q2 q1 )],
+        [qw( q6 q5 q4 q3 q2 q1 )],
         'sort=ts is still the default'
     ;
 }
