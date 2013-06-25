@@ -90,25 +90,36 @@ get '/current_user' => sub {
 
 # user settings are private; you can't get settings of other users
 get '/current_user/settings' => sub {
-    my $login = session('login');
-    die "not logged in" unless $login;
-    return db->users->get_settings($login);
+    die "not logged in" unless session->{login};
+
+    return db->users->get_settings(session->{login});
 };
 
 any ['put', 'post'] => '/current_user/settings' => sub {
-    my $login = session('login');
-    die "not logged in" unless $login;
+    die "not logged in" unless session->{login};
+
     db->users->set_settings(
-        $login => _expand_settings(scalar params()),
+        session->{login} => _expand_settings(scalar params()),
         (session('persona_email') ? 1 : 0) # force 'email_confirmed' setting
     );
     return { result => 'ok' };
 };
 
+post "/settings/set/:name/:value" => sub {
+    die "not logged in" unless session->{login};
+
+    db->users->set_setting(
+        session->{login},
+        param('name'),
+        param('value')
+    );
+    return { result => 'ok' };
+};
+
 post '/current_user/dismiss_notification/:id' => sub {
-    my $login = session('login');
-    die "not logged in" unless $login;
-    db->notifications->remove(param('id'), $login);
+    die "not logged in" unless session->{login};
+
+    db->notifications->remove(param('id'), session->{login});
     return { result => 'ok' };
 };
 

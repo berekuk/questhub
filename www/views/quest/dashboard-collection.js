@@ -1,9 +1,11 @@
 define([
     'underscore',
     'views/proto/common',
+    'models/current-user',
     'views/quest/collection',
+    'views/progress/big',
     'text!templates/dashboard-quest-collection.html'
-], function (_, Common, QuestCollection, html) {
+], function (_, Common, currentUser, QuestCollection, ProgressBig, html) {
 
     return Common.extend({
         template: _.template(html),
@@ -13,31 +15,76 @@ define([
                 return new QuestCollection({
                     collection: this.collection,
                     showRealm: true,
-                    user: this.options.user
+                    user: this.options.user // FIXME - get this from collection instead?
                 });
+            },
+            '.progress-subview': function () {
+                return new ProgressBig();
+            }
+        },
+
+        events: {
+            'click .show-tags': function (e) {
+                var mode = (e.currentTarget.checked ? 'normal' : 'dense');
+                currentUser.setSetting('quest-collection-view-mode', mode);
+                this.setViewMode(mode);
+            },
+        },
+
+        setViewMode: function (mode) {
+            if (mode == 'normal') {
+                this.$('.quests-list').removeClass('quests-list-tagless');
+            }
+            else {
+                this.$('.quests-list').addClass('quests-list-tagless');
             }
         },
 
         afterInitialize: function () {
             var view = this;
             this.listenTo(this.collection, 'reset add remove', function () {
+                this.subview('.progress-subview').off();
+                this.fetched = true;
                 view.showOrHide();
             });
+            this.subview('.progress-subview').on();
         },
 
         showOrHide: function () {
-            if (this.collection.length) {
-                this.$el.show();
+            var innerEl = this.$el.find('.quest-collection-inner');
+            if (this.fetched) {
+                innerEl.show();
+                if (!this.collection.length) {
+                    this.$('.quest-filter').hide();
+                }
+                else {
+                    this.$('.quest-filter').show();
+                }
             }
             else {
-                this.$el.hide();
+                innerEl.hide();
             }
+
+            var length = this.collection.length;
+            if (this.collection.gotMore) {
+                length += '+';
+            }
+            this.$('.quest-collection-header-count').text(length);
+            this.setViewMode(this.getViewMode());
+        },
+
+        getViewMode: function () {
+            var viewMode = currentUser.getSetting('quest-collection-view-mode');
+            viewMode = viewMode || 'normal';
+            return viewMode;
         },
 
         serialize: function () {
             return {
                 caption: this.options.caption,
-                collection: this.collection
+                length: this.collection.length,
+                collection: this.collection,
+                viewMode: this.getViewMode()
             };
         },
 

@@ -1,6 +1,23 @@
 // see views/quest/small.js
 .quest-row td {
     line-height: 25px;
+
+    .quest-small-counters {
+        float: right;
+        text-align: right;
+        .likes {
+            display: block;
+        }
+    }
+}
+
+.quests-list-tagless {
+    .quest-small-tags {
+        display: none;
+    }
+    .quest-small-counters .likes {
+        display: inline !important;
+    }
 }
 
 @mixin quest-row($color) {

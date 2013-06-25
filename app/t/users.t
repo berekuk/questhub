@@ -484,4 +484,16 @@ sub unfollow_realm :Tests {
     });
 }
 
+sub settings :Tests {
+    http_json GET => "/api/fakeuser/foo";
+
+    http_json POST => "/api/settings/set/blah/5";
+    my $got_settings = http_json GET => '/api/current_user/settings';
+    cmp_deeply $got_settings, { blah => 5 };
+
+    http_json POST => "/api/settings/set/duh/6";
+    $got_settings = http_json GET => '/api/current_user/settings';
+    cmp_deeply $got_settings, { blah => 5, duh => 6 };
+}
+
 __PACKAGE__->new->runtests;
