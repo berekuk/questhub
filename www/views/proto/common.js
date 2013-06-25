@@ -59,17 +59,21 @@ define([
             });
         },
 
+        rebuildSubview: function (key) {
+            var value = _.result(this, 'subviews')[key];
+
+            var method = value;
+            if (!_.isFunction(method)) method = this[value];
+            if (!method) throw new Error('Method "' + value + '" does not exist');
+            method = _.bind(method, this);
+            var subview = method();
+            this._subviewInstances[key] = subview;
+        },
+
         // get a subview from cache, lazily instantiate it if necessary
         subview: function (key) {
             if (!this._subviewInstances[key]) {
-                var value = _.result(this, 'subviews')[key];
-
-                var method = value;
-                if (!_.isFunction(method)) method = this[value];
-                if (!method) throw new Error('Method "' + value + '" does not exist');
-                method = _.bind(method, this);
-                var subview = method();
-                this._subviewInstances[key] = subview;
+                this.rebuildSubview(key);
             }
             return this._subviewInstances[key];
         },

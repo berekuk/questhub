@@ -52,6 +52,7 @@ define([
             "quest/:id": "questPage",
             "realm/:realm": "realmPage",
             "player/:login": "dashboard",
+            "player/:login/quest/:tab": "dashboard",
             "me": "myDashboard",
             "about": "about",
             "realms": "realms",
@@ -120,7 +121,7 @@ define([
             this.appView.setPageView(new Welcome({ model: currentUser }));
         },
 
-        dashboard: function (login) {
+        dashboard: function (login, tab) {
             var currentLogin = currentUser.get('login');
 
             var model;
@@ -134,6 +135,9 @@ define([
             }
 
             var view = new Dashboard({ model: model });
+            if (tab != undefined) {
+                view.tab = tab;
+            }
 
             if (my) {
                 view.activate(); // activate immediately, user is already fetched

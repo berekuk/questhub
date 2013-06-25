@@ -13,7 +13,7 @@ define([
                 return new QuestCollection({
                     collection: this.collection,
                     showRealm: true,
-                    user: this.options.user
+                    user: this.options.user // FIXME - get this from collection instead?
                 });
             }
         },
@@ -43,11 +43,18 @@ define([
             else {
                 this.$el.hide();
             }
+
+            var length = this.collection.length;
+            if (this.collection.gotMore) {
+                length += '+';
+            }
+            this.$('.quest-collection-header-count').text(length);
         },
 
         serialize: function () {
             return {
                 caption: this.options.caption,
+                length: this.collection.length,
                 collection: this.collection
             };
         },

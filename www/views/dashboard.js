@@ -16,8 +16,14 @@ define([
             return (this.my() ? 'my-quests' : 'none');
         },
 
+        tab: 'open',
+
         realm: function () {
             return this.options.realm;
+        },
+
+        events: {
+            'click ul.dashboard-nav a': 'switchTab'
         },
 
         subviews: {
@@ -27,47 +33,42 @@ define([
                     realm: this.realm()
                 });
             },
-            '.progress-subview': function () {
-                return new ProgressBig();
-            },
-            '.open-quests': function () {
-                return this.createQuestSubview('Open', { status: 'open', user: this.model.get('login') })
-            },
-            '.closed-quests': function () {
-                return this.createQuestSubview('Completed', { status: 'closed', limit: 5, user: this.model.get('login') })
-            },
-            '.abandoned-quests': function () {
-                return this.createQuestSubview('Abandoned', { status: 'abandoned', limit: 5, user: this.model.get('login') })
+            '.quests-subview': function () {
+                if (this.tab == 'open') {
+                    return this.createQuestSubview('open', { status: 'open' });
+                }
+                else if (this.tab == 'closed') {
+                    return this.createQuestSubview('completed', { status: 'closed' })
+                }
+                else if (this.tab == 'abandoned') {
+                    return this.createQuestSubview('abandoned', { status: 'abandoned' })
+                }
             }
         },
 
-        progress: 0,
+        switchTab: function (e) {
+            var tab = $(e.target).attr('data-dashboard-tab');
+            this.switchTabByName(tab);
 
-        moreProgress: function () {
-            this.progress++;
-            if (this.progress == 1) {
-                this.subview('.progress-subview').on();
-            }
+            var url = '/player/' + this.model.get('login') + '/quest/' + tab;
+            Backbone.trigger('pp:navigate', url);
+            Backbone.trigger('pp:quiet-url-update');
         },
 
-        lessProgress: function () {
-            this.progress--;
-            if (this.progress == 0) {
-                this.subview('.progress-subview').off();
-            }
+        switchTabByName: function(tab) {
+            this.tab = tab;
+            this.rebuildSubview('.quests-subview');
+            this.render(); // TODO - why can't we just re-render a subview?
         },
 
         createQuestSubview: function (caption, options) {
             var that = this;
 
-            options.limit = options.limit || 30;
+            options.limit = 100;
             options.order = 'desc';
+            options.user = this.model.get('login');
 
             var collection = new QuestCollectionModel([], options);
-            this.moreProgress();
-            collection.fetch().always(function () {
-                that.lessProgress();
-            });
 
             if (options.status == 'open' && this.my()) {
                 this.listenTo(Backbone, 'pp:quest-add', function (model) {
@@ -75,11 +76,13 @@ define([
                 });
             }
 
+            console.log('login: ' + this.model.get('login'));
             var collectionView = new DashboardQuestCollection({
                 collection: collection,
                 caption: caption,
-                user: options.user
+                user: this.model.get('login')
             });
+            collection.fetch();
 
             return collectionView;
         },
@@ -112,6 +115,10 @@ define([
                 my: my,
                 tour: tour
             };
+        },
+
+        afterRender: function () {
+            this.$('[data-dashboard-tab=' + this.tab + ']').parent().addClass('active');
         }
     });
 });

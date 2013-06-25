@@ -17,9 +17,12 @@
     </div>
   <% } %>
 
-  <div class="open-quests"></div>
-  <div class="closed-quests"></div>
-  <div class="abandoned-quests"></div>
+  <ul class="nav nav-pills dashboard-nav">
+    <li><a href="#" data-dashboard-tab="open">Open quests</a></li>
+    <li><a href="#" data-dashboard-tab="closed">Completed quests</a></li>
+    <li><a href="#" data-dashboard-tab="abandoned">Abandoned quests</a></li>
+  </ul>
+  <div class="quests-subview"></div>
 
   <div class="progress-subview"></div>
 
