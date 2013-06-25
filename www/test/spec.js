@@ -6,11 +6,12 @@
             // copy-pasted from /setup.js
             'backbone': 'vendors/backbone',
             'underscore': 'vendors/underscore',
-            'jquery': 'vendors/jquery-1.7.1',
+            'jquery': 'vendors/jquery-1.9.1',
             'jquery.autosize': 'vendors/autosize/jquery.autosize',
             'jquery.timeago': 'vendors/jquery.timeago',
             'bootstrap': 'vendors/bootstrap/js/bootstrap',
             'bootbox': 'vendors/bootbox',
+            'jquery-ui': 'vendors/jquery-ui/js/jquery-ui-1.10.3.custom',
             // TODO - local storage
 
             'jasmine': 'test/lib/jasmine-1.3.1/jasmine',

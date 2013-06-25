@@ -683,7 +683,7 @@ sub manual_order :Tests {
     }
 
     http_json POST => '/api/quest/set_manual_order', { params => {
-        quest_ids => [
+        'quest_ids[]' => [
             map { $_->{_id} } @quests
         ],
     } };
