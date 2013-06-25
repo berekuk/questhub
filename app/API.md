@@ -163,7 +163,9 @@ Options:
 * `limit`
 * `offset`
 * `order` - `asc` or `desc`, with `desc` being the default
-* `sort` - only `leaderboard` value is supported for now, meaning composite likes_count->comments_count sorting
+* `sort`
+  * `leaderboard`: composite likes_count->comments_count sorting
+  * `manual`: sort in order specified by `POST /api/quest/set_manual_order` (see below); not yet ordered manually quests will be listed on top, in descending-by-timestamp order
 * `user`
 * `comment_count`
 * `unclaimed` - if true, return unclaimed quests (user='')
@@ -226,6 +228,12 @@ Invite a user (`invitee` param) to the quest.
 ##### POST /api/quest/{id}/uninvite
 
 Cancel the invitation.
+
+##### POST /api/set_manual_order
+
+Set manual ordering of quests.
+
+Parameters: `quest_ids[]` array with quest ids. Use `GET /api/quest?sort=manual` to fetch quests in this order.
 
 ### Realms
 

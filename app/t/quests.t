@@ -670,4 +670,23 @@ sub atom :Tests {
     is exception { XML::LibXML->new->parse_string($response->content) }, undef;
 }
 
+sub manual_order :Tests {
+    http_json GET => '/api/fakeuser/foo';
+
+    my @quests;
+    for (1..5) {
+        push @quests, http_json POST => '/api/quest', { params => {
+            name => "q$_",
+            status => 'open',
+            realm => 'europe',
+        } };
+    }
+
+    http_json POST => '/api/quest/set_manual_order', { params => {
+        quest_ids => [
+            map { $_->{_id} } @quests
+        ],
+    } };
+}
+
 __PACKAGE__->new->runtests;
