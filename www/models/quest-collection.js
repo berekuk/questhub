@@ -65,6 +65,7 @@ define([
             return $.post('/api/quest/set_manual_order', {
                 'quest_ids[]': ids
             });
+            mixpanel.track('set order');
         }
     });
 });
