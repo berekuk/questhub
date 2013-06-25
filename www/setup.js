@@ -2,11 +2,11 @@ requirejs.config({
     paths: {
         'backbone': 'vendors/backbone',
         'underscore': 'vendors/underscore',
-        'jquery': 'vendors/jquery-1.7.1',
+        'jquery': 'vendors/jquery-1.9.1',
         'jquery.autosize': 'vendors/autosize/jquery.autosize',
         'jquery.timeago': 'vendors/jquery.timeago',
         'bootstrap': 'vendors/bootstrap/js/bootstrap',
-        'bootbox': 'vendors/bootbox',
+        'bootbox': 'vendors/bootbox'
     },
     deps: ['app'],
     shim: {
