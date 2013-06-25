@@ -36,12 +36,10 @@ define([
                 that.ordering = false;
                 if (that.moreOrdering) {
                     that.moreOrdering = false;
-                    console.log('moreOrdering');
                     that.saveManualOrder();
                 }
                 else {
                     that.moreOrdering = false;
-                    console.log('OK!');
                     that.trigger('order-saved');
                 }
             });
