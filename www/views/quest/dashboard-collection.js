@@ -3,9 +3,9 @@ define([
     'views/proto/common',
     'models/current-user',
     'views/quest/collection',
-    'views/progress/big',
+    'views/progress', 'views/progress/big',
     'text!templates/dashboard-quest-collection.html'
-], function (_, Common, currentUser, QuestCollection, ProgressBig, html) {
+], function (_, Common, currentUser, QuestCollection, Progress, ProgressBig, html) {
 
     return Common.extend({
         template: _.template(html),
@@ -21,6 +21,9 @@ define([
             },
             '.progress-subview': function () {
                 return new ProgressBig();
+            },
+            '.order-progress-subview': function () {
+                return new Progress();
             }
         },
 
@@ -91,6 +94,13 @@ define([
 
         afterRender: function () {
             this.showOrHide();
+
+            this.listenTo(this.subview('.quests'), 'save-order', function () {
+                this.subview('.order-progress-subview').on();
+            });
+            this.listenTo(this.subview('.quests'), 'order-saved', function () {
+                this.subview('.order-progress-subview').off();
+            });
         }
     });
 });

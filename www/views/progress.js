@@ -7,6 +7,9 @@ define([
         template: _.template(html),
 
         on: function () {
+            if (this.$('.icon-spinner').is(':visible')) {
+                return; // already on
+            }
             this.off();
 
             var that = this;
