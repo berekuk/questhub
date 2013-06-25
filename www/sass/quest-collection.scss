@@ -1,6 +1,14 @@
 // see views/quest/small.js
 .quest-row td {
     line-height: 25px;
+
+    .quest-small-counters {
+        float: right;
+        text-align: right;
+        .likes {
+            display: block;
+        }
+    }
 }
 
 .quests-list-tagless {
