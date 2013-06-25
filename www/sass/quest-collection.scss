@@ -15,6 +15,9 @@
     .quest-small-tags {
         display: none;
     }
+    .quest-small-counters .likes {
+        display: inline !important;
+    }
 }
 
 @mixin quest-row($color) {
