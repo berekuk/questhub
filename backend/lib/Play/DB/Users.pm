@@ -458,7 +458,7 @@ sub set_settings {
 sub set_setting {
     my $self = shift;
     my ($login, $setting, $value) = validate(\@_, Login, Str, Str);
-    $setting =~ /^\w+$/ or die "Invalid setting name '$setting'"; # preventing mongo injections - special values such as '$unset'
+    $setting =~ /^[\w-]+$/ or die "Invalid setting name '$setting'"; # preventing mongo injections - special values such as '$unset'
 
     die "Forbidden setting '$setting'" if grep { $_ eq $setting } (secret_settings, protected_settings);
 

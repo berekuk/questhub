@@ -142,6 +142,23 @@ sub settings :Tests {
         scalar(db->users->get_settings('foo')),
         { blah => 7, duh => 8 },
         'set_setting updates settings';
+
+    like
+        exception {
+            db->users->set_setting('foo', 'dum.dum', 9);
+        },
+        qr/Invalid setting name/;
+
+    is
+        exception {
+            db->users->set_setting('foo', 'bum-bum', 10);
+        },
+        undef;
+
+    cmp_deeply
+        scalar(db->users->get_settings('foo')),
+        { blah => 7, duh => 8, 'bum-bum' => 10 },
+        'valid setting is set, invalid is not';
 }
 
 __PACKAGE__->new->runtests;
