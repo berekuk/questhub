@@ -513,4 +513,35 @@ sub move_to_realm :Tests {
         { europe => 2, asia => 0 };
 }
 
+sub manual_order :Tests {
+    db->users->add({ login => $_ }) for qw( foo bar );
+
+    my @quests = map {
+        db->quests->add({
+            name => "q$_",
+            user => 'foo',
+            realm => 'europe',
+        })
+    } 1..5;
+
+    db->quests->set_manual_order(
+        'foo',
+        [ map { $quests[$_]->{_id} } (3,2,4,0,1) ]
+    );
+
+    my $sorted = db->quests->list({ user => 'foo', sort => 'manual' });
+    cmp_deeply
+        [map { $_->{name} } @$sorted],
+        [qw( q4 q3 q5 q1 q2 )],
+        'sort=manual returns quests in sorted order'
+    ;
+
+    my $unsorted = db->quests->list({ user => 'foo' });
+    cmp_deeply
+        [map { $_->{name} } @$unsorted],
+        [qw( q5 q4 q3 q2 q1 )],
+        'sort=ts is still the default'
+    ;
+}
+
 __PACKAGE__->new->runtests;

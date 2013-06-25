@@ -56,6 +56,7 @@ use Play::Types qw( Id Login );
 
 use Play::Config qw(setting);
 use Play::DB qw(db);
+use Play::Mongo;
 
 use Play::DB::Role::PushPull;
 with
@@ -140,7 +141,7 @@ sub list {
         # flag meaning "fetch comment_count too"
         comment_count => Optional[Bool],
         # sorting and paging
-        sort => Optional[Str], # regex => qr/^(leaderboard|ts)$/ }
+        sort => Optional[Str], # regex => qr/^(leaderboard|ts|manual)$/ }
         order => Optional[Str], # regex => qr/^asc|desc$/, default => 'desc' },
         limit => Optional[Int],
         offset => Optional[Int],
@@ -173,6 +174,13 @@ sub list {
     if (not $params->{sort}) {
         my $order_flag = ($params->{order} eq 'asc' ? 1 : -1);
         $cursor = $cursor->sort({ _id => $order_flag });
+
+        $cursor = $cursor->limit($params->{limit}) if $params->{limit};
+        $cursor = $cursor->skip($params->{offset}) if $params->{offset};
+    }
+    elsif ($params->{sort} eq 'manual') {
+        # there's no order=ask in manual
+        $cursor = $cursor->sort({ order => 1 });
 
         $cursor = $cursor->limit($params->{limit}) if $params->{limit};
         $cursor = $cursor->skip($params->{offset}) if $params->{offset};
@@ -327,6 +335,32 @@ sub update {
     );
 
     return $id;
+}
+
+sub set_manual_order {
+    my $self = shift;
+    state $check = compile(
+        Login,
+        ArrayRef[Id],
+    );
+    my ($user, $quest_ids) = $check->(@_);
+
+    my $i = 0;
+    for my $id (@$quest_ids) {
+        $i++;
+        $self->collection->update(
+            {
+                _id => MongoDB::OID->new(value => $id),
+                team => $user,
+            },
+            {
+                '$set' => { order => $i }
+            }
+        );
+    }
+
+    Play::Mongo->db->last_error; # assuming it will wait until all queries are completed - is this true?
+    return;
 }
 
 sub _set_status {
