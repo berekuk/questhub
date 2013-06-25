@@ -1,6 +1,15 @@
-<div class="row-fluid quest-collection">
-  <div class="span3 quests-header">
-    <%- caption %> quests:
+<div class="progress-subview row-fluid"></div>
+<div class="row-fluid quest-collection-inner">
+  <div class="span3">
+    <div class="quest-collection-header">
+      <span class="quest-collection-header-count"><%- length %></span> <%- caption %> quests
+    </div>
+    <div class="well quest-filter">
+      <label class="checkbox">
+        <input class="show-tags" type="checkbox" <%- viewMode == 'dense' ? '' : 'checked="checked"' %>>
+        Show tags
+      </label>
+    </div>
   </div>
   <div class="span9 quests"></div>
 </div>
