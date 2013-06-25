@@ -16,6 +16,26 @@ define([
             };
         },
 
+        getSetting: function (name) {
+            var settings = this.get('settings');
+            if (!settings) {
+                return;
+            }
+            return settings[name];
+        },
+
+        setSetting: function (name, value) {
+            if (!this.get('registered')) {
+                return;
+            }
+
+            var settings = this.get('settings');
+            settings[name] = value;
+            this.set('settings', settings);
+            return $.post('/api/settings/set/' + name + '/' + value);
+            mixpanel.track('set setting', { name: name, value: value });
+        },
+
         onTour: function (page) {
             var result = this._tour[page];
             if (result) {

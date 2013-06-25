@@ -43,11 +43,14 @@ define([
                 else if (this.tab == 'abandoned') {
                     return this.createQuestSubview('abandoned', { status: 'abandoned' })
                 }
+                else {
+                    Backbone.trigger('pp:notify', 'error', 'unknown tab ' + this.tab);
+                }
             }
         },
 
         switchTab: function (e) {
-            var tab = $(e.target).attr('data-dashboard-tab');
+            var tab = $(e.target).closest('a').attr('data-dashboard-tab');
             this.switchTabByName(tab);
 
             var url = '/player/' + this.model.get('login') + '/quest/' + tab;
@@ -76,7 +79,6 @@ define([
                 });
             }
 
-            console.log('login: ' + this.model.get('login'));
             var collectionView = new DashboardQuestCollection({
                 collection: collection,
                 caption: caption,
