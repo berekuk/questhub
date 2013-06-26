@@ -55,19 +55,15 @@
 
         var specs = [];
 
-        specs.push('spec/current-user');
-        specs.push('spec/markdown');
-        specs.push('spec/comment');
-        specs.push('spec/quest-small');
-        specs.push('spec/quest-big');
-        specs.push('spec/quest-add');
-        specs.push('spec/like');
-        specs.push('spec/event-box');
-        specs.push('spec/navbar');
-        specs.push('spec/realm');
-
-        specs.push('spec/model/quest');
-        specs.push('spec/model/event');
+        specs.push(
+            'spec/markdown',
+            'spec/navbar', 'spec/current-user',
+            'spec/quest-small', 'spec/quest-big', 'spec/quest-add',
+            'spec/comment', 'spec/like',
+            'spec/event-box',
+            'spec/realm',
+            'spec/model/quest', 'spec/model/event', 'spec/model/current-user'
+        );
 
         // evil mocks
         mixpanel = {
@@ -95,8 +91,8 @@
             { id: 'asia', name: 'Asia', description: 'asia-asia', pic: 'asia.jpg' }
         ]);
 
-        $(function(){
-            require(specs, function(){
+        $(function() {
+            require(specs, function() {
                 jasmineEnv.execute();
             });
         });
