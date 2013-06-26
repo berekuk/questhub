@@ -136,6 +136,7 @@ define([
                 subview.setElement(that.$(key)).render();
             });
 
+            this.trigger('render');
             return this;
         },
 

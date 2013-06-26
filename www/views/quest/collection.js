@@ -45,7 +45,6 @@ define([
             });
         },
 
-        // evil hack - ignore PagedCollection's afterRender, i.e. disable tooltip code
         afterRender: function () {
             if (this.options.sortable) {
                 this.$('tbody').sortable({
@@ -61,7 +60,8 @@ define([
                     that.saveManualOrder();
                 });
             }
-            AnyCollection.prototype.afterRender.apply(this, arguments);
+
+            PagedCollection.prototype.afterRender.apply(this, arguments);
         }
     });
 });

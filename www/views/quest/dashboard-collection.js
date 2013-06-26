@@ -49,7 +49,7 @@ define([
             this.listenTo(this.collection, 'reset add remove', function () {
                 this.subview('.progress-subview').off();
                 this.fetched = true;
-                view.showOrHide();
+                this.showOrHide();
             });
             this.subview('.progress-subview').on();
         },
@@ -93,14 +93,14 @@ define([
         },
 
         afterRender: function () {
-            this.showOrHide();
-
-            this.listenTo(this.subview('.quests'), 'save-order', function () {
+            var sv = this.subview('.quests');
+            this.listenTo(sv, 'save-order', function () {
                 this.subview('.order-progress-subview').on();
             });
-            this.listenTo(this.subview('.quests'), 'order-saved', function () {
+            this.listenTo(sv, 'order-saved', function () {
                 this.subview('.order-progress-subview').off();
             });
+            this.listenTo(sv, 'render', this.showOrHide);
         }
     });
 });
