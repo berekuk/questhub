@@ -1,0 +1,35 @@
+<!-- profile page - user and his/her quests -->
+<div class="container-fluid dashboard">
+  <% if (obj.tour) { %>
+    <div class="newbie-tour">
+      <h2>So, here's your profile!</h2>
+    </div>
+  <% } %>
+  <div class="user-subview"></div>
+
+  <% if (obj.tour) { %>
+    <div class="newbie-tour newbie-tour-expect-quest">
+      <h4>This big empty space will be filled with your plans and achievements.</h4>
+      <h4>Press the "New quest" button on the upper right and enter your first quest.</h4>
+    </div>
+    <div class="newbie-tour newbie-tour-got-quest hide">
+      <h3>Great! Let's move on. Our final stop is your personal <a href="/">news feed</a>.</h3>
+    </div>
+  <% } %>
+
+  <ul class="nav nav-pills dashboard-nav">
+    <li><a href="#" data-dashboard-tab="open">
+      Open
+      <span class="desktop-text">quests</span></a></li>
+    <li><a href="#" data-dashboard-tab="closed">
+      Completed
+      <span class="desktop-text">quests</span></a></li>
+    <li><a href="#" data-dashboard-tab="abandoned">
+      Abandoned
+      <span class="desktop-text">quests</span></a></li>
+  </ul>
+  <div class="quests-subview"></div>
+
+  <div class="progress-subview"></div>
+
+</div>

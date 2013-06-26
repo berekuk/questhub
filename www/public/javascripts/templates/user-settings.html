@@ -1,0 +1,31 @@
+<div class="user-settings">
+  <div class="form-horizontal email-settings">
+    <% if (obj.email_confirmed == 'persona') { %>
+      <h4><%- obj.email || 'oops' %>
+      <span class="label label-success">Persona</span>
+      </h4>
+    <% } else { %>
+      <input name="email" type="email" placeholder="Email" value="<%- obj.email %>">
+      <span class="settings-conflict-email alert alert-error">&larr; Email is already in use.</span>
+      <span class="email-status <%= (obj.hideEmailStatus || obj.email_confirmed == 'persona') ? "hide" : "" %>">
+        <% if (obj.email_confirmed) { %>
+          <span class="label label-success">Confirmed</span>
+        <% } else if (obj.email) { %>
+          <button class="btn btn-warning resend-email-confirmation">Not confirmed. Resend confirmation key?</button>
+        <% } %>
+      </span>
+    <% } %>
+  </div>
+  <div>
+    <span class="muted">Notify me by email when someone...</span>
+    <label class="checkbox">
+        <input name="notify-comments" type="checkbox" <%= (obj.notify_comments > 0) ? 'checked' : '' %>>comments on my quest
+    </label>
+    <label class="checkbox">
+        <input name="notify-likes" type="checkbox" <%= (obj.notify_likes > 0) ? 'checked' : '' %>>likes my quest
+    </label>
+    <label class="checkbox">
+        <input name="notify-invites" type="checkbox" <%= (obj.notify_invites > 0) ? 'checked' : '' %>>invites me to a quest
+    </label>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="row-fluid">
+  <div class="span3"></div>
+  <div class="span6 unsubscribe">
+    <% if (status == 'ok') { %>
+      <h3><%- login %> unsubscribed from <%- field %>.</h3>
+      <% if (current_user.registered) { %>
+        <h3>Go to <button class="settings btn btn-primary">settings</button> if you want to tune your notifications further.</h3>
+        <h3>Or go to your <a href="/player/<%- login %>" class="btn btn-primary">profile</a>.</h3>
+      <% } %>
+
+    <% } else { %>
+      <h3 class="fail">Attempt to unsubscribe <%- login %> from <%- field %> has failed. Secret key is probably invalid.</h3>
+      <% if (current_user.registered) { %>
+        <h3>Go to <button class="settings btn btn-primary">settings</button> if you want to tune your notifications.</h3>
+      <% } %>
+
+    <% } %>
+
+    <% if (!current_user.registered) { %>
+      <h3>Sign in to tune your notification settings.</h3>
+      <div class="signin-subview"></div>
+    <% } %>
+  </div>
+</div>

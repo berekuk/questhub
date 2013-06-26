@@ -1,0 +1,125 @@
+<!-- quest details page -->
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span3 quest-page-left">
+
+      <% if (status == 'open') { %>
+      <div class="reward">
+        <div class="reward-circle" data-toggle="tooltip" data-placement="bottom" title="Reward&nbsp;for&nbsp;completing&nbsp;this&nbsp;quest">
+          <span class="points"><%- reward %></span>
+          <span class="points-text">points</span>
+        </div>
+      </div>
+      <% } %>
+
+      <div class="quest-action">
+        <% if (my) { %> <!-- quest belongs to the current user -->
+          <% if (status === 'open') { %>
+
+          <button class="complete btn btn-primary" data-toggle="tooltip" data-placement="right" title="Claim&nbsp;your&nbsp;points!">
+            <i class="icon-check"></i>
+            Complete
+          </button>
+
+          <button class="leave btn" data-toggle="tooltip" data-placement="right" title="Leave&nbsp;the&nbsp;quest&nbsp;to&nbsp;the&nbsp;others. Maybe&nbsp;someone&nbsp;else&nbsp;will&nbsp;do&nbsp;it&nbsp;for&nbsp;you.">
+            <i class="icon-minus"></i>
+            Leave
+          </button>
+
+          <button class="abandon btn" data-toggle="tooltip" data-placement="right" title="This&nbsp;will&nbsp;never&nbsp;happen. Let's&nbsp;just&nbsp;forget&nbsp;about&nbsp;it&nbsp;and&nbsp;move&nbsp;on.">
+            <i class="icon-eject"></i>
+            Abandon
+          </button>
+
+          <% } else if (status === 'closed') { %>
+
+            <button class="reopen btn btn-primary">
+              <i class="icon-backward"></i>
+              Reopen
+            </button>
+
+          <% } else if (status === 'abandoned') { %>
+
+            <button class="resurrect btn">
+              <i class="icon-play"></i>
+              Resurrect
+            </button>
+
+          <% } %>
+        <% } else { %>
+          <% if (currentUser) { %>
+            <!-- watch, like -->
+            <% if (meGusta) { %>
+              <button class="btn unlike">
+                <span class="muted">
+                <i class="icon-thumbs-up-alt"></i>
+                Unlike
+                </span>
+              </button>
+            <% } else { %>
+              <button class="btn btn-success like">
+                <i class="icon-thumbs-up"></i>
+                Like
+              </button>
+            <% } %>
+
+            <% if (obj.watchers && _.contains(watchers, currentUser)) { %>
+              <button class="btn unwatch muted">
+                <span class="muted">
+                <i class="icon-eye-close"></i>
+                Unwatch
+                </span>
+              </button>
+            <% } else { %>
+              <button class="btn watch">
+                <i class="icon-eye-open"></i>
+                Watch
+              </button>
+            <% } %>
+          <% } %>
+
+        <% } %>
+
+        <% if (invited) { %>
+        <span>You're invited! <button class="btn btn-danger join">Join this quest</button></span>
+        <% } %>
+
+        <% if (my) { %>
+          <button class="invite btn" data-toggle="tooltip" data-placement="right" title="Invite&nbsp;another&nbsp;player&nbsp;to&nbsp;work&nbsp;with&nbsp;you.">
+            <i class="icon-user"></i>
+            Invite
+          </button>
+          <form class="form-inline invite-dialog" onSubmit="return false">
+            <label class="muted">Invite:</label>
+            <!-- .input-block-level via http://stackoverflow.com/a/12322087 -->
+            <input id="inputInvitee" type="text" placeholder="Login" class="input-block-level">
+          </form>
+        <% } %>
+      </div>
+
+      <% if (obj.invitee && obj.invitee.length) { %>
+        <div class="invited-list">
+        <div>Invited:</div>
+        <ul>
+          <% _.each(invitee, function (i) { %>
+          <li>
+            <% if (my) { %>
+              <a href="#" class="uninvite mini-button" data-login="<%- i %>"><i class="icon-remove"></i></a>
+            <% } %>
+            <%= partial.user({ realm: realm, login: i }) %>
+          </li>
+          <% }) %>
+        </ul>
+        </div>
+      <% } %>
+
+    </div>
+
+    <div class="span9">
+      <div class="main">
+        <div class="quest-big"></div>
+        <div class="comments"></div>
+      </div>
+    </div>
+  </div>
+</div>

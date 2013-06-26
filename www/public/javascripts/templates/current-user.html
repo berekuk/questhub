@@ -1,0 +1,48 @@
+<!-- current user widget from right-top corner -->
+<ul class="top-nav">
+  <% if (registered === 1) { %><li>
+    <a href="#" class="quest-add-nav-button">
+      <i class="icon-plus"></i>
+      <span class="desktop-text">
+        New quest
+      </span>
+    </a>
+  </li><% } %><% if (obj.notifications && obj.notifications.length) { %>
+  <li class="current-user-notifications-icon">
+    <a href="#" class="notifications">
+      <i class="icon-envelope-alt icon-large"></i>
+    </a>
+  </li><% } %><li class="dropdown">
+    <% if (registered === 1) { %>
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="icon-cog"></i>
+      </a>
+      <ul class="dropdown-menu">
+        <li>
+        <a href="#" class="settings">
+          <i class="icon-wrench"></i>
+          Settings
+        </a>
+        <a href="#" class="logout">
+          <i class="icon-signout"></i>
+          Logout
+        </a>
+        </li>
+      </ul>
+    <% } else { %>
+      <!-- TODO: refactor to use views/user/signin.js -->
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="icon-signin"></i>
+        <span class="desktop-text">
+          Sign In
+        </span>
+      </a>
+      <ul class="dropdown-menu">
+        <li>
+          <a href="/auth/twitter">with Twitter</i></a>
+          <a href="#" class="login-with-persona">with Email</a>
+        </li>
+      </ul>
+    <% } %>
+  </li>
+</ul>

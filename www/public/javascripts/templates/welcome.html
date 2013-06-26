@@ -1,0 +1,65 @@
+<!-- landing page -->
+<div class="container-fluid welcome well">
+
+  <div class="row-fluid">
+    <div class="span12">
+      <h1 class="brand">Questhub</h1>
+      <h2>Share your quests.</h2>
+      <hr>
+    </div>
+  </div>
+  <div class="row-fluid">
+    <div class="span6">
+      <div class="info-blocks">
+        <div class="row-fluid">
+          <i class="icon-list-alt"></i>
+          <div>
+            This is your <strong>public task tracker</strong>.
+          </div>
+        </div>
+        <div class="row-fluid">
+          <i class="icon-thumbs-up"></i>
+          <div>
+            This is a gamified platform for <strong>connecting and encouraging</strong> people.
+          </div>
+        </div>
+        <div class="row-fluid">
+          <i class="icon-group"></i>
+          <div>
+            This is a <strong>social network</strong> for people who want to do stuff.
+          </div>
+        </div>
+        <div class="row-fluid">
+          <i class="icon-comment"></i>
+          <div>
+            This is a place to <strong>gather and provide feedback</strong> on the things you did and on the things you&apos;re going to do.
+          </div>
+        </div>
+        <div class="row-fluid">
+          <i class="icon-star"></i>
+          <div>
+            Finally, you can get <strong>game points</strong> here!
+          </div>
+        </div>
+      </div>
+      <p>
+      </p>
+    </div>
+    <div class="span6 welcome-signin">
+      <p>
+      <% if (registered) { %>
+        <a href="/" class="btn btn-large btn-primary">Go to your profile</a>
+      <% } else { %>
+        <span class="signin"></span>
+      <% } %>
+      </p>
+    </div>
+  </div>
+  <div class="row-fluid">
+    <div class="span8">
+      <hr>
+      <h3>There are <a href="/realms">3 realms</a> so far:</h3>
+      <div class="realms-subview"></div>
+    </div>
+  </div>
+</div>

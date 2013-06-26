@@ -1,0 +1,67 @@
+<nav>
+  <div class="nav-inner">
+  <ul class="top-nav">
+    <li class="menu-item-feed">
+      <a class="brand" href="/">
+        <% if (registered) { %>
+          <i class="icon-rss"></i>
+        <% } else { %>
+          <span class="mobile-text">
+            QH
+          </span>
+        <% } %>
+        <span class="desktop-text">
+          Questhub.io
+        </span>
+      </a>
+    </li>
+  </ul><ul class="nav-menu top-nav">
+    <% if (registered) { %>
+    <li class="menu-item-my-quests"><a href="/player/<%- currentUser %>">
+        <i class="icon-list-ul"></i>
+        <span class="desktop-text">
+          <%= currentUser %>
+        </span>
+      </a>
+    </li><% } %><li class="menu-item-realms">
+      <a href="/realms">
+        <i class="icon-puzzle-piece"></i>
+        <span class="desktop-text">
+          Realms
+        </span>
+      </a>
+    </li>
+  </ul><!--
+
+  --><% if (realm) { %><!--
+  --><span class="desktop-text nav-menu-separator">&#10148;</span><!--
+  --><ul class="nav-realm top-nav">
+    <li class="menu-item-realm-page">
+      <a href="/realm/<%- realm.id %>" class="nav-realm-title">
+        <%- realm.name %>
+     </a>
+     <span class="desktop-text nav-menu-separator">&#10148;</span>
+    </li><li class="menu-item-user-list">
+      <a href="/realm/<%- realm.id %>/players">
+        <i class="icon-group"></i>
+        <span class="desktop-text">
+          Players
+        </span>
+      </a>
+    </li><li class="menu-item-explore">
+      <a href="/realm/<%- realm.id %>/explore">
+        <i class="icon-book"></i>
+        <span class="desktop-text">
+          Explore
+        </span>
+      </a>
+    </li>
+  </ul><!--
+  --><% } %><!--
+
+  --><p class="navbar-text pull-right"></p>
+
+  <div class="current-user-box"></div>
+
+  </div>
+</nav>

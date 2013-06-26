@@ -1,0 +1,66 @@
+<div class="<%= "quest-big-" + ext_status %> quest-big well">
+
+  <div>
+    <% if (team.length == 0) { %>
+      <%= partial.user({ realm: realm, login: obj.author }) %><span class="muted"> suggests a quest:</span>
+    <% } else { %>
+      <span class="muted">
+      <%= _.map(team, function (member) { return partial.user({ realm: realm, login: member }); }).join(', ') %>
+      <%= (team.length == 1 ? 'is' : 'are') %> on a quest<%= (_.first(team) == obj.author) ? '' : ' by ' + partial.user({ realm: realm, login: obj.author }) %>:</span>
+      <% if (my) { %>
+        <%= partial.edit_tools() %>
+      <% } %>
+    <% } %>
+  </div>
+
+  <h2>
+    <span class="quest-big-editable"><%- name %></span>
+    <% if (my) { %>
+      <span class="control-group quest-big-edit">
+        <input class="quest-edit-name" name="name" type="text" placeholder="Quest title is required!">
+      </span>
+    <% } %>
+  </h2>
+
+  <% if (obj.description && description) { %>
+    <div class="quest-big-editable">
+      <%= partial.markdown(description, realm) %>
+    </div>
+  <% } %>
+  <% if (my) { %>
+    <div class="quest-big-edit">
+      <textarea name="description" class="span12" placeholder="Quest description"></textarea>
+      <div class="quest-big-description-preview markdown-preview">
+        <div class="_label">Description preview</div>
+        <div class="_content"></div>
+      </div>
+    </div>
+  <% } %>
+
+  <span class="muted quest-big-edit control-group">
+    <input name="tags" type="text" placeholder="Tags" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
+
+    <button class="btn btn-primary save pull-right">Save</button>
+  </span>
+  <% if (team.length == 0 && currentUser) { %>
+    <div>
+      <span class="muted">This quest is not claimed by anybody. Would you like to take it?</span>
+      <button class="quest-join btn btn-primary">Take</button>
+    </div>
+  <% } %>
+
+
+  <div class="object-bottom-line">
+    <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
+
+    <span class="likes-subview"></span>
+    <%= partial.watchers(obj) %>
+
+  <div class="quest-big-labels">
+    <%= partial.quest_labels(obj) %>
+  </div>
+  </div>
+
+  <div style="clear:both"> </div>
+
+</div>

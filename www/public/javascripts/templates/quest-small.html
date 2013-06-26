@@ -1,0 +1,23 @@
+<td data-quest-id="<%- _id %>">
+  <span class="quest-small-counters">
+    <span class="likes"></span>
+
+    <% if (obj.comment_count) { %>
+      <a href="/realm/<%- realm %>/quest/<%= _id %>"><span class="badge badge-info"><i class="icon-comment"></i> <%= comment_count %></span></a>
+    <% } %>
+  </span>
+
+  <%= partial.quest_link(obj) %>
+  <% var others = _.filter(team, function (u) { return u != user }) %>
+  <% if (others.length) { %>
+    <span>(<%- user ? 'with ' : '' %></span><!--
+    --><%= _.map(others, function (u) { return partial.user({ realm: realm, login: u }) }).join(', ') %><!--
+    --><span>)</span>
+  <% } %>
+
+  <br>
+  <div class="quest-small-tags">
+    <%= partial.quest_labels(obj) %>&nbsp;
+  </div>
+
+</td>
