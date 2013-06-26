@@ -17,7 +17,8 @@
             'jasmine': 'test/lib/jasmine-1.3.1/jasmine',
             'jasmine-jquery': 'test/lib/jasmine-jquery',
             'jasmine-html': 'test/lib/jasmine-1.3.1/jasmine-html',
-            'spec': 'test/spec/'
+            'spec': 'test/spec/',
+            'sinon': 'test/lib/sinon-1.7.3'
         },
         shim: {
             underscore: {
@@ -30,6 +31,9 @@
             jasmine: {
                 exports: 'jasmine'
             },
+            sinon: {
+                exports: 'sinon'
+            },
             'jasmine-html': {
                 deps: ['jasmine'],
                 exports: 'jasmine'
@@ -39,7 +43,7 @@
     });
 
     require([
-        'underscore', 'backbone', 'jquery', 'jasmine-html', 'models/current-user', 'models/shared-models'
+        'underscore', 'backbone', 'jquery', 'jasmine-html', 'models/current-user', 'models/shared-models', 'sinon'
     ], function(_, Backbone, $, jasmine, currentUser, sharedModels) {
 
         var jasmineEnv = jasmine.getEnv();

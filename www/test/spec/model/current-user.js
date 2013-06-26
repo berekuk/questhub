@@ -59,5 +59,47 @@ define([
                 expect(currentUser.needsToRegister()).not.toBe(true);
             });
         });
+
+        describe('realms:', function () {
+            var server;
+            beforeEach(function () {
+                sinon.spy(mixpanel, 'track');
+                server = sinon.fakeServer.create();
+                server.respondWith(
+                    'POST',
+                    '/api/follow_realm/blah',
+                    [
+                        200,
+                        {"Content-Type": "application/json"},
+                        JSON.stringify({
+                            result: "ok"
+                        })
+                    ]
+                );
+            });
+            afterEach(function () {
+                mixpanel.track.restore();
+                server.restore();
+            });
+
+            _.each(['follow', 'unfollow'], function (t) {
+                var method = t + 'Realm';
+                describe(method, function () {
+                    it('calls mixpanel.track', function () {
+                        currentUser[method]('blah');
+                        server.respond();
+                        expect(mixpanel.track.calledOnce).toBe(true);
+                        expect(mixpanel.track.calledWith(t + ' realm')).toBe(true);
+                    });
+                    it('posts to API', function () {
+                        currentUser[method]('blah');
+                        server.respond();
+                        expect(server.requests.length).toEqual(1);
+                        expect(server.requests[0].method).toEqual('POST');
+                        expect(server.requests[0].url).toEqual('/api/' + t + '_realm/blah');
+                    });
+                });
+            });
+        });
     });
 });
