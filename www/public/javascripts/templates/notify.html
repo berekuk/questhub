@@ -1,9 +1,0 @@
-<!-- notification messages -->
-<div class="alert alert-<%= obj.type || 'error' %>">
-  <button type="button" class="close" data-dismiss="alert">×</button>
-  <% if (obj.message) { %>
-    <%= message %>
-  <% } else { %>
-    Unknown <%= obj.type || 'error' %> message
-  <% } %>
-</div>
