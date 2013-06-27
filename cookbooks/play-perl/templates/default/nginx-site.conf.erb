@@ -39,16 +39,18 @@ server {
     proxy_pass       http://127.0.0.1:<%= @dancer_port %>;
   }
 
-  location / {
-    proxy_set_header X-Forwarded-Host localhost;
-    if ($args ~ "^_escaped_fragment_=$") {
-        proxy_pass       http://127.0.0.1:4000;
-    }
+  location @backbone {
+    root /play/www/public;
+    try_files $uri <%= @dev ? '/index.html' : '/index-optimized.html' %>;
+  }
 
+  location / {
     root <%= @static_root %>;
+
+    error_log /data/nginx-dev.error.log;
 
     expires 0;
     add_header        Cache-Control private;
-    try_files $uri /index.html;
+    try_files $uri @backbone;
   }
 }
