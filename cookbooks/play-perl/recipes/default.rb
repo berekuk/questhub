@@ -51,7 +51,7 @@ cpan_module 'Template'
 cpan_module 'DateTime'
 cpan_module 'DateTime::Format::RFC3339'
 
-cpan_module 'T/TO/TOBYINK/Type-Tiny-0.007_09.tar.gz'
+cpan_module 'T/TO/TOBYINK/Type-Tiny-0.012.tar.gz'
 
 directory '/data' # logs
 
