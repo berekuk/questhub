@@ -27,7 +27,6 @@ template "/etc/nginx/sites-enabled/old" do
   notifies :restart, "service[nginx]"
 end
 
-include_recipe "play-perl::node"
-include_recipe "phantomjs"
+include_recipe "phantomjs" # for generating static files - not used yet
 
 service "nginx"

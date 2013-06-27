@@ -1,0 +1,10 @@
+# vim: ft=perl
+use parent qw(Ubic::Service::SimpleDaemon);
+
+__PACKAGE__->new({
+    bin => '/usr/bin/coffee --map -w -o . -c src/',
+    cwd => '/play/www',
+    stdout => '/data/coffee.log',
+    stderr => '/data/coffee.err.log',
+    ubic_log => '/data/coffee.ubic.log',
+});
