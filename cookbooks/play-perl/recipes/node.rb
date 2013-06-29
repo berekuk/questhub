@@ -1,3 +1,2 @@
-ppa "chris-lea/node.js"
-package "nodejs"
-
+include_recipe "node"
+include_recipe "npm"

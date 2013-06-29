@@ -29,7 +29,7 @@ template "/etc/nginx/sites-enabled/play-perl-dev.org" do
   notifies :restart, "service[nginx]"
 end
 
-include_recipe "play-perl::node"
+# for running jasmine tests from CLI
 include_recipe "phantomjs"
 
 # used by build_static.pl
@@ -40,5 +40,11 @@ gem_package 'rb-inotify' do
   version '0.8.8'
 end
 ubic_service "sass" do
+  action [:install, :start]
+end
+
+include_recipe "npm"
+npm_package "coffee-script"
+ubic_service "coffee" do
   action [:install, :start]
 end

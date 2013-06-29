@@ -18,6 +18,8 @@ Vagrant::Config.run do |config|
   # all code should use /play, because we have no vagrant in production environment, and it would be weird to keep /vagrant folder there
   config.vm.share_folder "play", "/play", "."
 
+  # Upgrade chef
+  config.vm.provision :shell, :inline => "gem install chef --version 10.16.4 --no-rdoc --no-ri --conservative"
   # Enable and configure the chef solo provisioner
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = ['cookbooks']

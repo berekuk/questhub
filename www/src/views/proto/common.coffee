@@ -1,0 +1,120 @@
+# Common questhub view.
+# It declares render() itself, you need to declare serialize() instead of render.
+# If you want to do some more work on render(), define afterRender().
+#
+# It also declares initialize().
+# If you want to do some more work on render(), define afterInitialize().
+#
+# options:
+#   t: 'blah' - use '#template-blah' template
+#   selfRender: this flag causes initialize() to call render()
+#   serialize: should prepare params for the template; defaults to self.model.toJSON(), or {} if model is not defined
+#   features: array with features that should be enabled in html after rendering; possible values: ['timeago', 'tooltip']
+#   subviews: events-style hash with subviews; see assign pattern in http://ianstormtaylor.com/assigning-backbone-subviews-made-even-cleaner/
+#   activated: if false, turn render() into a null operation until someone calls activate(); also, don't initialize subviews until activation
+#
+# subviews usage example:
+#   subviews: {
+#     '.foo-item': function() { return new Foo() },
+#     '.bar-item': 'barSubview',
+#   },
+#   barSubview: function() {
+#      return new Bar(); // will be called only once and cached
+#   }
+#
+# Note that this class overrides remove(), calling remove() for all subviews for you. Die, zombies.
+define [
+    "backbone", "underscore",
+    "views/proto/base",
+    "jquery.timeago", "bootstrap" # for features
+], (Backbone, _, Base) ->
+    "use strict"
+    class extends Base
+
+        # TODO - detect 't' default value from the class name somehow? is it possible in JS?
+        initialize: ->
+            super
+            @initSubviews()  if @activated
+            @afterInitialize()
+            @render()  if @selfRender
+
+        initSubviews: ->
+            @_subviewInstances
+
+            # this was a warning situation in the past, but now views/explore.js legitimately re-initializes subviews
+            #            console.log('initSubviews is called twice!');
+            @_subviewInstances = {}
+            that = this
+            _.each _.keys(_.result(this, "subviews")), (key) ->
+                that.subview key # will perform the lazy init
+
+
+        rebuildSubview: (key) ->
+            value = _.result(this, "subviews")[key]
+            method = value
+            method = this[value]  unless _.isFunction(method)
+            throw new Error("Method \"" + value + "\" does not exist")  unless method
+            method = _.bind(method, this)
+            subview = method()
+            @_subviewInstances[key] = subview
+
+
+        # get a subview from cache, lazily instantiate it if necessary
+        subview: (key) ->
+            @rebuildSubview key  unless @_subviewInstances[key]
+            @_subviewInstances[key]
+
+        afterInitialize: ->
+
+        serialize: ->
+            if @model
+                @model.toJSON()
+            else
+                {}
+
+        features: []
+        subviews: {}
+        activated: true
+        activate: ->
+            unless @activated
+                @activated = true
+                @initSubviews()
+            @render()
+
+        render: ->
+            return  unless @activated
+            params = @serialize()
+            params.partial = @partial
+            @$el.html @template(params)
+
+            # TODO - enable all features by default?
+            # how much overhead would that create?
+            that = this
+            _.each @features, (feature) ->
+                if feature is "timeago"
+                    that.$("time.timeago").timeago()
+                else if feature is "tooltip"
+                    that.$("[data-toggle=tooltip]").tooltip()
+                else
+                    console.log "unknown feature: " + feature
+
+            @afterRender()
+            _.each _.keys(@_subviewInstances), (key) ->
+                subview = that._subviewInstances[key]
+                subview.setElement(that.$(key)).render()
+
+            @trigger "render"
+            this
+
+        afterRender: (->)
+
+        remove: ->
+            that = this
+
+            # _subviewInstances can be undefined if view was never activated
+            if @_subviewInstances
+                _.each _.keys(@_subviewInstances), (key) ->
+                    subview = that._subviewInstances[key]
+                    subview.remove()
+
+            super
