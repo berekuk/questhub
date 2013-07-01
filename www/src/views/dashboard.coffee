@@ -19,9 +19,9 @@ define [
 
             ".dashboard-subview": ->
                 if @tab == 'quests'
-                    subview = new DashboardQuests model: @model
-                    subview.tab = @options.questTab if @options.questTab?
-                    subview
+                    new DashboardQuests
+                        model: @model
+                        tab: @options.questTab
                 else if @tab == 'activity'
                     new DashboardActivity model: @model
                 else if @tab == 'profile'

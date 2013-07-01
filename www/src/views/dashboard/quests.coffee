@@ -8,9 +8,12 @@ define [
     class extends Common
         template: _.template(html)
 
-        tab: "open"
         events:
             "click ul.dashboard-quests-tabs a": "switchTab"
+
+        initialize: ->
+            @tab = @options.tab || 'open'
+            super
 
         subviews:
             ".quests-subview": ->

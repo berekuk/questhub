@@ -7,5 +7,3 @@ define ["underscore", "views/proto/common", "models/current-user", "text!templat
             params.currentUser = currentUser.get("login")
             params.realm = @options.realm
             params
-
-

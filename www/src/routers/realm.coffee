@@ -14,7 +14,6 @@ define [
             "realm/:realm/players": "userList"
             "realm/:realm/explore(/:tab)": "explore"
             "realm/:realm/explore/:tab/tag/:tag": "explore"
-            "realm/:realm/quest/:id": "realmQuestPage"
 
         realms: ->
             view = new RealmDetailCollection collection: sharedModels.realms

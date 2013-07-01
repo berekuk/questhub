@@ -49,7 +49,15 @@
 }
 
 .user-big-tabs {
-    float: right;
+
+    clear: both;
+    padding-top: 5px;
+    @include breakpoint(B) {
+        clear: none;
+        float: right;
+        padding-top: 0px;
+    }
+
     ul {
         list-style-type: none;
         font-size: 18px;

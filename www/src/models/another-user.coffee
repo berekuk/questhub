@@ -4,5 +4,3 @@ define ["backbone", "models/user"], (Backbone, User) ->
 
         url: ->
             "/api/user/" + @get("login")
-
-
