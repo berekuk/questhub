@@ -12,7 +12,7 @@ system('rm -rf www-build');
 system('cp -r www www-build');
 system(qw{
     rm -rf
-    www-build/views www-build/models
+    www-build/views www-build/models www-build/routers
     www-build/test
     www-build/sass
     www-build/templates

@@ -17,10 +17,9 @@ define ["underscore", "views/proto/common", "views/user/signin", "views/realm/co
 
         afterInitialize: ->
             @listenTo currentUser, "change:registered", ->
-                Backbone.trigger "pp:navigate", "/",
+                Backbone.history.navigate "/",
                     trigger: true
                     replace: true
-
 
             mixpanel.track "visit /welcome"
 

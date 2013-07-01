@@ -29,7 +29,7 @@ define ["backbone", "underscore", "views/proto/common", "views/user/notification
             navigator.id.watch
                 loggedInUser: user
                 onlogin: (assertion) ->
-          
+
                     # A user has logged in! Here you need to:
                     # 1. Send the assertion to your backend for verification and to create a session.
                     # 2. Update your UI.
@@ -47,7 +47,7 @@ define ["backbone", "underscore", "views/proto/common", "views/user/notification
 
 
                 onlogout: ->
-          
+
                     # sometimes persona decides that it should log out the twitter user, so we're trying to prevent it here
                     # it happens often in confusion of localhost:3000 and localhost:3001 in development, since persona only works for :3000
                     view.backendLogout()  if view.model.get("settings") and view.model.get("settings").email_confirmed is "persona"
@@ -59,7 +59,7 @@ define ["backbone", "underscore", "views/proto/common", "views/user/notification
             @listenTo @model, "change", @render
             @listenTo @model, "change", ->
                 settingsModel = @model.get("settings") or {}
-        
+
                 # now settings box will show the preview of (probably) correct settings even before it refetches its actual version
                 # (see SettingsBox code for the details)
                 @getSettingsBox().model.clear().set settingsModel
@@ -68,7 +68,7 @@ define ["backbone", "underscore", "views/proto/common", "views/user/notification
         checkUser: ->
             if @model.needsToRegister()
                 ga "send", "event", "register", "new-dialog"
-                Backbone.trigger "pp:navigate", "/register",
+                Backbone.history.navigate "/register",
                     trigger: true
                     replace: true
 
@@ -84,11 +84,9 @@ define ["backbone", "underscore", "views/proto/common", "views/user/notification
 
 
         logout: ->
-      
+
             # TODO - fade to black until response
             if @model.get("settings") and @model.get("settings").email_confirmed is "persona"
                 navigator.id.logout()
             else
                 @backendLogout()
-
-

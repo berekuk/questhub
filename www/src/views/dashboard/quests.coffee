@@ -55,7 +55,7 @@ define [
             tab = $(e.target).closest("a").attr("data-tab")
             @switchTabByName tab
             url = "/player/#{ @model.get("login") }/quest/#{tab}"
-            Backbone.trigger "pp:navigate", url
+            Backbone.history.navigate url
             Backbone.trigger "pp:quiet-url-update"
 
         switchTabByName: (tab) ->

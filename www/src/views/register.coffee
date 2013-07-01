@@ -80,7 +80,7 @@ define ["underscore", "jquery", "views/proto/common", "models/user-settings", "m
             ga "send", "event", "register", "submit"
             mixpanel.track "register submit"
             @subview(".progress-subview").on()
-      
+
             # TODO - what should we do if login is empty?
             $.post("/api/register",
                 login: @getLogin()
@@ -92,13 +92,12 @@ define ["underscore", "jquery", "views/proto/common", "models/user-settings", "m
                     currentUser.fetch
                         success: ->
                             mixpanel.alias currentUser.get("_id")
-                            Backbone.trigger "pp:navigate", "/start-tour",
+                            Backbone.history.navigate "/start-tour",
                                 trigger: true
                                 replace: true
 
-
                         error: ->
-                            Backbone.trigger "pp:navigate", "/welcome",
+                            Backbone.history.navigate "/welcome",
                                 trigger: true
 
 
@@ -114,7 +113,7 @@ define ["underscore", "jquery", "views/proto/common", "models/user-settings", "m
             ).fail (response) ->
                 ga "send", "event", "register", "fail"
                 mixpanel.track "register fail"
-        
+
                 # let's hope that server didn't register the user before it returned a error
                 that.subview(".progress-subview").off()
                 that.submitted = false
@@ -132,7 +131,7 @@ define ["underscore", "jquery", "views/proto/common", "models/user-settings", "m
             mixpanel.track "register cancel"
             @subview(".progress-subview").on()
             $.post("/api/register/cancel").done((model, response) ->
-                Backbone.trigger "pp:navigate", "/",
+                Backbone.history.navigate "/",
                     trigger: true
 
             ).fail ->

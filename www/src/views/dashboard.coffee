@@ -11,16 +11,17 @@ define [
         activated: false
         activeMenuItem: -> (if @my() then "my-quests" else "none")
 
-        tab: "quests"
-
         subviews:
             ".user-subview": ->
                 new UserBig
                     model: @model
+                    tab: @tab
 
             ".dashboard-subview": ->
                 if @tab == 'quests'
-                    new DashboardQuests model: @model
+                    subview = new DashboardQuests model: @model
+                    subview.tab = @options.questTab if @options.questTab?
+                    subview
                 else if @tab == 'activity'
                     new DashboardActivity model: @model
                 else if @tab == 'profile'
@@ -28,6 +29,9 @@ define [
                 else
                     alert "unknown tab #{@tab}"
 
+        initialize: ->
+            @tab = @options.tab || 'quests'
+            super
 
         initSubviews: ->
             super
@@ -38,8 +42,7 @@ define [
                     quests: ''
                     activity: '/activity'
                     profile: '/profile'
-                url = "/player/#{ @model.get("login") }#{ tab2url[tab] }"
-                Backbone.trigger "pp:navigate", url
+                Backbone.history.navigate "/player/#{ @model.get("login") }#{ tab2url[tab] }"
                 Backbone.trigger "pp:quiet-url-update"
 
         switchTabByName: (tab) ->

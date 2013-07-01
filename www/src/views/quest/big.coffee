@@ -25,8 +25,7 @@ define ["underscore", "jquery", "markdown", "backbone", "views/proto/common", "v
         afterInitialize: ->
             @listenTo @model, "change", @render
 
-        join: ->
-            @model.join()
+        join: -> @model.join()
 
         startEdit: ->
             return  unless @model.isOwned()
@@ -50,7 +49,7 @@ define ["underscore", "jquery", "markdown", "backbone", "views/proto/common", "v
             else
                 preview.hide()
 
-    
+
         # check if edit form is valid, and also highlight invalid fiels appropriately
         validateForm: ->
             ok = true
@@ -66,7 +65,7 @@ define ["underscore", "jquery", "markdown", "backbone", "views/proto/common", "v
             else
                 unless cg.hasClass("error")
                     cg.addClass "error"
-          
+
                     # copy-pasted from views/quest/add, TODO - refactor
                     oldFocus = $(":focus")
                     cg.find("input").tooltip "show"
@@ -91,10 +90,10 @@ define ["underscore", "jquery", "markdown", "backbone", "views/proto/common", "v
             @$(".quest-big-editable").show()
 
         saveEdit: ->
-      
+
             # so, we're using DOM data to cache validation status... this is a slippery slope.
             return  if @$("button.save").hasClass("disabled")
-      
+
             # form is validated already by edit() method
             name = @$("[name=name]").val()
             description = @$("[name=description]").val()
@@ -111,10 +110,8 @@ define ["underscore", "jquery", "markdown", "backbone", "views/proto/common", "v
             bootbox.confirm "Quest and all comments will be destroyed permanently. Are you sure?", (result) ->
                 if result
                     that.model.destroy success: (model, response) ->
-                        Backbone.trigger "pp:navigate", "/",
+                        Backbone.history.navigate "/",
                             trigger: true
-
-
 
 
         serialize: ->
@@ -128,5 +125,3 @@ define ["underscore", "jquery", "markdown", "backbone", "views/proto/common", "v
             @$("[name=description]").autosize append: "\n"
 
         features: ["tooltip", "timeago"]
-
-

@@ -18,18 +18,17 @@ define [
 
         describe "quests tab change", ->
             beforeEach ->
-                sinon.spy Backbone, "trigger"
+                sinon.spy Backbone.history, "navigate"
                 view.$el.find(".user-big-tabs [data-tab=activity]").click()
             afterEach ->
-                Backbone.trigger.restore()
+                Backbone.history.navigate.restore()
 
             it "changes view.tab", ->
-                expect(view.tab).toBe "activity"
+                expect(view.tab).toEqual "activity"
 
             it "updates url", ->
-                expect(Backbone.trigger.called).toBe true
-                expect(Backbone.trigger.getCall(0).args[0]).toEqual "pp:navigate"
-                expect(Backbone.trigger.getCall(0).args[1]).toEqual "/player/jasmine/activity"
+                expect(Backbone.history.navigate.called).toBe true
+                expect(Backbone.history.navigate.getCall(0).args[0]).toEqual "/player/jasmine/activity"
 
             it "highlighted tab link", ->
                 expect(view.$el.find(".user-big-tabs ._active").attr("data-tab")).toEqual "activity"
@@ -59,4 +58,4 @@ define [
         it "my() is true", ->
             expect(view.my()).toBe true
         it "active menu item", ->
-            expect(view.activeMenuItem()).toBe "my-quests"
+            expect(view.activeMenuItem()).toEqual "my-quests"
