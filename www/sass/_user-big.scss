@@ -12,7 +12,10 @@
 
 .user-big-names {
     float: left;
-    margin-left: 20px;
+    margin-left: 10px;
+    @include breakpoint(B) {
+        margin-left: 20px;
+    }
     .user-big-player-login {
         font-size: 18px;
         vertical-align: middle;
@@ -20,47 +23,17 @@
     }
 }
 
-.user-big-points {
-    float: left;
-    ul, li {
-        display: inline-block;
-        margin: 0;
-        padding: 0;
-    }
-    ul {
-        margin-top: 10px;
-        list-style-type: none;
-        li {
-            margin-bottom: 7px;
-            text-align: right;
-        }
-    }
-    @include breakpoint(B) {
-        clear: none;
-        ul {
-            margin-top: 4px;
-            margin-left: 20px;
-        }
-    }
-
-    .icon-question-sign {
-        color: $dark-grey;
-    }
-}
-
 .user-big-tabs {
-
     clear: both;
-    padding-top: 5px;
+    padding-top: 8px;
     @include breakpoint(B) {
-        clear: none;
         float: right;
-        padding-top: 0px;
+        clear: none;
+        padding-top: 0;
     }
 
     ul {
         list-style-type: none;
-        font-size: 18px;
         margin: 0px;
     }
     li {
@@ -87,8 +60,14 @@
         text-align: center;
         vertical-align: middle;
 
-        width: 45px;
-        height: 45px;
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+        @include breakpoint(B) {
+            width: 46px;
+            height: 46px;
+            font-size: 18px;
+        }
     }
 
     ._icon._active {

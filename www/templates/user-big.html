@@ -5,9 +5,6 @@
   <div class="user-big-names">
     <div>
       <span class="user-big-player-login"><%= login %></span>
-      <% if (my) { %>
-          <span class="mini-button"><a href="#" class="settings mini-button"><i class="icon-wrench"></i></a></span>
-      <% } %>
     </div>
     <% if (obj.twitter) {
       if (twitter.screen_name) { %>
@@ -16,21 +13,6 @@
           @<%= twitter.screen_name %>
         </a>
     <% } } %>
-  </div>
-
-  <div class="user-big-points">
-    <% if (obj.rp && _.size(obj.rp)) { %>
-      <ul>
-      <% _.each(rp, function (points, realm) { %>
-        <li>
-          <a class="badge badge-info" href="/realm/<%- realm %>/players">
-            <%- realm %>:
-            <%- points %>
-          </a>
-        </li>
-      <% }) %>
-      </ul>
-    <% } %>
   </div>
 
   <div class="user-big-tabs">
