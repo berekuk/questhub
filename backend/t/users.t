@@ -161,4 +161,39 @@ sub settings :Tests {
         'valid setting is set, invalid is not';
 }
 
+sub stat :Tests {
+    db->users->add({ login => 'foo' });
+
+    cmp_deeply
+        db->users->stat('foo'),
+        {
+            quests => {
+                open => 0,
+                closed => 0,
+                abandoned => 0,
+            }
+        };
+
+    my @quests = map {
+        db->quests->add({
+            name => "q$_",
+            user => 'foo',
+            realm => 'europe',
+        })
+    } 1..10;
+
+    db->quests->close($quests[$_]->{_id}, 'foo') for 1, 3, 5;
+    db->quests->abandon($quests[$_]->{_id}, 'foo') for 2, 8;
+
+    cmp_deeply
+        db->users->stat('foo'),
+        {
+            quests => {
+                open => 5,
+                closed => 3,
+                abandoned => 2,
+            }
+        }
+}
+
 __PACKAGE__->new->runtests;

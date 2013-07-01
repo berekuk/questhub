@@ -7,7 +7,7 @@ use Moo;
 use Log::Any qw($log);
 use Digest::SHA1 qw(sha1_hex);
 
-use Type::Params qw(validate);
+use Type::Params qw( compile validate );
 use Types::Standard qw(Str Int Bool Dict Undef Optional HashRef);
 use Play::Types qw(Login);
 
@@ -511,6 +511,22 @@ sub unsubscribe_secret {
     my ($login) = @_;
 
     return sha1_hex(setting('unsubscribe_salt').':'.$login);
+}
+
+sub stat {
+    my $self = shift;
+    state $check = compile(Login);
+    my ($login) = $check->(@_);
+
+    my $stat = {};
+
+    my $quests = db->quests->list({ user => $login });
+    for my $status (qw/ closed open abandoned /) {
+        $stat->{$status} = scalar grep { $_->{status} eq $status } @$quests;
+    }
+    return {
+        quests => $stat
+    };
 }
 
 =back
