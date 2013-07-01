@@ -2,12 +2,10 @@ define ["underscore", "views/proto/common", "views/user/big", "views/quest/dashb
     Common.extend
         template: _.template(html)
         activated: false
-        activeMenuItem: ->
-            (if @my() then "my-quests" else "none")
+        activeMenuItem: -> (if @my() then "my-quests" else "none")
 
         tab: "open"
-        realm: ->
-            @options.realm
+        realm: -> @options.realm
 
         events:
             "click ul.dashboard-nav a": "switchTab"
@@ -39,7 +37,7 @@ define ["underscore", "views/proto/common", "views/user/big", "views/quest/dashb
         switchTab: (e) ->
             tab = $(e.target).closest("a").attr("data-dashboard-tab")
             @switchTabByName tab
-            url = "/player/" + @model.get("login") + "/quest/" + tab
+            url = "/player/#{ @model.get("login") }/quest/#{tab}"
             Backbone.trigger "pp:navigate", url
             Backbone.trigger "pp:quiet-url-update"
 
@@ -51,7 +49,7 @@ define ["underscore", "views/proto/common", "views/user/big", "views/quest/dashb
         createQuestSubview: (caption, options) ->
             that = this
             # open quests are always displayed in their entirety
-            options.limit = 100  unless options.status is "open"
+            options.limit = 100 unless options.status is "open"
             options.order = "desc"
             options.user = @model.get("login")
             collection = new QuestCollectionModel([], options)
@@ -63,17 +61,15 @@ define ["underscore", "views/proto/common", "views/user/big", "views/quest/dashb
 
             if options.status is "open" and @my()
                 @listenTo Backbone, "pp:quest-add", (model) ->
-                    collection.add model,
-                        prepend: true
-
-
+                    collection.add model, prepend: true
                 viewOptions.sortable = true
+
             collectionView = new DashboardQuestCollection(viewOptions)
             collectionView
 
         my: ->
             currentLogin = currentUser.get("login")
-            return true  if currentLogin and currentLogin is @model.get("login")
+            return true if currentLogin and currentLogin is @model.get("login")
             false
 
         tourGotQuest: ->
@@ -87,11 +83,10 @@ define ["underscore", "views/proto/common", "views/user/big", "views/quest/dashb
         serialize: ->
             my = @my()
             tour = (my and currentUser.onTour("profile"))
-            @listenToOnce Backbone, "pp:quest-add", @tourGotQuest  if tour
+            @listenToOnce Backbone, "pp:quest-add", @tourGotQuest if tour
+
             my: my
             tour: tour
 
         afterRender: ->
             @$("[data-dashboard-tab=" + @tab + "]").parent().addClass "active"
-
-
