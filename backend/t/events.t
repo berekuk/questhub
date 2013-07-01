@@ -11,6 +11,9 @@ sub setup :Test(setup) {
 }
 
 sub basic :Tests {
+    db->users->add({ login => 'foo', fr => ['europe'] });
+    db->users->add({ login => 'bar' });
+
     db->events->add({
         type => 'a1-t1',
         author => 'foo',
@@ -18,7 +21,7 @@ sub basic :Tests {
     });
     db->events->add({
         type => 'a2-t2',
-        author => 'foo',
+        author => 'bar',
         realm => 'europe',
     });
     db->events->add({
@@ -27,22 +30,28 @@ sub basic :Tests {
         realm => 'asia',
     });
 
+    my $expect = sub {
+        [ map { superhashof({ type => "a$_-t$_" }) } @_ ]
+    };
+
     cmp_deeply(
         db->events->list({ realm => 'europe' }),
-        [
-            superhashof({ type => 'a2-t2' }), # last in, first out
-            superhashof({ type => 'a1-t1' }),
-        ]
+        $expect->(2, 1) # last in, first out
     );
 
-    db->users->add({ login => 'foo', fr => ['europe'] });
+    cmp_deeply(
+        db->events->list({}),
+        $expect->(3, 2, 1)
+    );
 
     cmp_deeply(
         db->events->list({ for => 'foo' }),
-        [
-            superhashof({ type => 'a2-t2' }),
-            superhashof({ type => 'a1-t1' }),
-        ]
+        $expect->(2, 1)
+    );
+
+    cmp_deeply(
+        db->events->list({ author => 'foo' }),
+        $expect->(3, 1)
     );
 }
 

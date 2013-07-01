@@ -22,6 +22,7 @@ use Play::DB qw(db);
 
 use Type::Params qw(validate);
 use Types::Standard qw(Undef Int Str Optional HashRef ArrayRef Dict);
+use Play::Types qw(Login);
 
 sub _prepare_event {
     my $self = shift;
@@ -55,7 +56,7 @@ sub email {
         subject => Str,
         body => Str,
         notify_field => Optional[Str],
-        login => Optional[Str],
+        login => Optional[Login],
     ]);
 
     my $email_storage = Play::Flux->email;
@@ -115,23 +116,23 @@ sub list {
         offset => Optional[Int],
         realm => Optional[Str],
         for => Optional[Str],
+        author => Optional[Login],
     ]);
     $params //= {};
     $params->{limit} //= 100;
     $params->{offset} //= 0;
-
-    die "One of 'realm' and 'for' should be set" if not defined $params->{for} and not defined $params->{realm};
-    die "Only one of 'realm' and 'for' should be set" if defined $params->{for} and defined $params->{realm};
 
     my $search_opt = {};
 
     if (defined $params->{realm}) {
         $search_opt->{realm} = $params->{realm};
     }
-    else {
+    elsif (defined $params->{for}) {
         my $user = db->users->get_by_login($params->{for}) or die "User '$params->{for}' not found";
         $search_opt->{realm} = { '$in' => $user->{fr} || [] };
     }
+
+    $search_opt->{author} = $params->{author} if defined $params->{author};
 
     my ($limit, $offset) = ($params->{limit}, $params->{offset});
 
