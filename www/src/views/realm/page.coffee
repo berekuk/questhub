@@ -1,4 +1,10 @@
-define ["underscore", "views/proto/common", "views/realm/controls", "models/event-collection", "views/event/collection", "text!templates/realm-page.html"], (_, Common, RealmControls, EventCollectionModel, EventCollection, html) ->
+define [
+    "underscore"
+    "views/proto/common"
+    "views/realm/controls"
+    "models/event-collection", "views/event/collection"
+    "text!templates/realm-page.html"
+], (_, Common, RealmControls, EventCollectionModel, EventCollection, html) ->
     Common.extend
         template: _.template(html)
         activeMenuItem: "realm-page"
@@ -18,5 +24,3 @@ define ["underscore", "views/proto/common", "views/realm/controls", "models/even
             )
             collection.fetch()
             new EventCollection(collection: collection)
-
-
