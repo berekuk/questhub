@@ -29,16 +29,31 @@ sub limit_offset :Tests {
 }
 
 sub list :Tests {
-    db->events->add({ blah => 5, type => 'add-test', realm => 'europe' });
-    db->events->add({ blah => 6, type => 'add-test', realm => 'europe' });
+    db->events->add({ author => 'foo', blah => $_, type => 'add-test', realm => 'europe' }) for (5, 6);
 
     my $list = http_json GET => '/api/event?realm=europe';
     cmp_deeply
         $list,
         [
-            superhashof({ blah => 6, _id => re('^\S+$'), ts => re('^\d+$'), type => 'add-test', realm => 'europe' }),
-            superhashof({ blah => 5, _id => re('^\S+$'), ts => re('^\d+$'), type => 'add-test', realm => 'europe' }),
-        ]
+            map {
+                superhashof({ author => 'foo', blah => $_, _id => re('^\S+$'), ts => re('^\d+$'), type => 'add-test', realm => 'europe' }),
+            } (6, 5)
+        ];
+
+    $list = http_json GET => '/api/event?author=foo';
+    cmp_deeply
+        $list,
+        [ map { superhashof({ blah => $_ }) } (6, 5) ];
+
+    $list = http_json GET => '/api/event';
+    cmp_deeply
+        $list,
+        [ map { superhashof({ blah => $_ }) } (6, 5) ];
+
+    $list = http_json GET => '/api/event?author=bar';
+    cmp_deeply
+        $list,
+        [];
 }
 
 sub various_events :Tests {

@@ -45,7 +45,7 @@ define ["underscore", "views/proto/common", "models/quest-collection", "views/qu
             options.realm = @realm()
             if options.watchedByMe
                 unless currentUser.get("login")
-                    Backbone.trigger "pp:navigate", "/welcome",
+                    Backbone.history.navigate "/welcome",
                         trigger: true
                         replace: true
 
@@ -70,7 +70,7 @@ define ["underscore", "views/proto/common", "models/quest-collection", "views/qu
             @switchTabByName tab
             url = "/realm/#{@realm()}/explore/#{tab}"
             url += "/tag/#{@tag}" if @tag?
-            Backbone.trigger "pp:navigate", url
+            Backbone.history.navigate url
             Backbone.trigger "pp:quiet-url-update"
 
         switchTabByName: (tab) ->
@@ -86,5 +86,5 @@ define ["underscore", "views/proto/common", "models/quest-collection", "views/qu
             @$("[data-explore-tab=" + @tab + "]").parent().addClass "active"
 
         removeFilter: ->
-            Backbone.trigger "pp:navigate", "/realm/" + @realm() + "/explore/" + @tab,
+            Backbone.history.navigate "/realm/#{ @realm() }/explore/#{@tab}",
                 trigger: true

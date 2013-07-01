@@ -1,51 +1,86 @@
 .user-big {
-    .user-big-avatar {
-        float: left;
+    &:after {
+        content: '';
+        display: block;
+        clear: both;
     }
-    .user-big-names {
-        float: left;
+}
+
+.user-big-avatar {
+    float: left;
+}
+
+.user-big-names {
+    float: left;
+    margin-left: 10px;
+    @include breakpoint(B) {
         margin-left: 20px;
-        .user-big-player-login {
-            font-size: 18px;
-            vertical-align: middle;
-            line-height: 30px;
-        }
     }
-
-    .user-big-points {
-        clear: both;
-        ul, li {
-            display: inline-block;
-            margin: 0;
-            padding: 0;
-        }
-        ul {
-            margin-top: 10px;
-            list-style-type: none;
-            li {
-                margin-bottom: 7px;
-                text-align: right;
-            }
-        }
-        @include breakpoint(B) {
-            clear: none;
-            ul {
-                margin-top: 4px;
-                margin-left: 20px;
-            }
-        }
-
-        .icon-question-sign {
-            color: $dark-grey;
-        }
+    .user-big-player-login {
+        font-size: 18px;
+        vertical-align: middle;
+        line-height: 30px;
     }
+}
 
-    .user-big-new-quest {
+.user-big-tabs {
+    clear: both;
+    padding-top: 8px;
+    @include breakpoint(B) {
         float: right;
-        margin-top: 10px;
-        margin-right: 10px;
+        clear: none;
+        padding-top: 0;
     }
-    .user-big-terminator {
-        clear: both;
+
+    ul {
+        list-style-type: none;
+        margin: 0px;
+    }
+    li {
+        display: inline-block;
+    }
+
+    @mixin switch-circle($color) {
+        border: 2px $color solid;
+        &:hover {
+            background-color: $color;
+        }
+        &._active {
+            background-color: $color;
+        }
+    }
+
+    ._icon {
+        @include border-radius(50%);
+        display: table-cell;
+
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+
+        text-align: center;
+        vertical-align: middle;
+
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+        @include breakpoint(B) {
+            width: 46px;
+            height: 46px;
+            font-size: 18px;
+        }
+    }
+
+    ._icon._active {
+        cursor: default;
+    }
+
+    ._icon._switch-quests {
+        @include switch-circle($highlight);
+    }
+    ._icon._switch-activity {
+        @include switch-circle($closed-quest-color);
+    }
+    ._icon._switch-profile {
+        @include switch-circle($unclaimed-quest-color);
     }
 }

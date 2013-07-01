@@ -5,20 +5,9 @@
       <h2>So, here's your profile!</h2>
     </div>
   <% } %>
-  <div class="user-subview"></div>
 
-  <ul class="nav nav-pills dashboard-nav">
-    <li><a href="#" data-dashboard-tab="open">
-      Open
-      <span class="desktop-text">quests</span></a></li>
-    <li><a href="#" data-dashboard-tab="closed">
-      Completed
-      <span class="desktop-text">quests</span></a></li>
-    <li><a href="#" data-dashboard-tab="abandoned">
-      Abandoned
-      <span class="desktop-text">quests</span></a></li>
-  </ul>
-  <div class="quests-subview"></div>
+  <div class="user-subview"></div>
+  <div class="dashboard-subview"></div>
 
   <% if (obj.tour) { %>
     <div class="newbie-tour newbie-tour-expect-quest">
@@ -29,7 +18,4 @@
       <h3>Great! Let's move on. Our final stop is your personal <a href="/">news feed</a>.</h3>
     </div>
   <% } %>
-
-  <div class="progress-subview"></div>
-
 </div>

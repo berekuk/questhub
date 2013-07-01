@@ -7,5 +7,3 @@ define ["underscore", "views/proto/push-pull", "text!templates/like.html"], (_, 
 
         pull: ->
             @model.unlike()
-
-

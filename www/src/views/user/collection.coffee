@@ -11,5 +11,3 @@ define ["underscore", "views/proto/paged-collection", "views/user/small", "text!
                 model: model
                 realm: @realm()
             )
-
-

@@ -3,5 +3,3 @@ define ["models/proto/paged-collection", "models/another-user"], (Parent, Anothe
         cgi: ["sort", "order", "limit", "offset", "realm"]
         baseUrl: "/api/user"
         model: AnotherUser
-
-

@@ -1,0 +1,38 @@
+<div class="dashboard-profile">
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span6 well dashboard-profile-scores">
+        <% if (obj.rp && _.size(obj.rp)) { %>
+          <ul>
+          <% _.each(rp, function (points, realm) { %>
+            <li>
+              <a class="_realm-link" href="/realm/<%- realm %>">
+                <img src="/i/<%- realm %>.png"/>
+              </a>
+              <span class="dashboard-profile-text">
+                <a href="/realm/<%- realm %>/players">
+                  <%- points %> points
+                </a>
+              </span>
+            </li>
+          <% }) %>
+          </ul>
+        <% } else { %>
+          <span class="dashboard-profile-text">
+            You don't have any points yet.
+          </span>
+        <% } %>
+        <i class="icon-question-sign" data-toggle="tooltip" title='points are granted for each completed quest and each "like" on those quests'></i>
+      </div>
+      <div class="span6 well dashboard-profile-quest-stats">
+        <% _.each(stat.quests, function (n, status) { %>
+          <div class="dashboard-profile-text">
+            <a href="/player/<%- login %>/quest/<%- status %>">
+            <%- n %> <%- status == 'closed' ? 'completed' : status %> quests
+            </a>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+</div>

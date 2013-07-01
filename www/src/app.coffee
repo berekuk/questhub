@@ -1,19 +1,21 @@
 # move these into appropriate modules
 require [
     "jquery",
-    "router",
-    "views/app", "models/current-user",
+    "routers/main", "routers/user", "routers/realm", "routers/legacy"
+    "views/app",
+    "models/current-user",
     "bootstrap", "jquery.autosize", "jquery.timeago"
-], ($, Router, App, currentUser) ->
+], ($, MainRouter, UserRouter, RealmRouter, LegacyRouter, App, currentUser) ->
     appView = new App(el: $("#wrap"))
     appView.render()
     $(document).ajaxError ->
         appView.notify "error", "Internal HTTP error"
         ga "send", "event", "server", "error"
 
-    router = new Router(appView)
-    Backbone.on "pp:navigate", (url, options) ->
-        router.navigate url, options
+    new MainRouter(appView)
+    new RealmRouter(appView)
+    new UserRouter(appView)
+    new LegacyRouter(appView)
 
     Backbone.on "pp:notify", (type, message) ->
         appView.notify type, message
@@ -38,5 +40,5 @@ require [
         if not event.altKey and not event.ctrlKey and not event.metaKey and not event.shiftKey
             event.preventDefault()
             url = $(event.currentTarget).attr("href").replace(/^\//, "")
-            router.navigate url,
+            Backbone.history.navigate url,
                 trigger: true

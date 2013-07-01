@@ -66,6 +66,7 @@
             'spec/comment', 'spec/like',
             'spec/event-box',
             'spec/realm',
+            'spec/dashboard',
             'spec/model/quest', 'spec/model/event', 'spec/model/current-user'
         );
 
@@ -87,7 +88,8 @@
             login: 'jasmine',
             _id: '12345678901234567890abcd',
             settings: {},
-            notifications: []
+            notifications: [],
+            pic: "/current-user.png"
         });
 
         sharedModels.realms.set([

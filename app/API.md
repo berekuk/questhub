@@ -79,7 +79,11 @@ Unfollow a realm.
 
 ##### GET /api/user/{login}
 
-Get any user data.
+Get user data.
+
+##### GET /api/user/{login}/stat
+
+Get user statistics: number of open quests, number of completed quests, etc.
 
 ##### GET /api/user/{login}/pic?s={size}
 
@@ -247,7 +251,10 @@ Get the list of realms.
 
 Get events, starting from the latest.
 
-`realm` or `for` parameter is required. `realm` filters by realm; `for` gives the personal feed of one user (i.e., list of all events this user is subscribed to).
+Filtering options:
+* `realm`
+* `for` - get personal feed of one user (i.e., list of all events this user is subscribed to); only one of `realm` and `for` can be set at the same time
+* `author` - get the activity of one user
 
 Other options:
 
