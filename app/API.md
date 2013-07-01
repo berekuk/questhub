@@ -79,7 +79,11 @@ Unfollow a realm.
 
 ##### GET /api/user/{login}
 
-Get any user data.
+Get user data.
+
+##### GET /api/user/{login}/stat
+
+Get user statistics: number of open quests, number of completed quests, etc.
 
 ##### GET /api/user/{login}/pic?s={size}
 

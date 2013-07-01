@@ -133,6 +133,11 @@ get '/user/:login' => sub {
     return $user;
 };
 
+get '/user/:login/stat' => sub {
+    my $login = param('login');
+    return db->users->stat($login);
+};
+
 get '/user/:login/pic' => sub {
     my $size = param('s');
     my $file = db->images->upic_file(param('login'), $size);

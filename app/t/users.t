@@ -496,4 +496,24 @@ sub settings :Tests {
     cmp_deeply $got_settings, { blah => 5, duh => 6 };
 }
 
+sub stat :Tests {
+    my $self = shift;
+    http_json GET => "/api/fakeuser/foo";
+
+    http_json POST => '/api/quest', { params => {
+        name => 'q1',
+        realm => 'europe',
+    } };
+
+    my $stat = http_json GET => '/api/user/foo/stat';
+    cmp_deeply $stat, {
+        quests => {
+            open => 1,
+            closed => 0,
+            abandoned => 0,
+        }
+    };
+
+}
+
 __PACKAGE__->new->runtests;
