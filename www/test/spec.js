@@ -88,7 +88,8 @@
             login: 'jasmine',
             _id: '12345678901234567890abcd',
             settings: {},
-            notifications: []
+            notifications: [],
+            pic: "/current-user.png"
         });
 
         sharedModels.realms.set([

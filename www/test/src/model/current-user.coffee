@@ -78,9 +78,3 @@ define ["models/current-user"], (currentUser) ->
                         expect(server.requests.length).toEqual 1
                         expect(server.requests[0].method).toEqual "POST"
                         expect(server.requests[0].url).toEqual "/api/" + t + "_realm/blah"
-
-
-
-
-
-
