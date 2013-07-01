@@ -34,9 +34,9 @@ define [
         # TODO - detect 't' default value from the class name somehow? is it possible in JS?
         initialize: ->
             super
-            @initSubviews()  if @activated
+            @initSubviews() if @activated
             @afterInitialize()
-            @render()  if @selfRender
+            @render() if @selfRender
 
         initSubviews: ->
             @_subviewInstances
@@ -44,24 +44,28 @@ define [
             # this was a warning situation in the past, but now views/explore.js legitimately re-initializes subviews
             #            console.log('initSubviews is called twice!');
             @_subviewInstances = {}
-            that = this
-            _.each _.keys(_.result(this, "subviews")), (key) ->
-                that.subview key # will perform the lazy init
+            _.each _.keys(_.result(this, "subviews")), (key) =>
+                @subview key # will perform the lazy init
 
 
         rebuildSubview: (key) ->
             value = _.result(this, "subviews")[key]
             method = value
-            method = this[value]  unless _.isFunction(method)
-            throw new Error("Method \"" + value + "\" does not exist")  unless method
+            method = this[value] unless _.isFunction(method)
+            throw new Error("Method '#{value}' does not exist") unless method
             method = _.bind(method, this)
             subview = method()
             @_subviewInstances[key] = subview
 
+            # useless on initial init - view's element is an empty div - but can come in handy if someone calls rebuildSubview leter
+            subview.setElement(@$(key))
+
+            subview
+
 
         # get a subview from cache, lazily instantiate it if necessary
         subview: (key) ->
-            @rebuildSubview key  unless @_subviewInstances[key]
+            @rebuildSubview key unless @_subviewInstances[key]
             @_subviewInstances[key]
 
         afterInitialize: ->
@@ -89,19 +93,18 @@ define [
 
             # TODO - enable all features by default?
             # how much overhead would that create?
-            that = this
-            _.each @features, (feature) ->
+            _.each @features, (feature) =>
                 if feature is "timeago"
-                    that.$("time.timeago").timeago()
+                    @$("time.timeago").timeago()
                 else if feature is "tooltip"
-                    that.$("[data-toggle=tooltip]").tooltip()
+                    @$("[data-toggle=tooltip]").tooltip()
                 else
                     console.log "unknown feature: " + feature
 
             @afterRender()
-            _.each _.keys(@_subviewInstances), (key) ->
-                subview = that._subviewInstances[key]
-                subview.setElement(that.$(key)).render()
+            _.each _.keys(@_subviewInstances), (key) =>
+                subview = @_subviewInstances[key]
+                subview.setElement(@$(key)).render()
 
             @trigger "render"
             this
@@ -109,12 +112,10 @@ define [
         afterRender: (->)
 
         remove: ->
-            that = this
-
             # _subviewInstances can be undefined if view was never activated
             if @_subviewInstances
-                _.each _.keys(@_subviewInstances), (key) ->
-                    subview = that._subviewInstances[key]
+                _.each _.keys(@_subviewInstances), (key) =>
+                    subview = @_subviewInstances[key]
                     subview.remove()
 
             super

@@ -1,68 +1,50 @@
-define ["underscore", "views/proto/common", "views/user/big", "views/quest/dashboard-collection", "models/quest-collection", "models/current-user", "text!templates/dashboard.html"], (_, Common, UserBig, DashboardQuestCollection, QuestCollectionModel, currentUser, html) ->
-    Common.extend
+define [
+    "underscore"
+    "views/proto/common"
+    "views/user/big",
+    "views/dashboard/quests", "views/dashboard/activity", "views/dashboard/profile"
+    "models/current-user",
+    "text!templates/dashboard.html"
+], (_, Common, UserBig, DashboardQuests, DashboardActivity, DashboardProfile, currentUser, html) ->
+    class extends Common
         template: _.template(html)
         activated: false
         activeMenuItem: -> (if @my() then "my-quests" else "none")
 
-        tab: "open"
-
-        events:
-            "click ul.dashboard-nav a": "switchTab"
+        tab: "quests"
 
         subviews:
             ".user-subview": ->
                 new UserBig
                     model: @model
 
-            ".quests-subview": ->
-                if @tab is "open"
-                    @createQuestSubview "open",
-                        sort: "manual"
-                        status: "open"
-
-                else if @tab is "closed"
-                    @createQuestSubview "completed",
-                        status: "closed"
-
-                else if @tab is "abandoned"
-                    @createQuestSubview "abandoned",
-                        status: "abandoned"
-
+            ".dashboard-subview": ->
+                if @tab == 'quests'
+                    new DashboardQuests model: @model
+                else if @tab == 'activity'
+                    new DashboardActivity model: @model
+                else if @tab == 'profile'
+                    new DashboardProfile model: @model
                 else
-                    Backbone.trigger "pp:notify", "error", "unknown tab " + @tab
+                    alert "unknown tab #{@tab}"
 
-        switchTab: (e) ->
-            tab = $(e.target).closest("a").attr("data-dashboard-tab")
-            @switchTabByName tab
-            url = "/player/#{ @model.get("login") }/quest/#{tab}"
-            Backbone.trigger "pp:navigate", url
-            Backbone.trigger "pp:quiet-url-update"
+
+        initSubviews: ->
+            super
+            @listenTo @subview(".user-subview"), "switch", (params) ->
+                tab = params.tab
+                @switchTabByName tab
+                tab2url =
+                    quests: ''
+                    activity: '/activity'
+                    profile: '/profile'
+                url = "/player/#{ @model.get("login") }#{ tab2url[tab] }"
+                Backbone.trigger "pp:navigate", url
+                Backbone.trigger "pp:quiet-url-update"
 
         switchTabByName: (tab) ->
             @tab = tab
-            @rebuildSubview ".quests-subview"
-            @render() # TODO - why can't we just re-render a subview?
-
-        createQuestSubview: (caption, options) ->
-            that = this
-            # open quests are always displayed in their entirety
-            options.limit = 100 unless options.status is "open"
-            options.order = "desc"
-            options.user = @model.get("login")
-            collection = new QuestCollectionModel([], options)
-            collection.fetch()
-            viewOptions =
-                collection: collection
-                caption: caption
-                user: @model.get("login")
-
-            if options.status is "open" and @my()
-                @listenTo Backbone, "pp:quest-add", (model) ->
-                    collection.add model, prepend: true
-                viewOptions.sortable = true
-
-            collectionView = new DashboardQuestCollection(viewOptions)
-            collectionView
+            @rebuildSubview(".dashboard-subview").render()
 
         my: ->
             currentLogin = currentUser.get("login")
@@ -78,12 +60,7 @@ define ["underscore", "views/proto/common", "views/user/big", "views/quest/dashb
             @my() and currentUser.onTour("profile")
 
         serialize: ->
-            my = @my()
-            tour = (my and currentUser.onTour("profile"))
+            tour = @onTour()
             @listenToOnce Backbone, "pp:quest-add", @tourGotQuest if tour
 
-            my: my
             tour: tour
-
-        afterRender: ->
-            @$("[data-dashboard-tab=" + @tab + "]").parent().addClass "active"

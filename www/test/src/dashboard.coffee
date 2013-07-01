@@ -11,28 +11,28 @@ define [
 
         describe "initial tab", ->
             it "tab property", ->
-                expect(view.tab).toEqual "open"
+                expect(view.tab).toEqual "quests"
 
             it "highlighted tab link", ->
-                expect(view.$el.find(".dashboard-nav .active a").attr("data-dashboard-tab")).toEqual "open"
+                expect(view.$el.find(".user-big-tabs ._active").attr("data-tab")).toEqual "quests"
 
-        describe "tab change", ->
+        describe "quests tab change", ->
             beforeEach ->
                 sinon.spy Backbone, "trigger"
-                view.$el.find("a:contains(Completed)").click()
+                view.$el.find(".user-big-tabs [data-tab=activity]").click()
             afterEach ->
                 Backbone.trigger.restore()
 
             it "changes view.tab", ->
-                expect(view.tab).toBe "closed"
+                expect(view.tab).toBe "activity"
 
             it "updates url", ->
                 expect(Backbone.trigger.called).toBe true
                 expect(Backbone.trigger.getCall(0).args[0]).toEqual "pp:navigate"
-                expect(Backbone.trigger.getCall(0).args[1]).toEqual "/player/jasmine/quest/closed"
+                expect(Backbone.trigger.getCall(0).args[1]).toEqual "/player/jasmine/activity"
 
             it "highlighted tab link", ->
-                expect(view.$el.find(".dashboard-nav .active a").attr("data-dashboard-tab")).toEqual "closed"
+                expect(view.$el.find(".user-big-tabs ._active").attr("data-tab")).toEqual "activity"
 
 
     describe "another user's dashboard:", ->
