@@ -247,7 +247,10 @@ Get the list of realms.
 
 Get events, starting from the latest.
 
-`realm` or `for` parameter is required. `realm` filters by realm; `for` gives the personal feed of one user (i.e., list of all events this user is subscribed to).
+Filtering options:
+* `realm`
+* `for` - get personal feed of one user (i.e., list of all events this user is subscribed to); only one of `realm` and `for` can be set at the same time
+* `author` - get the activity of one user
 
 Other options:
 
