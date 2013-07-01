@@ -30,9 +30,6 @@ define ["views/event/box", "models/event", "jasmine-jquery"], (EventBox, EventMo
             )
             view = new EventBox(model: model)
             view.render()
+
             it "quest name in event html", ->
                 expect(view.$el.html()).toContain "quest name"
-
-
-
-

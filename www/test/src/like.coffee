@@ -15,6 +15,7 @@ define ["models/current-user", "models/quest", "views/quest/like"], (currentUser
             model = new QuestModel(_.extend(proto, {}))
             view = new Like(model: model)
             view.render()
+
             it "contains likes badge", ->
                 expect(view.$el).toContain ".like-button"
 
@@ -31,6 +32,7 @@ define ["models/current-user", "models/quest", "views/quest/like"], (currentUser
             ))
             view = new Like(model: model)
             view.render()
+
             it "contains likes badge", ->
                 expect(view.$el).toContain ".like-button"
                 expect(view.$(".like-button")).toHaveText "2"
@@ -47,12 +49,9 @@ define ["models/current-user", "models/quest", "views/quest/like"], (currentUser
             ))
             view = new Like(model: model)
             view.render()
+
             it "contains likes badge", ->
                 expect(view.$el).toContain ".like-button"
 
             it "not clickable", ->
                 expect(view.$el).not.toContain "a"
-
-
-
-

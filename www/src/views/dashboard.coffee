@@ -5,17 +5,14 @@ define ["underscore", "views/proto/common", "views/user/big", "views/quest/dashb
         activeMenuItem: -> (if @my() then "my-quests" else "none")
 
         tab: "open"
-        realm: -> @options.realm
 
         events:
             "click ul.dashboard-nav a": "switchTab"
 
         subviews:
             ".user-subview": ->
-                new UserBig(
+                new UserBig
                     model: @model
-                    realm: @realm()
-                )
 
             ".quests-subview": ->
                 if @tab is "open"
