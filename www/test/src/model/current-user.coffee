@@ -50,31 +50,62 @@ define ["models/current-user"], (currentUser) ->
                 expect(currentUser.needsToRegister()).not.toBe true
 
 
-        describe "realms:", ->
+        describe "following", ->
             server = undefined
             beforeEach ->
                 sinon.spy mixpanel, "track"
                 server = sinon.fakeServer.create()
-                server.respondWith "POST", "/api/follow_realm/blah", [200,
-                    "Content-Type": "application/json"
-                , JSON.stringify(result: "ok")]
 
             afterEach ->
                 mixpanel.track.restore()
                 server.restore()
 
-            _.each ["follow", "unfollow"], (t) ->
-                method = t + "Realm"
-                describe method, ->
-                    it "calls mixpanel.track", ->
-                        currentUser[method] "blah"
-                        server.respond()
-                        expect(mixpanel.track.calledOnce).toBe true
-                        expect(mixpanel.track.calledWith(t + " realm")).toBe true
+            describe "realms:", ->
+                beforeEach ->
+                    server.respondWith "POST", "/api/follow_realm/blah", [200,
+                        "Content-Type": "application/json"
+                    , JSON.stringify(result: "ok")]
+                    server.respondWith "POST", "/api/unfollow_realm/blah", [200,
+                        "Content-Type": "application/json"
+                    , JSON.stringify(result: "ok")]
 
-                    it "posts to API", ->
-                        currentUser[method] "blah"
-                        server.respond()
-                        expect(server.requests.length).toEqual 1
-                        expect(server.requests[0].method).toEqual "POST"
-                        expect(server.requests[0].url).toEqual "/api/" + t + "_realm/blah"
+                _.each ["follow", "unfollow"], (t) ->
+                    method = t + "Realm"
+                    describe method, ->
+                        it "calls mixpanel.track", ->
+                            currentUser[method] "blah"
+                            server.respond()
+                            expect(mixpanel.track.calledOnce).toBe true
+                            expect(mixpanel.track.calledWith(t + " realm")).toBe true
+
+                        it "posts to API", ->
+                            currentUser[method] "blah"
+                            server.respond()
+                            expect(server.requests.length).toEqual 1
+                            expect(server.requests[0].method).toEqual "POST"
+                            expect(server.requests[0].url).toEqual "/api/" + t + "_realm/blah"
+
+            describe "players:", ->
+                beforeEach ->
+                    server.respondWith "POST", "/api/user/somebody/follow", [200,
+                        "Content-Type": "application/json"
+                    , JSON.stringify(result: "ok")]
+                    server.respondWith "POST", "/api/user/somebody/unfollow", [200,
+                        "Content-Type": "application/json"
+                    , JSON.stringify(result: "ok")]
+
+                _.each ["follow", "unfollow"], (t) ->
+                    method = t + "User"
+                    describe method, ->
+                        it "calls mixpanel.track", ->
+                            currentUser[method] "somebody"
+                            server.respond()
+                            expect(mixpanel.track.calledOnce).toBe true
+                            expect(mixpanel.track.calledWith(t + " user")).toBe true
+
+                        it "posts to API", ->
+                            currentUser[method] "somebody"
+                            server.respond()
+                            expect(server.requests.length).toEqual 1
+                            expect(server.requests[0].method).toEqual "POST"
+                            expect(server.requests[0].url).toEqual "/api/user/somebody/" + t
