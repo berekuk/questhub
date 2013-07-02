@@ -1,4 +1,5 @@
 .user-big {
+    position: relative;
     &:after {
         content: '';
         display: block;
@@ -24,14 +25,21 @@
 }
 
 .user-big-actions {
-    float: left;
-    margin-left: 10px;
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+
+    @include breakpoint(A) {
+        position: static;
+        float: left;
+        margin-left: 15px;
+    }
 }
 
 .user-big-tabs {
     clear: both;
     padding-top: 8px;
-    @include breakpoint(B) {
+    @include breakpoint(A) {
         float: right;
         clear: none;
         padding-top: 0;
