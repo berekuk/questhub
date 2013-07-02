@@ -10,49 +10,162 @@ sub setup :Test(setup) {
     reset_db();
 }
 
-sub basic :Tests {
-    db->users->add({ login => 'foo', fr => ['europe'] });
+sub _cmp_list {
+    my ($query, $types) = @_;
+
+    cmp_deeply(
+        db->events->list($query),
+        [ map { superhashof({ type => $_ }) } @$types ]
+    );
+}
+
+sub list_realm :Tests {
+    db->users->add({ login => 'foo' });
     db->users->add({ login => 'bar' });
 
     db->events->add({
-        type => 'a1-t1',
+        type => 'e1',
         author => 'foo',
         realm => 'europe',
     });
     db->events->add({
-        type => 'a2-t2',
+        type => 'e2',
         author => 'bar',
         realm => 'europe',
     });
     db->events->add({
-        type => 'a3-t3',
-        author => 'foo',
+        type => 'e3',
+        author => 'bar',
         realm => 'asia',
     });
 
-    my $expect = sub {
-        [ map { superhashof({ type => "a$_-t$_" }) } @_ ]
-    };
+    _cmp_list
+        { realm => 'europe' },
+        [qw( e2 e1 )];
+}
 
-    cmp_deeply(
-        db->events->list({ realm => 'europe' }),
-        $expect->(2, 1) # last in, first out
-    );
+sub list_for_self :Tests {
+    db->users->add({ login => 'foo' });
+    db->users->add({ login => 'bar' });
 
-    cmp_deeply(
-        db->events->list({}),
-        $expect->(3, 2, 1)
-    );
+    db->events->add({
+        type => 'e1',
+        author => 'foo',
+        realm => 'europe',
+    });
+    db->events->add({
+        type => 'e2',
+        author => 'foo',
+        realm => 'europe',
+    });
+    db->events->add({
+        type => 'e3',
+        author => 'bar',
+        realm => 'europe',
+    });
 
-    cmp_deeply(
-        db->events->list({ for => 'foo' }),
-        $expect->(2, 1)
-    );
+    _cmp_list
+        { for => 'foo' },
+        [qw( e2 e1 )];
+}
 
-    cmp_deeply(
-        db->events->list({ author => 'foo' }),
-        $expect->(3, 1)
-    );
+sub list_for_fr :Tests {
+    db->users->add({ login => 'foo', fr => ['asia'] });
+    db->users->add({ login => 'bar' });
+    db->users->add({ login => 'baz', fr => ['asia', 'europe'] });
+
+    db->events->add({
+        type => 'e1',
+        author => 'bar',
+        realm => 'europe',
+    });
+    db->events->add({
+        type => 'e2',
+        author => 'bar',
+        realm => 'asia',
+    });
+    db->events->add({
+        type => 'e3',
+        author => 'bar',
+        realm => 'asia',
+    });
+
+    _cmp_list
+        { for => 'foo' },
+        [qw( e3 e2 )];
+    _cmp_list
+        { for => 'baz' },
+        [qw( e3 e2 e1 )];
+}
+
+sub list_for_fu :Tests {
+    db->users->add({ login => 'foo', fu => ['bar'] });
+    db->users->add({ login => 'bar' });
+    db->users->add({ login => 'baz', fu => ['foo', 'bar'] });
+
+    db->events->add({
+        type => 'e1',
+        author => 'foo',
+        realm => 'europe',
+    });
+    db->events->add({
+        type => 'e2',
+        author => 'bar',
+        realm => 'asia',
+    });
+    db->events->add({
+        type => 'e3',
+        author => 'baz',
+        realm => 'asia',
+    });
+
+    _cmp_list
+        { for => 'foo' },
+        [qw( e2 e1 )];
+    _cmp_list
+        { for => 'bar' },
+        [qw( e2 )];
+    _cmp_list
+        { for => 'baz' },
+        [qw( e3 e2 e1 )];
+}
+
+sub list_for_mixed :Tests {
+    db->users->add({ login => 'foo', fu => ['bar', 'baz'], fr => ['asia'] });
+    db->users->add({ login => 'bar' });
+    db->users->add({ login => 'baz' });
+    db->users->add({ login => 'yarr' });
+    db->users->add({ login => 'arrgh' });
+
+    db->events->add({
+        type => 'e1',
+        author => 'foo',
+        realm => 'europe',
+    });
+    db->events->add({
+        type => 'e2',
+        author => 'bar',
+        realm => 'europe',
+    });
+    db->events->add({
+        type => 'e3',
+        author => 'baz',
+        realm => 'europe',
+    });
+    db->events->add({
+        type => 'e4',
+        author => 'yarr',
+        realm => 'europe',
+    });
+    db->events->add({
+        type => 'e5',
+        author => 'arrgh',
+        realm => 'asia',
+    });
+
+    _cmp_list
+        { for => 'foo' },
+        [qw( e5 e3 e2 e1 )];
 }
 
 sub realm_validation :Tests {

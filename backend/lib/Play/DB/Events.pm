@@ -129,7 +129,21 @@ sub list {
     }
     elsif (defined $params->{for}) {
         my $user = db->users->get_by_login($params->{for}) or die "User '$params->{for}' not found";
-        $search_opt->{realm} = { '$in' => $user->{fr} || [] };
+
+        my @subqueries;
+        if ($user->{fr}) {
+            push @subqueries, { realm => { '$in' => $user->{fr} } };
+        }
+        $user->{fu} ||= [];
+        push @{ $user->{fu} }, $user->{login};
+        push @subqueries, { author => { '$in' => $user->{fu} } };
+
+        if (@subqueries) {
+            $search_opt->{'$or'} = \@subqueries
+        }
+        else {
+            $search_opt->{no_such_field} = 'no_such_value';
+        }
     }
 
     $search_opt->{author} = $params->{author} if defined $params->{author};
