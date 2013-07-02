@@ -140,6 +140,3 @@ define ["underscore", "jquery", "views/proto/common", "models/user-settings", "m
                 that.enableForm()
                 that.validate()
                 that.subview(".progress-subview").off()
-
-
-

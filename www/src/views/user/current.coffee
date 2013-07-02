@@ -1,4 +1,10 @@
-define ["backbone", "underscore", "views/proto/common", "views/user/notifications-box", "views/user/settings-box", "models/current-user", "models/user-settings", "text!templates/current-user.html"], (Backbone, _, Common, NotificationsBox, UserSettingsBox, currentUser, UserSettingsModel, html) ->
+define [
+    "backbone", "underscore"
+    "views/proto/common"
+    "views/user/notifications-box", "views/user/settings-box"
+    "models/current-user", "models/user-settings"
+    "text!templates/current-user.html"
+], (Backbone, _, Common, NotificationsBox, UserSettingsBox, currentUser, UserSettingsModel, html) ->
     Common.extend
         template: _.template(html)
         events:
@@ -22,14 +28,13 @@ define ["backbone", "underscore", "views/proto/common", "views/user/notification
             @_notificationsBox.start()
 
         setPersonaWatch: ->
-            persona = @model.get("persona")
             user = null
-            user = @model.get("settings").email  if @model.get("settings") and @model.get("settings").email and @model.get("settings").email_confirmed and @model.get("settings").email_confirmed is "persona"
-            view = this
+            if @model.get("settings")?.email and @model.get("settings")?.email_confirmed is "persona"
+                user = @model.get("settings").email
+
             navigator.id.watch
                 loggedInUser: user
-                onlogin: (assertion) ->
-
+                onlogin: (assertion) =>
                     # A user has logged in! Here you need to:
                     # 1. Send the assertion to your backend for verification and to create a session.
                     # 2. Update your UI.
@@ -39,18 +44,18 @@ define ["backbone", "underscore", "views/proto/common", "views/user/notification
                         data:
                             assertion: assertion
 
-                        success: (res, status, xhr) ->
-                            view.model.fetch()
+                        success: (res, status, xhr) =>
+                            @model.fetch()
 
-                        error: (xhr, status, err) ->
+                        error: (xhr, status, err) =>
                             Backbone.trigger "pp:notify", "error", "/auth/persona failed."
 
 
-                onlogout: ->
-
+                onlogout: =>
                     # sometimes persona decides that it should log out the twitter user, so we're trying to prevent it here
                     # it happens often in confusion of localhost:3000 and localhost:3001 in development, since persona only works for :3000
-                    view.backendLogout()  if view.model.get("settings") and view.model.get("settings").email_confirmed is "persona"
+                    if @model.get("settings")?.email_confirmed is "persona"
+                        @backendLogout()
 
 
         afterInitialize: ->
