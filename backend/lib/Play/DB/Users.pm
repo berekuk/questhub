@@ -307,6 +307,77 @@ sub unfollow_realm {
     }
 }
 
+=item B<follow_user($login, $following)>
+
+Subscribe to another user.
+
+=cut
+sub follow_user {
+    my $self = shift;
+    my ($login, $following) = validate(\@_, Login, Login);
+
+    # validating that user exists
+    $self->get_by_login($following) or die "User '$following' not found";
+
+    my $result = $self->collection->update(
+        {
+            login => $login,
+            fu => { '$ne' => $following },
+        },
+        {
+            '$addToSet' => { fu => $following }
+        },
+        { safe => 1 }
+    );
+
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "User $login not found or unable to follow the user $following";
+    }
+
+    my $email = db->users->get_email($following, 'notify_followers') or return;
+    db->events->email({
+        address => $email,
+        subject => "$login is now following you on Questhub",
+        notify_field => 'notify_followers',
+        body => qq[
+            <p>
+            Hi $following,<br>
+            <a href="http://].setting('hostport').qq[/player/$login">$login</a> is now following you on Questhub.
+            </p>
+        ],
+    });
+}
+
+=item B<unfollow_user($login, $following)>
+
+Unsubscribe from a realm.
+
+=cut
+sub unfollow_user {
+    my $self = shift;
+    my ($login, $following) = validate(\@_, Login, Login);
+
+    # validating that user exists
+    $self->get_by_login($following) or die "User '$following' not found";
+
+    my $result = $self->collection->update(
+        {
+            login => $login,
+            fu => $following,
+        },
+        {
+            '$pull' => { fu => $following }
+        },
+        { safe => 1 }
+    );
+
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "User $login not found or unable to unfollow the user $following";
+    }
+}
+
 # some settings can't be set by the client
 sub protected_settings {
     qw( email_confirmed );
@@ -366,7 +437,9 @@ sub confirm_email {
             Login: $login<br>
             Email: $settings->{email}<br>
             Notify about comments on your quests: ].$bool2str->('notify_comments').q[<br>
-            Notify about likes on your quests: ].$bool2str->('notify_likes').q[
+            Notify about likes on your quests: ].$bool2str->('notify_likes').q[<br>
+            Notify about likes on your quests: ].$bool2str->('notify_invites').q[<br>
+            Notify about new followers: ].$bool2str->('notify_followers').q[
             </p>
             <p>
             You can customize your email notifications <a href="http://].setting('hostport').qq[">at the website</a>.

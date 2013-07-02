@@ -15,6 +15,6 @@ define ["underscore", "jquery", "views/proto/common", "text!templates/confirm-em
             ).fail (response) ->
                 ga "send", "event", "confirm-email", "failed"
                 mixpanel.track "confirm-email failed"
-                Backbone.history.navigate, "/",
+                Backbone.history.navigate "/",
                     trigger: true
                     replace: true

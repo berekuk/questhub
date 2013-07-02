@@ -9,5 +9,3 @@ define ["views/realm/big", "views/proto/any-collection", "models/current-user", 
         activeMenuItem: "realms"
         serialize: ->
             tour: currentUser.onTour("realms")
-
-

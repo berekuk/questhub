@@ -1,4 +1,7 @@
 @mixin breakpoint($point) {
+    @if $point == A {
+        @media (min-width: 481px) { @content; }
+    }
     @if $point == B {
         @media (min-width: 768px) { @content; }
     }
@@ -10,6 +13,9 @@
     }
     @else if $point == lessThanB {
         @media (max-width: 767px)  { @content; }
+    }
+    @else if $point == lessThanA {
+        @media (max-width: 480px)  { @content; }
     }
 }
 

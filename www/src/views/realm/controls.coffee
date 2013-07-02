@@ -12,7 +12,6 @@ define ["views/proto/common", "models/current-user", "text!templates/realm-contr
                     that.render()
 
 
-
         unfollow: ->
             that = this
             currentUser.unfollowRealm(@model.get("id")).always ->
@@ -20,10 +19,7 @@ define ["views/proto/common", "models/current-user", "text!templates/realm-contr
                     that.render()
 
 
-
         serialize: ->
             params = @model.toJSON()
             params.currentUser = currentUser
             params
-
-

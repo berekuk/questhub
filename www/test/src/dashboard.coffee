@@ -3,6 +3,15 @@ define [
     "views/dashboard"
 ], (AnotherUserModel, currentUser, Dashboard) ->
     describe "dashboard:", ->
+        # TODO - get rid of this copy-paste, reusable decribe() wrapper?
+        server = undefined
+        beforeEach ->
+            sinon.spy mixpanel, "track"
+            server = sinon.fakeServer.create()
+        afterEach ->
+            mixpanel.track.restore()
+            server.restore()
+
         view = undefined
         beforeEach ->
             view = new Dashboard(model: currentUser)

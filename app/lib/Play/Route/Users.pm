@@ -257,21 +257,26 @@ get '/user/:login/unsubscribe/:field' => sub {
     }
 };
 
-post '/follow_realm/:realm' => sub {
-    my $login = session('login');
-    die "not logged in" unless $login;
-    db->users->follow_realm($login, param('realm'));
+for my $method (qw( follow_realm unfollow_realm )) {
+    post "/$method/:realm" => sub {
+        my $login = session('login') or die "not logged in";
 
-    return { status => 'ok' };
-};
+        db->users->$method($login, param('realm'));
 
-post '/unfollow_realm/:realm' => sub {
-    my $login = session('login');
-    die "not logged in" unless $login;
-    db->users->unfollow_realm($login, param('realm'));
+        return { status => 'ok' };
+    };
+}
 
-    return { status => 'ok' };
-};
+for my $method (qw( follow unfollow )) {
+    post "/user/:login/$method" => sub {
+        my $login = session('login') or die "not logged in";
+
+        my $full_method = "${method}_user";
+        db->users->$full_method($login, param('login'));
+
+        return { status => 'ok' };
+    };
+}
 
 post '/logout' => sub {
     session->destroy(session); #FIXME: workaround a buggy Dancer::Session::MongoDB

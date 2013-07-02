@@ -16,6 +16,7 @@ define ["underscore", "jquery", "views/proto/common", "models/user-settings", "m
                     notify_likes: 1
                     notify_invites: 1
                     notify_comments: 1
+                    notify_followers: 1
                 )
                 if @model.get("settings")
                     model.set "email", @model.get("settings")["email"]

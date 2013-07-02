@@ -73,6 +73,33 @@ sub unfollow_realm :Tests {
     cmp_deeply $user->{fr}, ['europe'];
 }
 
+sub follow_unfollow_user :Tests {
+    db->users->add({ login => $_ }) for qw/ foo bar baz /;
+
+    like
+        exception { db->users->follow_user('foo', 'unknown') },
+        qr/User 'unknown' not found/;
+
+    db->users->follow_user('foo', 'bar');
+
+    my $user = db->users->get_by_login('foo');
+    cmp_deeply $user->{fu}, ['bar'];
+
+    like
+        exception { db->users->follow_user('foo', 'bar') },
+        qr/unable to follow/;
+    $user = db->users->get_by_login('foo');
+    cmp_deeply $user->{fu}, ['bar'];
+
+    db->users->follow_user('foo', 'baz');
+    $user = db->users->get_by_login('foo');
+    cmp_deeply $user->{fu}, ['bar', 'baz'];
+
+    db->users->unfollow_user('foo', 'baz');
+    $user = db->users->get_by_login('foo');
+    cmp_deeply $user->{fu}, ['bar'];
+}
+
 sub unsubscribe :Tests {
     db->users->add({ login => 'foo', realms => ['europe'] });
 

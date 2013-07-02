@@ -3,6 +3,8 @@ define ["backbone", "jquery", "models/user"], (Backbone, $, User) ->
         initialize: ->
             @_tour = {}
 
+        url: -> "/api/current_user"
+
         startTour: ->
             @_tour =
                 realms: true
@@ -34,26 +36,29 @@ define ["backbone", "jquery", "models/user"], (Backbone, $, User) ->
         dismissNotification: (_id) ->
             $.post @url() + "/dismiss_notification/" + _id
 
-        url: ->
-            "/api/current_user"
-
         needsToRegister: ->
-            return  if @get("registered")
-            return true  if @get("twitter") or (@get("settings") and @get("settings").email and @get("settings").email_confirmed)
+            return if @get("registered")
+            return true if @get("twitter")
+            return true if @get("settings") and @get("settings").email and @get("settings").email_confirmed
             return
 
         followRealm: (id) ->
-            mixpanel.track "follow realm",
-                realm_id: id
-
+            mixpanel.track "follow realm", realm_id: id
             $.post "/api/follow_realm/" + id
 
         unfollowRealm: (id) ->
-            mixpanel.track "unfollow realm",
-                realm_id: id
-
+            mixpanel.track "unfollow realm", realm_id: id
             $.post "/api/unfollow_realm/" + id
+
+        followUser: (login) ->
+            mixpanel.track "follow user", following: login
+            $.post "/api/user/#{login}/follow"
+
+        unfollowUser: (login) ->
+            mixpanel.track "unfollow user", following: login
+            $.post "/api/user/#{login}/unfollow"
     )
+
     result = new CurrentUser()
     Backbone.listenTo result, "change", (e) ->
         if result.get("registered")
@@ -62,7 +67,7 @@ define ["backbone", "jquery", "models/user"], (Backbone, $, User) ->
                 $username: result.get("login")
                 $name: result.get("login")
                 $email: result.get("settings").email
-        
+
                 # TODO - fill $created
                 notify_likes: result.get("settings").notify_likes
                 notify_comments: result.get("settings").notify_comments
@@ -71,4 +76,3 @@ define ["backbone", "jquery", "models/user"], (Backbone, $, User) ->
             mixpanel.name_tag result.get("login")
 
     result # singleton!
-

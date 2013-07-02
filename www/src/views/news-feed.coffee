@@ -21,5 +21,4 @@ define ["jquery", "underscore", "views/proto/common", "models/event-collection",
             login: @model.get("login")
             tour: currentUser.onTour("feed")
             followingRealms: currentUser.get("fr")
-
-
+            followingUsers: currentUser.get("fu")
