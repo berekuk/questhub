@@ -13,9 +13,9 @@
         text-align: center;
     }
     padding: 10px;
-    background-color: lighten($open-quest-color, 10%);
-    border: 1px solid darken($grey, 5%);
-    @include box-shadow(0 5px 13px rgba(0, 0, 0, 0.2));
+    background-color: $mat;
+    border: 1px solid darken($grey, 10%);
+    @include box-shadow(0 5px 23px rgba(0, 0, 0, 0.2));
 }
 
 .newbie-tour-expect-quest {
