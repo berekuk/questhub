@@ -106,6 +106,8 @@ define [
             @appView.setPageView view
 
         twitterLogin: ->
+            # unused? remove this route?
+            # views/user/signin sets window.location directly now...
             window.location = "/auth/twitter"
 
         about: ->
