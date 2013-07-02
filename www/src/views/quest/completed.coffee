@@ -4,7 +4,8 @@ define ["underscore", "views/proto/common", "models/current-user", "text!templat
         events:
             "click .btn-primary": "stop"
 
-        afterInitialize: ->
+        initialize: ->
+            super
             @setElement $("#quest-completed-modal")
 
         start: ->
@@ -12,23 +13,11 @@ define ["underscore", "views/proto/common", "models/current-user", "text!templat
             @$(".modal").modal "show"
             $.getScript "http://platform.twitter.com/widgets.js"
 
-    
-        #!function (d,s,id) {
-        #    var js,fjs=d.getElementsByTagName(s)[0];
-        #    if(!d.getElementById(id)){
-        #        js=d.createElement(s);
-        #        js.id=id;
-        #        js.src="//platform.twitter.com/widgets.js";
-        #        fjs.parentNode.insertBefore(js,fjs);
-        #    }
-        #} (document,"script","twitter-wjs");
         stop: ->
             @$(".modal").modal "hide"
 
         serialize: ->
             params = @model.serialize()
             params.gotTwitter = Boolean(currentUser.get("twitter"))
-            params.totalPoints = params.reward + currentUser.get("rp")[@model.get("realm")]
+            params.totalPoints = params.reward + (currentUser.get("rp")[@model.get("realm")] || 0)
             params
-
-
