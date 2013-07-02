@@ -27,21 +27,19 @@
 
   <div class="user-big-tabs">
     <ul>
+      <%
+        _.each({
+          'quests': 'list-ul',
+          'activity': 'film',
+          'profile': 'user'
+        }, function (icon, t) {
+      %>
       <li>
-        <div data-tab="quests" class="_icon _switch-quests">
-          <i class="icon-list-ul"></i>
+        <div data-tab="<%- t %>" class="_icon _switch-<%- t %> <%- tab == t ? '_active' : '' %>">
+          <i class="icon-<%- icon %>"></i>
         </div>
       </li>
-      <li>
-        <div data-tab="activity" class="_icon _switch-activity">
-          <i class="icon-film"></i>
-        </div>
-      </li>
-      <li>
-        <div data-tab="profile" class="_icon _switch-profile">
-          <i class="icon-user"></i>
-        </div>
-      </li>
+      <% }) %>
     </ul>
   </div>
 </div>

@@ -23,6 +23,7 @@ define ["underscore", "views/proto/common", "models/current-user", "views/quest/
             params.registered = currentUser.get("registered")
             params.my = (currentLogin and currentLogin is @model.get("login"))
             params.following = @model.get("login") in (currentUser.get('fu') || [])
+            params.tab = @tab
             params
 
         newQuestDialog: ->
@@ -47,8 +48,5 @@ define ["underscore", "views/proto/common", "models/current-user", "views/quest/
             @trigger "switch", tab: @tab
             t.closest("ul").find("._active").removeClass "_active"
             t.addClass "_active"
-
-        afterRender: ->
-            @$(".user-big-tabs [data-tab=" + @tab + "]").addClass "_active"
 
         features: ["tooltip"]
