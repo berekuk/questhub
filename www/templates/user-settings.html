@@ -17,15 +17,18 @@
     <% } %>
   </div>
   <div>
-    <span class="muted">Notify me by email when someone...</span>
+    <div class="muted notify-text">Notify me by email when someone...</div>
     <label class="checkbox">
-        <input name="notify-comments" type="checkbox" <%= (obj.notify_comments > 0) ? 'checked' : '' %>>comments on my quest
+        <input name="notify-comments" type="checkbox" <%= (obj.notify_comments > 0) ? 'checked' : '' %>>comments on my quest or mentions me
     </label>
     <label class="checkbox">
         <input name="notify-likes" type="checkbox" <%= (obj.notify_likes > 0) ? 'checked' : '' %>>likes my quest
     </label>
     <label class="checkbox">
         <input name="notify-invites" type="checkbox" <%= (obj.notify_invites > 0) ? 'checked' : '' %>>invites me to a quest
+    </label>
+    <label class="checkbox">
+        <input name="notify-followers" type="checkbox" <%= (obj.notify_followers > 0) ? 'checked' : '' %>>follows me
     </label>
   </div>
 </div>

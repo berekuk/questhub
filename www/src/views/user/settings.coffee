@@ -33,15 +33,15 @@ define ["underscore", "jquery", "views/proto/common", "settings", "text!template
             @$("input").prop "disabled", true
 
         typing: ->
-      
+
             # We need both.
             # First line hides status immediately...
             @$(".email-status").hide()
-      
+
             # Second line guarantees that it doesn't show up for a moment when we call save() and re-render.
             @hideEmailStatus = true
 
-    
+
         # i.e., parse the DOM and return the model params
         deserialize: ->
             settings =
@@ -49,10 +49,9 @@ define ["underscore", "jquery", "views/proto/common", "settings", "text!template
                 notify_comments: @$("[name=notify-comments]").is(":checked")
                 notify_likes: @$("[name=notify-likes]").is(":checked")
                 notify_invites: @$("[name=notify-invites]").is(":checked")
+                notify_followers: @$("[name=notify-followers]").is(":checked")
 
             settings
 
         save: (cbOptions) ->
             @model.save @deserialize(), cbOptions
-
-
