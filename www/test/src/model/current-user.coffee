@@ -25,8 +25,15 @@ define ["models/current-user"], (currentUser) ->
 
 
         describe "settings:", ->
+            server = undefined
             beforeEach ->
+                sinon.spy mixpanel, "track"
+                server = sinon.fakeServer.create()
                 currentUser.set "settings", {}
+
+            afterEach ->
+                mixpanel.track.restore()
+                server.restore()
 
             describe "getSetting", ->
                 it "on unknown setting", ->
@@ -38,7 +45,6 @@ define ["models/current-user"], (currentUser) ->
                         bar: 6
 
                     expect(currentUser.getSetting("foo")).toEqual 5
-
 
             it "setSetting", ->
                 currentUser.setSetting "foo", 7

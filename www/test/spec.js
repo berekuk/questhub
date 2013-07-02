@@ -66,7 +66,7 @@
             'spec/comment', 'spec/like',
             'spec/event-box',
             'spec/realm',
-            'spec/dashboard',
+            'spec/dashboard', 'spec/user-big',
             'spec/model/quest', 'spec/model/event', 'spec/model/current-user'
         );
 
