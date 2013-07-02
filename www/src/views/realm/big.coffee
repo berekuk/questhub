@@ -4,5 +4,3 @@ define ["views/proto/common", "views/realm/controls", "text!templates/realm-deta
         subviews:
             ".controls-subview": ->
                 new RealmControls(model: @model)
-
-

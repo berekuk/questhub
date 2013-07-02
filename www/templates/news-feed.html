@@ -16,10 +16,10 @@
       </div>
     </div>
     <div class="span9">
-      <% if (!followingRealms || !followingRealms.length) { %>
+      <% if ( (!followingRealms || !followingRealms.length) && (!followingUsers || !followingUsers.length) ) { %>
       <div class="alert alert-warning">
       <h3>
-        Your news feed is empty.<br>
+        Your don't follow any players or topics yet.<br>
         Go to <a href="/realms">Realms</a> tab and follow some realms.
       </h3>
       </div>

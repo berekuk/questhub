@@ -15,6 +15,16 @@
     <% } } %>
   </div>
 
+  <div class="user-big-actions">
+    <% if (registered && !my) { %>
+      <% if (following) { %>
+        <button class="btn user-big-unfollow">Unfollow</button>
+      <% } else { %>
+        <button class="btn btn-primary user-big-follow">Follow</button>
+      <% } %>
+    <% } %>
+  </div>
+
   <div class="user-big-tabs">
     <ul>
       <li>
