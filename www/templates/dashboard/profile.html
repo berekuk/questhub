@@ -1,37 +1,59 @@
 <div class="dashboard-profile">
   <div class="container-fluid">
     <div class="row-fluid">
-      <div class="span6 well dashboard-profile-scores">
-        <% if (obj.rp && _.size(obj.rp)) { %>
+      <div class="span6">
+        <div class="well dashboard-profile-scores">
+          <% if (obj.rp && _.size(obj.rp)) { %>
           <ul>
-          <% _.each(rp, function (points, realm) { %>
+            <% _.each(rp, function (points, realm) { %>
             <li>
-              <a class="_realm-link" href="/realm/<%- realm %>">
-                <img src="/i/<%- realm %>.png"/>
+            <a class="_realm-link" href="/realm/<%- realm %>">
+              <img src="/i/<%- realm %>.png"/>
+            </a>
+            <span class="dashboard-profile-text">
+              <a href="/realm/<%- realm %>/players">
+                <%- points %> points
               </a>
-              <span class="dashboard-profile-text">
-                <a href="/realm/<%- realm %>/players">
-                  <%- points %> points
-                </a>
-              </span>
+            </span>
             </li>
-          <% }) %>
+            <% }) %>
           </ul>
-        <% } else { %>
+          <% } else { %>
           <span class="dashboard-profile-text">
             You don't have any points yet.
           </span>
-        <% } %>
-        <i class="icon-question-sign" data-toggle="tooltip" title='points are granted for each completed quest and each "like" on those quests'></i>
+          <% } %>
+          <i class="icon-question-sign" data-toggle="tooltip" title='points are granted for each completed quest and each "like" on those quests'></i>
+        </div>
       </div>
-      <div class="span6 well dashboard-profile-quest-stats">
-        <% _.each(stat.quests, function (n, status) { %>
+      <div class="span6">
+        <div class="well dashboard-profile-quest-stats">
+          <% _.each(stat.quests, function (n, status) { %>
           <div class="dashboard-profile-text">
             <a href="/player/<%- login %>/quest/<%- status %>">
-            <%- n %> <%- status == 'closed' ? 'completed' : status %> quests
+              <%- n %> <%- status == 'closed' ? 'completed' : status %> quests
             </a>
           </div>
-        <% }) %>
+          <% }) %>
+        </div>
+        <div class="well dashboard-profile-text">
+          <% if (fr && fr.length) { %>
+            <p>
+                Follows
+                  <%= _.map(fr, function (realm) {
+                    return '<a href="/realm/' + realm + '">' + realm + '</a>'
+                    }).join(", ")
+                  %>
+                realm<%- (fr.length == 1) ? '' : 's' %>.
+            </p>
+          <% } %>
+          <% if (obj.fu && fu.length) { %>
+            <p class="dashboard-profile-text">
+              <%- (fr && fr.length) ? 'Also, follows' : 'Follows' %> <%- fu.length %> other player<%- fu.length == 1 ? '' : 's' %>:
+              <%= _.map(fu, function (l) { return partial.user({ login: l }) }).join(', ') %>
+            </p>
+          <% } %>
+        </div>
       </div>
     </div>
   </div>
