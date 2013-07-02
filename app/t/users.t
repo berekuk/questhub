@@ -484,6 +484,25 @@ sub unfollow_realm :Tests {
     });
 }
 
+sub follow_unfollow_user :Tests {
+    http_json GET => "/api/fakeuser/foo";
+    http_json GET => "/api/fakeuser/bar";
+    http_json GET => "/api/fakeuser/baz";
+
+    http_json POST => "/api/user/bar/follow";
+    http_json POST => "/api/user/baz/follow";
+    my $current_user = http_json GET => '/api/current_user';
+    cmp_deeply $current_user, superhashof({
+        fu => ['bar', 'baz'],
+    });
+
+    http_json POST => "/api/user/baz/unfollow";
+    $current_user = http_json GET => '/api/current_user';
+    cmp_deeply $current_user, superhashof({
+        fu => ['bar'],
+    });
+}
+
 sub settings :Tests {
     http_json GET => "/api/fakeuser/foo";
 
