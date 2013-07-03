@@ -88,7 +88,7 @@ get '/current_user' => sub {
         $user->{settings}{email} = session('persona_email');
         $user->{settings}{email_confirmed} = 'persona';
     }
-    $user->{persona_user} = session('persona_email');
+    $user->{persona_user} = session('persona_email') if session('persona_email');
 
     return $user;
 };
