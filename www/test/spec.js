@@ -71,6 +71,7 @@
         );
 
         // evil mocks
+        // mocking Mixpanel
         mixpanel = {
             init: function () {},
             track: function () {},
@@ -79,7 +80,15 @@
             alias: function () {},
             name_tag: function () {},
         };
+        // mocking Google Analytics
         ga = function () {};
+
+        // mocking Persona
+        navigator.id = {
+            watch: function () {},
+            request: function () {},
+            logout: function () {},
+        };
 
         Backbone.history.start();
 
