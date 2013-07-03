@@ -60,7 +60,10 @@ define [
                     replace: true
 
                 return
+
+            ga "send", "event", "register", "new-dialog"
             mixpanel.track "register form"
+
             view = new Register(model: currentUser)
             @appView.setPageView view # not rendered yet
             view.render()

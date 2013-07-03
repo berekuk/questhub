@@ -75,50 +75,53 @@ define ["underscore", "jquery", "views/proto/common", "models/user-settings", "m
         editEmail: ->
             @$(".settings-conflict-email").hide()
 
+        _registerDone: (data) ->
+            if data.status is "conflict"
+                ga "send", "event", "register", "conflict"
+                mixpanel.track "register conflict"
+                @$(".settings-conflict-" + data.reason).show()
+                @subview(".progress-subview").off()
+                @submitted = false
+                @validate()
+                return
+
+            if data.status != "ok"
+                alert "unknown backend /register status: " + data.status
+                return
+
+            ga "send", "event", "register", "ok"
+            mixpanel.track "register ok"
+            currentUser.fetch
+                success: ->
+                    mixpanel.alias currentUser.get("_id")
+                    Backbone.history.navigate "/start-tour",
+                        trigger: true
+                        replace: true
+                error: ->
+                    Backbone.history.navigate "/welcome",
+                        trigger: true
+
+
+        _registerFail: (response) ->
+            ga "send", "event", "register", "fail"
+            mixpanel.track "register fail"
+
+            # let's hope that server didn't register the user before it returned a error
+            @subview(".progress-subview").off()
+            @submitted = false
+            @validate()
+
         doRegister: ->
-            return  unless @enabled
-            that = this
+            return unless @enabled
             ga "send", "event", "register", "submit"
             mixpanel.track "register submit"
             @subview(".progress-subview").on()
 
-            # TODO - what should we do if login is empty?
-            $.post("/api/register",
+            $.post "/api/register",
                 login: @getLogin()
-                settings: JSON.stringify(@subview(".settings-subview").deserialize())
-            ).done((data) ->
-                if data.status is "ok"
-                    ga "send", "event", "register", "ok"
-                    mixpanel.track "register ok"
-                    currentUser.fetch
-                        success: ->
-                            mixpanel.alias currentUser.get("_id")
-                            Backbone.history.navigate "/start-tour",
-                                trigger: true
-                                replace: true
-
-                        error: ->
-                            Backbone.history.navigate "/welcome",
-                                trigger: true
-
-
-                else if data.status is "conflict"
-                    ga "send", "event", "register", "conflict"
-                    mixpanel.track "register conflict"
-                    that.$(".settings-conflict-" + data.reason).show()
-                    that.subview(".progress-subview").off()
-                    that.submitted = false
-                    that.validate()
-                else
-                    alert "unknown backend /register status: " + data.status
-            ).fail (response) ->
-                ga "send", "event", "register", "fail"
-                mixpanel.track "register fail"
-
-                # let's hope that server didn't register the user before it returned a error
-                that.subview(".progress-subview").off()
-                that.submitted = false
-                that.validate()
+                settings: JSON.stringify @subview(".settings-subview").deserialize()
+            .done (data) => @_registerDone
+            .fail (response) => @_registerFail
 
             @submitted = true
             @validate()
@@ -127,16 +130,18 @@ define ["underscore", "jquery", "views/proto/common", "models/user-settings", "m
             @disable()
             @disableForm()
             @$(".cancel").addClass "disabled"
-            that = this
             ga "send", "event", "register", "cancel"
             mixpanel.track "register cancel"
             @subview(".progress-subview").on()
-            $.post("/api/register/cancel").done((model, response) ->
+
+            $.post("/api/register/cancel")
+            .done (model, response) =>
+                navigator.id.logout()
                 Backbone.history.navigate "/",
                     trigger: true
 
-            ).fail ->
-                that.$(".cancel").removeClass "disabled"
-                that.enableForm()
-                that.validate()
-                that.subview(".progress-subview").off()
+            .fail =>
+                @$(".cancel").removeClass "disabled"
+                @enableForm()
+                @validate()
+                @subview(".progress-subview").off()

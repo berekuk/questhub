@@ -1,0 +1,36 @@
+.transitional {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2001;
+}
+
+.transitional-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2000;
+    background-color: black;
+    @include opacity(70);
+}
+
+.transitional-centered {
+    position: absolute;
+    top: 10%;
+    width: 100%;
+}
+
+.transitional-inner {
+    margin: 0 auto;
+    max-width: 500px;
+    padding: 35px;
+    text-align: center;
+    font-size: 24px;
+    background-color: $mat;
+    @include opacity(100);
+    z-index: 2001;
+}

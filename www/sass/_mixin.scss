@@ -60,3 +60,8 @@
         border-color: rgba(0,0,0,.15);
     }
 }
+
+@mixin opacity($opacity) {
+    opacity: $opacity / 100;
+    filter: alpha(opacity=#{$opacity})
+}
