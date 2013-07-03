@@ -62,7 +62,6 @@ define ["backbone", "jquery", "models/user"], (Backbone, $, User) ->
     result = new CurrentUser()
     Backbone.listenTo result, "change", (e) ->
         if result.get("registered")
-            mixpanel.identify result.get("_id")
             mixpanel.people.set
                 $username: result.get("login")
                 $name: result.get("login")
@@ -72,6 +71,8 @@ define ["backbone", "jquery", "models/user"], (Backbone, $, User) ->
                 notify_likes: result.get("settings").notify_likes
                 notify_comments: result.get("settings").notify_comments
                 notify_invites: result.get("settings").notify_invites
+                notify_followers: result.get("settings").notify_followers
+            mixpanel.identify result.get("_id")
 
             mixpanel.name_tag result.get("login")
 

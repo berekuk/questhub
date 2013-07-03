@@ -93,6 +93,9 @@ define ["underscore", "jquery", "views/proto/common", "models/user-settings", "m
                     currentUser.fetch
                         success: ->
                             mixpanel.alias currentUser.get("_id")
+                            mixpanel.people.set
+                                $created: new Date()
+
                             Backbone.history.navigate "/start-tour",
                                 trigger: true
                                 replace: true
