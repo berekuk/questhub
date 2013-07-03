@@ -120,8 +120,10 @@ define ["underscore", "jquery", "views/proto/common", "models/user-settings", "m
             $.post "/api/register",
                 login: @getLogin()
                 settings: JSON.stringify @subview(".settings-subview").deserialize()
-            .done (data) => @_registerDone
-            .fail (response) => @_registerFail
+            .done (data) =>
+                @_registerDone(data)
+            .fail (response) =>
+                @_registerFail(response)
 
             @submitted = true
             @validate()

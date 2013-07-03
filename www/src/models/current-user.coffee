@@ -17,7 +17,7 @@ define ["backbone", "jquery", "models/user"], (Backbone, $, User) ->
             settings[name]
 
         setSetting: (name, value) ->
-            return  unless @get("registered")
+            return unless @get("registered")
             settings = @get("settings")
             settings[name] = value
             @set "settings", settings

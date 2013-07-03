@@ -20,7 +20,7 @@ define [
                 new RealmCollection(collection: collection)
 
         afterInitialize: ->
-            mixpanel.track "visit /welcome"
+            mixpanel.track "visit /welcome" unless currentUser.get("registered")
             @listenTo currentUser, "change:registered", ->
                 Backbone.history.navigate "/",
                     trigger: true
