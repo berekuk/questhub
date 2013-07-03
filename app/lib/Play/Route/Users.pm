@@ -48,9 +48,13 @@ post '/auth/persona' => sub {
     }
     session 'persona_email' => $email;
 
-    my $login = db->users->get_by_email($email);
-    if ($login) {
-        session 'login' => $login;
+    my $user = db->users->get_by_email($email);
+    if ($user) {
+        session 'login' => $user->{login};
+
+        if (not $user->{settings}{email_confirmed}) {
+            # TODO - upgrade email_confirmed to persona?
+        }
     }
 
     return { result => 'ok' };
@@ -84,6 +88,7 @@ get '/current_user' => sub {
         $user->{settings}{email} = session('persona_email');
         $user->{settings}{email_confirmed} = 'persona';
     }
+    $user->{persona_user} = session('persona_email');
 
     return $user;
 };
