@@ -49,7 +49,7 @@
           <% } %>
           <% if (obj.fu && fu.length) { %>
             <p class="dashboard-profile-text">
-              <%- (fr && fr.length) ? 'Also, follows' : 'Follows' %> <%- fu.length %> player<%- fu.length == 1 ? '' : 's' %>:
+              <%- (obj.fr && fr.length) ? 'Also, follows' : 'Follows' %> <%- fu.length %> player<%- fu.length == 1 ? '' : 's' %>:
               <%= _.map(fu, function (l) { return partial.user({ login: l }) }).join(', ') %>.
             </p>
           <% } %>
