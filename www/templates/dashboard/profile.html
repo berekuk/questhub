@@ -37,7 +37,7 @@
           <% }) %>
         </div>
         <div class="well dashboard-profile-text">
-          <% if (fr && fr.length) { %>
+          <% if (obj.fr && fr.length) { %>
             <p>
                 Follows
                   <%= _.map(fr, function (realm) {
@@ -52,6 +52,9 @@
               <%- (fr && fr.length) ? 'Also, follows' : 'Follows' %> <%- fu.length %> player<%- fu.length == 1 ? '' : 's' %>:
               <%= _.map(fu, function (l) { return partial.user({ login: l }) }).join(', ') %>.
             </p>
+          <% } %>
+          <% if ((!obj.fr || !fr.length) && (!obj.fu || !fu.length)) { %>
+            <%- login %> doesn't follow any realms or players yet.
           <% } %>
         </div>
       </div>
