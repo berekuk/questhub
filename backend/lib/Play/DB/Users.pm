@@ -346,6 +346,7 @@ sub follow_user {
             <a href="http://].setting('hostport').qq[/player/$login">$login</a> is now following you on Questhub.
             </p>
         ],
+        login => $following,
     });
 }
 
