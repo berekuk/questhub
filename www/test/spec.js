@@ -62,6 +62,7 @@
         specs.push(
             'spec/markdown',
             'spec/navbar', 'spec/current-user',
+            'spec/register',
             'spec/quest-small', 'spec/quest-big', 'spec/quest-add',
             'spec/comment', 'spec/like',
             'spec/event-box',

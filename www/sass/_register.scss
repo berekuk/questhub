@@ -34,14 +34,14 @@
     margin-top: 15px;
 
     .buttons {
-        margin-top: 20px;
+        margin-top: 10px;
 
         button.cancel {
             margin-left: 10px;
         }
     }
 
-    .settings-conflict-login {
+    .settings-conflict-login, .settings-conflict-email {
         display: none;
     }
 }

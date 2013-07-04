@@ -7,9 +7,9 @@
   </div>
   <div></div>
   <div class="register-form">
-    <div class="control-group login">
+    <div class="control-group login-form">
+      <label class="settings-conflict-login alert alert-error">Sorry, this login is already taken.</label>
       <input name="login" type="text" maxlength="16" placeholder="Login">
-      <span class="settings-conflict-login alert alert-error">&larr; Sorry, this login is already taken.</label>
     </div>
 
     <% if (obj.settings && obj.settings.email_confirmed == 'persona') { %>
@@ -17,8 +17,10 @@
       <span class="label label-success">Persona</span>
       </h4>
     <% } else { %>
-      <input name="email" type="email" placeholder="Email">
-      <span class="settings-conflict-email alert alert-error">&larr; Email is already in use.</span>
+      <div class="control-group">
+        <label class="settings-conflict-email alert alert-error">Email is already in use.</label>
+        <input name="email" type="email" placeholder="Email">
+      </div>
     <% } %>
 
     <div class="buttons">
