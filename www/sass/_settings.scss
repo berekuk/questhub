@@ -3,7 +3,18 @@
         margin-bottom: 20px;
     }
     .user-settings-checkboxes {
-        margin-bottom: 20px;
+        margin-bottom: 25px;
+    }
+
+    .user-settings-token {
+        button.regenerate-token {
+            margin-left: -5px;
+            margin-top: 3px;
+        }
+        button.generate-token {
+            position: relative;
+            top: 3px; // fixing vertical line-up
+        }
     }
 
     // insert a gap before "Not confirmed" button when it's under the email input

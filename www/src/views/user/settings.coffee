@@ -4,7 +4,7 @@ define ["underscore", "jquery", "views/proto/common", "settings", "text!template
         events:
             "click .resend-email-confirmation": "resendEmailConfirmation"
             "keyup [name=email]": "typing"
-            "click button.generate-token": "generateApiToken"
+            "click button.js-generate-token": "generateApiToken"
 
         resendEmailConfirmation: ->
             btn = @$(".resend-email-confirmation")
