@@ -427,7 +427,7 @@ sub perl_get_by_email :Tests {
     } };
 
     my $user = db->users->get_by_email('jack@example.com');
-    is $user, 'jack', 'get_by_email returns login';
+    is $user->{login}, 'jack', 'get_by_email returns user';
 }
 
 sub dismiss_notification :Tests {

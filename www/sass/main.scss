@@ -1,34 +1,35 @@
-@import 'sass/mixin';
-@import 'sass/common.scss';
+@import 'mixin';
+@import 'common';
 
-@import 'sass/blocks/tag.scss';
-@import 'sass/blocks/mini-like.scss';
-@import 'sass/blocks/preview.scss';
-@import 'sass/blocks/well.scss';
+@import 'blocks/tag';
+@import 'blocks/mini-like';
+@import 'blocks/preview';
+@import 'blocks/well';
 
-@import 'sass/frame.scss';
-@import 'sass/navbar.scss';
+@import 'frame';
+@import 'navbar';
+@import 'transitional';
 
-@import 'sass/realm.scss';
-@import 'sass/about.scss';
-@import 'sass/welcome.scss';
+@import 'realm';
+@import 'about';
+@import 'welcome';
 
-@import 'sass/newbie-tour.scss';
-@import 'sass/register.scss';
-@import 'sass/settings.scss';
-@import 'sass/unsubscribe.scss';
+@import 'newbie-tour';
+@import 'register';
+@import 'settings';
+@import 'unsubscribe';
 
-@import 'sass/explore.scss';
-@import 'sass/quest-collection.scss';
-@import 'sass/quest-page.scss';
+@import 'explore';
+@import 'quest-collection';
+@import 'quest-page';
 
-@import 'sass/quest-add.scss';
-@import 'sass/dashboard.scss';
+@import 'quest-add';
+@import 'dashboard';
 
-@import 'sass/news-feed.scss';
-@import 'sass/event-collection.scss';
+@import 'news-feed';
+@import 'event-collection';
 
-@import 'sass/user-collection.scss';
-@import 'sass/user-big.scss';
+@import 'user-collection';
+@import 'user-big';
 
-@import 'sass/comment.scss';
+@import 'comment';

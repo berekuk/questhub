@@ -41,9 +41,7 @@ sub get_by_email {
     my $self = shift;
     my ($email) = validate(\@_, Str);
 
-    my $user = $self->collection->find_one({ 'settings.email' => $email });
-    return unless $user;
-    return $user->{login};
+    return $self->collection->find_one({ 'settings.email' => $email });
 }
 
 sub _prepare_user {
