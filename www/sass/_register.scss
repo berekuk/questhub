@@ -1,6 +1,7 @@
 .register {
     max-width: 850px;
     margin: 0 auto;
+    text-align: center;
 
     @include breakpoint(B) {
         padding-left: 50px;
@@ -8,14 +9,29 @@
         padding-bottom: 50px;
         padding-top: 20px;
     }
+}
 
-    .registration-form {
-        margin-top: 15px;
+
+.register-header {
+    display: inline-block;
+
+    @include breakpoint(lessThanB) {
+        h2 {
+            font-size: 24px;
+        }
+        h3 {
+            font-size: 18px;
+        }
     }
 
     .twitter-login {
         white-space: nowrap;
     }
+}
+
+.register-form {
+    display: inline-block;
+    margin-top: 15px;
 
     .buttons {
         margin-top: 20px;

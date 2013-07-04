@@ -50,11 +50,9 @@ define ["underscore", "jquery", "views/proto/common", "models/user-settings", "m
 
         disableForm: ->
             @$("[name=login]").prop "disabled", true
-            @subview(".settings-subview").stop()
 
         enableForm: ->
             @$("[name=login]").prop "disabled", false
-            @subview(".settings-subview").start()
 
         validate: ->
             login = @getLogin()
@@ -122,7 +120,13 @@ define ["underscore", "jquery", "views/proto/common", "models/user-settings", "m
 
             $.post "/api/register",
                 login: @getLogin()
-                settings: JSON.stringify @subview(".settings-subview").deserialize()
+                settings: JSON.stringify(
+                    notify_likes: 1
+                    notify_invites: 1
+                    notify_comments: 1
+                    notify_followers: 1
+                    email: @$("[name=email]").val() # TODO - validate email
+                )
             .done (data) =>
                 @_registerDone(data)
             .fail (response) =>
