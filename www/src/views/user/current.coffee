@@ -47,6 +47,7 @@ define [
 
         setPersonaWatch: ->
             user = @model.get("persona_user")
+            user = null unless user?
 
             navigator.id.watch
                 loggedInUser: user
