@@ -4,6 +4,7 @@ define ["underscore", "jquery", "views/proto/common", "settings", "text!template
         events:
             "click .resend-email-confirmation": "resendEmailConfirmation"
             "keyup [name=email]": "typing"
+            "click button.generate-token": "generateApiToken"
 
         resendEmailConfirmation: ->
             btn = @$(".resend-email-confirmation")
@@ -14,6 +15,9 @@ define ["underscore", "jquery", "views/proto/common", "settings", "text!template
             ).fail ->
                 btn.text "Confirmation key resending failed"
 
+        generateApiToken: ->
+            @listenToOnce @model, "change:api_token", @render
+            @model.generateApiToken()
 
         serialize: ->
             params = @model.toJSON()

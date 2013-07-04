@@ -1,5 +1,5 @@
 <div class="user-settings">
-  <div class="form-horizontal email-settings">
+  <div class="form-horizontal user-settings-email">
     <% if (obj.email_confirmed == 'persona') { %>
       <h4><%- obj.email || 'oops' %>
       <span class="label label-success">Persona</span>
@@ -16,7 +16,7 @@
       </span>
     <% } %>
   </div>
-  <div>
+  <div class="user-settings-checkboxes">
     <div class="muted notify-text">Notify me by email when someone...</div>
     <label class="checkbox">
         <input name="notify-comments" type="checkbox" <%= (obj.notify_comments > 0) ? 'checked' : '' %>>comments on my quest or mentions me
@@ -31,4 +31,14 @@
         <input name="notify-followers" type="checkbox" <%= (obj.notify_followers > 0) ? 'checked' : '' %>>follows me
     </label>
   </div>
+
+  <div>
+    <% if (obj.api_token) { %>
+      <span class="_token"><%- obj.api_token %></span>
+      <button class="btn btn-primary generate-token">Regenerate API token</button>
+    <% } else { %>
+      <button class="btn btn-primary generate-token">Generate API token</button>
+    <% } %>
+  </div>
+
 </div>
