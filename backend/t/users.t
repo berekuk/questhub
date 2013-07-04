@@ -162,6 +162,9 @@ sub settings :Tests {
         { blah => 7 },
         'set_settings overwrites all settings';
 
+    # updating settings to the same value doesn't break (checking that Mongo's update() returns non-zero result in this case)
+    db->users->set_settings('foo', { blah => 7 });
+
     # TODO - test email and email_confirmed fields and $persona flag
 
     db->users->set_setting('foo', 'duh', 8);
@@ -186,6 +189,39 @@ sub settings :Tests {
         scalar(db->users->get_settings('foo')),
         { blah => 7, duh => 8, 'bum-bum' => 10 },
         'valid setting is set, invalid is not';
+}
+
+sub api_token :Tests {
+    db->users->add({ login => 'foo' });
+    db->users->set_settings('foo', { blah => 5, api_token => 'abcd' });
+    cmp_deeply
+        scalar(db->users->get_settings('foo')),
+        { blah => 5 },
+        "can't set api_token explicitly";
+
+    like
+        exception { db->users->set_setting('foo', api_token => 'abcd') },
+        qr/Forbidden setting/,
+        "can't set api_token via set_setting either";
+
+    my $token = db->users->generate_api_token('foo');
+    like $token, qr/^[0-9a-f]{32}$/;
+    cmp_deeply
+        scalar(db->users->get_settings('foo')),
+        { blah => 5, api_token => $token },
+        "can obtain pre-generated token via get_settings";
+
+    db->users->set_settings('foo', { blah => 6 });
+    cmp_deeply
+        scalar(db->users->get_settings('foo')),
+        { blah => 6, api_token => $token },
+        "token is preserved on set_settings";
+
+    db->users->set_settings('foo', { blah => 6, api_token => 'xxxx' });
+    cmp_deeply
+        scalar(db->users->get_settings('foo')),
+        { blah => 6, api_token => $token },
+        "...even if new token is provided";
 }
 
 sub stat :Tests {

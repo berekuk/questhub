@@ -379,7 +379,7 @@ sub unfollow_user {
 
 # some settings can't be set by the client
 sub protected_settings {
-    qw( email_confirmed );
+    qw( email_confirmed api_token );
 }
 
 # some settings can't even be seen
@@ -498,32 +498,40 @@ sub set_settings {
     delete $settings->{$_} for secret_settings, protected_settings;
     delete $settings->{user}; # just to avoid the confusion, nobody uses this field anyway (since we merged user_settings and users collections)
 
+    my $old_settings = $self->get_settings($login, 1);
+
     if ($persona) {
         $settings->{email_confirmed} = 'persona';
     }
     else {
-        my $old_settings = $self->get_settings($login, 1);
         if ($settings->{email}) {
 
             if ($old_settings->{email} and $old_settings->{email} eq $settings->{email}) {
                 # changing non-email settings -> confirmation status is not lost
-                for (qw/ email_confirmed email_confirmation_secret /) {
+                for (secret_settings, protected_settings) {
                     $settings->{$_} = $old_settings->{$_} if exists $old_settings->{$_};
                 }
-                # TODO - if we ever get other protected_settings than 'email_confirmed', we need to preserve them from old_settings here too
             }
-            elsif (not $settings->{email_confirmed}) { # email_confirmed can be set in settings if $force_protected flag is on
+            else {
                 $log->info('need email confirmation');
                 $settings->{email_confirmation_secret} = $self->_send_email_confirmation($login, $settings->{email});
             }
         }
     }
+    # preserving protected_settings minus email_confirmed - do we need more facets of special settings?
+    for (qw( api_token )) {
+        $settings->{$_} = $old_settings->{$_} if exists $old_settings->{$_};
+    }
 
-    $self->collection->update(
+    my $result = $self->collection->update(
         { login => $login },
         { '$set' => { settings => $settings } },
         { safe => 1 }
-    ); # FIXME - check result!
+    );
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "Unable to update settings for $login";
+    }
     return;
 }
 
@@ -544,6 +552,23 @@ sub set_setting {
         die "User $login not found?";
     }
     return;
+}
+
+sub generate_api_token {
+    my $self = shift;
+    my ($login) = validate(\@_, Login);
+
+    my $token = join '', map { sprintf "%x", rand 16 } 1..32;
+    my $result = $self->collection->update(
+        { login => $login },
+        { '$set' => { "settings.api_token" => $token } },
+        { safe => 1 }
+    );
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "User $login not found";
+    }
+    return $token;
 }
 
 sub get_email {
