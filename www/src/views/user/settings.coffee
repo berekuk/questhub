@@ -4,16 +4,27 @@ define ["underscore", "jquery", "views/proto/common", "settings", "text!template
         events:
             "click .resend-email-confirmation": "resendEmailConfirmation"
             "keyup [name=email]": "typing"
+            "click button.js-generate-token": "generateApiToken"
+            "click .user-settings-token-about": ->
+                # this can be removed after settings will be refactored not to be a modal window
+                window.location = '/about/api' # we'd have to hide settings box otherwise
+                false # overriding the link - avoiding minor screen flashing before the page reloads
 
         resendEmailConfirmation: ->
             btn = @$(".resend-email-confirmation")
-            return  if btn.hasClass("disabled")
+            return if btn.hasClass("disabled")
             btn.addClass "disabled"
+
+            mixpanel.track "confirm-email resend"
             $.post("/api/register/resend_email_confirmation", {}).done(->
                 btn.text "Confirmation key sent"
             ).fail ->
                 btn.text "Confirmation key resending failed"
 
+        generateApiToken: (e) ->
+            mixpanel.track "generate token", regenerate: $(e.target).hasClass('regenerate-token')
+            @listenToOnce @model, "change:api_token", @render
+            @model.generateApiToken()
 
         serialize: ->
             params = @model.toJSON()

@@ -4,13 +4,15 @@ use Dancer ':syntax';
 prefix '/api';
 
 use Play::DB qw(db);
+use Play::App::Util qw(login);
 
 post '/quest/:quest_id/comment' => sub {
-    die "not logged in" unless session->{login};
+    my $login = login;
+
     return db->comments->add({
         quest_id => param('quest_id'),
         body => param('body'),
-        author => session->{login},
+        author => $login,
     });
 };
 
@@ -23,11 +25,11 @@ get '/quest/:quest_id/comment/:id' => sub {
 };
 
 del '/quest/:quest_id/comment/:id' => sub {
-    die "not logged in" unless session->{login};
+    my $login = login;
     db->comments->remove({
         quest_id => param('quest_id'),
         id => param('id'),
-        user => session->{login}
+        user => $login
     });
     return {
         result => 'ok',
@@ -35,12 +37,12 @@ del '/quest/:quest_id/comment/:id' => sub {
 };
 
 put '/quest/:quest_id/comment/:id' => sub {
-    die "not logged in" unless session->{login};
+    my $login = login;
     my $updated_id = db->comments->update({
         quest_id => param('quest_id'),
         id => param('id'),
         body => param('body'),
-        user => session->{login}
+        user => $login
     });
     return {
         _id => $updated_id,
@@ -49,8 +51,8 @@ put '/quest/:quest_id/comment/:id' => sub {
 
 for my $method (qw/ like unlike /) {
     post "/quest/:quest_id/comment/:id/$method" => sub {
-        die "not logged in" unless session->{login};
-        db->comments->$method(param('id'), session->{login}); # ignore quest_id - comment id identifies the comment
+        my $login = login;
+        db->comments->$method(param('id'), $login); # ignore quest_id - comment id identifies the comment
 
         return {
             result => 'ok',

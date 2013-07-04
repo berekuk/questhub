@@ -5,9 +5,9 @@ define [
     "views/quest/page", "models/quest"
     "views/welcome"
     "views/news-feed"
-    "views/about", "views/register"
+    "views/register"
     "views/confirm-email", "views/user/unsubscribe"
-], (Backbone, Common, currentUser, QuestPage, QuestModel, Welcome, NewsFeed, About, Register, ConfirmEmail, Unsubscribe) ->
+], (Backbone, Common, currentUser, QuestPage, QuestModel, Welcome, NewsFeed, Register, ConfirmEmail, Unsubscribe) ->
 
     class extends Common
         routes:
@@ -19,7 +19,6 @@ define [
             "player/:login/unsubscribe/:field/:status": "unsubscribeResult"
             "start-tour": "startTour"
             "quest/:id": "questPage"
-            "about": "about"
             "realm/:realm/quest/:id": "realmQuestPage"
 
         questPage: (id) ->
@@ -112,6 +111,3 @@ define [
             # unused? remove this route?
             # views/user/signin sets window.location directly now...
             window.location = "/auth/twitter"
-
-        about: ->
-            @appView.setPageView new About()

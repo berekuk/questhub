@@ -5,17 +5,18 @@ prefix '/api';
 
 use Play::DB qw(db);
 use Play::Markdown qw(markdown);
+use Play::App::Util qw(login);
 
 use DateTime;
 use DateTime::Format::RFC3339;
 my $rfc3339 = DateTime::Format::RFC3339->new;
 
 put '/quest/:id' => sub {
-    die "not logged in" unless session->{login};
+    my $login = login;
     my $updated_id = db->quests->update(
         param('id'),
         {
-            user => session->{login},
+            user => $login,
             map { param($_) ? ($_ => param($_)) : () } qw/ name tags description /,
         }
     );
@@ -25,10 +26,10 @@ put '/quest/:id' => sub {
 };
 
 del '/quest/:id' => sub {
-    die "not logged in" unless session->{login};
+    my $login = login;
     db->quests->remove(
         param('id'),
-        { user => session->{login} }
+        { user => $login }
     );
     return {
         result => 'ok',
@@ -36,7 +37,7 @@ del '/quest/:id' => sub {
 };
 
 post '/quest' => sub {
-    die "not logged in" unless session->{login};
+    my $login = login;
 
     # optional fields
     my $params = {
@@ -50,7 +51,7 @@ post '/quest' => sub {
     }
 
     $params->{status} = 'open';
-    $params->{team} = [ session->{login} ];
+    $params->{team} = [ $login ];
 
     return db->quests->add($params);
 };
@@ -105,8 +106,8 @@ for my $method (qw(
     close reopen abandon resurrect
 )) {
     post "/quest/:id/$method" => sub {
-        die "not logged in" unless session->{login};
-        db->quests->$method(param('id'), session->{login});
+        my $login = login;
+        db->quests->$method(param('id'), $login);
 
         return {
             result => 'ok',
@@ -116,8 +117,8 @@ for my $method (qw(
 
 for my $method (qw/ invite uninvite /) {
     post "/quest/:id/$method" => sub {
-        die "not logged in" unless session->{login};
-        db->quests->$method(param('id'), param('invitee'), session->{login});
+        my $login = login;
+        db->quests->$method(param('id'), param('invitee'), $login);
 
         return {
             result => 'ok',
@@ -126,8 +127,8 @@ for my $method (qw/ invite uninvite /) {
 }
 
 post '/quest/set_manual_order' => sub {
-    die "not logged in" unless session->{login};
-    db->quests->set_manual_order(session->{login}, param('quest_ids[]'));
+    my $login = login;
+    db->quests->set_manual_order($login, param('quest_ids[]'));
 
     return {
         result => 'ok'

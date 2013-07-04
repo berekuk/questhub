@@ -11,6 +11,8 @@ auth_twitter_init();
 use Play::Config;
 use Play::DB qw(db);
 
+use Play::App::Util qw( login try_login );
+
 get '/auth/twitter' => sub {
     if (not session('twitter_user')) {
         redirect auth_twitter_authenticate_url;
@@ -63,9 +65,9 @@ post '/auth/persona' => sub {
 prefix '/api';
 
 get '/current_user' => sub {
-
     my $user = {};
-    my $login = session('login');
+    my $login = try_login;
+
     if ($login) {
         $user = db->users->get_by_login($login);
         unless ($user) {
@@ -95,36 +97,41 @@ get '/current_user' => sub {
 
 # user settings are private; you can't get settings of other users
 get '/current_user/settings' => sub {
-    die "not logged in" unless session->{login};
-
-    return db->users->get_settings(session->{login});
+    return db->users->get_settings(login);
 };
 
 any ['put', 'post'] => '/current_user/settings' => sub {
-    die "not logged in" unless session->{login};
+    my $login = login;
 
     db->users->set_settings(
-        session->{login} => _expand_settings(scalar params()),
+        $login => _expand_settings(scalar params()),
         (session('persona_email') ? 1 : 0) # force 'email_confirmed' setting
     );
     return { result => 'ok' };
 };
 
 post "/settings/set/:name/:value" => sub {
-    die "not logged in" unless session->{login};
+    my $login = login;
 
     db->users->set_setting(
-        session->{login},
+        $login,
         param('name'),
         param('value')
     );
     return { result => 'ok' };
 };
 
-post '/current_user/dismiss_notification/:id' => sub {
-    die "not logged in" unless session->{login};
+post '/current_user/generate_api_token' => sub {
+    my $login = login;
 
-    db->notifications->remove(param('id'), session->{login});
+    my $token = db->users->generate_api_token(login);
+    return { result => 'ok', api_token => $token };
+};
+
+post '/current_user/dismiss_notification/:id' => sub {
+    my $login = login;
+
+    db->notifications->remove(param('id'), $login);
     return { result => 'ok' };
 };
 
@@ -223,8 +230,8 @@ post '/register/cancel' => sub {
 };
 
 post '/register/resend_email_confirmation' => sub {
-    my $login = session('login');
-    die "not logged in" unless $login;
+    my $login = login;
+
     db->users->resend_email_confirmation($login);
     return { result => 'ok' };
 };
@@ -264,7 +271,7 @@ get '/user/:login/unsubscribe/:field' => sub {
 
 for my $method (qw( follow_realm unfollow_realm )) {
     post "/$method/:realm" => sub {
-        my $login = session('login') or die "not logged in";
+        my $login = login;
 
         db->users->$method($login, param('realm'));
 
@@ -274,7 +281,7 @@ for my $method (qw( follow_realm unfollow_realm )) {
 
 for my $method (qw( follow unfollow )) {
     post "/user/:login/$method" => sub {
-        my $login = session('login') or die "not logged in";
+        my $login = login;
 
         my $full_method = "${method}_user";
         db->users->$full_method($login, param('login'));

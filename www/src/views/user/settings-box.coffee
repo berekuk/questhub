@@ -9,7 +9,7 @@ define ["underscore", "views/proto/common", "views/user/settings", "models/curre
     Common.extend
         template: _.template(html)
         events:
-            "click .btn-primary": "submit"
+            "click button.submit": "submit"
 
         subviews:
             ".settings-subview": ->
@@ -50,7 +50,6 @@ define ["underscore", "views/proto/common", "views/user/settings", "models/curre
             @subview(".settings-subview").save
                 success: ->
                     that.$(".modal").modal "hide"
-          
                     # Just to be safe.
                     # Also, if email was changed, we want to trigger the 'sync' event and show the notify box.
                     currentUser.fetch()
@@ -58,6 +57,3 @@ define ["underscore", "views/proto/common", "views/user/settings", "models/curre
                 error: ->
                     Backbone.trigger "pp:notify", "error", "Failed to save new settings"
                     that.$(".modal").modal "hide"
-
-
-

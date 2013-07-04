@@ -1,0 +1,64 @@
+<h1 class="brand">Questhub API</h1>
+
+<div>
+  <p>
+  Questhub API is open. In fact, the entire website is built using the same API.
+  </p>
+</div>
+
+<div>
+  <h3>Technical details</h3>
+  <p>
+  API routes which require authentication require <em>API tokens</em>; you can get one from your settings.
+  Here's an example on how to use tokens:
+  <div style="overflow: auto">
+    <code>
+    http://questhub.io/api/current_user?api_user=your_login&amp;api_token=0123456789abcdef0123456789abcdef
+    </code>
+  </div>
+  </p>
+  <p>
+  Non-modifying routes, such as ones for obtaining quests or activity feeds, usually don't require authentication.
+  </p>
+  <p>
+  All API routes are described in <a href="https://github.com/berekuk/play-perl/blob/master/app/API.md">API.md</a> file in our github repo.
+  </p>
+  <p>
+  API is not entirely stable and changes often, but usually in a backward-compatible way. If you want to know about upcoming changes, you should consider <a href="/realm/meta">following the Meta realm</a>.
+  </p>
+
+<div>
+  <h3>Rules</h3>
+  <p>
+  <strong>Things to do with API:</strong>
+  <ul>
+    <li>command-line clients;</li>
+    <li>alternative frontends;</li>
+    <li>exporting data anywhere you like;</li>
+    <li>alternative input methods: email-to-questhub, twitter-to-questhub;</li>
+    <li>importing from relevant sources with high signal/noise ratio (be careful about this one and read below).</li>
+  </ul>
+  </p>
+
+  <p>
+  <strong>Things not to do with API:</strong>
+  <ul>
+    <li>
+      don't create quests automatically for insignificant achievements
+      <br>(for example, don't claim each commit as a quest);
+    </li>
+    <li>
+      don't import from large-volume sources where you don't have the control over quality
+      <br>(for example, if your open source project is so popular that people create several issues per day with minor feature requests, maybe you shouldn't import them all as quests);
+    </li>
+    <li>generally, don't import from sources with low signal/noise ratio;</li>
+    <li>don't import stuff just to dump it on questhub if you never visit the website yourself;</li>
+    <li>don't like all quests about chosen topic automatically;</li>
+  </ul>
+  </p>
+  <p>
+  In the future, as questhub grows and develops better ways to filter through large volumes of quests, these rules will be relaxed.<br>
+  </p>
+  <p>
+  I leave the right to temporarily or permanently revoke the right of anyone's API usage as I see fit.
+  </p>

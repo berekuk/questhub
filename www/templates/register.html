@@ -1,26 +1,34 @@
 <!-- registration form -->
 <div class="row-fluid register well">
-  <div class="span12">
+  <div class="register-header">
     <h2>Welcome to the <%= partial.settings.service_name %><% if (obj.twitter) { %>, <span class="twitter-login"><i class="icon-twitter"></i> <%= twitter.screen_name %></span class="twitter-login"><% } %>!
     </h2>
-    <h3><span class="desktop-text">One final step before you can join your fellow hackers...</span></h3>
+    <h3>What would you like to be called?</h3>
   </div>
-  <div class="span8 offset2">
-    <div class="registration-form">
-      <div class="control-group login">
-        <input name="login" type="text" maxlength="16" placeholder="Login">
-        <span class="settings-conflict-login alert alert-error">&larr; Sorry, this login is already taken.</label>
-      </div>
-
-      <div class="settings-subview"></div>
-
-      <div class="buttons">
-      <button class="btn btn-primary btn-large submit">Register</button>
-      <button class="btn btn-large cancel">Cancel</button>
-      </div>
-      <p>
-      <div class="progress-subview"></div>
-      </p>
+  <div></div>
+  <div class="register-form">
+    <div class="control-group login-form">
+      <label class="settings-conflict-login alert alert-error">Sorry, this login is already taken.</label>
+      <input name="login" type="text" maxlength="16" placeholder="Login">
     </div>
+
+    <% if (obj.settings && obj.settings.email_confirmed == 'persona') { %>
+      <h4><%- obj.settings.email || 'oops, internal logic error' %>
+      <span class="label label-success">Persona</span>
+      </h4>
+    <% } else { %>
+      <div class="control-group">
+        <label class="settings-conflict-email alert alert-error">Email is already in use.</label>
+        <input name="email" type="email" placeholder="Email">
+      </div>
+    <% } %>
+
+    <div class="buttons">
+    <button class="btn btn-primary btn-large submit">Register</button>
+    <button class="btn btn-large cancel">Cancel</button>
+    </div>
+    <p>
+    <div class="progress-subview"></div>
+    </p>
   </div>
 </div>

@@ -1,7 +1,20 @@
 .user-settings {
-    margin-bottom: 10px;
-    .email-settings {
+    .user-settings-email {
         margin-bottom: 20px;
+    }
+    .user-settings-checkboxes {
+        margin-bottom: 25px;
+    }
+
+    .user-settings-token {
+        button.regenerate-token {
+            margin-left: -5px;
+            margin-top: 3px;
+        }
+        button.generate-token {
+            position: relative;
+            top: 3px; // fixing vertical line-up
+        }
     }
 
     // insert a gap before "Not confirmed" button when it's under the email input
@@ -9,12 +22,11 @@
         margin-bottom: 8px;
     }
 
-    .settings-conflict-email {
-        display: none;
-    }
-
     .notify-text {
         margin-bottom: 4px;
     }
 }
 
+.settings-conflict-email {
+    display: none;
+}

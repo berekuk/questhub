@@ -1,43 +1,30 @@
 # TODO - refactor into views/proto/form
-define ["underscore", "jquery", "views/proto/common", "models/user-settings", "models/current-user", "views/user/settings", "views/progress/big", "text!templates/register.html"], (_, $, Common, UserSettingsModel, currentUser, UserSettings, ProgressBig, html) ->
-    Common.extend
+define [
+    "underscore", "jquery"
+    "views/proto/common"
+    "models/current-user"
+    "views/progress/big"
+    "text!templates/register.html"
+], (_, $, Common, currentUser, ProgressBig, html) ->
+    class extends Common
         template: _.template(html)
         activeMenuItem: "home"
         events:
             "click .submit": "doRegister"
             "click .cancel": "cancel"
-            "keydown [name=login]": "checkEnter"
             "keyup [name=login]": "editLogin"
             "keyup [name=email]": "editEmail"
 
         subviews:
-            ".settings-subview": ->
-                model = new UserSettingsModel(
-                    notify_likes: 1
-                    notify_invites: 1
-                    notify_comments: 1
-                    notify_followers: 1
-                )
-                if @model.get("settings")
-                    model.set "email", @model.get("settings")["email"]
-                    model.set "email_confirmed", @model.get("settings")["email_confirmed"]
-                new UserSettings(model: model)
+            ".progress-subview": -> new ProgressBig()
 
-            ".progress-subview": ->
-                new ProgressBig()
-
-        afterInitialize: ->
-            _.bindAll this
-
-        afterRender: ->
+        render: ->
+            super
             @validate()
             @$("[name=login]").focus()
 
-        checkEnter: (e) ->
-            @doRegister()  if e.keyCode is 13
-
-        getLogin: ->
-            @$("[name=login]").val()
+        getLogin: -> @$("[name=login]").val()
+        getEmail: -> @$("[name=email]").val()
 
         disable: ->
             @$(".submit").addClass "disabled"
@@ -48,32 +35,33 @@ define ["underscore", "jquery", "views/proto/common", "models/user-settings", "m
             @enabled = true
             @submitted = false
 
-        disableForm: ->
-            @$("[name=login]").prop "disabled", true
-            @subview(".settings-subview").stop()
-
-        enableForm: ->
-            @$("[name=login]").prop "disabled", false
-            @subview(".settings-subview").start()
+        disableForm: -> @$("[name=login]").prop "disabled", true
+        enableForm: -> @$("[name=login]").prop "disabled", false
 
         validate: ->
             login = @getLogin()
             if login.match(/^\w*$/)
-                @$(".login").removeClass "error"
+                @$(".login-form").removeClass "error"
             else
-                @$(".login").addClass "error"
+                @$(".login-form").addClass "error"
                 login = undefined
-            if @submitted or not login
+            if @submitted or not login or not @getEmail()
                 @disable()
             else
                 @enable()
 
-        editLogin: ->
+        editLogin: (e) ->
             @$(".settings-conflict-login").hide()
             @validate()
+            @checkEnter(e)
 
-        editEmail: ->
+        editEmail: (e) ->
             @$(".settings-conflict-email").hide()
+            @validate()
+            @checkEnter(e)
+
+        checkEnter: (e) ->
+            @doRegister() if e.keyCode is 13
 
         _registerDone: (data) ->
             if data.status is "conflict"
@@ -91,16 +79,17 @@ define ["underscore", "jquery", "views/proto/common", "models/user-settings", "m
 
             ga "send", "event", "register", "ok"
             mixpanel.track "register ok"
+            mixpanel.people.set
+                $created: new Date()
+
             currentUser.fetch
-                success: ->
+                success: =>
                     mixpanel.alias currentUser.get("_id")
-                    mixpanel.people.set
-                        $created: new Date()
 
                     Backbone.history.navigate "/start-tour",
                         trigger: true
                         replace: true
-                error: ->
+                error: =>
                     Backbone.history.navigate "/welcome",
                         trigger: true
 
@@ -122,7 +111,13 @@ define ["underscore", "jquery", "views/proto/common", "models/user-settings", "m
 
             $.post "/api/register",
                 login: @getLogin()
-                settings: JSON.stringify @subview(".settings-subview").deserialize()
+                settings: JSON.stringify(
+                    notify_likes: 1
+                    notify_invites: 1
+                    notify_comments: 1
+                    notify_followers: 1
+                    email: @getEmail() # TODO - validate email
+                )
             .done (data) =>
                 @_registerDone(data)
             .fail (response) =>
