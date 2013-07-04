@@ -8,7 +8,6 @@ define [
 
     subviewClass = class extends Common
         initialize: ->
-            console.log @options
             @template = @options.template
             super
 
