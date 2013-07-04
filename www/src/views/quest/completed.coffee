@@ -1,5 +1,5 @@
 define ["underscore", "views/proto/common", "models/current-user", "text!templates/quest-completed.html"], (_, Common, currentUser, html) ->
-    Common.extend
+    class extends Common
         template: _.template(html)
         events:
             "click .btn-primary": "stop"
