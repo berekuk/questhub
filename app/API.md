@@ -63,6 +63,10 @@ Same as `PUT` - both rewrite settings entirely.
 
 Set one key/value setting, leaving others intact.
 
+##### POST /api/current_user/generate_api_token
+
+Generate API token; it will be returned in response, or it can be obtained from settings later.
+
 ##### POST /api/current_user/dismiss_notification/{id}
 
 Dismiss notification.

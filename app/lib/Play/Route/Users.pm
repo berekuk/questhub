@@ -121,6 +121,13 @@ post "/settings/set/:name/:value" => sub {
     return { result => 'ok' };
 };
 
+post '/current_user/generate_api_token' => sub {
+    die "not logged in" unless session->{login};
+
+    my $token = db->users->generate_api_token(session->{login});
+    return { result => 'ok', api_token => $token };
+};
+
 post '/current_user/dismiss_notification/:id' => sub {
     die "not logged in" unless session->{login};
 

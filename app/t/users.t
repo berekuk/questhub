@@ -515,6 +515,18 @@ sub settings :Tests {
     cmp_deeply $got_settings, { blah => 5, duh => 6 };
 }
 
+sub api_token :Tests {
+    http_json GET => "/api/fakeuser/foo";
+
+    my $generate_result = http_json POST => "/api/current_user/generate_api_token";
+    cmp_deeply
+        $generate_result,
+        { result => 'ok', api_token => re('^[0-9a-f]{32}$') };
+
+    my $got_settings = http_json GET => '/api/current_user/settings';
+    cmp_deeply $got_settings, { api_token => $generate_result->{api_token} };
+}
+
 sub stat :Tests {
     my $self = shift;
     http_json GET => "/api/fakeuser/foo";
