@@ -515,7 +515,7 @@ sub settings :Tests {
     cmp_deeply $got_settings, { blah => 5, duh => 6 };
 }
 
-sub api_token :Tests {
+sub generate_api_token :Tests {
     http_json GET => "/api/fakeuser/foo";
 
     my $generate_result = http_json POST => "/api/current_user/generate_api_token";
@@ -525,6 +525,43 @@ sub api_token :Tests {
 
     my $got_settings = http_json GET => '/api/current_user/settings';
     cmp_deeply $got_settings, { api_token => $generate_result->{api_token} };
+}
+
+sub use_api_token :Tests {
+    http_json GET => "/api/fakeuser/foo";
+
+    Dancer::session->destroy;
+    my $response = dancer_response GET => "/api/current_user/settings";
+    is $response->status, 500;
+    like $response->content, qr/not logged in/;
+
+    $response = dancer_response GET => "/api/current_user/settings?api_login=foo&api_token=xxxx";
+    is $response->status, 500;
+    like $response->content, qr/foo needs to generate API token first/;
+
+    Dancer::session login => 'foo';
+    $response = dancer_response GET => "/api/current_user/settings";
+    is $response->status, 200, 'current_user/settings works if session is set...';
+    $response = dancer_response GET => "/api/current_user/settings?api_login=foo&api_token=xxxx";
+    is $response->status, 500, '...but api_login and api_token have a priority over current session';
+    like $response->content, qr/foo needs to generate API token first/;
+
+    http_json POST => "/api/current_user/generate_api_token";
+    my $token = http_json(GET => "/api/current_user/settings")->{api_token};
+
+    Dancer::session->destroy;
+    http_json GET => "/api/current_user/settings?api_login=foo&api_token=$token";
+    $response = dancer_response GET => "/api/current_user/settings?api_login=foo&api_token=${token}2";
+    is $response->status, 500;
+    like $response->content, qr/Invalid token for user foo/;
+
+    http_json GET => "/api/fakeuser/bar";
+    Dancer::session->destroy;
+    $response = dancer_response GET => "/api/current_user/settings?api_login=bar&api_token=$token";
+    is $response->status, 500, "can't reuse tokens with other users";
+    like $response->content, qr/bar needs to generate API token first/;
+
+    # TODO - test /api/current_user (it's special because it uses try_login, to return { registered => 0 } for not-logged-in users)
 }
 
 sub stat :Tests {
