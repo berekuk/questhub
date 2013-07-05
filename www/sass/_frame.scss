@@ -19,24 +19,24 @@ input {
     height: auto !important;
     height: 100%;
     // Negative indent footer by its height
-    margin: 0 auto -85px;
+    margin: 0 auto -102px;
     @include breakpoint(B) {
-        margin-bottom: -65px;
+        margin-bottom: -82px;
     }
     @include breakpoint(C) {
-        margin-bottom: -45px;
+        margin-bottom: -56px;
     }
 }
 
 // Set the fixed height of the footer here
 #push,
 #footer {
-    height: 85px;
+    height: 102px;
     @include breakpoint(B) {
-        height: 65px;
+        height: 82px;
     }
     @include breakpoint(C) {
-        height: 45px;
+        height: 56px;
     }
 }
 
@@ -67,7 +67,7 @@ input {
     }
 
     @include breakpoint(B) {
-        .footer-separator-tail {
+        .footer-separator-first {
             display: inline;
             visibility: visible;
         }
@@ -85,6 +85,16 @@ input {
     }
     .flattr-wrapper {
         position: relative;
-        top: 6px;
+        top: 10px;
+        @include breakpoint(C) {
+            top: 6px;
+        }
+    }
+    .mixpanel-badge img {
+        margin-left: 8px;
+        margin-top: 6px;
+        @include breakpoint(C) {
+            margin-top: 0px;
+        }
     }
 }
