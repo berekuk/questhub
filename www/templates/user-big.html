@@ -29,14 +29,14 @@
     <ul>
       <%
         _.each({
-          'quests': 'list-ul',
-          'activity': 'film',
-          'profile': 'user'
-        }, function (icon, t) {
+          'quests': { icon: 'list-ul', tooltip: 'Quests' },
+          'activity': { icon: 'film', tooltip: 'Activity' },
+          'profile': { icon: 'user', tooltip: 'Profile' }
+        }, function (o, t) {
       %>
       <li>
-        <div data-tab="<%- t %>" class="_icon _switch-<%- t %> <%- tab == t ? '_active' : '' %>">
-          <i class="icon-<%- icon %>"></i>
+        <div data-toggle="tooltip" data-placement="top" title="<%- o.tooltip %>" data-tab="<%- t %>" class="_icon _switch-<%- t %> <%- tab == t ? '_active' : '' %>">
+          <i class="icon-<%- o.icon %>"></i>
         </div>
       </li>
       <% }) %>
