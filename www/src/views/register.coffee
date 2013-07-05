@@ -45,10 +45,13 @@ define [
             else
                 @$(".login-form").addClass "error"
                 login = undefined
-            if @submitted or not login or not @getEmail()
+            if @submitted or not login
                 @disable()
-            else
-                @enable()
+                return
+            if not @getEmail() && not (@model.get('settings') && @model.get('settings').email_confirmed == 'persona')
+                @disable()
+                return
+            @enable()
 
         editLogin: (e) ->
             @$(".settings-conflict-login").hide()
@@ -109,15 +112,18 @@ define [
             mixpanel.track "register submit"
             @subview(".progress-subview").on()
 
+            notify = @$("[name=notify]").is(":checked")
+            settings =
+                notify_likes: notify
+                notify_invites: notify
+                notify_comments: notify
+                notify_followers: notify
+                newsletter: @$("[name=newsletter]").is(":checked")
+                email: @getEmail() # TODO - validate email
+
             $.post "/api/register",
                 login: @getLogin()
-                settings: JSON.stringify(
-                    notify_likes: 1
-                    notify_invites: 1
-                    notify_comments: 1
-                    notify_followers: 1
-                    email: @getEmail() # TODO - validate email
-                )
+                settings: JSON.stringify settings
             .done (data) =>
                 @_registerDone(data)
             .fail (response) =>

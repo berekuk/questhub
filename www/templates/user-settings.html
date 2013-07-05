@@ -19,16 +19,22 @@
   <div class="user-settings-checkboxes">
     <div class="muted notify-text">Notify me by email when someone...</div>
     <label class="checkbox">
-        <input name="notify-comments" type="checkbox" <%= (obj.notify_comments > 0) ? 'checked' : '' %>>comments on my quest or mentions me
+      <input name="notify-comments" type="checkbox" <%= (obj.notify_comments > 0) ? 'checked' : '' %>>comments on my quest or mentions me
     </label>
     <label class="checkbox">
-        <input name="notify-likes" type="checkbox" <%= (obj.notify_likes > 0) ? 'checked' : '' %>>likes my quest
+      <input name="notify-likes" type="checkbox" <%= (obj.notify_likes > 0) ? 'checked' : '' %>>likes my quest
     </label>
     <label class="checkbox">
-        <input name="notify-invites" type="checkbox" <%= (obj.notify_invites > 0) ? 'checked' : '' %>>invites me to a quest
+      <input name="notify-invites" type="checkbox" <%= (obj.notify_invites > 0) ? 'checked' : '' %>>invites me to a quest
     </label>
     <label class="checkbox">
-        <input name="notify-followers" type="checkbox" <%= (obj.notify_followers > 0) ? 'checked' : '' %>>follows me
+      <input name="notify-followers" type="checkbox" <%= (obj.notify_followers > 0) ? 'checked' : '' %>>follows me
+    </label>
+  </div>
+
+  <div class="user-settings-newsletter">
+    <label class="checkbox">
+      <input name="newsletter" type="checkbox" <%= (obj.newsletter > 0) ? 'checked' : '' %>>Subscribe to the newsletter <span class="muted">(approximately once per few weeks)</span>
     </label>
   </div>
 
