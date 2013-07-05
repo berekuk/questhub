@@ -61,6 +61,7 @@ define ["underscore", "jquery", "views/proto/common", "settings", "text!template
                 notify_likes: @$("[name=notify-likes]").is(":checked")
                 notify_invites: @$("[name=notify-invites]").is(":checked")
                 notify_followers: @$("[name=notify-followers]").is(":checked")
+                newsletter: @$("[name=newsletter]").is(":checked")
 
             settings
 
