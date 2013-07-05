@@ -62,6 +62,11 @@ sub ensure_indices {
     $quests_collection->ensure_index({ 'team' => 1 });
     $quests_collection->ensure_index({ 'watchers' => 1 });
     $quests_collection->ensure_index({ 'realm' => 1 });
+
+    my $events_collection = Play::Mongo->db->get_collection('events');
+    $events_collection->drop_indexes;
+    $events_collection->ensure_index({ 'realm' => 1 });
+    $events_collection->ensure_index({ 'author' => 1 });
 }
 
 1;
