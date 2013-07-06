@@ -183,6 +183,7 @@ Options:
   * `leaderboard`: composite likes_count->comments_count sorting
   * `manual`: sort in order specified by `POST /api/quest/set_manual_order` (see below); not yet ordered manually quests will be listed on top, in descending-by-timestamp order
 * `user`
+* `status`
 * `comment_count`
 * `unclaimed` - if true, return unclaimed quests (user='')
 * `tags` - filter by tag; only one-tag-per-query filtering is supported now
