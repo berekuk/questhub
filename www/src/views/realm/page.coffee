@@ -1,37 +1,38 @@
 define [
     "underscore"
-    "views/proto/common"
+    "views/proto/tabbed"
     "views/realm/big"
     "views/explore"
     "views/realm/page/activity"
     "views/user/collection", "models/user-collection"
     "text!templates/realm-page.html"
-], (_, Common, RealmBig, Explore, RealmPageActivity, UserCollection, UserCollectionModel, html) ->
-    class extends Common
+], (_, Tabbed, RealmBig, Explore, RealmPageActivity, UserCollection, UserCollectionModel, html) ->
+    class extends Tabbed
         template: _.template(html)
         activeMenuItem: "realm-page"
         activated: false
 
-        initialize: ->
-            @tab = @options.tab || 'activity'
-            super
+        realm: -> @model.get "id"
 
-        subviews:
-            ".realm-big-sv": ->
-                new RealmBig
-                    model: @model
-                    tab: @tab
-            ".realm-page-sv": ->
-                if @tab == 'quests'
+        urlRoot: -> "/realm/#{ @model.get("id") }"
+        tab: 'activity'
+        tabSubview: ".realm-page-sv"
+        tabs:
+            activity:
+                url: ''
+                subview: -> new RealmPageActivity model: @model
+            quests:
+                url: '/explore'
+                subview: ->
                     sv = new Explore _.extend(
                         { realm: @model.get('id') },
                         @options.explore || {}
                     )
                     sv.activate()
                     sv
-                else if @tab == 'activity'
-                    new RealmPageActivity model: @model
-                else if @tab == 'players'
+            players:
+                url: '/players'
+                subview: ->
                     collection = new UserCollectionModel [],
                         realm: @model.get('id')
                         sort: "leaderboard"
@@ -39,24 +40,18 @@ define [
                     view = new UserCollection collection: collection
                     collection.fetch()
                     view
-                else
-                    alert "unknown tab #{@tab}"
 
-        realm: ->
-            @model.get "id"
+
+        subviews: ->
+            subviews = super
+            subviews[".realm-big-sv"] = ->
+                new RealmBig
+                    model: @model
+                    tab: @tab
+            subviews
+
 
         initSubviews: ->
             super
             @listenTo @subview(".realm-big-sv"), "switch", (params) ->
-                tab = params.tab
-                @switchTabByName tab
-                tab2url =
-                    quests: '/explore'
-                    activity: ''
-                    players: '/players'
-                Backbone.history.navigate "/realm/#{ @model.get("id") }#{ tab2url[tab] }"
-                Backbone.trigger "pp:quiet-url-update"
-
-        switchTabByName: (tab) ->
-            @tab = tab
-            @rebuildSubview(".realm-page-sv").render()
+                @switchTabByName params.tab

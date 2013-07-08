@@ -1,53 +1,45 @@
 define [
     "underscore"
-    "views/proto/common"
+    "views/proto/tabbed"
     "views/user/big",
     "views/dashboard/quests", "views/dashboard/activity", "views/dashboard/profile"
     "models/current-user",
     "text!templates/dashboard.html"
-], (_, Common, UserBig, DashboardQuests, DashboardActivity, DashboardProfile, currentUser, html) ->
-    class extends Common
+], (_, Tabbed, UserBig, DashboardQuests, DashboardActivity, DashboardProfile, currentUser, html) ->
+    class extends Tabbed
         template: _.template(html)
         activated: false
         activeMenuItem: -> (if @my() then "my-quests" else "none")
 
-        subviews:
-            ".user-subview": ->
+        subviews: ->
+            subviews = super
+            subviews[".user-subview"] = ->
                 new UserBig
                     model: @model
                     tab: @tab
+            subviews
 
-            ".dashboard-subview": ->
-                if @tab == 'quests'
+        tab: 'quests'
+        tabSubview: '.dashboard-subview'
+        urlRoot: -> "/player/#{ @model.get('login') }"
+        tabs:
+            quests:
+                url: ''
+                subview: ->
                     new DashboardQuests
                         model: @model
                         tab: @options.questTab
-                else if @tab == 'activity'
-                    new DashboardActivity model: @model
-                else if @tab == 'profile'
-                    new DashboardProfile model: @model
-                else
-                    alert "unknown tab #{@tab}"
-
-        initialize: ->
-            @tab = @options.tab || 'quests'
-            super
+            activity:
+                url: '/activity'
+                subview: -> new DashboardActivity model: @model
+            profile:
+                url: '/profile'
+                subview: -> new DashboardProfile model: @model
 
         initSubviews: ->
             super
             @listenTo @subview(".user-subview"), "switch", (params) ->
-                tab = params.tab
-                @switchTabByName tab
-                tab2url =
-                    quests: ''
-                    activity: '/activity'
-                    profile: '/profile'
-                Backbone.history.navigate "/player/#{ @model.get("login") }#{ tab2url[tab] }"
-                Backbone.trigger "pp:quiet-url-update"
-
-        switchTabByName: (tab) ->
-            @tab = tab
-            @rebuildSubview(".dashboard-subview").render()
+                @switchTabByName params.tab
 
         my: ->
             currentLogin = currentUser.get("login")

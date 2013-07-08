@@ -77,7 +77,7 @@ define [
                 {}
 
         features: []
-        subviews: {}
+        subviews: -> {}
         activated: true
         activate: ->
             unless @activated

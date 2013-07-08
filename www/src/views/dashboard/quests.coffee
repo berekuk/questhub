@@ -1,40 +1,40 @@
 define [
     "underscore"
-    "views/proto/common"
+    "views/proto/tabbed"
     "views/quest/dashboard-collection", "models/quest-collection"
     "models/current-user"
     "text!templates/dashboard/quests.html"
-], (_, Common, DashboardQuestCollection, QuestCollectionModel, currentUser, html) ->
-    class extends Common
+], (_, Tabbed, DashboardQuestCollection, QuestCollectionModel, currentUser, html) ->
+    class extends Tabbed
         template: _.template(html)
 
         events:
             "click ul.dashboard-quests-tabs a": "switchTab"
 
-        initialize: ->
-            @tab = @options.tab || 'open'
-            super
-
-        subviews:
-            ".quests-subview": ->
-                if @tab is "open"
+        urlRoot: -> "/player/#{ @model.get("login") }"
+        tab: "open"
+        tabSubview: ".quests-subview"
+        tabs:
+            open:
+                url: ''
+                subview: ->
                     @createQuestSubview "open",
                         sort: "manual"
                         status: "open"
-
-                else if @tab is "closed"
+            closed:
+                url: '/quest/closed'
+                subview: ->
                     @createQuestSubview "completed",
                         status: "closed"
-
-                else if @tab is "abandoned"
+            abandoned:
+                url: '/quest/abandoned'
+                subview: ->
                     @createQuestSubview "abandoned",
                         status: "abandoned"
 
-                else
-                    Backbone.trigger "pp:notify", "error", "unknown tab " + @tab
+        switchTab: (e) -> @switchTabByName $(e.target).closest("a").attr("data-tab")
 
         createQuestSubview: (caption, options) ->
-            that = this
             # open quests are always displayed in their entirety
             options.limit = 100 unless options.status is "open"
             options.order = "desc"
@@ -53,18 +53,6 @@ define [
 
             collectionView = new DashboardQuestCollection(viewOptions)
             collectionView
-
-        switchTab: (e) ->
-            tab = $(e.target).closest("a").attr("data-tab")
-            @switchTabByName tab
-            url = "/player/#{ @model.get("login") }/quest/#{tab}"
-            Backbone.history.navigate url
-            Backbone.trigger "pp:quiet-url-update"
-
-        switchTabByName: (tab) ->
-            @tab = tab
-            @rebuildSubview ".quests-subview"
-            @render() # TODO - why can't we just re-render a subview?
 
         my: ->
             currentLogin = currentUser.get("login")
