@@ -3,20 +3,20 @@
 }
 
 .realm-logo {
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
-
-    margin: 0 10px;
-    cursor: pointer;
+    margin: 0;
     padding: 10px;
-
-    width: 110px;
-    height: 110px;
+    margin-bottom: 5px;
 
     img {
+        margin: 10px;
         width: 80px;
         height: 80px;
+    }
+    .controls-subview {
+        button {
+            display: block;
+            margin: 0 auto;
+        }
     }
 }
 
@@ -25,13 +25,6 @@
 
     .realm-detail-logo {
         float: left;
-        margin-bottom: 15px;
-    }
-    .realm-controls {
-        button {
-            display: block;
-            margin: 0 auto;
-        }
     }
 
     .realm-detail-link h3 {
@@ -49,7 +42,7 @@
             clear: none;
         }
         .realm-detail-logo {
-            margin-right: 30px;
+            margin-right: 10px;
         }
         .realm-detail-link h3 {
             margin-top: 10px;
@@ -67,9 +60,45 @@
             padding-right: 15px;
         }
     }
+}
 
-    .realm-controls {
-        margin-top: 10px;
-        margin-bottom: 10px;
+.realm-big-logo {
+    @include breakpoint(A) {
+        float: left;
+        margin-right: 40px;
     }
+
+    .realm-logo {
+        float: left;
+    }
+    .realm-big-logo-title {
+        text-align: center;
+        font-size: 22px;
+
+        @include breakpoint(A) {
+            float: left;
+            margin-top: 10px;
+            font-size: 24.5px; // normal h3 size
+            text-align: left;
+        }
+    }
+}
+.realm-big-description {
+    clear: both;
+    @include breakpoint(A) {
+        clear: none;
+    }
+    margin-bottom: 45px;
+    @include breakpoint(B) {
+        margin-bottom: 57px;
+    }
+}
+.realm-big {
+    position: relative;
+    margin-bottom: 20px;
+}
+.realm-big-tabs {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
 }

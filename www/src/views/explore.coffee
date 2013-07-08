@@ -1,5 +1,11 @@
-define ["underscore", "views/proto/common", "models/quest-collection", "views/quest/collection", "models/current-user", "text!templates/explore.html"], (_, Common, QuestCollectionModel, QuestCollection, currentUser, html) ->
-    Common.extend
+define [
+    "underscore"
+    "views/proto/common"
+    "models/quest-collection", "views/quest/collection"
+    "models/current-user"
+    "text!templates/explore.html"
+], (_, Common, QuestCollectionModel, QuestCollection, currentUser, html) ->
+    class extends Common
         template: _.template(html)
         activeMenuItem: "explore"
         className: "explore"
@@ -10,10 +16,10 @@ define ["underscore", "views/proto/common", "models/quest-collection", "views/qu
         subviews:
             ".explore-tab-content": "tabSubview"
 
-        tab: "latest"
-        activated: false
-        afterInitialize: ->
-            _.bindAll this
+        initialize: ->
+            @tab = @options.tab || "latest"
+            @tag = @options.tag
+            super
 
         name2options:
             latest:
@@ -37,8 +43,7 @@ define ["underscore", "views/proto/common", "models/quest-collection", "views/qu
                 watchedByMe: true
                 showStatus: true
 
-        realm: ->
-            @options.realm
+        realm: -> @options.realm
 
         tabSubview: ->
             options = _.clone(@name2options[@tab])
@@ -60,10 +65,9 @@ define ["underscore", "views/proto/common", "models/quest-collection", "views/qu
             options.limit = 100
             collection = new QuestCollectionModel([], options)
             collection.fetch()
-            new QuestCollection(
+            new QuestCollection
                 collection: collection
                 showStatus: options.showStatus
-            )
 
         switchTab: (e) ->
             tab = $(e.target).attr("data-explore-tab")

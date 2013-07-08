@@ -10,37 +10,36 @@ define [
     class extends Common
         routes:
             "realms": "realms"
-            "realm/:realm": "realmPage"
-            "realm/:realm/players": "userList"
-            "realm/:realm/explore(/:tab)": "explore"
-            "realm/:realm/explore/:tab/tag/:tag": "explore"
+            "realm/:realm": "realmActivity"
+            "realm/:realm/players": "realmPlayers"
+            "realm/:realm/explore(/:tab)": "realmExplore"
+            "realm/:realm/explore/:tab/tag/:tag": "realmExplore"
 
         realms: ->
             view = new RealmDetailCollection collection: sharedModels.realms
             view.collection.fetch()
             @appView.setPageView view
 
-        explore: (realm, tab, tag) ->
-            view = new Explore(realm: realm)
-            view.tab = tab if tab?
-            view.tag = tag if tag?
-            view.activate()
-            @appView.setPageView view
-
-        userList: (realm) ->
-            collection = new UserCollectionModel([],
-                realm: realm
-                sort: "leaderboard"
-                limit: 100
+        _realm: (realm, options) ->
+            model = new RealmModel id: realm
+            view = new RealmPage _.extend(
+                { model: model },
+                options
             )
-            view = new UserCollection(collection: collection)
-            collection.fetch()
-            @appView.setPageView view
-
-        realmPage: (realm) ->
-            model = new RealmModel(id: realm)
-            view = new RealmPage(model: model)
             model.fetch()
                 .success -> view.activate()
-
             @appView.setPageView view
+
+        realmActivity: (realm) ->
+            @_realm realm, tab: 'activity'
+
+        realmExplore: (realm, tab, tag) ->
+            @_realm realm,
+                tab: 'quests'
+                explore:
+                    tab: tab
+                    tag: tag
+
+        realmPlayers: (realm) ->
+            @_realm realm,
+                tab: 'players'
