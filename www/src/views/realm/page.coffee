@@ -2,8 +2,7 @@ define [
     "underscore"
     "views/proto/tabbed"
     "views/realm/big"
-    "views/explore"
-    "views/realm/page/library", "views/realm/page/activity"
+    "views/explore", "views/library/overview", "views/realm/page/activity"
     "views/user/collection", "models/user-collection"
     "text!templates/realm-page.html"
 ], (_, Tabbed, RealmBig, Explore, RealmPageLibrary, RealmPageActivity, UserCollection, UserCollectionModel, html) ->
