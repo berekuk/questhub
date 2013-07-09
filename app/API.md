@@ -252,9 +252,19 @@ Set manual ordering of quests.
 
 Parameters: `quest_ids[]` array with quest ids. Use `GET /api/quest?sort=manual` to fetch quests in this order.
 
+### Quest library
+
+##### GET /api/library
+
+Get the list of library quests.
+
+##### GET /api/library/{id}
+
+Get one library quest.
+
 ### Realms
 
-##### GET /realm
+##### GET /api/realm
 
 Get the list of realms.
 
@@ -364,3 +374,5 @@ Event:
         quest: { ... },
         invitee: 'bar' # only for 'invite-quest' type
     }
+
+# vim: ft=markdown
