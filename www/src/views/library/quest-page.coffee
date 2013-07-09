@@ -5,6 +5,6 @@ define [
 ], (_, Common, html) ->
     class extends Common
         template: _.template html
-        selfRender: true
+        activated: false
 
         realm: -> @model.get 'realm'

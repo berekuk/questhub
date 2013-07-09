@@ -8,7 +8,7 @@ define [
     Base.extend
         template: _.template(html)
         events:
-            "click .quest-add": "submit"
+            "click ._go": "submit"
             "keyup [name=name]": "nameEdit"
             "keyup [name=tags]": "tagsEdit"
             "click .quest-add-realm button": ->
@@ -20,11 +20,11 @@ define [
             @render()
 
         disable: ->
-            @$(".quest-add").addClass "disabled"
+            @$("._go").addClass "disabled"
             @enabled = false
 
         enable: ->
-            @$(".quest-add").removeClass "disabled"
+            @$("._go").removeClass "disabled"
             @enabled = true
             @submitted = false
 
@@ -71,7 +71,7 @@ define [
             testerId = "#quest-add-test-span"
             tester = $(testerId)
             unless tester.length
-                tester = $("<span id=\"" + testerId + "\"></span>")
+                tester = $("<span id=\"#{testerId}\"></span>")
                 tester.css "display", "none"
                 tester.css "fontFamily", input.css("fontFamily")
                 @$el.append tester
@@ -100,10 +100,9 @@ define [
 
         render: ->
             unless sharedModels.realms.length
-                sharedModels.realms.fetch().success =>
-                    @render()
-
+                sharedModels.realms.fetch().success => @render()
                 return
+
             defaultRealm = @options.realm
             unless defaultRealm
                 userRealms = sharedModels.currentUser.get("realms")
@@ -112,12 +111,11 @@ define [
                 realms: sharedModels.realms.toJSON()
                 defaultRealm: defaultRealm
             ))
-            qe = @$(".quest-edit-name")
-            @$(".modal").modal().on "shown", ->
-                qe.focus()
+
+            @$(".modal").modal().on "shown", =>
+                @$("[name=name]").focus()
 
             @$(".modal").modal().on "hidden", (e) =>
-
                 # modal includes items with tooltip, which can fire "hidden" too,
                 # and these events bubble up DOM tree, ending here
                 return unless $(e.target).hasClass("modal")
@@ -127,7 +125,7 @@ define [
             @$(".icon-spinner").hide()
             @submitted = false
             @validate()
-            @$(".quest-edit-description").autosize append: "\n"
+            @$("[name=description]").autosize append: "\n"
 
         submit: ->
             return unless @enabled
