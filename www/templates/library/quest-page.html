@@ -3,12 +3,16 @@
     <div class="offset3 span9">
       <div class="well">
         <h2><%- name %></h2>
-        <div>
-          <%= partial.markdown(description) %> <!-- TODO: realm -->
-        </div>
-        <div>
-          <span class="muted"><%- stat.players %> <i class="icon-user"></i></span>
-        </div>
+        <% if (obj.description) { %>
+          <div>
+            <%= partial.markdown(description) %> <!-- TODO: realm -->
+          </div>
+        <% } %>
+        <% if (obj.stat) { %>
+          <div>
+            <span class="muted"><%- stat.players %> <i class="icon-user"></i></span>
+          </div>
+        <% } %>
       </div>
       <div>
         <button class="btn btn-primary">Take this quest</button>

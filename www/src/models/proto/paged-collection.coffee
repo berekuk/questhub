@@ -1,11 +1,11 @@
 # see models/user-collection.js for implementation example
 define ["backbone", "underscore"], (Backbone, _) ->
     Backbone.Collection.extend
-    
+
         # all implementations should support at least 'limit' and 'offset'
         # if you override cgi, don't forget about it!
         cgi: ["limit", "offset"]
-    
+
         # baseUrl is required
         defaultCgi: []
         url: ->
@@ -22,7 +22,7 @@ define ["backbone", "underscore"], (Backbone, _) ->
             @options.limit++  if @options.limit # always ask for one more
             @gotMore = true # optimistic :)
 
-    
+
         # copied and adapted from Backbone.Collection.fetch
         # see http://documentcloud.github.com/backbone/docs/backbone.html#section-104
         # we have to do it manually, because we want to know the size of resp, and ignore the last item
@@ -44,7 +44,7 @@ define ["backbone", "underscore"], (Backbone, _) ->
 
             @sync "read", this, options
 
-    
+
         # pager
         # supports { success: ..., error: ... } as a second parameter
         fetchMore: (count, options) ->
@@ -54,5 +54,3 @@ define ["backbone", "underscore"], (Backbone, _) ->
             options.update = true
             options.remove = false
             @fetch options
-
-

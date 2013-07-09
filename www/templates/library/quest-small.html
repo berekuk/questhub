@@ -1,0 +1,14 @@
+<div class="well clearfix">
+  <button class="btn btn-primary pull-right">Take this quest</button>
+  <a href="/realm/<%- realm %>/library/quest/<%- _id %>"><%- name %></a>
+  <% if (obj.description) { %>
+    <div>
+      <%= partial.markdown(description) %> <!-- TODO: realm -->
+    </div>
+  <% } %>
+  <% if (obj.stat) { %>
+    <div>
+      <span class="muted"><%- stat.players || 0 %> <i class="icon-user"></i></span>
+    </div>
+  <% } %>
+</div>

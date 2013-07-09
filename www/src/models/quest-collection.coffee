@@ -56,6 +56,3 @@ define ["models/proto/paged-collection", "models/quest"], (Parent, Quest) ->
             mixpanel.track "set order"
             $.post "/api/quest/set_manual_order",
                 "quest_ids[]": ids
-
-
-

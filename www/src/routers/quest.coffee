@@ -2,18 +2,18 @@ define [
     "backbone"
     "routers/proto/common"
     "views/quest/page", "models/quest"
-    "models/library-quest", "views/library/quest"
+    "models/library/quest", "views/library/quest-page"
 ], (Backbone, Common, QuestPage, QuestModel, LibraryQuestModel, LibraryQuestPage) ->
     class extends Common
         routes:
             "quest/:id": "questPage"
             "realm/:realm/quest/:id": "realmQuestPage"
             "library/:id": "libraryPage"
-            "realm/:realm/library/:id": "realmLibraryPage"
+            "realm/:realm/library/quest/:id": "realmLibraryPage"
 
         questPage: (id) ->
-            model = new QuestModel(_id: id)
-            view = new QuestPage(model: model)
+            model = new QuestModel _id: id
+            view = new QuestPage model: model
             model.fetch success: =>
                 Backbone.history.navigate "/realm/" + model.get("realm") + "/quest/" + model.id,
                     trigger: true
@@ -28,18 +28,15 @@ define [
             @questPage id
 
         libraryPage: (id) ->
-            model = new LibraryQuestModel
-                name: "Read a book"
-                description: """
-                  1. Choose any book you like.
-                  1. Read it.
-                  1. ...
-                  1. PROFIT!
-                """
-                stat:
-                    players: 98
-                realm: "perl"
+            model = new LibraryQuestModel _id: id
             view = new LibraryQuestPage model: model
+            model.fetch success: =>
+                Backbone.history.navigate "/realm/" + model.get("realm") + "/library/quest/" + model.id,
+                    trigger: true
+                    replace: true
+                view.activate()
+                @appView.updateRealm()
+
             @appView.setPageView view
 
         realmLibraryPage: (realm, id) ->
