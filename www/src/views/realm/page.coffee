@@ -3,10 +3,10 @@ define [
     "views/proto/tabbed"
     "views/realm/big"
     "views/explore"
-    "views/realm/page/activity"
+    "views/realm/page/library", "views/realm/page/activity"
     "views/user/collection", "models/user-collection"
     "text!templates/realm-page.html"
-], (_, Tabbed, RealmBig, Explore, RealmPageActivity, UserCollection, UserCollectionModel, html) ->
+], (_, Tabbed, RealmBig, Explore, RealmPageLibrary, RealmPageActivity, UserCollection, UserCollectionModel, html) ->
     class extends Tabbed
         template: _.template(html)
         activeMenuItem: "realm-page"
@@ -15,11 +15,14 @@ define [
         realm: -> @model.get "id"
 
         urlRoot: -> "/realm/#{ @model.get("id") }"
-        tab: 'activity'
+        tab: 'library'
         tabSubview: ".realm-page-sv"
         tabs:
-            activity:
+            library:
                 url: ''
+                subview: -> new RealmPageLibrary model: @model
+            activity:
+                url: '/activity'
                 subview: -> new RealmPageActivity model: @model
             quests:
                 url: '/explore'

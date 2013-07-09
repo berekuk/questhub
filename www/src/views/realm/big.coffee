@@ -14,7 +14,7 @@ define [
                 new RealmControls model: @model
 
         initialize: ->
-            @tab = @options.tab || 'activity'
+            @tab = @options.tab || 'library'
             super
 
         switch: (e) ->
