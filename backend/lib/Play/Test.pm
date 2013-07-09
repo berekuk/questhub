@@ -20,7 +20,7 @@ BEGIN {
 use Email::Sender::Simple;
 
 sub reset_db {
-    for (qw/ quests comments users events notifications /) {
+    for (qw/ quests comments users events notifications library /) {
         Play::Mongo->db->get_collection($_)->remove({});
     }
 }

@@ -49,6 +49,11 @@ sub realms {
     return Play::DB::Realms->new;
 }
 
+sub library {
+    require Play::DB::Library;
+    return Play::DB::Library->new;
+}
+
 sub ensure_indices {
     my $users_collection = Play::Mongo->db->get_collection('users');
     $users_collection->drop_indexes; # yeah! (FIXME)
