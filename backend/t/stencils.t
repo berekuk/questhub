@@ -73,4 +73,25 @@ sub get :Tests {
         qr/not found/;
 }
 
+sub take :Tests {
+    db->users->add({ login => 'foo' });
+
+    my $stencil = db->stencils->add({
+        realm => 'europe',
+        author => 'foo',
+        name => 'Do something',
+    });
+
+    db->stencils->take($stencil->{_id}, 'foo');
+
+    my $quests = db->quests->list({ user => 'foo' });
+    cmp_deeply $quests, [
+        superhashof {
+            team => ['foo'],
+            name => 'Do something',
+            realm => 'europe',
+        }
+    ];
+}
+
 __PACKAGE__->new->runtests;

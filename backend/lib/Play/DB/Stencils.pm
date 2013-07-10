@@ -13,6 +13,7 @@ use Moo;
 with 'Play::DB::Role::Common';
 
 use Play::Mongo;
+use Play::DB qw(db);
 
 use Type::Params qw( compile );
 use Types::Standard qw( Undef Dict Str Optional );
@@ -69,6 +70,20 @@ sub get {
     die "stencil $id not found" unless $stencil;
     $self->_prepare($stencil);
     return $stencil;
+}
+
+sub take {
+    my $self = shift;
+    state $check = compile(Id, Login);
+    my ($id, $login) = $check->(@_);
+
+    my $stencil = $self->get($id);
+    db->quests->add({
+        realm => $stencil->{realm},
+        name => $stencil->{name},
+        user => $login,
+    });
+    return;
 }
 
 1;
