@@ -13,6 +13,10 @@ post '/stencil' => sub {
         author => $login,
     };
 
+    # optional fields
+    for (qw/ description /) {
+        $params->{$_} = param($_) if defined param($_);
+    };
     # required fields
     for (qw/ realm name /) {
         my $value = param($_) or die "'$_' is not set";

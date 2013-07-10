@@ -270,6 +270,15 @@ Get one stencil.
 
 Create a stencil.
 
+Parameters:
+
+* `realm`
+* `name`
+
+Optional parameters:
+
+* `description`
+
 ##### POST /api/stencil/{id}/take
 
 Take a stencil as a quest.

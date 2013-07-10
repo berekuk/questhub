@@ -41,6 +41,7 @@ sub add {
     state $check = compile(Dict[
         realm => Realm,
         name => Str,
+        description => Optional[Str],
         author => Login,
     ]);
     my ($params) = $check->(@_);
@@ -87,12 +88,16 @@ sub take {
     my ($id, $login) = $check->(@_);
 
     my $stencil = $self->get($id);
-    my $quest = db->quests->add({
+
+    my $quest_params = {
         realm => $stencil->{realm},
         name => $stencil->{name},
         user => $login,
         stencil => $id,
-    });
+    };
+    $quest_params->{description} = $stencil->{description} if defined $stencil->{description};
+
+    my $quest = db->quests->add($quest_params);
     return $quest;
 }
 
