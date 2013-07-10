@@ -9,17 +9,17 @@ sub setup :Test(setup) {
 }
 
 sub add :Tests {
-    my $book = db->library->add({
+    my $stencil = db->stencils->add({
         realm => 'europe',
         author => 'foo',
         name => 'Start a World War I',
     });
-    my $book2 = db->library->add({
+    my $stencil2 = db->stencils->add({
         realm => 'europe',
         author => 'foo',
         name => 'Start a World War II',
     });
-    cmp_deeply $book, {
+    cmp_deeply $stencil, {
         realm => 'europe',
         name => 'Start a World War I',
         author => 'foo',
@@ -29,38 +29,38 @@ sub add :Tests {
 }
 
 sub list :Tests {
-    db->library->add({
+    db->stencils->add({
         realm => 'europe',
         author => 'foo',
         name => 'Start a World War I',
     });
-    db->library->add({
+    db->stencils->add({
         realm => 'europe',
         author => 'foo',
         name => 'Start a World War II',
     });
-    db->library->add({
+    db->stencils->add({
         realm => 'asia',
         author => 'foo',
         name => 'Attach Pearl Harbor',
     });
 
-    my $books = db->library->list({});
-    is scalar @$books, 3;
+    my $stencils = db->stencils->list({});
+    is scalar @$stencils, 3;
 
-    $books = db->library->list({ realm => 'europe' });
-    is scalar @$books, 2;
+    $stencils = db->stencils->list({ realm => 'europe' });
+    is scalar @$stencils, 2;
 }
 
 sub get :Tests {
-    my $result = db->library->add({
+    my $result = db->stencils->add({
         realm => 'europe',
         author => 'foo',
         name => 'Start a World War I',
     });
 
-    my $book = db->library->get($result->{_id});
-    cmp_deeply $book, {
+    my $stencil = db->stencils->get($result->{_id});
+    cmp_deeply $stencil, {
         realm => 'europe',
         name => 'Start a World War I',
         author => 'foo',
@@ -69,7 +69,7 @@ sub get :Tests {
     };
 
     like
-        exception { db->library->get('f' x 24) },
+        exception { db->stencils->get('f' x 24) },
         qr/not found/;
 }
 

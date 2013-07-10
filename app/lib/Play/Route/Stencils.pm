@@ -1,11 +1,12 @@
-package Play::Route::Quests;
+package Play::Route::Stencils;
 
 use Dancer ':syntax';
 prefix '/api';
 
 use Play::DB qw(db);
+use Play::App::Util qw(login);
 
-post '/library' => sub {
+post '/stencil' => sub {
     my $login = login;
 
     my $params = {
@@ -18,18 +19,18 @@ post '/library' => sub {
         $params->{$_} = $value;
     }
 
-    return db->library->add($params);
+    return db->stencils->add($params);
 };
 
-get '/library' => sub {
+get '/stencil' => sub {
     my $params = {
         map { param($_) ? ($_ => param($_)) : () } qw/ realm /,
     };
-    return db->library->list($params);
+    return db->stencils->list($params);
 };
 
-get '/library/:id' => sub {
-    return db->library->get(param('id'));
+get '/stencil/:id' => sub {
+    return db->stencils->get(param('id'));
 };
 
 true;

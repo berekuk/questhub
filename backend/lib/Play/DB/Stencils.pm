@@ -1,12 +1,8 @@
-package Play::DB::Library;
+package Play::DB::Stencils;
 
 =head1 SYNOPSIS
 
-    $library->add({ name => "read a book", realm => "chaos" });
-
-=head1 DESCRIPTION
-
-We're calling library quests "books" internally. Just because we need a name for them. (FIXME - figure out a better name.)
+    $stensils->add({ name => "read a book", realm => "chaos" });
 
 =cut
 
@@ -22,16 +18,13 @@ use Type::Params qw( compile );
 use Types::Standard qw( Undef Dict Str Optional );
 use Play::Types qw( Id Login Realm );
 
-sub _build_entity_name { 'book' }
-sub _build_collection { Play::Mongo->db->get_collection('library') }
-
-sub _prepare_book {
+sub _prepare {
     my $self = shift;
-    my ($book) = @_;
-    $book->{ts} = $book->{_id}->get_time;
-    $book->{_id} = $book->{_id}->to_string;
+    my ($stencil) = @_;
+    $stencil->{ts} = $stencil->{_id}->get_time;
+    $stencil->{_id} = $stencil->{_id}->to_string;
 
-    return $book;
+    return $stencil;
 }
 
 sub add {
@@ -45,8 +38,8 @@ sub add {
 
     my $id = $self->collection->insert($params, { safe => 1 });
 
-    my $book = { %$params, _id => $id };
-    $self->_prepare_book($book);
+    my $stencil = { %$params, _id => $id };
+    $self->_prepare($stencil);
 }
 
 sub list {
@@ -58,10 +51,10 @@ sub list {
     my ($params) = $check->(@_);
     $params ||= {};
 
-    my @books = $self->collection->find($params)->all;
-    $self->_prepare_book($_) for @books;
+    my @stencils = $self->collection->find($params)->all;
+    $self->_prepare($_) for @stencils;
 
-    return \@books;
+    return \@stencils;
 }
 
 sub get {
@@ -69,13 +62,13 @@ sub get {
     state $check = compile(Id);
     my ($id) = $check->(@_);
 
-    my $book = $self->collection->find_one({
+    my $stencil = $self->collection->find_one({
         _id => MongoDB::OID->new(value => $id)
     });
 
-    die "library quest $id not found" unless $book;
-    $self->_prepare_book($book);
-    return $book;
+    die "stencil $id not found" unless $stencil;
+    $self->_prepare($stencil);
+    return $stencil;
 }
 
 1;

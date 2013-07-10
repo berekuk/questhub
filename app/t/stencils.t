@@ -12,7 +12,7 @@ sub setup :Tests(setup => no_plan) {
 sub add :Tests {
     http_json GET => "/api/fakeuser/foo";
 
-    http_json POST => "/api/library", { params => {
+    http_json POST => "/api/stencil", { params => {
         realm => 'europe',
         name => 'Do something',
     } };
@@ -21,16 +21,16 @@ sub add :Tests {
 sub list :Tests {
     http_json GET => "/api/fakeuser/foo";
 
-    http_json POST => "/api/library", { params => {
+    http_json POST => "/api/stencil", { params => {
         realm => 'europe',
         name => 'Do something',
     } };
-    http_json POST => "/api/library", { params => {
+    http_json POST => "/api/stencil", { params => {
         realm => 'europe',
         name => 'Do something else',
     } };
 
-    my $result = http_json GET => "/api/library?realm=europe";
+    my $result = http_json GET => "/api/stencil?realm=europe";
     cmp_deeply $result, [
         superhashof({
             name => 'Do something', # TODO - sorting order?
@@ -44,14 +44,14 @@ sub list :Tests {
 sub get_one :Tests {
     http_json GET => "/api/fakeuser/foo";
 
-    my $result = http_json POST => "/api/library", { params => {
+    my $result = http_json POST => "/api/stencil", { params => {
         realm => 'europe',
         name => 'Do something',
     } };
 
     like $result->{_id}, qr/^\w{24}$/;
-    my $book = http_json GET => "/api/library/$result->{_id}";
-    cmp_deeply $book, {
+    my $stencil = http_json GET => "/api/stencil/$result->{_id}";
+    cmp_deeply $stencil, {
         name => 'Do something',
         realm => 'europe',
         author => 'foo',

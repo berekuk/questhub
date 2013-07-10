@@ -252,15 +252,19 @@ Set manual ordering of quests.
 
 Parameters: `quest_ids[]` array with quest ids. Use `GET /api/quest?sort=manual` to fetch quests in this order.
 
-### Quest library
+### Stencils
 
-##### GET /api/library
+##### GET /api/stencil
 
-Get the list of library quests.
+Get the list of stencils.
 
-##### GET /api/library/{id}
+Options:
 
-Get one library quest.
+* `realm`
+
+##### GET /api/stencil/{id}
+
+Get one stencil.
 
 ### Realms
 

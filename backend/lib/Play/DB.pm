@@ -49,9 +49,9 @@ sub realms {
     return Play::DB::Realms->new;
 }
 
-sub library {
-    require Play::DB::Library;
-    return Play::DB::Library->new;
+sub stencils {
+    require Play::DB::Stencils;
+    return Play::DB::Stencils->new;
 }
 
 sub ensure_indices {
