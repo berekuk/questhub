@@ -1,30 +1,19 @@
 define [
     "underscore"
     "views/proto/common"
-    "models/shared-models"
     "text!templates/stencil/page.html"
-], (_, Common, sharedModels, html) ->
+], (_, Common, html) ->
     class extends Common
         template: _.template html
         activated: false
 
         realm: -> @model.get 'realm'
 
-        # copy-pasted from views/stencil/small.coffee
         events:
-            "click ._take": "take"
+            "click ._take": -> @model.take()
 
-        serialize: ->
-            params = super
-            for quest in @model.get "quests"
-                if sharedModels.currentUser.get("login") in quest.team
-                    params.my = quest
-                    break
-            params
+        initialize: ->
+            super
+            @listenTo @model, "sync", => @render()
 
-        take: ->
-            @model.take()
-            .success =>
-                @model.fetch()
-                .success =>
-                    @render()
+        serialize: -> @model.serialize()

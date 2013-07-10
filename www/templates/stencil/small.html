@@ -1,12 +1,15 @@
 <div class="well clearfix">
-  <div class="stencil-small-relation pull-right">
-    <% console.log(obj) %>
-    <% if (obj.my) { %>
-      <a href="/realm/<%- my.realm %>/quest/<%- my._id %>">Your quest</a>
-    <% } else { %>
-      <button class="btn btn-primary _take">Take this quest</button>
-    <% } %>
-  </div>
+
+  <% if (currentUser) { %>
+    <div class="stencil-small-relation pull-right">
+      <% if (obj.my) { %>
+        <a href="/realm/<%- my.realm %>/quest/<%- my._id %>">Your quest</a>
+      <% } else { %>
+        <button class="btn btn-primary _take">Take this quest</button>
+      <% } %>
+    </div>
+  <% } %>
+
   <a href="/realm/<%- realm %>/stencil/<%- _id %>"><%- name %></a>
   <% if (obj.description) { %>
     <div>

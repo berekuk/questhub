@@ -1,8 +1,21 @@
-define ["backbone"], (Backbone) ->
+define [
+    "backbone"
+    "models/current-user"
+], (Backbone, currentUser) ->
     class extends Backbone.Model
         idAttribute: "_id"
         urlRoot: "/api/stencil"
 
         take: ->
             mixpanel.track "take stencil"
-            return $.post "#{ @url() }/take"
+            $.post("#{ @url() }/take")
+            .success => @fetch()
+
+        serialize: ->
+            params = @toJSON()
+            for quest in @get "quests"
+                if currentUser.get("login") in quest.team
+                    params.my = quest
+                    break
+            params.currentUser = currentUser.get "login"
+            params

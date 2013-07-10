@@ -6,16 +6,18 @@
     <div class="well">
       <p>
       Stencils are quest ideas.<br>
-      You can take any stencil as a quest, and even multiple times, if it makes sense.
+      You can take any stencil as a quest, and even do it multiple times in a row, if it makes sense.
       </p>
       <p>
-      You don't have to choose your quest from this list, though. Coming up with unique task and creating it directly is completely fine, too.
+      You don't have to choose your quest from this list, though. Coming up with unique task and creating it directly is great, too.
       </p>
       </p>
     </div>
   </div>
   <div class="span9">
     <div class="stencil-collection-sv"></div>
-    <button class="btn btn-primary add-stencil"><i class="icon-plus"></i> New stencil</button>
+    <% if (currentUser) { %>
+      <button class="btn btn-primary btn-large add-stencil"><i class="icon-plus"></i> New stencil</button>
+    <% } %>
   </div>
 </div>

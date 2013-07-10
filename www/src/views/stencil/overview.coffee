@@ -1,10 +1,11 @@
 define [
     "underscore"
     "views/proto/common"
+    "models/shared-models"
     "models/stencil/collection", "views/stencil/collection"
     "views/stencil/add"
     "text!templates/stencil/overview.html"
-], (_, Common, CollectionModel, Collection, StencilAdd, html) ->
+], (_, Common, sharedModels, CollectionModel, Collection, StencilAdd, html) ->
     class extends Common
         template: _.template(html)
 
@@ -21,3 +22,8 @@ define [
 
         addDialog: ->
             new StencilAdd realm: @model.id
+
+        serialize: ->
+            params = super
+            params.currentUser = sharedModels.currentUser.get "login"
+            params
