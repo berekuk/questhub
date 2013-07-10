@@ -2,7 +2,7 @@ package Play::DB::Stencils;
 
 =head1 SYNOPSIS
 
-    $stensils->add({ name => "read a book", realm => "chaos" });
+    $stencils->add({ name => "read a book", realm => "chaos" });
 
 =cut
 
@@ -82,6 +82,7 @@ sub take {
         realm => $stencil->{realm},
         name => $stencil->{name},
         user => $login,
+        stencil => $id,
     });
     return;
 }

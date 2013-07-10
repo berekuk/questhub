@@ -90,6 +90,7 @@ sub take :Tests {
             team => ['foo'],
             name => 'Do something',
             realm => 'europe',
+            stencil => $stencil->{_id},
         }
     ];
 }

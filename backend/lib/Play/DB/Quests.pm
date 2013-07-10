@@ -271,6 +271,7 @@ sub add {
         team => Optional[ArrayRef[Login]],
         tags => Optional[ArrayRef[Str]],
         status => Optional[Str],
+        stencil => Optional[Id],
     ]);
     my ($params) = $check->(@_);
     $params->{status} //= 'open';
