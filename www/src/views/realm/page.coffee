@@ -18,10 +18,10 @@ define [
         tabSubview: ".realm-page-sv"
         tabs:
             stencils:
-                url: ''
+                url: '/stencils'
                 subview: -> new RealmPageStencils model: @model
             activity:
-                url: '/activity'
+                url: ''
                 subview: -> new RealmPageActivity model: @model
             quests:
                 url: '/explore'
