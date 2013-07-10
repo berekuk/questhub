@@ -14,6 +14,9 @@
             <span class="label label-<%= status === 'open' && 'warning' %>"><%- count %> <%= status === 'closed' ? 'completed' : status %></span>
           <% }) %>
         <% } %>
+        <div class="object-bottom-line">
+          <em><small class="muted">Created</small></em> <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
+        </div>
       </div>
 
       <% if (currentUser) { %>
@@ -21,7 +24,7 @@
           <% if (obj.my) { %>
             <a href="/realm/<%- my.realm %>/quest/<%- my._id %>">Your quest</a>
           <% } else { %>
-            <button class="btn btn-primary _take">Take this quest</button>
+            <button class="btn btn-large btn-primary _take">Take this quest</button>
           <% } %>
         </div>
       <% } %>

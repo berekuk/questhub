@@ -17,3 +17,5 @@ define [
             @listenTo @model, "sync", => @render()
 
         serialize: -> @model.serialize()
+
+        features: ["timeago"]
