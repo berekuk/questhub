@@ -60,4 +60,23 @@ sub get_one :Tests {
     };
 }
 
+sub take :Tests {
+    http_json GET => "/api/fakeuser/foo";
+
+    my $result = http_json POST => "/api/stencil", { params => {
+        realm => 'europe',
+        name => 'Do something',
+    } };
+
+    http_json POST => "/api/stencil/$result->{_id}/take";
+    my $quests = http_json GET => "/api/quest?user=foo";
+    cmp_deeply $quests, [
+        superhashof({
+            author => 'foo',
+            name => 'Do something',
+            realm => 'europe',
+        }),
+    ];
+}
+
 __PACKAGE__->new->runtests;

@@ -266,6 +266,14 @@ Options:
 
 Get one stencil.
 
+##### POST /api/stencil
+
+Create a stencil.
+
+##### POST /api/stencil/{id}/take
+
+Take a stencil as a quest.
+
 ### Realms
 
 ##### GET /api/realm
