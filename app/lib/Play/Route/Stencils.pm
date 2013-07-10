@@ -30,11 +30,12 @@ get '/stencil' => sub {
     my $params = {
         map { param($_) ? ($_ => param($_)) : () } qw/ realm /,
     };
+    $params->{quests} = 1; # TODO - param
     return db->stencils->list($params);
 };
 
 get '/stencil/:id' => sub {
-    return db->stencils->get(param('id'));
+    return db->stencils->get(param('id'), { quests => 1 });
 };
 
 post '/stencil/:id/take' => sub {

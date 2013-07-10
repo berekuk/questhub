@@ -104,6 +104,22 @@ sub expand_events {
         }
     }
 
+    # fetch stencils
+    {
+        my @stencil_events = grep {
+            defined $_->{stencil_id}
+        } @events;
+        my @stencil_ids = map { $_->{stencil_id} } @stencil_events;
+
+        if (@stencil_ids) {
+            my $stencils = db->stencils->bulk_get(\@stencil_ids);
+
+            for my $event (@stencil_events) {
+                $event->{stencil} = $stencils->{$event->{stencil_id}};
+            }
+        }
+    }
+
     @events = grep { not $_->{deleted} } @events;
 
     return \@events;

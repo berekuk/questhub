@@ -66,6 +66,17 @@
     <title><% event.author %> invited <% event.invitee || event.comment.invitee %> to work on a quest: <% event.quest.name | xml %></title>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest_id %>" />
 
+    <% ELSIF event.type == 'add-stencil' %>
+    <title><% event.author %> created a stencil: <% event.stencil.name | xml %></title>
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/stencil/<%= event.stencil_id %>" />
+    <% IF event.stencil.description %>
+        <content type="html">
+            <![CDATA[
+            <% markdown(event.stencil.description) %>
+            ]]>
+        </content>
+    <% END %>
+
     <% ELSE %>
     <title>Unknown event type (<% event.type %>)</title>
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %>" />
