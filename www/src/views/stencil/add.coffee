@@ -6,8 +6,8 @@ Lots of this code is copy-pasted from views/quest/add.coffee.
 define [
     "underscore", "jquery"
     "views/proto/common"
-    "models/library/quest"
-    "text!templates/library/quest-add.html"
+    "models/stencil"
+    "text!templates/stencil/add.html"
 ], (_, $, Common, Model, html) ->
     class extends Common
         template: _.template html
@@ -61,11 +61,11 @@ define [
                 name: @getName()
                 realm: @options.realm
 
-            mixpanel.track "add library quest"
+            mixpanel.track "add stencil"
             model = new Model()
             model.save params,
                 success: =>
-                    Backbone.trigger "pp:library-quest-add", model
+                    Backbone.trigger "pp:stencil-add", model
                     @$(".modal").modal "hide"
             @$(".icon-spinner").show()
             @validate()

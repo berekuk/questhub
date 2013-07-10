@@ -2,10 +2,10 @@ define [
     "underscore"
     "views/proto/tabbed"
     "views/realm/big"
-    "views/explore", "views/library/overview", "views/realm/page/activity"
+    "views/explore", "views/stencil/overview", "views/realm/page/activity"
     "views/user/collection", "models/user-collection"
     "text!templates/realm-page.html"
-], (_, Tabbed, RealmBig, Explore, RealmPageLibrary, RealmPageActivity, UserCollection, UserCollectionModel, html) ->
+], (_, Tabbed, RealmBig, Explore, RealmPageStencils, RealmPageActivity, UserCollection, UserCollectionModel, html) ->
     class extends Tabbed
         template: _.template(html)
         activeMenuItem: "realm-page"
@@ -14,12 +14,12 @@ define [
         realm: -> @model.get "id"
 
         urlRoot: -> "/realm/#{ @model.get("id") }"
-        tab: 'library'
+        tab: 'stencils'
         tabSubview: ".realm-page-sv"
         tabs:
-            library:
+            stencils:
                 url: ''
-                subview: -> new RealmPageLibrary model: @model
+                subview: -> new RealmPageStencils model: @model
             activity:
                 url: '/activity'
                 subview: -> new RealmPageActivity model: @model

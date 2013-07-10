@@ -14,7 +14,7 @@ define [
                 new RealmControls model: @model
 
         initialize: ->
-            @tab = @options.tab || 'library'
+            @tab = @options.tab || 'stencils'
             super
 
         switch: (e) ->

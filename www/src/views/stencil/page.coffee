@@ -1,7 +1,7 @@
 define [
     "underscore"
     "views/proto/common"
-    "text!templates/library/quest-page.html"
+    "text!templates/stencil/page.html"
 ], (_, Common, html) ->
     class extends Common
         template: _.template html

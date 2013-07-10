@@ -1,18 +1,18 @@
 define [
     "underscore"
     "views/proto/common"
-    "models/library/collection", "views/library/collection"
-    "views/library/quest-add"
-    "text!templates/library/overview.html"
-], (_, Common, CollectionModel, Collection, QuestAdd, html) ->
+    "models/stencil/collection", "views/stencil/collection"
+    "views/stencil/add"
+    "text!templates/stencil/overview.html"
+], (_, Common, CollectionModel, Collection, StencilAdd, html) ->
     class extends Common
         template: _.template(html)
 
         events:
-            "click .add-library-quest": "addDialog"
+            "click .add-stencil": "addDialog"
 
         subviews:
-            '.library-collection-sv': ->
+            '.stencil-collection-sv': ->
                 collection = new CollectionModel [],
                     realm: @model.id
                 view = new Collection collection: collection
@@ -20,4 +20,4 @@ define [
                 view
 
         addDialog: ->
-            new QuestAdd realm: @model.id
+            new StencilAdd realm: @model.id

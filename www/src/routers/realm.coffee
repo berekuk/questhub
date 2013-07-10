@@ -10,7 +10,7 @@ define [
     class extends Common
         routes:
             "realms": "realms"
-            "realm/:realm": "realmLibrary"
+            "realm/:realm": "realmStencils"
             "realm/:realm/activity": "realmActivity"
             "realm/:realm/players": "realmPlayers"
             "realm/:realm/explore(/:tab)": "realmExplore"
@@ -31,8 +31,8 @@ define [
                 .success -> view.activate()
             @appView.setPageView view
 
-        realmLibrary: (realm) ->
-            @_realm realm, tab: 'library'
+        realmStencils: (realm) ->
+            @_realm realm, tab: 'stencils'
 
         realmActivity: (realm) ->
             @_realm realm, tab: 'activity'

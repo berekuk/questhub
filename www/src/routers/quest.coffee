@@ -2,14 +2,14 @@ define [
     "backbone"
     "routers/proto/common"
     "views/quest/page", "models/quest"
-    "models/library/quest", "views/library/quest-page"
-], (Backbone, Common, QuestPage, QuestModel, LibraryQuestModel, LibraryQuestPage) ->
+    "models/stencil", "views/stencil/page"
+], (Backbone, Common, QuestPage, QuestModel, StencilModel, StencilPage) ->
     class extends Common
         routes:
             "quest/:id": "questPage"
             "realm/:realm/quest/:id": "realmQuestPage"
-            "library/:id": "libraryPage"
-            "realm/:realm/library/quest/:id": "realmLibraryPage"
+            "stencil/:id": "stencilPage"
+            "realm/:realm/stencil/:id": "realmStencilPage"
 
         questPage: (id) ->
             model = new QuestModel _id: id
@@ -27,11 +27,11 @@ define [
         realmQuestPage: (realm, id) ->
             @questPage id
 
-        libraryPage: (id) ->
-            model = new LibraryQuestModel _id: id
-            view = new LibraryQuestPage model: model
+        stencilPage: (id) ->
+            model = new StencilModel _id: id
+            view = new StencilPage model: model
             model.fetch success: =>
-                Backbone.history.navigate "/realm/" + model.get("realm") + "/library/quest/" + model.id,
+                Backbone.history.navigate "/realm/" + model.get("realm") + "/stencil/" + model.id,
                     trigger: true
                     replace: true
                 view.activate()
@@ -39,5 +39,5 @@ define [
 
             @appView.setPageView view
 
-        realmLibraryPage: (realm, id) ->
-            @libraryPage id
+        realmStencilPage: (realm, id) ->
+            @stencilPage id
