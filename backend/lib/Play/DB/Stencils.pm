@@ -25,6 +25,14 @@ sub _prepare {
     $stencil->{ts} = $stencil->{_id}->get_time;
     $stencil->{_id} = $stencil->{_id}->to_string;
 
+    # FIXME - this can get expensive
+    my $quests = db->quests->list({ stencil => $stencil->{_id} });
+    $stencil->{quests} = $quests;
+    $stencil->{stat} = {};
+    for my $quest (@$quests) {
+        $stencil->{stat}{$quest->{status}}++;
+    }
+
     return $stencil;
 }
 
@@ -69,6 +77,7 @@ sub get {
 
     die "stencil $id not found" unless $stencil;
     $self->_prepare($stencil);
+
     return $stencil;
 }
 
@@ -78,13 +87,13 @@ sub take {
     my ($id, $login) = $check->(@_);
 
     my $stencil = $self->get($id);
-    db->quests->add({
+    my $quest = db->quests->add({
         realm => $stencil->{realm},
         name => $stencil->{name},
         user => $login,
         stencil => $id,
     });
-    return;
+    return $quest;
 }
 
 1;

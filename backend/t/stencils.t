@@ -19,7 +19,7 @@ sub add :Tests {
         author => 'foo',
         name => 'Start a World War II',
     });
-    cmp_deeply $stencil, {
+    cmp_deeply $stencil, superhashof {
         realm => 'europe',
         name => 'Start a World War I',
         author => 'foo',
@@ -60,7 +60,7 @@ sub get :Tests {
     });
 
     my $stencil = db->stencils->get($result->{_id});
-    cmp_deeply $stencil, {
+    cmp_deeply $stencil, superhashof {
         realm => 'europe',
         name => 'Start a World War I',
         author => 'foo',
@@ -82,7 +82,14 @@ sub take :Tests {
         name => 'Do something',
     });
 
-    db->stencils->take($stencil->{_id}, 'foo');
+    my $take_result = db->stencils->take($stencil->{_id}, 'foo');
+    cmp_deeply $take_result, superhashof {
+        team => ['foo'],
+        name => 'Do something',
+        realm => 'europe',
+        stencil => $stencil->{_id},
+        _id => $take_result->{_id},
+    };
 
     my $quests = db->quests->list({ user => 'foo' });
     cmp_deeply $quests, [
@@ -91,6 +98,7 @@ sub take :Tests {
             name => 'Do something',
             realm => 'europe',
             stencil => $stencil->{_id},
+            _id => $take_result->{_id},
         }
     ];
 }

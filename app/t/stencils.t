@@ -51,7 +51,7 @@ sub get_one :Tests {
 
     like $result->{_id}, qr/^\w{24}$/;
     my $stencil = http_json GET => "/api/stencil/$result->{_id}";
-    cmp_deeply $stencil, {
+    cmp_deeply $stencil, superhashof {
         name => 'Do something',
         realm => 'europe',
         author => 'foo',
@@ -68,7 +68,13 @@ sub take :Tests {
         name => 'Do something',
     } };
 
-    http_json POST => "/api/stencil/$result->{_id}/take";
+    my $take_result = http_json POST => "/api/stencil/$result->{_id}/take";
+    cmp_deeply $take_result, superhashof {
+        author => 'foo',
+        name => 'Do something',
+        realm => 'europe',
+    };
+
     my $quests = http_json GET => "/api/quest?user=foo";
     cmp_deeply $quests, [
         superhashof({

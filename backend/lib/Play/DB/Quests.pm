@@ -52,7 +52,7 @@ use Moo;
 
 use Type::Params qw( compile validate );
 use Types::Standard qw( Undef Bool Int Str Optional Dict ArrayRef HashRef );
-use Play::Types qw( Id Login );
+use Play::Types qw( Id Login Realm );
 
 use Play::Config qw(setting);
 use Play::DB qw(db);
@@ -135,7 +135,7 @@ sub list {
     state $check = compile(Undef|Dict[
         # find() filters
         user => Optional[Login],
-        realm => Optional[Str],
+        realm => Optional[Realm],
         unclaimed => Optional[Bool],
         status => Optional[Str],
         # flag meaning "fetch comment_count too"
@@ -147,6 +147,7 @@ sub list {
         offset => Optional[Int],
         tags => Optional[Str],
         watchers => Optional[Str],
+        stencil => Optional[Id],
     ]);
     my ($params) = $check->(@_);
     $params ||= {};
@@ -158,7 +159,7 @@ sub list {
     }
 
     my $query = {
-            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ status tags watchers realm /
+            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ status tags watchers realm stencil /
     };
     $query->{team} = $params->{user} if defined $params->{user};
     $query->{status} ||= { '$ne' => 'deleted' };

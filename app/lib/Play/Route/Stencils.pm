@@ -36,8 +36,8 @@ get '/stencil/:id' => sub {
 post '/stencil/:id/take' => sub {
     my $login = login;
 
-    db->stencils->take(param('id'), $login);
-    return { result => 'ok' }; # TODO - return the id of newly created quest?
+    my $result = db->stencils->take(param('id'), $login);
+    return $result;
 };
 
 true;
