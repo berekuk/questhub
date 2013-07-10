@@ -13,7 +13,7 @@
   <a href="/realm/<%- realm %>/stencil/<%- _id %>"><%- name %></a>
   <% if (obj.description) { %>
     <div>
-      <%= partial.markdown(description) %> <!-- TODO: realm -->
+      <%= partial.markdown(description, realm) %>
     </div>
   <% } %>
   <% if (obj.stat) { %>

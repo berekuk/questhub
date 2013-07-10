@@ -2,11 +2,6 @@
     cursor: default; // override bootstrap's "pointer" cursor style, it's confusing
 }
 
-textarea.quest-edit-description {
-    @include box-sizing(border-box);
-    width: 100%;
-}
-
 .quest-tags-edit input {
     background-color: lighten($open-quest-color, 20%);
 }

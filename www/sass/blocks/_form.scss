@@ -11,3 +11,8 @@ input.input-large {
     font-weight: 200;
     margin-bottom: 0px;
 }
+
+textarea.textarea-large {
+    @include box-sizing(border-box);
+    width: 100%;
+}

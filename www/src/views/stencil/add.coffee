@@ -8,6 +8,7 @@ define [
     "views/proto/common"
     "models/stencil"
     "text!templates/stencil/add.html"
+    "jquery.autosize"
 ], (_, $, Common, Model, html) ->
     class extends Common
         template: _.template html
@@ -36,6 +37,7 @@ define [
             @submitted = false
 
         getName: -> @$("[name=name]").val()
+        getDescription: -> @$("[name=description]").val()
 
         validate: (options) ->
             if @submitted or not @getName()
@@ -55,11 +57,15 @@ define [
             @$(".icon-spinner").hide()
             @submitted = false
             @validate()
+            @$("[name=description]").autosize append: "\n"
 
         submit: ->
             params =
                 name: @getName()
                 realm: @options.realm
+
+            description = @getDescription()
+            params.description = description if description
 
             mixpanel.track "add stencil"
             model = new Model()
