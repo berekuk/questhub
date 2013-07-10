@@ -11,6 +11,12 @@
         <%= partial.edit_tools() %>
       <% } %>
     <% } %>
+    <% if (obj.stencil) { %>
+      <br>
+      <span class="muted">
+      (<a href="/realm/<%- realm %>/stencil/<%- stencil %>">Stencil</a>)
+      </span>
+    <% } %>
   </div>
 
   <h2>
