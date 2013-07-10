@@ -56,6 +56,12 @@
 
 <% if (obj.quest) { %>
   <div class="event-quest-title">
+    <% if (quest.stencil) { %>
+      <a href="/realm/<%- quest.realm %>/stencil/<%- quest.stencil %>" class="grey-icon-link">
+        <i class="icon-book"></i>
+      </a>
+    <% } %>
+
     <%= partial.quest_link(quest) %>.
   </div>
 <% } %>

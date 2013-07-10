@@ -14,7 +14,7 @@ define [
         realm: -> @model.get "id"
 
         urlRoot: -> "/realm/#{ @model.get("id") }"
-        tab: 'stencils'
+        tab: 'activity'
         tabSubview: ".realm-page-sv"
         tabs:
             stencils:

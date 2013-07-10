@@ -10,8 +10,8 @@ define [
     class extends Common
         routes:
             "realms": "realms"
-            "realm/:realm": "realmStencils"
-            "realm/:realm/activity": "realmActivity"
+            "realm/:realm": "realmActivity"
+            "realm/:realm/stencils": "realmStencils"
             "realm/:realm/players": "realmPlayers"
             "realm/:realm/explore(/:tab)": "realmExplore"
             "realm/:realm/explore/:tab/tag/:tag": "realmExplore"
