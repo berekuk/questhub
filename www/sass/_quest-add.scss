@@ -2,16 +2,6 @@
     cursor: default; // override bootstrap's "pointer" cursor style, it's confusing
 }
 
-input.quest-edit-name {
-    font-size: 22px;
-    line-height: 32px;
-    height: 38px;
-    @include box-sizing(border-box);
-    width: 100%;
-    font-weight: 200;
-    margin-bottom: 0px;
-}
-
 textarea.quest-edit-description {
     @include box-sizing(border-box);
     width: 100%;
@@ -19,10 +9,6 @@ textarea.quest-edit-description {
 
 .quest-tags-edit input {
     background-color: lighten($open-quest-color, 20%);
-}
-
-.quest-add-row {
-    margin-bottom: 8px;
 }
 
 .quest-add-realm {

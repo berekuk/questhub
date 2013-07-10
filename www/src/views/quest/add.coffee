@@ -67,7 +67,7 @@ define [
             @checkEnter e
 
         optimizeNameFont: ->
-            input = @$(".quest-edit-name")
+            input = @$("[name=name]")
             testerId = "#quest-add-test-span"
             tester = $(testerId)
             unless tester.length
