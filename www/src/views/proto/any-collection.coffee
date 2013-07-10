@@ -35,7 +35,7 @@ define ["backbone", "underscore", "views/proto/common"], (Backbone, _, Common) -
 
         afterRender: ->
             @removeItemSubviews()
-            @$(@listSelector).show()  if @collection.length # collection table is hidden initially - see https://github.com/berekuk/play-perl/issues/61
+            @$(@listSelector).show() if @collection.length # collection table is hidden initially - see https://github.com/berekuk/play-perl/issues/61
             @collection.each @renderOne, this
 
         generateItem: (model) ->

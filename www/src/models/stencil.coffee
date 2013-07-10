@@ -6,10 +6,14 @@ define [
         idAttribute: "_id"
         urlRoot: "/api/stencil"
 
-        take: ->
+        take: ({ success } = {})->
             mixpanel.track "take stencil"
             $.post("#{ @url() }/take")
-            .success => @fetch()
+            .success =>
+                console.log "posted"
+                @fetch().success =>
+                    console.log "fetched"
+                    success()
 
         serialize: ->
             params = @toJSON()
