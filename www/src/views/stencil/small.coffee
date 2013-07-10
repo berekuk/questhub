@@ -7,10 +7,6 @@ define [
         template: _.template html
 
         events:
-            "click ._take": -> @model.take()
-
-        initialize: ->
-            super
-            @listenTo @model, "sync", => @render()
+            "click ._take": -> @model.take success: => @render()
 
         serialize: -> @model.serialize()

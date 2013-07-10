@@ -2,7 +2,9 @@
   <div class="row-fluid">
     <div class="span3">
       <div class="stencil-page-icon">
-        <i class="icon-book"></i>
+        <a href="/realm/<%- realm %>" class="grey-icon-link">
+          <i class="icon-book"></i>
+        </a>
       </div>
 
       <div class="stencil-page-stat">
@@ -19,19 +21,21 @@
 
       <% if (currentUser) { %>
         <div>
-          <% if (!obj.my) { %>
+          <% if (!myQuests.length) { %>
             <button class="btn btn-large btn-primary _take">Take this quest</button>
           <% } %>
         </div>
 
-        <% if (obj.my) { %>
-          <h3 class="muted">Your quest linked to this stencil:</h3>
+        <% if (myQuests.length) { %>
+          <h3 class="muted">Your open quests:</h3>
           <div class="stencil-my-quests-sv"></div>
         <% } %>
       <% } %>
 
-      <h3 class="muted">All quests linked to this stencil:</h3>
-      <div class="stencil-quests-sv"></div>
+      <% if (otherQuests.length) { %>
+        <h3 class="muted">All instances:</h3>
+        <div class="stencil-quests-sv"></div>
+      <% } %>
 
     </div>
   </div>

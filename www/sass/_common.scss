@@ -126,3 +126,11 @@ td {
     margin-bottom: 20px;
     color: $dark-grey;
 }
+
+.grey-icon-link {
+    color: $dark-grey;
+    &:hover {
+        text-decoration: none;
+        color: $text-color;
+    }
+}

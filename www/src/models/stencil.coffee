@@ -1,7 +1,7 @@
 define [
-    "backbone"
+    "underscore", "backbone"
     "models/current-user"
-], (Backbone, currentUser) ->
+], (_, Backbone, currentUser) ->
     class extends Backbone.Model
         idAttribute: "_id"
         urlRoot: "/api/stencil"
@@ -15,11 +15,21 @@ define [
                     console.log "fetched"
                     success()
 
+        myQuests: ->
+            _.filter(
+                @get("quests"),
+                (q) -> q.author == currentUser.get("login") and q.status == 'open'
+            )
+
+        otherQuests: ->
+            _.filter(
+                @get("quests"),
+                (q) -> q.author != currentUser.get("login") or q.status != 'open'
+            )
+
         serialize: ->
             params = @toJSON()
-            for quest in @get "quests"
-                if currentUser.get("login") in quest.team
-                    params.my = quest
-                    break
+            params.myQuests = @myQuests()
+            params.otherQuests = @otherQuests()
             params.currentUser = currentUser.get "login"
             params

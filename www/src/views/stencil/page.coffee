@@ -14,16 +14,8 @@ define [
 
         subviews:
             ".stencil-big-sv": -> new StencilBig model: @model
-            ".stencil-my-quests-sv": ->
-                @questsSV _.filter(
-                    @model.get("quests"),
-                    (q) -> q.author == currentUser.get "login"
-                )
-            ".stencil-quests-sv": ->
-                @questsSV _.filter(
-                    @model.get("quests"),
-                    (q) -> q.author != currentUser.get "login"
-                )
+            ".stencil-my-quests-sv": -> @questsSV @model.myQuests()
+            ".stencil-quests-sv": -> @questsSV @model.otherQuests()
 
 
         questsSV: (quests) ->
@@ -44,7 +36,6 @@ define [
                     @render()
 
         render: ->
-            console.log "render"
             super
             @subview(".stencil-my-quests-sv").updateShowMore()
             @subview(".stencil-quests-sv").updateShowMore()
