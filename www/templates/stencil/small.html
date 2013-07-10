@@ -1,5 +1,11 @@
 <div class="well clearfix">
-  <button class="btn btn-primary pull-right">Take this quest</button>
+  <div class="stencil-small-relation pull-right">
+    <% if (relation == 'untaken') { %>
+      <button class="btn btn-primary _take">Take this quest</button>
+    <% } else if (relation == 'open') { %>
+      <span>You're on this quest!</span>
+    <% } %>
+  </div>
   <a href="/realm/<%- realm %>/stencil/<%- _id %>"><%- name %></a>
   <% if (obj.description) { %>
     <div>

@@ -1,6 +1,8 @@
 define [
     "models/proto/paged-collection"
-], (Parent) ->
+    "models/stencil"
+], (Parent, Stencil) ->
     class extends Parent
         baseUrl: "/api/stencil"
         cgi: ["realm"]
+        model: Stencil
