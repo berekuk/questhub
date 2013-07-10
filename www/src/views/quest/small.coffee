@@ -1,4 +1,9 @@
-define ["underscore", "views/proto/common", "views/quest/like", "text!templates/quest-small.html"], (_, Common, Like, html) ->
+define [
+    "underscore"
+    "views/proto/common"
+    "views/quest/like"
+    "text!templates/quest/small.html"
+], (_, Common, Like, html) ->
     Common.extend
         template: _.template(html)
         tagName: "tr"

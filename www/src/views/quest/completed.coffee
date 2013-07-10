@@ -1,4 +1,9 @@
-define ["underscore", "views/proto/common", "models/current-user", "text!templates/quest-completed.html"], (_, Common, currentUser, html) ->
+define [
+    "underscore"
+    "views/proto/common"
+    "models/current-user"
+    "text!templates/quest/completed.html"
+], (_, Common, currentUser, html) ->
     class extends Common
         template: _.template(html)
         events:

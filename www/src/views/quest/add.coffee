@@ -2,7 +2,7 @@ define [
     "underscore", "jquery"
     "views/proto/base"
     "models/shared-models", "models/quest"
-    "text!templates/quest-add.html"
+    "text!templates/quest/add.html"
     "bootstrap", "jquery.autosize"
 ], (_, $, Base, sharedModels, QuestModel, html) ->
     Base.extend

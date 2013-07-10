@@ -1,4 +1,11 @@
-define ["underscore", "views/proto/common", "models/current-user", "views/quest/collection", "views/progress", "views/progress/big", "text!templates/dashboard-quest-collection.html"], (_, Common, currentUser, QuestCollection, Progress, ProgressBig, html) ->
+define [
+    "underscore"
+    "views/proto/common"
+    "models/current-user"
+    "views/quest/collection"
+    "views/progress", "views/progress/big"
+    "text!templates/dashboard-quest-collection.html"
+], (_, Common, currentUser, QuestCollection, Progress, ProgressBig, html) ->
     Common.extend
         template: _.template(html)
         subviews:

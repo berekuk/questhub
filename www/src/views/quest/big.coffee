@@ -1,4 +1,11 @@
-define ["underscore", "jquery", "markdown", "backbone", "views/proto/common", "views/quest/like", "models/current-user", "bootbox", "text!templates/quest-big.html"], (_, $, markdown, Backbone, Common, Like, currentUser, bootbox, html) ->
+define [
+    "underscore", "backbone"
+    "jquery", "markdown", "bootbox"
+    "views/proto/common"
+    "views/quest/like"
+    "models/current-user"
+    "text!templates/quest/big.html"
+], (_, Backbone, $, markdown, bootbox, Common, Like, currentUser, html) ->
     "use strict"
     Common.extend
         template: _.template(html)
