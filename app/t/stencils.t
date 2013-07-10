@@ -15,6 +15,7 @@ sub add :Tests {
     http_json POST => "/api/stencil", { params => {
         realm => 'europe',
         name => 'Do something',
+        description => 'Just do anything',
     } };
 }
 
@@ -24,6 +25,7 @@ sub list :Tests {
     http_json POST => "/api/stencil", { params => {
         realm => 'europe',
         name => 'Do something',
+        description => 'Just do anything',
     } };
     http_json POST => "/api/stencil", { params => {
         realm => 'europe',
@@ -32,8 +34,10 @@ sub list :Tests {
 
     my $result = http_json GET => "/api/stencil?realm=europe";
     cmp_deeply $result, [
+        # TODO - sorting order?
         superhashof({
-            name => 'Do something', # TODO - sorting order?
+            name => 'Do something',
+            description => 'Just do anything',
         }),
         superhashof({
             name => 'Do something else',
