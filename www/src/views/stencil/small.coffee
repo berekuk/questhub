@@ -19,5 +19,3 @@ define [
             .success =>
                 @relation = 'open'
                 @render()
-
-

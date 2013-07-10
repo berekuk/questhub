@@ -8,3 +8,9 @@ define [
         activated: false
 
         realm: -> @model.get 'realm'
+
+        events:
+            "click ._take": "take"
+
+        take: ->
+            @model.take()
