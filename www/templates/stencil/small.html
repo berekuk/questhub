@@ -1,9 +1,10 @@
 <div class="well clearfix">
   <div class="stencil-small-relation pull-right">
-    <% if (relation == 'untaken') { %>
+    <% console.log(obj) %>
+    <% if (obj.my) { %>
+      <a href="/realm/<%- my.realm %>/quest/<%- my._id %>">Your quest</a>
+    <% } else { %>
       <button class="btn btn-primary _take">Take this quest</button>
-    <% } else if (relation == 'open') { %>
-      <span>You're on this quest!</span>
     <% } %>
   </div>
   <a href="/realm/<%- realm %>/stencil/<%- _id %>"><%- name %></a>
@@ -14,7 +15,9 @@
   <% } %>
   <% if (obj.stat) { %>
     <div>
-      <span class="muted"><%- stat.players || 0 %> <i class="icon-user"></i></span>
+    <% _.each(stat, function (count, status) { %>
+      <span class="label label-<%= status === 'open' && 'warning' %>"><%- count %> <%= status === 'closed' ? 'completed' : status %></span>
+    <% }) %>
     </div>
   <% } %>
 </div>

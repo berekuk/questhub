@@ -1,21 +1,26 @@
 define [
     "underscore"
     "views/proto/common"
+    "models/shared-models"
     "text!templates/stencil/small.html"
-], (_, Common, html) ->
+], (_, Common, sharedModels, html) ->
     class extends Common
         template: _.template html
 
         events:
             "click ._take": "take"
 
-        serialize: ->
-            params = super
-            params.relation = @relation || 'untaken'
-            params
-
         take: ->
             @model.take()
             .success =>
-                @relation = 'open'
-                @render()
+                @model.fetch()
+                .success =>
+                    @render()
+
+        serialize: ->
+            params = super
+            for quest in @model.get "quests"
+                if sharedModels.currentUser.get("login") in quest.team
+                    params.my = quest
+                    break
+            params

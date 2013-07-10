@@ -56,7 +56,7 @@ define [
                 innerEl.hide()
             length = @collection.length
             length += "+"  if @collection.gotMore
-            @$(".quest-collection-header-count").text length
+            @$(".js-quest-collection-header-count").text length
             @setViewMode @getViewMode()
 
         getViewMode: ->
