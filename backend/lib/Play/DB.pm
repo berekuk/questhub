@@ -63,10 +63,11 @@ sub ensure_indices {
 
     my $quests_collection = Play::Mongo->db->get_collection('quests');
     $quests_collection->drop_indexes;
-    $quests_collection->ensure_index({ 'tags' => 1 });
+    $quests_collection->ensure_index({ 'tags' => 1 }, { sparse => 1 });
     $quests_collection->ensure_index({ 'team' => 1 });
-    $quests_collection->ensure_index({ 'watchers' => 1 });
+    $quests_collection->ensure_index({ 'watchers' => 1 }, { sparse => 1 });
     $quests_collection->ensure_index({ 'realm' => 1 });
+    $quests_collection->ensure_index({ 'stencil' => 1 }, { sparse => 1 });
 
     my $events_collection = Play::Mongo->db->get_collection('events');
     $events_collection->drop_indexes;
