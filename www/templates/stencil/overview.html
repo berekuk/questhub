@@ -11,13 +11,19 @@
       <p>
       You don't have to choose your quest from this list, though. Coming up with unique task and creating it directly is great, too.
       </p>
-      </p>
+      <p>
+      <a href="/realm/meta/quest/51db41b85a854b176100002b">Learn more about the history of this feature.</a>
     </div>
   </div>
   <div class="span9">
     <div class="stencil-collection-sv"></div>
-    <% if (currentUser && obj.keepers && _.contains(keepers, currentUser)) { %>
+    <% if (isKeeper) { %>
       <button class="btn btn-primary btn-large add-stencil"><i class="icon-plus"></i> New stencil</button>
+    <% } else { %>
+      <p class="muted">
+      Want to add a new stencil? Ask a realm keeper.<br>
+      (List of realm keepers can be found on <a href="/realm/<%- id %>/players">players</a> tab.)
+      </p>
     <% } %>
   </div>
 </div>

@@ -54,6 +54,6 @@
         @include switch-circle($unclaimed-quest-color);
     }
     ._icon._switch-stencils {
-        @include switch-circle($unclaimed-quest-color);
+        @include switch-circle($important-color);
     }
 }

@@ -26,4 +26,5 @@ define [
         serialize: ->
             params = super
             params.currentUser = sharedModels.currentUser.get "login"
+            params.isKeeper = (params.currentUser && @model.get("keepers") && _.contains(@model.get("keepers"), params.currentUser))
             params
