@@ -70,6 +70,39 @@ sub add {
     return $stencil;
 }
 
+sub edit {
+    my $self = shift;
+    state $check = compile(Id, Dict[
+        user => Login,
+        name => Optional[Str],
+        description => Optional[Str],
+    ]);
+    my ($id, $params) = $check->(@_);
+    my $user = delete $params->{user};
+
+    # explicitly specifying that we don't want any quest info - just in case stencils->get defaults change in the future
+    my $stencil = $self->get($id, { quests => 0 });
+
+    delete $stencil->{_id};
+    delete $stencil->{ts};
+    die "got stencil->{quests}" if $stencil->{quests}; # extra precaution
+
+    my $realm = $stencil->{realm};
+    unless (db->realms->is_keeper($stencil->{realm}, $user)) {
+        die "access denied";
+    }
+
+    my $updated_stencil = { %$stencil, %$params };
+
+    $self->collection->update(
+        { _id => MongoDB::OID->new(value => $id) },
+        $updated_stencil,
+        { safe => 1 }
+    );
+
+    return;
+}
+
 sub list {
     my $self = shift;
     state $check = compile(Undef|Dict[

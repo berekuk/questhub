@@ -12,17 +12,17 @@ sub add :Tests {
     my $stencil = db->stencils->add({
         realm => 'europe',
         author => 'foo',
-        name => 'Start a World War I',
+        name => 'Start the World War I',
     });
     my $stencil2 = db->stencils->add({
         realm => 'europe',
         author => 'foo',
-        name => 'Start a World War II',
+        name => 'Start the World War II',
         description => 'Hitler Hitler Hitler Hitler.',
     });
     cmp_deeply $stencil, superhashof {
         realm => 'europe',
-        name => 'Start a World War I',
+        name => 'Start the World War I',
         author => 'foo',
         _id => re('^\w{24}$'),
         ts => re('^\d+'),
@@ -33,12 +33,12 @@ sub list :Tests {
     db->stencils->add({
         realm => 'europe',
         author => 'foo',
-        name => 'Start a World War I',
+        name => 'Start the World War I',
     });
     db->stencils->add({
         realm => 'europe',
         author => 'foo',
-        name => 'Start a World War II',
+        name => 'Start the World War II',
     });
     db->stencils->add({
         realm => 'asia',
@@ -57,13 +57,13 @@ sub get :Tests {
     my $result = db->stencils->add({
         realm => 'europe',
         author => 'foo',
-        name => 'Start a World War I',
+        name => 'Start the World War I',
     });
 
     my $stencil = db->stencils->get($result->{_id});
     cmp_deeply $stencil, superhashof {
         realm => 'europe',
-        name => 'Start a World War I',
+        name => 'Start the World War I',
         author => 'foo',
         _id => re('^\w{24}$'),
         ts => re('^\d+'),
@@ -112,9 +112,36 @@ sub keeper_only :Tests {
         db->stencils->add({
             realm => 'europe',
             author => 'bar',
-            name => 'Start a World War I',
+            name => 'Start the World War I',
         });
     }, qr/bar is not a keeper of europe/;
+}
+
+sub edit :Tests {
+    my $stencil = db->stencils->add({
+        realm => 'europe',
+        author => 'foo',
+        name => 'Start the World War I',
+    });
+
+    db->stencils->edit($stencil->{_id}, {
+        name => 'Stop the World War I',
+        user => 'foo2',
+    });
+
+    cmp_deeply
+        db->stencils->get($stencil->{_id}),
+        superhashof {
+            name => 'Stop the World War I',
+            author => 'foo',
+        };
+
+    like exception {
+        db->stencils->edit($stencil->{_id}, {
+            name => 'Stop the World War I',
+            user => 'bar',
+        });
+    }, qr/access denied/;
 }
 
 __PACKAGE__->new->runtests;

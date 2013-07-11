@@ -15,8 +15,8 @@ sub list {
     state $_list =
     setting('test')
     ? [
-        { id => 'europe', name => 'Europe', description => 'europe-europe', pic => 'europe.jpg', keepers => ['foo'] },
-        { id => 'asia', name => 'Asia', description => 'asia-asia', pic => 'asia.jpg', keepers => ['bar'] },
+        { id => 'europe', name => 'Europe', description => 'europe-europe', pic => 'europe.jpg', keepers => ['foo', 'foo2'] },
+        { id => 'asia', name => 'Asia', description => 'asia-asia', pic => 'asia.jpg', keepers => ['bar', 'bar2'] },
     ]
     : [
         {
