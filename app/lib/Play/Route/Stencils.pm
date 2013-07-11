@@ -44,7 +44,7 @@ put '/stencil/:id' => sub {
         param('id'),
         {
             user => $login,
-            map { param($_) ? ($_ => param($_)) : () } qw/ name description /,
+            map { defined(param($_)) ? ($_ => param($_)) : () } qw/ name description /,
         }
     );
     return { result => 'ok' };
