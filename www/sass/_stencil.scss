@@ -7,3 +7,13 @@
     margin-top: 20px;
     text-align: right;
 }
+
+.stencil-small-title {
+    margin-bottom: 8px;
+}
+.stencil-small-description {
+    margin-bottom: 8px;
+    p:last-child, ul:last-child {
+        margin-bottom: 0px;
+    }
+}

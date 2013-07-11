@@ -33,7 +33,7 @@
       <% } %>
 
       <% if (otherQuests.length) { %>
-        <h3 class="muted">All instances:</h3>
+        <h3 class="muted"><%- myQuests.length ? 'Other' : 'All' %> quests:</h3>
         <div class="stencil-quests-sv"></div>
       <% } %>
 
