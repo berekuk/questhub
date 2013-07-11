@@ -2,10 +2,16 @@
     font-size: 64px;
     text-align: right;
 }
-
 .stencil-page-stat {
     margin-top: 20px;
     text-align: right;
+}
+
+.stencil-small {
+    @include mark($mat);
+}
+.stencil-small-my {
+    @include mark($highlight);
 }
 
 .stencil-small-title {

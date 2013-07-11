@@ -1,4 +1,9 @@
-define ["underscore", "jquery", "views/proto/common", "settings", "text!templates/user-settings.html"], (_, $, Common, instanceSettings, html) ->
+define [
+    "underscore", "jquery"
+    "views/proto/common"
+    "settings"
+    "text!templates/user/settings.html"
+], (_, $, Common, instanceSettings, html) ->
     Common.extend
         template: _.template(html)
         events:

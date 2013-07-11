@@ -8,34 +8,30 @@ textarea.comment-edit {
     height: 100%;
 }
 
-@mixin comment($color) {
-    border-left: $color 5px solid;
-}
-
 .comment-type-close {
-    @include comment($closed-quest-color);
+    @include mark($closed-quest-color);
 }
 
 .comment-type-reopen {
-    @include comment($open-quest-color);
+    @include mark($open-quest-color);
 }
 
 .comment-type-abandon {
-    @include comment($abandoned-quest-color);
+    @include mark($abandoned-quest-color);
 }
 
 .comment-type-join {
-    @include comment($unclaimed-quest-color);
+    @include mark($unclaimed-quest-color);
 }
 
 .comment-type-invite {
-    @include comment($unclaimed-quest-color);
+    @include mark($unclaimed-quest-color);
 }
 
 .comment-type-leave {
-    @include comment($abandoned-quest-color);
+    @include mark($abandoned-quest-color);
 }
 
 .comment-type-resurrect {
-    @include comment(white);
+    @include mark(white);
 }

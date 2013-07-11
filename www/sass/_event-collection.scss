@@ -48,9 +48,6 @@
     }
 }
 
-@mixin event-box($color) {
-    border-left: $color 5px solid;
-}
 .event-type-add-quest {
-    @include event-box($open-quest-color);
+    @include mark($open-quest-color);
 }

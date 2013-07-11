@@ -5,7 +5,12 @@
 # Because of that, UserSettingsBox and UserSettings are two different views.
 #
 # Also, separating modal view logic is a Good Thing in any case. This view can become 'views/proto/modal' in the future.
-define ["underscore", "views/proto/common", "views/user/settings", "models/current-user", "text!templates/user-settings-box.html"], (_, Common, UserSettings, currentUser, html) ->
+define [
+    "underscore"
+    "views/proto/common"
+    "views/user/settings", "models/current-user"
+    "text!templates/user/settings-box.html"
+], (_, Common, UserSettings, currentUser, html) ->
     Common.extend
         template: _.template(html)
         events:

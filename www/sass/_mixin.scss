@@ -65,3 +65,8 @@
     opacity: $opacity / 100;
     filter: alpha(opacity=#{$opacity})
 }
+
+@mixin mark($color) {
+    background-color: $mat;
+    border-left: 5px solid $color;
+}

@@ -1,4 +1,3 @@
-<!-- users list -->
 <div class="row-fluid">
   <div class="span3">
     <div class="sidebar-header">
@@ -11,13 +10,16 @@
         <li>open quests.</li>
       </ol>
     </div>
+    <% if (obj.keepers) { %>
+      <div class="well">
+        Realm keepers:<br>
+        <%= _.map(keepers, function (keeper) {
+          return partial.user({ realm: id, login: keeper });
+        }).join(", ") %>.
+      </div>
+    <% } %>
   </div>
   <div class="span6">
-    <table class="table table-bordered users-list hide">
-      <tr class="show-more">
-        <td><a href="#">Show more...</a></td>
-      </tr>
-    </table>
-    <span class="progress-spin"></span>
+    <div class="user-collection-sv"></div>
   </div>
 </div>
