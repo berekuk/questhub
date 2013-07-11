@@ -1,7 +1,7 @@
 .tag {
-    background-color: $abandoned-quest-color;
+    background-color: $grey-color;
     color: $text-color;
-    border: darken($abandoned-quest-color, 20%) solid 1px;
+    border: darken($grey-color, 20%) solid 1px;
 
     @include border-radius(3px);
     @include badge;
@@ -10,7 +10,7 @@
 
     &:hover {
         color: $text-color;
-        background-color: darken($abandoned-quest-color, 5%);
+        background-color: darken($grey-color, 5%);
         text-decoration: none;
     }
 }
@@ -27,8 +27,8 @@
 }
 
 .tag-realm {
-    background-color: $closed-quest-color;
+    background-color: $blue-color;
     &:hover {
-        background-color: darken($closed-quest-color, 5%);
+        background-color: darken($blue-color, 5%);
     }
 }

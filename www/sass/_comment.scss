@@ -21,11 +21,11 @@ textarea.comment-edit {
 }
 
 .comment-type-join {
-    @include mark($unclaimed-quest-color);
+    @include mark($join-color);
 }
 
 .comment-type-invite {
-    @include mark($unclaimed-quest-color);
+    @include mark($invite-color);
 }
 
 .comment-type-leave {

@@ -42,18 +42,18 @@
     }
 
     ._icon._switch-quests {
-        @include switch-circle($highlight);
+        @include switch-circle($bright-color);
     }
     ._icon._switch-activity {
-        @include switch-circle($closed-quest-color);
+        @include switch-circle($blue-color);
     }
     ._icon._switch-profile {
-        @include switch-circle($unclaimed-quest-color);
+        @include switch-circle($green-color);
     }
     ._icon._switch-players {
-        @include switch-circle($unclaimed-quest-color);
+        @include switch-circle($green-color);
     }
     ._icon._switch-stencils {
-        @include switch-circle($important-color);
+        @include switch-circle($red-color);
     }
 }

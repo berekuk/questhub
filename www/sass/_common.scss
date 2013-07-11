@@ -1,13 +1,23 @@
-$open-quest-color: hsl(35, 85%, 75%);
-$closed-quest-color: hsl(200, 65%, 75%);
-$abandoned-quest-color: #dddddd;
-$unclaimed-quest-color: hsl(120, 65%, 75%);
-$important-color: hsl(1, 80%, 75%);
+$orange-color: hsl(35, 85%, 75%);
+$bright-color: hsl(45, 100%, 50%);
+$blue-color: hsl(200, 65%, 75%);
+$grey-color: #dddddd;
+$green-color: hsl(120, 65%, 75%);
+$red-color: hsl(1, 80%, 75%);
+
+$open-quest-color: $orange-color;
+$closed-quest-color: $blue-color;
+$abandoned-quest-color: $grey-color;
+$unclaimed-quest-color: $green-color;
+$important-color: $red-color;
+$invite-color: $green-color;
+$join-color: $green-color;
+
 $mat: white;
 $grey: #eee;
 $dark-grey: #999; // same as bootstrap's .muted color
 $text-color: #333;
-$highlight: hsl(45, 100%, 50%);
+$highlight: $bright-color;
 $like-color: hsl(120, 30%, 40%);
 $ground-color: #f5f5f5;
 
@@ -32,7 +42,7 @@ h2, h3 {
 }
 tbody tr.show-more > td {
     cursor: pointer;
-    background-color: lighten($unclaimed-quest-color, 10%);
+    background-color: lighten($green-color, 10%);
     a {
         color: $text-color;
     }
