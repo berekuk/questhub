@@ -626,6 +626,20 @@ sub stat {
     };
 }
 
+sub autocomplete {
+    my $self = shift;
+    state $check = compile(Login); # any prefix of login is login too, right? (unless we require login to be N characters long, oops)
+    my ($prefix) = $check->(@_);
+
+    my @users = $self->collection->find({
+        login => {
+            '$regex' => "^$prefix"
+        }
+    }, { login => 1 })->limit(5)->all;
+
+    return [ sort map { $_->{login} } @users ];
+}
+
 =back
 
 =cut

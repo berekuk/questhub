@@ -259,4 +259,20 @@ sub stat :Tests {
         }
 }
 
+sub autocomplete :Tests {
+    db->users->add({ login => $_ }) for qw( foo foo2 foobar bar barfoo fo );
+
+    cmp_deeply
+        db->users->autocomplete('fo'),
+        [qw( fo foo foo2 foobar )],
+        'users starting with prefix';
+
+    db->users->add({ login => $_ }) for qw( foo3 foo4 foo5 foo6 );
+    cmp_deeply
+        db->users->autocomplete('fo'),
+        [qw( fo foo foo2 foo3 foo4 )],
+        '5 results max';
+
+}
+
 __PACKAGE__->new->runtests;
