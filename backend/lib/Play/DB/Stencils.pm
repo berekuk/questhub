@@ -53,6 +53,8 @@ sub add {
     ]);
     my ($params) = $check->(@_);
 
+    die "$params->{author} is not a keeper of $params->{realm}" unless db->realms->is_keeper($params->{realm}, $params->{author});
+
     my $id = $self->collection->insert($params, { safe => 1 });
 
     my $stencil = { %$params, _id => $id };

@@ -42,7 +42,7 @@ sub list :Tests {
     });
     db->stencils->add({
         realm => 'asia',
-        author => 'foo',
+        author => 'bar',
         name => 'Attach Pearl Harbor',
     });
 
@@ -105,6 +105,16 @@ sub take :Tests {
             _id => $take_result->{_id},
         }
     ];
+}
+
+sub keeper_only :Tests {
+    like exception {
+        db->stencils->add({
+            realm => 'europe',
+            author => 'bar',
+            name => 'Start a World War I',
+        });
+    }, qr/bar is not a keeper of europe/;
 }
 
 __PACKAGE__->new->runtests;
