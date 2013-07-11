@@ -160,6 +160,12 @@ div.quest-big-unclaimed {
 
         .invite-dialog {
             display: none;
+            input {
+                width: 100%;
+                display: block;
+                min-height: 30px;
+                @include box-sizing(border-box);
+            }
         }
     }
 
