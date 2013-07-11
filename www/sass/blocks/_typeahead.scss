@@ -2,7 +2,10 @@
 .twitter-typeahead .tt-query,
 .twitter-typeahead .tt-hint {
   margin-bottom: 0;
-//  @include box-sizing(content-box);
+}
+
+.twitter-typeahead .tt-hint {
+    color: $dark-grey;
 }
 
 .tt-dropdown-menu {

@@ -46,7 +46,7 @@ define [
             @$(".invite-dialog").show 0, =>
                 @$(".invite-dialog input").typeahead
                     name: "users"
-                    local: ["berekuk", "bessarabov", "neilb"]
+                    remote: "/api/user/%QUERY/autocomplete"
                 @$(".invite-dialog input").focus()
 
 
