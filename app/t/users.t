@@ -565,7 +565,6 @@ sub use_api_token :Tests {
 }
 
 sub stat :Tests {
-    my $self = shift;
     http_json GET => "/api/fakeuser/foo";
 
     http_json POST => '/api/quest', { params => {
@@ -582,6 +581,15 @@ sub stat :Tests {
         }
     };
 
+}
+
+sub autocomplete :Tests {
+    http_json GET => "/api/fakeuser/$_" for qw( foo foo2 foobar bar fo );
+
+    my $users = http_json GET => '/api/user/fo/autocomplete';
+    cmp_deeply
+        $users,
+        [qw( fo foo foo2 foobar )];
 }
 
 __PACKAGE__->new->runtests;
