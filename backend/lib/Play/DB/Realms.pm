@@ -24,7 +24,7 @@ sub list {
             name => 'Play Perl',
             description => 'Everything about Perl: Perl 5 and Perl 6, uploading CPAN modules and reporting bugs, writing blog posts and recording podcasts, giving Perl talks and organizing YAPC events.',
             pic => '/i/perl.png',
-            keepers => ['yanick', 'tobyink', 'neilb'],
+            keepers => ['yanick', 'tobyink', 'neilb', 'berekuk'],
         },
         {
             id => 'chaos',
