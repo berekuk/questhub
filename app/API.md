@@ -79,13 +79,17 @@ Follow a realm (i.e., subscribe to it in news feed).
 
 Unfollow a realm.
 
-##### POST /api/{login}/follow
+##### POST /api/user/{login}/follow
 
 Follow user (i.e., subscribe in news feed).
 
-##### POST /api/{login}/unfollow
+##### POST /api/user/{login}/unfollow
 
 Unfollow user.
+
+##### GET /api/user/{prefix}/autocomplete
+
+Autocomplete user by login prefix.
 
 ### Players
 

@@ -5,6 +5,7 @@ define [
     "views/quest/big", "views/comment/collection"
     "models/comment-collection", "models/current-user"
     "text!templates/quest/page.html"
+    "jquery.typeahead"
 ], (_, Common, QuestCompleted, QuestBig, CommentCollection, CommentCollectionModel, currentUser, html) ->
     Common.extend
         activated: false
@@ -18,22 +19,13 @@ define [
             "click .invite": "inviteDialog"
             "click .uninvite": "uninviteAction"
             "click .join": "joinAction"
-            "click .like": ->
-                @model.like()
-
-            "click .unlike": ->
-                @model.unlike()
-
-            "click .watch": ->
-                @model.act "watch"
-
-            "click .unwatch": ->
-                @model.act "unwatch"
-
+            "click .like": -> @model.like()
+            "click .unlike": -> @model.unlike()
+            "click .watch": -> @model.act "watch"
+            "click .unwatch": -> @model.act "unwatch"
             "keyup #inputInvitee": "inviteAction"
 
-        realm: ->
-            @model.get "realm"
+        realm: -> @model.get "realm"
 
         subviews:
             ".quest-big": ->
@@ -50,21 +42,24 @@ define [
                 )
 
         inviteDialog: ->
-            that = this
             @$(".invite.button").hide()
-            @$(".invite-dialog").show 0, ->
-                that.$(".invite-dialog input").focus()
+            @$(".invite-dialog").show 0, =>
+                @$(".invite-dialog input").typeahead
+                    name: "users"
+                    remote: "/api/user/%QUERY/autocomplete"
+                @$(".invite-dialog input").focus()
 
 
         inviteAction: (e) ->
-      
+
             # escape
             if e.keyCode is 27
+                @$(".invite-dialog input").typeahead "destroy"
                 @$(".invite-dialog").hide()
                 @$(".invite-dialog input").val ""
                 @$(".invite.button").show()
                 return
-      
+
             # enter
             @model.invite @$("#inputInvitee").val()  if e.keyCode is 13
             return
@@ -80,17 +75,10 @@ define [
             modal = new QuestCompleted(model: @model)
             modal.start()
 
-        abandon: ->
-            @model.abandon()
-
-        leave: ->
-            @model.leave()
-
-        resurrect: ->
-            @model.resurrect()
-
-        reopen: ->
-            @model.reopen()
+        abandon: -> @model.abandon()
+        leave: -> @model.leave()
+        resurrect: -> @model.resurrect()
+        reopen: -> @model.reopen()
 
         serialize: ->
             params = @model.serialize()
@@ -106,5 +94,3 @@ define [
 
 
         features: ["tooltip"]
-
-

@@ -295,6 +295,10 @@ post '/logout' => sub {
     return { status => 'ok' };
 };
 
+get '/user/:prefix/autocomplete' => sub {
+    return db->users->autocomplete(param('prefix'));
+};
+
 if ($ENV{DEV_MODE}) {
     get '/fakeuser/:login' => sub {
         my $login = param('login');
