@@ -23,18 +23,21 @@ sub list {
             name => 'Play Perl',
             description => 'Everything about Perl: Perl 5 and Perl 6, uploading CPAN modules and reporting bugs, writing blog posts and recording podcasts, giving Perl talks and organizing YAPC events.',
             pic => '/i/perl.png',
+            keepers => ['yanick', 'tobyink', 'neilb'],
         },
         {
             id => 'chaos',
             name => 'Chaotic realm',
             description => qq{First rule of chaotic realm is: there are no rules. Points don't mean much here. Anything goes, from "get a driving license" to "read a book".\n\nThis realm is currently occupied by Russians, but don't let this discourage you if you don't speak Russian. Everyone is welcome!},
             pic => '/i/chaos.png',
+            keepers => ['bessarabov', 'berekuk', 'Nazer'],
         },
         {
             id => 'meta',
             name => 'Meta hub',
             description => "Questhub development center. \@berekuk is dogfooding here, mostly alone.\n\nYou can follow questhub development here and encourage me to work on new features and fix bugs.",
             pic => '/i/meta.png',
+            keepers => ['berekuk'],
         },
     ];
     return $_list;
