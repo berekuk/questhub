@@ -44,3 +44,9 @@ require [
             url = $(event.currentTarget).attr("href").replace(/^\//, "")
             Backbone.history.navigate url,
                 trigger: true
+
+    $(document).on "click", "a[href^='h']", (event) ->
+        if not event.altKey and not event.ctrlKey and not event.metaKey and not event.shiftKey
+            event.preventDefault()
+            url = $(event.currentTarget).attr("href")
+            window.open url, '_blank'
