@@ -10,5 +10,3 @@ define ["views/proto/common", "views/event/any", "text!templates/event-box.html"
             params = @model.toJSON()
             params.showRealm = @options.showRealm
             params
-
-

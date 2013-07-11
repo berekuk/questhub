@@ -194,7 +194,6 @@ sub add_quest :Tests {
     };
 
     http_json GET => "/api/fakeuser/$user";
-    Dancer::session login => $user;
 
     my $add_result = http_json POST => '/api/quest', { params => $new_record };
 

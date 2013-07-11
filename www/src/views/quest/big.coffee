@@ -1,4 +1,11 @@
-define ["underscore", "jquery", "markdown", "backbone", "views/proto/common", "views/quest/like", "models/current-user", "bootbox", "text!templates/quest-big.html"], (_, $, markdown, Backbone, Common, Like, currentUser, bootbox, html) ->
+define [
+    "underscore", "backbone"
+    "jquery", "markdown", "bootbox"
+    "views/proto/common"
+    "views/quest/like"
+    "models/current-user"
+    "text!templates/quest/big.html"
+], (_, Backbone, $, markdown, bootbox, Common, Like, currentUser, html) ->
     "use strict"
     Common.extend
         template: _.template(html)
@@ -28,9 +35,8 @@ define ["underscore", "jquery", "markdown", "backbone", "views/proto/common", "v
         join: -> @model.join()
 
         startEdit: ->
-            return  unless @model.isOwned()
+            return unless @model.isOwned()
             @$(".quest-big-edit").show()
-            @backup = _.clone(@model.attributes)
             tags = @model.get("tags") or []
             @$("[name=tags]").val tags.join(", ")
             @$("[name=name]").val @model.get("name")
@@ -83,16 +89,16 @@ define ["underscore", "jquery", "markdown", "backbone", "views/proto/common", "v
                 @saveEdit()
             else if e.which is 27
                 @closeEdit()
-            else @updateDescriptionPreview()  if target.is("textarea")
+            else @updateDescriptionPreview() if target.is("textarea")
 
         closeEdit: ->
             @$(".quest-big-edit").hide()
             @$(".quest-big-editable").show()
 
-        saveEdit: ->
 
+        saveEdit: ->
             # so, we're using DOM data to cache validation status... this is a slippery slope.
-            return  if @$("button.save").hasClass("disabled")
+            return if @$("button.save").hasClass("disabled")
 
             # form is validated already by edit() method
             name = @$("[name=name]").val()
@@ -106,13 +112,11 @@ define ["underscore", "jquery", "markdown", "backbone", "views/proto/common", "v
             @closeEdit()
 
         destroy: ->
-            that = this
-            bootbox.confirm "Quest and all comments will be destroyed permanently. Are you sure?", (result) ->
+            bootbox.confirm "Quest and all comments will be destroyed permanently. Are you sure?", (result) =>
                 if result
-                    that.model.destroy success: (model, response) ->
+                    @model.destroy success: (model, response) ->
                         Backbone.history.navigate "/",
                             trigger: true
-
 
         serialize: ->
             params = @model.serialize()

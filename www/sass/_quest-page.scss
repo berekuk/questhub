@@ -3,22 +3,17 @@ div.quest-big-open, div.quest-big-closed, div.quest-big-abandoned, div.quest-big
     padding: 9px;
 }
 
-@mixin quest-big($color) {
-    background-color: $mat;
-    border-left: 5px solid $color;
-}
-
 div.quest-big-open {
-    @include quest-big($open-quest-color);
+    @include mark($open-quest-color);
 }
 div.quest-big-closed {
-    @include quest-big($closed-quest-color);
+    @include mark($closed-quest-color);
 }
 div.quest-big-abandoned {
-    @include quest-big($abandoned-quest-color);
+    @include mark($abandoned-quest-color);
 }
 div.quest-big-unclaimed {
-    @include quest-big($unclaimed-quest-color);
+    @include mark($unclaimed-quest-color);
 }
 
 .quest-big {

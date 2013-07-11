@@ -2,12 +2,11 @@ define [
     "backbone"
     "routers/proto/common"
     "models/current-user"
-    "views/quest/page", "models/quest"
     "views/welcome"
     "views/news-feed"
     "views/register"
     "views/confirm-email", "views/user/unsubscribe"
-], (Backbone, Common, currentUser, QuestPage, QuestModel, Welcome, NewsFeed, Register, ConfirmEmail, Unsubscribe) ->
+], (Backbone, Common, currentUser, Welcome, NewsFeed, Register, ConfirmEmail, Unsubscribe) ->
 
     class extends Common
         routes:
@@ -18,24 +17,6 @@ define [
             "auth/twitter": "twitterLogin"
             "player/:login/unsubscribe/:field/:status": "unsubscribeResult"
             "start-tour": "startTour"
-            "quest/:id": "questPage"
-            "realm/:realm/quest/:id": "realmQuestPage"
-
-        questPage: (id) ->
-            model = new QuestModel(_id: id)
-            view = new QuestPage(model: model)
-            model.fetch success: =>
-                Backbone.history.navigate "/realm/" + model.get("realm") + "/quest/" + model.id,
-                    trigger: true
-                    replace: true
-
-                view.activate()
-                @appView.updateRealm()
-
-            @appView.setPageView view
-
-        realmQuestPage: (realm, id) ->
-            @questPage id
 
         welcome: ->
             # model is usually empty, but sometimes it's not - logged-in users can see the welcome page too

@@ -26,12 +26,10 @@
 
 @mixin quest-row($color) {
     > td {
-        background-color: $mat;
-        border-left: $color 5px solid;
+        @include mark($color);
     }
     &:hover > td {
-        background-color: $mat;
-        border-left: darken($color, 20%) 5px solid;
+        @include mark(darken($color, 20%));
     }
 }
 

@@ -1,4 +1,11 @@
-define ["underscore", "views/proto/common", "views/quest/completed", "views/quest/big", "views/comment/collection", "models/comment-collection", "models/current-user", "text!templates/quest-page.html"], (_, Common, QuestCompleted, QuestBig, CommentCollection, CommentCollectionModel, currentUser, html) ->
+define [
+    "underscore"
+    "views/proto/common"
+    "views/quest/completed"
+    "views/quest/big", "views/comment/collection"
+    "models/comment-collection", "models/current-user"
+    "text!templates/quest/page.html"
+], (_, Common, QuestCompleted, QuestBig, CommentCollection, CommentCollectionModel, currentUser, html) ->
     Common.extend
         activated: false
         template: _.template(html)

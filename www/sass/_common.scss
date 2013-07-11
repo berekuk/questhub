@@ -2,6 +2,7 @@ $open-quest-color: hsl(35, 85%, 75%);
 $closed-quest-color: hsl(200, 65%, 75%);
 $abandoned-quest-color: #dddddd;
 $unclaimed-quest-color: hsl(120, 65%, 75%);
+$important-color: hsl(1, 80%, 75%);
 $mat: white;
 $grey: #eee;
 $dark-grey: #999; // same as bootstrap's .muted color
@@ -115,5 +116,22 @@ td {
 
     &:hover {
         background-color: $mat;
+    }
+}
+
+.sidebar-header {
+    margin-top: 8px;
+    font-size: 24px;
+    font-weight: 200;
+    text-align: right;
+    margin-bottom: 20px;
+    color: $dark-grey;
+}
+
+.grey-icon-link {
+    color: $dark-grey;
+    &:hover {
+        text-decoration: none;
+        color: $text-color;
     }
 }

@@ -8,7 +8,7 @@
   </div>
   <div class="modal-body quest-add-body">
 
-    <div class="quest-add-row quest-add-realm">
+    <div class="form-row quest-add-realm">
       <% if (!defaultRealm) { %>
         <div class="quest-add-realm-reminder badge">
           Choose a realm:
@@ -21,21 +21,21 @@
       </div>
     </div>
 
-    <div class="quest-add-row">
+    <div class="form-row">
       <label><small class="muted">Write a short description of the task here.</small></label>
-      <input name="name" type="text" class="quest-edit-name" placeholder="What's your next goal?">
+      <input name="name" type="text" class="input-large" placeholder="What's your next goal?">
     </div>
 
-    <div class="quest-add-row">
+    <div class="form-row">
       <label><small class="muted">Descrpition (markdown syntax supported):</small></label>
-      <textarea name="description" class="quest-edit-description" placeholder="Quest details are optional. You can always add them later."></textarea>
+      <textarea name="description" class="textarea-large" placeholder="Quest details are optional. You can always add them later."></textarea>
     </div>
 
-    <div class="quest-add-row">
+    <div class="form-row">
       <div class="quest-tags-edit control-group">
         <label><small class="muted">Tags are optional. Enter them comma-separated here, for example: "bug,dancer"</small></label>
         <input name="tags" type="text" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual" data-container="quest-add-modal">
-        <button class="btn btn-primary quest-add pull-right">Go!</button>
+        <button class="btn btn-primary _go pull-right">Go!</button>
       </div>
     </div>
   </div>

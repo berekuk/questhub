@@ -1,5 +1,10 @@
-# left column of the dashboard page
-define ["underscore", "views/proto/common", "models/current-user", "views/quest/add", "text!templates/user-big.html"], (_, Common, currentUser, QuestAdd, html) ->
+define [
+    "underscore"
+    "views/proto/common"
+    "models/current-user"
+    "views/quest/add"
+    "text!templates/user/big.html"
+], (_, Common, currentUser, QuestAdd, html) ->
     class extends Common
         template: _.template(html)
 

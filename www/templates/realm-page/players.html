@@ -1,0 +1,25 @@
+<div class="row-fluid">
+  <div class="span3">
+    <div class="sidebar-header">
+      Players
+    </div>
+    <div class="well">
+      Players are sorted by:
+      <ol>
+        <li>game points;</li>
+        <li>open quests.</li>
+      </ol>
+    </div>
+    <% if (obj.keepers) { %>
+      <div class="well">
+        Realm keepers:<br>
+        <%= _.map(keepers, function (keeper) {
+          return partial.user({ realm: id, login: keeper });
+        }).join(", ") %>.
+      </div>
+    <% } %>
+  </div>
+  <div class="span6">
+    <div class="user-collection-sv"></div>
+  </div>
+</div>

@@ -252,9 +252,49 @@ Set manual ordering of quests.
 
 Parameters: `quest_ids[]` array with quest ids. Use `GET /api/quest?sort=manual` to fetch quests in this order.
 
+### Stencils
+
+##### GET /api/stencil
+
+Get the list of stencils.
+
+Options:
+
+* `realm`
+
+##### GET /api/stencil/{id}
+
+Get one stencil.
+
+##### POST /api/stencil
+
+Create a stencil.
+
+Parameters:
+
+* `realm`
+* `name`
+
+Optional parameters:
+
+* `description`
+
+##### PUT /api/quest/{id}
+
+Edit a stencil.
+
+Possible parameters:
+
+* `name`
+* `description`
+
+##### POST /api/stencil/{id}/take
+
+Take a stencil as a quest.
+
 ### Realms
 
-##### GET /realm
+##### GET /api/realm
 
 Get the list of realms.
 
@@ -364,3 +404,5 @@ Event:
         quest: { ... },
         invitee: 'bar' # only for 'invite-quest' type
     }
+
+# vim: ft=markdown

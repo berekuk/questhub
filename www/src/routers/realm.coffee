@@ -11,6 +11,7 @@ define [
         routes:
             "realms": "realms"
             "realm/:realm": "realmActivity"
+            "realm/:realm/stencils": "realmStencils"
             "realm/:realm/players": "realmPlayers"
             "realm/:realm/explore(/:tab)": "realmExplore"
             "realm/:realm/explore/:tab/tag/:tag": "realmExplore"
@@ -29,6 +30,9 @@ define [
             model.fetch()
                 .success -> view.activate()
             @appView.setPageView view
+
+        realmStencils: (realm) ->
+            @_realm realm, tab: 'stencils'
 
         realmActivity: (realm) ->
             @_realm realm, tab: 'activity'

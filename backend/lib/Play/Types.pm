@@ -6,7 +6,7 @@ use warnings;
 use Type::Library
     -base,
     -declare => qw(
-        Id Login
+        Id Login Realm
         ImageSize ImageUpic
         CommentParams
     );
@@ -14,6 +14,7 @@ use Type::Utils;
 use Types::Standard qw( Str StrMatch Dict );
 
 declare Login, as StrMatch[ qr/^\w{1,16}$/ ];
+declare Realm, as StrMatch[ qr/^\w{1,16}$/ ];
 declare Id, as StrMatch[ qr/^[0-9a-f]{24}$/ ];
 
 declare ImageSize, as enum([qw/ small normal /]);

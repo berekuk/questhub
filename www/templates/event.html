@@ -48,16 +48,37 @@
     <i class="icon-user"></i>
     <%= partial.user({ realm: realm, login: author }) %> joins <a href="/realm/<%- realm %>"><%- realm %></a> realm.
 
+  <% } else if (type == 'add-stencil') { %>
+    <i class="icon-book"></i>
+    <%= partial.user({ realm: realm, login: author }) %> created a stencil:
+
   <% } else { %>
-    <em>Unknown event type <%- type %> <%- obj.comment.type ? '(comment type ' + obj.comment.type + ')' : '' %>. Try to refresh the page.</em>
+    <em>Unknown event type <%- type %> <%- (obj.comment && obj.comment.type) ? '(comment type ' + obj.comment.type + ')' : '' %>. Try to refresh the page.</em>
 
   <% } %>
 </div>
 
 <% if (obj.quest) { %>
   <div class="event-quest-title">
+    <% if (quest.stencil) { %>
+      <a href="/realm/<%- quest.realm %>/stencil/<%- quest.stencil %>" class="grey-icon-link">
+        <i class="icon-book"></i>
+      </a>
+    <% } %>
+
     <%= partial.quest_link(quest) %>.
   </div>
+<% } %>
+
+<% if (type == 'add-stencil') { %>
+  <div class="event-quest-title">
+    <a href="/realm/<%- realm %>/stencil/<%- stencil._id %>"><%- stencil.name %></a></script>
+  </div>
+  <% if (stencil.description) { %>
+    <div class="event-well-quest-description widetext">
+      <%= partial.markdown(stencil.description, realm) %>
+    </div>
+  <% } %>
 <% } %>
 
 <% if (type == 'add-quest' && quest.description) { %>

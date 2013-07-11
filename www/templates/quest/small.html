@@ -7,6 +7,12 @@
     <% } %>
   </span>
 
+  <% if (obj.stencil) { %>
+    <a href="/realm/<%- realm %>/stencil/<%- stencil %>" class="grey-icon-link">
+      <i class="icon-book"></i>
+    </a>
+  <% } %>
+
   <%= partial.quest_link(obj) %>
   <% var others = _.filter(team, function (u) { return u != user }) %>
   <% if (others.length) { %>

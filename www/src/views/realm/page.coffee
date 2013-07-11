@@ -2,11 +2,9 @@ define [
     "underscore"
     "views/proto/tabbed"
     "views/realm/big"
-    "views/explore"
-    "views/realm/page/activity"
-    "views/user/collection", "models/user-collection"
+    "views/explore", "views/stencil/overview", "views/realm/page/activity", "views/realm/page/players"
     "text!templates/realm-page.html"
-], (_, Tabbed, RealmBig, Explore, RealmPageActivity, UserCollection, UserCollectionModel, html) ->
+], (_, Tabbed, RealmBig, Explore, RealmPageStencils, RealmPageActivity, RealmPagePlayers, html) ->
     class extends Tabbed
         template: _.template(html)
         activeMenuItem: "realm-page"
@@ -18,6 +16,9 @@ define [
         tab: 'activity'
         tabSubview: ".realm-page-sv"
         tabs:
+            stencils:
+                url: '/stencils'
+                subview: -> new RealmPageStencils model: @model
             activity:
                 url: ''
                 subview: -> new RealmPageActivity model: @model
@@ -32,14 +33,7 @@ define [
                     sv
             players:
                 url: '/players'
-                subview: ->
-                    collection = new UserCollectionModel [],
-                        realm: @model.get('id')
-                        sort: "leaderboard"
-                        limit: 100
-                    view = new UserCollection collection: collection
-                    collection.fetch()
-                    view
+                subview: -> new RealmPagePlayers model: @model
 
 
         subviews: ->

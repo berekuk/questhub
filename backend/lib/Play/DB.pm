@@ -49,6 +49,11 @@ sub realms {
     return Play::DB::Realms->new;
 }
 
+sub stencils {
+    require Play::DB::Stencils;
+    return Play::DB::Stencils->new;
+}
+
 sub ensure_indices {
     my $users_collection = Play::Mongo->db->get_collection('users');
     $users_collection->drop_indexes; # yeah! (FIXME)
@@ -62,6 +67,7 @@ sub ensure_indices {
     $quests_collection->ensure_index({ 'team' => 1 });
     $quests_collection->ensure_index({ 'watchers' => 1 });
     $quests_collection->ensure_index({ 'realm' => 1 });
+    $quests_collection->ensure_index({ 'stencil' => 1 });
 
     my $events_collection = Play::Mongo->db->get_collection('events');
     $events_collection->drop_indexes;

@@ -1,0 +1,52 @@
+.stencil-small {
+    @include mark($mat);
+}
+.stencil-small-my {
+    @include mark($highlight);
+}
+
+.stencil-small-title {
+    margin-bottom: 8px;
+}
+.stencil-small-description {
+    margin-bottom: 8px;
+    p:last-child, ul:last-child {
+        margin-bottom: 0px;
+    }
+}
+
+.stencil-page-icon {
+    font-size: 64px;
+    float: left;
+    margin-right: 20px;
+
+    @include breakpoint(B) {
+        float: none;
+        text-align: right;
+        margin-right: 0px;
+    }
+}
+.stencil-page-stat {
+    @include breakpoint(B) {
+        text-align: right;
+    }
+    .label {
+        margin-bottom: 3px;
+    }
+}
+.stencil-page-sidebar {
+    margin-bottom: 10px;
+}
+
+.stencil-big-edit-tools {
+    float: right;
+    line-height: 12px;
+}
+.stencil-big {
+    ._edit {
+        display: none;
+    }
+    [name=name] {
+        margin-top: 10px;
+    }
+}

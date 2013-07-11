@@ -1,0 +1,18 @@
+.form-row {
+    margin-bottom: 8px;
+}
+
+input.input-large {
+    font-size: 22px;
+    line-height: 32px;
+    height: 38px;
+    @include box-sizing(border-box);
+    width: 100%;
+    font-weight: 200;
+    margin-bottom: 0px;
+}
+
+textarea.textarea-large {
+    @include box-sizing(border-box);
+    width: 100%;
+}

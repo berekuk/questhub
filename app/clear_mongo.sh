@@ -7,6 +7,7 @@ db.users.drop()
 db.sessions.drop()
 db.comments.drop()
 db.events.drop()
+db.stencils.drop()
 END
 )
 
