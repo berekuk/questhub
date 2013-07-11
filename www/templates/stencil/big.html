@@ -1,11 +1,39 @@
-<div class="well">
+<div class="well stencil-big">
   <span class="muted">Stencil by <%= partial.user({ login: author }) %>:</span>
-  <h2><%- name %></h2>
+
+  <% if (isKeeper) { %>
+    <div class="stencil-big-edit-tools">
+      <a href="#" class="edit mini-button"><i class="icon-pencil"></i></a>
+    </div>
+  <% } %>
+
+  <div class="_editable">
+    <h2><%- name %></h2>
+  </div>
+  <% if (isKeeper) { %>
+  <div class="_edit form-row control-group">
+    <input class="input-large" name="name" type="text" placeholder="Stencil title is required!">
+  </div>
+  <% } %>
+
   <% if (obj.description) { %>
-    <div>
+    <div class="_editable">
       <%= partial.markdown(description, realm) %>
     </div>
   <% } %>
+  <% if (isKeeper) { %>
+  <div class="_edit form-row">
+    <textarea name="description" class="span12" placeholder="Stencil description"></textarea>
+    <div class="js-stencil-big-description-preview markdown-preview">
+      <div class="_label">Description preview</div>
+      <div class="_content"></div>
+    </div>
+  </div>
+  <div class="_edit clearfix">
+    <button class="btn btn-primary save pull-right">Save</button>
+  </div>
+  <% } %>
+
   <div class="object-bottom-line">
     <em><small class="muted">Created</small></em> <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
   </div>

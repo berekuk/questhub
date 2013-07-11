@@ -2,39 +2,19 @@ define ["backbone", "jquery", "models/current-user"], (Backbone, $, currentUser)
     Backbone.Model.extend
         idAttribute: "_id"
         urlRoot: "/api/quest"
-        like: ->
-            @act "like"
 
-        unlike: ->
-            @act "unlike"
+        like: -> @act "like"
+        unlike: -> @act "unlike"
 
-        invite: (invitee) ->
-            @act "invite",
-                invitee: invitee
+        invite: (invitee) -> @act "invite", invitee: invitee
+        uninvite: (invitee) -> @act "uninvite", invitee: invitee 
 
-
-        uninvite: (invitee) ->
-            @act "uninvite",
-                invitee: invitee
-
-
-        join: ->
-            @act "join"
-
-        leave: ->
-            @act "leave"
-
-        close: ->
-            @act "close"
-
-        abandon: ->
-            @act "abandon"
-
-        resurrect: ->
-            @act "resurrect"
-
-        reopen: ->
-            @act "reopen"
+        join: -> @act "join"
+        leave: -> @act "leave"
+        close: -> @act "close"
+        abandon: -> @act "abandon"
+        resurrect: -> @act "resurrect"
+        reopen: -> @act "reopen"
 
         act: (action, params) ->
             model = this
