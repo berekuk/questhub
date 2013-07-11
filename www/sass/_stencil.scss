@@ -17,11 +17,25 @@
 
 .stencil-page-icon {
     font-size: 64px;
-    text-align: right;
+    float: left;
+    margin-right: 20px;
+
+    @include breakpoint(B) {
+        float: none;
+        text-align: right;
+        margin-right: 0px;
+    }
 }
 .stencil-page-stat {
-    margin-top: 20px;
-    text-align: right;
+    @include breakpoint(B) {
+        text-align: right;
+    }
+    .label {
+        margin-bottom: 3px;
+    }
+}
+.stencil-page-sidebar {
+    margin-bottom: 10px;
 }
 
 .stencil-big-edit-tools {
