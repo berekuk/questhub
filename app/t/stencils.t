@@ -89,4 +89,26 @@ sub take :Tests {
     ];
 }
 
+sub edit :Tests {
+    http_json GET => "/api/fakeuser/foo";
+
+    my $add_result = http_json POST => "/api/stencil", { params => {
+        realm => 'europe',
+        name => 'Do something',
+    } };
+
+    my $edit_result = http_json PUT => "/api/stencil/$add_result->{_id}", { params => {
+        name => "Do something else",
+    } };
+
+    my $stencil = http_json GET => "/api/stencil/$add_result->{_id}";
+    cmp_deeply $stencil, superhashof {
+        name => 'Do something else',
+        realm => 'europe',
+        author => 'foo',
+        _id => re('^\w{24}$'),
+        ts => re('^\d+$'),
+    };
+}
+
 __PACKAGE__->new->runtests;

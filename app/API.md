@@ -279,6 +279,15 @@ Optional parameters:
 
 * `description`
 
+##### PUT /api/quest/{id}
+
+Edit a stencil.
+
+Possible parameters:
+
+* `name`
+* `description`
+
 ##### POST /api/stencil/{id}/take
 
 Take a stencil as a quest.

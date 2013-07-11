@@ -38,6 +38,18 @@ get '/stencil/:id' => sub {
     return db->stencils->get(param('id'), { quests => 1 });
 };
 
+put '/stencil/:id' => sub {
+    my $login = login;
+    my $updated_id = db->stencils->edit(
+        param('id'),
+        {
+            user => $login,
+            map { param($_) ? ($_ => param($_)) : () } qw/ name description /,
+        }
+    );
+    return { result => 'ok' };
+};
+
 post '/stencil/:id/take' => sub {
     my $login = login;
 
