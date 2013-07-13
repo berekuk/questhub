@@ -1,7 +1,7 @@
 <div class="event-header">
   <% if (type == 'add-quest') { %>
     <i class="icon-plus"></i>
-    <%= partial.user({ realm: realm, login: author }) %> started a new quest:
+    <%= partial.user({ realm: realm, login: author }) %> started a new <a href="/realm/<%- realm %>"><%- realm %></a> quest:
 
   <% } else if (type == 'add-comment' && (comment.type == undefined || comment.type == 'text')) { %>
     <div class="event-header">
