@@ -16,3 +16,7 @@ textarea.textarea-large {
     @include box-sizing(border-box);
     width: 100%;
 }
+.modal textarea.textarea-large {
+    max-height: 170px;
+    resize: none !important;
+}
