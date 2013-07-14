@@ -38,14 +38,18 @@
         i.icon-group {
             color: $green-color;
         }
-        margin: 20px;
+        margin-left: 20px;
         margin-right: 30px;
+        margin-bottom: 10px;
+        margin-top: 10px;
         h3 {
             margin: 0px;
+            margin-bottom: 5px;
         }
     }
     .welcome-block-text {
         margin-top: 15px;
+        margin-right: 5px;
     }
     .welcome-block {
         &:after {
