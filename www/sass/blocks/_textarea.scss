@@ -1,0 +1,57 @@
+.helper-textarea {
+    textarea {
+        resize: none !important;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.helper-textarea-preview {
+    margin-bottom: 8px;
+    ._label {
+        color: $dark-grey;
+        float: right;
+        margin-right: 5px;
+    }
+    ._content {
+        background-color: $mat;
+        min-height: 30px;
+        border: dashed 1px $dark-grey;
+        padding: 5px;
+    }
+}
+.helper-textarea-main {
+    position: relative;
+}
+.helper-textarea-controls {
+    position: absolute;
+    right: 7px;
+    bottom: 10px;
+
+    a {
+        font-size: 18px;
+        color: $dark-grey;
+
+        &:hover {
+            text-decoration: none;
+            color: $text-color;
+        }
+    }
+}
+
+.helper-textarea-empty .helper-textarea-controls {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+.helper-textarea-empty:hover .helper-textarea-controls {
+    opacity: 1;
+}
+
+.helper-textarea-cheatsheet {
+    a {
+        display: block;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        float: right;
+    }
+}

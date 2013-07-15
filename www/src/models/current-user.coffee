@@ -13,7 +13,7 @@ define ["backbone", "jquery", "models/user"], (Backbone, $, User) ->
 
         getSetting: (name) ->
             settings = @get("settings")
-            return  unless settings
+            return unless settings
             settings[name]
 
         setSetting: (name, value) ->

@@ -4,7 +4,8 @@ define [
     "text!templates/about.html"
     "text!templates/about/main.html"
     "text!templates/about/api.html"
-], (_, Common, Tabbed, html, mainHtml, apiHtml) ->
+    "text!templates/about/syntax.html"
+], (_, Common, Tabbed, html, mainHtml, apiHtml, syntaxHtml) ->
 
     subviewClass = class extends Common
         initialize: ->
@@ -28,6 +29,9 @@ define [
             api:
                 url: '/api'
                 subview: -> new subviewClass template: _.template apiHtml
+            syntax:
+                url: '/syntax'
+                subview: -> new subviewClass template: _.template syntaxHtml
 
         switchTab: (e) ->
             @switchTabByName $(e.target).attr("data-about-tab")

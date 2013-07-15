@@ -1,16 +1,25 @@
-define ["underscore", "markdown", "views/proto/any-collection", "models/current-user", "views/user/signin", "views/comment/any", "text!templates/comment-collection.html"], (_, markdown, AnyCollection, currentUser, Signin, Comment, html) ->
+define [
+    "underscore", "markdown"
+    "views/proto/any-collection"
+    "models/current-user"
+    "views/user/signin", "views/comment/any"
+    "views/helper/textarea"
+    "text!templates/comment-collection.html"
+], (_, markdown, AnyCollection, currentUser, Signin, Comment, Textarea, html) ->
     class extends AnyCollection
         template: _.template(html)
         events:
             "click .submit": "postComment"
-            "keyup [name=comment]": "validate"
 
         subviews:
             ".signin": ->
                 new Signin()
+            ".comment-add-sv": ->
+                new Textarea
+                    realm: @options.realm
+                    placeholder: "Comment (Markdown syntax supported)"
 
-        celem: ->
-            @$ "[name=comment]"
+        textarea: -> @subview ".comment-add-sv"
 
         serialize: ->
             currentUser: currentUser.get("login")
@@ -22,51 +31,52 @@ define ["underscore", "markdown", "views/proto/any-collection", "models/current-
             )
 
         listSelector: ".comments-list"
-        afterInitialize: ->
+
+        initialize: ->
             @listenTo @collection, "add", @resetForm
             super
 
-        afterRender: ->
+        render: ->
             super
-            @$("[name=comment]").autosize()
+            return unless @activated
+            @textarea().reveal()
+            @textarea().on "edit", @validate
+            @textarea().on "save", @postComment
+# we could clean the comment on cancel, but it would be too annoying to lose your data accidentally
+# TODO - think through if this is useful
+#            @textarea().on "cancel", @resetForm
 
 
         # set the appropriate "add comment" button style
-        validate: (e) ->
-            text = @celem().val()
-            if text
-                @$(".submit").removeClass "disabled"
-                @$(".comment-preview").show()
-                @$(".comment-preview ._content").html markdown(text, @options.realm)
-            else
-                @$(".submit").addClass "disabled"
-                @$(".comment-preview").hide()
+        validate: (e) =>
+            text = @textarea().value()
+            @$(".submit").toggleClass "disabled", !text
 
-        disableForm: ->
-            @celem().attr disabled: "disabled"
+        disableForm: =>
+            return unless @activated
+            @textarea().disable()
             @$(".submit").addClass "disabled"
 
-        resetForm: ->
-            @celem().removeAttr "disabled"
-            @celem().val ""
+        resetForm: =>
+            return unless @activated
+            console.log "resetForm"
+            @textarea().enable()
+            @textarea().clear()
             @validate()
 
-        enableForm: ->
-
+        enableForm: =>
+            return unless @activated
             # the difference from resetForm() is that we don't clear textarea's val() to prevent the comment from vanishing
-            @celem().removeAttr "disabled"
+            @textarea.enable()
             @validate()
 
-        postComment: ->
-            return  if @$(".submit").hasClass("disabled")
+        postComment: =>
+            return if @$(".submit").hasClass("disabled")
             @disableForm()
             ga "send", "event", "comment", "add"
             mixpanel.track "add comment"
-            @collection.createTextComment @celem().val(),
+            @collection.createTextComment @textarea().value(),
                 wait: true
                 error: @enableForm
-
-
-
 
 # on success, 'add' will fire and form will be resetted

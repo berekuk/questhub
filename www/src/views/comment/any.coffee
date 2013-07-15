@@ -1,62 +1,70 @@
-define ["underscore", "views/proto/common", "views/comment/like", "models/current-user", "text!templates/comment.html"], (_, Common, CommentLike, currentUser, html) ->
-    Common.extend
+define [
+    "underscore"
+    "views/proto/common"
+    "views/comment/like"
+    "models/current-user"
+    "views/helper/textarea"
+    "text!templates/comment.html"
+], (_, Common, CommentLike, currentUser, Textarea, html) ->
+    class extends Common
         template: _.template(html)
         events:
             "click .delete": "destroy"
             "click .edit": "edit"
-            "blur .comment-edit": "closeEdit"
-            mouseenter: (e) ->
-                @subview(".likes").showButton()
-
-            mouseleave: (e) ->
-                @subview(".likes").hideButton()
+            "click .comment-edit-button-cancel": "cancelEdit"
+            "click .comment-edit-button-save": "saveEdit"
+            mouseenter: (e) -> @subview(".likes").showButton()
+            mouseleave: (e) -> @subview(".likes").hideButton()
 
         subviews:
             ".likes": ->
-                new CommentLike(model: @model)
+                new CommentLike model: @model
 
         edit: ->
-            return  unless @isOwned()
-            @$(".comment-edit").show()
+            return unless @isOwned()
             @$(".comment-content").hide()
-            @$(".comment-edit").focus()
-            @$(".comment-edit").autosize()
+            @$(".comment-edit-tools").hide()
+            @$(".comment-edit-buttons").show()
 
-        closeEdit: ->
-            edit = @$(".comment-edit")
-            return  if edit.attr("disabled") # already saving
-            value = edit.val()
-            return  unless value # empty comments are forbidden
-            that = this
-            edit.attr "disabled", "disabled"
-            @model.save
-                body: value
-            ,
-                success: ->
-                    that.model.fetch
-                        success: ->
-                            edit.attr "disabled", false
-                            edit.hide()
-                            @$(".comment-content").show()
-                            that.render()
+            @$(".comment-edit").html("")
+            @textarea = new Textarea()
+            @textarea.render()
+            @$(".comment-edit").append @textarea.$el
+            @$(".comment-edit").show()
+            @textarea.reveal(@model.get "body")
+            @textarea.focus()
 
-                        error: (model, xhr, options) ->
-                            edit.attr "disabled", false
+            @textarea.on "save", => @saveEdit()
+            @textarea.on "cancel", => @cancelEdit()
+
+        cancelEdit: ->
+            @textarea.disable() # to avoid accidental saveEdit() because of blur (not relevant anymore)
+            @render()
+            return
 
 
-                error: (model, xhr) ->
-                    edit.attr "disabled", false
+        saveEdit: ->
+            return if @textarea.disabled()
+            value = @textarea.value()
+            return unless value # empty comments are forbidden
+
+            @textarea.disable()
+            deferred = @model.save body: value
+            deferred.success =>
+                @model.fetch
+                    success: => @render() # rendering fixes everything, cleans up our Textarea, re-draws content, etc.
+                    error: (model, xhr, options) => @textarea.enable()
+
+            deferred.error (model, xhr) =>
+                @textarea.enable()
 
 
         destroy: ->
-            that = this
-            bootbox.confirm "Are you sure you want to delete this comment?", (result) ->
-                that.model.destroy wait: true  if result
+            bootbox.confirm "Are you sure you want to delete this comment?", (result) =>
+                @model.destroy wait: true if result
 
-
-        features: ["timeago"]
         serialize: ->
-            params = @model.toJSON()
+            params = super
             params.my = @isOwned()
             params.realm = @options.realm
             params
@@ -64,4 +72,4 @@ define ["underscore", "views/proto/common", "views/comment/like", "models/curren
         isOwned: ->
             currentUser.get("login") is @model.get("author")
 
-
+        features: ["timeago"]

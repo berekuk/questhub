@@ -45,5 +45,4 @@ define [
                     tag: tag
 
         realmPlayers: (realm) ->
-            @_realm realm,
-                tab: 'players'
+            @_realm realm, tab: 'players'

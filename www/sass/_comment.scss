@@ -35,3 +35,8 @@ textarea.comment-edit {
 .comment-type-resurrect {
     @include mark(white);
 }
+
+.comment-edit-buttons {
+    display: none;
+    float: right;
+}

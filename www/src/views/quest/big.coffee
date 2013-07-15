@@ -1,13 +1,14 @@
 define [
     "underscore", "backbone"
-    "jquery", "markdown", "bootbox"
+    "jquery", "bootbox"
     "views/proto/common"
     "views/quest/like"
+    "views/helper/textarea"
     "models/current-user"
     "text!templates/quest/big.html"
-], (_, Backbone, $, markdown, bootbox, Common, Like, currentUser, html) ->
+], (_, Backbone, $, bootbox, Common, Like, Textarea, currentUser, html) ->
     "use strict"
-    Common.extend
+    class extends Common
         template: _.template(html)
         events:
             "click .quest-join": "join"
@@ -15,12 +16,8 @@ define [
             "click .edit": "startEdit"
             "click button.save": "saveEdit"
             "keyup input": "edit"
-            "keyup [name=description]": "edit"
-            mouseenter: (e) ->
-                @subview(".likes-subview").showButton()
-
-            mouseleave: (e) ->
-                @subview(".likes-subview").hideButton()
+            mouseenter: (e) -> @subview(".likes-subview").showButton()
+            mouseleave: (e) -> @subview(".likes-subview").hideButton()
 
         subviews:
             ".likes-subview": ->
@@ -28,11 +25,17 @@ define [
                     model: @model
                     hidden: true
                 )
+            ".description-sv": ->
+                new Textarea
+                    realm: @model.get("realm")
+                    placeholder: "Quest description"
 
         afterInitialize: ->
             @listenTo @model, "change", @render
 
         join: -> @model.join()
+
+        description: -> @subview(".description-sv")
 
         startEdit: ->
             return unless @model.isOwned()
@@ -40,21 +43,10 @@ define [
             tags = @model.get("tags") or []
             @$("[name=tags]").val tags.join(", ")
             @$("[name=name]").val @model.get("name")
-            @$("[name=description]").val(@model.get("description")).trigger "autosize"
             @validateForm()
             @$(".quest-big-editable").hide()
             @$("[name=name]").focus()
-            @updateDescriptionPreview()
-
-        updateDescriptionPreview: ->
-            text = @$("[name=description]").val()
-            preview = @$(".quest-big-description-preview")
-            if text
-                preview.show()
-                preview.find("._content").html markdown(text, @model.get("realm"))
-            else
-                preview.hide()
-
+            @description().reveal @model.get("description")
 
         # check if edit form is valid, and also highlight invalid fiels appropriately
         validateForm: ->
@@ -89,24 +81,23 @@ define [
                 @saveEdit()
             else if e.which is 27
                 @closeEdit()
-            else @updateDescriptionPreview() if target.is("textarea")
 
-        closeEdit: ->
+        closeEdit: =>
             @$(".quest-big-edit").hide()
             @$(".quest-big-editable").show()
+            @description().hide()
 
 
-        saveEdit: ->
+        saveEdit: =>
             # so, we're using DOM data to cache validation status... this is a slippery slope.
             return if @$("button.save").hasClass("disabled")
 
             # form is validated already by edit() method
             name = @$("[name=name]").val()
-            description = @$("[name=description]").val()
             tagline = @$("[name=tags]").val()
             @model.save
                 name: name
-                description: description
+                description: @description().value()
                 tags: @model.tagline2tags(tagline)
 
             @closeEdit()
@@ -126,6 +117,7 @@ define [
             params
 
         afterRender: ->
-            @$("[name=description]").autosize append: "\n"
+            @listenTo @description(), "save", @saveEdit
+            @listenTo @description(), "cancel", @closeEdit
 
         features: ["tooltip", "timeago"]
