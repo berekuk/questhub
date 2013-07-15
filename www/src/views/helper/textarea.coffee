@@ -20,7 +20,9 @@ define [
         hide: -> @$el.hide()
         disable: -> @$("textarea").prop "disabled", true
         enable: -> @$("textarea").prop "disabled", false
+        disabled: -> @$("textarea").prop "disabled"
         clear: -> @$("textarea").val ""
+        focus: -> @$("textarea").focus()
 
         updatePreview: ->
             text = @$("textarea").val()
