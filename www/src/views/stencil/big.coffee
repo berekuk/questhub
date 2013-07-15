@@ -1,19 +1,26 @@
 define [
-    "underscore", "markdown"
+    "underscore"
     "views/proto/common"
     "models/shared-models"
+    "views/helper/textarea"
     "text!templates/stencil/big.html"
-], (_, markdown, Common, sharedModels, html) ->
+], (_, Common, sharedModels, Textarea, html) ->
     class extends Common
         template: _.template html
-        serialize: -> @model.serialize()
         features: ["timeago"]
 
         events:
             "click .edit": "startEdit"
             "click button.save": "saveEdit"
             "keyup input": "edit"
-            "keyup [name=description]": "edit"
+
+        subviews:
+            ".description-sv": ->
+                new Textarea
+                    realm: @model.get("realm")
+                    placeholder: "Stencil description"
+
+        description: -> @subview(".description-sv")
 
         initialize: ->
             super
@@ -25,10 +32,12 @@ define [
                 sharedModels.realms.fetch().success => @render()
                 return
             super
+            @listenTo @description(), "save", @saveEdit
+            @listenTo @description(), "cancel", @closeEdit
 
         # FIXME - copy-pasted from view/stencil/overview, move to model?
         serialize: ->
-            params = super
+            params = @model.serialize()
             params.currentUser = sharedModels.currentUser.get "login"
 
             realm = sharedModels.realms.findWhere { id: @model.get("realm") }
@@ -39,10 +48,9 @@ define [
             @$("._edit").show()
             @$("._editable").hide()
             @$("[name=name]").val @model.get("name")
-            @$("[name=description]").val(@model.get("description")).trigger "autosize"
             @$("[name=name]").focus()
             @validateForm()
-            @updateDescriptionPreview()
+            @description().reveal @model.get("description")
 
         validateForm: ->
             ok = true
@@ -58,25 +66,13 @@ define [
                 @$("button.save").addClass "disabled"
             ok
 
-        updateDescriptionPreview: ->
-            text = @$("[name=description]").val()
-            preview = @$(".js-stencil-big-description-preview")
-            if text
-                preview.show()
-                preview.find("._content").html markdown(text, @model.get("realm"))
-            else
-                preview.hide()
-
-        saveEdit: ->
+        saveEdit: =>
             # so, we're using DOM data to cache validation status... this is a slippery slope.
             return if @$("button.save").hasClass("disabled")
 
-            # form is validated already by edit() method
-            name = @$("[name=name]").val()
-            description = @$("[name=description]").val()
             @model.save
-                name: name
-                description: description
+                name: @$("[name=name]").val()
+                description: @description().value()
             @closeEdit()
 
         edit: (e) ->
@@ -85,8 +81,7 @@ define [
                 @saveEdit()
             else if e.which is 27
                 @closeEdit()
-            else @updateDescriptionPreview() if target.is("textarea")
 
-        closeEdit: ->
+        closeEdit: =>
             @$("._edit").hide()
             @$("._editable").show()

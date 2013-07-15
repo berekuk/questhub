@@ -18,6 +18,9 @@ define [
         value: -> @$("textarea").val()
 
         hide: -> @$el.hide()
+        disable: -> @$("textarea").prop "disabled", true
+        enable: -> @$("textarea").prop "disabled", false
+        clear: -> @$("textarea").val ""
 
         updatePreview: ->
             text = @$("textarea").val()
@@ -33,11 +36,12 @@ define [
                 @trigger "save", @value()
             else if e.which is 27
                 @trigger "cancel"
+            return false if not @$el.is(":visible") or @$("textarea").prop("disabled")
 
         postEdit: (e) ->
-            if not @$el.is(":visible")
-                return
+            return false if not @$el.is(":visible") or @$("textarea").prop("disabled")
             @updatePreview()
+            @trigger "edit"
 
         render: ->
             super
@@ -45,4 +49,3 @@ define [
 
         serialize: ->
             placeholder: @options.placeholder
-
