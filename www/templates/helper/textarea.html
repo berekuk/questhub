@@ -1,5 +1,18 @@
 <div class="helper-textarea">
-  <textarea placeholder="<%- placeholder %>"></textarea>
+  <div class="helper-textarea-main">
+    <textarea placeholder="<%- placeholder %>"></textarea>
+    <div class="helper-textarea-controls">
+      <a href="#" class="helper-textarea-show-help" data-toggle="popover">
+        <i class="icon-question"></i>
+      </a>
+      <a href="#" class="helper-textarea-hide-preview <%- (!previewMode) ? 'hide' : '' %>" title="Hide preview">
+        <i class="icon-caret-up"></i>
+      </a>
+      <a href="#" class="helper-textarea-show-preview <%- (previewMode) ? 'hide' : '' %>" title="Show preview">
+        <i class="icon-caret-down"></i>
+      </a>
+    </div>
+  </div>
   <div class="helper-textarea-preview">
     <div class="_label">Preview</div>
     <div class="_content"></div>
