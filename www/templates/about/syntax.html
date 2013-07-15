@@ -1,0 +1,194 @@
+<h1 class="brand">Questhub Markdown syntax</h1>
+
+<p>
+Questhub uses <a href="http://daringfireball.net/projects/markdown/">Markdown</a>-based syntax for comments, quest descriptions, and all other player-generated long-form texts.
+</p>
+
+
+<div>
+  <hr>
+  <h2>Headers</h2>
+
+  <p>Some <code>#</code>'s before a string produces a header</p>
+
+  <h1>Header 1</h1>
+  <h2>Header 2</h2>
+  <h3>Header 3</h3>
+
+  Header 4
+
+  <p><code># Header 1</code> <br>
+  <code>## Header 2</code> <br>
+  <code>### Header 3</code> <br>
+  <code>#### Header 4</code></p>
+
+</div>
+
+<div class="widetext comment-content">
+
+  <hr>
+  <h2>Formatting</h2>
+
+  <p><strong>BOLD</strong>  <br>
+  <code>__BOLD__</code> or <code>**BOLD**</code></p>
+
+  <p><em>ITALIC</em>  <br>
+  <code>_ITALIC_</code> or <code>*ITALIC*</code></p>
+
+  <p><em><strong>BOTH BOLD AND ITALIC</strong></em> <br>
+  <code>___BOTH BOLD AND ITALIC___</code></p>
+
+</div>
+
+<div>
+  <hr>
+  <h2>Lists</h2>
+
+  <h3>Unordered list</h3>
+
+  <p>Either <code>+</code> or <code>*</code> or <code>-</code> produces unordered list, marked with round 'bullets'</p>
+
+  <ul>
+    <li>text 1</li>
+    <li>text 2</li>
+    <li>text 3</li>
+  </ul>
+
+  <p><code>+ text 1</code> <br>
+  <code>* text 2</code> <br>
+  <code>- text 3</code></p>
+
+  <h3>Ordered list</h3>
+
+  <p><code>1.</code> produces an auto-numbered ordered list</p>
+
+  <ol>
+    <li>text 1</li>
+    <li>text 2</li>
+    <li>text 3</li>
+  </ol>
+
+  <p><code>1. text 1</code> <br>
+  <code>1. text 2</code> <br>
+  <code>1. text 3</code></p>
+
+</div>
+
+<div class="widetext comment-content">
+
+  <hr>
+  <h2>Blockquotes</h2>
+
+  <blockquote>
+    <p>Level one</p>
+
+    <blockquote>
+      <p>Level two</p>
+
+      <blockquote>
+        <p>Level three</p>
+
+        <blockquote>
+          <p>Level four</p>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+
+  <p><code>&gt; Level one</code> <br>
+  <code>&gt;&gt; Level two</code> <br>
+  <code>&gt;&gt;&gt; Level three</code> <br>
+  <code>&gt;&gt;&gt;&gt; Level four</code></p>
+
+</div>
+
+<div>
+
+  <hr>
+  <h2>Inline code</h2>
+
+  <p>Putting `some text`  in backquotes produces inline code highlighting like this: <code>some text</code>. You may use it for any purpose you like, not only for code highlighting though.</p>
+
+  <p>If you don't know, where backquote is placed on keyboard, here is a picture for you: <br>
+  <img src="http://upload.wikimedia.org/wikipedia/commons/1/16/Backquote.png" alt="backquote" title=""></p>
+
+  <hr>
+  <h2>Horizontal rule</h2>
+
+  <p>You can make horizontal separation lines using <code>***</code><br>
+
+  <hr>
+  <h2>Questhub names highlighting</h2>
+
+  <p>You can mention any player's name from Questhub using <code>@PlayerName</code>.  <br>
+  E.g. <code>@berekuk</code>  produces <a href="/player/berekuk" class="user-link">berekuk</a>.<br>
+  This is not standard feature of Markdown, so be warned. It may not work anywhere else.  <br>
+  Also please don't mindlessly mention other players. They will receive e-mail notification, that you have mentioned them.</p>
+
+</div>
+
+<div>
+
+  <hr>
+  <h2>Links</h2>
+
+  <p>Links consist of three parts: <code>Link Text</code>, <code>Link Title</code> and <code>URL</code> <br>
+  This is inline link template in Markdown <br>
+  <code>[Link Text](URL "Link Title")</code></p>
+
+  <p>e.g. <code>[QuestHub](http://questhub.io "This is QuestHub!")</code> will produce:  <br>
+  <a href="http://questhub.io" title="This is QuestHub!">QuestHub</a> </p>
+
+  <p>You can omit <code>Link Title</code> to make things shorter. <br>
+  <code>[QuestHub](http://questhub.io)</code> will produce:  <br>
+  <a href="http://questhub.io">QuestHub</a></p>
+
+  <p>And even shorter by putting URL into <code>&lt;&gt;</code>. So that <code>&lt;http://questhub.io&gt;</code> will make: <br>
+  <a href="http://questhub.io">http://questhub.io</a></p>
+
+  <p>Finally you can simply type URL ,and it will be converted to a link :) <br>
+  <code>http://questhub.io</code> <br>
+  <a href="http://questhub.io">http://questhub.io</a></p>
+
+</div>
+
+<div>
+
+  <hr>
+  <h2>Images</h2>
+
+  <p>You can put images into your quests. Image code template is the following: <br>
+  <code>![Alt text](Image_URL "Image Title")</code></p>
+
+  <p>For example <code>![QuestHub Chaos](http://questhub.io/i/chaos.png "This is QH Chaos!")</code> makes: <br>
+  <img src="http://questhub.io/i/chaos.png" alt="QuestHub Chaos" title="This is QH Chaos!"></p>
+
+  <p>Also you can omit <code>Alt text</code> and <code>Image Title</code> like this: <br>
+  <code>![](http://questhub.io/i/chaos.png)</code> <br>
+  <img src="http://questhub.io/i/chaos.png" alt="" title=""></p>
+
+  <p>And you can combine images with hyperlinks! (Try by pressing the next Flying Spaghetti Monster)  <br>
+  <code>[![](http://questhub.io/i/chaos.png)](http://questhub.io/realm/chaos)</code>  <br>
+  <a href="http://questhub.io/realm/chaos"><img src="http://questhub.io/i/chaos.png" alt="" title=""></a></p>
+
+</div>
+
+<div class="widetext comment-content">
+
+  <hr>
+  <h2>Final Notes</h2>
+
+  <ol>
+    <li><p>Most of common html syntax is supported by Markdown parser here</p>
+
+    <ul><li><code>&lt;a href="http://questhub.io"&gt;QuestHub&lt;/a&gt;</code> <br>
+      <a href="http://questhub.io">QuestHub</a></li>
+      <li><code>&lt;s&gt;strike-through text&lt;/s&gt;</code> <br>
+      <s>strike-through text</s></li>
+      <li><code>&lt;p&gt;This &lt;br /&gt; is a paragraph &lt;br /&gt; with &lt;br /&gt; line breaks&lt;/p&gt;</code> <br>
+      <p>This <br> is a paragraph <br> with <br> line breaks</p></li></ul></li>
+    <li><p>Paragraphs are separated by a single line break, not by double, as in standard Markdown.</p></li>
+    <li>Try it yourself, that's always fun!</li>
+  </ol>
+
+</div>
