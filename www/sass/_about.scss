@@ -2,9 +2,14 @@
     max-width: 650px;
     margin: 0 auto;
 
+}
+
+.about-inner {
     @include breakpoint(B) {
         padding-left: 30px;
         padding-right: 30px;
+        padding-bottom: 30px;
+        padding-top: 20px;
     }
     h2 {
         font-weight: normal;

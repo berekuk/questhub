@@ -40,6 +40,9 @@ define [
             previewMode = value
             currentUser.setSetting "preview-mode", 0 + previewMode
             @updatePreview()
+            @focus()
+            @$(".helper-textarea-show-preview").toggle(!previewMode)
+            @$(".helper-textarea-hide-preview").toggle(previewMode)
 
         updatePreview: ->
             text = @value()
@@ -49,13 +52,9 @@ define [
 
             if text and previewMode
                 preview.show()
-                @$(".helper-textarea-show-preview").hide()
-                @$(".helper-textarea-hide-preview").show()
                 preview.find("._content").html markdown(text, @options.realm)
             else
                 preview.hide()
-                @$(".helper-textarea-hide-preview").hide()
-                @$(".helper-textarea-show-preview").show()
 
         toggleHelp: ->
             if not @popoverInitialized
@@ -73,7 +72,7 @@ define [
                         <code>&gt; Blockquote</code><br>
                         <code>@login</code><br>
                         <code>[Link title](Link URL)</code><br>
-                        <a href="/about/markdown">Full cheat sheat &rarr;</a>
+                        <a href="#" onclick="window.open('/about/syntax', '_blank')" class="helper-textarea-cheatsheet-link">Full cheat sheat &rarr;</a>
                       </div>
                     """
                     container: "body"
@@ -81,6 +80,7 @@ define [
                 )
                 @popoverInitialized = true
             @$(".helper-textarea-show-help").popover "toggle"
+            console.log @$(".helper-textarea-cheatsheet-link")
             return false
 
         destroyHelp: ->
