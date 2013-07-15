@@ -5,6 +5,14 @@
     <h2>Share your quests.</h2>
   </div>
 
+  <div class="welcome-signin">
+    <% if (registered) { %>
+      <a href="/" class="btn btn-large btn-primary">Go to your profile</a>
+    <% } else { %>
+      <span class="signin"></span>
+    <% } %>
+  </div>
+
   <div class="container-fluid">
     <div class="row-fluid">
       <div class="span6 well welcome-block">
@@ -17,7 +25,9 @@
           <p>
           Publish your tasks as quests, sort them, prioritize them, do them.
           </p>
-          <span class="muted">Questhub is your free public task tracker.</span>
+          <p>
+          Basically, Questhub is your free public task tracker.
+          </p>
         </div>
 
       </div>
