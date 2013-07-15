@@ -7,7 +7,7 @@
 
   <div class="welcome-signin">
     <% if (registered) { %>
-      <a href="/" class="btn btn-large btn-primary">Go to your profile</a>
+      <a href="/me" class="btn btn-large btn-primary">Go to your profile</a>
     <% } else { %>
       <span class="signin"></span>
     <% } %>
@@ -102,7 +102,14 @@
         </div>
 
       </div>
-
     </div>
+
+    <div class="row-fluid">
+      <div class="welcome-realms well">
+        <h3>There are <a href="/realms">3 realms</a> so far:</h3>
+        <div class="realms-subview"></div>
+      </div>
+    </div>
+
   </div>
 </div>
