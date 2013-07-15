@@ -1,65 +1,115 @@
 <!-- landing page -->
-<div class="container-fluid welcome well">
+<div class="welcome">
+  <div class="welcome-header">
+    <h1 class="brand">Questhub</h1>
+    <h2>Share your quests.</h2>
+  </div>
 
-  <div class="row-fluid">
-    <div class="span12">
-      <h1 class="brand">Questhub</h1>
-      <h2>Share your quests.</h2>
-      <hr>
-    </div>
+  <div class="welcome-signin">
+    <% if (registered) { %>
+      <a href="/me" class="btn btn-large btn-primary">Go to your profile</a>
+    <% } else { %>
+      <span class="signin"></span>
+    <% } %>
   </div>
-  <div class="row-fluid">
-    <div class="span6">
-      <div class="info-blocks">
-        <div class="row-fluid">
-          <i class="icon-list-alt"></i>
-          <div>
-            This is your <strong>public task tracker</strong>.
-          </div>
+
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span6 well welcome-block">
+
+        <div class="welcome-block-header">
+          <h3>Do stuff</h3>
+          <i class="icon-check"></i>
         </div>
-        <div class="row-fluid">
-          <i class="icon-thumbs-up"></i>
-          <div>
-            This is a gamified platform for <strong>connecting and encouraging</strong> people.
-          </div>
+        <div class="welcome-block-text">
+          <p>
+          Publish your tasks as quests, sort them, prioritize them, do them.
+          </p>
+          <p>
+          Basically, Questhub is your free public task tracker.
+          </p>
         </div>
-        <div class="row-fluid">
-          <i class="icon-group"></i>
-          <div>
-            This is a <strong>social network</strong> for people who want to do stuff.
-          </div>
-        </div>
-        <div class="row-fluid">
-          <i class="icon-comment"></i>
-          <div>
-            This is a place to <strong>gather and provide feedback</strong> on the things you did and on the things you&apos;re going to do.
-          </div>
-        </div>
-        <div class="row-fluid">
-          <i class="icon-star"></i>
-          <div>
-            Finally, you can get <strong>game points</strong> here!
-          </div>
-        </div>
+
       </div>
-      <p>
-      </p>
+      <div class="span6 well welcome-block">
+
+        <div class="welcome-block-header">
+          <h3>Have fun</h3>
+          <i class="icon-puzzle-piece"></i>
+        </div>
+        <div class="welcome-block-text">
+          <p>
+          Complete a quest and get points.<br>
+          The more interesting is your quest, the people will upvote it, and the more points you will get.
+          </p>
+        </div>
+
+      </div>
     </div>
-    <div class="span6 welcome-signin">
-      <p>
-      <% if (registered) { %>
-        <a href="/" class="btn btn-large btn-primary">Go to your profile</a>
-      <% } else { %>
-        <span class="signin"></span>
-      <% } %>
-      </p>
+    <div class="row-fluid">
+      <div class="span6 well welcome-block">
+
+        <div class="welcome-block-header">
+          <h3>Choose</h3>
+          <i class="icon-book"></i>
+        </div>
+        <div class="welcome-block-text">
+          <p>
+          Choose your journey from libraries of pre-scripted quests, or invent your own unique quests.
+          </p>
+        </div>
+
+      </div>
+      <div class="span6 well welcome-block">
+
+        <div class="welcome-block-header">
+          <h3>Connect</h3>
+          <i class="icon-rss"></i>
+        </div>
+        <div class="welcome-block-text">
+          <p>
+          Follow your friends or entire realms.<br>
+          See how their story unwinds.
+          </p>
+        </div>
+
+      </div>
     </div>
-  </div>
-  <div class="row-fluid">
-    <div class="span8">
-      <hr>
-      <h3>There are <a href="/realms">3 realms</a> so far:</h3>
-      <div class="realms-subview"></div>
+    <div class="row-fluid">
+      <div class="span6 well welcome-block">
+
+        <div class="welcome-block-header">
+          <h3>Encourage</h3>
+          <i class="icon-thumbs-up"></i>
+        </div>
+        <div class="welcome-block-text">
+          <p>
+          Upvote other people's quests, and they will become more motivated. They might upvote you in return.
+          </p>
+        </div>
+
+      </div>
+      <div class="span6 well welcome-block">
+
+        <div class="welcome-block-header">
+          <h3>Team up</h3>
+          <i class="icon-group"></i>
+        </div>
+        <div class="welcome-block-text">
+          <p>
+          Invite your friends to join you on your quests. Or find some stranger whose task you like and join them.
+          </p>
+        </div>
+
+      </div>
     </div>
+
+    <div class="row-fluid">
+      <div class="welcome-realms well">
+        <h3>There are <a href="/realms">3 realms</a> so far:</h3>
+        <div class="realms-subview"></div>
+      </div>
+    </div>
+
   </div>
 </div>
