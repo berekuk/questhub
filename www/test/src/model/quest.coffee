@@ -11,13 +11,14 @@ define ["models/quest", "jasmine-jquery"], (QuestModel) ->
                 author: "jonti"
                 tags: ["feature"]
                 likes: ["mushroom", "snake"]
+                base_points: 1
+                points: 1
 
             beforeEach ->
                 model = new QuestModel(modelParams)
 
             it "all properties", ->
                 expect(model.serialize()).toEqual _.extend(modelParams,
-                    reward: 3
                     ext_status: "open"
                     my: false
                 )
@@ -28,15 +29,3 @@ define ["models/quest", "jasmine-jquery"], (QuestModel) ->
             it "ext_status of unclaimed quest", ->
                 model.set "team", []
                 expect(model.serialize().ext_status).toEqual "unclaimed"
-
-            it "reward when likes are empty", ->
-                model.set "likes", []
-                expect(model.serialize().reward).toEqual 1
-
-            it "reward when there are no likes", ->
-                model.unset "likes"
-                expect(model.serialize().reward).toEqual 1
-
-
-
-

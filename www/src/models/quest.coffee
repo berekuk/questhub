@@ -45,9 +45,6 @@ define ["backbone", "jquery", "models/current-user"], (Backbone, $, currentUser)
             return "unclaimed"  if status is "open" and @get("team").length is 0
             status
 
-        reward: ->
-            1 + ((if @get("likes") then @get("likes").length else 0))
-
         isOwned: ->
             currentLogin = currentUser.get("login")
             return  if not currentLogin or not currentLogin.length
@@ -58,7 +55,6 @@ define ["backbone", "jquery", "models/current-user"], (Backbone, $, currentUser)
         serialize: ->
             params = @toJSON()
             params.ext_status = @extStatus()
-            params.reward = @reward()
             if params.tags
                 params.tags = params.tags.sort()
             else

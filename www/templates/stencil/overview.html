@@ -1,5 +1,5 @@
 <div class="row-fluid">
-  <div class="span3">
+  <div class="span3 stencil-overview-sidebar">
     <div class="sidebar-header">
       Stencils <span class="label label-important">beta</span>
     </div>
@@ -14,12 +14,15 @@
       <p>
       <a href="/realm/meta/quest/51db41b85a854b176100002b">Learn more about the history of this feature.</a>
     </div>
+    <% if (isKeeper) { %>
+      <div class="stencil-overview-sidebar-controls">
+        <button class="btn btn-primary btn-large add-stencil"><i class="icon-plus"></i> New stencil</button>
+      </div>
+    <% } %>
   </div>
   <div class="span9">
     <div class="stencil-collection-sv"></div>
-    <% if (isKeeper) { %>
-      <button class="btn btn-primary btn-large add-stencil"><i class="icon-plus"></i> New stencil</button>
-    <% } else { %>
+    <% if (!isKeeper) { %>
       <p class="muted">
       Want to add a new stencil? Ask a realm keeper.<br>
       (List of realm keepers can be found on <a href="/realm/<%- id %>/players">players</a> tab.)

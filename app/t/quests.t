@@ -81,7 +81,7 @@ sub quest_list :Tests {
         ],
         [
             map {
-                {
+                superhashof {
                     %$_,
                     author => 'foo',
                     team => ['foo'],
@@ -191,6 +191,7 @@ sub add_quest :Tests {
         status  => 'open',
         realm => 'europe',
         description => "Description.\n\nMore description.",
+        points => 3,
     };
 
     http_json GET => "/api/fakeuser/$user";
@@ -199,7 +200,15 @@ sub add_quest :Tests {
 
     cmp_deeply
         $add_result,
-        { %$new_record, team => [$user], author => $user, _id => re('^\S+$'), ts => re('^\d+$') },
+        {
+            %$new_record,
+            team => [$user],
+            author => $user,
+            _id => re('^\S+$'),
+            ts => re('^\d+$'),
+            base_points => 1, # impossible to set points through http API
+            points => 1,
+        },
         'add response';
 
     my $id = $add_result->{_id};
@@ -207,7 +216,15 @@ sub add_quest :Tests {
     my $got_quest = http_json GET => "/api/quest/$id";
     cmp_deeply
         $got_quest,
-        { %$new_record, team => [$user], author => $user, _id => re('^\S+$'), ts => re('^\d+$') },
+        {
+            %$new_record,
+            team => [$user],
+            author => $user,
+            _id => re('^\S+$'),
+            ts => re('^\d+$'),
+            base_points => 1,
+            points => 1,
+        },
         'get response';
 }
 

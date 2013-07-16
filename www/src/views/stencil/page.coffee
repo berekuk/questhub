@@ -17,6 +17,10 @@ define [
             ".stencil-my-quests-sv": -> @questsSV @model.myQuests()
             ".stencil-quests-sv": -> @questsSV @model.otherQuests()
 
+        initialize: ->
+            super
+            @listenTo @model, "change", =>
+                @render() if @activated
 
         questsSV: (quests) ->
             collection = new QuestCollectionModel(quests)
@@ -41,3 +45,5 @@ define [
             @subview(".stencil-quests-sv").updateShowMore()
 
         serialize: -> @model.serialize()
+
+        features: ["tooltip"]

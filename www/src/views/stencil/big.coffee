@@ -73,6 +73,7 @@ define [
             @model.save
                 name: @$("[name=name]").val()
                 description: @description().value()
+                points: @$(".stencil-big-reward .active").attr "data-points"
             @closeEdit()
 
         edit: (e) ->

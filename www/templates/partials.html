@@ -43,4 +43,16 @@
       </span>
     <% } %>
   </script>
+
+  <script type="text/template" class="reward-list">
+    <% _.each(quest.team, function (u) { %>
+    <div>
+      <%= partial.user({ login: u }) %> gets
+      <div class="reward-small">
+        <%- quest.points %>
+      </div>
+      point<%- (quest.likes && quest.likes.length) ? 's' : '' %>.
+    </div>
+    <% }) %>
+  </script>
 </div>

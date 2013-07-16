@@ -43,6 +43,8 @@ sub like_quest :Tests {
             team => ['blah'],
             author => 'blah',
             realm => 'europe',
+            base_points => 1,
+            points => 3,
         };
 
     is db->users->get_by_login('blah')->{rp}{europe}, 3;

@@ -1,4 +1,5 @@
 <div class="event-header">
+
   <% if (type == 'add-quest') { %>
     <i class="icon-plus"></i>
     <%= partial.user({ realm: realm, login: author }) %> started a new quest:
@@ -92,6 +93,12 @@
 <% if (obj.comment && (comment.type == undefined || comment.type == 'text')) { %>
   <div class="widetext">
     <%= partial.markdown(comment.body, realm) %>
+  </div>
+<% } %>
+
+<% if (type == 'add-comment' && comment.type == 'close') { %>
+  <div class="event-quest-reward">
+    <%= partial.reward_list({ quest: quest, partial: partial }) %>
   </div>
 <% } %>
 

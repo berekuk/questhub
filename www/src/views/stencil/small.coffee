@@ -10,3 +10,5 @@ define [
             "click ._take": -> @model.take success: => @render()
 
         serialize: -> @model.serialize()
+
+        features: ["tooltip"]

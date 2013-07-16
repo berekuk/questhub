@@ -202,7 +202,9 @@ sub add_points {
 
     my $user = $self->get_by_login($login);
     die "User '$login' not found" unless $user;
-    die "User doesn't belong to the realm $realm" unless grep { $_ eq $realm } @{ $user->{realms} };
+    unless (grep { $_ eq $realm } @{ $user->{realms} }) {
+        $self->join_realm($login, $realm);
+    }
 
     my $points = $user->{rp}{$realm} || 0;
     $points += $amount;

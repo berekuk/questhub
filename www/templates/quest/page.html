@@ -4,10 +4,12 @@
     <div class="span3 quest-page-left">
 
       <% if (status == 'open') { %>
-      <div class="reward">
-        <div class="reward-circle" data-toggle="tooltip" data-placement="bottom" title="Reward&nbsp;for&nbsp;completing&nbsp;this&nbsp;quest">
-          <span class="points"><%- reward %></span>
-          <span class="points-text">points</span>
+      <div class="quest-reward">
+        <div class="reward-big" data-toggle="tooltip" data-placement="bottom" title="Reward&nbsp;for&nbsp;completing&nbsp;this&nbsp;quest">
+          <div class="_content">
+            <span class="_points"><%- points %></span>
+            <span class="_points-text">point<%- (points == 1) ? '' : 's' %></span>
+          </div>
         </div>
       </div>
       <% } %>
@@ -97,7 +99,7 @@
       </div>
 
       <% if (obj.invitee && obj.invitee.length) { %>
-        <div class="invited-list">
+        <div class="invited-list <%- my ? 'invited-list-my' : '' %>">
         <div>Invited:</div>
         <ul>
           <% _.each(invitee, function (i) { %>

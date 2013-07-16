@@ -564,4 +564,29 @@ sub manual_order :Tests {
     ;
 }
 
+sub points :Tests {
+    db->users->add({ login => $_ }) for qw/ foo bar /;
+    my $quest = db->quests->add({
+        name => "q1",
+        user => 'foo',
+        realm => 'europe',
+    });
+
+    is $quest->{base_points}, 1;
+    is $quest->{points}, 1;
+
+    $quest = db->quests->get($quest->{_id});
+
+    is $quest->{base_points}, 1;
+    is $quest->{points}, 1;
+
+    db->quests->like($quest->{_id}, 'bar');
+
+    $quest = db->quests->get($quest->{_id});
+
+    is $quest->{base_points}, 1;
+    is $quest->{points}, 2;
+
+}
+
 __PACKAGE__->new->runtests;
