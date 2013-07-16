@@ -1,7 +1,7 @@
 <div class="well clearfix stencil-small <%- (currentUser && myQuests.length) ? 'stencil-small-my' : '' %>">
 
   <div class="stencil-small-reward">
-    <div class="reward-medium">
+    <div class="reward-medium" data-toggle="tooltip" data-placement="top" title="Reward&nbsp;for&nbsp;taking and&nbsp;completing&nbsp;this&nbsp;stencil">
       <div class="_content">
         <span class="_points"><%- points %></span>
         <span class="_points-text">point<%- (points == 1) ? '' : 's' %></span>
@@ -10,7 +10,7 @@
     <% if (currentUser) { %>
       <div class="stencil-small-relation">
         <% if (myQuests.length) { %>
-          <a href="/realm/<%- myQuests[0].realm %>/quest/<%- myQuests[0]._id %>">Your quest</a>
+        <strong><a href="/realm/<%- myQuests[0].realm %>/quest/<%- myQuests[0]._id %>">Your quest</a></strong>
         <% } else { %>
           <button class="btn btn-mini btn-primary _take">Take this quest</button>
         <% } %>
