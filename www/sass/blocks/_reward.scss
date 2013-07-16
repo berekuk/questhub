@@ -30,11 +30,7 @@
 }
 
 .reward-big {
-    @include reward-circle(85px, 25px, 14px);
-}
-
-.reward-medium {
-    @include reward-circle(65px, 20px, 12px);
+    @include reward-circle(67px, 22px, 12px);
 }
 
 .reward-small {

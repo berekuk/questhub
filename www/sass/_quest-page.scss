@@ -25,24 +25,16 @@ div.quest-big-unclaimed {
         margin-top: 20px;
     }
 }
-
 .quest-big-labels {
     display: block;
     float: right;
 }
-
 .quest-big-edit {
     display: none;
     margin-bottom: 5px;
 }
 
 .quest-page-left {
-    .watchers {
-        margin-bottom: 8px;
-    }
-    .likes {
-        margin-bottom: 8px;
-    }
 
     position: relative;
     @include breakpoint(C) {
@@ -73,11 +65,14 @@ div.quest-big-unclaimed {
         > div {
             width: 120px; // width of an action button
             float: right;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         > div.quest-reward {
             text-align: center;
+            > div {
+                margin: 0 auto;
+            }
         }
         > div.quest-action {
 
@@ -85,14 +80,10 @@ div.quest-big-unclaimed {
                 display: block;
             }
         }
-
-        > div.invited-list {
-            margin-top: 15px;
-        }
     }
 
     @media (max-width: 767px) {
-        min-height: 90px !important;
+        min-height: 80px !important;
 
         > div.quest-reward {
             position: absolute;
@@ -101,14 +92,33 @@ div.quest-big-unclaimed {
         }
 
         > div.quest-action {
-            margin-left: 90px;
+            margin-left: 80px;
             vertical-align: top;
-            float: left;
+            min-height: 67px; // allow invited-list below to be a part a of normal flow
         }
 
         > div.invited-list {
-            margin-left: 18px;
-            float: right;
+            margin-left: 5px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            display: block;
+            clear: both;
+            width: auto;
+
+            > div {
+                display: inline;
+            }
+            ul, li {
+                display: inline;
+            }
+            li {
+                margin-left: 5px;
+            }
+        }
+        > div.invited-list-my {
+            li {
+                margin-left: 30px;
+            }
         }
 
         &:after {
@@ -118,7 +128,7 @@ div.quest-big-unclaimed {
         }
     }
 
-    @media (max-width: 660px) {
+    @media (max-width: 595px) {
         > div.quest-action button {
             display: block;
         }

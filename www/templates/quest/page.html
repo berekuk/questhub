@@ -99,7 +99,7 @@
       </div>
 
       <% if (obj.invitee && obj.invitee.length) { %>
-        <div class="invited-list">
+        <div class="invited-list <%- my ? 'invited-list-my' : '' %>">
         <div>Invited:</div>
         <ul>
           <% _.each(invitee, function (i) { %>
