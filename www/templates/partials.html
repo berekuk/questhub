@@ -49,7 +49,7 @@
     <div>
       <%= partial.user({ login: u }) %> gets
       <div class="reward-small">
-        <%- 1 + (quest.likes ? quest.likes.length : 0) %>
+        <%- quest.points %>
       </div>
       point<%- (quest.likes && quest.likes.length) ? 's' : '' %>.
     </div>

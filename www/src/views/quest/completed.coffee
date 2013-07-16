@@ -24,5 +24,5 @@ define [
         serialize: ->
             params = @model.serialize()
             params.gotTwitter = Boolean(currentUser.get("twitter"))
-            params.totalPoints = params.reward + (currentUser.get("rp")[@model.get("realm")] || 0)
+            params.totalPoints = params.points + (currentUser.get("rp")[@model.get("realm")] || 0)
             params

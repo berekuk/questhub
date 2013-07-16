@@ -1,3 +1,8 @@
+.stencil-overview-sidebar-controls {
+    text-align: right;
+    margin-bottom: 10px;
+}
+
 .stencil-small {
     @include mark($mat);
 }
@@ -7,6 +12,9 @@
 
 .stencil-small-title {
     margin-bottom: 8px;
+    font-size: 22px;
+    line-height: 30px;
+    font-weight: 200;
 }
 .stencil-small-description {
     margin-bottom: 8px;
@@ -18,6 +26,7 @@
     float: right;
     width: 90px;
     margin-bottom: 5px;
+    margin-left: 5px;
     .reward-medium {
         margin: 0 auto;
         margin-bottom: 5px;
