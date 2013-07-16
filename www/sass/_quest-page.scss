@@ -46,7 +46,7 @@ div.quest-big-unclaimed {
 
     position: relative;
     @include breakpoint(C) {
-        > div.reward {
+        > div.quest-reward {
             position: absolute;
             right: 130px;
             top: 0;
@@ -76,12 +76,8 @@ div.quest-big-unclaimed {
             margin-bottom: 20px;
         }
 
-        > div.reward {
+        > div.quest-reward {
             text-align: center;
-
-            .reward-circle {
-                margin: 0 auto;
-            }
         }
         > div.quest-action {
 
@@ -98,7 +94,7 @@ div.quest-big-unclaimed {
     @media (max-width: 767px) {
         min-height: 90px !important;
 
-        > div.reward {
+        > div.quest-reward {
             position: absolute;
             left: 0;
             top: 0;
@@ -125,29 +121,6 @@ div.quest-big-unclaimed {
     @media (max-width: 660px) {
         > div.quest-action button {
             display: block;
-        }
-    }
-
-    .reward {
-        .reward-circle {
-            @include border-radius(50%);
-
-            padding: 20px;
-            display: inline-block;
-            cursor: pointer;
-            background-color: $mat;
-            border: 3px $highlight solid;
-            transition: background-color 0.5s ease;
-            text-align: center;
-
-            .points {
-                display: block;
-                font-size: 25px;
-            }
-
-            &:hover {
-                background-color: $highlight;
-            }
         }
     }
 
