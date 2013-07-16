@@ -37,19 +37,11 @@
     text-align: center;
 }
 
-.stencil-page-stat {
-    @include breakpoint(B) {
-        text-align: right;
-    }
-    .label {
-        margin-bottom: 3px;
-    }
-}
 .stencil-page-sidebar {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 .stencil-page-icon {
-    font-size: 80px;
+    font-size: 72px;
     float: left;
     margin-right: 20px;
 
@@ -59,16 +51,27 @@
         margin-right: 0px;
     }
 }
+.stencil-page-stat {
+    display: inline-block;
+    @include breakpoint(B) {
+        text-align: right;
+        display: block;
+    }
+    .label {
+        margin-bottom: 3px;
+    }
+}
 .stencil-page-sidebar {
     position: relative;
     .stencil-page-reward {
-        position: absolute;
-        right: 0px;
-        top: 0;
-    }
-    @include breakpoint(B) {
-        .stencil-page-reward {
-            right: 100px;
+        display: inline-block;
+        float: left;
+        margin-right: 20px;
+        @include breakpoint(B) {
+            margin-right: 0px;
+            position: absolute;
+            right: 80px;
+            top: 0;
         }
     }
 }
