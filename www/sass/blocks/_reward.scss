@@ -18,3 +18,9 @@
         background-color: $highlight;
     }
 }
+
+.reward-small {
+    color: darken(saturate($highlight, 10%), 10%);
+    display: inline-block;
+    font-weight: bold;
+}
