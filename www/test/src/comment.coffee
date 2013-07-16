@@ -1,4 +1,7 @@
-define ["models/comment", "views/comment/any"], (CommentModel, CommentText) ->
+define [
+    "models/comment", "models/quest"
+    "views/comment/any"
+], (CommentModel, QuestModel, CommentText) ->
     describe "comments render", ->
         model = new CommentModel(
             body: "aaa"
@@ -8,13 +11,24 @@ define ["models/comment", "views/comment/any"], (CommentModel, CommentText) ->
             author: "ooo"
             type: "text"
         )
-        view = new CommentText(model: model)
+        questModel = new QuestModel(
+                ts: 1360197975
+                status: "open"
+                _id: "5112f9577a8f1d370b000002"
+                team: ["badger"]
+                name: "Badger Badger"
+                author: "jonti"
+                tags: ["feature"]
+                base_points: 1
+                points: 1
+        )
+        view = new CommentText(
+            model: model
+            quest: questModel
+        )
         view.render()
         it "comment body", ->
             expect(view.$el.html()).toContain "aaa"
 
         it "comment author", ->
             expect(view.$el.html()).toContain "ooo"
-
-
-
