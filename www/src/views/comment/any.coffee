@@ -67,6 +67,7 @@ define [
             params = super
             params.my = @isOwned()
             params.realm = @options.realm
+            params.quest = @options.quest.toJSON()
             params
 
         isOwned: ->

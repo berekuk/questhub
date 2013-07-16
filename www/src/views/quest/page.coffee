@@ -39,6 +39,7 @@ define [
                 new CommentCollection(
                     collection: commentsModel
                     realm: @realm()
+                    quest: @model
                 )
 
         inviteDialog: ->

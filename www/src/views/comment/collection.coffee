@@ -28,6 +28,7 @@ define [
             new Comment(
                 model: model
                 realm: @options.realm
+                quest: @options.quest
             )
 
         listSelector: ".comments-list"
