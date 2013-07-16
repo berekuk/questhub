@@ -82,6 +82,10 @@ sub _prepare_quest {
 
     $quest->{team} ||= [];
 
+    $quest->{base_points} ||= 1;
+    $quest->{points} = $quest->{base_points};
+    $quest->{points} += scalar @{ $quest->{likes} } if $quest->{likes};
+
     return $quest;
 }
 
@@ -273,6 +277,7 @@ sub add {
         tags => Optional[ArrayRef[Str]],
         status => Optional[Str],
         stencil => Optional[Id],
+        base_points => Optional[Int],
     ]);
     my ($params) = $check->(@_);
     $params->{status} //= 'open';
@@ -311,15 +316,6 @@ sub add {
     });
 
     return $quest;
-}
-
-sub _quest2points {
-    my $self = shift;
-    my ($quest) = @_;
-
-    my $points = 1;
-    $points += scalar @{ $quest->{likes} } if $quest->{likes};
-    return $points;
 }
 
 =item B<update($id, $fields_to_update_hashref)>
@@ -410,7 +406,7 @@ sub _set_status {
     }
 
     if ($params->{points}) {
-        my $points = $self->_quest2points($quest);
+        my $points = $quest->{points};
         $points = -$points if $params->{points} == -1;
         db->users->add_points($_, $points, $quest->{realm}) for @{$quest->{team}};
     }
@@ -535,7 +531,7 @@ after 'like' => sub {
         if ($quest->{status} eq 'open') {
             $email_body .= q[
                 <p>
-                Reward for completing this quest is now ].$self->_quest2points($quest).q[.
+                Reward for completing this quest is now ].$quest->{points}.q[.
                 </p>
             ];
         }
@@ -588,7 +584,7 @@ sub remove {
     }
 
     if ($quest->{status} eq 'closed') {
-        db->users->add_points($_, -$self->_quest2points($quest), $quest->{realm}) for @{$quest->{team}};
+        db->users->add_points($_, -$quest->{points}, $quest->{realm}) for @{$quest->{team}};
     }
 
     delete $quest->{_id};
@@ -774,8 +770,8 @@ sub move_to_realm {
     }
 
     if ($quest->{status} eq 'closed') {
-        db->users->add_points($_, -$self->_quest2points($quest), $old_realm) for @{$quest->{team}};
-        db->users->add_points($_, $self->_quest2points($quest), $realm) for @{$quest->{team}};
+        db->users->add_points($_, -$quest->{points}, $old_realm) for @{$quest->{team}};
+        db->users->add_points($_, $quest->{points}, $realm) for @{$quest->{team}};
     }
 
     $self->_update_user_realms($quest);

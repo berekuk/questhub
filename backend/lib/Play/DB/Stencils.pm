@@ -17,8 +17,8 @@ use Play::DB qw(db);
 use MongoDB::OID;
 
 use Type::Params qw( compile );
-use Types::Standard qw( Undef Dict Str StencilPoints Optional Bool ArrayRef );
-use Play::Types qw( Id Login Realm );
+use Types::Standard qw( Undef Dict Str Optional Bool ArrayRef );
+use Play::Types qw( Id Login Realm StencilPoints );
 
 sub _prepare {
     my $self = shift;
@@ -185,6 +185,7 @@ sub take {
         name => $stencil->{name},
         user => $login,
         stencil => $id,
+        base_points => $stencil->{points},
     };
     $quest_params->{description} = $stencil->{description} if defined $stencil->{description};
 

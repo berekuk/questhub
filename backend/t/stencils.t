@@ -13,6 +13,7 @@ sub add :Tests {
         realm => 'europe',
         author => 'foo',
         name => 'Start the World War I',
+        points => 2,
     });
     my $stencil2 = db->stencils->add({
         realm => 'europe',
@@ -26,6 +27,7 @@ sub add :Tests {
         author => 'foo',
         _id => re('^\w{24}$'),
         ts => re('^\d+'),
+        points => 2,
     };
 }
 
@@ -39,6 +41,7 @@ sub list :Tests {
         realm => 'europe',
         author => 'foo',
         name => 'Start the World War II',
+        points => 3,
     });
     db->stencils->add({
         realm => 'asia',
@@ -142,6 +145,17 @@ sub edit :Tests {
             user => 'bar',
         });
     }, qr/access denied/;
+}
+
+sub points :Tests {
+    like exception {
+        db->stencils->add({
+            realm => 'europe',
+            author => 'foo',
+            name => 'I want it all',
+            points => 5,
+        });
+    }, qr/type constraint/;
 }
 
 __PACKAGE__->new->runtests;
