@@ -17,7 +17,7 @@ use Play::DB qw(db);
 use MongoDB::OID;
 
 use Type::Params qw( compile );
-use Types::Standard qw( Undef Dict Str Optional Bool ArrayRef );
+use Types::Standard qw( Undef Dict Str Int Optional Bool ArrayRef );
 use Play::Types qw( Id Login Realm );
 
 sub _prepare {
@@ -25,6 +25,7 @@ sub _prepare {
     my ($stencil) = @_;
     $stencil->{ts} = $stencil->{_id}->get_time;
     $stencil->{_id} = $stencil->{_id}->to_string;
+    $stencil->{points} ||= 1;
 
     return $stencil;
 }
@@ -50,8 +51,10 @@ sub add {
         name => Str,
         description => Optional[Str],
         author => Login,
+        points => Optional[Int],
     ]);
     my ($params) = $check->(@_);
+    $params->{points} ||= 1;
 
     die "$params->{author} is not a keeper of $params->{realm}" unless db->realms->is_keeper($params->{realm}, $params->{author});
 
@@ -76,6 +79,7 @@ sub edit {
         user => Login,
         name => Optional[Str],
         description => Optional[Str],
+        points => Optional[Int],
     ]);
     my ($id, $params) = $check->(@_);
     my $user = delete $params->{user};
