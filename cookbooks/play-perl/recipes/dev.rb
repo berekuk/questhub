@@ -35,7 +35,9 @@ include_recipe "phantomjs"
 # used by build_static.pl
 cpan_module "IPC::System::Simple"
 
-gem_package 'sass'
+gem_package 'sass' do
+    options(:prerelease => true)    # dangerous, but gives us source maps (until 3.3.0 officially releases)
+end
 gem_package 'rb-inotify' do
   version '0.9'
 end

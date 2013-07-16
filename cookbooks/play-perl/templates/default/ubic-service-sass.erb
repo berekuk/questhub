@@ -2,7 +2,7 @@
 use parent qw(Ubic::Service::SimpleDaemon);
 
 __PACKAGE__->new({
-    bin => '/opt/vagrant_ruby/bin/sass --watch sass/main.scss:css/main.css',
+    bin => '/opt/vagrant_ruby/bin/sass --watch sass/main.scss:css/main.css --sourcemap',
     cwd => '/play/www',
     stdout => '/data/sass.log',
     stderr => '/data/sass.err.log',
