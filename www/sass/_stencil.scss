@@ -37,17 +37,6 @@
     text-align: center;
 }
 
-.stencil-page-icon {
-    font-size: 64px;
-    float: left;
-    margin-right: 20px;
-
-    @include breakpoint(B) {
-        float: none;
-        text-align: right;
-        margin-right: 0px;
-    }
-}
 .stencil-page-stat {
     @include breakpoint(B) {
         text-align: right;
@@ -58,6 +47,30 @@
 }
 .stencil-page-sidebar {
     margin-bottom: 10px;
+}
+.stencil-page-icon {
+    font-size: 80px;
+    float: left;
+    margin-right: 20px;
+
+    @include breakpoint(B) {
+        float: none;
+        text-align: right;
+        margin-right: 0px;
+    }
+}
+.stencil-page-sidebar {
+    position: relative;
+    .stencil-page-reward {
+        position: absolute;
+        right: 0px;
+        top: 0;
+    }
+    @include breakpoint(B) {
+        .stencil-page-reward {
+            right: 100px;
+        }
+    }
 }
 
 .stencil-big-edit-tools {
@@ -70,5 +83,8 @@
     }
     [name=name] {
         margin-top: 10px;
+    }
+    .object-bottom-line {
+        margin-top: 20px;
     }
 }
