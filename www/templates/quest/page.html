@@ -5,9 +5,11 @@
 
       <% if (status == 'open') { %>
       <div class="quest-reward">
-        <div class="reward-circle" data-toggle="tooltip" data-placement="bottom" title="Reward&nbsp;for&nbsp;completing&nbsp;this&nbsp;quest">
-          <span class="points"><%- reward %></span>
-          <span class="points-text">points</span>
+        <div class="reward-big" data-toggle="tooltip" data-placement="bottom" title="Reward&nbsp;for&nbsp;completing&nbsp;this&nbsp;quest">
+          <div class="_content">
+            <span class="_points"><%- reward %></span>
+            <span class="_points-text">points</span>
+          </div>
         </div>
       </div>
       <% } %>

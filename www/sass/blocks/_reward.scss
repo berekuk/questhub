@@ -1,22 +1,40 @@
-.reward-circle {
+@mixin reward-circle($size, $font-size, $note-size) {
     @include border-radius(50%);
 
-    padding: 20px;
-    display: inline-block;
+    width: $size;
+    height: $size;
+
+    display: table;
     cursor: pointer;
     background-color: $mat;
     border: 3px $highlight solid;
     transition: background-color 0.5s ease;
     text-align: center;
 
-    .points {
+    ._content {
+        display: table-cell;
+        vertical-align: middle;
+    }
+    ._points {
         display: block;
-        font-size: 25px;
+        font-size: $font-size;
+    }
+    ._points-text {
+        display: block;
+        font-size: $note-size;
     }
 
     &:hover {
         background-color: $highlight;
     }
+}
+
+.reward-big {
+    @include reward-circle(85px, 25px, 14px);
+}
+
+.reward-medium {
+    @include reward-circle(65px, 20px, 12px);
 }
 
 .reward-small {
