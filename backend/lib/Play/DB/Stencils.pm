@@ -119,7 +119,7 @@ sub list {
 
     my $fetch_quests = delete $params->{quests};
 
-    my @stencils = $self->collection->find($params)->all;
+    my @stencils = $self->collection->find($params)->sort({ points => 1 })->all;
 
     $self->_prepare($_) for @stencils;
     if ($fetch_quests) {

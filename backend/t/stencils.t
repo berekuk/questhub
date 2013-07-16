@@ -46,11 +46,16 @@ sub list :Tests {
     db->stencils->add({
         realm => 'asia',
         author => 'bar',
-        name => 'Attach Pearl Harbor',
+        name => 'Attack Pearl Harbor',
+        points => 2,
     });
 
     my $stencils = db->stencils->list({});
     is scalar @$stencils, 3;
+    cmp_deeply
+        [ map { $_->{name} } @$stencils ],
+        ["Start the World War I", "Attack Pearl Harbor", "Start the World War II"],
+        'stencils are ordered by points score';
 
     $stencils = db->stencils->list({ realm => 'europe' });
     is scalar @$stencils, 2;
