@@ -38,6 +38,7 @@ define [
 
         getName: -> @$("[name=name]").val()
         getDescription: -> @$("[name=description]").val()
+        getPoints: -> @$(".stencil-add-reward .active").attr "data-points"
 
         validate: (options) ->
             if @submitted or not @getName()
@@ -66,6 +67,7 @@ define [
 
             description = @getDescription()
             params.description = description if description
+            params.points = @getPoints()
 
             mixpanel.track "add stencil"
             model = new Model()
