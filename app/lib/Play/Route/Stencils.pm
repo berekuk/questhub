@@ -14,7 +14,7 @@ post '/stencil' => sub {
     };
 
     # optional fields
-    for (qw/ description /) {
+    for (qw/ description points /) {
         $params->{$_} = param($_) if defined param($_);
     };
     # required fields
@@ -44,7 +44,7 @@ put '/stencil/:id' => sub {
         param('id'),
         {
             user => $login,
-            map { defined(param($_)) ? ($_ => param($_)) : () } qw/ name description /,
+            map { defined(param($_)) ? ($_ => param($_)) : () } qw/ name description points /,
         }
     );
     return { result => 'ok' };

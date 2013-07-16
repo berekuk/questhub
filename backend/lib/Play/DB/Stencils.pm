@@ -17,7 +17,7 @@ use Play::DB qw(db);
 use MongoDB::OID;
 
 use Type::Params qw( compile );
-use Types::Standard qw( Undef Dict Str Int Optional Bool ArrayRef );
+use Types::Standard qw( Undef Dict Str StencilPoints Optional Bool ArrayRef );
 use Play::Types qw( Id Login Realm );
 
 sub _prepare {
@@ -51,7 +51,7 @@ sub add {
         name => Str,
         description => Optional[Str],
         author => Login,
-        points => Optional[Int],
+        points => Optional[StencilPoints],
     ]);
     my ($params) = $check->(@_);
     $params->{points} ||= 1;
@@ -79,7 +79,7 @@ sub edit {
         user => Login,
         name => Optional[Str],
         description => Optional[Str],
-        points => Optional[Int],
+        points => Optional[StencilPoints],
     ]);
     my ($id, $params) = $check->(@_);
     my $user = delete $params->{user};

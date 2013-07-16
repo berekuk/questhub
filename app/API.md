@@ -278,6 +278,7 @@ Parameters:
 
 * `realm`
 * `name`
+* `points` (allowed values: 1, 2 or 3)
 
 Optional parameters:
 

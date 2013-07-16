@@ -7,15 +7,20 @@ use Type::Library
     -base,
     -declare => qw(
         Id Login Realm
+        StencilPoints
         ImageSize ImageUpic
         CommentParams
     );
 use Type::Utils;
-use Types::Standard qw( Str StrMatch Dict );
+use Types::Standard qw( Str StrMatch Dict Int );
 
 declare Login, as StrMatch[ qr/^\w{1,16}$/ ];
 declare Realm, as StrMatch[ qr/^\w{1,16}$/ ];
 declare Id, as StrMatch[ qr/^[0-9a-f]{24}$/ ];
+
+declare StencilPoints,
+    as Int,
+    where { $_ == 1 or $_ == 2 or $_ == 3 };
 
 declare ImageSize, as enum([qw/ small normal /]);
 
