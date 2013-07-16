@@ -11,6 +11,10 @@
     <% } else if (type == 'close') { %>
       <i class="icon-check"></i>
       Quest completed.
+
+      <div class="comment-content-reward">
+        <%= partial.reward_list({ quest: quest, partial: partial }) %>
+      </div>
     <% } else if (type == 'reopen') { %>
       <i class="icon-backward"></i>
       Quest reopened.
