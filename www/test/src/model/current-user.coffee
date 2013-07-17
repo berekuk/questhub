@@ -87,7 +87,7 @@ define ["models/current-user"], (currentUser) ->
                         it "posts to API", ->
                             currentUser[method] "blah"
                             server.respond()
-                            expect(server.requests.length).toEqual 1
+                            expect(server.requests.length).toEqual 2 # follow, and then refetch self
                             expect(server.requests[0].method).toEqual "POST"
                             expect(server.requests[0].url).toEqual "/api/" + t + "_realm/blah"
 
@@ -112,6 +112,6 @@ define ["models/current-user"], (currentUser) ->
                         it "posts to API", ->
                             currentUser[method] "somebody"
                             server.respond()
-                            expect(server.requests.length).toEqual 1
+                            expect(server.requests.length).toEqual 2 # follow, and then refetch self
                             expect(server.requests[0].method).toEqual "POST"
                             expect(server.requests[0].url).toEqual "/api/user/somebody/" + t

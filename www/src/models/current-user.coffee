@@ -52,11 +52,11 @@ define ["backbone", "jquery", "models/user"], (Backbone, $, User) ->
 
         followUser: (login) ->
             mixpanel.track "follow user", following: login
-            $.post "/api/user/#{login}/follow"
+            $.post("/api/user/#{login}/follow").always => @fetch()
 
         unfollowUser: (login) ->
             mixpanel.track "unfollow user", following: login
-            $.post "/api/user/#{login}/unfollow"
+            $.post("/api/user/#{login}/unfollow").always => @fetch()
     )
 
     result = new CurrentUser()
