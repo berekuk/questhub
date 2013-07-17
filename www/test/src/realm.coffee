@@ -6,7 +6,3 @@ define ["views/realm/detail-collection", "models/shared-models"], (RealmDetailCo
             collection.trigger "sync" # mocked by spec.js, firing the event to cause rendering
             it "lists realm descriptions", ->
                 expect(view.$el.html()).toContain "asia-asia"
-
-
-
-

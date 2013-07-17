@@ -103,8 +103,8 @@
         });
 
         sharedModels.realms.set([
-            { id: 'europe', name: 'Europe', description: 'europe-europe', pic: 'europe.jpg' },
-            { id: 'asia', name: 'Asia', description: 'asia-asia', pic: 'asia.jpg' }
+            { id: 'europe', name: 'Europe', description: 'europe-europe', pic: 'europe.jpg', stat: { users: 0, quests: 0, stencils: 0 } },
+            { id: 'asia', name: 'Asia', description: 'asia-asia', pic: 'asia.jpg', stat: { users: 0, quests: 0, stencils: 0 }  }
         ]);
 
         $(function() {
