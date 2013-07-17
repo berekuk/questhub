@@ -26,7 +26,7 @@ define [
             t.addClass "_active"
 
         serialize: ->
-            params = @model.toJSON()
+            params = super
             params.tab = @tab
             params
 
