@@ -2,9 +2,7 @@
   <span class="muted">Stencil by <%= partial.user({ login: author }) %>:</span>
 
   <% if (isKeeper) { %>
-    <div class="stencil-big-edit-tools">
-      <a href="#" class="edit mini-button"><i class="icon-pencil"></i></a>
-    </div>
+    <%= partial.edit_tools() %>
   <% } %>
 
   <div class="_editable">

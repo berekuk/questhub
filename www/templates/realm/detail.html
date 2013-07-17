@@ -1,0 +1,31 @@
+<div class="well realm-detail clearfix">
+
+  <div class="realm-detail-logo">
+    <div class="realm-logo">
+      <a href="/realm/<%- id %>">
+        <img src="/i/<%- id %>.png"/><br>
+      </a>
+      <div class="controls-subview"></div>
+    </div>
+
+  </div>
+
+  <div>
+    <a href="/realm/<%- id %>" class="realm-detail-link">
+      <h3><%- name %></h3>
+    </a>
+    <div class="realm-detail-stat">
+      <ul>
+        <li><a href="/realm/<%- id %>/players"><%- obj.stat.users %> <i class="icon-group"></i>,</a></li>
+        <li><a href="/realm/<%- id %>/explore"><%- obj.stat.quests %> <i class="icon-list"></i>,</a></li>
+        <li><a href="/realm/<%- id %>/stencils"><%- obj.stat.stencils %> <i class="icon-book"></i></a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="realm-detail-description">
+    <%= partial.markdown(description, id) %>
+  </div>
+
+
+</div>

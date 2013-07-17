@@ -72,9 +72,12 @@ define [
 
         serialize: ->
             if @model
-                @model.toJSON()
+                if @model.serialize
+                    return @model.serialize()
+                else
+                    return @model.toJSON()
             else
-                {}
+                return {}
 
         features: []
         subviews: -> {}

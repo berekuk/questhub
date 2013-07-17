@@ -7,7 +7,7 @@ define [
     "text!templates/quest/page.html"
     "jquery.typeahead"
 ], (_, Common, QuestCompleted, QuestBig, CommentCollection, CommentCollectionModel, currentUser, html) ->
-    Common.extend
+    class extends Common
         activated: false
         template: _.template(html)
         events:
@@ -82,7 +82,7 @@ define [
         reopen: -> @model.reopen()
 
         serialize: ->
-            params = @model.serialize()
+            params = super
             params.currentUser = currentUser.get("login")
             params.invited = _.contains(params.invitee or [], params.currentUser)
             params.meGusta = _.contains(params.likes or [], params.currentUser)
@@ -92,6 +92,5 @@ define [
             @listenTo @model, "change", @render
             @listenTo @model, "act", ->
                 @subview(".comments").collection.fetch()
-
 
         features: ["tooltip"]

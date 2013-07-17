@@ -8,14 +8,14 @@
       <%= _.map(team, function (member) { return partial.user({ realm: realm, login: member }); }).join(', ') %>
       <%= (team.length == 1 ? 'is' : 'are') %> on a quest<%= (_.first(team) == obj.author) ? '' : ' by ' + partial.user({ realm: realm, login: obj.author }) %>:</span>
       <% if (my) { %>
-        <%= partial.edit_tools() %>
+        <%= partial.edit_tools({ remove: true }) %>
       <% } %>
     <% } %>
   </div>
 
   <h2>
     <% if (obj.stencil) { %>
-      <a href="/realm/<%- realm %>/stencil/<%- stencil %>" class="grey-icon-link">
+      <a href="/realm/<%- realm %>/stencil/<%- stencil %>" class="grey-link">
         <i class="icon-book"></i>
       </a>
     <% } %>

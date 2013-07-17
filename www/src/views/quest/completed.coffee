@@ -22,7 +22,7 @@ define [
             @$(".modal").modal "hide"
 
         serialize: ->
-            params = @model.serialize()
+            params = super
             params.gotTwitter = Boolean(currentUser.get("twitter"))
             params.totalPoints = params.points + (currentUser.get("rp")[@model.get("realm")] || 0)
             params

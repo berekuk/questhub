@@ -1,0 +1,89 @@
+.realm-big {
+    position: relative;
+    margin-bottom: 20px;
+
+    ._edit {
+        display: none;
+    }
+}
+
+.realm-big-description-buttons {
+    .cancel {
+        float: right;
+    }
+    .save {
+        float: right;
+        margin-left: 5px;
+    }
+    padding-bottom: 10px;
+}
+
+.realm-big-logo {
+    float: left;
+}
+.realm-big-title {
+    margin-left: 130px;
+    @include breakpoint(B) {
+        margin-left: 270px;
+    }
+}
+.realm-big-description {
+    margin-bottom: 45px;
+    padding-top: 10px;
+    clear: both;
+    @include breakpoint(B) {
+        margin-bottom: 57px;
+        margin-left: 270px;
+        padding-top: 0px;
+        clear: none;
+    }
+}
+.realm-big-tabs {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+}
+
+.realm-big-title {
+    text-align: center;
+    font-size: 22px;
+    line-height: 50px;
+    font-weight: 200;
+    margin-top: 15px;
+
+    @include breakpoint(B) {
+        font-size: 24.5px; // normal h3 size
+        margin-bottom: 5px;
+        margin-top: 0px;
+        text-align: left;
+    }
+}
+.realm-big-stat {
+    color: $dark-grey;
+    text-align: center;
+    margin-left: 15px;
+
+    ul {
+        margin: 0;
+        list-style-type: none;
+    }
+    li {
+        display: inline;
+    }
+    a {
+        @include grey-link;
+    }
+
+    @include breakpoint(B) {
+        position: absolute;
+        left: 130px;
+        top: 22px;
+        font-size: 18px;
+        font-weight: 200;
+
+        li {
+            line-height: 28px;
+            display: block;
+        }
+    }
+}

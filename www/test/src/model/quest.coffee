@@ -1,5 +1,5 @@
-define ["models/quest", "jasmine-jquery"], (QuestModel) ->
-    describe "model/quest", ->
+define ["models/quest"], (QuestModel) ->
+    describe "model/quest:", ->
         describe "serialize", ->
             model = undefined
             modelParams =

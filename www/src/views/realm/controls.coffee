@@ -1,25 +1,22 @@
-define ["views/proto/common", "models/current-user", "text!templates/realm-controls.html"], (Common, currentUser, html) ->
-    Common.extend
+define [
+    "views/proto/common"
+    "models/current-user"
+    "text!templates/realm/controls.html"
+], (Common, currentUser, html) ->
+    class extends Common
         template: _.template(html)
         events:
             "click .realm-follow": "follow"
             "click .realm-unfollow": "unfollow"
 
-        follow: ->
-            that = this
-            currentUser.followRealm(@model.get("id")).always ->
-                currentUser.fetch().done ->
-                    that.render()
+        initialize: ->
+            super
+            @listenTo currentUser, 'change', @render
 
-
-        unfollow: ->
-            that = this
-            currentUser.unfollowRealm(@model.get("id")).always ->
-                currentUser.fetch().done ->
-                    that.render()
-
+        follow: -> currentUser.followRealm @model.get("id")
+        unfollow: -> currentUser.unfollowRealm @model.get("id")
 
         serialize: ->
-            params = @model.toJSON()
+            params = super
             params.currentUser = currentUser
             params

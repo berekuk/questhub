@@ -250,6 +250,26 @@ sub list {
     return \@quests;
 }
 
+=item B<count($filter_hashref)>
+
+=cut
+sub count {
+    my $self = shift;
+    state $check = compile(Undef|Dict[
+        user => Optional[Login],
+        realm => Optional[Realm],
+        status => Optional[Str],
+        stencil => Optional[Id],
+    ]);
+    my ($params) = $check->(@_);
+    $params ||= {};
+
+    $params->{team} = delete $params->{user} if exists $params->{user};
+
+    my $count = $self->collection->find($params)->count;
+    return $count;
+}
+
 sub _update_user_realms {
     my $self = shift;
     state $check = compile(HashRef);
@@ -314,6 +334,8 @@ sub add {
         quest_id => $id->to_string,
         realm => $params->{realm},
     });
+
+    db->realms->inc_quests($params->{realm});
 
     return $quest;
 }

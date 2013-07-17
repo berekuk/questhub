@@ -37,7 +37,7 @@ define [
             params
 
         getRealm: ->
-            return  unless @options.realm
+            return unless @options.realm
             realm = sharedModels.realms.findWhere(id: @options.realm)
             throw "Oops"  unless realm
             realm.toJSON()

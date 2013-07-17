@@ -110,7 +110,7 @@ define [
                             trigger: true
 
         serialize: ->
-            params = @model.serialize()
+            params = super
             params.currentUser = currentUser.get("login")
             params.meGusta = _.contains(params.likes or [], params.currentUser)
             params.showStatus = true

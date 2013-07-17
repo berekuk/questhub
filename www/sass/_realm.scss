@@ -21,38 +21,6 @@
     }
 }
 
-.realm-detail {
-    position: relative;
-
-    .realm-detail-logo {
-        float: left;
-    }
-
-    .realm-detail-link h3 {
-        text-align: center;
-        font-size: 22px;
-    }
-
-    .realm-detail-description {
-        clear: both;
-    }
-
-    @include breakpoint(B) {
-        .realm-detail-description {
-            margin-right: 30px;
-            clear: none;
-        }
-        .realm-detail-logo {
-            margin-right: 10px;
-        }
-        .realm-detail-link h3 {
-            margin-top: 10px;
-            font-size: 24.5px; // normal h3 size
-            text-align: left;
-        }
-    }
-}
-
 .realm-page {
     > h2 {
         text-align: center;
@@ -63,43 +31,5 @@
     }
 }
 
-.realm-big-logo {
-    @include breakpoint(A) {
-        float: left;
-        margin-right: 40px;
-    }
-
-    .realm-logo {
-        float: left;
-    }
-    .realm-big-logo-title {
-        text-align: center;
-        font-size: 22px;
-
-        @include breakpoint(A) {
-            float: left;
-            margin-top: 10px;
-            font-size: 24.5px; // normal h3 size
-            text-align: left;
-        }
-    }
-}
-.realm-big-description {
-    clear: both;
-    @include breakpoint(A) {
-        clear: none;
-    }
-    margin-bottom: 45px;
-    @include breakpoint(B) {
-        margin-bottom: 57px;
-    }
-}
-.realm-big {
-    position: relative;
-    margin-bottom: 20px;
-}
-.realm-big-tabs {
-    position: absolute;
-    right: 8px;
-    bottom: 8px;
-}
+@import 'realm/detail';
+@import 'realm/big';

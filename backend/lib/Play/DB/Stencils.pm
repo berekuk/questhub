@@ -70,6 +70,8 @@ sub add {
         realm => $params->{realm},
     });
 
+    db->realms->inc_stencils($params->{realm});
+
     return $stencil;
 }
 
@@ -127,6 +129,18 @@ sub list {
     }
 
     return \@stencils;
+}
+
+sub count {
+    my $self = shift;
+    state $check = compile(Undef|Dict[
+        realm => Realm,
+    ]);
+    my ($params) = $check->(@_);
+    $params ||= {};
+
+    my $count = $self->collection->find($params)->count;
+    return $count;
 }
 
 sub get {

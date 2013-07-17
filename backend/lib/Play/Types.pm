@@ -6,7 +6,8 @@ use warnings;
 use Type::Library
     -base,
     -declare => qw(
-        Id Login Realm
+        Id Login
+        Realm RealmName
         StencilPoints
         ImageSize ImageUpic
         CommentParams
@@ -16,6 +17,7 @@ use Types::Standard qw( Str StrMatch Dict Int );
 
 declare Login, as StrMatch[ qr/^\w{1,16}$/ ];
 declare Realm, as StrMatch[ qr/^\w{1,16}$/ ];
+declare RealmName, as StrMatch[ qr/^.{1,16}$/ ];
 declare Id, as StrMatch[ qr/^[0-9a-f]{24}$/ ];
 
 declare StencilPoints,
