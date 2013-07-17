@@ -589,4 +589,27 @@ sub points :Tests {
 
 }
 
+sub count :Tests {
+    db->users->add({ login => $_ }) for qw/ foo bar /;
+    for (1..5) {
+        db->quests->add({
+            name => "f$_",
+            user => 'foo',
+            realm => 'europe',
+        });
+    }
+    for (1..3) {
+        db->quests->add({
+            name => "b$_",
+            user => 'bar',
+            realm => 'europe',
+        });
+    }
+
+    is db->quests->count({}), 8;
+    is db->quests->count({ user => 'foo' }), 5;
+    is db->quests->count({ realm => 'europe' }), 8;
+    is db->quests->count({ realm => 'asia' }), 0;
+}
+
 __PACKAGE__->new->runtests;
