@@ -73,6 +73,10 @@ sub ensure_indices {
     $events_collection->drop_indexes;
     $events_collection->ensure_index({ 'realm' => 1 });
     $events_collection->ensure_index({ 'author' => 1 });
+
+    my $realms_collection = Play::Mongo->db->get_collection('realms');
+    $realms_collection->drop_indexes;
+    $realms_collection->ensure_index({ 'id' => 1 }, { unique => 1 });
 }
 
 1;

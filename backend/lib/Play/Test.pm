@@ -1,9 +1,12 @@
 package Play::Test;
 
-use 5.010;
-
-use strict;
+use 5.014;
 use warnings;
+
+BEGIN {
+    $ENV{PLAY_CONFIG_FILE} = '/play/backend/t/data/config.yml';
+    $ENV{EMAIL_SENDER_TRANSPORT} = 'Test';
+}
 
 use parent qw(Exporter);
 our @EXPORT = qw( reset_db pumper process_email_queue prepare_data_dir );
@@ -13,16 +16,15 @@ use Import::Into;
 
 use autodie qw(system);
 
-BEGIN {
-    $ENV{PLAY_CONFIG_FILE} = '/play/backend/t/data/config.yml';
-    $ENV{EMAIL_SENDER_TRANSPORT} = 'Test';
-}
+use Play::DB qw(db);
+
 use Email::Sender::Simple;
 
 sub reset_db {
-    for (qw/ quests comments users events notifications stencils /) {
+    for (qw/ quests comments users events notifications stencils realms /) {
         Play::Mongo->db->get_collection($_)->remove({});
     }
+    db->realms->reset_to_initial;
 }
 
 sub pumper {
@@ -60,7 +62,6 @@ sub import {
     warnings->import;
     utf8->import;
 
-    use Play::DB qw(db);
     db->ensure_indices();
     reset_db();
 

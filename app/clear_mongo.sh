@@ -8,6 +8,7 @@ db.sessions.drop()
 db.comments.drop()
 db.events.drop()
 db.stencils.drop()
+db.realms.drop()
 END
 )
 
