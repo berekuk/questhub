@@ -100,7 +100,7 @@ sub update_stat :Tests {
         db->realms->get('europe'),
         superhashof {
             id => 'europe',
-            stat => { users => 3, quests => 2 }
+            stat => { users => 3, quests => 2, stencils => 0 }
         };
 
     # db is already consistent, but we're checking that update_stat at least doesn't break anything
@@ -111,7 +111,7 @@ sub update_stat :Tests {
         db->realms->get('europe'),
         superhashof {
             id => 'europe',
-            stat => { users => 3, quests => 2 }
+            stat => { users => 3, quests => 2, stencils => 0 }
         };
 }
 

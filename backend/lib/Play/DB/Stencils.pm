@@ -70,6 +70,8 @@ sub add {
         realm => $params->{realm},
     });
 
+    db->realms->inc_stencils($params->{realm});
+
     return $stencil;
 }
 

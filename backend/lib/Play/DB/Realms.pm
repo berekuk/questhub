@@ -16,6 +16,9 @@ sub _prepare {
     my ($realm) = @_;
     delete $realm->{_id};
     $realm->{keepers} ||= [];
+
+    $realm->{stat} ||= {};
+    $realm->{stat}{$_} ||= 0 for qw( users quests stencils );
     return $realm;
 }
 
@@ -121,9 +124,9 @@ sub _inc_stat {
     }
     return;
 }
-
 sub inc_users { shift()->_inc_stat(@_, 'users')  }
 sub inc_quests { shift()->_inc_stat(@_, 'quests')  }
+sub inc_stencils { shift()->_inc_stat(@_, 'stencils')  }
 
 sub validate_name {
     my $self = shift;
