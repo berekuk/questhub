@@ -28,7 +28,9 @@
     <div class="pull-right">
       <label> <!-- label fixes the font size, even inside h2 -->
         <a href="#" class="edit mini-button"><i class="icon-pencil"></i></a>
+        <% if (obj && obj.remove) { %>
         <a href="#" class="delete mini-button"><i class="icon-remove"></i></a>
+        <% } %>
       </label>
     </div>
   </script>

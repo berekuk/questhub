@@ -1,7 +1,7 @@
 <div class="well comment-type-<%- type %>">
   <% if (my && type == 'text') { %>
     <div class="comment-edit-tools">
-      <%= partial.edit_tools() %>
+      <%= partial.edit_tools({ remove: true }) %>
     </div>
   <% } %>
 

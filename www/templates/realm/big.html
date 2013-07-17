@@ -1,4 +1,7 @@
 <div class="well realm-big clearfix">
+  <% if (obj.isKeeper) { %>
+    <%= partial.edit_tools() %>
+  <% } %>
   <div class="realm-big-logo">
     <div class="realm-logo">
       <img src="/i/<%- id %>.png"/>

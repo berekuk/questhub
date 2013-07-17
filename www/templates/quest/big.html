@@ -8,7 +8,7 @@
       <%= _.map(team, function (member) { return partial.user({ realm: realm, login: member }); }).join(', ') %>
       <%= (team.length == 1 ? 'is' : 'are') %> on a quest<%= (_.first(team) == obj.author) ? '' : ' by ' + partial.user({ realm: realm, login: obj.author }) %>:</span>
       <% if (my) { %>
-        <%= partial.edit_tools() %>
+        <%= partial.edit_tools({ remove: true }) %>
       <% } %>
     <% } %>
   </div>
