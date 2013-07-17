@@ -21,8 +21,10 @@ use autodie qw(system);
 
 sub main {
     my $from_production;
+    my $keep_settings;
     GetOptions(
         'p|production!' => \$from_production,
+        'k|keep-settings!' => \$keep_settings,
     ) or pod2usage(2);
     pod2usage(2) if @ARGV;
 
@@ -50,7 +52,7 @@ sub main {
     system(q{vagrant ssh -c 'cd /play && mongorestore'});
 
     # to avoid accidentally sending emails to users while debugging
-    system(q[vagrant ssh -c '(echo '\''use play'\''; echo '\''db.users.update({}, {"$unset": { "settings" : 1 } }, false, true)'\'') | mongo']);
+    system(q[vagrant ssh -c '(echo '\''use play'\''; echo '\''db.users.update({}, {"$unset": { "settings" : 1 } }, false, true)'\'') | mongo']) unless $keep_settings;
 }
 
 main unless caller;
