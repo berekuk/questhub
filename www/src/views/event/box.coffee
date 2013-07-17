@@ -1,5 +1,5 @@
 define ["views/proto/common", "views/event/any", "text!templates/event-box.html"], (Common, Event, html) ->
-    Common.extend
+    class extends Common
         template: _.template(html)
         className: "event-box-view"
         subviews:
@@ -7,6 +7,6 @@ define ["views/proto/common", "views/event/any", "text!templates/event-box.html"
                 new Event(model: @model)
 
         serialize: ->
-            params = @model.toJSON()
+            params = super
             params.showRealm = @options.showRealm
             params

@@ -24,7 +24,7 @@ define [
             Backbone.trigger "pp:settings-dialog"
 
         serialize: ->
-            params = @model.toJSON()
+            params = super
             currentLogin = currentUser.get("login")
             params.registered = currentUser.get("registered")
             params.my = (currentLogin and currentLogin is @model.get("login"))

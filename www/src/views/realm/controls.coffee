@@ -17,6 +17,6 @@ define [
         unfollow: -> currentUser.unfollowRealm @model.get("id")
 
         serialize: ->
-            params = @model.toJSON()
+            params = super
             params.currentUser = currentUser
             params
