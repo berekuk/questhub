@@ -60,10 +60,6 @@
         line-height: 28px;
     }
     a {
-        color: $dark-grey;
-        &:hover {
-            color: $text-color;
-            text-decoration: none;
-        }
+        @include grey-link;
     }
 }

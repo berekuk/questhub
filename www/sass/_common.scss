@@ -139,10 +139,6 @@ td {
     color: $dark-grey;
 }
 
-.grey-icon-link {
-    color: $dark-grey;
-    &:hover {
-        text-decoration: none;
-        color: $text-color;
-    }
+.grey-link {
+    @include grey-link;
 }
