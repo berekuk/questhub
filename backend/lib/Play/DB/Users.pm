@@ -9,7 +9,7 @@ use Digest::SHA1 qw(sha1_hex);
 
 use Type::Params qw( compile validate );
 use Types::Standard qw(Str Int Bool Dict Undef Optional HashRef);
-use Play::Types qw(Login);
+use Play::Types qw(Login Realm);
 
 use Play::Config qw(setting);
 use Play::DB qw(db);
@@ -189,6 +189,25 @@ sub list {
     }
 
     return \@users;
+}
+
+=item B<count($params)>
+
+Get the number of users matching the params. The only param is I<realm>.
+
+=cut
+sub count {
+    my $self = shift;
+    state $check = compile(Undef|Dict[
+        realm => Realm,
+    ]);
+    my ($params) = $check->(@_);
+    $params ||= {};
+
+    $params->{realms} = delete $params->{realm};
+
+    my $count = $self->collection->find($params)->count;
+    return $count;
 }
 
 =item B<add_points($login, $amount, $realm)>

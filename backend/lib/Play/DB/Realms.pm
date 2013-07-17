@@ -89,10 +89,15 @@ sub update_stat {
     state $check = compile(Realm);
     my ($id) = $check->(@_);
 
-    my $users = db->users->list({ realm => $id });
+    my $users = db->users->count({ realm => $id });
+    my $quests = db->quests->count({ realm => $id });
+
     $self->collection->update(
         { id => $id },
-        { '$set' => { 'stat.users' => scalar @$users } },
+        { '$set' => {
+            'stat.users' => $users,
+            'stat.quests' => $quests,
+        } },
         { safe => 1 }
     );
 

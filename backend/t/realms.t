@@ -105,7 +105,7 @@ sub update_stat :Tests {
         db->realms->get('europe'),
         superhashof {
             id => 'europe',
-            stat => { users => 3 }
+            stat => { users => 3, quests => 0 }
         };
 }
 
