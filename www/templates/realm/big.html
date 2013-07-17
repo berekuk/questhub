@@ -10,40 +10,51 @@
     </div>
   </div>
 
+  <div class="realm-big-title">
+    <span class="_editable">
+      <%- name %>
+    </span>
+
+    <% if (isKeeper) { %>
+    <div class="_edit form-row control-group">
+      <input class="input-large" name="name" type="text" maxlength="16" placeholder="Name is required!">
+    </div>
+    <% } %>
+  </div>
+
   <div class="realm-big-stat">
     <ul>
-      <li><a href="/realm/<%- id %>/players"><%- obj.stat.users %> players</a></li>
-      <li><a href="/realm/<%- id %>/explore"><%- obj.stat.quests %> quests</a></li>
-      <li><a href="/realm/<%- id %>/stencils"><%- obj.stat.stencils %> stencils</a></li>
+      <li><a href="/realm/<%- id %>/players">
+        <%- obj.stat.users %>
+        <span class="desktop-text">players</span>
+        <span class="mobile-text"><i class="icon-group"></i>,</span>
+      </a></li>
+      <li><a href="/realm/<%- id %>/explore">
+        <%- obj.stat.quests %>
+        <span class="desktop-text">quests</span>
+        <span class="mobile-text"><i class="icon-list"></i>,</span>
+      </a></li>
+      <li><a href="/realm/<%- id %>/stencils">
+        <%- obj.stat.stencils %>
+        <span class="desktop-text">stencils</span>
+        <span class="mobile-text"><i class="icon-book"></i></span>
+      </a></li>
     </ul>
   </div>
 
-  <div class="realm-big-texts">
-    <div class="realm-big-title">
-      <h3 class="_editable">
-        <%- name %>
-      </h3>
-      <% if (isKeeper) { %>
-      <div class="_edit form-row control-group">
-        <input class="input-large" name="name" type="text" maxlength="16" placeholder="Name is required!">
-      </div>
-      <% } %>
+  <div class="realm-big-description">
+    <div class="_editable">
+      <%= partial.markdown(description, id) %>
     </div>
-
-    <div class="realm-big-description">
-      <div class="_editable">
-        <%= partial.markdown(description, id) %>
+    <% if (isKeeper) { %>
+      <div class="_edit form-row">
+        <div class="description-sv"></div>
       </div>
-      <% if (isKeeper) { %>
-        <div class="_edit form-row">
-          <div class="description-sv"></div>
-        </div>
-        <div class="_edit form-row">
-          <button class="btn btn-primary save">Save</button>
-          <button class="btn cancel">Cancel</button>
-        </div>
-      <% } %>
-    </div>
+      <div class="_edit form-row realm-big-description-buttons clearfix">
+        <button class="btn btn-primary save">Save</button>
+        <button class="btn cancel">Cancel</button>
+      </div>
+    <% } %>
   </div>
 
   <div class="realm-big-tabs">

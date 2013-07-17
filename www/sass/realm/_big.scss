@@ -5,7 +5,9 @@
     ._edit {
         display: none;
     }
+}
 
+.realm-big-description-buttons {
     .cancel {
         float: right;
     }
@@ -13,24 +15,27 @@
         float: right;
         margin-left: 5px;
     }
-
+    padding-bottom: 10px;
 }
 
-// layout
 .realm-big-logo {
     float: left;
 }
-.realm-big-stat {
-    float: left;
-    padding-top: 18px;
-    padding-right: 40px;
+.realm-big-title {
+    margin-left: 130px;
+    @include breakpoint(B) {
+        margin-left: 270px;
+    }
 }
-.realm-big-texts {
-    float: left;
-    width: 550px;
+.realm-big-description {
     margin-bottom: 45px;
+    padding-top: 10px;
+    clear: both;
     @include breakpoint(B) {
         margin-bottom: 57px;
+        margin-left: 270px;
+        padding-top: 0px;
+        clear: none;
     }
 }
 .realm-big-tabs {
@@ -39,27 +44,46 @@
     bottom: 8px;
 }
 
-// styling
 .realm-big-title {
     text-align: center;
     font-size: 22px;
+    line-height: 50px;
+    font-weight: 200;
+    margin-top: 15px;
 
-    @include breakpoint(A) {
+    @include breakpoint(B) {
         font-size: 24.5px; // normal h3 size
+        margin-bottom: 5px;
+        margin-top: 0px;
         text-align: left;
     }
 }
 .realm-big-stat {
-    font-size: 20px;
     color: $dark-grey;
-    font-weight: 200;
+    text-align: center;
+    margin-left: 15px;
+
     ul {
+        margin: 0;
         list-style-type: none;
     }
     li {
-        line-height: 28px;
+        display: inline;
     }
     a {
         @include grey-link;
+    }
+
+    @include breakpoint(B) {
+        position: absolute;
+        left: 130px;
+        top: 22px;
+        font-size: 18px;
+        font-weight: 200;
+
+        li {
+            line-height: 28px;
+            display: block;
+        }
     }
 }
