@@ -82,7 +82,7 @@ define [
         reopen: -> @model.reopen()
 
         serialize: ->
-            params = @model.serialize()
+            params = super
             params.currentUser = currentUser.get("login")
             params.invited = _.contains(params.invitee or [], params.currentUser)
             params.meGusta = _.contains(params.likes or [], params.currentUser)

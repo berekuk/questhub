@@ -44,6 +44,4 @@ define [
             @subview(".stencil-my-quests-sv").updateShowMore()
             @subview(".stencil-quests-sv").updateShowMore()
 
-        serialize: -> @model.serialize()
-
         features: ["tooltip"]

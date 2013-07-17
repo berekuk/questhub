@@ -4,7 +4,7 @@ define [
     "settings"
     "text!templates/user/settings.html"
 ], (_, $, Common, instanceSettings, html) ->
-    Common.extend
+    class extends Common
         template: _.template(html)
         events:
             "click .resend-email-confirmation": "resendEmailConfirmation"
@@ -32,7 +32,7 @@ define [
             @model.generateApiToken()
 
         serialize: ->
-            params = @model.toJSON()
+            params = super
             params.hideEmailStatus = @hideEmailStatus
             params
 

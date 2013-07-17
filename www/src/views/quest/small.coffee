@@ -4,7 +4,7 @@ define [
     "views/quest/like"
     "text!templates/quest/small.html"
 ], (_, Common, Like, html) ->
-    Common.extend
+    class extends Common
         template: _.template(html)
         tagName: "tr"
         className: "quest-row"
@@ -23,7 +23,7 @@ define [
                 )
 
         serialize: ->
-            params = @model.serialize()
+            params = super
             params.user = @options.user
             params.showStatus = @options.showStatus
             params.showRealm = @options.showRealm
@@ -34,5 +34,3 @@ define [
             @$el.addClass className
 
         features: ["tooltip"]
-
-

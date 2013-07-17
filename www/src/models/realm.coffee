@@ -5,8 +5,12 @@ define [
     class extends Backbone.Model
         url: -> "/api/realm/" + @get("id")
 
+        isKeeper: ->
+            login = currentUser.get "login"
+            return (login and @get("keepers") and login in @get("keepers"))
+
         serialize: ->
             params = @toJSON()
             login = currentUser.get "login"
-            params.isKeeper = (login and params.keepers and login in params.keepers)
+            params.isKeeper = @isKeeper()
             params

@@ -35,13 +35,12 @@ define [
             @listenTo @description(), "save", @saveEdit
             @listenTo @description(), "cancel", @closeEdit
 
-        # FIXME - copy-pasted from view/stencil/overview, move to model?
         serialize: ->
-            params = @model.serialize()
-            params.currentUser = sharedModels.currentUser.get "login"
+            params = super
 
+            # TODO - move to model.serialize?
             realm = sharedModels.realms.findWhere { id: @model.get("realm") }
-            params.isKeeper = (params.currentUser && realm.get("keepers") && _.contains(realm.get("keepers"), params.currentUser))
+            params.isKeeper = realm.isKeeper()
             params
 
         startEdit: ->
