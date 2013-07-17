@@ -4,7 +4,7 @@ use Play::Test;
 use parent qw(Test::Class);
 
 use Play::DB qw(db);
-use Test::Fatal;
+use Test::Deep qw(bag);
 
 sub setup :Test(setup) {
     reset_db();
@@ -18,10 +18,31 @@ sub validate_name :Tests {
 sub list :Tests {
     cmp_deeply
         db->realms->list,
-        [
+        bag(
             superhashof({ id => 'europe' }),
             superhashof({ id => 'asia' }),
+        );
+
+    db->users->add({ login => 'foo' });
+    db->users->join_realm('foo', 'europe');
+
+    cmp_deeply
+        db->realms->list,
+        [
+            superhashof({ id => 'europe' }), # europe got more users
+            superhashof({ id => 'asia' }),
         ];
+
+    db->users->add({ login => $_ }) for qw( bar bar2 );
+    db->users->join_realm($_, 'asia') for qw( bar bar2 );
+
+    cmp_deeply
+        db->realms->list,
+        [
+            superhashof({ id => 'asia' }), # asia got more users
+            superhashof({ id => 'europe' }),
+        ];
+
 }
 
 sub add :Tests {
@@ -34,11 +55,11 @@ sub add :Tests {
 
     cmp_deeply
         db->realms->list,
-        [
+        bag(
             superhashof({ id => 'europe' }),
             superhashof({ id => 'asia' }),
             superhashof({ id => 'fitness' }),
-        ], 'new realm is there in ->list';
+        ), 'new realm is there in ->list';
 
     like exception {
         db->realms->add({
@@ -84,6 +105,14 @@ sub update :Tests {
 
 sub update_stat :Tests {
     db->users->add({ login => $_ }) for qw( foo bar baz zzz );
+
+    cmp_deeply
+        db->realms->get('europe'),
+        superhashof {
+            id => 'europe',
+            stat => { users => 0, quests => 0, stencils => 0 }
+        };
+
     db->users->join_realm(foo => 'europe');
     db->users->join_realm(bar => 'europe');
     db->users->join_realm(baz => 'europe');
@@ -96,11 +125,17 @@ sub update_stat :Tests {
         realm => 'europe',
     }) for 1..2;
 
+    db->stencils->add({
+        realm => 'europe',
+        name => 'do something',
+        author => 'foo',
+    });
+
     cmp_deeply
         db->realms->get('europe'),
         superhashof {
             id => 'europe',
-            stat => { users => 3, quests => 2, stencils => 0 }
+            stat => { users => 3, quests => 2, stencils => 1 }
         };
 
     # db is already consistent, but we're checking that update_stat at least doesn't break anything
@@ -111,7 +146,7 @@ sub update_stat :Tests {
         db->realms->get('europe'),
         superhashof {
             id => 'europe',
-            stat => { users => 3, quests => 2, stencils => 0 }
+            stat => { users => 3, quests => 2, stencils => 1 }
         };
 }
 

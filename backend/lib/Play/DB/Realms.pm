@@ -27,7 +27,7 @@ sub list {
     state $check = compile();
     $check->(@_);
 
-    my @realms = $self->collection->find()->all; # TODO - sort
+    my @realms = $self->collection->find()->sort({ 'stat.users' => -1 })->all;
     $self->_prepare($_) for @realms;
     return \@realms;
 }
@@ -94,12 +94,14 @@ sub update_stat {
 
     my $users = db->users->count({ realm => $id });
     my $quests = db->quests->count({ realm => $id });
+    my $stencils = db->stencils->count({ realm => $id });
 
     $self->collection->update(
         { id => $id },
         { '$set' => {
             'stat.users' => $users,
             'stat.quests' => $quests,
+            'stat.stencils' => $stencils,
         } },
         { safe => 1 }
     );
