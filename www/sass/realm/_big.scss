@@ -22,7 +22,7 @@
 }
 .realm-big-stat {
     float: left;
-    padding-top: 20px;
+    padding-top: 18px;
     padding-right: 40px;
 }
 .realm-big-texts {
@@ -58,5 +58,12 @@
     }
     li {
         line-height: 28px;
+    }
+    a {
+        color: $dark-grey;
+        &:hover {
+            color: $text-color;
+            text-decoration: none;
+        }
     }
 }
