@@ -1,0 +1,53 @@
+.realm-big {
+    position: relative;
+    margin-bottom: 20px;
+
+    ._edit {
+        display: none;
+    }
+}
+
+// layout
+.realm-big-logo {
+    float: left;
+}
+.realm-big-stat {
+    float: left;
+    padding-top: 20px;
+    padding-right: 40px;
+}
+.realm-big-texts {
+    float: left;
+    width: 550px;
+    margin-bottom: 45px;
+    @include breakpoint(B) {
+        margin-bottom: 57px;
+    }
+}
+.realm-big-tabs {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+}
+
+// styling
+.realm-big-title {
+    text-align: center;
+    font-size: 22px;
+
+    @include breakpoint(A) {
+        font-size: 24.5px; // normal h3 size
+        text-align: left;
+    }
+}
+.realm-big-stat {
+    font-size: 20px;
+    color: $dark-grey;
+    font-weight: 200;
+    ul {
+        list-style-type: none;
+    }
+    li {
+        line-height: 28px;
+    }
+}

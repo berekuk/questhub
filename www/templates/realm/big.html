@@ -2,22 +2,48 @@
   <% if (obj.isKeeper) { %>
     <%= partial.edit_tools() %>
   <% } %>
+
   <div class="realm-big-logo">
     <div class="realm-logo">
       <img src="/i/<%- id %>.png"/>
       <div class="controls-subview"></div>
     </div>
-    <div class="realm-big-logo-title">
-      <h3>
+  </div>
+
+  <div class="realm-big-stat">
+    <ul>
+      <li>
+        <%- obj.stat.users %> players
+      </li>
+      <li>100 quests</li>
+      <li>10 stencils</li>
+    </ul>
+  </div>
+
+  <div class="realm-big-texts">
+    <div class="realm-big-title">
+      <h3 class="_editable">
         <%- name %>
       </h3>
+      <% if (isKeeper) { %>
+      <div class="_edit form-row control-group">
+        <input class="input-large" name="name" type="text" maxlength="16" placeholder="Name is required!">
+      </div>
+      <% } %>
+    </div>
+
+    <div class="realm-big-description">
+      <div class="_editable">
+        <%= partial.markdown(description, id) %>
+      </div>
+      <% if (isKeeper) { %>
+        <div class="_edit form-row">
+          <div class="description-sv"></div>
+        </div>
+      <% } %>
     </div>
   </div>
-  <div class="realm-big-description">
-    <p>
-      <%= partial.markdown(description, id) %>
-    </p>
-  </div>
+
   <div class="realm-big-tabs">
     <div class="big-tabs">
       <ul>
