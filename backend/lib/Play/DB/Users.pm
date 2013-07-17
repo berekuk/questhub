@@ -267,7 +267,7 @@ sub join_realm {
         die "User $login not found or unable to join the realm";
     }
 
-    db->realms->add_user($login, $realm); # not transactional, we may get in trouble. someone better call realms->update_stat() soon
+    db->realms->inc_users($realm); # not transactional, we may get in trouble. someone better call realms->update_stat() soon
 }
 
 =item B<follow_realm($login, $realm)>

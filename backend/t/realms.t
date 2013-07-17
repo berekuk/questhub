@@ -90,11 +90,17 @@ sub update_stat :Tests {
     db->users->join_realm(baz => 'asia');
     db->users->join_realm(zzz => 'asia');
 
+    db->quests->add({
+        name => 'quest name',
+        team => ['foo'],
+        realm => 'europe',
+    }) for 1..2;
+
     cmp_deeply
         db->realms->get('europe'),
         superhashof {
             id => 'europe',
-            stat => { users => 3 }
+            stat => { users => 3, quests => 2 }
         };
 
     # db is already consistent, but we're checking that update_stat at least doesn't break anything
@@ -105,7 +111,7 @@ sub update_stat :Tests {
         db->realms->get('europe'),
         superhashof {
             id => 'europe',
-            stat => { users => 3, quests => 0 }
+            stat => { users => 3, quests => 2 }
         };
 }
 

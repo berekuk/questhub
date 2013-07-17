@@ -335,6 +335,8 @@ sub add {
         realm => $params->{realm},
     });
 
+    db->realms->inc_quests($params->{realm});
+
     return $quest;
 }
 

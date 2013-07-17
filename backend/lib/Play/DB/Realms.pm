@@ -104,14 +104,14 @@ sub update_stat {
     return;
 }
 
-sub add_user {
+sub _inc_stat {
     my $self = shift;
-    my $check = compile(Login, Realm);
-    my ($login, $id) = $check->(@_);
+    my $check = compile(Realm, Str);
+    my ($id, $stat) = $check->(@_);
 
     my $result = $self->collection->update(
         { id => $id },
-        { '$inc' => { 'stat.users' => 1 } },
+        { '$inc' => { "stat.$stat" => 1 } },
         { safe => 1 }
     );
 
@@ -121,6 +121,9 @@ sub add_user {
     }
     return;
 }
+
+sub inc_users { shift()->_inc_stat(@_, 'users')  }
+sub inc_quests { shift()->_inc_stat(@_, 'quests')  }
 
 sub validate_name {
     my $self = shift;
