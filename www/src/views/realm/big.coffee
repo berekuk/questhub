@@ -1,7 +1,7 @@
 define [
   "views/proto/common"
   "views/realm/controls"
-  "text!templates/realm-big.html"
+  "text!templates/realm/big.html"
 ], (Common, RealmControls, html) ->
     class extends Common
         template: _.template(html)

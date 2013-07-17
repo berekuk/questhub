@@ -3,7 +3,7 @@ define [
     "views/proto/tabbed"
     "views/realm/big"
     "views/explore", "views/stencil/overview", "views/realm/page/activity", "views/realm/page/players"
-    "text!templates/realm-page.html"
+    "text!templates/realm/page.html"
 ], (_, Tabbed, RealmBig, Explore, RealmPageStencils, RealmPageActivity, RealmPagePlayers, html) ->
     class extends Tabbed
         template: _.template(html)

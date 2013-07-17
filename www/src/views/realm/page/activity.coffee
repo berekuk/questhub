@@ -2,7 +2,7 @@ define [
     "underscore"
     "views/proto/common"
     "models/event-collection", "views/event/collection"
-    "text!templates/realm-page/activity.html"
+    "text!templates/realm/page/activity.html"
 ], (_, Common, EventCollectionModel, EventCollection, html) ->
     class extends Common
         template: _.template(html)
