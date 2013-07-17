@@ -10,6 +10,8 @@ define [
         events:
             "click .edit": "startEdit"
             "click .realm-big-tabs div._icon": "switch"
+            "click button.cancel": "closeEdit"
+            "click button.save": "saveEdit"
             "keyup input": "edit"
 
         subviews:
