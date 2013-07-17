@@ -6,6 +6,7 @@ with 'Play::DB::Role::Common';
 
 use Type::Params qw(compile);
 use Play::Config qw(setting);
+use Play::DB qw(db);
 
 use Types::Standard qw( Str StrMatch Dict ArrayRef Optional );
 use Play::Types qw( Login Realm RealmName );
@@ -80,6 +81,40 @@ sub update {
     );
 
     return $id;
+}
+
+# TODO - call this regularly
+sub update_stat {
+    my $self = shift;
+    state $check = compile(Realm);
+    my ($id) = $check->(@_);
+
+    my $users = db->users->list({ realm => $id });
+    $self->collection->update(
+        { id => $id },
+        { '$set' => { 'stat.users' => scalar @$users } },
+        { safe => 1 }
+    );
+
+    return;
+}
+
+sub add_user {
+    my $self = shift;
+    my $check = compile(Login, Realm);
+    my ($login, $id) = $check->(@_);
+
+    my $result = $self->collection->update(
+        { id => $id },
+        { '$inc' => { 'stat.users' => 1 } },
+        { safe => 1 }
+    );
+
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "Realm $id not found";
+    }
+    return;
 }
 
 sub validate_name {

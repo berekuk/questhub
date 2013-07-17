@@ -82,4 +82,31 @@ sub update :Tests {
         'only keepers can update realms';
 }
 
+sub update_stat :Tests {
+    db->users->add({ login => $_ }) for qw( foo bar baz zzz );
+    db->users->join_realm(foo => 'europe');
+    db->users->join_realm(bar => 'europe');
+    db->users->join_realm(baz => 'europe');
+    db->users->join_realm(baz => 'asia');
+    db->users->join_realm(zzz => 'asia');
+
+    cmp_deeply
+        db->realms->get('europe'),
+        superhashof {
+            id => 'europe',
+            stat => { users => 3 }
+        };
+
+    # db is already consistent, but we're checking that update_stat at least doesn't break anything
+    # TODO - modify user.realms directly and then check that update_stat() fixes things
+    db->realms->update_stat('europe');
+
+    cmp_deeply
+        db->realms->get('europe'),
+        superhashof {
+            id => 'europe',
+            stat => { users => 3 }
+        };
+}
+
 __PACKAGE__->new->runtests;
