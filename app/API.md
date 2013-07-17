@@ -303,6 +303,15 @@ Take a stencil as a quest.
 
 Get the list of realms.
 
+##### PUT /api/realm/{id}
+
+Edit a realm.
+
+Parameters:
+
+* `name`
+* `description`
+
 ### Other
 
 ##### GET /api/event

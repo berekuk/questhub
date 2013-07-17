@@ -13,4 +13,16 @@ get '/realm/:id' => sub {
     return db->realms->get(param('id'));
 };
 
+put '/realm/:id' => sub {
+    my $login = login;
+    my $updated_id = db->realms->update(
+        param('id'),
+        {
+            user => $login,
+            map { defined(param($_)) ? ($_ => param($_)) : () } qw/ name description /,
+        }
+    );
+    return { result => 'ok' };
+};
+
 true;
