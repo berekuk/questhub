@@ -44,11 +44,11 @@ define ["backbone", "jquery", "models/user"], (Backbone, $, User) ->
 
         followRealm: (id) ->
             mixpanel.track "follow realm", realm_id: id
-            $.post "/api/follow_realm/" + id
+            $.post("/api/follow_realm/" + id).always => @fetch()
 
         unfollowRealm: (id) ->
             mixpanel.track "unfollow realm", realm_id: id
-            $.post "/api/unfollow_realm/" + id
+            $.post("/api/unfollow_realm/" + id).always => @fetch()
 
         followUser: (login) ->
             mixpanel.track "follow user", following: login
