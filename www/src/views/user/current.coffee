@@ -20,7 +20,7 @@ define [
 
             # a precaution against "navigator.id.watch must be called before navigator.id.request" race condition
             # (I don't know how exactly this race happens, but I've seen it in the wild)
-            @setPersonaWatch if not @personaWatch
+            @setPersonaWatch() if not @personaWatch
 
             navigator.id.request()
 
