@@ -1,0 +1,56 @@
+.stencil-page-icon {
+    font-size: 72px;
+    float: left;
+    margin-right: 20px;
+
+    @include breakpoint(B) {
+        float: none;
+        text-align: right;
+        margin-right: 0px;
+    }
+}
+.stencil-page-stat {
+    float: left;
+    @include breakpoint(B) {
+        float: none;
+        text-align: right;
+        display: block;
+    }
+    .label {
+        margin-bottom: 3px;
+    }
+}
+.stencil-page-sidebar {
+    margin-bottom: 5px;
+    position: relative;
+    @include clearfix;
+
+    .stencil-page-reward {
+        display: inline-block;
+        float: left;
+        margin-right: 15px;
+        @include breakpoint(B) {
+            margin-right: 0px;
+            position: absolute;
+            right: 80px;
+            top: 0;
+        }
+    }
+
+    ._take {
+        float: left;
+        margin-left: 20px;
+        @include breakpoint(lessThanA) {
+            margin-left: 0;
+            float: none;
+            width: 100%;
+            margin-top: 5px;
+        }
+        @include breakpoint(B) {
+            margin-left: 0;
+            float: none;
+            margin-top: 20px;
+            width: 100%;
+        }
+    }
+}

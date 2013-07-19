@@ -1,6 +1,6 @@
-<div class="well clearfix stencil-small <%- (currentUser && myQuests.length) ? 'stencil-small-my' : '' %>">
+<article class="well stencil-small <%- (currentUser && myQuests.length) ? 'stencil-small-my' : '' %>">
 
-  <div class="stencil-small-reward">
+  <aside class="stencil-small-reward">
     <div class="reward-big" data-toggle="tooltip" data-placement="top" title="Reward&nbsp;for&nbsp;taking and&nbsp;completing&nbsp;this&nbsp;stencil">
       <div class="_content">
         <span class="_points"><%- points %></span>
@@ -16,11 +16,11 @@
         <% } %>
       </div>
     <% } %>
-  </div>
+  </aside>
 
-  <div class="stencil-small-title">
+  <header class="stencil-small-title">
     <a href="/realm/<%- realm %>/stencil/<%- _id %>"><%- name %></a>
-  </div>
+  </header>
 
   <% if (obj.description) { %>
     <div class="stencil-small-description">
@@ -28,7 +28,7 @@
     </div>
   <% } %>
 
-  <div class="stencil-small-bottom-line">
+  <footer class="stencil-small-bottom-line">
     <% if (obj.stat) { %>
       <span class="stencil-small-stat">
       <% _.each(stat, function (count, status) { %>
@@ -36,5 +36,5 @@
       <% }) %>
       </span>
     <% } %>
-  </div>
-</div>
+  </footer>
+</article>

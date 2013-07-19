@@ -1,22 +1,20 @@
-<article class="event-well well <%- 'event-type-' + type %> <%- obj.comment ? 'comment-type-' + obj.comment.type : '' %>">
-  <div class="event-header">
+<article class="event well <%- 'event-type-' + type %> <%- obj.comment ? 'comment-type-' + obj.comment.type : '' %>">
+  <header>
 
     <% if (type == 'add-quest') { %>
       <i class="icon-plus"></i>
       <%= partial.user({ realm: realm, login: author }) %> started a new quest:
 
     <% } else if (type == 'add-comment' && (comment.type == undefined || comment.type == 'text')) { %>
-      <div class="event-header">
-        <i class="icon-comment"></i>
-        <%= partial.user({ realm: realm, login: author }) %>
-        commented on
-        <% if (quest.team && quest.team.length > 0) { %>
-          <%= partial.user({ realm: realm, login: _.first(quest.team) }) %>'s
-        <% } else { %>
-          a
-        <% } %>
-        quest:
-      </div>
+      <i class="icon-comment"></i>
+      <%= partial.user({ realm: realm, login: author }) %>
+      commented on
+      <% if (quest.team && quest.team.length > 0) { %>
+        <%= partial.user({ realm: realm, login: _.first(quest.team) }) %>'s
+      <% } else { %>
+        a
+      <% } %>
+      quest:
 
     <% } else if (type == 'close-quest' || (type == 'add-comment' && comment.type == 'close')) { %>
       <i class="icon-check"></i>
@@ -58,7 +56,7 @@
       <em>Unknown event type <%- type %> <%- (obj.comment && obj.comment.type) ? '(comment type ' + obj.comment.type + ')' : '' %>. Try to refresh the page.</em>
 
     <% } %>
-  </div>
+  </header>
 
   <% if (obj.quest) { %>
     <div class="event-quest-title">
@@ -108,9 +106,9 @@
     <% if (_.contains(['add-quest', 'add-comment'], type)) { %>
       <span class="likes"></span>
     <% } %>
-  </footer>
 
-  <% if (showRealm) { %>
-  <a href="/realm/<%- realm %>" class="tag tag-realm event-realm-label"><%- realm %></a>
-  <% } %>
+    <% if (showRealm) { %>
+    <a href="/realm/<%- realm %>" class="tag tag-realm event-realm-label"><%- realm %></a>
+    <% } %>
+  </footer>
 </article>

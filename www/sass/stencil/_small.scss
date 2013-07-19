@@ -1,0 +1,34 @@
+.stencil-small {
+    @include mark($mat);
+    @include clearfix;
+}
+.stencil-small-my {
+    @include mark($highlight);
+}
+
+.stencil-small-title {
+    margin-bottom: 8px;
+    font-size: 22px;
+    line-height: 30px;
+    font-weight: 200;
+}
+.stencil-small-description {
+    margin-bottom: 8px;
+    p:last-child, ul:last-child {
+        margin-bottom: 0px;
+    }
+}
+.stencil-small-reward {
+    float: right;
+    width: 89px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    .reward-big {
+        margin: 0 auto;
+        margin-bottom: 5px;
+    }
+}
+.stencil-small-relation {
+    margin: 0 auto;
+    text-align: center;
+}

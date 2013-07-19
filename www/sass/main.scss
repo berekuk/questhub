@@ -34,7 +34,10 @@
 @import 'dashboard/profile';
 @import 'dashboard/activity';
 
-@import 'stencil';
+@import 'stencil/overview';
+@import 'stencil/small';
+@import 'stencil/page';
+@import 'stencil/big';
 
 @import 'news-feed';
 @import 'event/collection';

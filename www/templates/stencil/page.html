@@ -1,4 +1,6 @@
-<div class="sidebar stencil-page-sidebar clearfix">
+<article>
+
+<aside class="sidebar stencil-page-sidebar">
 
   <div class="stencil-page-reward">
     <div class="reward-big" data-toggle="tooltip" data-placement="bottom" title="Reward&nbsp;for&nbsp;taking and&nbsp;completing&nbsp;this&nbsp;stencil">
@@ -22,27 +24,30 @@
       <% }) %>
     <% } %>
   </div>
-</div>
+
+  <% if (currentUser) { %>
+    <% if (!myQuests.length) { %>
+      <button class="btn btn-large btn-primary _take">Take this quest</button>
+    <% } %>
+  <% } %>
+</aside>
 
 <div class="mainarea">
   <div class="stencil-big-sv"></div>
-
-  <% if (currentUser) { %>
-    <div>
-      <% if (!myQuests.length) { %>
-        <button class="btn btn-large btn-primary _take">Take this quest</button>
-      <% } %>
-    </div>
-
-    <% if (myQuests.length) { %>
-      <h3 class="muted">Your open quests:</h3>
-      <div class="stencil-my-quests-sv"></div>
-    <% } %>
-  <% } %>
-
-  <% if (otherQuests.length) { %>
-    <h3 class="muted"><%- myQuests.length ? 'Other' : 'All' %> quests:</h3>
-    <div class="stencil-quests-sv"></div>
-  <% } %>
-
 </div>
+
+<% if (currentUser && myQuests.length) { %>
+  <section>
+    <header class="sidebar-header sidebar">Your open quests:</header>
+    <div class="stencil-my-quests-sv mainarea"></div>
+  </section>
+<% } %>
+
+<% if (otherQuests.length) { %>
+  <section>
+    <header class="sidebar-header sidebar"><%- myQuests.length ? 'Other' : 'All' %> quests:</header>
+    <div class="stencil-quests-sv mainarea"></div>
+  </section>
+<% } %>
+
+</article>

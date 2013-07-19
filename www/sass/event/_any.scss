@@ -1,4 +1,4 @@
-.event-well {
+.event {
     position: relative;
 
     .event-realm-label {
@@ -15,28 +15,28 @@
         margin-top: 8px;
         margin-bottom: 8px;
     }
+
+    > header {
+        position: relative;
+        font-size: 11.844px;
+        color: $dark-grey;
+
+        i {
+            color: $dark-grey;
+            @include breakpoint(B) {
+                display: inline-block;
+                position: absolute;
+
+                left: -38px;
+                top: -3px;
+                font-size: 20px;
+            }
+        }
+    }
 }
 .event-quest-reward {
     margin-top: 8px;
     margin-bottom: 8px;
-}
-
-.event-header {
-    position: relative;
-    font-size: 11.844px;
-    color: $dark-grey;
-
-    i {
-        color: $dark-grey;
-        @include breakpoint(B) {
-            display: inline-block;
-            position: absolute;
-
-            left: -38px;
-            top: -3px;
-            font-size: 20px;
-        }
-    }
 }
 
 .event-type-add-quest {
