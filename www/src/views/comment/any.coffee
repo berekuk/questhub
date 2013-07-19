@@ -13,6 +13,7 @@ define [
             "click .edit": "edit"
             "click .comment-edit-button-cancel": "cancelEdit"
             "click .comment-edit-button-save": "saveEdit"
+            "click .comment-reply-link": "reply"
             mouseenter: (e) -> @subview(".likes").showButton()
             mouseleave: (e) -> @subview(".likes").hideButton()
 
@@ -66,11 +67,17 @@ define [
         serialize: ->
             params = super
             params.my = @isOwned()
+            params.currentUser = currentUser.get("login")
             params.realm = @options.realm
             params.quest = @options.quest.toJSON()
             params
 
         isOwned: ->
             currentUser.get("login") is @model.get("author")
+
+        reply: ->
+            @options.quest.trigger "compose-comment",
+                reply: @model.get "author"
+
 
         features: ["timeago"]
