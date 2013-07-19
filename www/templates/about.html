@@ -1,20 +1,22 @@
-<div class="about">
-  <ul class="nav nav-pills">
-    <%
+<section class="about">
+  <nav>
+    <ul class="nav nav-pills">
+      <%
       _.each({
-        'main': 'About',
-        'api': 'API',
-        'syntax': 'Syntax',
+      'main': 'About',
+      'api': 'API',
+      'syntax': 'Syntax',
       }, function (title, t) {
-    %>
-    <li class="<%- tab == t ? 'active' : '' %>">
-      <a href="#" data-about-tab="<%- t %>">
-        <%- title %>
-      </a>
-    </li>
-    <% }) %>
-  </ul>
-  <div class="well about-inner">
+      %>
+      <li class="<%- tab == t ? 'active' : '' %>">
+        <a href="#" data-about-tab="<%- t %>">
+          <%- title %>
+        </a>
+      </li>
+      <% }) %>
+    </ul>
+  </nav>
+  <article class="well about-inner">
     <div class="about-sv"></div>
-  </div>
-</div>
+  </article>
+</section>

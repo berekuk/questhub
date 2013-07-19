@@ -8,7 +8,7 @@
   <% } else { %>
   <div class="well">
     <p>
-    The entire collection of quests lies before you.
+    The entire collection of realm's quests lies before you.
     <p>
     Upvote the stuff you like, comment on the quests you don't understand, and poke those who promised to do something and then forgot.
     </p>
@@ -16,8 +16,8 @@
   <% } %>
 </aside>
 
-<div class="mainarea">
-  <ul class="nav nav-pills explore-nav">
+<section class="mainarea">
+  <nav class="nav nav-pills explore-nav">
       <li><a href="#" data-explore-tab="latest">Latest</a></li>
       <li><a href="#" data-explore-tab="unclaimed">Unclaimed</a></li>
       <li><a href="#" data-explore-tab="open">Best open</a></li>
@@ -25,8 +25,6 @@
       <% if (currentUser) { %>
       <li><a href="#" data-explore-tab="watched-by-me">Watched by me</a></li>
       <% } %>
-  </ul>
-  <div>
-    <div class="explore-tab-content"></div>
-  </div>
-</div>
+  </nav>
+  <div class="explore-tab-content"></div>
+</section>

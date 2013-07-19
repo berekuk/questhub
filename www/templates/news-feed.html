@@ -1,29 +1,29 @@
 <% if (tour) { %>
-<div class="newbie-tour">
+<aside class="newbie-tour">
   <h3>Here you can see all activity from realms and people you followed earlier.</h3>
   <h4>Don't hesitate to interact with other players, they probably posted their quests because they want to share :)</h4>
-</div>
+</aside>
 <% } %>
 
 <aside class="sidebar">
-  <div class="well">
+  <section class="well">
     <p>
     Your personal news feed.
     <p>
     <a href="http://<%= window.location.host %>/api/event/atom?for=<%- login %>" class="btn btn-warning"><i class="icon-rss"></i> RSS</a>
     </p>
-  </div>
+  </section>
 </aside>
 
 <div class="mainarea">
   <% if ( (!followingRealms || !followingRealms.length) && (!followingUsers || !followingUsers.length) ) { %>
-  <div class="alert alert-warning">
-  <h3>
-    Your don't follow any players or topics yet.<br>
-    Go to <a href="/realms">Realms</a> tab and follow some realms.
-  </h3>
-  </div>
+    <aside class="alert alert-warning">
+    <h3>
+      Your don't follow any players or topics yet.<br>
+      Go to <a href="/realms">Realms</a> tab and follow some realms.
+    </h3>
+    </aside>
   <% } %>
-  <div class="main subview">
-  </div>
+
+  <div class="main subview"></div>
 </div>

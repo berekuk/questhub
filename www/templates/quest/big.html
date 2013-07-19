@@ -51,14 +51,15 @@
   <% } %>
 
 
-  <div class="object-bottom-line">
+  <footer class="object-bottom-line">
     <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
 
     <span class="likes-subview"></span>
     <%= partial.watchers(obj) %>
 
-  <div class="quest-big-labels">
-    <%= partial.quest_labels(obj) %>
-  </div>
+    <div class="quest-big-labels">
+      <%= partial.quest_labels(obj) %>
+    </div>
+  </footer>
 
 </div>
