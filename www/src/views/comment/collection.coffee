@@ -1,11 +1,11 @@
 define [
-    "underscore", "markdown"
+    "underscore", "jquery", "markdown"
     "views/proto/any-collection"
     "models/current-user"
     "views/user/signin", "views/comment/any"
     "views/helper/textarea"
     "text!templates/comment-collection.html"
-], (_, markdown, AnyCollection, currentUser, Signin, Comment, Textarea, html) ->
+], (_, $, markdown, AnyCollection, currentUser, Signin, Comment, Textarea, html) ->
     class extends AnyCollection
         template: _.template(html)
         events:
@@ -35,6 +35,7 @@ define [
 
         initialize: ->
             @listenTo @collection, "add", @resetForm
+            @listenTo @options.quest, "compose-comment", @composeComment
             super
 
         render: ->
@@ -79,5 +80,15 @@ define [
             @collection.createTextComment @textarea().value(),
                 wait: true
                 error: @enableForm
+
+        composeComment: (opt) ->
+            @textarea().reveal("@#{opt.reply}: ")
+            console.log @$('.comment-add').offset().top
+            @textarea
+            $('html, body').animate {
+                scrollTop: @$('.comment-add').offset().top
+            }, {
+                complete: => @textarea().focus()
+            }
 
 # on success, 'add' will fire and form will be resetted

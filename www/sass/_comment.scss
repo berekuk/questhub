@@ -45,3 +45,10 @@ textarea.comment-edit {
     margin-top: 8px;
     margin-bottom: 8px;
 }
+
+.comment-interact {
+    visibility: hidden;
+}
+.comment:hover .comment-interact {
+    visibility: visible;
+}

@@ -1,4 +1,4 @@
-<article class="well comment-type-<%- type %>">
+<article class="comment well comment-type-<%- type %>">
   <% if (my && type == 'text') { %>
     <div class="comment-edit-tools">
       <%= partial.edit_tools({ remove: true }) %>
@@ -45,6 +45,10 @@
     <%= partial.user({ realm: realm, login: author }) %>
     <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
     <span class="likes"></span>
+
+    <% if (currentUser) { %>
+    <span class="muted comment-interact">&bull; <a href="#" class="comment-reply-link">Reply</a></span>
+    <% } %>
 
     <div class="comment-edit-buttons">
       <button class="btn btn-small comment-edit-button-cancel">Cancel</button>

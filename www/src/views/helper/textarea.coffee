@@ -20,6 +20,9 @@ define [
         reveal: (text) ->
             @$el.show()
             @$("textarea").val(text).trigger "autosize"
+            if text?
+                len = text.length * 2 # http://stackoverflow.com/a/1675345/137062
+                @$("textarea")[0].setSelectionRange len, len
             @updatePreview()
 
         value: -> @$("textarea").val()
