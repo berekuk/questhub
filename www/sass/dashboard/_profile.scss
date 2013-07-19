@@ -1,0 +1,73 @@
+.dashboard-profile-column {
+    @include breakpoint(B) {
+        float: left;
+        width: 49%;
+        margin-right: 2%;
+        &:last-of-type {
+            margin-right: 0%;
+        }
+    }
+}
+
+.dashboard-profile {
+    .well {
+        padding: 20px;
+        @include breakpoint(B) {
+            padding: 30px;
+        }
+    }
+
+    a {
+        font-weight: 200;
+    }
+    a.user-link {
+        font-weight: normal;
+        color: #08c;
+    }
+}
+
+.dashboard-profile-scores {
+    position: relative;
+    ul {
+        list-style-type: none;
+        margin: 0 auto;
+    }
+
+    @include breakpoint(B) {
+        ul {
+            margin-left: 30px;
+        }
+    }
+    img {
+        display: inline;
+        margin-right: 20px;
+        width: 50px;
+        height: 50px;
+
+        @include breakpoint(B) {
+            width: 80px;
+            height: 80px;
+        }
+    }
+    a._realm-link:hover {
+        text-decoration: none !important;
+    }
+
+    .icon-question-sign {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        color: $dark-grey;
+    }
+}
+
+.dashboard-profile-text {
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 200;
+
+    @include breakpoint(B) {
+        font-size: 24px;
+        line-height: 36px;
+    }
+}
