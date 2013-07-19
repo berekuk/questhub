@@ -1,0 +1,47 @@
+.event-well {
+    position: relative;
+
+    .event-realm-label {
+        position: absolute;
+        right: 0px;
+        bottom: 0px;
+    }
+
+    p:last-child, ul:last-child {
+        margin-bottom: 0px;
+    }
+
+    .widetext {
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+}
+.event-quest-reward {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.event-header {
+    position: relative;
+    font-size: 11.844px;
+    color: $dark-grey;
+
+    i {
+        color: $dark-grey;
+        @include breakpoint(B) {
+            display: inline-block;
+            position: absolute;
+
+            left: -38px;
+            top: -3px;
+            font-size: 20px;
+        }
+    }
+}
+
+.event-type-add-quest {
+    @include mark($open-quest-color);
+}
+.event-type-add-stencil {
+    @include mark($red-color);
+}

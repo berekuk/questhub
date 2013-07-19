@@ -1,110 +1,116 @@
-<div class="event-header">
+<article class="event-well well <%- 'event-type-' + type %> <%- obj.comment ? 'comment-type-' + obj.comment.type : '' %>">
+  <div class="event-header">
 
-  <% if (type == 'add-quest') { %>
-    <i class="icon-plus"></i>
-    <%= partial.user({ realm: realm, login: author }) %> started a new quest:
+    <% if (type == 'add-quest') { %>
+      <i class="icon-plus"></i>
+      <%= partial.user({ realm: realm, login: author }) %> started a new quest:
 
-  <% } else if (type == 'add-comment' && (comment.type == undefined || comment.type == 'text')) { %>
-    <div class="event-header">
-      <i class="icon-comment"></i>
-      <%= partial.user({ realm: realm, login: author }) %>
-      commented on
-      <% if (quest.team && quest.team.length > 0) { %>
-        <%= partial.user({ realm: realm, login: _.first(quest.team) }) %>'s
-      <% } else { %>
-        a
-      <% } %>
-      quest:
-    </div>
+    <% } else if (type == 'add-comment' && (comment.type == undefined || comment.type == 'text')) { %>
+      <div class="event-header">
+        <i class="icon-comment"></i>
+        <%= partial.user({ realm: realm, login: author }) %>
+        commented on
+        <% if (quest.team && quest.team.length > 0) { %>
+          <%= partial.user({ realm: realm, login: _.first(quest.team) }) %>'s
+        <% } else { %>
+          a
+        <% } %>
+        quest:
+      </div>
 
-  <% } else if (type == 'close-quest' || (type == 'add-comment' && comment.type == 'close')) { %>
-    <i class="icon-check"></i>
-    <%= partial.user({ realm: realm, login: author }) %> completed a quest:
+    <% } else if (type == 'close-quest' || (type == 'add-comment' && comment.type == 'close')) { %>
+      <i class="icon-check"></i>
+      <%= partial.user({ realm: realm, login: author }) %> completed a quest:
 
-  <% } else if (type == 'reopen-quest' || (type == 'add-comment' && comment.type == 'reopen')) { %>
-    <i class="icon-backward"></i>
-    <%= partial.user({ realm: realm, login: author }) %> reopened a quest:
+    <% } else if (type == 'reopen-quest' || (type == 'add-comment' && comment.type == 'reopen')) { %>
+      <i class="icon-backward"></i>
+      <%= partial.user({ realm: realm, login: author }) %> reopened a quest:
 
-  <% } else if (type == 'abandon-quest' || (type == 'add-comment' && comment.type == 'abandon')) { %>
-    <i class="icon-eject"></i>
-    <%= partial.user({ realm: realm, login: author }) %> abandoned a quest:
+    <% } else if (type == 'abandon-quest' || (type == 'add-comment' && comment.type == 'abandon')) { %>
+      <i class="icon-eject"></i>
+      <%= partial.user({ realm: realm, login: author }) %> abandoned a quest:
 
-  <% } else if (type == 'resurrect-quest' || (type == 'add-comment' && comment.type == 'resurrect')) { %>
-    <i class="icon-play"></i>
-    <%= partial.user({ realm: realm, login: author }) %> resurrected a quest:
+    <% } else if (type == 'resurrect-quest' || (type == 'add-comment' && comment.type == 'resurrect')) { %>
+      <i class="icon-play"></i>
+      <%= partial.user({ realm: realm, login: author }) %> resurrected a quest:
 
-  <% } else if (type == 'invite-quest' || (type == 'add-comment' && comment.type == 'invite')) { %>
-    <i class="icon-group"></i>
-    <%= partial.user({ realm: realm, login: author }) %> invited <%= partial.user({ realm: realm, login: obj.invitee || obj.comment.invitee }) %> to work a quest:
+    <% } else if (type == 'invite-quest' || (type == 'add-comment' && comment.type == 'invite')) { %>
+      <i class="icon-group"></i>
+      <%= partial.user({ realm: realm, login: author }) %> invited <%= partial.user({ realm: realm, login: obj.invitee || obj.comment.invitee }) %> to work a quest:
 
-  <% } else if (type == 'add-comment' && comment.type == 'leave') { %>
-    <i class="icon-signout"></i>
-    <%= partial.user({ realm: realm, login: author }) %> left a quest:
+    <% } else if (type == 'add-comment' && comment.type == 'leave') { %>
+      <i class="icon-signout"></i>
+      <%= partial.user({ realm: realm, login: author }) %> left a quest:
 
-  <% } else if (type == 'add-comment' && comment.type == 'join') { %>
-    <i class="icon-signin"></i>
-    <%= partial.user({ realm: realm, login: author }) %> joined a quest:
+    <% } else if (type == 'add-comment' && comment.type == 'join') { %>
+      <i class="icon-signin"></i>
+      <%= partial.user({ realm: realm, login: author }) %> joined a quest:
 
-  <% } else if (type == 'add-user') { %>
-    <i class="icon-user"></i>
-    <%= partial.user({ realm: realm, login: author }) %> joins <a href="/realm/<%- realm %>"><%- realm %></a> realm.
+    <% } else if (type == 'add-user') { %>
+      <i class="icon-user"></i>
+      <%= partial.user({ realm: realm, login: author }) %> joins <a href="/realm/<%- realm %>"><%- realm %></a> realm.
 
-  <% } else if (type == 'add-stencil') { %>
-    <i class="icon-book"></i>
-    <%= partial.user({ realm: realm, login: author }) %> created a stencil:
+    <% } else if (type == 'add-stencil') { %>
+      <i class="icon-book"></i>
+      <%= partial.user({ realm: realm, login: author }) %> created a stencil:
 
-  <% } else { %>
-    <em>Unknown event type <%- type %> <%- (obj.comment && obj.comment.type) ? '(comment type ' + obj.comment.type + ')' : '' %>. Try to refresh the page.</em>
+    <% } else { %>
+      <em>Unknown event type <%- type %> <%- (obj.comment && obj.comment.type) ? '(comment type ' + obj.comment.type + ')' : '' %>. Try to refresh the page.</em>
 
-  <% } %>
-</div>
-
-<% if (obj.quest) { %>
-  <div class="event-quest-title">
-    <% if (quest.stencil) { %>
-      <a href="/realm/<%- quest.realm %>/stencil/<%- quest.stencil %>" class="grey-link">
-        <i class="icon-book"></i>
-      </a>
     <% } %>
-
-    <%= partial.quest_link(quest) %>.
   </div>
-<% } %>
 
-<% if (type == 'add-stencil') { %>
-  <div class="event-quest-title">
-    <a href="/realm/<%- realm %>/stencil/<%- stencil._id %>"><%- stencil.name %></a></script>
-  </div>
-  <% if (stencil.description) { %>
-    <div class="event-well-quest-description widetext">
-      <%= partial.markdown(stencil.description, realm) %>
+  <% if (obj.quest) { %>
+    <div class="event-quest-title">
+      <% if (quest.stencil) { %>
+        <a href="/realm/<%- quest.realm %>/stencil/<%- quest.stencil %>" class="grey-link">
+          <i class="icon-book"></i>
+        </a>
+      <% } %>
+
+      <%= partial.quest_link(quest) %>.
     </div>
   <% } %>
-<% } %>
 
-<% if (type == 'add-quest' && quest.description) { %>
-  <% if (quest.description) { %>
-    <div class="event-well-quest-description widetext">
-      <%= partial.markdown(quest.description, realm) %>
+  <% if (type == 'add-stencil') { %>
+    <div class="event-quest-title">
+      <a href="/realm/<%- realm %>/stencil/<%- stencil._id %>"><%- stencil.name %></a></script>
+    </div>
+    <% if (stencil.description) { %>
+      <div class="event-well-quest-description widetext">
+        <%= partial.markdown(stencil.description, realm) %>
+      </div>
+    <% } %>
+  <% } %>
+
+  <% if (type == 'add-quest' && quest.description) { %>
+    <% if (quest.description) { %>
+      <div class="event-well-quest-description widetext">
+        <%= partial.markdown(quest.description, realm) %>
+      </div>
+    <% } %>
+  <% } %>
+
+  <% if (obj.comment && (comment.type == undefined || comment.type == 'text')) { %>
+    <div class="widetext">
+      <%= partial.markdown(comment.body, realm) %>
     </div>
   <% } %>
-<% } %>
 
-<% if (obj.comment && (comment.type == undefined || comment.type == 'text')) { %>
-  <div class="widetext">
-    <%= partial.markdown(comment.body, realm) %>
-  </div>
-<% } %>
-
-<% if (type == 'add-comment' && comment.type == 'close') { %>
-  <div class="event-quest-reward">
-    <%= partial.reward_list({ quest: quest, partial: partial }) %>
-  </div>
-<% } %>
-
-<footer class="object-bottom-line">
-  <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
-  <% if (_.contains(['add-quest', 'add-comment'], type)) { %>
-    <span class="likes"></span>
+  <% if (type == 'add-comment' && comment.type == 'close') { %>
+    <div class="event-quest-reward">
+      <%= partial.reward_list({ quest: quest, partial: partial }) %>
+    </div>
   <% } %>
-</footer>
+
+  <footer class="object-bottom-line">
+    <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
+    <% if (_.contains(['add-quest', 'add-comment'], type)) { %>
+      <span class="likes"></span>
+    <% } %>
+  </footer>
+
+  <% if (showRealm) { %>
+  <a href="/realm/<%- realm %>" class="tag tag-realm event-realm-label"><%- realm %></a>
+  <% } %>
+</article>

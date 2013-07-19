@@ -37,7 +37,8 @@
 @import 'stencil';
 
 @import 'news-feed';
-@import 'event-collection';
+@import 'event/collection';
+@import 'event/any';
 
 @import 'user/collection';
 @import 'user/big';
