@@ -25,10 +25,12 @@
 @import 'unsubscribe';
 
 @import 'explore';
-@import 'quest-collection';
-@import 'quest-page';
 
-@import 'quest-add';
+@import 'quest/collection';
+@import 'quest/page';
+@import 'quest/add';
+@import 'quest/completed';
+
 @import 'dashboard/profile';
 @import 'dashboard/activity';
 
