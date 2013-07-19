@@ -1,0 +1,7 @@
+.user-unsubscribe {
+    margin: 0 auto;
+    max-width: 450px;
+    @include breakpoint(B) {
+        margin-top: 50px;
+    }
+}
