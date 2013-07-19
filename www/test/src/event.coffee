@@ -1,5 +1,8 @@
-define ["views/event/box", "models/event", "jasmine-jquery"], (EventBox, EventModel) ->
-    describe "event-box", ->
+define [
+    "views/event/any", "models/event"
+    "jasmine-jquery"
+], (Event, EventModel) ->
+    describe "event:", ->
         describe "render", ->
             model = new EventModel(
                 comment:
@@ -28,7 +31,7 @@ define ["views/event/box", "models/event", "jasmine-jquery"], (EventBox, EventMo
                 quest_id: "517629ce5c6a12cf78000002"
                 comment_id: "5187d5eb9174e8db1000001e"
             )
-            view = new EventBox(model: model)
+            view = new Event(model: model)
             view.render()
 
             it "quest name in event html", ->
