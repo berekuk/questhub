@@ -10,7 +10,8 @@
 @import 'blocks/typeahead';
 @import 'blocks/reward';
 
-@import 'frame';
+@import 'layout/frame';
+@import 'layout/grid';
 @import 'navbar';
 @import 'transitional';
 
@@ -35,7 +36,7 @@
 @import 'news-feed';
 @import 'event-collection';
 
-@import 'user-collection';
-@import 'user-big';
+@import 'user/collection';
+@import 'user/big';
 
 @import 'comment';

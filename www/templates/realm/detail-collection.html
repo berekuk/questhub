@@ -1,42 +1,41 @@
-<div class="container-fluid">
-  <% if (tour) { %>
-  <div class="newbie-tour">
-    <h2>Welcome aboard!</h2>
-    <h3>
-      First, follow any number of realms you're interested in.
-    </h3>
-    <h4>
-      (You can always find this list under the "Realms" tab.)
-    </h4>
-  </div>
-  <% } %>
-  <div class="row-fluid">
-    <div class="span3">
-      <div class="well">
-        <p>
-        Questhub activity happens across multiple realms.
-        </p>
-        <p>
-        You can participate in any number of them.
-        </p>
-        <p>
-        Follow realms to add them to your personal <a href="/">News feed</a>.
-        </p>
-      </div>
-    </div>
-    <div class="span9">
-      <div class="realm-detail-collection-list">
-      </div>
-      <p>
-        <span class="muted"><a href="mailto:me@berekuk.ru">Drop us a line</a> if you want to add a new realm.</a></span>
-      </p>
-    </div>
-  </div>
-  <% if (tour) { %>
-  <div class="newbie-tour">
-    <h3>
-      Now let's <a href="/me">take a look at your profile</a>...
-    </h3>
-  </div>
-  <% } %>
+<% if (tour) { %>
+<div class="newbie-tour">
+  <h2>Welcome aboard!</h2>
+  <h3>
+    First, follow any number of realms you're interested in.
+  </h3>
+  <h4>
+    (You can always find this list under the "Realms" tab.)
+  </h4>
 </div>
+<% } %>
+
+<div class="sidebar">
+  <div class="well">
+    <p>
+    Questhub activity happens across multiple realms.
+    </p>
+    <p>
+    You can participate in any number of them.
+    </p>
+    <p>
+    Follow realms to add them to your personal <a href="/">News feed</a>.
+    </p>
+  </div>
+</div>
+
+<div class="mainarea">
+  <div class="realm-detail-collection-list">
+  </div>
+  <p>
+    <span class="muted"><a href="mailto:me@berekuk.ru">Drop us a line</a> if you want to add a new realm.</a></span>
+  </p>
+</div>
+
+<% if (tour) { %>
+<div class="newbie-tour">
+  <h3>
+    Now let's <a href="/me">take a look at your profile</a>...
+  </h3>
+</div>
+<% } %>

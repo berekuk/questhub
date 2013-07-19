@@ -1,32 +1,31 @@
-<div class="row-fluid">
-  <div class="span3 stencil-overview-sidebar">
-    <div class="sidebar-header">
-      Stencils <span class="label label-important">beta</span>
-    </div>
-    <div class="well">
-      <p>
-      Stencils are quest ideas.<br>
-      You can take any stencil as a quest, and even do it multiple times in a row when it makes sense.
-      </p>
-      <p>
-      You don't have to choose your quest from this list, though. Coming up with unique task and creating it directly is great, too.
-      </p>
-      <p>
-      <a href="/realm/meta/quest/51db41b85a854b176100002b">Learn more about the history of this feature.</a>
-    </div>
-    <% if (isKeeper) { %>
-      <div class="stencil-overview-sidebar-controls">
-        <button class="btn btn-primary btn-large add-stencil"><i class="icon-plus"></i> New stencil</button>
-      </div>
-    <% } %>
+<div class="sidebar stencil-overview-sidebar">
+  <div class="sidebar-header">
+    Stencils <span class="label label-important">beta</span>
   </div>
-  <div class="span9">
-    <div class="stencil-collection-sv"></div>
-    <% if (!isKeeper) { %>
-      <p class="muted">
-      Want to add a new stencil? Ask a realm keeper.<br>
-      (List of realm keepers can be found on <a href="/realm/<%- id %>/players">players</a> tab.)
-      </p>
-    <% } %>
+  <div class="well">
+    <p>
+    Stencils are quest ideas.<br>
+    You can take any stencil as a quest, and even do it multiple times in a row when it makes sense.
+    </p>
+    <p>
+    You don't have to choose your quest from this list, though. Coming up with unique task and creating it directly is great, too.
+    </p>
+    <p>
+    <a href="/realm/meta/quest/51db41b85a854b176100002b">Learn more about the history of this feature.</a>
   </div>
+  <% if (isKeeper) { %>
+    <div class="stencil-overview-sidebar-controls">
+      <button class="btn btn-primary btn-large add-stencil"><i class="icon-plus"></i> New stencil</button>
+    </div>
+  <% } %>
+</div>
+
+<div class="mainarea">
+  <div class="stencil-collection-sv"></div>
+  <% if (!isKeeper) { %>
+    <p class="muted">
+    Want to add a new stencil? Ask a realm keeper.<br>
+    (List of realm keepers can be found on <a href="/realm/<%- id %>/players">players</a> tab.)
+    </p>
+  <% } %>
 </div>
