@@ -17,7 +17,8 @@
 </aside>
 
 <section class="mainarea">
-  <nav class="nav nav-pills explore-nav">
+  <nav>
+    <ul class="nav nav-pills explore-nav">
       <li><a href="#" data-explore-tab="latest">Latest</a></li>
       <li><a href="#" data-explore-tab="unclaimed">Unclaimed</a></li>
       <li><a href="#" data-explore-tab="open">Best open</a></li>
@@ -25,6 +26,7 @@
       <% if (currentUser) { %>
       <li><a href="#" data-explore-tab="watched-by-me">Watched by me</a></li>
       <% } %>
+    </ul>
   </nav>
   <div class="explore-tab-content"></div>
 </section>
