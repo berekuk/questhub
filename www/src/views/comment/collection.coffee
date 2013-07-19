@@ -44,6 +44,11 @@ define [
             @textarea().reveal()
             @textarea().on "edit", @validate
             @textarea().on "save", @postComment
+
+            if @options.reply
+                @options.quest.trigger "compose-comment", reply: @options.reply
+                @options.reply = false
+
 # we could clean the comment on cancel, but it would be too annoying to lose your data accidentally
 # TODO - think through if this is useful
 #            @textarea().on "cancel", @resetForm

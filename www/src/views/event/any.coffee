@@ -3,8 +3,9 @@ define [
     "views/proto/common"
     "views/quest/like", "views/comment/like"
     "models/quest", "models/comment"
+    "models/current-user"
     "text!templates/event.html"
-], (Backbone, _, $, Common, QuestLike, CommentLike, QuestModel, CommentModel, html) ->
+], (Backbone, _, $, Common, QuestLike, CommentLike, QuestModel, CommentModel, currentUser, html) ->
     class extends Common
         template: _.template(html)
         features: ["timeago"]
@@ -41,4 +42,5 @@ define [
         serialize: ->
             params = super
             params.showRealm = @options.showRealm
+            params.currentUser = currentUser.get("login")
             params

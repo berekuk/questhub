@@ -107,6 +107,12 @@
       <span class="likes"></span>
     <% } %>
 
+    <% if (obj.quest && currentUser) { %>
+    <span class="muted event-interact">&bull;
+      <a href="/realm/<%- realm %>/quest/<%- quest._id %>/reply/<%- author %>">Reply</a>
+    </span>
+    <% } %>
+
     <% if (showRealm) { %>
     <a href="/realm/<%- realm %>" class="tag tag-realm event-realm-label"><%- realm %></a>
     <% } %>

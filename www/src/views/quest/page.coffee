@@ -40,6 +40,7 @@ define [
                     collection: commentsModel
                     realm: @realm()
                     quest: @model
+                    reply: @options.reply
                 )
 
         inviteDialog: ->

@@ -46,9 +46,11 @@ textarea.comment-edit {
     margin-bottom: 8px;
 }
 
-.comment-interact {
-    visibility: hidden;
-}
-.comment:hover .comment-interact {
-    visibility: visible;
+@include breakpoint(B) {
+    .comment-interact {
+        visibility: hidden;
+    }
+    .comment:hover .comment-interact {
+        visibility: visible;
+    }
 }
