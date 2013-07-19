@@ -80,9 +80,9 @@
 }
 
 @mixin clearfix {
-    &:after {
-        content: '';
-        display: block;
+    &:before, &:after {
+        display: table;
+        content: "";
         clear: both;
     }
 }

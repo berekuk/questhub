@@ -1,5 +1,5 @@
 <% if (tour) { %>
-<div class="newbie-tour">
+<aside class="newbie-tour">
   <h2>Welcome aboard!</h2>
   <h3>
     First, follow any number of realms you're interested in.
@@ -7,10 +7,10 @@
   <h4>
     (You can always find this list under the "Realms" tab.)
   </h4>
-</div>
+</aside>
 <% } %>
 
-<div class="sidebar">
+<aside class="sidebar">
   <div class="well">
     <p>
     Questhub activity happens across multiple realms.
@@ -22,20 +22,19 @@
     Follow realms to add them to your personal <a href="/">News feed</a>.
     </p>
   </div>
-</div>
+</aside>
 
-<div class="mainarea">
-  <div class="realm-detail-collection-list">
-  </div>
-  <p>
+<section class="mainarea">
+  <div class="realm-detail-collection-list"></div>
+  <footer>
     <span class="muted"><a href="mailto:me@berekuk.ru">Drop us a line</a> if you want to add a new realm.</a></span>
-  </p>
-</div>
+  </footer>
+</section>
 
 <% if (tour) { %>
-<div class="newbie-tour">
+<aside class="newbie-tour">
   <h3>
     Now let's <a href="/me">take a look at your profile</a>...
   </h3>
-</div>
+</aside>
 <% } %>

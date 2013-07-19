@@ -1,5 +1,11 @@
-define ["backbone", "underscore", "jquery", "views/proto/common", "views/quest/like", "views/comment/like", "models/quest", "models/comment", "text!templates/event.html"], (Backbone, _, $, Common, QuestLike, CommentLike, QuestModel, CommentModel, html) ->
-    Common.extend
+define [
+    "backbone", "underscore", "jquery"
+    "views/proto/common"
+    "views/quest/like", "views/comment/like"
+    "models/quest", "models/comment"
+    "text!templates/event.html"
+], (Backbone, _, $, Common, QuestLike, CommentLike, QuestModel, CommentModel, html) ->
+    class extends Common
         template: _.template(html)
         features: ["timeago"]
 
@@ -31,3 +37,8 @@ define ["backbone", "underscore", "jquery", "views/proto/common", "views/quest/l
                     new CommentLike(model: commentModel)
             else
                 {}
+
+        serialize: ->
+            params = super
+            params.showRealm = @options.showRealm
+            params

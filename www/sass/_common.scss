@@ -24,6 +24,11 @@ $ground-color: #f5f5f5;
 
 body { background-color: $ground-color }
 
+// html5 outline tags - do we really need this if we don't support IE <9?
+section, article, aside, footer, header, nav, hgroup {
+    display:block;
+}
+
 .brand {
     font-family: doppio-one, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }

@@ -1,4 +1,4 @@
-<div class="well realm-big clearfix">
+<section class="well realm-big">
   <% if (obj.isKeeper) { %>
     <%= partial.edit_tools() %>
   <% } %>
@@ -22,7 +22,7 @@
     <% } %>
   </div>
 
-  <div class="realm-big-stat">
+  <nav class="realm-big-stat">
     <ul>
       <li><a href="/realm/<%- id %>/players">
         <%- obj.stat.users %>
@@ -40,7 +40,7 @@
         <span class="mobile-text"><i class="icon-book"></i></span>
       </a></li>
     </ul>
-  </div>
+  </nav>
 
   <div class="realm-big-description">
     <div class="_editable">
@@ -58,7 +58,7 @@
   </div>
 
   <div class="realm-big-tabs">
-    <div class="big-tabs">
+    <nav class="big-tabs">
       <ul>
       <%
           _.each({
@@ -75,6 +75,6 @@
         </li>
         <% }) %>
       </ul>
-    </div>
+    </nav>
   </div>
-</div>
+</section>

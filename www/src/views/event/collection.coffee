@@ -1,9 +1,9 @@
 define [
   "jquery", "underscore",
   "views/proto/paged-collection",
-  "views/event/box",
+  "views/event/any",
   "text!templates/event-collection.html"
-], ($, _, PagedCollection, EventBox, html) ->
+], ($, _, PagedCollection, Event, html) ->
     class extends PagedCollection
         template: _.template html
         listSelector: ".event-collection"
@@ -13,6 +13,6 @@ define [
             @listenTo Backbone, "pp:quest-add", (model) -> @collection.fetch()
 
         generateItem: (model) ->
-            new EventBox
+            new Event
                 model: model
                 showRealm: @options.showRealm

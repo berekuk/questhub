@@ -65,7 +65,7 @@
             'spec/register',
             'spec/quest-small', 'spec/quest-big', 'spec/quest-add',
             'spec/comment', 'spec/like',
-            'spec/event-box',
+            'spec/event',
             'spec/realm', 'spec/realm-controls',
             'spec/dashboard', 'spec/user-big',
             'spec/model/quest', 'spec/model/event', 'spec/model/current-user', 'spec/model/realm'

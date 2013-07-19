@@ -1,6 +1,7 @@
 .realm-big {
     position: relative;
     margin-bottom: 20px;
+    @include clearfix;
 
     ._edit {
         display: none;
