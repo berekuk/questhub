@@ -102,9 +102,9 @@
   </div>
 <% } %>
 
-<div class="object-bottom-line">
+<footer class="object-bottom-line">
   <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
   <% if (_.contains(['add-quest', 'add-comment'], type)) { %>
     <span class="likes"></span>
   <% } %>
-</div>
+</footer>

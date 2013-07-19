@@ -29,8 +29,7 @@ input {
 }
 
 // Set the fixed height of the footer here
-#push,
-#footer {
+#push, footer {
     height: 102px;
     @include breakpoint(B) {
         height: 82px;
@@ -55,7 +54,12 @@ input {
     @include clearfix;
 }
 
-#footer {
+footer {
+    // This is a cargo-cult.
+    // Previous version of footer used .container from Bootstrap,
+    // which included clearfix, and somehow vertically aligned <p> to the middle.
+    @include clearfix;
+
     font-size: 11.844px;
     background-color: $mat;
     padding-left: 10px;
