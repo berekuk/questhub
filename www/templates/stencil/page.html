@@ -1,52 +1,48 @@
-<div class="container-fluid">
-  <div class="row-fluid">
-    <div class="span3 stencil-page-sidebar clearfix">
+<div class="sidebar stencil-page-sidebar clearfix">
 
-      <div class="stencil-page-reward">
-        <div class="reward-big" data-toggle="tooltip" data-placement="bottom" title="Reward&nbsp;for&nbsp;taking and&nbsp;completing&nbsp;this&nbsp;stencil">
-          <div class="_content">
-            <span class="_points"><%- points %></span>
-            <span class="_points-text">point<%- (points == 1) ? '' : 's' %></span>
-          </div>
-        </div>
+  <div class="stencil-page-reward">
+    <div class="reward-big" data-toggle="tooltip" data-placement="bottom" title="Reward&nbsp;for&nbsp;taking and&nbsp;completing&nbsp;this&nbsp;stencil">
+      <div class="_content">
+        <span class="_points"><%- points %></span>
+        <span class="_points-text">point<%- (points == 1) ? '' : 's' %></span>
       </div>
-
-      <div class="stencil-page-icon">
-        <a href="/realm/<%- realm %>/stencils" class="grey-link">
-          <i class="icon-book"></i>
-        </a>
-      </div>
-
-      <div class="stencil-page-stat">
-        <% if (obj.stat) { %>
-          <% _.each(stat, function (count, status) { %>
-            <span class="label label-<%= status === 'open' && 'warning' %>"><%- count %> <%= status === 'closed' ? 'completed' : status %></span><br>
-          <% }) %>
-        <% } %>
-      </div>
-    </div>
-
-    <div class="span9">
-      <div class="stencil-big-sv"></div>
-
-      <% if (currentUser) { %>
-        <div>
-          <% if (!myQuests.length) { %>
-            <button class="btn btn-large btn-primary _take">Take this quest</button>
-          <% } %>
-        </div>
-
-        <% if (myQuests.length) { %>
-          <h3 class="muted">Your open quests:</h3>
-          <div class="stencil-my-quests-sv"></div>
-        <% } %>
-      <% } %>
-
-      <% if (otherQuests.length) { %>
-        <h3 class="muted"><%- myQuests.length ? 'Other' : 'All' %> quests:</h3>
-        <div class="stencil-quests-sv"></div>
-      <% } %>
-
     </div>
   </div>
+
+  <div class="stencil-page-icon">
+    <a href="/realm/<%- realm %>/stencils" class="grey-link">
+      <i class="icon-book"></i>
+    </a>
+  </div>
+
+  <div class="stencil-page-stat">
+    <% if (obj.stat) { %>
+      <% _.each(stat, function (count, status) { %>
+        <span class="label label-<%= status === 'open' && 'warning' %>"><%- count %> <%= status === 'closed' ? 'completed' : status %></span><br>
+      <% }) %>
+    <% } %>
+  </div>
+</div>
+
+<div class="mainarea">
+  <div class="stencil-big-sv"></div>
+
+  <% if (currentUser) { %>
+    <div>
+      <% if (!myQuests.length) { %>
+        <button class="btn btn-large btn-primary _take">Take this quest</button>
+      <% } %>
+    </div>
+
+    <% if (myQuests.length) { %>
+      <h3 class="muted">Your open quests:</h3>
+      <div class="stencil-my-quests-sv"></div>
+    <% } %>
+  <% } %>
+
+  <% if (otherQuests.length) { %>
+    <h3 class="muted"><%- myQuests.length ? 'Other' : 'All' %> quests:</h3>
+    <div class="stencil-quests-sv"></div>
+  <% } %>
+
 </div>

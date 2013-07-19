@@ -1,0 +1,17 @@
+.quest-completed-share {
+    @include clearfix;
+}
+.quest-completed-share-text {
+    font-size: 12px;
+    color: $dark-grey;
+    @include breakpoint(A) {
+        float: left;
+        margin-right: 30px;
+    }
+}
+
+.quest-completed-share-button {
+    @include breakpoint(A) {
+        float: left;
+    }
+}

@@ -10,7 +10,8 @@
 @import 'blocks/typeahead';
 @import 'blocks/reward';
 
-@import 'frame';
+@import 'layout/frame';
+@import 'layout/grid';
 @import 'navbar';
 @import 'transitional';
 
@@ -24,18 +25,22 @@
 @import 'unsubscribe';
 
 @import 'explore';
-@import 'quest-collection';
-@import 'quest-page';
 
-@import 'quest-add';
-@import 'dashboard';
+@import 'quest/collection';
+@import 'quest/page';
+@import 'quest/add';
+@import 'quest/completed';
+
+@import 'dashboard/profile';
+@import 'dashboard/activity';
 
 @import 'stencil';
 
 @import 'news-feed';
 @import 'event-collection';
 
-@import 'user-collection';
-@import 'user-big';
+@import 'user/collection';
+@import 'user/big';
+@import 'user/unsubscribe';
 
 @import 'comment';

@@ -1,0 +1,14 @@
+.sidebar {
+    @include breakpoint(B) {
+        width: 23%;
+        float: left;
+    }
+}
+
+.mainarea {
+    @include breakpoint(B) {
+        margin-left: 2.5%;
+        width: 74.5%;
+        float: left;
+    }
+}

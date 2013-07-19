@@ -30,7 +30,7 @@ sub main {
 
     my $HOST = 'questhub.io';
 
-    system(q{vagrant ssh -c 'cd /play/app && ./clear_mongo.sh'});
+    system(q{vagrant ssh -c 'cd /play/app && ./clear_mongo.sh && (echo '\''use play'\''; echo '\''db.realms.drop()'\'') | mongo'});
 
     system('rm -rf dump');
     system('mkdir dump');

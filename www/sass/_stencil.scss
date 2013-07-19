@@ -37,9 +37,6 @@
     text-align: center;
 }
 
-.stencil-page-sidebar {
-    margin-bottom: 5px;
-}
 .stencil-page-icon {
     font-size: 72px;
     float: left;
@@ -62,11 +59,13 @@
     }
 }
 .stencil-page-sidebar {
+    margin-bottom: 5px;
     position: relative;
+
     .stencil-page-reward {
         display: inline-block;
         float: left;
-        margin-right: 20px;
+        margin-right: 15px;
         @include breakpoint(B) {
             margin-right: 0px;
             position: absolute;
