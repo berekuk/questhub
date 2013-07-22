@@ -9,16 +9,16 @@
   <div class="modal-body quest-add-body">
 
     <div class="form-row quest-add-realm">
-      <% if (!defaultRealm) { %>
-        <div class="quest-add-realm-reminder badge">
-          Choose a realm:
-        </div>
-      <% } %>
-      <div class="btn-group" data-toggle="buttons-radio">
+      <select name="realm">
+        <% if (!defaultRealm) { %>
+          <option value="" selected>
+            Choose a realm:
+          </option>
+        <% } %>
         <% _.each(realms, function(r) { %>
-        <button class="btn <%- r.id == defaultRealm ? 'active' : '' %>" data-realm-id="<%- r.id %>"><%- r.name %></button>
+        <option value="<%- r.id %>" <%- r.id == defaultRealm ? 'selected' : '' %>><%- r.name %></option>
         <% }) %>
-      </div>
+      </select>
     </div>
 
     <div class="form-row">

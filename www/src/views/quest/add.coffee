@@ -11,8 +11,7 @@ define [
             "click ._go": "submit"
             "keyup [name=name]": "nameEdit"
             "keyup [name=tags]": "tagsEdit"
-            "click .quest-add-realm button": ->
-                @validate checkRealm: false
+            "change [name=realm]": "validate"
 
         initialize: ->
             _.bindAll this
@@ -29,10 +28,9 @@ define [
             @submitted = false
 
         validate: (options) ->
-            if (not options or options.checkRealm isnt false) and not @getRealm()
+            if not @getRealm()
                 @disable()
                 return
-            @$(".quest-add-realm-reminder").hide()
             if @submitted or not @getName()
                 @disable()
                 return
@@ -96,7 +94,7 @@ define [
             QuestModel::tagline2tags tagLine
 
         getRealm: ->
-            @$(".quest-add-realm .active").attr "data-realm-id"
+            @$("[name=realm] :selected").val()
 
         render: ->
             unless sharedModels.realms.length
