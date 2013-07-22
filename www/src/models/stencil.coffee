@@ -10,9 +10,7 @@ define [
             mixpanel.track "take stencil"
             $.post("#{ @url() }/take")
             .success =>
-                console.log "posted"
                 @fetch().success =>
-                    console.log "fetched"
                     success()
 
         myQuests: ->
