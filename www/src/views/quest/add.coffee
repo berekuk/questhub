@@ -5,7 +5,7 @@ define [
     "text!templates/quest/add.html"
     "bootstrap", "jquery.autosize"
 ], (_, $, Base, sharedModels, QuestModel, html) ->
-    Base.extend
+    class extends Base
         template: _.template(html)
         events:
             "click ._go": "submit"
@@ -110,12 +110,6 @@ define [
 
             @$("[name=name]").focus()
 
-            @$(".modal").modal().on "hidden", (e) =>
-                # modal includes items with tooltip, which can fire "hidden" too,
-                # and these events bubble up DOM tree, ending here
-                return unless $(e.target).hasClass("modal")
-                @remove()
-
             @$(".btn-group").button()
             @$(".icon-spinner").hide()
             @submitted = false
@@ -148,3 +142,7 @@ define [
         onSuccess: (model) ->
             Backbone.trigger "pp:quest-add", model
             @remove()
+
+        remove: ->
+            super
+            @trigger "remove"

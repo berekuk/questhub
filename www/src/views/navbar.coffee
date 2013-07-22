@@ -8,19 +8,22 @@ define [
     class extends Common
         template: _.template(html)
         events:
-            "click .quest-add-nav-button": ->
-                new QuestAdd(realm: @options.realm)
+            "click .quest-add-nav-button": "startQuestAdd"
 
-        afterInitialize: ->
-            @listenTo Backbone, "pp:quiet-url-update", ->
-                @render()
+        startQuestAdd: ->
+            return if @questAdd # can't fire two forms at once
+            @questAdd = new QuestAdd(realm: @options.realm)
+            @questAdd.on "remove", => @questAdd = undefined
 
-            that = this
-            $(window).on "scroll.navbar-sticked", ->
+        initialize: ->
+            super
+            @listenTo Backbone, "pp:quiet-url-update", -> @render()
+
+            $(window).on "scroll.navbar-sticked", =>
                 if $(window).scrollTop() > 10
-                    that.$el.find("nav").addClass "sticked"
+                    @$el.find("nav").addClass "sticked"
                 else
-                    that.$el.find("nav").removeClass "sticked"
+                    @$el.find("nav").removeClass "sticked"
 
         # navbar usually don't get removed, but just to be safe...
         remove: ->
@@ -39,16 +42,15 @@ define [
         getRealm: ->
             return unless @options.realm
             realm = sharedModels.realms.findWhere(id: @options.realm)
-            throw "Oops"  unless realm
+            throw "Oops" unless realm
             realm.toJSON()
 
         render: ->
 
             # wait for realms data; copy-paste from views/quest/add
             unless sharedModels.realms.length
-                that = this
-                sharedModels.realms.fetch().success ->
-                    that.render()
+                sharedModels.realms.fetch().success =>
+                    @render()
 
                 return
             super
@@ -63,5 +65,3 @@ define [
 
         setActive: (selector) ->
             @active = selector # don't render - views/app will call render() itself soon
-
-
