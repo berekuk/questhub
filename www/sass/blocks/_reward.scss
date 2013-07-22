@@ -7,7 +7,6 @@
     display: table;
     cursor: pointer;
     background-color: $mat;
-    border: 3px $highlight solid;
     transition: background-color 0.5s ease;
     text-align: center;
 
@@ -23,14 +22,24 @@
         display: block;
         font-size: $note-size;
     }
+}
 
+@mixin reward-circle-color($color) {
+    border: 3px $color solid;
     &:hover {
-        background-color: $highlight;
+        background-color: $color;
     }
 }
 
 .reward-big {
     @include reward-circle(67px, 22px, 12px);
+    @include reward-circle-color($highlight);
+}
+.reward-big-closed {
+    @include reward-circle-color($closed-quest-color);
+}
+.reward-big-abandoned {
+    @include reward-circle-color($abandoned-quest-color);
 }
 
 .reward-small {
