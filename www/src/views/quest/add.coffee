@@ -9,6 +9,8 @@ define [
         template: _.template(html)
         events:
             "click ._go": "submit"
+            "click .quest-add-close": "remove"
+            "click .quest-add-backdrop": "remove"
             "keyup [name=name]": "nameEdit"
             "keyup [name=tags]": "tagsEdit"
             "change [name=realm]": "validate"
@@ -83,18 +85,14 @@ define [
                     input.css "fontSize", newFontSize
                     input.css "lineHeight", newFontSize
 
-        getName: ->
-            @$("[name=name]").val()
-
-        getDescription: ->
-            @$("[name=description]").val()
+        getName: -> @$("[name=name]").val()
+        getDescription: -> @$("[name=description]").val()
+        getRealm: -> @$("[name=realm] :selected").val()
 
         getTags: ->
             tagLine = @$("[name=tags]").val()
             QuestModel::tagline2tags tagLine
 
-        getRealm: ->
-            @$("[name=realm] :selected").val()
 
         render: ->
             unless sharedModels.realms.length
@@ -110,8 +108,7 @@ define [
                 defaultRealm: defaultRealm
             ))
 
-            @$(".modal").modal().on "shown", =>
-                @$("[name=name]").focus()
+            @$("[name=name]").focus()
 
             @$(".modal").modal().on "hidden", (e) =>
                 # modal includes items with tooltip, which can fire "hidden" too,
@@ -150,4 +147,4 @@ define [
 
         onSuccess: (model) ->
             Backbone.trigger "pp:quest-add", model
-            @$(".quest-add-modal").modal "hide"
+            @remove()

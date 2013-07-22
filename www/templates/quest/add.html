@@ -1,25 +1,36 @@
-<div class="quest-add-modal modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+<div class="quest-add-backdrop"></div>
+
+<div class="quest-add">
+
+  <header>
+    <a href="#" class="quest-add-close mini-button"><i class="icon-remove"></i></a>
     <h3>
       Add a quest
-      <i class="icon-spinner icon-spin"></i>
     </h3>
-  </div>
-  <div class="modal-body quest-add-body">
+    <hr>
+  </header>
 
-    <div class="form-row quest-add-realm">
-      <select name="realm">
-        <% if (!defaultRealm) { %>
-          <option value="" selected>
-            Choose a realm:
-          </option>
-        <% } %>
+  <div class="sidebar">
+    <div class="quest-add-realm-list desktop-block">
+      <ul class="nav nav-pills">
         <% _.each(realms, function(r) { %>
-        <option value="<%- r.id %>" <%- r.id == defaultRealm ? 'selected' : '' %>><%- r.name %></option>
+        <li class="<%- r.id == defaultRealm ? 'active' : '' %>"><a href="#" data-realm="<%- r.id %>"><%- r.name %></a></li>
         <% }) %>
-      </select>
+      </ul>
     </div>
+    <select name="realm" class="quest-add-realm-select mobile-block">
+      <% if (!defaultRealm) { %>
+        <option value="" selected>
+          Choose a realm:
+        </option>
+      <% } %>
+      <% _.each(realms, function(r) { %>
+      <option value="<%- r.id %>" <%- r.id == defaultRealm ? 'selected' : '' %>><%- r.name %></option>
+      <% }) %>
+    </select>
+  </div>
+
+  <div class="mainarea">
 
     <div class="form-row">
       <label><small class="muted">Write a short description of the task here.</small></label>
@@ -35,8 +46,15 @@
       <div class="quest-tags-edit control-group">
         <label><small class="muted">Tags are optional. Enter them comma-separated here, for example: "bug,dancer"</small></label>
         <input name="tags" type="text" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual" data-container="quest-add-modal">
-        <button class="btn btn-primary _go pull-right">Go!</button>
+
+        <div class="pull-right">
+          <i class="icon-spinner icon-spin"></i>
+          <button class="btn btn-primary _go">Go!</button>
+        </div>
       </div>
     </div>
   </div>
+
+  <div class="quest-add-arrow"></div>
+
 </div>

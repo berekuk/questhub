@@ -1,4 +1,66 @@
-.quest-add-body label {
+.quest-add-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+.quest-add {
+    position: fixed;
+    top: 45px;
+    left: 5px;
+    right: 5px;
+    @include breakpoint(C) {
+        left: 50%;
+        margin-left: -490px;
+        width: 980px;
+    }
+
+    padding: {
+        left: 10px;
+        right: 10px;
+    }
+    background-color: $mat;
+    border: 1px solid darken($grey, 10%);
+    @include box-shadow(0 5px 23px rgba(0, 0, 0, 0.2));
+}
+.quest-add-arrow {
+    position: absolute;
+    top: -11px;
+    right: 26px;
+    @include breakpoint(B) {
+        right: 60px;
+    }
+    @include breakpoint(C) {
+        right: 95px;
+    }
+    width: 0;
+    height: 0;
+    border-left: 11px solid transparent;
+    border-right: 11px solid transparent;
+
+    border-bottom: 11px solid $dark-grey;
+
+    &:after {
+        content: "";
+        position: absolute;
+        top: 1px;
+        display: block;
+        margin-left: -10px;
+
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+
+        border-bottom: 10px solid $mat;
+    }
+}
+.quest-add-close {
+    float: right;
+}
+
+.quest-add label {
     cursor: default; // override bootstrap's "pointer" cursor style, it's confusing
 }
 
@@ -6,24 +68,9 @@
     background-color: lighten($orange-color, 20%);
 }
 
-.quest-add-realm {
-    text-align: center;
-    .btn-group {
+.quest-add-realm-list {
+    li {
         display: block;
-        @include breakpoint(B) {
-            display: inline-block;
-        }
+        width: 100%;
     }
-    button {
-        color: $dark-grey;
-        font-size: 12px !important;
-    }
-    button.active {
-        font-weight: bold;
-    }
-}
-
-.quest-add-realm-reminder {
-    margin-bottom: 5px;
-    display: inline-block;
 }
