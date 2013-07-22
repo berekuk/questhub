@@ -35,8 +35,10 @@ include_recipe "phantomjs"
 # used by build_static.pl
 cpan_module "IPC::System::Simple"
 
-gem_package 'sass' do
-    options(:prerelease => true)    # dangerous, but gives us source maps (until 3.3.0 officially releases)
+# not using gem_package - it fails for some reason
+execute "install-SASS" do
+    not_if "which sass"
+    command "gem install sass --prerelease" # --prerelease is dangerous, but gives us source maps (until 3.3.0 officially releases)
 end
 gem_package 'rb-inotify' do
   version '0.9'
