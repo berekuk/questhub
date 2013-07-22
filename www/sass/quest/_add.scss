@@ -1,4 +1,7 @@
 .quest-add-backdrop {
+    z-index: 10;
+    @include opacity(30);
+    background-color: black;
     position: fixed;
     top: 0;
     right: 0;
@@ -6,6 +9,7 @@
     left: 0;
 }
 .quest-add {
+    z-index: 20;
     position: fixed;
     top: 45px;
     left: 5px;
