@@ -17,6 +17,13 @@ define [
             "change [name=realm]": "switchRealmSelect"
             "click .quest-add-realm-list li a": "switchRealmList"
 
+        subviews:
+            ".description-sv": ->
+                new Textarea
+                    realm: @getRealm()
+                    placeholder: "Quest details are optional. You can always add them later."
+        description: -> @subview(".description-sv")
+
         initialize: ->
             super
             _.bindAll this
@@ -155,10 +162,10 @@ define [
             @$(".icon-spinner").hide()
             @submitted = false
             @validate()
-            @$("[name=description]").autosize append: "\n"
 
             window.getComputedStyle(@$(".quest-add-backdrop")[0]).getPropertyValue("opacity")
             @$(".quest-add-backdrop").addClass "quest-add-backdrop-fade"
+            @description().reveal ""
 
 
         submit: ->
@@ -167,7 +174,7 @@ define [
                 name: @getName()
                 realm: @getRealm()
 
-            description = @getDescription()
+            description = @description().value()
             model_params.description = description if description
             tags = @getTags()
             model_params.tags = tags if tags
