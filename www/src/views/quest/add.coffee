@@ -13,12 +13,41 @@ define [
             "click .quest-add-backdrop": "remove"
             "keyup [name=name]": "nameEdit"
             "keyup [name=tags]": "tagsEdit"
-            "change [name=realm]": "validate"
+            "change [name=realm]": "switchRealmSelect"
+            "click .quest-add-realm-list li a": "switchRealmList"
 
         initialize: ->
             _.bindAll this
             $("#modal-storage").append @$el
             @render()
+
+        setUpic: (id) ->
+            realm = sharedModels.realms.findWhere id: id
+            $('.quest-add-realm-pic-box').html('')
+            $('.quest-add-realm-pic-box').append $('<img src="' + realm.get("pic") + '">')
+
+
+        setRealmList: (realm) ->
+            @$(".quest-add-realm-list ul li").removeClass("active")
+            @$(".quest-add-realm-list ul li[data-realm=#{realm}]").addClass("active")
+
+        setRealmSelect: (realm) ->
+            @$(".quest-add-realm-select :selected").prop "selected", false
+            @$(".quest-add-realm-select [value=#{realm}]").prop "selected", true
+            @$("[name=name]").focus()
+
+        switchRealmList: (e) ->
+            realm = $(e.target).closest("a").parent().attr("data-realm")
+            @setRealmList realm
+            @setRealmSelect realm
+            @setUpic realm
+            @validate()
+            @$("[name=name]").focus()
+
+        switchRealmSelect: ->
+            realm = @$(".quest-add-realm-select :selected").val()
+            @setRealmList realm
+            @validate()
 
         disable: ->
             @$("._go").addClass "disabled"
@@ -87,7 +116,10 @@ define [
 
         getName: -> @$("[name=name]").val()
         getDescription: -> @$("[name=description]").val()
-        getRealm: -> @$("[name=realm] :selected").val()
+        getRealm: ->
+            selectRealm = @$(".quest-add-realm-select [name=realm] :selected").val()
+            listRealm = @$(".quest-add-realm-list li.active").attr("data-realm")
+            return selectRealm || listRealm
 
         getTags: ->
             tagLine = @$("[name=tags]").val()
@@ -115,6 +147,10 @@ define [
             @submitted = false
             @validate()
             @$("[name=description]").autosize append: "\n"
+
+            window.getComputedStyle(@$(".quest-add-backdrop")[0]).getPropertyValue("opacity")
+            @$(".quest-add-backdrop").addClass "quest-add-backdrop-fade"
+
 
         submit: ->
             return unless @enabled

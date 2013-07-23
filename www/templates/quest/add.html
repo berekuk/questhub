@@ -14,9 +14,10 @@
     <div class="quest-add-realm-list desktop-block">
       <ul class="nav nav-pills">
         <% _.each(realms, function(r) { %>
-        <li class="<%- r.id == defaultRealm ? 'active' : '' %>"><a href="#" data-realm="<%- r.id %>"><%- r.name %></a></li>
+        <li class="<%- r.id == defaultRealm ? 'active' : '' %>" data-realm="<%- r.id %>"><a href="#"><%- r.name %></a></li>
         <% }) %>
       </ul>
+      <div class="quest-add-realm-pic-box"></div>
     </div>
     <select name="realm" class="quest-add-realm-select mobile-block">
       <% if (!defaultRealm) { %>
@@ -49,7 +50,7 @@
 
         <div class="pull-right">
           <i class="icon-spinner icon-spin"></i>
-          <button class="btn btn-primary _go">Go!</button>
+          <button class="btn btn-primary btn-large _go">Go</button>
         </div>
       </div>
     </div>

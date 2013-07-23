@@ -1,6 +1,6 @@
 .quest-add-backdrop {
     z-index: 10;
-    @include opacity(30);
+    @include opacity(0);
     background-color: black;
     position: fixed;
     top: 0;
@@ -8,6 +8,11 @@
     bottom: 0;
     left: 0;
 }
+.quest-add-backdrop-fade {
+    @include opacity(30);
+    transition: opacity 0.2s ease;
+}
+
 .quest-add {
     z-index: 20;
     position: fixed;
@@ -16,13 +21,14 @@
     right: 5px;
     @include breakpoint(C) {
         left: 50%;
-        margin-left: -490px;
-        width: 980px;
+        margin-left: -450px;
+        width: 900px;
     }
 
     padding: {
-        left: 10px;
-        right: 10px;
+        left: 20px;
+        right: 20px;
+        bottom: 10px;
     }
     background-color: $mat;
     border: 1px solid darken($grey, 10%);
@@ -36,7 +42,7 @@
         right: 60px;
     }
     @include breakpoint(C) {
-        right: 95px;
+        right: 55px;
     }
     width: 0;
     height: 0;
@@ -77,4 +83,8 @@
         display: block;
         width: 100%;
     }
+}
+.quest-add-realm-pic-box img {
+    display: block;
+    margin: 0 auto;
 }
