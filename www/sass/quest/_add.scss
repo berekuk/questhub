@@ -1,24 +1,9 @@
-.quest-add-close {
-    float: right;
-}
-
 .quest-add label {
     cursor: default; // override bootstrap's "pointer" cursor style, it's confusing
 }
 
 .quest-tags-edit input {
     background-color: lighten($orange-color, 20%);
-}
-
-.quest-add .form-row {
-    position: relative;
-}
-.quest-add-go-block {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    button {
-    }
 }
 
 .quest-add-mainarea {
@@ -50,7 +35,9 @@
 }
 .quest-add-realm-list-unpicked {
     border: 1px dashed $red-color;
-//    color: $red-color;
+    > header {
+        color: $red-color;
+    }
 }
 .quest-add-realm-pic-box img {
     display: block;
