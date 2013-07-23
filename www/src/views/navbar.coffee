@@ -11,9 +11,11 @@ define [
             "click .quest-add-nav-button": "startQuestAdd"
 
         startQuestAdd: ->
-            return if @questAdd # can't fire two forms at once
-            @questAdd = new QuestAdd(realm: @options.realm)
-            @questAdd.on "remove", => @questAdd = undefined
+            if @options.realm
+                url = "/realm/#{@options.realm}/quest/add"
+            else
+                url = "/quest/add"
+            Backbone.history.navigate url, trigger: true
 
         initialize: ->
             super

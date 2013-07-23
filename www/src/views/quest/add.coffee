@@ -10,8 +10,8 @@ define [
         template: _.template(html)
         events:
             "click ._go": "submit"
-            "click .quest-add-close": "remove"
-            "click .quest-add-backdrop": "remove"
+            "click ._cancel": "close"
+            "click .quest-add-close": "close"
             "keyup [name=name]": "nameEdit"
             "keyup [name=tags]": "tagsEdit"
             "change [name=realm]": "switchRealmSelect"
@@ -27,14 +27,14 @@ define [
         initialize: ->
             super
             _.bindAll this
-            $("#modal-storage").append @$el
             @render()
 
         setUpic: (id) ->
             realm = sharedModels.realms.findWhere id: id
-            $('.quest-add-realm-pic-box').html('')
-            $('.quest-add-realm-pic-box').append $('<img src="' + realm.get("pic") + '">')
+            @$('.quest-add-realm-pic-box').html('')
+            @$('.quest-add-realm-pic-box').append $('<img src="' + realm.get("pic") + '">')
 
+            @$(".quest-add-realm-list").removeClass("quest-add-realm-list-unpicked")
 
         setRealmList: (realm) ->
             @$(".quest-add-realm-list ul li").removeClass("active")
@@ -56,6 +56,7 @@ define [
         switchRealmSelect: ->
             realm = @$(".quest-add-realm-select :selected").val()
             @setRealmList realm
+            @setUpic realm
             @validate()
 
         disable: ->
@@ -156,16 +157,17 @@ define [
             defaultRealm = @defaultRealm()
             @setUpic defaultRealm if defaultRealm
 
-            @$("[name=name]").focus()
 
             @$(".btn-group").button()
             @$(".icon-spinner").hide()
             @submitted = false
             @validate()
 
-            window.getComputedStyle(@$(".quest-add-backdrop")[0]).getPropertyValue("opacity")
             @$(".quest-add-backdrop").addClass "quest-add-backdrop-fade"
             @description().reveal ""
+            window.setTimeout =>
+                @$("[name=name]").focus()
+            , 100
 
 
         submit: ->
@@ -193,8 +195,7 @@ define [
 
         onSuccess: (model) ->
             Backbone.trigger "pp:quest-add", model
-            @remove()
+            @close()
 
-        remove: ->
-            super
-            @trigger "remove"
+        close: ->
+            Backbone.history.navigate "/", trigger: true, replace: true

@@ -86,3 +86,11 @@
         clear: both;
     }
 }
+
+@mixin bg-header {
+    margin-top: 8px;
+    font-size: 24px;
+    font-weight: 200;
+    margin-bottom: 20px;
+    color: $dark-grey;
+}

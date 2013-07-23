@@ -1,77 +1,3 @@
-.quest-add-backdrop {
-    z-index: 10;
-    @include opacity(0);
-    background-color: black;
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-}
-.quest-add-backdrop-fade {
-    @include opacity(30);
-    transition: opacity 0.2s ease;
-}
-
-.quest-add {
-    z-index: 20;
-    position: fixed;
-    top: 45px;
-    left: 5px;
-    right: 5px;
-    @include breakpoint(C) {
-        left: 50%;
-        margin-left: -250px;
-        width: 700px;
-    }
-
-    padding: 10px;
-    padding-top: 20px;
-    padding-right: 20px;
-    background-color: $mat;
-    border: 1px solid darken($grey, 10%);
-    @include box-shadow(0 5px 23px rgba(0, 0, 0, 0.2));
-
-    h3 {
-        margin-bottom: 0;
-    }
-    hr {
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-}
-.quest-add-arrow {
-    position: absolute;
-    top: -11px;
-    right: 26px;
-    @include breakpoint(B) {
-        right: 60px;
-    }
-    @include breakpoint(C) {
-        right: 55px;
-    }
-    width: 0;
-    height: 0;
-    border-left: 11px solid transparent;
-    border-right: 11px solid transparent;
-
-    border-bottom: 11px solid $dark-grey;
-
-    &:after {
-        content: "";
-        position: absolute;
-        top: 1px;
-        display: block;
-        margin-left: -10px;
-
-        width: 0;
-        height: 0;
-        border-left: 10px solid transparent;
-        border-right: 10px solid transparent;
-
-        border-bottom: 10px solid $mat;
-    }
-}
 .quest-add-close {
     float: right;
 }
@@ -95,13 +21,44 @@
     }
 }
 
+.quest-add-mainarea {
+    > header {
+        @include bg-header;
+        text-align: center;
+        @include breakpoint(lessThanA) {
+            font-size: 18px;
+        }
+    }
+}
+.quest-add-form {
+    padding: 10px;
+}
+
 .quest-add-realm-list {
+    margin-right: 20px;
+    max-width: 150px;
+    float: right;
+    > header {
+        @include bg-header;
+        text-align: center;
+    }
     li {
         display: block;
         width: 100%;
+        text-align: center;
     }
+}
+.quest-add-realm-list-unpicked {
+    border: 1px dashed $red-color;
+//    color: $red-color;
 }
 .quest-add-realm-pic-box img {
     display: block;
     margin: 0 auto;
+}
+
+.quest-add-realm-select {
+    width: 140px;
+    position: relative;
+    top: 3px;
 }

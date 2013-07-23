@@ -1,9 +1,10 @@
-<div class="quest-add-backdrop"></div>
-
 <div class="quest-add">
+  <div class="quest-add-sidebar sidebar">
+    <div class="quest-add-realm-list <%- defaultRealm ? '' : 'quest-add-realm-list-unpicked' %> desktop-block">
+      <header>
+        Realm:
+      </header>
 
-  <div class="sidebar">
-    <div class="quest-add-realm-list desktop-block">
       <ul class="nav nav-pills">
         <% _.each(realms, function(r) { %>
         <li class="<%- r.id == defaultRealm ? 'active' : '' %>" data-realm="<%- r.id %>"><a href="#"><%- r.name %></a></li>
@@ -11,46 +12,54 @@
       </ul>
       <div class="quest-add-realm-pic-box"></div>
     </div>
-    <select name="realm" class="quest-add-realm-select mobile-block">
-      <% if (!defaultRealm) { %>
-        <option value="" selected>
-          Choose a realm:
-        </option>
-      <% } %>
-      <% _.each(realms, function(r) { %>
-      <option value="<%- r.id %>" <%- r.id == defaultRealm ? 'selected' : '' %>><%- r.name %></option>
-      <% }) %>
-    </select>
   </div>
 
-  <div class="mainarea">
-    <a href="#" class="quest-add-close mini-button"><i class="icon-remove"></i></a>
+  <div class="quest-add-mainarea mainarea">
 
-
-    <div class="form-row">
-      <label><small class="muted">Write a short description of the task here.</small></label>
-      <input name="name" type="text" class="input-large" placeholder="What's your next goal?">
+    <header>
+      Go on a quest
+    <div class="mobile-inline-block">
+      in
+      <select name="realm" class="quest-add-realm-select">
+        <% if (!defaultRealm) { %>
+          <option value="" selected>
+            Pick a realm:
+          </option>
+        <% } %>
+        <% _.each(realms, function(r) { %>
+        <option value="<%- r.id %>" <%- r.id == defaultRealm ? 'selected' : '' %>><%- r.name %></option>
+        <% }) %>
+      </select>
     </div>
+    </header>
 
-    <div class="form-row">
-      <label><small class="muted">Descrpition:</small></label>
-      <div class="description-sv"></div>
-    </div>
-
-    <div class="form-row">
-      <div class="quest-add-go-block">
-        <i class="icon-spinner icon-spin"></i>
-        <button class="btn btn-primary btn-large _go">Start quest</button>
+    <div class="well clearfix quest-add-form">
+      <div class="form-row">
+        <label><small class="muted">Write a short description of the task here.</small></label>
+        <input name="name" type="text" class="input-large" placeholder="What's your next goal?">
       </div>
 
-      <div class="quest-tags-edit control-group">
-        <label><small class="muted">Tags are optional. Enter them comma-separated here (for example: "bug,dancer"):</small></label>
-        <input name="tags" type="text" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual" data-container="quest-add-modal">
-
+      <div class="form-row">
+        <label><small class="muted">Descrpition:</small></label>
+        <div class="description-sv"></div>
       </div>
+
+      <div class="form-row">
+        <div class="quest-tags-edit control-group">
+          <label><small class="muted">Tags are optional. Enter them comma-separated here (for example: "bug,dancer"):</small></label>
+          <input name="tags" type="text" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual" data-container="quest-add-modal">
+
+        </div>
+      </div>
+
     </div>
+
+    <div class="pull-right">
+      <i class="icon-spinner icon-spin"></i>
+      <button class="btn btn-large _cancel">Cancel</button>
+      <button class="btn btn-primary btn-large _go">Start quest</button>
+    </div>
+
   </div>
-
-  <div class="quest-add-arrow"></div>
 
 </div>
