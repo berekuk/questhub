@@ -78,6 +78,20 @@ a.mini-button {
     color: $text-color;
 }
 
+.desktop-block {
+    display: none;
+    @include breakpoint(B) {
+        display: block;
+    }
+}
+
+.mobile-block {
+    display: block;
+    @include breakpoint(B) {
+        display: none;
+    }
+}
+
 .desktop-text {
     display: none;
     @include breakpoint(B) {
@@ -134,12 +148,8 @@ td {
 }
 
 .sidebar-header {
-    margin-top: 8px;
-    font-size: 24px;
-    font-weight: 200;
     text-align: right;
-    margin-bottom: 20px;
-    color: $dark-grey;
+    @include bg-header;
 }
 
 .grey-link {

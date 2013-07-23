@@ -1,4 +1,4 @@
-.quest-add-body label {
+.quest-add label {
     cursor: default; // override bootstrap's "pointer" cursor style, it's confusing
 }
 
@@ -6,24 +6,54 @@
     background-color: lighten($orange-color, 20%);
 }
 
-.quest-add-realm {
-    text-align: center;
-    .btn-group {
-        display: block;
-        @include breakpoint(B) {
-            display: inline-block;
+.quest-add-mainarea {
+    > header {
+        @include bg-header;
+        text-align: center;
+        @include breakpoint(lessThanA) {
+            font-size: 18px;
         }
     }
-    button {
-        color: $dark-grey;
-        font-size: 12px !important;
+}
+.quest-add-form {
+    padding: 10px;
+}
+
+.quest-add-realm-list {
+    margin: 0 auto;
+    max-width: 150px;
+    > header {
+        @include bg-header;
+        text-align: center;
     }
-    button.active {
-        font-weight: bold;
+    li {
+        display: block;
+        width: 100%;
+        text-align: center;
     }
 }
 
-.quest-add-realm-reminder {
-    margin-bottom: 5px;
-    display: inline-block;
+.quest-add-sidebar {
+    border: 1px solid transparent;
+}
+.quest-add-realm-unpicked {
+    border: 1px dashed $red-color;
+    header {
+        color: $red-color;
+    }
+}
+.quest-add-realm-helper {
+    clear: both;
+    img {
+        display: block;
+        margin: 0 auto;
+        width: 80px;
+        height: 80px;
+    }
+}
+
+.quest-add-realm-select {
+    width: 140px;
+    position: relative;
+    top: 3px;
 }

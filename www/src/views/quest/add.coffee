@@ -1,23 +1,59 @@
 define [
     "underscore", "jquery"
-    "views/proto/base"
+    "views/proto/common"
+    "views/helper/textarea", "views/quest/add/realm-helper"
     "models/shared-models", "models/quest"
     "text!templates/quest/add.html"
     "bootstrap", "jquery.autosize"
-], (_, $, Base, sharedModels, QuestModel, html) ->
-    Base.extend
+], (_, $, Common, Textarea, RealmHelper, sharedModels, QuestModel, html) ->
+    class extends Common
         template: _.template(html)
         events:
             "click ._go": "submit"
+            "click ._cancel": "close"
+            "click .quest-add-close": "close"
             "keyup [name=name]": "nameEdit"
             "keyup [name=tags]": "tagsEdit"
-            "click .quest-add-realm button": ->
-                @validate checkRealm: false
+            "change [name=realm]": "switchRealmSelect"
+            "click .quest-add-realm-list li a": "switchRealmList"
+
+        subviews:
+            ".description-sv": ->
+                new Textarea
+                    realm: @getRealmId()
+                    placeholder: "Quest details are optional. You can always add them later."
+            ".realm-sv": ->
+                new RealmHelper model: @getRealm()
+
+        description: -> @subview(".description-sv")
 
         initialize: ->
+            super
             _.bindAll this
-            $("#modal-storage").append @$el
             @render()
+
+        setRealmList: (realm) ->
+            @$(".quest-add-realm-list ul li").removeClass("active")
+            @$(".quest-add-realm-list ul li[data-realm=#{realm}]").addClass("active")
+
+        setRealmSelect: (realm) ->
+            @$(".quest-add-realm-select :selected").prop "selected", false
+            @$(".quest-add-realm-select [value=#{realm}]").prop "selected", true
+            @$("[name=name]").focus()
+
+        switchRealmList: (e) ->
+            id = $(e.target).closest("a").parent().attr("data-realm")
+            @setRealmList id
+            @setRealmSelect id
+            @updateRealm id
+            @validate()
+            @$("[name=name]").focus()
+
+        switchRealmSelect: ->
+            id = @$(".quest-add-realm-select :selected").val()
+            @setRealmList id
+            @updateRealm id
+            @validate()
 
         disable: ->
             @$("._go").addClass "disabled"
@@ -29,10 +65,9 @@ define [
             @submitted = false
 
         validate: (options) ->
-            if (not options or options.checkRealm isnt false) and not @getRealm()
+            if not @getRealmId()
                 @disable()
                 return
-            @$(".quest-add-realm-reminder").hide()
             if @submitted or not @getName()
                 @disable()
                 return
@@ -85,55 +120,68 @@ define [
                     input.css "fontSize", newFontSize
                     input.css "lineHeight", newFontSize
 
-        getName: ->
-            @$("[name=name]").val()
-
-        getDescription: ->
-            @$("[name=description]").val()
+        getName: -> @$("[name=name]").val()
+        getDescription: -> @$("[name=description]").val()
+        getRealmId: -> @_realmId
+        getRealm: -> @_realm
 
         getTags: ->
             tagLine = @$("[name=tags]").val()
             QuestModel::tagline2tags tagLine
 
-        getRealm: ->
-            @$(".quest-add-realm .active").attr "data-realm-id"
+        initRealm: ->
+            id = @options.realm
+            unless id
+                userRealms = sharedModels.currentUser.get("realms")
+                id = userRealms[0] if userRealms and userRealms.length is 1
+            @updateRealm id
+
+        setRealm: (id) ->
+            @_realmId = id
+            if id
+                @_realm = sharedModels.realms.findWhere id: id
+            else
+                @_realm = null
+
+        updateRealm: (id) ->
+            @setRealm id
+            @rebuildSubview ".realm-sv"
+            @subview(".realm-sv").render()
+            @$(".quest-add-sidebar").removeClass("quest-add-realm-unpicked")
+
+        serialize: ->
+            realms: sharedModels.realms.toJSON()
+            selectedRealm: @getRealmId()
 
         render: ->
             unless sharedModels.realms.length
                 sharedModels.realms.fetch().success => @render()
                 return
 
-            defaultRealm = @options.realm
-            unless defaultRealm
-                userRealms = sharedModels.currentUser.get("realms")
-                defaultRealm = userRealms[0] if userRealms and userRealms.length is 1
-            @$el.html $(@template(
-                realms: sharedModels.realms.toJSON()
-                defaultRealm: defaultRealm
-            ))
-
-            @$(".modal").modal().on "shown", =>
-                @$("[name=name]").focus()
-
-            @$(".modal").modal().on "hidden", (e) =>
-                # modal includes items with tooltip, which can fire "hidden" too,
-                # and these events bubble up DOM tree, ending here
-                return unless $(e.target).hasClass("modal")
-                @remove()
+            @initRealm()
+            super
+            @setRealmList @getRealmId()
+            @setRealmSelect @getRealmId()
 
             @$(".btn-group").button()
             @$(".icon-spinner").hide()
             @submitted = false
             @validate()
-            @$("[name=description]").autosize append: "\n"
+
+            @$(".quest-add-backdrop").addClass "quest-add-backdrop-fade"
+            @description().reveal ""
+            window.setTimeout =>
+                @$("[name=name]").focus()
+            , 100
+
 
         submit: ->
             return unless @enabled
             model_params =
                 name: @getName()
-                realm: @getRealm()
+                realm: @getRealmId()
 
-            description = @getDescription()
+            description = @description().value()
             model_params.description = description if description
             tags = @getTags()
             model_params.tags = tags if tags
@@ -152,4 +200,7 @@ define [
 
         onSuccess: (model) ->
             Backbone.trigger "pp:quest-add", model
-            @$(".quest-add-modal").modal "hide"
+            @close()
+
+        close: ->
+            Backbone.history.navigate "/", trigger: true, replace: true

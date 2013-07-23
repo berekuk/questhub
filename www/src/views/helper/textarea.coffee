@@ -20,7 +20,7 @@ define [
         reveal: (text) ->
             @$el.show()
             @$("textarea").val(text).trigger "autosize"
-            if text?
+            if text and text.length
                 len = text.length * 2 # http://stackoverflow.com/a/1675345/137062
                 @$("textarea")[0].setSelectionRange len, len
             @updatePreview()
@@ -83,7 +83,6 @@ define [
                 )
                 @popoverInitialized = true
             @$(".helper-textarea-show-help").popover "toggle"
-            console.log @$(".helper-textarea-cheatsheet-link")
             return false
 
         destroyHelp: ->

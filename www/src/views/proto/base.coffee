@@ -4,6 +4,3 @@ define ["backbone", "underscore", "markdown", "settings", "views/partials"], (Ba
         initialize: ->
             @listenTo Backbone, "pp:logviews", ->
                 console.log this
-
-
-
