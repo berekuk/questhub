@@ -1,11 +1,12 @@
 define [
     "underscore", "jquery"
-    "views/proto/base"
+    "views/proto/common"
+    "views/helper/textarea"
     "models/shared-models", "models/quest"
     "text!templates/quest/add.html"
     "bootstrap", "jquery.autosize"
-], (_, $, Base, sharedModels, QuestModel, html) ->
-    class extends Base
+], (_, $, Common, Textarea, sharedModels, QuestModel, html) ->
+    class extends Common
         template: _.template(html)
         events:
             "click ._go": "submit"
@@ -17,6 +18,7 @@ define [
             "click .quest-add-realm-list li a": "switchRealmList"
 
         initialize: ->
+            super
             _.bindAll this
             $("#modal-storage").append @$el
             @render()
@@ -125,20 +127,27 @@ define [
             tagLine = @$("[name=tags]").val()
             QuestModel::tagline2tags tagLine
 
+        defaultRealm: ->
+            defaultRealm = @options.realm
+            unless defaultRealm
+                userRealms = sharedModels.currentUser.get("realms")
+                defaultRealm = userRealms[0] if userRealms and userRealms.length is 1
+            return defaultRealm
+
+        serialize: ->
+            realms: sharedModels.realms.toJSON()
+            defaultRealm: @defaultRealm()
+
 
         render: ->
             unless sharedModels.realms.length
                 sharedModels.realms.fetch().success => @render()
                 return
 
-            defaultRealm = @options.realm
-            unless defaultRealm
-                userRealms = sharedModels.currentUser.get("realms")
-                defaultRealm = userRealms[0] if userRealms and userRealms.length is 1
-            @$el.html $(@template(
-                realms: sharedModels.realms.toJSON()
-                defaultRealm: defaultRealm
-            ))
+            super
+
+            defaultRealm = @defaultRealm()
+            @setUpic defaultRealm if defaultRealm
 
             @$("[name=name]").focus()
 
