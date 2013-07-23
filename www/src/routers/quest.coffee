@@ -57,7 +57,8 @@ define [
                 return
 
             if realm
-                Backbone.history.navigate "/quest/add" # we'd have to update url when realm is changed in quest-add dialog otherwise
+                # we'd have to update url when realm is changed in quest-add dialog otherwise
+                Backbone.history.navigate "/quest/add", replace: true
 
             view = new QuestAdd(realm: realm)
             @appView.setPageView view

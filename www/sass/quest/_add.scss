@@ -20,9 +20,8 @@
 }
 
 .quest-add-realm-list {
-    margin-right: 20px;
+    margin: 0 auto;
     max-width: 150px;
-    float: right;
     > header {
         @include bg-header;
         text-align: center;
@@ -33,9 +32,13 @@
         text-align: center;
     }
 }
+
+.quest-add-sidebar {
+    border: 1px solid transparent;
+}
 .quest-add-realm-unpicked {
     border: 1px dashed $red-color;
-    > header {
+    header {
         color: $red-color;
     }
 }
