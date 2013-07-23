@@ -2,14 +2,6 @@
 
 <div class="quest-add">
 
-  <header>
-    <a href="#" class="quest-add-close mini-button"><i class="icon-remove"></i></a>
-    <h3>
-      Add a quest
-    </h3>
-    <hr>
-  </header>
-
   <div class="sidebar">
     <div class="quest-add-realm-list desktop-block">
       <ul class="nav nav-pills">
@@ -32,6 +24,8 @@
   </div>
 
   <div class="mainarea">
+    <a href="#" class="quest-add-close mini-button"><i class="icon-remove"></i></a>
+
 
     <div class="form-row">
       <label><small class="muted">Write a short description of the task here.</small></label>
@@ -39,19 +33,20 @@
     </div>
 
     <div class="form-row">
-      <label><small class="muted">Descrpition (markdown syntax supported):</small></label>
+      <label><small class="muted">Descrpition:</small></label>
       <textarea name="description" class="textarea-large" placeholder="Quest details are optional. You can always add them later."></textarea>
     </div>
 
     <div class="form-row">
+      <div class="quest-add-go-block">
+        <i class="icon-spinner icon-spin"></i>
+        <button class="btn btn-primary btn-large _go">Start quest</button>
+      </div>
+
       <div class="quest-tags-edit control-group">
-        <label><small class="muted">Tags are optional. Enter them comma-separated here, for example: "bug,dancer"</small></label>
+        <label><small class="muted">Tags are optional. Enter them comma-separated here (for example: "bug,dancer"):</small></label>
         <input name="tags" type="text" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual" data-container="quest-add-modal">
 
-        <div class="pull-right">
-          <i class="icon-spinner icon-spin"></i>
-          <button class="btn btn-primary btn-large _go">Go</button>
-        </div>
       </div>
     </div>
   </div>
