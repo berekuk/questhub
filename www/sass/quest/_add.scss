@@ -33,15 +33,20 @@
         text-align: center;
     }
 }
-.quest-add-realm-list-unpicked {
+.quest-add-realm-unpicked {
     border: 1px dashed $red-color;
     > header {
         color: $red-color;
     }
 }
-.quest-add-realm-pic-box img {
-    display: block;
-    margin: 0 auto;
+.quest-add-realm-helper {
+    clear: both;
+    img {
+        display: block;
+        margin: 0 auto;
+        width: 80px;
+        height: 80px;
+    }
 }
 
 .quest-add-realm-select {

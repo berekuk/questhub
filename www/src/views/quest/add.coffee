@@ -1,11 +1,11 @@
 define [
     "underscore", "jquery"
     "views/proto/common"
-    "views/helper/textarea"
+    "views/helper/textarea", "views/quest/add/realm-helper"
     "models/shared-models", "models/quest"
     "text!templates/quest/add.html"
     "bootstrap", "jquery.autosize"
-], (_, $, Common, Textarea, sharedModels, QuestModel, html) ->
+], (_, $, Common, Textarea, RealmHelper, sharedModels, QuestModel, html) ->
     class extends Common
         template: _.template(html)
         events:
@@ -20,21 +20,17 @@ define [
         subviews:
             ".description-sv": ->
                 new Textarea
-                    realm: @getRealm()
+                    realm: @getRealmId()
                     placeholder: "Quest details are optional. You can always add them later."
+            ".realm-sv": ->
+                new RealmHelper model: @getRealm()
+
         description: -> @subview(".description-sv")
 
         initialize: ->
             super
             _.bindAll this
             @render()
-
-        setUpic: (id) ->
-            realm = sharedModels.realms.findWhere id: id
-            @$('.quest-add-realm-pic-box').html('')
-            @$('.quest-add-realm-pic-box').append $('<img src="' + realm.get("pic") + '">')
-
-            @$(".quest-add-realm-list").removeClass("quest-add-realm-list-unpicked")
 
         setRealmList: (realm) ->
             @$(".quest-add-realm-list ul li").removeClass("active")
@@ -46,17 +42,17 @@ define [
             @$("[name=name]").focus()
 
         switchRealmList: (e) ->
-            realm = $(e.target).closest("a").parent().attr("data-realm")
-            @setRealmList realm
-            @setRealmSelect realm
-            @setUpic realm
+            id = $(e.target).closest("a").parent().attr("data-realm")
+            @setRealmList id
+            @setRealmSelect id
+            @updateRealm id
             @validate()
             @$("[name=name]").focus()
 
         switchRealmSelect: ->
-            realm = @$(".quest-add-realm-select :selected").val()
-            @setRealmList realm
-            @setUpic realm
+            id = @$(".quest-add-realm-select :selected").val()
+            @setRealmList id
+            @updateRealm id
             @validate()
 
         disable: ->
@@ -69,7 +65,7 @@ define [
             @submitted = false
 
         validate: (options) ->
-            if not @getRealm()
+            if not @getRealmId()
                 @disable()
                 return
             if @submitted or not @getName()
@@ -126,37 +122,47 @@ define [
 
         getName: -> @$("[name=name]").val()
         getDescription: -> @$("[name=description]").val()
-        getRealm: ->
-            selectRealm = @$(".quest-add-realm-select [name=realm] :selected").val()
-            listRealm = @$(".quest-add-realm-list li.active").attr("data-realm")
-            return selectRealm || listRealm
+        getRealmId: -> @_realmId
+        getRealm: -> @_realm
 
         getTags: ->
             tagLine = @$("[name=tags]").val()
             QuestModel::tagline2tags tagLine
 
-        defaultRealm: ->
-            defaultRealm = @options.realm
-            unless defaultRealm
+        initRealm: ->
+            id = @options.realm
+            unless id
                 userRealms = sharedModels.currentUser.get("realms")
-                defaultRealm = userRealms[0] if userRealms and userRealms.length is 1
-            return defaultRealm
+                id = userRealms[0] if userRealms and userRealms.length is 1
+            @updateRealm id
+
+        setRealm: (id) ->
+            @_realmId = id
+            if id
+                @_realm = sharedModels.realms.findWhere id: id
+            else
+                @_realm = null
+
+        updateRealm: (id) ->
+            @setRealm id
+            @rebuildSubview ".realm-sv"
+            @subview(".realm-sv").render()
+            @$(".quest-add-sidebar").removeClass("quest-add-realm-unpicked")
 
         serialize: ->
             realms: sharedModels.realms.toJSON()
-            defaultRealm: @defaultRealm()
-
+            selectedRealm: @getRealmId()
 
         render: ->
             unless sharedModels.realms.length
                 sharedModels.realms.fetch().success => @render()
                 return
 
+            console.log "render"
+            @initRealm()
             super
-
-            defaultRealm = @defaultRealm()
-            @setUpic defaultRealm if defaultRealm
-
+            @setRealmList @getRealmId()
+            @setRealmSelect @getRealmId()
 
             @$(".btn-group").button()
             @$(".icon-spinner").hide()
@@ -174,7 +180,7 @@ define [
             return unless @enabled
             model_params =
                 name: @getName()
-                realm: @getRealm()
+                realm: @getRealmId()
 
             description = @description().value()
             model_params.description = description if description

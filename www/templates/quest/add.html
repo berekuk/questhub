@@ -1,17 +1,17 @@
 <div class="quest-add">
-  <div class="quest-add-sidebar sidebar">
-    <div class="quest-add-realm-list <%- defaultRealm ? '' : 'quest-add-realm-list-unpicked' %> desktop-block">
+  <div class="quest-add-sidebar sidebar desktop-block <%- selectedRealm ? '' : 'quest-add-realm-unpicked' %>">
+    <div class="quest-add-realm-list clearfix">
       <header>
         Realm:
       </header>
 
       <ul class="nav nav-pills">
         <% _.each(realms, function(r) { %>
-        <li class="<%- r.id == defaultRealm ? 'active' : '' %>" data-realm="<%- r.id %>"><a href="#"><%- r.name %></a></li>
+        <li data-realm="<%- r.id %>"><a href="#"><%- r.name %></a></li>
         <% }) %>
       </ul>
-      <div class="quest-add-realm-pic-box"></div>
     </div>
+    <div class="realm-sv"></div>
   </div>
 
   <div class="quest-add-mainarea mainarea">
@@ -21,13 +21,11 @@
     <div class="mobile-inline-block">
       in
       <select name="realm" class="quest-add-realm-select">
-        <% if (!defaultRealm) { %>
-          <option value="" selected>
-            Pick a realm:
-          </option>
-        <% } %>
+        <option value="" selected>
+          Pick a realm:
+        </option>
         <% _.each(realms, function(r) { %>
-        <option value="<%- r.id %>" <%- r.id == defaultRealm ? 'selected' : '' %>><%- r.name %></option>
+        <option value="<%- r.id %>"><%- r.name %></option>
         <% }) %>
       </select>
     </div>
