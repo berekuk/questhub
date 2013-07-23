@@ -158,7 +158,6 @@ define [
                 sharedModels.realms.fetch().success => @render()
                 return
 
-            console.log "render"
             @initRealm()
             super
             @setRealmList @getRealmId()
