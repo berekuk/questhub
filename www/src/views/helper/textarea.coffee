@@ -113,3 +113,7 @@ define [
         serialize: ->
             placeholder: @options.placeholder
             previewMode: previewMode
+
+        setRealm: (realm) ->
+            @options.realm = realm
+            @updatePreview()

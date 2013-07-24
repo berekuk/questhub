@@ -121,7 +121,7 @@ define [
                     input.css "lineHeight", newFontSize
 
         getName: -> @$("[name=name]").val()
-        getDescription: -> @$("[name=description]").val()
+        getDescription: -> @description().value()
         getRealmId: -> @_realmId
         getRealm: -> @_realm
 
@@ -148,6 +148,7 @@ define [
             @rebuildSubview ".realm-sv"
             @subview(".realm-sv").render()
             @$(".quest-add-sidebar").removeClass("quest-add-realm-unpicked")
+            @description().setRealm(id)
 
         serialize: ->
             realms: sharedModels.realms.toJSON()
