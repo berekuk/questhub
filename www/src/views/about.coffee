@@ -15,6 +15,7 @@ define [
     class extends Tabbed
         template: _.template html
         selfRender: true
+        pageTitle: -> "About"
 
         events:
             "click .nav li a": "switchTab"

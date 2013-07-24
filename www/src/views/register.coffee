@@ -15,6 +15,8 @@ define [
             "keyup [name=login]": "editLogin"
             "keyup [name=email]": "editEmail"
 
+        pageTitle: -> "Register"
+
         subviews:
             ".progress-subview": -> new ProgressBig()
 

@@ -10,6 +10,8 @@ define [
         activeMenuItem: "realm-page"
         activated: false
 
+        pageTitle: -> @model.get "name"
+
         realm: -> @model.get "id"
 
         urlRoot: -> "/realm/#{ @model.get("id") }"
@@ -35,6 +37,9 @@ define [
                 url: '/players'
                 subview: -> new RealmPagePlayers model: @model
 
+        initialize: ->
+            super
+            @listenTo @model, "change", => @trigger "change:page-title"
 
         subviews: ->
             subviews = super
