@@ -11,6 +11,7 @@ define [
         activated: false
 
         realm: -> @model.get 'realm'
+        pageTitle: -> @model.get 'name'
 
         subviews:
             ".stencil-big-sv": -> new StencilBig model: @model
@@ -21,6 +22,7 @@ define [
             super
             @listenTo @model, "change", =>
                 @render() if @activated
+                @trigger "change:page-title"
 
         questsSV: (quests) ->
             collection = new QuestCollectionModel(quests)

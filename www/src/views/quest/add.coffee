@@ -8,6 +8,10 @@ define [
 ], (_, $, Common, Textarea, RealmHelper, sharedModels, QuestModel, html) ->
     class extends Common
         template: _.template(html)
+
+        activeMenuItem: -> "new-quest"
+        pageTitle: -> "New quest"
+
         events:
             "click ._go": "submit"
             "click ._cancel": "close"
