@@ -11,6 +11,8 @@ define [
         activated: false
         activeMenuItem: -> (if @my() then "my-quests" else "none")
 
+        pageTitle: -> @model.get "login"
+
         subviews: ->
             subviews = super
             subviews[".user-subview"] = ->
