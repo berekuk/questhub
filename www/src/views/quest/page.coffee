@@ -26,6 +26,7 @@ define [
             "keyup #inputInvitee": "inviteAction"
 
         realm: -> @model.get "realm"
+        pageTitle: -> @model.get "name"
 
         subviews:
             ".quest-big": ->
@@ -90,7 +91,10 @@ define [
             params
 
         afterInitialize: ->
-            @listenTo @model, "change", @render
+            @listenTo @model, "change", =>
+                @render()
+                @trigger "change:page-title"
+
             @listenTo @model, "act", ->
                 @subview(".comments").collection.fetch()
 
