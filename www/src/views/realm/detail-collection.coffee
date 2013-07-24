@@ -12,5 +12,7 @@ define [
         className: "realm-detail-collection"
         listSelector: ".realm-detail-collection-list"
         activeMenuItem: "realms"
+        pageTitle: -> "Realms"
+
         serialize: ->
             tour: currentUser.onTour("realms")
