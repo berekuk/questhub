@@ -9,4 +9,9 @@ define [
         generateItem: (model) ->
             new RealmSmall(model: model)
 
-        listSelector: ".realm-collection"
+        listSelector: ".realm-collection-list"
+
+        serialize: ->
+            params = super
+            params.realmCount = @collection.length
+            params

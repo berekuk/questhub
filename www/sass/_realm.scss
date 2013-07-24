@@ -1,7 +1,3 @@
-.realm-collection > div {
-    display: inline-block;
-}
-
 .realm-logo {
     margin: 0;
     padding: 10px;
@@ -31,5 +27,6 @@
     }
 }
 
+@import 'realm/collection';
 @import 'realm/detail';
 @import 'realm/big';
