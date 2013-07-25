@@ -54,3 +54,19 @@ textarea.comment-edit {
         visibility: visible;
     }
 }
+
+.comment-add {
+    @include clearfix;
+    .btn-primary.submit {
+        float: right;
+    }
+}
+
+.comment-add-signin {
+    h3, > .signin {
+        float: left;
+    }
+    h3 {
+        margin-right: 15px;
+    }
+}
