@@ -1,0 +1,30 @@
+.realm-submenu {
+    width: 100%;
+    @include clearfix;
+}
+.realm-submenu-inner {
+    @include breakpoint(B) {
+        float: right;
+    }
+    margin-bottom: 10px;
+    h3 {
+        margin: 0 7px;
+
+        @include opacity(70);
+        &:hover {
+            @include opacity(100);
+        }
+        a {
+            color: $text-color;
+            &:hover {
+                color: $text-color;
+                text-decoration: none;
+            }
+        }
+    }
+    > h3, > div {
+        display: inline-block;
+        vertical-align: middle;
+    }
+}
+

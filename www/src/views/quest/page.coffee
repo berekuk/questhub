@@ -2,11 +2,11 @@ define [
     "underscore"
     "views/proto/common"
     "views/quest/completed"
-    "views/realm/tabs", "views/quest/big", "views/comment/collection"
+    "views/realm/submenu", "views/quest/big", "views/comment/collection"
     "models/comment-collection", "models/current-user", "models/shared-models"
     "text!templates/quest/page.html"
     "jquery.typeahead"
-], (_, Common, QuestCompleted, RealmTabs, QuestBig, CommentCollection, CommentCollectionModel, currentUser, sharedModels, html) ->
+], (_, Common, QuestCompleted, RealmSubmenu, QuestBig, CommentCollection, CommentCollectionModel, currentUser, sharedModels, html) ->
     class extends Common
         activated: false
         template: _.template(html)
@@ -31,11 +31,8 @@ define [
         realmModel: -> sharedModels.realms.findWhere id: @realm()
 
         subviews:
-            ".realm-tabs-sv": ->
-                new RealmTabs
-                    model: @realmModel()
-                    small: true
-                    navigate: true
+            ".realm-submenu-sv": ->
+                new RealmSubmenu model: @realmModel()
 
             ".quest-big": ->
                 new QuestBig(model: @model)
