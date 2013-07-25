@@ -3,7 +3,9 @@
     @include clearfix;
 }
 .quest-page-realm-inner {
-    float: right;
+    @include breakpoint(B) {
+        float: right;
+    }
     margin-bottom: 10px;
     h3 {
         margin: 0 5px;
