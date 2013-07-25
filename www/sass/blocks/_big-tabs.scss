@@ -1,4 +1,4 @@
-.big-tabs {
+.round-tabs {
     ul {
         list-style-type: none;
         margin: 0px;
@@ -9,6 +9,7 @@
 
     @mixin switch-circle($color) {
         border: 2px $color solid;
+        background-color: $mat;
         &:hover {
             background-color: $color;
         }
@@ -55,5 +56,18 @@
     }
     ._icon._switch-stencils {
         @include switch-circle($red-color);
+    }
+}
+
+.round-tabs-small {
+    ._icon {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+        @include breakpoint(B) {
+            width: 36px;
+            height: 36px;
+            font-size: 14px;
+        }
     }
 }

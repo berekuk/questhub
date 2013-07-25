@@ -1,19 +1,23 @@
 define [
     "underscore"
     "views/proto/common"
-    "models/current-user"
+    "models/current-user", "models/shared-models"
+    "views/realm/submenu"
     "views/stencil/big"
     "views/quest/collection", "models/quest-collection"
     "text!templates/stencil/page.html"
-], (_, Common, currentUser, StencilBig, QuestCollection, QuestCollectionModel, html) ->
+], (_, Common, currentUser, sharedModels, RealmSubmenu, StencilBig, QuestCollection, QuestCollectionModel, html) ->
     class extends Common
         template: _.template html
         activated: false
 
         realm: -> @model.get 'realm'
+        realmModel: -> sharedModels.realms.findWhere id: @realm()
+
         pageTitle: -> @model.get 'name'
 
         subviews:
+            ".realm-submenu-sv": -> new RealmSubmenu model: @realmModel()
             ".stencil-big-sv": -> new StencilBig model: @model
             ".stencil-my-quests-sv": -> @questsSV @model.myQuests()
             ".stencil-quests-sv": -> @questsSV @model.otherQuests()
@@ -45,5 +49,10 @@ define [
             super
             @subview(".stencil-my-quests-sv").updateShowMore()
             @subview(".stencil-quests-sv").updateShowMore()
+
+        serialize: ->
+            params = super
+            params.realmData = @realmModel().toJSON()
+            params
 
         features: ["tooltip"]

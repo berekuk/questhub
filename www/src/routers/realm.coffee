@@ -16,6 +16,19 @@ define [
             "realm/:realm/explore(/:tab)": "realmExplore"
             "realm/:realm/explore/:tab/tag/:tag": "realmExplore"
 
+        initialize: ->
+            super
+            @listenTo Backbone, "navigate:realm", (params) =>
+                url = ''
+                switch params.tab
+                    when 'stencils' then url = '/stencils'
+                    when 'activity' then url = ''
+                    when 'players' then url = '/players'
+                    when 'quests' then url = '/explore'
+                    else throw "unknown tab"
+
+                Backbone.history.navigate "/realm/#{params.realm}#{url}", trigger: true
+
         realms: ->
             view = new RealmDetailCollection collection: sharedModels.realms
             view.collection.fetch()

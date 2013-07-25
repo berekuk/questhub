@@ -1,15 +1,14 @@
 define [
   "views/proto/common"
-  "views/realm/controls"
+  "views/realm/controls", "views/realm/tabs"
   "views/helper/textarea"
   "text!templates/realm/big.html"
-], (Common, RealmControls, Textarea, html) ->
+], (Common, RealmControls, RealmTabs, Textarea, html) ->
     class extends Common
         template: _.template(html)
 
         events:
             "click .edit": "startEdit"
-            "click .realm-big-tabs div._icon": "switch"
             "click button.cancel": "closeEdit"
             "click button.save": "saveEdit"
             "keyup input": "edit"
@@ -17,6 +16,8 @@ define [
         subviews:
             ".controls-subview": ->
                 new RealmControls model: @model
+            ".tabs-sv": ->
+                new RealmTabs tab: @tab
             ".description-sv": ->
                 new Textarea
                     realm: @model.get("realm")
@@ -63,23 +64,11 @@ define [
                 description: @description().value()
             @closeEdit()
 
-
-        switch: (e) ->
-            t = $(e.target).closest("._icon")
-            @tab = t.attr "data-tab"
-
-            @trigger "switch", tab: @tab
-            t.closest("ul").find("._active").removeClass "_active"
-            t.addClass "_active"
-
-        serialize: ->
-            params = super
-            params.tab = @tab
-            params
-
         render: ->
             super
             @listenTo @description(), "save", @saveEdit
             @listenTo @description(), "cancel", @closeEdit
+            @listenTo @subview(".tabs-sv"), "switch", (params) =>
+                @trigger "switch", params
 
         features: ["tooltip"]
