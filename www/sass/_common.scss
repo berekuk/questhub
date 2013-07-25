@@ -150,6 +150,11 @@ td {
 .sidebar-header {
     text-align: right;
     @include bg-header;
+    position: relative;
+    .btn-mini {
+        position: relative;
+        top: -3px;
+    }
 }
 
 .grey-link {
