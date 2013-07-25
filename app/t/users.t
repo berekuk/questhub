@@ -38,7 +38,7 @@ sub current_user :Tests {
         },
         settings => {},
         notifications => [],
-        realms => ['europe', 'asia'],
+        realms => ['asia', 'europe'],
     });
 
     http_json PUT => '/api/current_user/settings', { params => { foo => 'bar' } };
@@ -56,7 +56,7 @@ sub current_user :Tests {
         },
         settings => { foo => 'bar' },
         notifications => [],
-        realms => ['europe', 'asia'],
+        realms => ['asia', 'europe'],
     });
 
     db->notifications->add('blah2', 'shout', 'preved');
@@ -79,7 +79,7 @@ sub current_user :Tests {
             superhashof({ params => 'preved' }),
             superhashof({ params => 'medved' }),
         ],
-        realms => ['europe', 'asia'],
+        realms => ['asia', 'europe'],
     });
 
 }
@@ -99,7 +99,7 @@ sub another_user :Tests {
             europe => 0,
             asia => 0,
         },
-        realms => ['europe', 'asia'],
+        realms => ['asia', 'europe'],
     });
 }
 
@@ -142,7 +142,7 @@ sub users_list :Tests {
                     europe => 0,
                     asia => 0,
                 },
-                realms => ['europe', 'asia'],
+                realms => ['asia', 'europe'],
                 pic => ignore,
             },
         } qw( blah blah2 blah3 )
@@ -169,7 +169,7 @@ sub users_list_limit_offset :Tests {
                         europe => 0,
                         asia => 0,
                     },
-                    realms => ['europe', 'asia'],
+                    realms => ['asia', 'europe'],
                     pic => {
                         small => ignore,
                         normal => ignore,
@@ -222,7 +222,7 @@ sub open_quests_count :Tests {
                 asia => 0,
             },
             open_quests => 2, # asia quest doesn't count
-            realms => ['europe', 'asia'],
+            realms => ['asia', 'europe'],
         }),
         superhashof({
             twitter => {
@@ -234,7 +234,7 @@ sub open_quests_count :Tests {
                 europe => 0,
                 asia => 0,
             },
-            realms => ['europe', 'asia'],
+            realms => ['asia', 'europe'],
         }),
     ];
 }

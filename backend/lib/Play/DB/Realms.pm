@@ -11,6 +11,8 @@ use Play::DB qw(db);
 use Types::Standard qw( Str StrMatch Dict ArrayRef Optional );
 use Play::Types qw( Login Realm RealmName );
 
+use Tie::IxHash;
+
 sub _prepare {
     my $self = shift;
     my ($realm) = @_;
@@ -27,7 +29,9 @@ sub list {
     state $check = compile();
     $check->(@_);
 
-    my @realms = $self->collection->find()->sort({ 'stat.users' => -1 })->all;
+    my @realms = $self->collection->find()->sort(
+        Tie::IxHash->new('stat.users' => -1, id => 1)
+    )->all;
     $self->_prepare($_) for @realms;
     return \@realms;
 }
