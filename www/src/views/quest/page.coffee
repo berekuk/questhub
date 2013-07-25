@@ -3,10 +3,10 @@ define [
     "views/proto/common"
     "views/quest/completed"
     "views/quest/big", "views/comment/collection"
-    "models/comment-collection", "models/current-user"
+    "models/comment-collection", "models/current-user", "models/shared-models"
     "text!templates/quest/page.html"
     "jquery.typeahead"
-], (_, Common, QuestCompleted, QuestBig, CommentCollection, CommentCollectionModel, currentUser, html) ->
+], (_, Common, QuestCompleted, QuestBig, CommentCollection, CommentCollectionModel, currentUser, sharedModels, html) ->
     class extends Common
         activated: false
         template: _.template(html)
@@ -88,6 +88,9 @@ define [
             params.currentUser = currentUser.get("login")
             params.invited = _.contains(params.invitee or [], params.currentUser)
             params.meGusta = _.contains(params.likes or [], params.currentUser)
+
+            realmModel = sharedModels.realms.findWhere id: params.realm
+            params.realmData = realmModel.toJSON()
             params
 
         afterInitialize: ->

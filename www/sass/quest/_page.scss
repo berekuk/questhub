@@ -1,3 +1,19 @@
+.quest-page-realm {
+    width: 100%;
+    @include clearfix;
+}
+.quest-page-realm-inner {
+    float: right;
+    margin-bottom: 10px;
+    h3 {
+        margin: 0 5px;
+    }
+    > img, h3, nav {
+        display: inline-block;
+        vertical-align: middle;
+    }
+}
+
 div.quest-big-open, div.quest-big-closed, div.quest-big-abandoned, div.quest-big-unclaimed {
     position: relative;
     padding: 9px;
