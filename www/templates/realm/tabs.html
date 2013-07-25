@@ -1,0 +1,18 @@
+<nav class="round-tabs <%- small ? 'round-tabs-small' : '' %>">
+  <ul>
+    <%
+    _.each({
+    'activity': { icon: 'film', tooltip: 'Activity' },
+    'stencils': { icon: 'book', tooltip: 'Stencils' },
+    'quests': { icon: 'list-ul', tooltip: 'Quests' },
+    'players': { icon: 'group', tooltip: 'Players' }
+    }, function (o, t) {
+    %>
+    <li>
+      <div data-toggle="tooltip" data-placement="top" title="<%- o.tooltip %>" data-tab="<%- t %>" class="_icon _switch-<%- t %> <%- tab == t ? '_active' : '' %>">
+        <i class="icon-<%- o.icon %>"></i>
+      </div>
+    </li>
+    <% }) %>
+  </ul>
+</nav>

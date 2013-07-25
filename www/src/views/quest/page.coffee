@@ -2,11 +2,11 @@ define [
     "underscore"
     "views/proto/common"
     "views/quest/completed"
-    "views/quest/big", "views/comment/collection"
+    "views/realm/tabs", "views/quest/big", "views/comment/collection"
     "models/comment-collection", "models/current-user", "models/shared-models"
     "text!templates/quest/page.html"
     "jquery.typeahead"
-], (_, Common, QuestCompleted, QuestBig, CommentCollection, CommentCollectionModel, currentUser, sharedModels, html) ->
+], (_, Common, QuestCompleted, RealmTabs, QuestBig, CommentCollection, CommentCollectionModel, currentUser, sharedModels, html) ->
     class extends Common
         activated: false
         template: _.template(html)
@@ -28,7 +28,15 @@ define [
         realm: -> @model.get "realm"
         pageTitle: -> @model.get "name"
 
+        realmModel: -> sharedModels.realms.findWhere id: @realm()
+
         subviews:
+            ".realm-tabs-sv": ->
+                new RealmTabs
+                    model: @realmModel()
+                    small: true
+                    navigate: true
+
             ".quest-big": ->
                 new QuestBig(model: @model)
 
@@ -89,8 +97,7 @@ define [
             params.invited = _.contains(params.invitee or [], params.currentUser)
             params.meGusta = _.contains(params.likes or [], params.currentUser)
 
-            realmModel = sharedModels.realms.findWhere id: params.realm
-            params.realmData = realmModel.toJSON()
+            params.realmData = @realmModel().toJSON()
             params
 
         afterInitialize: ->

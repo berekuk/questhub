@@ -2,31 +2,15 @@
 
 <div class="quest-page-realm">
   <div class="quest-page-realm-inner">
+
     <h3>
       <a href="/realm/<%- realmData.id %>">
         <img src="<%- realmData.pic %>" width="40" height="40">
         <%- realmData.name %>
       </a>
     </h3>
+    <div class="realm-tabs-sv"></div>
 
-    <nav class="round-tabs round-tabs-small">
-      <ul>
-        <%
-        _.each({
-        'activity': { icon: 'film', tooltip: 'Activity' },
-        'stencils': { icon: 'book', tooltip: 'Stencils' },
-        'quests': { icon: 'list-ul', tooltip: 'Quests' },
-        'players': { icon: 'group', tooltip: 'Players' }
-        }, function (o, t) {
-        %>
-        <li>
-          <div data-toggle="tooltip" data-placement="top" title="<%- o.tooltip %>" data-tab="<%- t %>" class="_icon _switch-<%- t %>">
-            <i class="icon-<%- o.icon %>"></i>
-          </div>
-        </li>
-        <% }) %>
-      </ul>
-    </nav>
   </div>
 </div>
 
