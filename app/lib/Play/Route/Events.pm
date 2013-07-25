@@ -19,11 +19,6 @@ get '/event' => sub {
 };
 
 get '/event/atom' => sub {
-    unless (param('realm') or param('for')) {
-        status 'not_found';
-        return "one of 'realm' or 'for' is necessary";
-    }
-
     my @events = @{ db->events->list({
         limit => 30,
         map { param($_) ? ( $_ => param($_) ): () } qw/ realm limit for author /,

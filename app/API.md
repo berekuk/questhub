@@ -330,9 +330,9 @@ Other options:
 
 ##### GET /api/event/atom
 
-Get the Atom feed with 100 last events.
+Get the Atom feed with 30 last events.
 
-Either `realm` or `for` parameter should be set.
+Supported options: `realm`, `for`, `author`, `limit`.
 
 ##### GET /api/dev/session/{name}
 
