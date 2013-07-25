@@ -7,8 +7,20 @@
     margin-bottom: 10px;
     h3 {
         margin: 0 5px;
+
+        @include opacity(70);
+        &:hover {
+            @include opacity(100);
+        }
+        a {
+            color: $text-color;
+            &:hover {
+                color: $text-color;
+                text-decoration: none;
+            }
+        }
     }
-    > img, h3, nav {
+    > h3, nav {
         display: inline-block;
         vertical-align: middle;
     }
