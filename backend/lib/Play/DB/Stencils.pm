@@ -49,7 +49,7 @@ sub add {
     state $check = compile(Dict[
         realm => Realm,
         name => Str,
-        note => Optional[Str],
+        description => Optional[Str],
         author => Login,
         points => Optional[StencilPoints],
     ]);
@@ -80,7 +80,7 @@ sub edit {
     state $check = compile(Id, Dict[
         user => Login,
         name => Optional[Str],
-        note => Optional[Str],
+        description => Optional[Str],
         points => Optional[StencilPoints],
     ]);
     my ($id, $params) = $check->(@_);
@@ -201,7 +201,7 @@ sub take {
         stencil => $id,
         base_points => $stencil->{points},
     };
-    $quest_params->{note} = $stencil->{note} if defined $stencil->{note};
+    $quest_params->{note} = $stencil->{description} if defined $stencil->{description};
 
     my $quest = db->quests->add($quest_params);
     return $quest;

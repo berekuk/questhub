@@ -282,7 +282,7 @@ Parameters:
 
 Optional parameters:
 
-* `note`
+* `description`
 
 ##### PUT /api/quest/{id}
 
@@ -291,7 +291,7 @@ Edit a stencil.
 Possible parameters:
 
 * `name`
-* `note`
+* `description`
 
 ##### POST /api/stencil/{id}/take
 
@@ -387,7 +387,7 @@ Quest:
 
         // stencil-specific fields:
         stencil: ..., // mongo id
-        note: 'stencil note',
+        note: 'stencil description',
         base_points: 3
     }
 

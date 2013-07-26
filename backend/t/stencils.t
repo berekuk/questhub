@@ -19,7 +19,7 @@ sub add :Tests {
         realm => 'europe',
         author => 'foo',
         name => 'Start the World War II',
-        note => 'Hitler Hitler Hitler Hitler.',
+        description => 'Hitler Hitler Hitler Hitler.',
     });
     cmp_deeply $stencil, superhashof {
         realm => 'europe',
@@ -89,7 +89,7 @@ sub take :Tests {
         realm => 'europe',
         author => 'foo',
         name => 'Do something',
-        note => 'Just do anything',
+        description => 'Just do anything',
     });
 
     my $take_result = db->stencils->take($stencil->{_id}, 'foo');
