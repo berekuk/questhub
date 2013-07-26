@@ -56,7 +56,9 @@ sub add {
     my $check = compile(CommentParams);
     my ($params) = $check->(@_);
 
-    my $quest = db->quests->get($params->{quest_id}) or die "quest '$params->{quest_id}' not found";
+    $params->{entity} eq 'quest' or die "non-quest comments are not supported yet";
+
+    my $quest = db->quests->get($params->{eid}) or die "quest '$params->{eid}' not found";
 
     my $id = $self->collection->insert($params, { safe => 1 });
 
@@ -81,7 +83,12 @@ sub get {
     my $check = compile(Id);
     my ($quest_id) = $check->(@_);
 
-    my @comments = $self->collection->find({ quest_id => $quest_id })->sort({ _id => 'asc' })->all;
+    my @comments = $self->collection->find({
+        entity => 'quest',
+        eid => $quest_id,
+    })->sort({
+        _id => 'asc'
+    })->all;
     $self->_prepare_comment($_) for @comments;
 
     return \@comments;
@@ -144,23 +151,23 @@ sub bulk_count {
 
     # TODO - upgrade MongoDB to 2.2+ and use aggregation
     my @comments = $self->collection->find({
-        quest_id => { '$in' => $ids },
+        entity => 'quest',
+        eid => { '$in' => $ids },
         body => { '$exists' => 1 },
     })->all;
     my %stat;
     for (@comments) {
-        $stat{ $_->{quest_id} }++;
+        $stat{ $_->{eid} }++;
     }
     return \%stat;
 }
 
-=item B<remove($quest_id, $id, $user)>
+=item B<< remove({ id => $id, user => $login }) >>
 
 =cut
 sub remove {
     my $self = shift;
     my $check = compile(Dict[
-        quest_id => Id,
         id => Id,
         user => Login,
     ]);
@@ -169,7 +176,6 @@ sub remove {
     my $result = $self->collection->remove(
         {
             _id => MongoDB::OID->new(value => $params->{id}),
-            quest_id => $params->{quest_id},
             author => $params->{user},
         },
         { just_one => 1, safe => 1 }
@@ -178,13 +184,12 @@ sub remove {
     return;
 }
 
-=item B<update($quest_id, $id, $body, $user)>
+=item B<< update({ id => $id, body => $body, user => $user) >>
 
 =cut
 sub update {
     my $self = shift;
     my $check = compile(Dict[
-        quest_id => Id,
         id => Id,
         body => Str,
         user => Login,
@@ -192,7 +197,6 @@ sub update {
     my ($params) = $check->(@_);
 
     my $id = delete $params->{id};
-    delete $params->{quest_id}; # ignore it for now
 
     my $comment = $self->get_one($id);
     unless ($comment->{author} eq $params->{user}) {

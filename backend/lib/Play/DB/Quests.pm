@@ -448,7 +448,8 @@ sub _set_status {
         db->comments->add({
             type => $params->{comment_type},
             author => $params->{user},
-            quest_id => $params->{id},
+            entity => 'quest',
+            eid => $params->{id},
         });
     }
     return;
@@ -652,7 +653,8 @@ sub invite {
     }
 
     db->comments->add({
-        quest_id => $id,
+        entity => 'quest',
+        eid => $id,
         author => $actor,
         type => 'invite',
         invitee => $user,
@@ -726,7 +728,8 @@ sub join {
     db->comments->add({
         type => 'join',
         author => $user,
-        quest_id => $id,
+        entity => 'quest',
+        eid => $id,
     });
 }
 
@@ -756,7 +759,8 @@ sub leave {
     db->comments->add({
         type => 'leave',
         author => $user,
-        quest_id => $id,
+        entity => 'quest',
+        eid => $id,
     });
 }
 

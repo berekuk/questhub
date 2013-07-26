@@ -18,8 +18,8 @@ sub add :Tests {
     });
     my $quest_id = $quest->{_id};
 
-    my $first = db->comments->add({ quest_id => $quest->{_id}, author => 'blah', body => 'first comment!' });
-    my $second = db->comments->add({ quest_id => $quest->{_id}, author => 'blah', body => 'second comment!' });
+    my $first = db->comments->add({ entity => 'quest', eid => $quest->{_id}, author => 'blah', body => 'first comment!' });
+    my $second = db->comments->add({ entity => 'quest', eid => $quest->{_id}, author => 'blah', body => 'second comment!' });
 
     cmp_deeply
         $first,
@@ -30,8 +30,8 @@ sub add :Tests {
     cmp_deeply
         $list,
         [
-            { _id => $first->{_id}, ts => re('^\d+$'), body => 'first comment!', author => 'blah', quest_id => $quest_id, type => 'text' },
-            { _id => $second->{_id}, ts => re('^\d+$'), body => 'second comment!', author => 'blah', quest_id => $quest_id, type => 'text' },
+            { _id => $first->{_id},  ts => re('^\d+$'), body => 'first comment!',  author => 'blah', entity => 'quest', eid => $quest_id, type => 'text' },
+            { _id => $second->{_id}, ts => re('^\d+$'), body => 'second comment!', author => 'blah', entity => 'quest', eid => $quest_id, type => 'text' },
         ]
 }
 
@@ -46,7 +46,7 @@ sub bulk_get :Tests {
     my $quest_id = $quest->{_id};
 
     my @c = map {
-        db->comments->add({ quest_id => $quest->{_id}, author => 'foo', body => "c$_" });
+        db->comments->add({ entity => 'quest', eid => $quest->{_id}, author => 'foo', body => "c$_" });
     } 0..4;
 
     my $comments = db->comments->bulk_get([ map { $_->{_id} } @c[0,2,3] ]);
@@ -97,10 +97,10 @@ sub bulk_count :Tests {
         realm => 'europe',
     });
 
-    db->comments->add({ quest_id => $q1->{_id}, author => 'foo', body => "c1" });
-    db->comments->add({ quest_id => $q1->{_id}, author => 'foo', body => "c2" });
-    db->comments->add({ quest_id => $q2->{_id}, author => 'foo', body => "c3" });
-    db->comments->add({ quest_id => $q1->{_id}, author => 'foo', type => 'close' });
+    db->comments->add({ entity => 'quest', eid => $q1->{_id}, author => 'foo', body => "c1" });
+    db->comments->add({ entity => 'quest', eid => $q1->{_id}, author => 'foo', body => "c2" });
+    db->comments->add({ entity => 'quest', eid => $q2->{_id}, author => 'foo', body => "c3" });
+    db->comments->add({ entity => 'quest', eid => $q1->{_id}, author => 'foo', type => 'close' });
 
     my $result = db->comments->bulk_count([ $q1->{_id}, $q2->{_id} ]);
     cmp_deeply(

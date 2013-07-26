@@ -32,18 +32,21 @@ declare ImageUpic,
 declare CommentParams,
     as (
         Dict[
-            quest_id => Id,
+            entity => enum([qw( quest )]),
+            eid => Id,
             author => Login,
 #            type => enum['text'], # default?
             body => Str,
         ] |
         Dict[
-            quest_id => Id,
+            entity => enum([qw( quest )]),
+            eid => Id,
             author => Login,
             type => enum([qw( like close reopen abandon resurrect leave join )]),
         ] |
         Dict[
-            quest_id => Id,
+            entity => enum([qw( quest )]),
+            eid => Id,
             author => Login,
             type => enum([qw( invite )]),
             invitee => Login,
