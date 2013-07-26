@@ -81,21 +81,6 @@ sub add {
     return { _id => $id->to_string };
 }
 
-=item B<get($quest_id)>
-
-Get all comments for a quest
-
-DEPRECATED, use B<list> instead.
-
-=cut
-sub get {
-    my $self = shift;
-    my $check = compile(Id);
-    my ($quest_id) = $check->(@_);
-
-    return $self->list('quest', $quest_id);
-}
-
 =item B<list($entity, $eid)>
 
 Get all comments for a quest or a stencil or another entity.

@@ -18,7 +18,7 @@ post '/quest/:quest_id/comment' => sub {
 };
 
 get '/quest/:quest_id/comment' => sub {
-    return db->comments->get(param('quest_id'));
+    return db->comments->list('quest', param('quest_id'));
 };
 
 get '/quest/:quest_id/comment/:id' => sub {
