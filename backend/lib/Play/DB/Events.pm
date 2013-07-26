@@ -92,7 +92,6 @@ sub expand_events {
         my @quest_events_data;
         for my $event (@events) {
             my $quest_id = $event->{quest_id};
-            $quest_id = $event->{comment}{quest_id} if not defined $quest_id and defined $event->{comment};
             $quest_id = $event->{comment}{eid} if not defined $quest_id and defined $event->{comment} and $event->{comment}{entity} eq 'quest';
             next unless $quest_id;
             push @quest_events_data, [$event, $quest_id];
