@@ -1,5 +1,15 @@
 package Play::DB::Comments;
 
+=head1 OBJECT FORMAT
+
+See C<CommentParams> definition in L<Play::Types>.
+
+=head1 METHODS
+
+=over
+
+=cut
+
 use Moo;
 use Play::DB::Role::PushPull;
 with
@@ -38,6 +48,9 @@ sub body2html {
     return $html, { mentions => \@mentions };
 }
 
+=item B<add($comment_params)>
+
+=cut
 sub add {
     my $self = shift;
     my $check = compile(CommentParams);
@@ -58,7 +71,11 @@ sub add {
     return { _id => $id->to_string };
 }
 
-# get all comments for a quest
+=item B<get($quest_id)>
+
+Get all comments for a quest
+
+=cut
 # TODO - pager?
 sub get {
     my $self = shift;
@@ -71,6 +88,11 @@ sub get {
     return \@comments;
 }
 
+=item B<get_one($id)>
+
+Get a single comment by its id.
+
+=cut
 sub get_one {
     my $self = shift;
     my $check = compile(Id);
@@ -84,6 +106,11 @@ sub get_one {
     return $comment;
 }
 
+=item B<bulk_get($ids_arrayref)>
+
+Get multiple comments by their ids.
+
+=cut
 sub bulk_get {
     my $self = shift;
     my $check = compile(ArrayRef[Id]);
@@ -106,7 +133,11 @@ sub bulk_get {
 }
 
 
-# get number of comments for each quest in given set
+=item B<bulk_count($quest_ids_arrayref)>
+
+Get number of comments for each quest in given set.
+
+=cut
 sub bulk_count {
     my $self = shift;
     my $check = compile(ArrayRef[Id]);
@@ -124,6 +155,9 @@ sub bulk_count {
     return \%stat;
 }
 
+=item B<remove($quest_id, $id, $user)>
+
+=cut
 sub remove {
     my $self = shift;
     my $check = compile(Dict[
@@ -145,6 +179,9 @@ sub remove {
     return;
 }
 
+=item B<update($quest_id, $id, $body, $user)>
+
+=cut
 sub update {
     my $self = shift;
     my $check = compile(Dict[
@@ -172,5 +209,9 @@ sub update {
 
     return $id;
 }
+
+=over
+
+=cut
 
 1;
