@@ -29,8 +29,15 @@
     <% } %>
   </h2>
 
+  <% if (obj.note && note) { %>
+  <div class="quest-big-note">
+    <%= partial.markdown(note, realm) %>
+  </div>
+  <% } %>
+
   <% if (obj.description && description) { %>
     <div class="quest-big-editable">
+      <% if (obj.note && note) { %><hr><% } %>
       <%= partial.markdown(description, realm) %>
     </div>
   <% } %>
