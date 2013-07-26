@@ -8,6 +8,7 @@ use Type::Library
     -declare => qw(
         Id Login
         Realm RealmName
+        Entity
         StencilPoints
         ImageSize ImageUpic
         CommentParams
@@ -29,10 +30,13 @@ declare ImageSize, as enum([qw/ small normal /]);
 declare ImageUpic,
     as Dict[small => Str, normal => Str];
 
+declare Entity,
+    as enum([qw( quest stencil )]);
+
 declare CommentParams,
     as (
         Dict[
-            entity => enum([qw( quest stencil )]),
+            entity => Entity,
             eid => Id,
             author => Login,
 #            type => enum['text'], # default?

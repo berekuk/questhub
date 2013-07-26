@@ -21,7 +21,7 @@ use Play::DB qw(db);
 
 use Types::Standard qw(Str Dict HashRef ArrayRef);
 use Type::Params qw(compile);
-use Play::Types qw(Id Login CommentParams);
+use Play::Types qw(Entity Id Login CommentParams);
 
 use Play::Markdown qw(markdown);
 
@@ -85,16 +85,33 @@ sub add {
 
 Get all comments for a quest
 
+DEPRECATED, use B<list> instead.
+
 =cut
-# TODO - pager?
 sub get {
     my $self = shift;
     my $check = compile(Id);
     my ($quest_id) = $check->(@_);
 
+    return $self->list('quest', $quest_id);
+}
+
+=item B<list($entity, $eid)>
+
+Get all comments for a quest or a stencil or another entity.
+
+I<$entity> can be either C<quest> or C<stencil>.
+
+=cut
+# TODO - pager?
+sub list {
+    my $self = shift;
+    my $check = compile(Entity, Id);
+    my ($entity, $eid) = $check->(@_);
+
     my @comments = $self->collection->find({
-        entity => 'quest',
-        eid => $quest_id,
+        entity => $entity,
+        eid => $eid,
     })->sort({
         _id => 'asc'
     })->all;

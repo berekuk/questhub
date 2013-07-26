@@ -26,7 +26,7 @@ sub add :Tests {
         { _id => re('^\S+$') },
         'add comment result';
 
-    my $list = db->comments->get($quest->{_id});
+    my $list = db->comments->list('quest', $quest_id);
     cmp_deeply
         $list,
         [
@@ -51,6 +51,48 @@ sub add_stencil_comment :Tests {
         $comment,
         { _id => re('^\S+$') },
         'add comment result';
+
+    my $list = db->comments->list('stencil', $stencil_id);
+    cmp_deeply
+        $list,
+        [
+            { _id => $comment->{_id},  ts => re('^\d+$'), body => 'first stencil comment ever!',  author => 'foo', entity => 'stencil', eid => $stencil_id, type => 'text' },
+        ]
+}
+
+sub list_respects_entity :Tests {
+    db->users->add({ login => 'foo' });
+
+    my $stencil = db->stencils->add({
+        realm => 'europe',
+        author => 'foo',
+        name => 'sss',
+        points => 2,
+    });
+    my $quest = db->quests->add({
+        user => 'foo',
+        name => 'foo',
+        realm => 'europe',
+    });
+
+    my $quest_comment = db->comments->add({ entity => 'quest', eid => $quest->{_id}, author => 'foo', body => 'quest comment' });
+    my $stencil_comment = db->comments->add({ entity => 'stencil', eid => $stencil->{_id}, author => 'foo', body => 'stencil comment' });
+
+    cmp_deeply
+        db->comments->list('quest', $quest->{_id}),
+        [ superhashof({ _id => $quest_comment->{_id} }) ];
+
+    cmp_deeply
+        db->comments->list('stencil', $stencil->{_id}),
+        [ superhashof({ _id => $stencil_comment->{_id} }) ];
+
+    cmp_deeply
+        db->comments->list('quest', $stencil->{_id}),
+        [];
+
+    cmp_deeply
+        db->comments->list('stencil', $quest->{_id}),
+        [];
 }
 
 sub bulk_get :Tests {
