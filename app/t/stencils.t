@@ -15,7 +15,7 @@ sub add :Tests {
     http_json POST => "/api/stencil", { params => {
         realm => 'europe',
         name => 'Do something',
-        description => 'Just do anything',
+        note => 'Just do anything',
     } };
 }
 
@@ -25,7 +25,7 @@ sub list :Tests {
     http_json POST => "/api/stencil", { params => {
         realm => 'europe',
         name => 'Do something',
-        description => 'Just do anything',
+        note => 'Just do anything',
     } };
     http_json POST => "/api/stencil", { params => {
         realm => 'europe',
@@ -37,7 +37,7 @@ sub list :Tests {
         # TODO - sorting order?
         superhashof({
             name => 'Do something',
-            description => 'Just do anything',
+            note => 'Just do anything',
         }),
         superhashof({
             name => 'Do something else',

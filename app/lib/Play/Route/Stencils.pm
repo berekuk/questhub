@@ -14,9 +14,14 @@ post '/stencil' => sub {
     };
 
     # optional fields
-    for (qw/ description points /) {
+    for (qw/ note points /) {
         $params->{$_} = param($_) if defined param($_);
     };
+    if (defined param('description')) {
+        # backward compatibility, in case someone tries to create a stencil without reloading a page after new stencil.code field is deployed
+        $params->{note} = param('description');
+    }
+
     # required fields
     for (qw/ realm name /) {
         my $value = param($_) or die "'$_' is not set";
@@ -40,12 +45,16 @@ get '/stencil/:id' => sub {
 
 put '/stencil/:id' => sub {
     my $login = login;
+
+    my $params = {
+        user => $login,
+        map { defined(param($_)) ? ($_ => param($_)) : () } qw/ name note points /,
+    };
+    $params->{note} = param('description') if defined param('description');
+
     my $updated_id = db->stencils->edit(
         param('id'),
-        {
-            user => $login,
-            map { defined(param($_)) ? ($_ => param($_)) : () } qw/ name description points /,
-        }
+        $params
     );
     return { result => 'ok' };
 };
