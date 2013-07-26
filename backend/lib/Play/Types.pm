@@ -32,7 +32,7 @@ declare ImageUpic,
 declare CommentParams,
     as (
         Dict[
-            entity => enum([qw( quest )]),
+            entity => enum([qw( quest stencil )]),
             eid => Id,
             author => Login,
 #            type => enum['text'], # default?

@@ -56,9 +56,18 @@ sub add {
     my $check = compile(CommentParams);
     my ($params) = $check->(@_);
 
-    $params->{entity} eq 'quest' or die "non-quest comments are not supported yet";
-
-    my $quest = db->quests->get($params->{eid}) or die "quest '$params->{eid}' not found";
+    my $realm;
+    if ($params->{entity} eq 'quest') {
+        my $quest = db->quests->get($params->{eid}) or die "quest '$params->{eid}' not found";
+        $realm = $quest->{realm};
+    }
+    elsif ($params->{entity} eq 'stencil') {
+        my $stencil = db->stencils->get($params->{eid}) or die "stencil '$params->{eid}' not found";
+        $realm = $stencil->{realm};
+    }
+    else {
+        die "Unknown entity '$params->{entity}'";
+    }
 
     my $id = $self->collection->insert($params, { safe => 1 });
 
@@ -66,7 +75,7 @@ sub add {
         type => 'add-comment',
         author => $params->{author},
         comment_id => $id->to_string,
-        realm => $quest->{realm},
+        realm => $realm,
     });
 
     return { _id => $id->to_string };

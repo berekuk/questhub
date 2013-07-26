@@ -35,6 +35,24 @@ sub add :Tests {
         ]
 }
 
+sub add_stencil_comment :Tests {
+    db->users->add({ login => 'foo' });
+
+    my $stencil = db->stencils->add({
+        realm => 'europe',
+        author => 'foo',
+        name => 'sss',
+        points => 2,
+    });
+    my $stencil_id = $stencil->{_id};
+
+    my $comment = db->comments->add({ entity => 'stencil', eid => $stencil->{_id}, author => 'foo', body => 'first stencil comment ever!' });
+    cmp_deeply
+        $comment,
+        { _id => re('^\S+$') },
+        'add comment result';
+}
+
 sub bulk_get :Tests {
     db->users->add({ login => 'foo' });
 
