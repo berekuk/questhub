@@ -150,19 +150,19 @@ sub bulk_get {
 }
 
 
-=item B<bulk_count($quest_ids_arrayref)>
+=item B<bulk_count($entity, $eids_arrayref)>
 
-Get number of comments for each quest in given set.
+Get number of comments for each entity in given set.
 
 =cut
 sub bulk_count {
     my $self = shift;
-    my $check = compile(ArrayRef[Id]);
-    my ($ids) = $check->(@_);
+    my $check = compile(Entity, ArrayRef[Id]);
+    my ($entity, $ids) = $check->(@_);
 
     # TODO - upgrade MongoDB to 2.2+ and use aggregation
     my @comments = $self->collection->find({
-        entity => 'quest',
+        entity => $entity,
         eid => { '$in' => $ids },
         body => { '$exists' => 1 },
     })->all;

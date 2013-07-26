@@ -162,7 +162,7 @@ sub bulk_count :Tests {
     db->comments->add({ entity => 'quest', eid => $q2->{_id}, author => 'foo', body => "c3" });
     db->comments->add({ entity => 'quest', eid => $q1->{_id}, author => 'foo', type => 'close' });
 
-    my $result = db->comments->bulk_count([ $q1->{_id}, $q2->{_id} ]);
+    my $result = db->comments->bulk_count('quest', [ $q1->{_id}, $q2->{_id} ]);
     cmp_deeply(
         $result,
         {

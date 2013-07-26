@@ -195,9 +195,12 @@ sub list {
     $self->_prepare_quest($_) for @quests;
 
     if ($params->{comment_count} or ($params->{sort} || '') eq 'leaderboard') {
-        my $comment_stat = db->comments->bulk_count([
-            map { $_->{_id} } @quests
-        ]);
+        my $comment_stat = db->comments->bulk_count(
+            'quest',
+            [
+                map { $_->{_id} } @quests
+            ]
+        );
 
         for my $quest (@quests) {
             my $cc = $comment_stat->{$quest->{_id}};
