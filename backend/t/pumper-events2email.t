@@ -37,7 +37,7 @@ sub startup :Test(startup => 2) {
 }
 
 sub comment_on_other_users_quest :Tests {
-    db->comments->add({ quest_id => $quest->{_id}, author => 'bar', body => '**strong**' });
+    db->comments->add({ entity => 'quest', eid => $quest->{_id}, author => 'bar', body => '**strong**' });
 
     $pumper->run;
     $log->contains_ok(qr/1 emails sent, 1 events processed/);
@@ -46,7 +46,7 @@ sub comment_on_other_users_quest :Tests {
     $email_in->commit;
     like $email->{body}, qr/commented on your quest/;
     like $email->{body}, qr{"http://localhost:3000/europe/player/bar"};
-    like $email->{body}, qr{"http://localhost:3000/europe/quest/$quest->{_id}"};
+    like $email->{body}, qr["http://localhost:3000/europe/quest/$quest->{_id}"];
 
     is $email_in->read, undef;
 
@@ -54,7 +54,7 @@ sub comment_on_other_users_quest :Tests {
 }
 
 sub comment_on_your_own_quest :Tests {
-    db->comments->add({ quest_id => $quest->{_id}, author => 'foo', body => 'self-comment' });
+    db->comments->add({ entity => 'quest', eid => $quest->{_id}, author => 'foo', body => 'self-comment' });
 
     $pumper->run;
     $log->contains_ok(qr/1 events processed$/);
@@ -73,7 +73,7 @@ sub comment_on_watched_quest :Tests {
     db->quests->watch($watched_quest->{_id}, 'baz');
     db->quests->watch($watched_quest->{_id}, 'baz2');
 
-    db->comments->add({ quest_id => $watched_quest->{_id}, author => 'baz', body => 'preved!' });
+    db->comments->add({ entity => 'quest', eid => $watched_quest->{_id}, author => 'baz', body => 'preved!' });
 
     $pumper->run;
     $log->contains_ok(qr/2 emails sent, 2 events processed$/);
@@ -95,7 +95,8 @@ sub comment_on_watched_quest :Tests {
 
 sub comment_with_mentions :Tests {
     db->comments->add({
-        quest_id => $quest->{_id},
+        entity => 'quest',
+        eid => $quest->{_id},
         author => 'foo',
         body => '@somebody, @somebody_else, hello.'
     });
