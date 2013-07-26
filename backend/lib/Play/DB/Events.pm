@@ -70,23 +70,6 @@ sub expand_events {
 
     my @events = @$events;
 
-    # fetch quests
-    {
-        my @quest_events = grep {
-            defined $_->{quest_id}
-        } @events;
-        my @quest_ids = map { $_->{quest_id} } @quest_events;
-
-        if (@quest_ids) {
-            my $quests = db->quests->bulk_get(\@quest_ids);
-
-            for my $event (@quest_events) {
-                $event->{quest} = $quests->{$event->{quest_id}};
-                $event->{deleted} = 1 unless $event->{quest};
-            }
-        }
-    }
-
     # fetch comments
     {
         my @comment_events = grep {
@@ -100,6 +83,27 @@ sub expand_events {
             for my $event (@comment_events) {
                 $event->{comment} = $comments->{$event->{comment_id}};
                 $event->{deleted} = 1 unless $event->{comment};
+            }
+        }
+    }
+
+    # fetch quests
+    {
+        my @quest_events_data;
+        for my $event (@events) {
+            my $quest_id = $event->{quest_id};
+            $quest_id = $event->{comment}{quest_id} if not defined $quest_id and defined $event->{comment};
+            next unless $quest_id;
+            push @quest_events_data, [$event, $quest_id];
+        }
+
+        if (@quest_events_data) {
+            my $quests = db->quests->bulk_get([ map { $_->[1] } @quest_events_data ]);
+
+            for my $data (@quest_events_data) {
+                my ($event, $quest_id) = @$data;
+                $event->{quest} = $quests->{$quest_id};
+                $event->{deleted} = 1 unless $event->{quest};
             }
         }
     }

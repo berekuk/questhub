@@ -4,6 +4,11 @@
     <link rel="alternate" type="text/html" href="http://<% settings.hostport %><% realm ? ('/realm/' _ realm) : '' %>" />
     <id>tag:<% settings.hostport %>,2013-02-15:global</id>
 
+<% BLOCK quest_link %>
+<link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest.item('_id') %>" />
+<% END %>
+
+
 <% FOREACH event IN events %>
 <entry>
     <updated><% event.updated %></updated>
@@ -14,78 +19,79 @@
     </author>
 
     <% IF event.type == 'add-quest' %>
-    <title><% event.author %> is on a new quest: <% event.quest.name | xml %></title>
-    <% IF event.quest.description %>
-        <content type="html">
-            <![CDATA[
-            <% markdown(event.quest.description) %>
-            ]]>
-        </content>
-    <% END %>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest_id %>" />
+        <title><% event.author %> is on a new quest: <% event.quest.name | xml %></title>
+        <% IF event.quest.description %>
+            <content type="html">
+                <![CDATA[
+                <% markdown(event.quest.description) %>
+                ]]>
+            </content>
+        <% END %>
+        <% PROCESS quest_link %>
 
     <% ELSIF event.type == 'close-quest' || (event.type == 'add-comment' && event.comment.type == 'close') %>
-    <title><% event.author %> completed a quest: <% event.quest.name | xml %></title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest_id %>" />
+        <title><% event.author %> completed a quest: <% event.quest.name | xml %></title>
+        <% PROCESS quest_link %>
 
     <% ELSIF event.type == 'reopen-quest' || (event.type == 'add-comment' && event.comment.type == 'reopen') %>
-    <title><% event.author %> reopened a quest: <% event.quest.name | xml %></title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest_id %>" />
+        <title><% event.author %> reopened a quest: <% event.quest.name | xml %></title>
+        <% PROCESS quest_link %>
 
     <% ELSIF event.type == 'abandon-quest' || (event.type == 'add-comment' && event.comment.type == 'abandon') %>
-    <title><% event.author %> abandoned a quest: <% event.quest.name | xml %></title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest_id %>" />
+        <title><% event.author %> abandoned a quest: <% event.quest.name | xml %></title>
+        <% PROCESS quest_link %>
 
     <% ELSIF event.type == 'resurrect-quest' || (event.type == 'add-comment' && event.comment.type == 'resurrect') %>
-    <title><% event.author %> resurrected a quest: <% event.quest.name | xml %></title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest_id %>" />
+        <title><% event.author %> resurrected a quest: <% event.quest.name | xml %></title>
+        <% PROCESS quest_link %>
 
     <% ELSIF event.type == 'add-user' %>
-    <title><% event.author %> joins <% event.realm %> realm</title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/player/<%= event.author %>" />
+        <title><% event.author %> joins <% event.realm %> realm</title>
+        <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/player/<%= event.author %>" />
 
     <% ELSIF event.type == 'add-comment' && event.comment.type == 'text' %>
-    <title><% event.author %> commented on <% event.quest.name | xml %></title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest.item('_id') %>" />
+        <title><% event.author %> commented on <% event.quest.name | xml %></title>
+        <% PROCESS quest_link %>
 
-    <content type="html">
-        <![CDATA[
-        <% markdown(event.comment.body) %>
-        ]]>
-    </content>
-
-    <% ELSIF event.type == 'add-comment' && event.comment.type == 'leave' %>
-    <title><% event.author %> left a quest: <% event.quest.name | xml %></title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest_id %>" />
-
-    <% ELSIF event.type == 'add-comment' && event.comment.type == 'join' %>
-    <title><% event.author %> joined a quest: <% event.quest.name | xml %></title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest_id %>" />
-
-    <% ELSIF event.type == 'invite-quest' || (event.type == 'add-comment' && event.comment.type == 'invite') %>
-    <title><% event.author %> invited <% event.invitee || event.comment.invitee %> to work on a quest: <% event.quest.name | xml %></title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest_id %>" />
-
-    <% ELSIF event.type == 'add-stencil' %>
-    <title><% event.author %> created a stencil: <% event.stencil.name | xml %></title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/stencil/<%= event.stencil_id %>" />
-    <% IF event.stencil.description %>
         <content type="html">
             <![CDATA[
-            <% markdown(event.stencil.description) %>
+            <% markdown(event.comment.body) %>
             ]]>
         </content>
-    <% END %>
+
+    <% ELSIF event.type == 'add-comment' && event.comment.type == 'leave' %>
+        <title><% event.author %> left a quest: <% event.quest.name | xml %></title>
+        <% PROCESS quest_link %>
+
+    <% ELSIF event.type == 'add-comment' && event.comment.type == 'join' %>
+        <title><% event.author %> joined a quest: <% event.quest.name | xml %></title>
+        <% PROCESS quest_link %>
+
+    <% ELSIF event.type == 'invite-quest' || (event.type == 'add-comment' && event.comment.type == 'invite') %>
+        <title><% event.author %> invited <% event.invitee || event.comment.invitee %> to work on a quest: <% event.quest.name | xml %></title>
+        <% PROCESS quest_link %>
+
+    <% ELSIF event.type == 'add-stencil' %>
+        <title><% event.author %> created a stencil: <% event.stencil.name | xml %></title>
+        <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/stencil/<%= event.stencil_id %>" />
+        <% IF event.stencil.description %>
+            <content type="html">
+                <![CDATA[
+                <% markdown(event.stencil.description) %>
+                ]]>
+            </content>
+        <% END %>
 
     <% ELSE %>
-    <title>Unknown event type (<% event.type %>)</title>
-    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>" />
-    <content type="html" xml:lang="en">
-        <![CDATA[
-            <p>This is a bug! We probably forgot to add a rendering template for this event type.</p>
-            <p>Please report it to the <a href="https://github.com/berekuk/play-perl/issues/new">Github Issues</a>.</p>
-        ]]>
-    </content>
+        <title>Unknown event type (<% event.type %>)</title>
+        <link rel="alternate" type="text/html" href="http://<% settings.hostport %>" />
+        <content type="html" xml:lang="en">
+            <![CDATA[
+                <p>This is a bug! We probably forgot to add a rendering template for this event type.</p>
+                <p>Please report it to the <a href="https://github.com/berekuk/play-perl/issues/new">Github Issues</a>.</p>
+            ]]>
+        </content>
+
     <% END %>
 </entry>
 <% END %>

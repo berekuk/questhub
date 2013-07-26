@@ -64,7 +64,6 @@ sub add {
         type => 'add-comment',
         author => $params->{author},
         comment_id => $id->to_string,
-        quest_id => $params->{quest_id},
         realm => $quest->{realm},
     });
 
