@@ -198,26 +198,6 @@ Options:
 
 Get one quest.
 
-##### POST /api/quest/{quest_id}/comment
-
-Add a new comment.
-
-##### GET /api/quest/{quest_id}/comment
-
-Get all quest's comments.
-
-##### GET /api/quest/{quest_id}/comment/{comment_id}
-
-Get a single comment.
-
-##### POST /api/quest/{id}/comment/{comment_id}/like
-
-Like a comment.
-
-##### POST /api/quest/{id}/comment/{comment_id}/unlike
-
-Unlike a comment.
-
 ##### POST /api/quest/{id}/like
 
 Like a quest.
@@ -255,6 +235,32 @@ Cancel the invitation.
 Set manual ordering of quests.
 
 Parameters: `quest_ids[]` array with quest ids. Use `GET /api/quest?sort=manual` to fetch quests in this order.
+
+### Comments
+
+All comment methods work both for `/api/quest` and for `/api/stencil` prefixes. We're listing just quest versions of all methods, because stencil ones are identical.
+
+(*Some* methods will work even if you choose `.../stencil/...` instead of `.../quest/...`, and vice versa. This is accidental and may change in the future.)
+
+##### POST /api/quest/{quest_id}/comment
+
+Add a new comment to a quest.
+
+##### GET /api/quest/{quest_id}/comment
+
+Get all quest's comments.
+
+##### GET /api/quest/{quest_id}/comment/{comment_id}
+
+Get a single comment.
+
+##### POST /api/quest/{id}/comment/{comment_id}/like
+
+Like a comment.
+
+##### POST /api/quest/{id}/comment/{comment_id}/unlike
+
+Unlike a comment.
 
 ### Stencils
 
