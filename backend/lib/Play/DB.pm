@@ -5,6 +5,7 @@ use 5.010;
 use Moo;
 
 use Play::Mongo;
+use Tie::IxHash;
 
 use parent qw(Exporter);
 our @EXPORT_OK = qw( db );
@@ -77,6 +78,12 @@ sub ensure_indices {
     my $realms_collection = Play::Mongo->db->get_collection('realms');
     $realms_collection->drop_indexes;
     $realms_collection->ensure_index({ 'id' => 1 }, { unique => 1 });
+
+    my $comments_collection = Play::Mongo->db->get_collection('comments');
+    $comments_collection->drop_indexes;
+    $comments_collection->ensure_index(
+        Tie::IxHash->new(entity => 1, eid => 1)
+    );
 }
 
 1;
