@@ -296,8 +296,10 @@ sub add {
         team => Optional[ArrayRef[Login]],
         tags => Optional[ArrayRef[Str]],
         status => Optional[Str],
+        # stencil-specific fields
         stencil => Optional[Id],
         base_points => Optional[Int],
+        note => Optional[Str],
     ]);
     my ($params) = $check->(@_);
     $params->{status} //= 'open';

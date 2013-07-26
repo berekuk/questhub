@@ -384,6 +384,11 @@ Quest:
             'bar-user'
         ],
         realm: 'chaos'
+
+        // stencil-specific fields:
+        stencil: ..., // mongo id
+        note: 'stencil description',
+        base_points: 3
     }
 
 Comment:

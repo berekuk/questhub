@@ -96,7 +96,7 @@ sub take :Tests {
     cmp_deeply $take_result, superhashof {
         team => ['foo'],
         name => 'Do something',
-        description => 'Just do anything',
+        note => 'Just do anything',
         realm => 'europe',
         stencil => $stencil->{_id},
         _id => $take_result->{_id},
@@ -107,7 +107,7 @@ sub take :Tests {
         superhashof {
             team => ['foo'],
             name => 'Do something',
-            description => 'Just do anything',
+            note => 'Just do anything',
             realm => 'europe',
             stencil => $stencil->{_id},
             _id => $take_result->{_id},

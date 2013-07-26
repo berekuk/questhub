@@ -70,6 +70,7 @@ sub take :Tests {
     my $result = http_json POST => "/api/stencil", { params => {
         realm => 'europe',
         name => 'Do something',
+        description => 'Ddd',
     } };
 
     my $take_result = http_json POST => "/api/stencil/$result->{_id}/take";
@@ -77,6 +78,7 @@ sub take :Tests {
         author => 'foo',
         name => 'Do something',
         realm => 'europe',
+        note => 'Ddd',
     };
 
     my $quests = http_json GET => "/api/quest?user=foo";
@@ -84,6 +86,7 @@ sub take :Tests {
         superhashof({
             author => 'foo',
             name => 'Do something',
+            note => 'Ddd',
             realm => 'europe',
         }),
     ];

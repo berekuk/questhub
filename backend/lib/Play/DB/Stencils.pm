@@ -201,7 +201,7 @@ sub take {
         stencil => $id,
         base_points => $stencil->{points},
     };
-    $quest_params->{description} = $stencil->{description} if defined $stencil->{description};
+    $quest_params->{note} = $stencil->{description} if defined $stencil->{description};
 
     my $quest = db->quests->add($quest_params);
     return $quest;
