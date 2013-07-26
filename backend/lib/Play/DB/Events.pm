@@ -87,39 +87,28 @@ sub expand_events {
         }
     }
 
-    # fetch quests
-    {
-        my @quest_events_data;
+    # fetch quests and stencils
+    for my $entity (qw( quest stencil )) {
+        my @events_data;
         for my $event (@events) {
-            my $quest_id = $event->{quest_id};
-            $quest_id = $event->{comment}{eid} if not defined $quest_id and defined $event->{comment} and $event->{comment}{entity} eq 'quest';
-            next unless $quest_id;
-            push @quest_events_data, [$event, $quest_id];
+            my $eid = $event->{"${entity}_id"};
+            $eid = $event->{comment}{eid} if not defined $eid and defined $event->{comment} and $event->{comment}{entity} eq $entity;
+            next unless $eid;
+            push @events_data, [$event, $eid];
         }
 
-        if (@quest_events_data) {
-            my $quests = db->quests->bulk_get([ map { $_->[1] } @quest_events_data ]);
+        if (@events_data) {
+            my $db =
+                ($entity eq 'quest') ? db->quests :
+                ($entity eq 'stencil') ? db->stencils :
+                die "internal error - unknown entity $entity";
 
-            for my $data (@quest_events_data) {
-                my ($event, $quest_id) = @$data;
-                $event->{quest} = $quests->{$quest_id};
-                $event->{deleted} = 1 unless $event->{quest};
-            }
-        }
-    }
+            my $objects = $db->bulk_get([ map { $_->[1] } @events_data ]);
 
-    # fetch stencils
-    {
-        my @stencil_events = grep {
-            defined $_->{stencil_id}
-        } @events;
-        my @stencil_ids = map { $_->{stencil_id} } @stencil_events;
-
-        if (@stencil_ids) {
-            my $stencils = db->stencils->bulk_get(\@stencil_ids);
-
-            for my $event (@stencil_events) {
-                $event->{stencil} = $stencils->{$event->{stencil_id}};
+            for my $data (@events_data) {
+                my ($event, $eid) = @$data;
+                $event->{$entity} = $objects->{$eid};
+                $event->{deleted} = 1 unless $event->{$entity};
             }
         }
     }

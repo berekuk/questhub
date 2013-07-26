@@ -204,4 +204,38 @@ sub load_quests :Tests {
     ];
 }
 
+sub stencil_comments :Tests {
+    db->users->add({ login => 'foo' });
+
+    my $stencil = db->stencils->add({
+        realm => 'europe',
+        author => 'foo',
+        name => 'sss',
+        points => 2,
+    });
+    my $stencil_id = $stencil->{_id};
+
+    my $comment = db->comments->add({ entity => 'stencil', eid => $stencil->{_id}, author => 'foo', body => 'hello' });
+
+    my $events = db->events->list({ realm => 'europe' });
+    cmp_deeply $events, [
+        superhashof({
+            stencil => superhashof({
+                name => 'sss'
+            }),
+            comment => superhashof({
+                body => 'hello',
+                entity => 'stencil',
+            }),
+            type => 'add-comment',
+        }),
+        superhashof({
+            stencil => superhashof({
+                name => 'sss'
+            }),
+            type => 'add-stencil',
+        }),
+    ];
+}
+
 __PACKAGE__->new->runtests;
