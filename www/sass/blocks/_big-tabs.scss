@@ -61,13 +61,13 @@
 
 .round-tabs-small {
     ._icon {
-        width: 36px;
-        height: 36px;
-        font-size: 14px;
+        width: 28px;
+        height: 28px;
+        font-size: 11px;
         @include breakpoint(B) {
-            width: 36px;
-            height: 36px;
-            font-size: 14px;
+            width: 28px;
+            height: 28px;
+            font-size: 11px;
         }
     }
 }

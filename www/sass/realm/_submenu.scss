@@ -6,9 +6,10 @@
     @include breakpoint(B) {
         float: right;
     }
-    margin-bottom: 10px;
-    h3 {
-        margin: 0 7px;
+    margin-bottom: 5px;
+    h4 {
+        margin: 0 5px;
+        font-weight: 200;
 
         @include opacity(70);
         &:hover {
@@ -22,7 +23,7 @@
             }
         }
     }
-    > h3, > div {
+    > h4, > div {
         display: inline-block;
         vertical-align: middle;
     }
