@@ -16,6 +16,7 @@ define [
             "stencil/:id": "stencilPage"
             "realm/:realm/stencil/:id": "realmStencilPage"
             "realm/:realm/stencil/:id/discuss": "realmStencilPageComments"
+            "realm/:realm/stencil/:id/reply/:reply": "stencilReply"
 
         questPage: (id, reply) ->
             model = new QuestModel _id: id
@@ -35,12 +36,15 @@ define [
         realmQuestPage: (realm, id, reply) ->
             @questPage id, reply
 
-        stencilPage: (id, tab) ->
+        stencilPage: (id, tab, reply) ->
             model = new StencilModel _id: id
-            view = new StencilPage model: model, tab: tab
+            view = new StencilPage
+                model: model
+                tab: tab
+                reply: reply
+
             model.fetch success: =>
                 Backbone.history.navigate view.url(),
-                    trigger: true
                     replace: true
                 view.activate()
                 @appView.updateRealm()
@@ -52,6 +56,9 @@ define [
 
         realmStencilPageComments: (realm, id) ->
             @stencilPage id, 'comments'
+
+        stencilReply: (realm, id, reply) ->
+            @stencilPage id, 'comments', reply
 
         questAdd: (realm) ->
             unless currentUser.get("registered")

@@ -33,7 +33,12 @@ define [
                 subview: -> new StencilPageQuests model: @model
             comments:
                 url: '/discuss'
-                subview: -> new StencilPageComments model: @model
+                subview: ->
+                    reply = @options.reply
+                    delete @options.reply
+                    new StencilPageComments
+                        model: @model
+                        reply: reply
 
         initialize: ->
             super

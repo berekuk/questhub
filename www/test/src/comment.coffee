@@ -7,7 +7,8 @@ define [
             body: "aaa"
             ts: 1363395653
             body_html: "aaa\n"
-            quest_id: "5143c351dd3d73910c00000e"
+            entity: "quest"
+            eid: "5143c351dd3d73910c00000e"
             author: "ooo"
             type: "text"
         )
@@ -24,7 +25,7 @@ define [
         )
         view = new CommentText(
             model: model
-            quest: questModel
+            object: questModel
         )
         view.render()
         it "comment body", ->

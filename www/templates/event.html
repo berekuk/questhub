@@ -9,12 +9,15 @@
       <i class="icon-comment"></i>
       <%= partial.user({ realm: realm, login: author }) %>
       commented on
-      <% if (quest.team && quest.team.length > 0) { %>
-        <%= partial.user({ realm: realm, login: _.first(quest.team) }) %>'s
+      <% if (comment.entity == 'quest' && quest.team && quest.team.length > 0) { %>
+        <%= partial.user({ realm: realm, login: _.first(quest.team) }) %>'s quest:
+      <% } else if (comment.entity == 'quest') { %>
+        a quest:
+      <% } else if (comment.entity == 'stencil') { %>
+        a stencil:
       <% } else { %>
-        a
+        <strong>unknown entity</strong>:
       <% } %>
-      quest:
 
     <% } else if (type == 'close-quest' || (type == 'add-comment' && comment.type == 'close')) { %>
       <i class="icon-check"></i>
@@ -59,14 +62,18 @@
   </header>
 
   <% if (obj.quest) { %>
-    <div class="event-quest-title">
+    <div>
       <% if (quest.stencil) { %>
-        <a href="/realm/<%- quest.realm %>/stencil/<%- quest.stencil %>" class="grey-link">
+        <a href="/realm/<%- realm %>/stencil/<%- quest.stencil %>" class="grey-link">
           <i class="icon-book"></i>
         </a>
       <% } %>
 
-      <%= partial.quest_link(quest) %>.
+      <%= partial.quest_link(quest) %>
+    </div>
+  <% } else if (obj.stencil) { %>
+    <div>
+      <a href="/realm/<%- realm %>/stencil/<%- stencil._id %>/discuss"><%- stencil.name %></a>
     </div>
   <% } %>
 
@@ -107,9 +114,9 @@
       <span class="likes"></span>
     <% } %>
 
-    <% if (obj.quest && currentUser) { %>
+    <% if (currentUser && (obj.quest || obj.stencil)) { %>
     <span class="muted event-interact">&bull;
-      <a href="/realm/<%- realm %>/quest/<%- quest._id %>/reply/<%- author %>">Reply</a>
+      <a href="/realm/<%- realm %>/<%- obj.quest ? 'quest' : 'stencil' %>/<%- (obj.quest ? obj.quest._id : obj.stencil._id) %>/reply/<%- author %>">Reply</a>
     </span>
     <% } %>
 
