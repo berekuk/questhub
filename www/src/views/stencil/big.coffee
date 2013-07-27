@@ -12,7 +12,17 @@ define [
         events:
             "click .edit": "startEdit"
             "click button.save": "saveEdit"
+            "click .stencil-big-tabs div._icon": "switch"
             "keyup input": "edit"
+
+        switch: (e) ->
+            # FIXME - evil, evil copypaste (see also: user/big, realm/tabs)
+            t = $(e.target).closest("._icon")
+            @tab = t.attr "data-tab"
+
+            @trigger "switch", tab: @tab
+            t.closest("ul").find("._active").removeClass "_active"
+            t.addClass "_active"
 
         subviews:
             ".description-sv": ->
@@ -23,6 +33,7 @@ define [
         description: -> @subview(".description-sv")
 
         initialize: ->
+            @tab = @options.tab || 'quests'
             super
             @listenTo @model, "change", @render
 
@@ -41,6 +52,7 @@ define [
             # TODO - move to model.serialize?
             realm = sharedModels.realms.findWhere { id: @model.get("realm") }
             params.isKeeper = realm.isKeeper()
+            params.tab = @tab
             params
 
         startEdit: ->

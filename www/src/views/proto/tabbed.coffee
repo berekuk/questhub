@@ -9,6 +9,16 @@ define [
 
         tabs: {} # required
         urlRoot: null # required
+        url: ->
+            url = _.result @, 'urlRoot'
+
+            if @tabs[@tab].url?
+                url += @tabs[@tab].url
+            else if @tab2url
+                url += @tab2url(@tab)
+            else
+                console.trace "one of tabs[tab].url or tab2url must be set"
+            url
 
         initialize: ->
             @tab = @options.tab if @options.tab?
@@ -25,16 +35,8 @@ define [
         switchTabByName: (tab) ->
             @tab = tab
             @rebuildSubview(@tabSubview)
-            url = _.result @, 'urlRoot'
 
-            if @tabs[@tab].url?
-                url += @tabs[@tab].url
-            else if @tab2url
-                url += @tab2url(@tab)
-            else
-                console.trace "one of tabs[tab].url or tab2url must be set"
-
-            Backbone.history.navigate url
+            Backbone.history.navigate @url()
             Backbone.trigger "pp:quiet-url-update"
             @render()
 

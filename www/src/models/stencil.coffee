@@ -6,12 +6,11 @@ define [
         idAttribute: "_id"
         urlRoot: "/api/stencil"
 
-        take: ({ success } = {})->
+        take: ->
             mixpanel.track "take stencil"
             $.post("#{ @url() }/take")
             .success =>
-                @fetch().success =>
-                    success()
+                @fetch().success => @trigger "take:success"
 
         myQuests: ->
             _.filter(

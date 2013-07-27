@@ -1,0 +1,13 @@
+<% if (currentUser && myQuests.length) { %>
+  <section>
+    <header class="sidebar-header sidebar">Your open quests:</header>
+    <div class="stencil-my-quests-sv mainarea"></div>
+  </section>
+<% } %>
+
+<% if (otherQuests.length) { %>
+  <section>
+    <header class="sidebar-header sidebar"><%- myQuests.length ? 'Other' : 'All' %> quests:</header>
+    <div class="stencil-quests-sv mainarea"></div>
+  </section>
+<% } %>
