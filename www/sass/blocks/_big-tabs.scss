@@ -57,6 +57,9 @@
     ._icon._switch-stencils {
         @include switch-circle($red-color);
     }
+    ._icon._switch-comments {
+        @include switch-circle($blue-color);
+    }
 }
 
 .round-tabs-small {
