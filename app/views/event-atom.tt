@@ -5,9 +5,8 @@
     <id>tag:<% settings.hostport %>,2013-02-15:global</id>
 
 <% BLOCK quest_link %>
-<link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/quest/<%= event.quest.item('_id') %>" />
+<link rel="alternate" type="text/html" href="http://<% settings.hostport %>/realm/<% event.realm %>/quest/<%= event.quest.item('_id') %>" />
 <% END %>
-
 
 <% FOREACH event IN events %>
 <entry>
@@ -15,7 +14,7 @@
     <id>tag:<% settings.hostport %>,2013-05-09:<% event.type _ '/' _ event.item('_id') %></id>
     <author>
         <name><% event.author %></name>
-        <uri>http://<% settings.hostport %>/<% event.realm %>/player/<% event.author %></uri>
+        <uri>http://<% settings.hostport %>/player/<% event.author %></uri>
     </author>
 
     <% IF event.type == 'add-quest' %>
@@ -47,11 +46,24 @@
 
     <% ELSIF event.type == 'add-user' %>
         <title><% event.author %> joins <% event.realm %> realm</title>
-        <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/player/<%= event.author %>" />
+        <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/player/<%= event.author %>" />
 
     <% ELSIF event.type == 'add-comment' && event.comment.type == 'text' %>
-        <title><% event.author %> commented on <% event.quest.name | xml %></title>
-        <% PROCESS quest_link %>
+        <title><% event.author %> commented on
+            <% IF event.quest %>
+                a quest: <% event.quest.name | xml %>
+            <% ELSIF event.stencil %>
+                a stencil: <% event.stencil.name | xml %>
+            <% ELSE %>
+                something
+            <% END %>
+        </title>
+
+        <% IF event.quest %>
+            <% PROCESS quest_link %>
+        <% ELSIF event.stencil %>
+            <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/realm/<% event.realm %>/stencil/<%= event.stencil.item('_id') %>/discuss" />
+        <% END %>
 
         <content type="html">
             <![CDATA[
@@ -73,7 +85,7 @@
 
     <% ELSIF event.type == 'add-stencil' %>
         <title><% event.author %> created a stencil: <% event.stencil.name | xml %></title>
-        <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/<% event.realm %>/stencil/<%= event.stencil_id %>" />
+        <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/realm/<% event.realm %>/stencil/<%= event.stencil.item('_id') %>" />
         <% IF event.stencil.description %>
             <content type="html">
                 <![CDATA[
