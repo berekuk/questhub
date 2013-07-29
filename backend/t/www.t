@@ -26,4 +26,11 @@ sub quest_url :Tests {
     );
 }
 
+sub frontpage :Tests {
+    is(
+        Play::WWW->frontpage_url(),
+        'http://localhost:3000'
+    );
+}
+
 __PACKAGE__->new->runtests;

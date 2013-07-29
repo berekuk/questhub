@@ -131,7 +131,7 @@ sub body2html :Tests {
     ($html, $other) = db->comments->body2html('@berekuk, hello', 'europe');
     is
         $html,
-        qq{<a href="http://localhost:3000/europe/player/berekuk">berekuk</a>, hello\n},
+        qq{<a href="http://localhost:3000/player/berekuk">berekuk</a>, hello\n},
         'expand @name';
     cmp_deeply $other, { mentions => ['berekuk'] }, 'mentions';
 

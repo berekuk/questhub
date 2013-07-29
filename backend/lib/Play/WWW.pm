@@ -4,11 +4,19 @@ use 5.012;
 use warnings;
 
 use Type::Params qw(compile);
-use Types::Standard qw(HashRef Optional);
+use Types::Standard qw(HashRef Str Optional);
 use Play::Types qw(Login);
 use Type::Utils qw(enum);
 
 use Play::Config qw(setting);
+
+sub frontpage_url {
+    my $class = shift;
+    state $check = compile();
+    $check->(@_);
+
+    return "http://".setting('hostport');
+}
 
 sub player_url {
     my $class = shift;
@@ -38,6 +46,14 @@ sub stencil_url {
     $url .= "/$tab" if $tab;
 
     return $url;
+}
+
+sub confirm_email_url {
+    my $class = shift;
+    state $check = compile(Login, Str);
+    my ($login, $secret) = @_;
+
+    return "http://".setting('hostport')."/register/confirm/$login/$secret";
 }
 
 1;

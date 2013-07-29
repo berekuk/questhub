@@ -11,7 +11,7 @@ use Log::Any '$log';
 
 use Play::Flux;
 use Play::DB qw(db);
-use Play::Config qw(setting);
+use Play::WWW;
 
 use Play::EmailRecipients;
 
@@ -24,15 +24,9 @@ has 'in' => (
 
 sub _object_url {
     my ($object, $entity) = @_;
-    $entity eq 'quest' or $entity eq 'stencil' or die "unknown entity '$entity'";
-    my $url = "http://".setting('hostport')."/realm/$object->{realm}/$entity/$object->{_id}";
-    $url .= "/discuss" if $entity eq 'stencil';
-    return $url;
-}
-
-sub _player_url {
-    my ($login, $realm) = @_;
-    return "http://".setting('hostport')."/player/$login";
+    return Play::WWW->quest_url($object) if $entity eq 'quest';
+    return Play::WWW->stencil_url($object, 'comments') if $entity eq 'stencil';
+    die "unknown entity '$entity'";
 }
 
 sub process_add_comment {
@@ -78,7 +72,7 @@ sub process_add_comment {
         }
 
         my $email_body_header =
-            '<a href="' . _player_url($comment->{author}, $event->{realm}) . qq[">$comment->{author}</a> ]
+            '<a href="' . Play::WWW->player_url($comment->{author}) . qq[">$comment->{author}</a> ]
             .$appeal.' <a href="' . _object_url($object, $comment->{entity}). qq[">$object->{name}</a>:];
 
         my $email_body = qq[
@@ -119,7 +113,7 @@ sub process_close_quest {
     for my $recipient (@recipients) {
         my $email_body = qq[
             <p>
-            <a href="] . _player_url($event->{author}, $event->{realm}) . qq[">$event->{author}</a>
+            <a href="] . Play::WWW->player_url($event->{author}) . qq[">$event->{author}</a>
             completed a quest you're watching: <a href="]. _object_url($quest, 'quest') . qq[">$quest->{name}</a>.
             </p>
         ];
@@ -146,7 +140,7 @@ sub process_invite_quest {
     {
         my $email_body = qq[
             <p>
-            <a href="] . _player_url($event->{author}, $event->{realm}) . qq[">$event->{author}</a>
+            <a href="] . Play::WWW->player_url($event->{author}) . qq[">$event->{author}</a>
             invited you to a quest: <a href="] . _object_url($quest, 'quest') .qq[">$quest->{name}</a>.
             </p>
         ];
