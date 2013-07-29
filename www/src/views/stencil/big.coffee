@@ -7,7 +7,6 @@ define [
 ], (_, Common, sharedModels, Textarea, html) ->
     class extends Common
         template: _.template html
-        features: ["timeago"]
 
         events:
             "click .edit": "startEdit"
@@ -97,3 +96,5 @@ define [
         closeEdit: =>
             @$("._edit").hide()
             @$("._editable").show()
+
+        features: ['timeago', 'tooltip']
