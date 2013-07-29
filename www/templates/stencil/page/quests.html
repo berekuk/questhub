@@ -1,0 +1,15 @@
+<% if (otherQuests.length) { %>
+  <section>
+    <aside class="sidebar">
+      <header class="sidebar-header">Quests</header>
+      <div class="stencil-page-quests-stat">
+        <% if (obj.stat) { %>
+          <% _.each(stat, function (count, status) { %>
+            <span class="label label-<%= status === 'open' && 'warning' %>"><%- count %> <%= status === 'closed' ? 'completed' : status %></span>
+          <% }) %>
+        <% } %>
+      </div>
+    </aside>
+    <div class="stencil-quests-sv mainarea"></div>
+  </section>
+<% } %>

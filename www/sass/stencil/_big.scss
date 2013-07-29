@@ -1,4 +1,5 @@
 .stencil-big {
+    @include mark($stencil-color);
     ._edit {
         display: none;
     }
@@ -8,4 +9,12 @@
     .object-bottom-line {
         margin-top: 20px;
     }
+    position: relative;
+}
+
+// FIXME - copy-pasted from .realm-big-tabs
+.stencil-big-tabs {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
 }

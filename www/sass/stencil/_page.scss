@@ -9,17 +9,6 @@
         margin-right: 0px;
     }
 }
-.stencil-page-stat {
-    float: left;
-    @include breakpoint(B) {
-        float: none;
-        text-align: right;
-        display: block;
-    }
-    .label {
-        margin-bottom: 3px;
-    }
-}
 .stencil-page-sidebar {
     margin-bottom: 5px;
     position: relative;
@@ -55,7 +44,22 @@
     }
 }
 
-.stencil-page-quest-lists {
-    padding-top: 20px;
+.stencil-page-my-instance {
+    margin-top: 20px;
+    font-weight: 200;
+    font-size: 24px;
+
+    @include breakpoint(B) {
+        text-align: right;
+    }
+}
+
+.stencil-page-sv {
     clear: both;
+}
+
+.stencil-page-quests-stat {
+    > span {
+        margin-bottom: 5px;
+    }
 }

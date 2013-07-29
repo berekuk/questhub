@@ -55,19 +55,22 @@
         @include switch-circle($green-color);
     }
     ._icon._switch-stencils {
-        @include switch-circle($red-color);
+        @include switch-circle($stencil-color);
+    }
+    ._icon._switch-comments {
+        @include switch-circle($blue-color);
     }
 }
 
 .round-tabs-small {
     ._icon {
-        width: 36px;
-        height: 36px;
-        font-size: 14px;
+        width: 28px;
+        height: 28px;
+        font-size: 11px;
         @include breakpoint(B) {
-            width: 36px;
-            height: 36px;
-            font-size: 14px;
+            width: 28px;
+            height: 28px;
+            font-size: 11px;
         }
     }
 }

@@ -3,7 +3,7 @@ package Play::Markdown;
 use strict;
 use warnings;
 
-use Play::Config qw(setting);
+use Play::WWW;
 
 use parent qw(Text::Markdown);
 our @EXPORT_OK = qw(markdown);
@@ -14,6 +14,8 @@ our @MENTIONS; # will be filled after markdown() call
 my $obj = __PACKAGE__->new;
 sub markdown {
     my ($self) = @_;
+
+    @MENTIONS = ();
 
     my $result;
     if (ref $self) {
@@ -37,13 +39,13 @@ sub _RunSpanGamut {
     my $self = shift;
     my ($text) = $self->SUPER::_RunSpanGamut(@_);
 
-    if ($REALM) {
-        my $hostport = setting('hostport');
+    # expand mentions
+    {
         $text =~
             s{(^|[^\w])@(\w+)(?![^<>]*>)(?![^<>]*(?:>|<\/a>|<\/code>))}
             {
                 push @MENTIONS, $2;
-                qq{$1<a href="http://$hostport/$REALM/player/$2">$2</a>};
+                qq[$1<a href="] . Play::WWW->player_url($2) . qq[">$2</a>];
             }ge;
     }
 

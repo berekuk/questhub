@@ -39,13 +39,14 @@ define [
 
             ".comments": ->
                 commentsModel = new CommentCollectionModel([],
-                    quest_id: @model.id
+                    entity: 'quest'
+                    eid: @model.id
                 )
                 commentsModel.fetch()
                 new CommentCollection(
                     collection: commentsModel
                     realm: @realm()
-                    quest: @model
+                    object: @model
                     reply: @options.reply
                 )
 

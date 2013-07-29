@@ -38,4 +38,21 @@
   <div class="object-bottom-line">
     <em><span class="muted">Created</span></em> <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
   </div>
+
+  <nav class="round-tabs stencil-big-tabs">
+    <ul>
+      <%
+      _.each({
+      'comments': { icon: 'comments', tooltip: 'Comments' },
+      'quests': { icon: 'list-ul', tooltip: 'Quests' }
+      }, function (o, t) {
+      %>
+      <li>
+        <div data-toggle="tooltip" data-placement="top" title="<%- o.tooltip %>" data-tab="<%- t %>" class="_icon _switch-<%- t %> <%- tab == t ? '_active' : '' %>">
+          <i class="icon-<%- o.icon %>"></i>
+        </div>
+      </li>
+      <% }) %>
+    </ul>
+  </nav>
 </div>

@@ -36,5 +36,9 @@
       <% }) %>
       </span>
     <% } %>
+
+    <% if (obj.comment_count) { %>
+      <a href="/realm/<%- realm %>/stencil/<%= _id %>"><span class="badge badge-info"><i class="icon-comment"></i> <%= comment_count %></span></a>
+    <% } %>
   </footer>
 </article>

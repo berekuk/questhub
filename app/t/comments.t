@@ -38,6 +38,25 @@ sub add_comment :Tests {
         ]
 }
 
+sub add_stencil_comment :Tests {
+    http_json GET => "/api/fakeuser/foo";
+
+    my $stencil_result = http_json POST => '/api/stencil', { params => {
+        realm => 'europe',
+        name => 'Do something',
+        description => 'Just do anything',
+    } };
+    my $stencil_id = $stencil_result->{_id};
+
+    my $comment = http_json POST => "/api/stencil/$stencil_id/comment", { params => { body => 'first stencil comment!' } };
+    my $list = http_json GET => "/api/stencil/$stencil_id/comment";
+    cmp_deeply
+        $list,
+        [
+            { _id => $comment->{_id}, ts => re('^\d+$'), body => 'first stencil comment!', author => 'foo', entity => 'stencil', eid => $stencil_id, type => 'text' },
+        ]
+}
+
 sub remove :Tests {
 
     http_json GET => "/api/fakeuser/blah";

@@ -21,7 +21,7 @@ use Play::DB qw(db);
 
 use Types::Standard qw(Str Dict HashRef ArrayRef);
 use Type::Params qw(compile);
-use Play::Types qw(Id Login CommentParams);
+use Play::Types qw(Entity Id Login CommentParams);
 
 use Play::Markdown qw(markdown);
 
@@ -56,9 +56,18 @@ sub add {
     my $check = compile(CommentParams);
     my ($params) = $check->(@_);
 
-    $params->{entity} eq 'quest' or die "non-quest comments are not supported yet";
-
-    my $quest = db->quests->get($params->{eid}) or die "quest '$params->{eid}' not found";
+    my $realm;
+    if ($params->{entity} eq 'quest') {
+        my $quest = db->quests->get($params->{eid}) or die "quest '$params->{eid}' not found";
+        $realm = $quest->{realm};
+    }
+    elsif ($params->{entity} eq 'stencil') {
+        my $stencil = db->stencils->get($params->{eid}) or die "stencil '$params->{eid}' not found";
+        $realm = $stencil->{realm};
+    }
+    else {
+        die "Unknown entity '$params->{entity}'";
+    }
 
     my $id = $self->collection->insert($params, { safe => 1 });
 
@@ -66,26 +75,28 @@ sub add {
         type => 'add-comment',
         author => $params->{author},
         comment_id => $id->to_string,
-        realm => $quest->{realm},
+        realm => $realm,
     });
 
     return { _id => $id->to_string };
 }
 
-=item B<get($quest_id)>
+=item B<list($entity, $eid)>
 
-Get all comments for a quest
+Get all comments for a quest or a stencil or another entity.
+
+I<$entity> can be either C<quest> or C<stencil>.
 
 =cut
 # TODO - pager?
-sub get {
+sub list {
     my $self = shift;
-    my $check = compile(Id);
-    my ($quest_id) = $check->(@_);
+    my $check = compile(Entity, Id);
+    my ($entity, $eid) = $check->(@_);
 
     my @comments = $self->collection->find({
-        entity => 'quest',
-        eid => $quest_id,
+        entity => $entity,
+        eid => $eid,
     })->sort({
         _id => 'asc'
     })->all;
@@ -139,19 +150,19 @@ sub bulk_get {
 }
 
 
-=item B<bulk_count($quest_ids_arrayref)>
+=item B<bulk_count($entity, $eids_arrayref)>
 
-Get number of comments for each quest in given set.
+Get number of comments for each entity in given set.
 
 =cut
 sub bulk_count {
     my $self = shift;
-    my $check = compile(ArrayRef[Id]);
-    my ($ids) = $check->(@_);
+    my $check = compile(Entity, ArrayRef[Id]);
+    my ($entity, $ids) = $check->(@_);
 
     # TODO - upgrade MongoDB to 2.2+ and use aggregation
     my @comments = $self->collection->find({
-        entity => 'quest',
+        entity => $entity,
         eid => { '$in' => $ids },
         body => { '$exists' => 1 },
     })->all;

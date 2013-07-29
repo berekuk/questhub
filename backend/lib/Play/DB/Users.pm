@@ -13,6 +13,7 @@ use Play::Types qw(Login Realm);
 
 use Play::Config qw(setting);
 use Play::DB qw(db);
+use Play::WWW;
 
 with 'Play::DB::Role::Common';
 
@@ -364,7 +365,7 @@ sub follow_user {
         body => qq[
             <p>
             Hi $following,<br>
-            <a href="http://].setting('hostport').qq[/player/$login">$login</a> is now following you on Questhub.
+            <a href="].Play::WWW->player_url($login).qq[">$login</a> is now following you on Questhub.
             </p>
         ],
         login => $following,
@@ -464,7 +465,7 @@ sub confirm_email {
             Notify about new followers: ].$bool2str->('notify_followers').q[
             </p>
             <p>
-            You can customize your email notifications <a href="http://].setting('hostport').qq[">at the website</a>.
+            You can customize your email notifications <a href="].Play::WWW->frontpage_url().qq[">at the website</a>.
             </p>
         ],
     });
@@ -476,7 +477,7 @@ sub _send_email_confirmation {
 
     # need email confirmation
     my $secret = int rand(100000000000);
-    my $link = "http://".setting('hostport')."/register/confirm/$login/$secret";
+    my $link = Play::WWW->confirm_email_url($login, $secret);
     db->events->email({
         address => $email,
         subject => "Your ".setting('service_name')." email confirmation link, $login",

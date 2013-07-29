@@ -57,6 +57,7 @@ use Play::Types qw( Id Login Realm );
 use Play::Config qw(setting);
 use Play::DB qw(db);
 use Play::Mongo;
+use Play::WWW;
 
 use Play::DB::Role::PushPull;
 with
@@ -195,9 +196,12 @@ sub list {
     $self->_prepare_quest($_) for @quests;
 
     if ($params->{comment_count} or ($params->{sort} || '') eq 'leaderboard') {
-        my $comment_stat = db->comments->bulk_count([
-            map { $_->{_id} } @quests
-        ]);
+        my $comment_stat = db->comments->bulk_count(
+            'quest',
+            [
+                map { $_->{_id} } @quests
+            ]
+        );
 
         for my $quest (@quests) {
             my $cc = $comment_stat->{$quest->{_id}};
@@ -550,7 +554,7 @@ after 'like' => sub {
     if (my $email = db->users->get_email($team[0], 'notify_likes')) {
         my $email_body = qq[
             <p>
-            <a href="http://].setting('hostport').qq[/player/$user">$user</a> likes your quest <a href="http://].setting('hostport').qq[/quest/$quest->{_id}">$quest->{name}</a>.<br>
+            <a href="].Play::WWW->player_url($user).qq[">$user</a> likes your quest <a href="].Play::WWW->quest_url($quest).qq[">$quest->{name}</a>.<br>
             </p>
         ];
         if ($quest->{status} eq 'open') {

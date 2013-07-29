@@ -163,4 +163,22 @@ sub points :Tests {
     }, qr/type constraint/;
 }
 
+sub cc :Tests {
+    my @stencils;
+    push @stencils, db->stencils->add({
+        realm => 'europe',
+        author => 'foo',
+        name => "Stencil $_",
+        points => $_,
+    }) for 1..3;
+
+    db->comments->add({ entity => 'stencil', eid => $stencils[0]->{_id}, author => 'foo', body => 'ccc' }) for 1..3;
+    db->comments->add({ entity => 'stencil', eid => $stencils[2]->{_id}, author => 'foo', body => 'ccc' }) for 1..4;
+
+    my $got = db->stencils->list({ comment_count => 1, realm => 'europe' });
+    cmp_deeply
+        $got,
+        [ map { superhashof { comment_count => $_ }  } (3, 0, 4) ];
+}
+
 __PACKAGE__->new->runtests;

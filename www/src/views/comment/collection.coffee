@@ -28,14 +28,14 @@ define [
             new Comment(
                 model: model
                 realm: @options.realm
-                quest: @options.quest
+                object: @options.object
             )
 
         listSelector: ".comments-list"
 
         initialize: ->
             @listenTo @collection, "add", @resetForm
-            @listenTo @options.quest, "compose-comment", @composeComment
+            @listenTo @options.object, "compose-comment", @composeComment
             super
 
         render: ->
@@ -46,7 +46,7 @@ define [
             @textarea().on "save", @postComment
 
             if @options.reply
-                @options.quest.trigger "compose-comment", reply: @options.reply
+                @options.object.trigger "compose-comment", reply: @options.reply
                 @options.reply = false
 
 # we could clean the comment on cancel, but it would be too annoying to lose your data accidentally
@@ -66,7 +66,6 @@ define [
 
         resetForm: =>
             return unless @activated
-            console.log "resetForm"
             @textarea().enable()
             @textarea().clear()
             @validate()
@@ -88,7 +87,6 @@ define [
 
         composeComment: (opt) ->
             @textarea().reveal("@#{opt.reply}: ")
-            console.log @$('.comment-add').offset().top
             @textarea
             $('html, body').animate {
                 scrollTop: @$('.comment-add').offset().top

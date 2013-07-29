@@ -11,7 +11,7 @@ use Log::Any '$log';
 
 use Play::Flux;
 use Play::DB qw(db);
-use Play::Config qw(setting);
+use Play::WWW;
 
 use Play::EmailRecipients;
 
@@ -22,14 +22,11 @@ has 'in' => (
     },
 );
 
-sub _quest_url {
-    my ($quest) = @_;
-    return "http://".setting('hostport')."/$quest->{realm}/quest/$quest->{_id}";
-}
-
-sub _player_url {
-    my ($login, $realm) = @_;
-    return "http://".setting('hostport')."/$realm/player/$login";
+sub _object_url {
+    my ($object, $entity) = @_;
+    return Play::WWW->quest_url($object) if $entity eq 'quest';
+    return Play::WWW->stencil_url($object) if $entity eq 'stencil';
+    die "unknown entity '$entity'";
 }
 
 sub process_add_comment {
@@ -37,18 +34,19 @@ sub process_add_comment {
     my ($event) = @_;
 
     my $comment = $event->{comment};
-    my $quest = $event->{quest};
+    my $object = $event->{ $comment->{entity} }; # expected entity to be either 'quest' or 'stencil'
 
     return unless $comment->{type} eq 'text'; # just a precaution, run_once() should filter other comments anyway
 
-    my ($body_html, $markdown_extra) = db->comments->body2html($comment->{body}, $quest->{realm});
+    my ($body_html, $markdown_extra) = db->comments->body2html($comment->{body}, $object->{realm});
 
     my @recipients;
     {
         my $er = Play::EmailRecipients->new;
 
-        $er->add_logins($quest->{team}, 'team');
-        $er->add_logins($quest->{watchers}, 'watcher') if $quest->{watchers};
+        $er->add_logins($object->{team}, 'team') if $object->{team};
+        $er->add_logins($object->{watchers}, 'watcher') if $object->{watchers};
+        $er->add_logins([ $object->{author} ], 'author') if $object->{author} and $comment->{entity} eq 'stencil'; # TODO - should quest authors who left the team get emails too?
         $er->add_logins($markdown_extra->{mentions}, 'mention') if $markdown_extra->{mentions};
 
         $er->exclude($comment->{author});
@@ -58,24 +56,24 @@ sub process_add_comment {
 
     for my $recipient (@recipients) {
 
-        # TODO - quote quest name!
+        # TODO - quote object name!
 
         my $reason = $recipient->{reason};
 
         my $appeal;
         if ($reason eq 'watcher') {
-            $appeal = "commented on a quest you're watching,";
+            $appeal = "commented on a $comment->{entity} you're watching,";
         }
         elsif ($reason eq 'mention') {
-            $appeal = "mentioned you in a quest";
+            $appeal = "mentioned you in a comment";
         }
         else {
-            $appeal = "commented on your quest";
+            $appeal = "commented on your $comment->{entity}";
         }
 
         my $email_body_header =
-            '<a href="' . _player_url($comment->{author}, $event->{realm}) . qq[">$comment->{author}</a> ]
-            .$appeal.' <a href="' . _quest_url($quest). qq[">$quest->{name}</a>:];
+            '<a href="' . Play::WWW->player_url($comment->{author}) . qq[">$comment->{author}</a> ]
+            .$appeal.' <a href="' . _object_url($object, $comment->{entity}). qq[">$object->{name}</a>:];
 
         my $email_body = qq[
             <p>
@@ -87,7 +85,7 @@ sub process_add_comment {
         ];
         db->events->email({
             address => $recipient->{email},
-            subject => "$comment->{author} commented on '$quest->{name}'",
+            subject => "$comment->{author} commented on '$object->{name}'",
             body => $email_body,
             notify_field => $recipient->{notify_field},
             login => $recipient->{login},
@@ -115,8 +113,8 @@ sub process_close_quest {
     for my $recipient (@recipients) {
         my $email_body = qq[
             <p>
-            <a href="] . _player_url($event->{author}, $event->{realm}) . qq[">$event->{author}</a>
-            completed a quest you're watching: <a href="]. _quest_url($quest) . qq[">$quest->{name}</a>.
+            <a href="] . Play::WWW->player_url($event->{author}) . qq[">$event->{author}</a>
+            completed a quest you're watching: <a href="]. _object_url($quest, 'quest') . qq[">$quest->{name}</a>.
             </p>
         ];
         db->events->email({
@@ -142,8 +140,8 @@ sub process_invite_quest {
     {
         my $email_body = qq[
             <p>
-            <a href="] . _player_url($event->{author}, $event->{realm}) . qq[">$event->{author}</a>
-            invited you to a quest: <a href="] . _quest_url($quest) .qq[">$quest->{name}</a>.
+            <a href="] . Play::WWW->player_url($event->{author}) . qq[">$event->{author}</a>
+            invited you to a quest: <a href="] . _object_url($quest, 'quest') .qq[">$quest->{name}</a>.
             </p>
         ];
         db->events->email({
@@ -173,10 +171,10 @@ sub run_once {
             if ($event->{comment}{type} eq 'text') {
                 $self->process_add_comment($event);
             }
-            elsif ($event->{comment}{type} eq 'close') {
+            elsif ($event->{comment}{type} eq 'close' and $event->{comment}{entity} eq 'quest') {
                 $self->process_close_quest($event);
             }
-            elsif ($event->{comment}{type} eq 'invite') {
+            elsif ($event->{comment}{type} eq 'invite' and $event->{comment}{entity} eq 'quest') {
                 $self->process_invite_quest($event);
             }
             # TODO - send emails on join, leave and other comment types

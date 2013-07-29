@@ -26,13 +26,73 @@ sub add :Tests {
         { _id => re('^\S+$') },
         'add comment result';
 
-    my $list = db->comments->get($quest->{_id});
+    my $list = db->comments->list('quest', $quest_id);
     cmp_deeply
         $list,
         [
             { _id => $first->{_id},  ts => re('^\d+$'), body => 'first comment!',  author => 'blah', entity => 'quest', eid => $quest_id, type => 'text' },
             { _id => $second->{_id}, ts => re('^\d+$'), body => 'second comment!', author => 'blah', entity => 'quest', eid => $quest_id, type => 'text' },
         ]
+}
+
+sub add_stencil_comment :Tests {
+    db->users->add({ login => 'foo' });
+
+    my $stencil = db->stencils->add({
+        realm => 'europe',
+        author => 'foo',
+        name => 'sss',
+        points => 2,
+    });
+    my $stencil_id = $stencil->{_id};
+
+    my $comment = db->comments->add({ entity => 'stencil', eid => $stencil->{_id}, author => 'foo', body => 'first stencil comment ever!' });
+    cmp_deeply
+        $comment,
+        { _id => re('^\S+$') },
+        'add comment result';
+
+    my $list = db->comments->list('stencil', $stencil_id);
+    cmp_deeply
+        $list,
+        [
+            { _id => $comment->{_id},  ts => re('^\d+$'), body => 'first stencil comment ever!',  author => 'foo', entity => 'stencil', eid => $stencil_id, type => 'text' },
+        ]
+}
+
+sub list_respects_entity :Tests {
+    db->users->add({ login => 'foo' });
+
+    my $stencil = db->stencils->add({
+        realm => 'europe',
+        author => 'foo',
+        name => 'sss',
+        points => 2,
+    });
+    my $quest = db->quests->add({
+        user => 'foo',
+        name => 'foo',
+        realm => 'europe',
+    });
+
+    my $quest_comment = db->comments->add({ entity => 'quest', eid => $quest->{_id}, author => 'foo', body => 'quest comment' });
+    my $stencil_comment = db->comments->add({ entity => 'stencil', eid => $stencil->{_id}, author => 'foo', body => 'stencil comment' });
+
+    cmp_deeply
+        db->comments->list('quest', $quest->{_id}),
+        [ superhashof({ _id => $quest_comment->{_id} }) ];
+
+    cmp_deeply
+        db->comments->list('stencil', $stencil->{_id}),
+        [ superhashof({ _id => $stencil_comment->{_id} }) ];
+
+    cmp_deeply
+        db->comments->list('quest', $stencil->{_id}),
+        [];
+
+    cmp_deeply
+        db->comments->list('stencil', $quest->{_id}),
+        [];
 }
 
 sub bulk_get :Tests {
@@ -71,7 +131,7 @@ sub body2html :Tests {
     ($html, $other) = db->comments->body2html('@berekuk, hello', 'europe');
     is
         $html,
-        qq{<a href="http://localhost:3000/europe/player/berekuk">berekuk</a>, hello\n},
+        qq{<a href="http://localhost:3000/player/berekuk">berekuk</a>, hello\n},
         'expand @name';
     cmp_deeply $other, { mentions => ['berekuk'] }, 'mentions';
 
@@ -102,7 +162,7 @@ sub bulk_count :Tests {
     db->comments->add({ entity => 'quest', eid => $q2->{_id}, author => 'foo', body => "c3" });
     db->comments->add({ entity => 'quest', eid => $q1->{_id}, author => 'foo', type => 'close' });
 
-    my $result = db->comments->bulk_count([ $q1->{_id}, $q2->{_id} ]);
+    my $result = db->comments->bulk_count('quest', [ $q1->{_id}, $q2->{_id} ]);
     cmp_deeply(
         $result,
         {

@@ -13,7 +13,7 @@
       Quest completed.
 
       <div class="comment-content-reward">
-        <%= partial.reward_list({ quest: quest, partial: partial }) %>
+        <%= partial.reward_list({ quest: object, partial: partial }) %>
       </div>
     <% } else if (type == 'reopen') { %>
       <i class="icon-backward"></i>
@@ -35,7 +35,7 @@
       Invited:
       <%= partial.user({ realm: realm, login: invitee }) %>
     <% } else { %>
-      Unknown quest type! Please report this bug.
+      Unknown comment type! Please report this bug.
     <% } %>
   </div>
   <% if (my && type == 'text') { %>

@@ -1,13 +1,12 @@
 define [
     "underscore"
-    "views/proto/common"
-    "models/current-user", "models/shared-models"
+    "views/proto/tabbed"
+    "models/shared-models"
     "views/realm/submenu"
-    "views/stencil/big"
-    "views/quest/collection", "models/quest-collection"
+    "views/stencil/big", "views/stencil/page/quests", "views/stencil/page/comments"
     "text!templates/stencil/page.html"
-], (_, Common, currentUser, sharedModels, RealmSubmenu, StencilBig, QuestCollection, QuestCollectionModel, html) ->
-    class extends Common
+], (_, Tabbed, sharedModels, RealmSubmenu, StencilBig, StencilPageQuests, StencilPageComments, html) ->
+    class extends Tabbed
         template: _.template html
         activated: false
 
@@ -15,12 +14,31 @@ define [
         realmModel: -> sharedModels.realms.findWhere id: @realm()
 
         pageTitle: -> @model.get 'name'
+        urlRoot: -> "/realm/#{@realm()}/stencil/#{ @model.id }"
 
-        subviews:
-            ".realm-submenu-sv": -> new RealmSubmenu model: @realmModel()
-            ".stencil-big-sv": -> new StencilBig model: @model
-            ".stencil-my-quests-sv": -> @questsSV @model.myQuests()
-            ".stencil-quests-sv": -> @questsSV @model.otherQuests()
+        subviews: ->
+            subviews = super
+            subviews[".realm-submenu-sv"] = -> new RealmSubmenu model: @realmModel()
+            subviews[".stencil-big-sv"] = ->
+                new StencilBig
+                    model: @model
+                    tab: @tab
+            subviews
+
+        tab: 'comments'
+        tabSubview: ".stencil-page-sv"
+        tabs:
+            quests:
+                url: '/quests'
+                subview: -> new StencilPageQuests model: @model
+            comments:
+                url: ''
+                subview: ->
+                    reply = @options.reply
+                    delete @options.reply
+                    new StencilPageComments
+                        model: @model
+                        reply: reply
 
         initialize: ->
             super
@@ -28,27 +46,13 @@ define [
                 @render() if @activated
                 @trigger "change:page-title"
 
-        questsSV: (quests) ->
-            collection = new QuestCollectionModel(quests)
-            view = new QuestCollection
-                collection: collection
-                showStatus: true
-            view.noProgress()
-            collection.gotMore = false
-            view.updateShowMore()
-            view
+        initSubviews: ->
+            super
+            @listenTo @subview(".stencil-big-sv"), "switch", (params) ->
+                @switchTabByName params.tab
 
         events:
-            "click ._take": ->
-                @model.take success: =>
-                    @rebuildSubview(".stencil-my-quests-sv")
-                    @rebuildSubview(".stencil-quests-sv") # not expecting it to change, but why not, if we already got the updated data
-                    @render()
-
-        render: ->
-            super
-            @subview(".stencil-my-quests-sv").updateShowMore()
-            @subview(".stencil-quests-sv").updateShowMore()
+            "click ._take": -> @model.take()
 
         serialize: ->
             params = super

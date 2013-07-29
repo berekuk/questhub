@@ -69,15 +69,14 @@ define [
             params.my = @isOwned()
             params.currentUser = currentUser.get("login")
             params.realm = @options.realm
-            params.quest = @options.quest.toJSON()
+            params.object = @options.object.toJSON()
             params
 
         isOwned: ->
             currentUser.get("login") is @model.get("author")
 
         reply: ->
-            @options.quest.trigger "compose-comment",
+            @options.object.trigger "compose-comment",
                 reply: @model.get "author"
-
 
         features: ["timeago"]
