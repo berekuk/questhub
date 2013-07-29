@@ -115,9 +115,13 @@ sub list {
         realm => Optional[Realm],
         author => Optional[Login],
         quests => Optional[Bool],
+        # flag meaning "fetch comment_count too"; copy-pasted from db->quests->list
+        comment_count => Optional[Bool],
     ]);
     my ($params) = $check->(@_);
     $params ||= {};
+
+    my $comment_count = delete $params->{comment_count};
 
     my $fetch_quests = delete $params->{quests};
 
@@ -126,6 +130,20 @@ sub list {
     $self->_prepare($_) for @stencils;
     if ($fetch_quests) {
         $self->_fill_quests($_) for @stencils;
+    }
+
+    if ($comment_count) {
+        my $comment_stat = db->comments->bulk_count(
+            'stencil',
+            [
+                map { $_->{_id} } @stencils
+            ]
+        );
+
+        for my $stencil (@stencils) {
+            my $cc = $comment_stat->{$stencil->{_id}};
+            $stencil->{comment_count} = $cc || 0;
+        }
     }
 
     return \@stencils;
