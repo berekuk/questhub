@@ -22,7 +22,9 @@
 
   <% if (currentUser) { %>
     <% if (myQuests.length) { %>
-      <strong><a href="/realm/<%- myQuests[0].realm %>/quest/<%- myQuests[0]._id %>">Your quest</a></strong>
+      <div class="stencil-page-my-instance">
+        <a href="/realm/<%- myQuests[0].realm %>/quest/<%- myQuests[0]._id %>">Your <span class="desktop-text">open</span> quest</a>
+      </div>
     <% } else { %>
       <button class="btn btn-large btn-primary _take">Take this quest</button>
     <% } %>

@@ -44,8 +44,17 @@
     }
 }
 
+.stencil-page-my-instance {
+    margin-top: 20px;
+    font-weight: 200;
+    font-size: 24px;
+
+    @include breakpoint(B) {
+        text-align: right;
+    }
+}
+
 .stencil-page-sv {
-    padding-top: 20px;
     clear: both;
 }
 
