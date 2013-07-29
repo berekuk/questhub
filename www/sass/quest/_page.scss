@@ -41,13 +41,13 @@ div.quest-big-unclaimed {
 
     position: relative;
     @include breakpoint(C) {
-        > div.quest-reward {
+        .quest-page-reward {
             position: absolute;
             right: 130px;
             top: 0;
         }
 
-        > div.quest-action {
+        .quest-page-action {
             width: 120px;
             margin-left: auto;
             margin-right: 0px;
@@ -71,13 +71,13 @@ div.quest-big-unclaimed {
             margin-bottom: 10px;
         }
 
-        > div.quest-reward {
+        .quest-page-reward {
             text-align: center;
             > div {
                 margin: 0 auto;
             }
         }
-        > div.quest-action {
+        .quest-page-action {
 
             button {
                 display: block;
@@ -88,13 +88,13 @@ div.quest-big-unclaimed {
     @media (max-width: 767px) {
         min-height: 80px !important;
 
-        > div.quest-reward {
+        .quest-page-reward {
             position: absolute;
             left: 0;
             top: 0;
         }
 
-        > div.quest-action {
+        .quest-page-action {
             margin-left: 80px;
             vertical-align: top;
             min-height: 67px; // allow invited-list below to be a part a of normal flow
@@ -128,12 +128,12 @@ div.quest-big-unclaimed {
     }
 
     @media (max-width: 595px) {
-        > div.quest-action button {
+        .quest-page-action button {
             display: block;
         }
     }
 
-    .quest-action {
+    .quest-page-action {
         button {
             width: 120px;
             margin-bottom: 7px;
