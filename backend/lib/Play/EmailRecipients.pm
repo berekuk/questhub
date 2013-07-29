@@ -20,6 +20,7 @@ has 'reason2setting' => (
         {
             'team' => 'notify_comments',
             'watcher' => 'notify_comments',
+            'author' => 'notify_comments',
             'mention' => 'notify_comments',
         };
     },
@@ -29,7 +30,7 @@ has 'priorities' => (
     is => 'ro',
     isa => ArrayRef[Str],
     default => sub {
-        ['team', 'watcher', 'mention'];
+        ['team', 'watcher', 'author', 'mention'];
     },
 );
 
