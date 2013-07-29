@@ -1,4 +1,5 @@
 .stencil-big {
+    @include mark($stencil-color);
     ._edit {
         display: none;
     }
