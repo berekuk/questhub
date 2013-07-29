@@ -3,18 +3,20 @@
 }
 
 @include breakpoint(C) {
+    .quest-page-sidebar {
+        text-align: right;
+        > div {
+            text-align: left;
+        }
+    }
     .quest-page-reward {
-        position: absolute;
-        top: 0;
-    }
-    .quest-page-unregistered .quest-page-reward {
-        right: 0;
-    }
-    .quest-page-registered .quest-page-reward {
-        right: 130px;
+        display: inline-block;
+        vertical-align: top;
+        margin-right: 10px;
     }
 
     .quest-page-action {
+        display: inline-block;
         width: 120px;
         margin-left: auto;
         margin-right: 0px;
@@ -25,6 +27,7 @@
     }
 
     .quest-page-invited-list {
+        margin-top: 10px;
         margin-right: 0px;
         margin-left: auto;
     }
