@@ -55,7 +55,7 @@
         @include switch-circle($green-color);
     }
     ._icon._switch-stencils {
-        @include switch-circle($red-color);
+        @include switch-circle($stencil-color);
     }
     ._icon._switch-comments {
         @include switch-circle($blue-color);
