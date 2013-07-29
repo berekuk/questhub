@@ -20,16 +20,10 @@
     </a>
   </div>
 
-  <div class="stencil-page-stat">
-    <% if (obj.stat) { %>
-      <% _.each(stat, function (count, status) { %>
-        <span class="label label-<%= status === 'open' && 'warning' %>"><%- count %> <%= status === 'closed' ? 'completed' : status %></span><br>
-      <% }) %>
-    <% } %>
-  </div>
-
   <% if (currentUser) { %>
-    <% if (!myQuests.length) { %>
+    <% if (myQuests.length) { %>
+      <strong><a href="/realm/<%- myQuests[0].realm %>/quest/<%- myQuests[0]._id %>">Your quest</a></strong>
+    <% } else { %>
       <button class="btn btn-large btn-primary _take">Take this quest</button>
     <% } %>
   <% } %>

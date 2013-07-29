@@ -33,7 +33,7 @@ define [
         description: -> @subview(".description-sv")
 
         initialize: ->
-            @tab = @options.tab || 'quests'
+            @tab = @options.tab || 'comments'
             super
             @listenTo @model, "change", @render
 

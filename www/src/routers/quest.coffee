@@ -15,7 +15,7 @@ define [
             "realm/:realm/quest/:id/reply/:reply": "realmQuestPage"
             "stencil/:id": "stencilPage"
             "realm/:realm/stencil/:id": "realmStencilPage"
-            "realm/:realm/stencil/:id/discuss": "realmStencilPageComments"
+            "realm/:realm/stencil/:id/quests": "realmStencilPageQuests"
             "realm/:realm/stencil/:id/reply/:reply": "stencilReply"
 
         questPage: (id, reply) ->
@@ -52,10 +52,10 @@ define [
             @appView.setPageView view
 
         realmStencilPage: (realm, id) ->
-            @stencilPage id
-
-        realmStencilPageComments: (realm, id) ->
             @stencilPage id, 'comments'
+
+        realmStencilPageQuests: (realm, id) ->
+            @stencilPage id, 'quests'
 
         stencilReply: (realm, id, reply) ->
             @stencilPage id, 'comments', reply

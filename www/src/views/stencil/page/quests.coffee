@@ -8,8 +8,7 @@ define [
         template: _.template html
 
         subviews:
-            ".stencil-my-quests-sv": -> @questsSV @model.myQuests()
-            ".stencil-quests-sv": -> @questsSV @model.otherQuests()
+            ".stencil-quests-sv": -> @questsSV @model.get("quests")
 
         questsSV: (quests) ->
             collection = new QuestCollectionModel(quests)
@@ -24,11 +23,9 @@ define [
         initialize: ->
             super
             @listenTo @model, 'take:success', =>
-                @rebuildSubview(".stencil-my-quests-sv")
-                @rebuildSubview(".stencil-quests-sv") # not expecting it to change, but why not, if we already got the updated data
+                @rebuildSubview(".stencil-quests-sv")
                 @render()
 
         render: ->
             super
-            @subview(".stencil-my-quests-sv").updateShowMore()
             @subview(".stencil-quests-sv").updateShowMore()

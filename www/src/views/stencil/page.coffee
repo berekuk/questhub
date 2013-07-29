@@ -25,14 +25,14 @@ define [
                     tab: @tab
             subviews
 
-        tab: 'quests'
+        tab: 'comments'
         tabSubview: ".stencil-page-sv"
         tabs:
             quests:
-                url: ''
+                url: '/quests'
                 subview: -> new StencilPageQuests model: @model
             comments:
-                url: '/discuss'
+                url: ''
                 subview: ->
                     reply = @options.reply
                     delete @options.reply
