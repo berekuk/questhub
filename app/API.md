@@ -271,6 +271,7 @@ Get the list of stencils.
 Options:
 
 * `realm`
+* `comment_count`
 
 ##### GET /api/stencil/{id}
 
