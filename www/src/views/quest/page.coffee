@@ -11,11 +11,11 @@ define [
         activated: false
         template: _.template(html)
         events:
-            "click .quest-action .complete": "close"
-            "click .quest-action .abandon": "abandon"
-            "click .quest-action .leave": "leave"
-            "click .quest-action .resurrect": "resurrect"
-            "click .quest-action .reopen": "reopen"
+            "click .quest-page-action .complete": "close"
+            "click .quest-page-action .abandon": "abandon"
+            "click .quest-page-action .leave": "leave"
+            "click .quest-page-action .resurrect": "resurrect"
+            "click .quest-page-action .reopen": "reopen"
             "click .invite": "inviteDialog"
             "click .uninvite": "uninviteAction"
             "click .join": "joinAction"

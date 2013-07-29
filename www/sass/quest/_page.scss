@@ -1,180 +1,144 @@
-div.quest-big-open, div.quest-big-closed, div.quest-big-abandoned, div.quest-big-unclaimed {
-    position: relative;
-    padding: 9px;
-}
-
-div.quest-big-open {
-    @include mark($open-quest-color);
-}
-div.quest-big-closed {
-    @include mark($closed-quest-color);
-}
-div.quest-big-abandoned {
-    @include mark($abandoned-quest-color);
-}
-div.quest-big-unclaimed {
-    @include mark($unclaimed-quest-color);
-}
-
-.quest-big {
-    h2 {
-        overflow: auto;
-    }
-
-    .object-bottom-line {
-        margin-top: 20px;
-    }
-}
-.quest-big-note {
-    // TODO - dotted border? colored background? how else can we emphasize that this is an uneditable part of stencil?
-}
-.quest-big-labels {
-    display: block;
-    float: right;
-}
-.quest-big-edit {
-    display: none;
-    margin-bottom: 5px;
-}
-
 .quest-page-sidebar {
-
     position: relative;
-    @include breakpoint(C) {
-        > div.quest-reward {
-            position: absolute;
-            right: 130px;
-            top: 0;
-        }
+}
 
-        > div.quest-action {
-            width: 120px;
-            margin-left: auto;
-            margin-right: 0px;
-
-            button {
-                display: block;
-            }
-        }
-
-        > div.invited-list {
-            margin-right: 0px;
-            margin-left: auto;
-            margin-top: 15px;
-        }
-    }
-
-    @media (min-width: 768px) and (max-width: 979px) {
+@include breakpoint(C) {
+    .quest-page-sidebar {
+        text-align: right;
         > div {
-            width: 120px; // width of an action button
-            float: right;
-            margin-bottom: 10px;
+            text-align: left;
         }
+    }
+    .quest-page-reward {
+        display: inline-block;
+        vertical-align: top;
+        margin-right: 10px;
+    }
 
-        > div.quest-reward {
-            text-align: center;
-            > div {
-                margin: 0 auto;
-            }
-        }
-        > div.quest-action {
+    .quest-page-action {
+        display: inline-block;
+        width: 120px;
+        margin-left: auto;
+        margin-right: 0px;
 
-            button {
-                display: block;
-            }
+        button {
+            display: block;
         }
     }
 
-    @media (max-width: 767px) {
-        min-height: 80px !important;
+    .quest-page-invited-list {
+        margin-top: 10px;
+        margin-right: 0px;
+        margin-left: auto;
+    }
+}
 
-        > div.quest-reward {
-            position: absolute;
-            left: 0;
-            top: 0;
+@media (min-width: 768px) and (max-width: 979px) {
+    .quest-page-sidebar > div {
+        width: 120px; // width of an action button
+        float: right;
+        margin-bottom: 10px;
+    }
+
+    .quest-page-reward {
+        text-align: center;
+        > div {
+            margin: 0 auto;
         }
-
-        > div.quest-action {
-            margin-left: 80px;
-            vertical-align: top;
-            min-height: 67px; // allow invited-list below to be a part a of normal flow
-        }
-
-        > div.invited-list {
-            margin-left: 5px;
-            margin-top: 5px;
-            margin-bottom: 5px;
+    }
+    .quest-page-action {
+        button {
             display: block;
-            clear: both;
-            width: auto;
-
-            > div {
-                display: inline;
-            }
-            ul, li {
-                display: inline;
-            }
-            li {
-                margin-left: 5px;
-            }
         }
-        > div.invited-list-my {
-            li {
-                margin-left: 30px;
-            }
-        }
+    }
+}
 
+@media (max-width: 767px) {
+    .quest-page-sidebar {
+        min-height: 80px !important;
         @include clearfix;
     }
 
-    @media (max-width: 595px) {
-        > div.quest-action button {
-            display: block;
-        }
+    .quest-page-reward {
+        position: absolute;
+        left: 0;
+        top: 0;
     }
 
-    .quest-action {
-        button {
-            width: 120px;
-            margin-bottom: 7px;
-            text-align: left;
-        }
-
-        .invite-dialog {
-            display: none;
-            input {
-                width: 100%;
-                display: block;
-                min-height: 30px;
-                @include box-sizing(border-box);
-            }
-        }
+    .quest-page-action {
+        margin-left: 80px;
+        vertical-align: top;
+        min-height: 67px; // allow invited-list below to be a part a of normal flow
     }
 
-    .invited-list {
+    .quest-page-invited-list {
+        margin-left: 5px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        display: block;
+        clear: both;
+        width: auto;
+
+        > div {
+            display: inline;
+        }
+        ul, li {
+            display: inline;
+        }
+        li {
+            margin-left: 5px;
+        }
+    }
+    .quest-page-invited-list-my {
+        li {
+            margin-left: 30px;
+        }
+    }
+}
+
+@media (max-width: 595px) {
+    .quest-page-action button {
+        display: block;
+    }
+}
+
+.quest-page-action {
+    button {
         width: 120px;
+        margin-bottom: 7px;
+        text-align: left;
+    }
 
-        h5 {
-            font-weight: 200;
+    .invite-dialog {
+        display: none;
+        input {
+            width: 100%;
+            display: block;
+            min-height: 30px;
+            @include box-sizing(border-box);
         }
+    }
+}
 
-        ul {
-            list-style-type: none;
-            text-align: left;
-            margin-left: 0px;
-            li {
-                margin-top: 6px;
-                position: relative;
+.quest-page-invited-list {
+    width: 120px;
 
-                .uninvite {
-                    position: absolute;
-                    left: -20px;
-                }
-                .join {
-                    position: absolute;
-                    left: -70px;
-                    width: 64px;
-                }
+    ul {
+        list-style-type: none;
+        text-align: left;
+        margin-left: 0px;
+        li {
+            margin-top: 6px;
+            position: relative;
+
+            .uninvite {
+                position: absolute;
+                left: -20px;
+            }
+            .join {
+                position: absolute;
+                left: -70px;
+                width: 64px;
             }
         }
     }

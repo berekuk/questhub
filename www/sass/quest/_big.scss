@@ -1,0 +1,39 @@
+div.quest-big-open, div.quest-big-closed, div.quest-big-abandoned, div.quest-big-unclaimed {
+    position: relative;
+    padding: 9px;
+}
+
+div.quest-big-open {
+    @include mark($open-quest-color);
+}
+div.quest-big-closed {
+    @include mark($closed-quest-color);
+}
+div.quest-big-abandoned {
+    @include mark($abandoned-quest-color);
+}
+div.quest-big-unclaimed {
+    @include mark($unclaimed-quest-color);
+}
+
+.quest-big {
+    h2 {
+        overflow: auto;
+    }
+
+    .object-bottom-line {
+        margin-top: 20px;
+    }
+}
+.quest-big-note {
+    // TODO - dotted border? colored background? how else can we emphasize that this is an uneditable part of stencil?
+}
+.quest-big-labels {
+    display: block;
+    float: right;
+}
+.quest-big-edit {
+    display: none;
+    margin-bottom: 5px;
+}
+
