@@ -25,7 +25,7 @@ has 'in' => (
 sub _object_url {
     my ($object, $entity) = @_;
     return Play::WWW->quest_url($object) if $entity eq 'quest';
-    return Play::WWW->stencil_url($object, 'comments') if $entity eq 'stencil';
+    return Play::WWW->stencil_url($object) if $entity eq 'stencil';
     die "unknown entity '$entity'";
 }
 

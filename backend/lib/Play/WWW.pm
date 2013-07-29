@@ -36,15 +36,11 @@ sub quest_url {
 
 sub stencil_url {
     my $class = shift;
-    state $check = compile(
-        HashRef,
-        Optional[enum('discuss')]
-    );
-    my ($stencil, $tab) = $check->(@_);
+    state $check = compile(HashRef);
+    my ($stencil) = $check->(@_);
 
     my $url = "http://".setting('hostport')."/realm/$stencil->{realm}/stencil/$stencil->{_id}";
-    $url .= "/$tab" if $tab;
-
+    #$url .= "/$tab" if $tab;
     return $url;
 }
 
