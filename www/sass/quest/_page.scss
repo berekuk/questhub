@@ -1,7 +1,3 @@
-.quest-page-sidebar {
-    position: relative;
-}
-
 @include breakpoint(C) {
     .quest-page-sidebar {
         text-align: right;
@@ -60,20 +56,17 @@
     }
 
     .quest-page-reward {
-        position: absolute;
-        left: 0;
-        top: 0;
+        float: left;
     }
 
     .quest-page-action {
-        margin-left: 80px;
-        vertical-align: top;
-        min-height: 67px; // allow invited-list below to be a part a of normal flow
+        float: left;
+        margin-left: 15px;
     }
 
     .quest-page-invited-list {
         margin-left: 5px;
-        margin-top: 5px;
+        padding-top: 8px;
         margin-bottom: 5px;
         display: block;
         clear: both;
