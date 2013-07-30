@@ -36,7 +36,7 @@ require [
 
     window.onbeforeunload = ->
         if TextArea.active()
-            return "You haven't finished your post yet."
+            return "You haven't finished editing yet."
         return
 
     $(document).on "click", "a[href='#']", (event) ->
