@@ -61,6 +61,7 @@
 
         specs.push(
             'spec/markdown',
+            'spec/textarea',
             'spec/navbar', 'spec/current-user',
             'spec/register',
             'spec/quest-small', 'spec/quest-big', 'spec/quest-add',

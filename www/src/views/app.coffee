@@ -32,7 +32,7 @@ define [
 
             # the explanation of this pattern can be found in this article: http://lostechies.com/derickbailey/2011/09/15/zombies-run-managing-page-transitions-in-backbone-apps/
             # (note that the article is dated - it's pre-0.9.2, Backbone didn't have .listenTo() back then
-            @_page.remove() if @_page # TODO - should we remove all subviews too?
+            @_page.remove() if @_page
             @_page = page
             @$(".app-view-container").append page.$el
             menuItem = _.result(page, "activeMenuItem") or "none"

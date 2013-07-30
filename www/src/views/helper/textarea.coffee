@@ -6,9 +6,13 @@ define [
 ], (_, markdown, Common, currentUser, html) ->
 
     previewMode = undefined
+    cachedText = {}
 
     class extends Common
         template: _.template html
+
+        @active: ->
+            !!(_.size _.find cachedText, (v) -> v? and v.length > 0)
 
         events:
             "keydown textarea": "preEdit"
@@ -17,26 +21,42 @@ define [
             "click .helper-textarea-hide-preview": -> @switchPreview(false)
             "click .helper-textarea-show-help": "toggleHelp"
 
+        # useful in case of accidental re-renders, we're calling it from reveal() and from render()
+        restoreFromCache: ->
+            if cachedText[@cid]
+                @setValue cachedText[@cid]
+                return true
+            return false
+
         reveal: (text) ->
             @$el.show()
-            @$("textarea").val(text).trigger "autosize"
+            @restoreFromCache() or @setValue(text)
+            $("textarea").trigger "autosize"
             if text and text.length
                 len = text.length * 2 # http://stackoverflow.com/a/1675345/137062
                 @$("textarea")[0].setSelectionRange len, len
             @updatePreview()
 
         value: -> @$("textarea").val()
+        setValue: (val) ->
+            @$("textarea").val(val)
+            cachedText[@cid] = val
+            return
 
-        hide: -> @$el.hide()
+        hide: ->
+            delete cachedText[@cid]
+            @$el.hide()
+
         disable: -> @$("textarea").prop "disabled", true
         enable: -> @$("textarea").prop "disabled", false
         disabled: -> not @$el.is(":visible") or @$("textarea").prop("disabled")
-        clear: -> @$("textarea").val ""
+        clear: -> @setValue("")
         focus: -> @$("textarea").focus()
 
         initialize: ->
             super
             previewMode = !!( currentUser.getSetting("preview-mode") - 0 ) # casting string to boolean
+            @on 'detach-subview', @selfDestruct, @
 
         preview: -> @$(".helper-textarea-preview")
         switchPreview: (value) ->
@@ -89,8 +109,12 @@ define [
             @popoverInitialized = false
             @$(".helper-textarea-show-help").popover "destroy"
 
-        remove: ->
+        selfDestruct: ->
+            delete cachedText[@cid]
             @destroyHelp()
+
+        remove: ->
+            @selfDestruct()
             super
 
         preEdit: (e) ->
@@ -102,12 +126,14 @@ define [
 
         postEdit: (e) ->
             return false if @disabled()
+            cachedText[@cid] = @value()
             @updatePreview()
             @trigger "edit"
 
         render: ->
             @destroyHelp()
             super
+            @restoreFromCache()
             @$("textarea").autosize append: "\n"
 
         serialize: ->

@@ -34,7 +34,6 @@ define [
         listSelector: ".comments-list"
 
         initialize: ->
-            @listenTo @collection, "add", @resetForm
             @listenTo @options.object, "compose-comment", @composeComment
             super
 
@@ -70,9 +69,9 @@ define [
             @textarea().clear()
             @validate()
 
+        # the difference from resetForm() is that we don't clear textarea's val() to prevent the comment from vanishing
         enableForm: =>
             return unless @activated
-            # the difference from resetForm() is that we don't clear textarea's val() to prevent the comment from vanishing
             @textarea.enable()
             @validate()
 
@@ -84,6 +83,7 @@ define [
             @collection.createTextComment @textarea().value(),
                 wait: true
                 error: @enableForm
+                success: @resetForm
 
         composeComment: (opt) ->
             @textarea().reveal("@#{opt.reply}: ")
