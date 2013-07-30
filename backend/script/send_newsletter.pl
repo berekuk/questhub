@@ -118,9 +118,11 @@ sub main {
     $body =~ /{{unsubscribe}}/ or die;
 
     my @targets = load_targets();
-    say "Sending newsletter to ".scalar(@targets)." users";
+    my $total_number = @targets;
 
     @targets = grep { $_->{login} eq 'berekuk' } @targets unless $force;
+
+    say "Sending newsletter to ".scalar(@targets)."/$total_number users";
 
     for my $target (@targets) {
         send_one({
