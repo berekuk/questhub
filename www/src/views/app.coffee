@@ -43,6 +43,7 @@ define [
             # FIXME - this leads to double-rendering navbar on the initial page load
             @updateRealm()
             @updateTitle()
+            window.scrollTo 0, 0
 
         updateRealm: ->
             realm = ((if @_page.realm then @_page.realm() else null))
