@@ -40,9 +40,9 @@ define [
 
         initSubviews: ->
             # this was a warning situation in the past, but now views/explore.js legitimately re-initializes subviews
-            # (TODO - hmm, or does it?
+            # (TODO - hmm, or does it?)
             #            console.log('initSubviews is called twice!');
-            @removeSubviews()
+            @_subviewInstances = {}
             _.each _.keys(_.result(this, "subviews")), (key) =>
                 @subview key # will perform the lazy init
 
@@ -55,7 +55,9 @@ define [
             method = _.bind(method, this)
             subview = method()
 
-            @_subviewInstances[key]?.remove()
+            if prev = @_subviewInstances[key]
+                prev.trigger('detach-subview') # allow subview to do additional cleanups
+                prev.stopListening() # cleanup jquery events
             @_subviewInstances[key] = subview
 
             # useless on initial init - view's element is an empty div - but can come in handy if someone calls rebuildSubview leter
@@ -120,7 +122,6 @@ define [
             if @_subviewInstances
                 _.each @_subviewInstances, (subview) =>
                     subview.remove()
-            @_subviewInstances = {}
 
         remove: ->
             @removeSubviews()

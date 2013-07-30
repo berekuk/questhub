@@ -56,6 +56,7 @@ define [
         initialize: ->
             super
             previewMode = !!( currentUser.getSetting("preview-mode") - 0 ) # casting string to boolean
+            @on 'detach-subview', @selfDestruct, @
 
         preview: -> @$(".helper-textarea-preview")
         switchPreview: (value) ->
@@ -108,9 +109,12 @@ define [
             @popoverInitialized = false
             @$(".helper-textarea-show-help").popover "destroy"
 
-        remove: ->
+        selfDestruct: ->
             delete cachedText[@cid]
             @destroyHelp()
+
+        remove: ->
+            @selfDestruct()
             super
 
         preEdit: (e) ->
