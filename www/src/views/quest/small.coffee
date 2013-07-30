@@ -29,7 +29,8 @@ define [
             params.showRealm = @options.showRealm
             params
 
-        afterRender: ->
+        render: ->
+            super
             className = "quest-" + @model.extStatus()
             @$el.addClass className
 

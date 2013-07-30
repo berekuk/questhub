@@ -1,6 +1,6 @@
 # Common questhub view.
 # It declares render() itself, you need to declare serialize() instead of render.
-# If you want to do some more work on render(), define afterRender().
+# If you want to do some more work on render(), call the parent's implementation with super.
 #
 # It also declares initialize().
 # If you want to do some more work on render(), don't forget to call super.
@@ -104,15 +104,12 @@ define [
                 else
                     console.log "unknown feature: " + feature
 
-            @afterRender()
             _.each _.keys(@_subviewInstances), (key) =>
                 subview = @_subviewInstances[key]
                 subview.setElement(@$(key)).render()
 
             @trigger "render"
             this
-
-        afterRender: (->)
 
         removeSubviews: ->
             # _subviewInstances can be undefined if view was never activated

@@ -25,18 +25,18 @@ define [
             deferred = @collection.saveManualOrder(questIds)
             @ordering = true
             @trigger "save-order"
-            that = this
-            deferred.always ->
-                that.ordering = false
-                if that.moreOrdering
-                    that.moreOrdering = false
-                    that.saveManualOrder()
+            deferred.always =>
+                @ordering = false
+                if @moreOrdering
+                    @moreOrdering = false
+                    @saveManualOrder()
                 else
-                    that.moreOrdering = false
-                    that.trigger "order-saved"
+                    @moreOrdering = false
+                    @trigger "order-saved"
 
 
-        afterRender: ->
+        render: ->
+            super
             if @options.sortable
                 @$("tbody").sortable(helper: (e, ui) ->
                     ui.children().each ->
@@ -44,8 +44,5 @@ define [
 
                     ui
                 ).disableSelection()
-                that = this
-                @$("tbody").on "sortupdate", ->
-                    that.saveManualOrder()
-
-            super
+                @$("tbody").on "sortupdate", =>
+                    @saveManualOrder()

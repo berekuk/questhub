@@ -53,17 +53,16 @@ define [
             unless sharedModels.realms.length
                 sharedModels.realms.fetch().success =>
                     @render()
-
                 return
+
             super
 
-        afterRender: ->
             unless @currentUser
                 @currentUser = new CurrentUser(model: currentUserModel)
                 @currentUser.setElement @$el.find(".current-user-box")
             else
                 @currentUser.setElement(@$el.find(".current-user-box")).render()
-            @$el.find(".menu-item-" + @active).addClass "active"  if @active
+            @$el.find(".menu-item-" + @active).addClass "active" if @active
 
         setActive: (selector) ->
             @active = selector # don't render - views/app will call render() itself soon

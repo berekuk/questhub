@@ -83,7 +83,8 @@ define [
             tag: @tag
             currentUser: currentUser.get("login")
 
-        afterRender: ->
+        render: ->
+            super
             @$("[data-explore-tab=" + @tab + "]").parent().addClass "active"
 
         removeFilter: ->

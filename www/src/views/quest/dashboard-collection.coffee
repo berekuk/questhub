@@ -70,7 +70,8 @@ define [
             collection: @collection
             viewMode: @getViewMode()
 
-        afterRender: ->
+        render: ->
+            super
             sv = @subview(".quests")
             @listenTo sv, "save-order", ->
                 @subview(".order-progress-subview").on()

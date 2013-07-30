@@ -117,7 +117,8 @@ define [
             params.showStatus = true
             params
 
-        afterRender: ->
+        render: ->
+            super
             @listenTo @description(), "save", @saveEdit
             @listenTo @description(), "cancel", @closeEdit
 

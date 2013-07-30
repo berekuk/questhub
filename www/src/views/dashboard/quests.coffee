@@ -59,5 +59,6 @@ define [
             return true if currentLogin and currentLogin is @model.get("login")
             false
 
-        afterRender: ->
+        render: ->
+            super
             @$(".dashboard-quests-tabs [data-tab=" + @tab + "]").parent().addClass "active"

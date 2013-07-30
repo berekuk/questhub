@@ -43,7 +43,8 @@ define [
             params.meGusta = _.contains(params.list, currentLogin)
             params
 
-        afterRender: ->
+        render: ->
+            super
             @hideButton() if @hidden
 
         features: ["tooltip"]

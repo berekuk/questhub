@@ -42,7 +42,8 @@ define ["backbone", "underscore", "views/proto/common"], (Backbone, _, Common) -
         renderOne: (model, options) ->
             view = @generateItem(model)
             @itemSubviews.push view
-            @insertOne view.render().el, options
+            view.render()
+            @insertOne view.el, options
 
         onAdd: (model, collection, options) ->
             @$(@listSelector).show()
