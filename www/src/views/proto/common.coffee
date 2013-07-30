@@ -3,7 +3,7 @@
 # If you want to do some more work on render(), define afterRender().
 #
 # It also declares initialize().
-# If you want to do some more work on render(), define afterInitialize().
+# If you want to do some more work on render(), don't forget to call super.
 #
 # options:
 #   t: 'blah' - use '#template-blah' template
@@ -35,7 +35,6 @@ define [
         initialize: ->
             super
             @initSubviews() if @activated
-            @afterInitialize()
             @render() if @selfRender
 
         initSubviews: ->
@@ -70,8 +69,6 @@ define [
         subview: (key) ->
             @rebuildSubview key unless @_subviewInstances[key]
             @_subviewInstances[key]
-
-        afterInitialize: ->
 
         serialize: ->
             if @model

@@ -2,11 +2,10 @@ define ["underscore", "views/proto/common", "text!templates/progress.html"], (_,
     Common.extend
         template: _.template(html)
         on: ->
-            return  if @$(".icon-spinner").is(":visible") # already on
+            return if @$(".icon-spinner").is(":visible") # already on
             @off()
-            that = this
-            @progressPromise = window.setTimeout(->
-                that.$(".icon-spinner").show()
+            @progressPromise = window.setTimeout(=>
+                @$(".icon-spinner").show()
             , 500)
 
         off: ->

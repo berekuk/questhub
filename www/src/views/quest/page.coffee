@@ -97,7 +97,8 @@ define [
             params.realmData = @realmModel().toJSON()
             params
 
-        afterInitialize: ->
+        initialize: ->
+            super
             @listenTo @model, "change", =>
                 @render()
                 @trigger "change:page-title"

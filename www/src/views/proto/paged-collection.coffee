@@ -29,7 +29,7 @@ define [
         updateShowMore: ->
             @$(".show-more").toggle @collection.gotMore
 
-        afterInitialize: ->
+        initialize: ->
             super
             @subview(".progress-spin").on() # app.js fetches the collection for the first time immediately
             @listenTo @collection, "error fetch-page", @noProgress

@@ -5,7 +5,7 @@ define [
     "models/current-user", "models/shared-models"
     "text!templates/welcome.html"
 ], (_, Common, Signin, RealmCollection, currentUser, sharedModels, html) ->
-    Common.extend
+    class extends Common
         template: _.template(html)
         selfRender: true
         activeMenuItem: "none"
@@ -19,7 +19,8 @@ define [
                 collection.fetch()
                 new RealmCollection(collection: collection)
 
-        afterInitialize: ->
+        initialize: ->
+            super
             mixpanel.track "visit /welcome" unless currentUser.get("registered")
             @listenTo currentUser, "change:registered", ->
                 Backbone.history.navigate "/",

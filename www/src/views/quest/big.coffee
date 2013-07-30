@@ -30,7 +30,8 @@ define [
                     realm: @model.get("realm")
                     placeholder: "Quest description"
 
-        afterInitialize: ->
+        initialize: ->
+            super
             @listenTo @model, "change", @render
 
         join: -> @model.join()

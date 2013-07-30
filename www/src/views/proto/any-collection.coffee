@@ -1,20 +1,17 @@
+# Any collection view consisting of arbitrary list of subviews
 #
-# * Any collection view consisting of arbitrary list of subviews
-# *
-# * options:
-# *   generateItem(model): function generating one item subview
-# *   listSelector: css selector specifying the div to which subviews will be appended (or prepended, or whatever - see 'insertMethod')
-# *
-# * Note that this view defines 'afterInitialize' and 'afterRender'. Sorry, future me.
-#
+# options:
+#   generateItem(model): function generating one item subview
+#   listSelector: css selector specifying the div to which subviews will be appended (or prepended, or whatever - see 'insertMethod')
 define ["backbone", "underscore", "views/proto/common"], (Backbone, _, Common) ->
     class extends Common
         activated: false
-        afterInitialize: ->
+        initialize: ->
             @listenTo @collection, "sync", @activate
             @listenTo @collection, "reset", @activate
             @listenTo @collection, "add", @onAdd
             @listenTo @collection, "remove", @render # TODO: optimize
+            super
 
         itemSubviews: []
 
@@ -33,7 +30,8 @@ define ["backbone", "underscore", "views/proto/common"], (Backbone, _, Common) -
 
             @itemSubviews = []
 
-        afterRender: ->
+        render: ->
+            super
             @removeItemSubviews()
             @$(@listSelector).show() if @collection.length # collection table is hidden initially - see https://github.com/berekuk/play-perl/issues/61
             @collection.each @renderOne, this

@@ -6,7 +6,7 @@ define [
     "views/progress", "views/progress/big"
     "text!templates/dashboard-quest-collection.html"
 ], (_, Common, currentUser, QuestCollection, Progress, ProgressBig, html) ->
-    Common.extend
+    class extends Common
         template: _.template(html)
         subviews:
             ".quests": ->
@@ -35,8 +35,8 @@ define [
             else
                 @$(".quests-list").addClass "quests-list-tagless"
 
-        afterInitialize: ->
-            view = this
+        initialize: ->
+            super
             @listenTo @collection, "reset add remove", ->
                 @subview(".progress-subview").off()
                 @fetched = true
@@ -79,5 +79,3 @@ define [
                 @subview(".order-progress-subview").off()
 
             @listenTo sv, "render", @showOrHide
-
-

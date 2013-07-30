@@ -11,7 +11,7 @@ define [
     "views/user/settings", "models/current-user"
     "text!templates/user/settings-box.html"
 ], (_, Common, UserSettings, currentUser, html) ->
-    Common.extend
+    class extends Common
         template: _.template(html)
         events:
             "click button.submit": "submit"
@@ -20,7 +20,8 @@ define [
             ".settings-subview": ->
                 new UserSettings(model: @model)
 
-        afterInitialize: ->
+        initialize: ->
+            super
             @setElement $("#user-settings") # settings-box is a singleton
 
         enable: ->

@@ -1,5 +1,10 @@
-define ["underscore", "views/proto/common", "views/user/notifications", "text!templates/notifications-box.html"], (_, Common, Notifications, html) ->
-    Common.extend
+define [
+    "underscore"
+    "views/proto/common"
+    "views/user/notifications"
+    "text!templates/notifications-box.html"
+], (_, Common, Notifications, html) ->
+    class extends Common
         template: _.template(html)
         events:
             "click .btn-primary": "next"
@@ -8,7 +13,8 @@ define ["underscore", "views/proto/common", "views/user/notifications", "text!te
             ".subview": ->
                 new Notifications(model: @model)
 
-        afterInitialize: ->
+        initialize: ->
+            super
             @setElement $("#notifications") # settings-box is a singleton
 
         start: ->
@@ -23,16 +29,11 @@ define ["underscore", "views/proto/common", "views/user/notifications", "text!te
             @current()
 
         next: ->
-            that = this
-            @model.dismissNotification(@current()._id).always ->
-                that.model.fetch().done(->
-                    unless that.current()
-                        that.$(".modal").modal "hide"
+            @model.dismissNotification(@current()._id).always =>
+                @model.fetch().done(=>
+                    unless @current()
+                        @$(".modal").modal "hide"
                         return
-                    that.subview(".subview").render()
+                    @subview(".subview").render()
                 ).fail ->
-                    that.$(".modal").modal "hide"
-
-
-
-
+                    @$(".modal").modal "hide"

@@ -8,7 +8,7 @@ define [
         template: _.template html
         listSelector: ".event-collection"
         pageSize: 50
-        afterInitialize: ->
+        initialize: ->
             super
             @listenTo Backbone, "pp:quest-add", (model) -> @collection.fetch()
 

@@ -1,19 +1,24 @@
-define ["underscore", "models/current-user", "views/proto/common"], (_, currentUser, Common) ->
-    Common.extend
+define [
+    "underscore"
+    "models/current-user"
+    "views/proto/common"
+], (_, currentUser, Common) ->
+    class extends Common
         buttonSelector: undefined
         ownerField: undefined
         field: undefined
         hidden: false
-        push: ->
 
+        push: ->
         pull: ->
 
         events:
             "click .push-self": "push"
             "click .pull-self": "pull"
 
-        afterInitialize: ->
+        initialize: ->
             @hidden = @options.hidden if @options.hidden?
+            super
             @listenTo @model, "change", @render
 
         showButton: ->
@@ -39,8 +44,6 @@ define ["underscore", "models/current-user", "views/proto/common"], (_, currentU
             params
 
         afterRender: ->
-            @hideButton()  if @hidden
+            @hideButton() if @hidden
 
         features: ["tooltip"]
-
-
