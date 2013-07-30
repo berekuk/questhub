@@ -12,7 +12,7 @@ define [
         template: _.template html
 
         @active: ->
-            _.size _.find cachedText, (v) -> v? and v.length > 0
+            !!(_.size _.find cachedText, (v) -> v? and v.length > 0)
 
         events:
             "keydown textarea": "preEdit"
