@@ -5,6 +5,7 @@
     pull-db.pl [--production]
     options:
       --production      Pull from questhub.io instead of dropbox backup
+      --keep-settings   Don't clean up email and other sensitive settings
 
 =cut
 
