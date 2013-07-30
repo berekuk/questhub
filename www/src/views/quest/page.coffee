@@ -17,7 +17,7 @@ define [
             "click .quest-page-action .resurrect": "resurrect"
             "click .quest-page-action .reopen": "reopen"
             "click .invite": "inviteDialog"
-            "click .uninvite": "uninviteAction"
+            "click .uninvite": "uninvite"
             "click .join": "joinAction"
             "click .like": -> @model.like()
             "click .unlike": -> @model.unlike()
@@ -73,21 +73,20 @@ define [
             @model.invite @$("#inputInvitee").val()  if e.keyCode is 13
             return
 
-        uninviteAction: (e) ->
+        uninvite: (e) ->
             @model.uninvite $(e.target).parent().attr("data-login")
-
-        joinAction: ->
-            @model.join()
 
         close: ->
             @model.close()
             modal = new QuestCompleted(model: @model)
             modal.start()
 
-        abandon: -> @model.abandon()
-        leave: -> @model.leave()
-        resurrect: -> @model.resurrect()
         reopen: -> @model.reopen()
+
+        abandon: -> @model.abandon()
+        resurrect: -> @model.resurrect()
+        leave: -> @model.leave()
+        join: -> @model.join()
 
         serialize: ->
             params = super
