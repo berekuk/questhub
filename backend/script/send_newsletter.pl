@@ -4,13 +4,16 @@ use 5.012;
 use warnings;
 use lib '/play/backend/lib';
 
-use Types::Standard qw(Dict Str);
+use Types::Standard qw(Dict Str Bool);
 use Type::Params qw(compile);
 
 use autodie qw(open);
 use Email::Simple;
 use Email::Sender::Simple qw(sendmail);
 use Encode qw(encode_utf8);
+use MIME::Base64 qw(encode_base64);
+use JSON;
+use DateTime;
 
 use Getopt::Long 2.33;
 use Pod::Usage;
@@ -37,9 +40,11 @@ sub send_one {
         body => Str,
         login => Str,
         to => Str,
+        dump => Bool,
+        campaign => Str,
     ]);
     my ($params) = $check->(@_);
-    my ($title, $body, $login, $to) = @$params{qw/ title body login to /};
+    my ($title, $body, $login, $to, $dump, $campaign) = @$params{qw/ title body login to dump campaign /};
 
     $body =~ s/{{login}}/$login/ or die "Login placeholder not found in newsletter";
 
@@ -47,6 +52,19 @@ sub send_one {
     my $unsubscribe_link = "http://".setting('hostport')."/api/user/$login/unsubscribe/newsletter?secret=$secret";
 
     $body =~ s/{{unsubscribe}}/$unsubscribe_link/ or die "Unsubscribe placeholder not found in newsletter";
+
+    my $data = encode_base64(
+        JSON->new->encode({
+            event => 'open newsletter',
+            properties => {
+                distinct_id => $login,
+                token => setting('mixpanel_token'),
+                campaign => $campaign,
+            },
+        }),
+        ''
+    );
+    $body .= qq{<img src="http://api.mixpanel.com/track/?data=$data&ip=1&img=1" width="1" height="1"/>};
 
     # TODO - send via sendmail queue
     # (need to support custom From in sendmail pumper first or decide that sending newsletter from notification@questhub.io is ok)
@@ -60,14 +78,28 @@ sub send_one {
         body => encode_utf8($body),
     );
 
+    if ($dump) {
+        use Data::Dumper;
+        say Dumper $email;
+        return;
+    }
     sendmail($email);
 }
 
 sub main {
     my $force;
+    my $dump;
+    my $campaign;
     GetOptions(
         'f|force' => \$force,
+        'd|dump' => \$dump,
+        'c|campaign' => \$campaign,
     ) or pod2usage(2);
+
+    unless ($campaign) {
+        $campaign = lc(DateTime->today->month_name) . '-' . DateTime->today->day ;
+        say "Campaign: $campaign";
+    }
 
     state $check = compile(Str);
     my ($file) = $check->(@ARGV);
@@ -95,6 +127,8 @@ sub main {
             %$target,
             title => $title,
             body => $body,
+            dump => $dump,
+            campaign => $campaign,
         });
     }
 }
