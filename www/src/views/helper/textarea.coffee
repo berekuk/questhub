@@ -6,9 +6,13 @@ define [
 ], (_, markdown, Common, currentUser, html) ->
 
     previewMode = undefined
+    cachedText = undefined
 
     class extends Common
         template: _.template html
+
+        @active: ->
+            cachedText? and cachedText.length > 0
 
         events:
             "keydown textarea": "preEdit"
@@ -19,19 +23,27 @@ define [
 
         reveal: (text) ->
             @$el.show()
-            @$("textarea").val(text).trigger "autosize"
+            @setValue(text)
+            $("textarea").trigger "autosize"
             if text and text.length
                 len = text.length * 2 # http://stackoverflow.com/a/1675345/137062
                 @$("textarea")[0].setSelectionRange len, len
             @updatePreview()
 
         value: -> @$("textarea").val()
+        setValue: (val) ->
+            @$("textarea").val(val)
+            cachedText = val
+            return
 
-        hide: -> @$el.hide()
+        hide: ->
+            cachedText = undefined
+            @$el.hide()
+
         disable: -> @$("textarea").prop "disabled", true
         enable: -> @$("textarea").prop "disabled", false
         disabled: -> not @$el.is(":visible") or @$("textarea").prop("disabled")
-        clear: -> @$("textarea").val ""
+        clear: -> @setValue("")
         focus: -> @$("textarea").focus()
 
         initialize: ->
@@ -90,6 +102,7 @@ define [
             @$(".helper-textarea-show-help").popover "destroy"
 
         remove: ->
+            cachedText = undefined
             @destroyHelp()
             super
 
@@ -102,6 +115,7 @@ define [
 
         postEdit: (e) ->
             return false if @disabled()
+            cachedText = @value()
             @updatePreview()
             @trigger "edit"
 
