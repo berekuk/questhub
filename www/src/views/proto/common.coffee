@@ -39,11 +39,10 @@ define [
             @render() if @selfRender
 
         initSubviews: ->
-            @_subviewInstances
-
             # this was a warning situation in the past, but now views/explore.js legitimately re-initializes subviews
+            # (TODO - hmm, or does it?
             #            console.log('initSubviews is called twice!');
-            @_subviewInstances = {}
+            @removeSubviews()
             _.each _.keys(_.result(this, "subviews")), (key) =>
                 @subview key # will perform the lazy init
 
@@ -55,6 +54,8 @@ define [
             throw new Error("Method '#{value}' does not exist") unless method
             method = _.bind(method, this)
             subview = method()
+
+            @_subviewInstances[key]?.remove()
             @_subviewInstances[key] = subview
 
             # useless on initial init - view's element is an empty div - but can come in handy if someone calls rebuildSubview leter
@@ -114,11 +115,13 @@ define [
 
         afterRender: (->)
 
-        remove: ->
+        removeSubviews: ->
             # _subviewInstances can be undefined if view was never activated
             if @_subviewInstances
-                _.each _.keys(@_subviewInstances), (key) =>
-                    subview = @_subviewInstances[key]
+                _.each @_subviewInstances, (subview) =>
                     subview.remove()
+            @_subviewInstances = {}
 
+        remove: ->
+            @removeSubviews()
             super

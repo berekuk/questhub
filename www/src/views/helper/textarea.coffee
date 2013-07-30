@@ -6,13 +6,13 @@ define [
 ], (_, markdown, Common, currentUser, html) ->
 
     previewMode = undefined
-    cachedText = undefined
+    cachedText = {}
 
     class extends Common
         template: _.template html
 
         @active: ->
-            cachedText? and cachedText.length > 0
+            _.size _.find cachedText, (v) -> v? and v.length > 0
 
         events:
             "keydown textarea": "preEdit"
@@ -21,9 +21,16 @@ define [
             "click .helper-textarea-hide-preview": -> @switchPreview(false)
             "click .helper-textarea-show-help": "toggleHelp"
 
+        # useful in case of accidental re-renders, we're calling it from reveal() and from render()
+        restoreFromCache: ->
+            if cachedText[@cid]
+                @setValue cachedText[@cid]
+                return true
+            return false
+
         reveal: (text) ->
             @$el.show()
-            @setValue(text)
+            @restoreFromCache() or @setValue(text)
             $("textarea").trigger "autosize"
             if text and text.length
                 len = text.length * 2 # http://stackoverflow.com/a/1675345/137062
@@ -33,11 +40,11 @@ define [
         value: -> @$("textarea").val()
         setValue: (val) ->
             @$("textarea").val(val)
-            cachedText = val
+            cachedText[@cid] = val
             return
 
         hide: ->
-            cachedText = undefined
+            delete cachedText[@cid]
             @$el.hide()
 
         disable: -> @$("textarea").prop "disabled", true
@@ -102,7 +109,7 @@ define [
             @$(".helper-textarea-show-help").popover "destroy"
 
         remove: ->
-            cachedText = undefined
+            delete cachedText[@cid]
             @destroyHelp()
             super
 
@@ -115,13 +122,14 @@ define [
 
         postEdit: (e) ->
             return false if @disabled()
-            cachedText = @value()
+            cachedText[@cid] = @value()
             @updatePreview()
             @trigger "edit"
 
         render: ->
             @destroyHelp()
             super
+            @restoreFromCache()
             @$("textarea").autosize append: "\n"
 
         serialize: ->

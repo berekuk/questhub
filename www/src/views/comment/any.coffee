@@ -38,11 +38,7 @@ define [
             @textarea.on "save", => @saveEdit()
             @textarea.on "cancel", => @cancelEdit()
 
-        cancelEdit: ->
-            @textarea.disable() # to avoid accidental saveEdit() because of blur (not relevant anymore)
-            @render()
-            return
-
+        cancelEdit: -> @render()
 
         saveEdit: ->
             return if @textarea.disabled()
@@ -78,5 +74,11 @@ define [
         reply: ->
             @options.object.trigger "compose-comment",
                 reply: @model.get "author"
+
+        render: ->
+            # to clean up cachedText state and avoid memory leaks (I really should turn it into more manageable subview)
+            @textarea?.remove()
+            delete @textarea
+            super
 
         features: ["timeago"]
