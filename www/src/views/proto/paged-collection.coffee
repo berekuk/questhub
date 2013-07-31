@@ -35,7 +35,6 @@ define [
             @listenTo @collection, "error fetch-page", @noProgress
             @listenTo @collection, "error", @noProgress
             @listenTo @collection, "fetch-page sync reset", @updateShowMore
-            @render()
 
         showMore: ->
             @$(".show-more").addClass "disabled"
