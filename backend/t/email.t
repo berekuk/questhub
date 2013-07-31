@@ -1,12 +1,6 @@
-#!/usr/bin/perl
-
-use 5.012;
-use warnings;
-
 use lib 'lib';
+use Play::Test;
 use parent qw(Test::Class);
-use Test::More;
-use Test::Fatal;
 
 use Play::Email;
 use Email::Simple;
@@ -34,6 +28,11 @@ sub sendmail :Tests {
         },
         undef,
         'sendmail() expects Email::Simple';
+}
+
+sub transport :Tests {
+    isa_ok(Play::Email->transport, 'Email::Sender::Transport::Test');
+    # TODO - test that when test=0, transport is DevNull or SMTP::SSL
 }
 
 __PACKAGE__->new->runtests;
