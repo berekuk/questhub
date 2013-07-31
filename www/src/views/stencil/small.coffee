@@ -6,7 +6,11 @@ define [
     class extends Common
         template: _.template html
 
+        initialize: ->
+            super
+            @listenTo @model, "take:success", => @render()
+
         events:
-            "click ._take": -> @model.take success: => @render()
+            "click ._take": -> @model.take()
 
         features: ["tooltip"]
