@@ -35,12 +35,12 @@ define [
             if text and text.length
                 len = text.length * 2 # http://stackoverflow.com/a/1675345/137062
                 @$("textarea")[0].setSelectionRange len, len
-            @updatePreview()
 
         value: -> @$("textarea").val()
         setValue: (val) ->
             @$("textarea").val(val)
             cachedText[@cid] = val
+            @updatePreview()
             return
 
         hide: ->
