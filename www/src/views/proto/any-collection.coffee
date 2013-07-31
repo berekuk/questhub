@@ -7,8 +7,8 @@ define ["backbone", "underscore", "views/proto/common"], (Backbone, _, Common) -
     class extends Common
         activated: false
         initialize: ->
-            @listenTo @collection, "sync", @activate
-            @listenTo @collection, "reset", @activate
+            @listenToOnce @collection, "sync", @activate
+            @listenToOnce @collection, "reset", @activate
             @listenTo @collection, "add", @onAdd
             @listenTo @collection, "remove", @render # TODO: optimize
             super
