@@ -220,7 +220,11 @@ Join a quest. User must be invited first using `/api/quest/{id}/invite` method.
 
 ##### POST /api/quest/{id}/leave
 
-Leave a quest. User must be the member of a quest's team.
+Leave a quest. User must be a member of the quest's team.
+
+##### POST /api/quest/{id}/checkin
+
+Check-in in a quest. User must be a member of the quest's team.
 
 ##### POST /api/quest/{id}/invite
 

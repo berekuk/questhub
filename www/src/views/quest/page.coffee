@@ -2,11 +2,11 @@ define [
     "underscore"
     "views/proto/common"
     "views/quest/completed"
-    "views/realm/submenu", "views/quest/big", "views/comment/collection"
+    "views/realm/submenu", "views/quest/checkins", "views/quest/big", "views/comment/collection"
     "models/comment-collection", "models/current-user", "models/shared-models"
     "text!templates/quest/page.html"
     "jquery.typeahead"
-], (_, Common, QuestCompleted, RealmSubmenu, QuestBig, CommentCollection, CommentCollectionModel, currentUser, sharedModels, html) ->
+], (_, Common, QuestCompleted, RealmSubmenu, QuestCheckins, QuestBig, CommentCollection, CommentCollectionModel, currentUser, sharedModels, html) ->
     class extends Common
         activated: false
         template: _.template(html)
@@ -36,6 +36,9 @@ define [
 
             ".quest-big": ->
                 new QuestBig(model: @model)
+
+            ".quest-checkins-sv": ->
+                new QuestCheckins(model: @model)
 
             ".comments": ->
                 commentsModel = new CommentCollectionModel([],

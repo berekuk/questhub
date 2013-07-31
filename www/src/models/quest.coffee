@@ -15,6 +15,7 @@ define ["backbone", "jquery", "models/current-user"], (Backbone, $, currentUser)
         abandon: -> @act "abandon"
         resurrect: -> @act "resurrect"
         reopen: -> @act "reopen"
+        checkin: -> @act "checkin"
 
         act: (action, params) ->
             model = this

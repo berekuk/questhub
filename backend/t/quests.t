@@ -612,4 +612,25 @@ sub count :Tests {
     is db->quests->count({ realm => 'asia' }), 0;
 }
 
+sub checkin :Tests {
+    db->users->add({ login => 'foo' });
+    my $quest = db->quests->add({
+        name => "qqq",
+        user => 'foo',
+        realm => 'europe',
+    });
+
+    is db->quests->get($quest->{_id})->{checkins}, undef;
+
+    db->quests->checkin($quest->{_id}, 'foo');
+    cmp_deeply
+        db->quests->get($quest->{_id})->{checkins},
+        [re('^\d+$')];
+
+    db->quests->checkin($quest->{_id}, 'foo');
+    cmp_deeply
+        db->quests->get($quest->{_id})->{checkins},
+        [re('^\d+$'), re('^\d+$')];
+}
+
 __PACKAGE__->new->runtests;
