@@ -83,9 +83,9 @@ define [
         subviews: -> {}
         activated: true
         activate: ->
-            unless @activated
-                @activated = true
-                @initSubviews()
+            return if @activated
+            @activated = true
+            @initSubviews()
             @render()
 
         render: ->

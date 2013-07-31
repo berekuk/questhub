@@ -8,7 +8,7 @@ define ["backbone", "underscore", "views/proto/common"], (Backbone, _, Common) -
         activated: false
         initialize: ->
             @listenToOnce @collection, "sync", @activate
-            @listenToOnce @collection, "reset", @activate
+            @listenTo @collection, "reset", => if @activated then @render() else @activate()
             @listenTo @collection, "add", @onAdd
             @listenTo @collection, "remove", @render # TODO: optimize
             super
