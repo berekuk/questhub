@@ -5,7 +5,6 @@ use warnings;
 
 BEGIN {
     $ENV{PLAY_CONFIG_FILE} = '/play/backend/t/data/config.yml';
-    $ENV{EMAIL_SENDER_TRANSPORT} = 'Test';
 }
 
 use parent qw(Exporter);
@@ -37,12 +36,12 @@ sub pumper {
 }
 
 sub process_email_queue {
-
-    Email::Sender::Simple->default_transport->clear_deliveries;
-    my @t = Email::Sender::Simple->default_transport->deliveries;
+    require Play::Email;
+    Play::Email->transport->clear_deliveries;
+    my @t = Play::Email->transport->deliveries;
     Play::Test::pumper('sendmail')->run;
 
-    my @deliveries = Email::Sender::Simple->default_transport->deliveries;
+    my @deliveries = Play::Email->transport->deliveries;
     return @deliveries;
 }
 
