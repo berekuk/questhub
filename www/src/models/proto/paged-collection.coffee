@@ -28,21 +28,21 @@ define ["backbone", "underscore"], (Backbone, _) ->
         # we have to do it manually, because we want to know the size of resp, and ignore the last item
         fetch: (options) ->
             options = (if options then _.clone(options) else {})
-            options.parse = true  if options.parse is undefined
-            success = options.success
-            collection = this
-            options.success = (resp) ->
-                if collection.options.limit
-                    collection.gotMore = (resp.length >= collection.options.limit)
-                    resp.pop()  if collection.gotMore # always ignore last item, we asked for it only for the sake of knowing if there's more
-                else
-                    collection.gotMore = false # there was no limit, so we got everything there is
-                method = (if options.update then "set" else "reset")
-                collection[method] resp, options
-                success collection, resp, options  if success
-                collection.trigger "fetch-page"
+            options.parse = true if options.parse is undefined
 
-            @sync "read", this, options
+            success = options.success
+            options.success = (resp) =>
+                if @options.limit
+                    @gotMore = (resp.length >= @options.limit)
+                    resp.pop() if @gotMore # always ignore last item, we asked for it only for the sake of knowing if there's more
+                else
+                    @gotMore = false # there was no limit, so we got everything there is
+                method = (if options.update then "set" else "reset")
+                @[method] resp, options
+                success @, resp, options if success
+                @trigger "fetch-page"
+
+            @sync "read", @, options
 
 
         # pager
