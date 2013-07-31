@@ -103,7 +103,7 @@ get '/quest/:id' => sub {
 
 for my $method (qw(
     like unlike join leave watch unwatch
-    close reopen abandon resurrect
+    close reopen abandon resurrect checkin
 )) {
     post "/quest/:id/$method" => sub {
         my $login = login;

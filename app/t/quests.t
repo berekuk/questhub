@@ -634,6 +634,20 @@ sub watch_unwatch :Tests {
     cmp_deeply $got_quest->{watchers}, ['bar'], 'baz is not a watcher anymore';
 }
 
+sub checkin :Tests {
+    http_json GET => "/api/fakeuser/foo";
+
+    my $quest = http_json POST => '/api/quest', { params => {
+        name => 'q1',
+        realm => 'europe',
+    } };
+
+    http_json POST => "/api/quest/$quest->{_id}/checkin";
+
+    my $got_quest = http_json GET => "/api/quest/$quest->{_id}";
+    cmp_deeply $got_quest->{checkins}, [re('^\d+$')], 'checked in';
+}
+
 sub email_watchers :Tests {
 
     http_json GET => "/api/fakeuser/foo";
