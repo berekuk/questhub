@@ -12,8 +12,8 @@ use Play::Config qw(setting);
 
 use Play::DB qw(db);
 
+use Play::Email;
 use Email::Simple;
-use Email::Sender::Simple qw(sendmail);
 use Encode qw(encode_utf8);
 
 has 'in' => (
@@ -61,7 +61,7 @@ sub run_once {
             body => encode_utf8($body),
         );
 
-        sendmail($email);
+        Play::Email->sendmail($email);
         $self->add_stat('emails sent');
     }
 }

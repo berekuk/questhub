@@ -5,7 +5,6 @@ use warnings;
 
 BEGIN {
     $ENV{PLAY_CONFIG_FILE} = '/play/backend/t/data/config.yml';
-    $ENV{EMAIL_SENDER_TRANSPORT} = 'Test';
 }
 
 use parent qw(Exporter);

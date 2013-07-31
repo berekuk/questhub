@@ -11,17 +11,17 @@ use Test::Fatal;
 use Play::Email;
 use Email::Simple;
 
-sub send :Tests {
+sub sendmail :Tests {
     like
         exception {
-            Play::Email->send("abc")
+            Play::Email->sendmail("abc")
         },
         qr/type constraint/,
-        'send() expects Email::Simple';
+        'sendmail() expects Email::Simple';
 
     is
         exception {
-            Play::Email->send(
+            Play::Email->sendmail(
                 Email::Simple->create(
                     header => [
                         From => q[me@berekuk.ru],
@@ -33,7 +33,7 @@ sub send :Tests {
             )
         },
         undef,
-        'send() expects Email::Simple';
+        'sendmail() expects Email::Simple';
 }
 
 __PACKAGE__->new->runtests;

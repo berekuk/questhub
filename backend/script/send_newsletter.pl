@@ -9,7 +9,7 @@ use Type::Params qw(compile);
 
 use autodie qw(open);
 use Email::Simple;
-use Email::Sender::Simple qw(sendmail);
+use Play::Email;
 use Encode qw(encode_utf8);
 use MIME::Base64 qw(encode_base64);
 use JSON;
@@ -83,7 +83,7 @@ sub send_one {
         say Dumper $email;
         return;
     }
-    sendmail($email);
+    Play::Email->sendmail($email);
 }
 
 sub main {
