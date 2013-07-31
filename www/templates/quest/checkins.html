@@ -1,0 +1,13 @@
+<div class="quest-checkins <%- enabled ? '' : 'hide' %>">
+  <header>Checkins:</header>
+  <% if (checkins.length) { %>
+    <% _.each(checkins, function (checkin) { %>
+    <div class="quest-checkin"><time class="timeago" datetime="<%= new Date(checkin * 1000).toISOString() %>"><%= new Date(checkin * 1000).toISOString() %></time></div>
+    <% }) %>
+  <% } else { %>
+  <div class="quest-checkin-none">None so far</div>
+  <% } %>
+  <% if (isOwned) { %>
+  <button class="btn btn-success quest-checkin-button">Checkin</button>
+  <% } %>
+</div>

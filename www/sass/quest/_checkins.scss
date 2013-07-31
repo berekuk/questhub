@@ -1,0 +1,56 @@
+.quest-checkins {
+    clear: both;
+    @include breakpoint(lessThanB) {
+        padding-top: 8px;
+        margin-bottom: 10px;
+    }
+    @include breakpoint(B) {
+        margin-top: 20px;
+    }
+
+    header {
+        display: inline;
+        @include bg-header;
+        margin-bottom: 8px;
+        text-align: center;
+        @include breakpoint(B) {
+            display: block;
+            text-align: center;
+        }
+    }
+    .quest-checkin {
+        display: inline;
+        .timeago {
+            color: $text-color;
+        }
+
+        @include breakpoint(lessThanB) {
+            &:after {
+                content: ", ";
+            }
+            &:last-of-type:after {
+                content: "";
+            }
+        }
+        @include breakpoint(B) {
+            display: block;
+            text-align: center;
+        }
+    }
+    .quest-checkin-button {
+        display: inline-block;
+        margin-left: 5px;
+        @include breakpoint(B) {
+            display: block;
+            margin: 0 auto;
+            margin-top: 10px;
+        }
+    }
+    .quest-checkin-none {
+        display: inline-block;
+        @include breakpoint(B) {
+            display: block;
+            text-align: center;
+        }
+    }
+}
