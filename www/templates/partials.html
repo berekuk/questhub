@@ -10,7 +10,8 @@
     <% if (obj.tags) { %>
       <% _.each(obj.tags, function (tag) { %>
         <% var isTime = (tag.match(/^\d+[mhdw]$/)); %>
-        <a href="/realm/<%- realm %>/explore/latest/tag/<%= tag %>" class="tag <%= (isTime ? 'tag-time' : '') %>">
+        <% var isSpecial = (tag.match(/^checkin$/)); %>
+        <a href="/realm/<%- realm %>/explore/latest/tag/<%= tag %>" class="tag <%= (isTime ? 'tag-time' : isSpecial ? 'tag-special' : '') %>">
           <% if (isTime) { %>
             <i class="icon-time"></i>
           <% } %>
