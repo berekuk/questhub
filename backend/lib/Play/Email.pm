@@ -19,6 +19,11 @@ sub _build_transport {
     elsif (not setting('ses') or not setting('ses')->{username} or setting('ses')->{username} eq 'NONE') {
         return Email::Sender::Transport::DevNull->new;
     }
+
+    # temporary, until I get SES production access approved
+    use Email::Sender::Transport::Sendmail;
+    return Email::Sender::Transport::Sendmail->new;
+
     return Email::Sender::Transport::SMTP::SSL->new(
         host => 'email-smtp.us-east-1.amazonaws.com',
         port => 587,
