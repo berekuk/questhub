@@ -1,5 +1,7 @@
 default.play_perl.twitter.consumer_key = "IRUAzmA5AjwBTrPQWrCzIQ"
 default.play_perl.twitter.consumer_secret = "Cj4hB54BLMYeoG9eEX4fd5gexg02nQLIRJ2S3f0nAH4"
+default.play_perl.aws.access_key = "NONE"
+default.play_perl.aws.secret_key = "NONE"
 default.play_perl.hostport = 'questhub.io'
 default.play_perl.service_name = 'Questhub.io'
 default.play_perl.unsubscribe_salt = '1234567890'

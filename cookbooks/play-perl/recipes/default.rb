@@ -79,7 +79,8 @@ template "/data/config.yml" do
       :hostport => node['play_perl']['hostport'],
       :service_name => node['play_perl']['service_name'],
       :unsubscribe_salt => node['play_perl']['unsubscribe_salt'],
-      :mixpanel_token => node['play_perl']['mixpanel_token']
+      :mixpanel_token => node['play_perl']['mixpanel_token'],
+      :aws => node['play_perl']['aws']
   })
   # TODO - notify ubic service restart
 end

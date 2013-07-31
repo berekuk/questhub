@@ -4,6 +4,9 @@ realms:
 - chaos
 - perl
 - meta
+aws:
+    access_key: "<%= @aws['access_key'] %>"
+    secret_key: "<%= @aws['secret_key'] %>"
 unsubscribe_salt: "<%= @unsubscribe_salt %>"
 mixpanel_token: "<%= @mixpanel_token %>"
 data_dir: "/data"
