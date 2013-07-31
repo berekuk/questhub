@@ -768,6 +768,27 @@ sub leave {
     });
 }
 
+sub checkin {
+    my $self = shift;
+    state $check = compile(Id, Login);
+    my ($id, $user) = $check->(@_);
+
+    my $result = $self->collection->update(
+        {
+            _id => MongoDB::OID->new(value => $id),
+            team => $user,
+        },
+        {
+            '$push' => { checkins => time }
+        },
+        { safe => 1 }
+    );
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "Quest not found or unable to checkin in a quest you don't own";
+    }
+}
+
 =item B<move_to_realm($id, $realm, $user)>
 
 =cut
