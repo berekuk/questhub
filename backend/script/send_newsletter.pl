@@ -1,5 +1,11 @@
 #!/usr/bin/env perl
 
+=head1 SYNOPSIS
+
+    send_newsletter.pl [--force] [--dump] [--campaign]
+
+=cut
+
 use 5.012;
 use warnings;
 use lib '/play/backend/lib';
@@ -23,6 +29,7 @@ use Play::DB qw(db);
 
 sub load_targets {
     my @users = db->users->collection->find->all;
+    say "Found ".scalar(@users)." users";
 
     my @targets;
     for my $user (@users) {
@@ -124,6 +131,9 @@ sub main {
 
     say "Sending newsletter to ".scalar(@targets)."/$total_number users";
 
+    my $send_rate = 5;
+    my $counter = 0;
+    my $sent = 0;
     for my $target (@targets) {
         send_one({
             %$target,
@@ -132,6 +142,13 @@ sub main {
             dump => $dump,
             campaign => $campaign,
         });
+        $counter++;
+        $sent++;
+        if ($counter >= $send_rate) {
+            $counter = 0;
+            say "$sent/".scalar(@targets)." sent";
+            sleep 1;
+        }
     }
 }
 
