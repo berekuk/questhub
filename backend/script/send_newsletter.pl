@@ -12,6 +12,7 @@ use lib '/play/backend/lib';
 
 use Types::Standard qw(Dict Str Bool);
 use Type::Params qw(compile);
+use Play::Types qw( Id Login );
 
 use autodie qw(open);
 use Email::Simple;
@@ -36,7 +37,7 @@ sub load_targets {
         my $login = $user->{login};
         # slower because we do an extra request per user, but at least we don't violate encapsulation
         my $email = db->users->get_email($login, 'newsletter') or next;
-        push @targets, { login => $login, to => $email };
+        push @targets, { login => $login, user_id => $user->{_id}->to_string, to => $email };
     }
     return @targets;
 }
@@ -45,13 +46,14 @@ sub send_one {
     state $check = compile(Dict[
         title => Str,
         body => Str,
-        login => Str,
+        login => Login,
+        user_id => Id,
         to => Str,
         dump => Bool,
         campaign => Str,
     ]);
     my ($params) = $check->(@_);
-    my ($title, $body, $login, $to, $dump, $campaign) = @$params{qw/ title body login to dump campaign /};
+    my ($title, $body, $login, $user_id, $to, $dump, $campaign) = @$params{qw/ title body login user_id to dump campaign /};
 
     $body =~ s/{{login}}/$login/ or die "Login placeholder not found in newsletter";
 
@@ -64,7 +66,7 @@ sub send_one {
         JSON->new->encode({
             event => 'open newsletter',
             properties => {
-                distinct_id => $login,
+                distinct_id => $user_id,
                 token => setting('mixpanel_token'),
                 campaign => $campaign,
             },
