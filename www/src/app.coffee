@@ -46,8 +46,11 @@ require [
     $(document).on "click", "a[href^='/']", (event) ->
         return if event.altKey or event.ctrlKey or event.metaKey or event.shiftKey
         return if TextArea.active() # not calling preventDefault, so we'll do a full page reload
+        el = $(event.currentTarget)
+        return if el.attr("target") == "_blank"
+
         event.preventDefault()
-        url = $(event.currentTarget).attr("href").replace(/^\//, "")
+        url = el.attr("href").replace(/^\//, "")
         Backbone.history.navigate url,
             trigger: true
 
