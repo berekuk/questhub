@@ -1,9 +1,9 @@
 define [
-    "underscore", "markdown"
+    "underscore", "jquery", "markdown"
     "views/proto/common"
     "models/current-user"
     "text!templates/helper/textarea.html"
-], (_, markdown, Common, currentUser, html) ->
+], (_, $, markdown, Common, currentUser, html) ->
 
     previewMode = undefined
     cachedText = {}
@@ -58,6 +58,8 @@ define [
             previewMode = !!( currentUser.getSetting("preview-mode") - 0 ) # casting string to boolean
             @on 'detach-subview', @selfDestruct, @
 
+            $("body").on "click", @blurHelp
+
         preview: -> @$(".helper-textarea-preview")
         switchPreview: (value) ->
             previewMode = value
@@ -81,6 +83,10 @@ define [
 
         helpLink: -> @$(".helper-textarea-show-help")
         helpPopover: -> @$(".popover")
+
+        blurHelp: (e) =>
+            if !@helpLink().is(e.target) and @helpLink().has(e.target).length == 0 and @helpPopover().has(e.target).length == 0
+                @helpLink().popover('hide')
 
         toggleHelp: ->
             if not @popoverInitialized
@@ -118,6 +124,7 @@ define [
             @destroyHelp()
 
         remove: ->
+            $("body").off "click", @blurHelp # avoiding event handler leaks
             @selfDestruct()
             super
 
