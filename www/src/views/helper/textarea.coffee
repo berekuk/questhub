@@ -104,7 +104,7 @@ define [
                         <code>&gt; Blockquote</code><br>
                         <code>@login</code><br>
                         <code>[Link title](Link URL)</code><br>
-                        <a href="#" onclick="window.open('/about/syntax', '_blank')" class="helper-textarea-cheatsheet-link">Full cheat sheat &rarr;</a>
+                        <a href="/about/syntax" target="_blank" class="helper-textarea-cheatsheet-link">Full cheat sheat &rarr;</a>
                       </div>
                     """
                     container: @$el
