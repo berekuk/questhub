@@ -79,10 +79,13 @@ define [
             else
                 preview.hide()
 
+        helpLink: -> @$(".helper-textarea-show-help")
+        helpPopover: -> @$(".popover")
+
         toggleHelp: ->
             if not @popoverInitialized
                 # for some reason this code doesn't work from render()
-                @$(".helper-textarea-show-help").popover(
+                @helpLink().popover(
                     placement: "top"
                     title: "Formatting cheat sheet"
                     html: true
@@ -98,16 +101,17 @@ define [
                         <a href="#" onclick="window.open('/about/syntax', '_blank')" class="helper-textarea-cheatsheet-link">Full cheat sheat &rarr;</a>
                       </div>
                     """
-                    container: "body"
+                    container: @$el
                     trigger: "manual"
                 )
                 @popoverInitialized = true
-            @$(".helper-textarea-show-help").popover "toggle"
+            @helpLink().popover "toggle"
+
             return false
 
         destroyHelp: ->
             @popoverInitialized = false
-            @$(".helper-textarea-show-help").popover "destroy"
+            @helpLink().popover "destroy"
 
         selfDestruct: ->
             delete cachedText[@cid]
