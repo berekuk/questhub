@@ -5,7 +5,8 @@ define [
     "text!templates/about/main.html"
     "text!templates/about/api.html"
     "text!templates/about/syntax.html"
-], (_, Common, Tabbed, html, mainHtml, apiHtml, syntaxHtml) ->
+    "text!templates/about/feedback.html"
+], (_, Common, Tabbed, html, mainHtml, apiHtml, syntaxHtml, feedbackHtml) ->
 
     subviewClass = class extends Common
         initialize: ->
@@ -33,6 +34,9 @@ define [
             syntax:
                 url: '/syntax'
                 subview: -> new subviewClass template: _.template syntaxHtml
+            feedback:
+                url: '/feedback'
+                subview: -> new subviewClass template: _.template feedbackHtml
 
         switchTab: (e) ->
             @switchTabByName $(e.target).attr("data-about-tab")
