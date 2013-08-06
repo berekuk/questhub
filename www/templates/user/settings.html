@@ -1,53 +1,57 @@
 <div class="user-settings">
-  <div class="form-horizontal user-settings-email">
-    <% if (obj.email_confirmed == 'persona') { %>
-      <h4><%- obj.email || 'oops' %>
-      <span class="label label-success">Persona</span>
-      </h4>
-    <% } else { %>
-      <input name="email" type="email" placeholder="Email" value="<%- obj.email %>">
-      <span class="settings-conflict-email alert alert-error">&larr; Email is already in use.</span>
-      <span class="email-status <%= (obj.hideEmailStatus || obj.email_confirmed == 'persona') ? "hide" : "" %>">
-        <% if (obj.email_confirmed) { %>
-          <span class="label label-success">Confirmed</span>
-        <% } else if (obj.email) { %>
-          <button class="btn btn-warning resend-email-confirmation">Not confirmed. Resend confirmation key?</button>
-        <% } %>
-      </span>
-    <% } %>
-  </div>
-  <div class="user-settings-checkboxes">
-    <div class="muted notify-text">Notify me by email when someone...</div>
-    <label class="checkbox">
-      <input name="notify-comments" type="checkbox" <%= (obj.notify_comments > 0) ? 'checked' : '' %>>comments on my quest or mentions me
-    </label>
-    <label class="checkbox">
-      <input name="notify-likes" type="checkbox" <%= (obj.notify_likes > 0) ? 'checked' : '' %>>likes my quest
-    </label>
-    <label class="checkbox">
-      <input name="notify-invites" type="checkbox" <%= (obj.notify_invites > 0) ? 'checked' : '' %>>invites me to a quest
-    </label>
-    <label class="checkbox">
-      <input name="notify-followers" type="checkbox" <%= (obj.notify_followers > 0) ? 'checked' : '' %>>follows me
-    </label>
-  </div>
+  <header>Your settings</header>
+  <div class="well user-settings-well">
+    <div class="form-horizontal user-settings-email">
+      <% if (obj.email_confirmed == 'persona') { %>
+        <h4><%- obj.email || 'oops' %>
+        <span class="label label-success">Persona</span>
+        </h4>
+      <% } else { %>
+        <input name="email" type="email" placeholder="Email" value="<%- obj.email %>">
+        <span class="settings-conflict-email alert alert-error">&larr; Email is already in use.</span>
+        <span class="email-status <%= (obj.hideEmailStatus || obj.email_confirmed == 'persona') ? "hide" : "" %>">
+          <% if (obj.email_confirmed) { %>
+            <span class="label label-success">Confirmed</span>
+          <% } else if (obj.email) { %>
+            <button class="btn btn-warning resend-email-confirmation">Not confirmed. Resend confirmation key?</button>
+          <% } %>
+        </span>
+      <% } %>
+    </div>
+    <div class="user-settings-checkboxes">
+      <div class="muted notify-text">Notify me by email when someone...</div>
+      <label class="checkbox">
+        <input name="notify-comments" type="checkbox" <%= (obj.notify_comments > 0) ? 'checked' : '' %>>comments on my quest or mentions me
+      </label>
+      <label class="checkbox">
+        <input name="notify-likes" type="checkbox" <%= (obj.notify_likes > 0) ? 'checked' : '' %>>likes my quest
+      </label>
+      <label class="checkbox">
+        <input name="notify-invites" type="checkbox" <%= (obj.notify_invites > 0) ? 'checked' : '' %>>invites me to a quest
+      </label>
+      <label class="checkbox">
+        <input name="notify-followers" type="checkbox" <%= (obj.notify_followers > 0) ? 'checked' : '' %>>follows me
+      </label>
+    </div>
 
-  <div class="user-settings-newsletter">
-    <label class="checkbox">
-      <input name="newsletter" type="checkbox" <%= (obj.newsletter > 0) ? 'checked' : '' %>>Subscribe to the newsletter <span class="muted">(approximately once per few weeks)</span>
-    </label>
-  </div>
+    <div class="user-settings-newsletter">
+      <label class="checkbox">
+        <input name="newsletter" type="checkbox" <%= (obj.newsletter > 0) ? 'checked' : '' %>>Subscribe to the newsletter <span class="muted">(approximately once per few weeks)</span>
+      </label>
+    </div>
 
-  <div class="user-settings-token">
-    <span class="muted">API token:</span>
-    <% if (obj.api_token) { %>
-      <span class="_token"><%- obj.api_token %></span>
-      <br><button class="btn btn-small js-generate-token js-regenerate-token regenerate-token">Regenerate</button>
-    <% } else { %>
-      <button class="btn btn-small js-generate-token generate-token">Generate</button>
-    <% } %>
-    <br>
-    <small><a href="/about/api" class="user-settings-token-about">About API</a></small>
+    <div class="user-settings-token">
+      <span class="muted">API token:</span>
+      <% if (obj.api_token) { %>
+        <span class="_token"><%- obj.api_token %></span>
+        <br><button class="btn btn-small js-generate-token js-regenerate-token regenerate-token">Regenerate</button>
+      <% } else { %>
+        <button class="btn btn-small js-generate-token generate-token">Generate</button>
+      <% } %>
+      <br>
+      <small><a href="/about/api" target="_blank">About API</a></small>
+    </div>
   </div>
-
+  <button class="btn btn-large btn-primary submit">Save settings</button>
+  <i class="icon-spinner icon-spin"></i>
 </div>
