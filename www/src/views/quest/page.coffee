@@ -18,7 +18,7 @@ define [
             "click .quest-page-action .reopen": "reopen"
             "click .invite": "inviteDialog"
             "click .uninvite": "uninvite"
-            "click .join": "joinAction"
+            "click .join": "join"
             "click .like": -> @model.like()
             "click .unlike": -> @model.unlike()
             "click .watch": -> @model.act "watch"
