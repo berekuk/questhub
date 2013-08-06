@@ -1,3 +1,9 @@
+log_format qh_log_format<%= @dev ? '_dev' : '' %>
+    '$remote_addr [$time_local] '
+    '"$request" $status $body_bytes_sent '
+    '"$http_referer" "$http_user_agent" '
+    '$request_time $upstream_response_time $pipe';
+
 server {
   listen       <%= @port %>;
 
@@ -16,7 +22,7 @@ server {
   gzip_min_length  1000;
   gzip_types text/css text/javascript application/x-javascript application/json;
 
-  access_log /data/access.log;
+  access_log /data/access.log qh_log_format<%= @dev ? '_dev' : '' %>;
   error_log  /data/error.log info;
 
   location /api {
