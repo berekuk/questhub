@@ -35,6 +35,7 @@ define [
             @textarea.reveal(@model.get "body")
             @textarea.focus()
 
+            mixpanel.track "start edit", entity: "comment"
             @textarea.on "save", => @saveEdit()
             @textarea.on "cancel", => @cancelEdit()
 
@@ -58,6 +59,7 @@ define [
 
         destroy: ->
             bootbox.confirm "Are you sure you want to delete this comment?", (result) =>
+                mixpanel.track "delete", entity: "comment"
                 @model.destroy wait: true if result
 
         serialize: ->

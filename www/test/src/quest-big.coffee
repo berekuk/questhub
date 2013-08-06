@@ -2,6 +2,9 @@ define ["views/quest/big", "models/quest", "jasmine-jquery"], (QuestBig, QuestMo
     describe "quest-big", ->
         beforeEach ->
             spyOn $, "ajax"
+            sinon.spy mixpanel, "track"
+        afterEach ->
+            mixpanel.track.restore()
 
         describe "render: ", ->
             describe "non-empty team", ->
@@ -70,6 +73,9 @@ define ["views/quest/big", "models/quest", "jasmine-jquery"], (QuestBig, QuestMo
                 it "title is visible", ->
                     expect(view.$el.find("h2 .quest-big-editable")).not.toHaveCss display: "none"
 
+                it "'start edit' event not tracked yet", ->
+                    expect(mixpanel.track.calledOnce).not.toBe true
+
 
             describe "after edit is clicked", ->
                 view = undefined
@@ -79,6 +85,10 @@ define ["views/quest/big", "models/quest", "jasmine-jquery"], (QuestBig, QuestMo
 
                 it "title is hidden", ->
                     expect(view.$el.find("h2 .quest-big-editable")).toHaveCss display: "none"
+
+                it "'start edit' event tracked", ->
+                    expect(mixpanel.track.calledOnce).toBe true
+                    expect(mixpanel.track.calledWith("start edit", entity: "quest")).toBe true
 
 
             describe "if enter is pressed", ->
@@ -161,8 +171,3 @@ define ["views/quest/big", "models/quest", "jasmine-jquery"], (QuestBig, QuestMo
 
                 it "title is not changed", ->
                     expect(view.$el.find("h2 .quest-big-editable").text()).toEqual "Badger Badger"
-
-
-
-
-

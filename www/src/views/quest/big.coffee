@@ -47,6 +47,7 @@ define [
             @validateForm()
             @$(".quest-big-editable").hide()
             @$("[name=name]").focus()
+            mixpanel.track "start edit", entity: "quest"
             @description().reveal @model.get("description")
 
         # check if edit form is valid, and also highlight invalid fiels appropriately
@@ -106,6 +107,7 @@ define [
         destroy: ->
             bootbox.confirm "Quest and all comments will be destroyed permanently. Are you sure?", (result) =>
                 if result
+                    mixpanel.track "delete", entity: "quest"
                     @model.destroy success: (model, response) ->
                         Backbone.history.navigate "/",
                             trigger: true

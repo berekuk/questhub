@@ -35,6 +35,7 @@ define [
             @$("._editable").hide()
             @$("[name=name]").val @model.get("name")
             @$("[name=name]").focus()
+            mixpanel.track "start edit", entity: "realm"
             @description().reveal @model.get("description")
 
         closeEdit: ->

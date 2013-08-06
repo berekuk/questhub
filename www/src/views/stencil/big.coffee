@@ -60,6 +60,7 @@ define [
             @$("[name=name]").val @model.get("name")
             @$("[name=name]").focus()
             @validateForm()
+            mixpanel.track "start edit", entity: "stencil"
             @description().reveal @model.get("description")
 
         validateForm: ->
