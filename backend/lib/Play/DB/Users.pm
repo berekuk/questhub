@@ -450,22 +450,18 @@ sub confirm_email {
     );
 
     my $bool2str = sub {
-        $settings->{$_[0]} ? 'enabled' : 'disabled';
+        $settings->{$_[0]} ? 'yes' : 'no';
     };
     db->events->email({
         address => $settings->{email},
         subject => "Your email at ".setting('service_name')." is confirmed, $login",
         body => qq[
             <p>
-            Login: $login<br>
-            Email: $settings->{email}<br>
-            Notify about comments on your quests: ].$bool2str->('notify_comments').q[<br>
-            Notify about likes on your quests: ].$bool2str->('notify_likes').q[<br>
-            Notify about likes on your quests: ].$bool2str->('notify_invites').q[<br>
-            Notify about new followers: ].$bool2str->('notify_followers').q[
+            Login: ].Play::WWW->player_url($login).qq[<br>
+            Email: <b>$settings->{email}</b>
             </p>
             <p>
-            You can customize your email notifications <a href="].Play::WWW->frontpage_url().qq[">at the website</a>.
+            You can customize your email notifications <a href="].Play::WWW->settings_url().qq[">at the website</a>.
             </p>
         ],
     });
