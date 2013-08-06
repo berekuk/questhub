@@ -56,3 +56,25 @@ define [
                 input.trigger e
 
                 expect(view.$(".label-success")).not.toBeVisible()
+
+        describe "preloader", ->
+            it "is hidden initially", ->
+                view.render()
+                expect(view.$(".progress-load-sv i")).toHaveCss display: "none"
+
+            it "revealed after 0.5 seconds", ->
+                # we're depending on progress view behavior here... whatever
+                jasmine.Clock.useMock()
+                view.render()
+                expect(view.$(".progress-load-sv i")).toHaveCss display: "none"
+                jasmine.Clock.tick(501)
+                expect(view.$(".progress-load-sv i")).not.toHaveCss display: "none"
+
+            it "revealed on server response", ->
+                jasmine.Clock.useMock()
+                view.render()
+                expect(view.$(".progress-load-sv i")).toHaveCss display: "none"
+                jasmine.Clock.tick(501)
+                expect(view.$(".progress-load-sv i")).not.toHaveCss display: "none"
+                server.respond()
+                expect(view.$(".progress-load-sv i")).toHaveCss display: "none"
