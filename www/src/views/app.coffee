@@ -48,8 +48,7 @@ define [
         updateRealm: ->
             realm = ((if @_page.realm then @_page.realm() else null))
             @realm_id = realm
-            @subview(".navbar-subview").options.realm = @realm_id
-            @subview(".navbar-subview").render()
+            @subview(".navbar-subview").setRealm(@realm_id)
 
         updateTitle: ->
             title = if @_page.pageTitle then @_page.pageTitle() else null

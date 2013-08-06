@@ -99,6 +99,12 @@ define [
                 Backbone.trigger "pp:notify", "error", "Logout failed."
                 transitional.remove()
 
+        setRealm: (realm_id) ->
+            if realm_id?
+                url = "/realm/#{realm_id}/quest/add"
+            else
+                url = "/quest/add"
+            @$(".quest-add-link").attr "href", url
 
         logout: ->
             # TODO - show "Signing out..." view

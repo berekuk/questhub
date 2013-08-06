@@ -37,4 +37,20 @@ define ["models/current-user", "views/user/current"], (currentUser, View) ->
                     ]
                     view = new View(model: model)
                     view.render()
-                    expect(view.$el.find(".current-user-notifications-icon").length).toEqual 1
+                    expect(view.$(".current-user-notifications-icon").length).toEqual 1
+
+            describe "new quest link", ->
+                view = undefined
+                beforeEach ->
+                    view = new View(model: model)
+                    view.render()
+                it "initial value", ->
+                    expect(view.$(".quest-add-link").attr "href").toEqual "/quest/add"
+
+                it "changed on setRealm", ->
+                    view.setRealm('europe')
+                    expect(view.$(".quest-add-link").attr "href").toEqual "/realm/europe/quest/add"
+
+                it "changed on setRealm(null)", ->
+                    view.setRealm(null)
+                    expect(view.$(".quest-add-link").attr "href").toEqual "/quest/add"

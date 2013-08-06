@@ -7,15 +7,6 @@ define [
 ], ($, Backbone, Common, currentUserModel, sharedModels, CurrentUser, QuestAdd, html) ->
     class extends Common
         template: _.template(html)
-        events:
-            "click .quest-add-nav-button": "startQuestAdd"
-
-        startQuestAdd: ->
-            if @options.realm
-                url = "/realm/#{@options.realm}/quest/add"
-            else
-                url = "/quest/add"
-            Backbone.history.navigate url, trigger: true
 
         initialize: ->
             super
@@ -46,6 +37,11 @@ define [
             realm = sharedModels.realms.findWhere(id: @options.realm)
             throw "Oops" unless realm
             realm.toJSON()
+
+        setRealm: (realm_id) ->
+            @options.realm = realm_id
+            @render()
+            @currentUser.setRealm realm_id
 
         render: ->
 
