@@ -5,6 +5,7 @@ cpan_module 'Test::Deep'
 cpan_module 'Test::Class'
 cpan_module 'Import::Into'
 cpan_module 'Carp::Always'
+cpan_module 'Capture::Tiny'
 
 # validate atom in tests
 package 'libxml2-dev'
