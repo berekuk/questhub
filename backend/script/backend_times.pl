@@ -1,4 +1,5 @@
 #!/usr/bin/env perl
+package script::backend_times;
 
 =head1 SYNOPSIS
 
@@ -9,9 +10,11 @@
 use 5.012;
 use warnings;
 use lib '/play/backend/lib';
+use Play::Config qw(setting);
 
 sub main {
-    my @lines = split /\n/, qx(tac /data/access.log | fgrep ' /api' | head -1000); # TODO - make 1000 customizable
+    my $access_log = setting('data_dir') . '/access.log';
+    my @lines = split /\n/, qx(tac $access_log | fgrep ' /api' | head -1000); # TODO - make 1000 customizable
 
     for my $line (@lines) {
         next if $line =~ /^\S+ - - \[/; # old log format
