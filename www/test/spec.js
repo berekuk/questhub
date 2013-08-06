@@ -62,7 +62,7 @@
         specs.push(
             'spec/markdown',
             'spec/textarea',
-            'spec/navbar', 'spec/current-user',
+            'spec/navbar', 'spec/current-user', 'spec/settings',
             'spec/register',
             'spec/quest-small', 'spec/quest-big', 'spec/quest-add',
             'spec/comment', 'spec/like',
