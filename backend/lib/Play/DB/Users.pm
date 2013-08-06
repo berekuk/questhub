@@ -457,7 +457,7 @@ sub confirm_email {
         subject => "Your email at ".setting('service_name')." is confirmed, $login",
         body => qq[
             <p>
-            Login: ].Play::WWW->player_url($login).qq[<br>
+            Login: <a href="].Play::WWW->player_url($login).qq[">$login</a><br>
             Email: <b>$settings->{email}</b>
             </p>
             <p>
