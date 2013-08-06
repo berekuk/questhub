@@ -1,8 +1,8 @@
-#!/usr/bin/perl
+package t::pumper::upic_fetcher;
 
 use lib 'lib';
 use Play::Test;
-use parent qw(Test::Class);
+use parent qw(Play::Test::Class);
 
 use Play::DB qw(db);
 use Play::Flux;
@@ -83,4 +83,4 @@ sub invalid_pic :Tests {
     $log->empty_ok; # make sure that pumper commits its input stream
 }
 
-__PACKAGE__->new->runtests;
+1;

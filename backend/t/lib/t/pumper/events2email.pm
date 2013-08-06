@@ -1,17 +1,22 @@
+package t::pumper::events2email;
+
 use lib 'lib';
 use Play::Test;
-use parent qw(Test::Class);
+use parent qw(Play::Test::Class);
 
 use Play::DB qw(db);
 
 use Log::Any::Test;
 use Log::Any qw($log);
 
-my $pumper = pumper('events2email');
-my $email_in = Play::Flux->email->in('test');
+my $pumper;
+my $email_in;
 my $quest;
 
 sub startup :Test(startup => 2) {
+    $pumper = pumper('events2email');
+    $email_in = Play::Flux->email->in('test');
+
     $pumper->run;
     $log->empty_ok;
 
@@ -34,6 +39,10 @@ sub startup :Test(startup => 2) {
 
     $pumper->run;
     $log->contains_ok(qr/7 events processed/); # quest-add, user-add
+}
+
+sub setup :Test(setup) {
+    $email_in->read_chunk(1000); # flush all previous unwanted items
 }
 
 sub comment_on_other_users_quest :Tests {
@@ -162,4 +171,4 @@ sub invite :Tests {
     like $chunk->[0]{subject}, qr/bar invites you to a quest/;
 };
 
-__PACKAGE__->new->runtests;
+1;
