@@ -18,6 +18,14 @@ sub frontpage_url {
     return "http://".setting('hostport');
 }
 
+sub settings_url {
+    my $class = shift;
+    state $check = compile();
+    $check->(@_);
+
+    return "http://".setting('hostport')."/settings";
+}
+
 sub player_url {
     my $class = shift;
     state $check = compile(Login);

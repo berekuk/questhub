@@ -33,4 +33,11 @@ sub frontpage :Tests {
     );
 }
 
+sub settings :Tests {
+    is(
+        Play::WWW->settings_url(),
+        'http://localhost:3000/settings'
+    );
+}
+
 __PACKAGE__->new->runtests;
