@@ -23,12 +23,7 @@ define [
             @appView.setPageView new Welcome(model: currentUser)
 
         feed: ->
-            unless currentUser.get("registered")
-                @navigate "/welcome",
-                    trigger: true
-                    replace: true
-
-                return
+            return unless @_checkLogin()
             view = new NewsFeed(model: currentUser)
             view.render()
             @appView.setPageView view
@@ -38,7 +33,6 @@ define [
                 @navigate "/",
                     trigger: true
                     replace: true
-
                 return
 
             ga "send", "event", "register", "new-dialog"
@@ -49,12 +43,8 @@ define [
             view.render()
 
         startTour: ->
-            unless currentUser.get("registered")
+            unless @_checkLogin()
                 Backbone.trigger "pp:notify", "error", "You need to be signed in to take a tour, sorry."
-                @navigate "/welcome",
-                    trigger: true
-                    replace: true
-
                 return
             currentUser.startTour()
             Backbone.history.navigate "/realms",

@@ -7,20 +7,20 @@ define [
     class extends Common
         routes:
             "me": "me"
+            "settings": "settings"
             "player/:login": "quests"
             "player/:login/quest/:tab": "quests"
             "player/:login/activity": "activity"
             "player/:login/profile": "profile"
 
         me: ->
-            if currentUser.get("registered")
-                @navigate "/player/" + currentUser.get("login"),
-                    trigger: true
-                    replace: true
-            else
-                @navigate "/welcome",
-                    trigger: true
-                    replace: true
+            return unless @_checkLogin()
+            @navigate "/player/" + currentUser.get("login"),
+                trigger: true
+                replace: true
+
+        settings: ->
+            return unless @_checkLogin()
 
 
         _dashboard: (login, options) ->

@@ -1,10 +1,19 @@
 define [
     "backbone"
-], (Backbone) ->
+    "models/current-user"
+], (Backbone, currentUser) ->
     class extends Backbone.Router
         initialize: (appView) ->
             @appView = appView
             @bind "route", @_trackPageview
+
+        _checkLogin: ->
+            unless currentUser.get("registered")
+                @navigate "/welcome",
+                    trigger: true
+                    replace: true
+                return
+            return true
 
         _trackPageview: ->
             url = Backbone.history.getFragment()
