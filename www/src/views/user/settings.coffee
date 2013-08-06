@@ -1,9 +1,10 @@
 define [
     "underscore", "jquery"
     "views/proto/common"
+    "views/progress"
     "settings", "models/user-settings", "models/current-user"
     "text!templates/user/settings.html"
-], (_, $, Common, instanceSettings, UserSettingsModel, currentUser, html) ->
+], (_, $, Common, Progress, instanceSettings, UserSettingsModel, currentUser, html) ->
     class extends Common
         template: _.template(html)
         events:
@@ -11,6 +12,10 @@ define [
             "keyup [name=email]": "typing"
             "click button.js-generate-token": "generateApiToken"
             "click button.submit": "submit"
+
+        subviews:
+            ".progress-load-sv": -> new Progress()
+            ".progress-save-sv": -> new Progress()
 
         initialize: ->
             super
@@ -39,16 +44,15 @@ define [
 
         serialize: ->
             params = super
-            console.trace()
             params.hideEmailStatus = @hideEmailStatus
             params
 
         enable: ->
-            @$(".icon-spinner").hide()
             @$(".btn-primary").removeClass "disabled"
+            @$(".email-status").show()
+            @$("input").prop "disabled", false
 
         disable: ->
-            @$(".icon-spinner").show()
             @$(".btn-primary").addClass "disabled"
             @$(".email-status").hide()
             @$("input").prop "disabled", true
@@ -58,16 +62,16 @@ define [
             unless @rerender
                 @rerender = true
                 @disable()
-                @$(".email-status").show()
-                @$("input").prop "disabled", false
                 @hideEmailStatus = false
                 @model.clear()
+                @subview(".progress-load-sv").on()
                 @model.fetch
                     success: =>
-                        @enable()
+                        @subview(".progress-load-sv").off()
+                        @render()
                     error: =>
-                        Backbone.trigger "pp:notify", "error", "Unable to fetch settings"
-                        # TODO - go to /?
+                        Backbone.trigger "pp:notify", "error", "Can't fetch your settings, try again later."
+                        Backbone.history.navigate "/", trigger: true
 
         typing: ->
             # We need both.
@@ -78,24 +82,24 @@ define [
 
         # parse the DOM and return the model params
         deserialize: ->
-            settings =
-                email: @$("[name=email]").val() # TODO - validate email
-                notify_comments: @$("[name=notify-comments]").is(":checked")
-                notify_likes: @$("[name=notify-likes]").is(":checked")
-                notify_invites: @$("[name=notify-invites]").is(":checked")
-                notify_followers: @$("[name=notify-followers]").is(":checked")
-                newsletter: @$("[name=newsletter]").is(":checked")
-
-            settings
+            email: @$("[name=email]").val() # TODO - validate email
+            notify_comments: @$("[name=notify-comments]").is(":checked")
+            notify_likes: @$("[name=notify-likes]").is(":checked")
+            notify_invites: @$("[name=notify-invites]").is(":checked")
+            notify_followers: @$("[name=notify-followers]").is(":checked")
+            newsletter: @$("[name=newsletter]").is(":checked")
 
         submit: ->
             ga "send", "event", "settings", "save"
             @disable()
+            @subview(".progress-save-sv").on()
             @model.save @deserialize(),
                 success: =>
+                    Backbone.history.navigate "/", trigger: true
                     # Just to be safe.
                     # Also, if email was changed, we want to trigger the 'sync' event and show the notify box.
                     currentUser.fetch()
-                    Backbone.history.navigate "/", trigger: true
                 error: =>
+                    @subview(".progress-save-sv").off()
                     Backbone.trigger "pp:notify", "error", "Failed to save new settings"
+                    @enable()

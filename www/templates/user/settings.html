@@ -1,5 +1,8 @@
 <div class="user-settings">
-  <header>Your settings</header>
+  <header>
+    <i class="icon-wrench"></i> Settings
+    <span class="progress-load-sv"></span>
+  </header>
   <div class="well user-settings-well">
     <div class="form-horizontal user-settings-email">
       <% if (obj.email_confirmed == 'persona') { %>
@@ -52,6 +55,8 @@
       <small><a href="/about/api" target="_blank">About API</a></small>
     </div>
   </div>
-  <button class="btn btn-large btn-primary submit">Save settings</button>
-  <i class="icon-spinner icon-spin"></i>
+  <button class="btn btn-large btn-primary submit">
+    Save settings
+    <span class="progress-save-sv"></span>
+  </button>
 </div>
