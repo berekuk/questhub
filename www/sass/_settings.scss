@@ -1,4 +1,13 @@
 .user-settings {
+    margin: 0 auto;
+    max-width: 650px;
+
+    .user-settings-well {
+        @include breakpoint(B) {
+            padding: 20px;
+        }
+    }
+
     .user-settings-email {
         margin-bottom: 20px;
     }
@@ -28,6 +37,15 @@
 
     .notify-text {
         margin-bottom: 4px;
+    }
+
+    > header {
+        text-align: center;
+        @include bg-header;
+    }
+
+    .submit {
+        float: right;
     }
 }
 

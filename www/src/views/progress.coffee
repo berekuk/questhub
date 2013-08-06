@@ -11,5 +11,3 @@ define ["underscore", "views/proto/common", "text!templates/progress.html"], (_,
         off: ->
             @$(".icon-spinner").hide()
             window.clearTimeout @progressPromise  if @progressPromise
-
-

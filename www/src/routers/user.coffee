@@ -3,25 +3,28 @@ define [
     "routers/proto/common"
     "models/current-user", "models/another-user"
     "views/dashboard"
-], (Backbone, _, Common, currentUser, AnotherUserModel, Dashboard) ->
+    "views/user/settings"
+], (Backbone, _, Common, currentUser, AnotherUserModel, Dashboard, UserSettings) ->
     class extends Common
         routes:
             "me": "me"
+            "settings": "settings"
             "player/:login": "quests"
             "player/:login/quest/:tab": "quests"
             "player/:login/activity": "activity"
             "player/:login/profile": "profile"
 
         me: ->
-            if currentUser.get("registered")
-                @navigate "/player/" + currentUser.get("login"),
-                    trigger: true
-                    replace: true
-            else
-                @navigate "/welcome",
-                    trigger: true
-                    replace: true
+            return unless @_checkLogin()
+            @navigate "/player/" + currentUser.get("login"),
+                trigger: true
+                replace: true
 
+        settings: ->
+            return unless @_checkLogin()
+            view = new UserSettings()
+            view.render()
+            @appView.setPageView view
 
         _dashboard: (login, options) ->
             currentLogin = currentUser.get("login")
