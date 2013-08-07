@@ -22,6 +22,12 @@ define [
         profile: '/profile'
     result.user_link = (login, tab) -> "/player/#{login}#{userTab2url[tab]}"
 
+    userQuestsTab2url =
+        open: ''
+        closed: '/quest/closed'
+        abandoned: '/quest/abandoned'
+    result.user_quests_link = (login, tab) -> "/player/#{login}#{userQuestsTab2url[tab]}"
+
     el.find("script").each ->
         name = @.className
         name = name.replace /-/g, "_"

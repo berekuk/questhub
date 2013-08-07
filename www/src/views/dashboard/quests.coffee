@@ -32,7 +32,10 @@ define [
                     @createQuestSubview "abandoned",
                         status: "abandoned"
 
-        switchTab: (e) -> @switchTabByName $(e.target).closest("a").attr("data-tab")
+        switchTab: (e) ->
+            return if e.ctrlKey or e.metaKey # link clicked and will be opened in new tab
+            e.preventDefault()
+            @switchTabByName $(e.target).closest("a").attr("data-tab")
 
         createQuestSubview: (caption, options) ->
             # open quests are always displayed in their entirety

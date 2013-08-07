@@ -1,15 +1,20 @@
 <div class="dashboard-quests">
   <nav>
     <ul class="nav nav-pills dashboard-quests-tabs">
-      <li><a href="#" data-tab="open">
-        Open
-        <span class="desktop-text">quests</span></a></li>
-      <li><a href="#" data-tab="closed">
-        Completed
-        <span class="desktop-text">quests</span></a></li>
-      <li><a href="#" data-tab="abandoned">
-        Abandoned
-        <span class="desktop-text">quests</span></a></li>
+      <%
+      _.each({
+      'open': { title: 'Open' },
+      'closed': { title: 'Completed' },
+      'abandoned': { title: 'Abandoned' }
+      }, function (o, tab) {
+      %>
+      <li>
+        <a href="<%= partial.user_quests_link(login, tab) %>" data-tab="<%- tab %>">
+          <%- o.title %>
+          <span class="desktop-text">quests</span>
+        </a>
+      </li>
+      <% }) %>
     </ul>
   </nav>
   <div class="quests-subview"></div>
