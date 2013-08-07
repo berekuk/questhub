@@ -41,6 +41,9 @@ define [
         unfollow: -> currentUser.unfollowUser @model.get("login")
 
         switch: (e) ->
+            return if e.ctrlKey or e.metaKey # link clicked and will be opened in new tab
+            e.preventDefault()
+
             t = $(e.target).closest("._icon")
             @tab = t.attr "data-tab"
 

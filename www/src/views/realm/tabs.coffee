@@ -12,10 +12,9 @@ define [
             super
 
         switch: (e) ->
-            if e.ctrlKey or e.metaKey
-                return
-
+            return if e.ctrlKey or e.metaKey # link clicked and will be opened in new tab
             e.preventDefault()
+
             t = $(e.target).closest("._icon")
             @tab = t.attr "data-tab"
 

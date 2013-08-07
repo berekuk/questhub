@@ -35,9 +35,11 @@
         }, function (o, t) {
       %>
       <li>
-        <div data-toggle="tooltip" data-placement="top" title="<%- o.tooltip %>" data-tab="<%- t %>" class="_icon _switch-<%- t %> <%- tab == t ? '_active' : '' %>">
-          <i class="icon-<%- o.icon %>"></i>
-        </div>
+        <a href="<%= partial.user_link(login, t) %>">
+          <div data-toggle="tooltip" data-placement="top" title="<%- o.tooltip %>" data-tab="<%- t %>" class="_icon _switch-<%- t %> <%- tab == t ? '_active' : '' %>">
+            <i class="icon-<%- o.icon %>"></i>
+          </div>
+        </a>
       </li>
       <% }) %>
     </ul>
