@@ -50,9 +50,13 @@ require [
         return if el.attr("target") == "_blank"
 
         event.preventDefault()
-        url = el.attr("href").replace(/^\//, "")
-        Backbone.history.navigate url,
-            trigger: true
+        fragment = el.attr("href").replace(/^\//, "")
+        if Backbone.history.fragment == fragment
+            # Backbone won't reload the page if we navigate to the current fragment
+            # so we have to mess with its internals
+            Backbone.history.loadUrl fragment
+        else
+            Backbone.history.navigate fragment, trigger: true
 
     $(document).on "click", "a[href^='h']", (event) ->
         return if event.altKey or event.ctrlKey or event.metaKey or event.shiftKey
