@@ -17,7 +17,7 @@ define [
             ".controls-subview": ->
                 new RealmControls model: @model
             ".tabs-sv": ->
-                new RealmTabs tab: @tab
+                new RealmTabs tab: @tab, model: @model
             ".description-sv": ->
                 new Textarea
                     realm: @model.get("realm")

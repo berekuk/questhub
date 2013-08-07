@@ -9,6 +9,13 @@ define [
         markdown: markdown
         settings: settings
 
+    tab2url =
+        stencils: '/stencils'
+        activity: ''
+        quests: '/explore'
+        players: '/players'
+    result.realm_link = (realm_id, tab) -> "/realm/#{realm_id}#{tab2url[tab]}"
+
     el.find("script").each ->
         name = @.className
         name = name.replace /-/g, "_"

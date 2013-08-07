@@ -6,12 +6,14 @@
     'stencils': { icon: 'book', tooltip: 'Stencils' },
     'quests': { icon: 'list-ul', tooltip: 'Quests' },
     'players': { icon: 'group', tooltip: 'Players' }
-    }, function (o, t) {
+    }, function (o, tab) {
     %>
     <li>
-      <div data-toggle="tooltip" data-placement="top" title="<%- o.tooltip %>" data-tab="<%- t %>" class="_icon _switch-<%- t %> <%- tab == t ? '_active' : '' %>">
-        <i class="icon-<%- o.icon %>"></i>
-      </div>
+      <a href="<%= partial.realm_link(id, tab) %>">
+        <div data-toggle="tooltip" data-placement="top" title="<%- o.tooltip %>" data-tab="<%- tab %>" class="_icon _switch-<%- tab %> <%- current_tab == tab ? '_active' : '' %>">
+          <i class="icon-<%- o.icon %>"></i>
+        </div>
+      </a>
     </li>
     <% }) %>
   </ul>

@@ -12,6 +12,10 @@ define [
             super
 
         switch: (e) ->
+            if e.ctrlKey or e.metaKey
+                return
+
+            e.preventDefault()
             t = $(e.target).closest("._icon")
             @tab = t.attr "data-tab"
 
@@ -23,5 +27,6 @@ define [
                 t.addClass "_active"
 
         serialize: ->
+            id: @model.get("id")
             small: @options.small
-            tab: @tab
+            current_tab: @tab

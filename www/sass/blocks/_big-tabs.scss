@@ -1,4 +1,12 @@
 .round-tabs {
+    a {
+        color: $text-color;
+        &:hover {
+            color: $text-color;
+            text-decoration: none;
+        }
+    }
+
     ul {
         list-style-type: none;
         margin: 0px;
