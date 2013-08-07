@@ -20,13 +20,18 @@
 <section class="mainarea">
   <nav>
     <ul class="nav nav-pills explore-nav">
-      <li><a href="#" data-explore-tab="latest">Latest</a></li>
-      <li><a href="#" data-explore-tab="unclaimed">Unclaimed</a></li>
-      <li><a href="#" data-explore-tab="open">Best open</a></li>
-      <li><a href="#" data-explore-tab="closed">Best completed</a></li>
-      <% if (currentUser) { %>
-      <li><a href="#" data-explore-tab="watched-by-me">Watched by me</a></li>
-      <% } %>
+      <%
+      _.each({
+      'latest': { title: 'Latest' },
+      'unclaimed': { title: 'Unclaimed' },
+      'open': { title: 'Best open' },
+      'closed': { title: 'Best completed' },
+      'watched-by-me': { title: 'Watched by me' }
+      }, function (o, tab) {
+        if (!currentUser && tab == 'watched-by-me') return;
+      %>
+      <li><a href="/realm/<%- realm %>/explore/<%- tab %><%- tag ? '/tag/' + tag : '' %>" data-explore-tab="<%- tab %>"><%- o.title %></a></li>
+      <% }) %>
     </ul>
   </nav>
   <div class="explore-tab-content"></div>

@@ -77,11 +77,15 @@ define [
                 showStatus: options.showStatus
 
         switchTab: (e) ->
+            return if e.ctrlKey or e.metaKey
+            e.preventDefault()
+
             @switchTabByName $(e.target).attr("data-explore-tab")
 
         serialize: ->
             tag: @tag
             currentUser: currentUser.get("login")
+            realm: @realm()
 
         render: ->
             super
