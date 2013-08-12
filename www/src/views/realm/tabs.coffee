@@ -29,3 +29,5 @@ define [
             id: @model.get("id")
             small: @options.small
             current_tab: @tab
+
+        features: ["tooltip"]

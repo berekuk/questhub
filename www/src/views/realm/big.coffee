@@ -71,5 +71,3 @@ define [
             @listenTo @description(), "cancel", @closeEdit
             @listenTo @subview(".tabs-sv"), "switch", (params) =>
                 @trigger "switch", params
-
-        features: ["tooltip"]
