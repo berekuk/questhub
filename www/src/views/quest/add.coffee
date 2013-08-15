@@ -69,13 +69,7 @@ define [
             @submitted = false
 
         validate: (options) ->
-            if not @getRealmId()
-                @disable()
-                return
-            if @submitted or not @getName()
-                @disable()
-                return
-            @enable()
+            @$("._go").tooltip("destroy")
             qt = @$(".quest-tags-edit")
             tagLine = @$("[name=tags]").val()
             if QuestModel::validateTagline(tagLine)
@@ -95,6 +89,15 @@ define [
                     qt.find("input").tooltip "show"
                     $(oldFocus).focus()
                 @disable()
+                return
+            if @submitted or not @getName()
+                @disable()
+                return
+            if not @getRealmId()
+                @$("._go").tooltip()
+                @disable()
+                return
+            @enable()
 
         nameEdit: (e) ->
             @validate()
