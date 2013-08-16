@@ -18,6 +18,9 @@
         min-height: 30px;
         border: dashed 1px $dark-grey;
         padding: 5px;
+        blockquote {
+            border-color: $dark-grey;
+        }
     }
 }
 .helper-textarea-main {
