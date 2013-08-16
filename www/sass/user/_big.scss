@@ -41,3 +41,13 @@
         padding-top: 0;
     }
 }
+
+.user-big-points {
+    display: inline-block;
+    > div {
+        background-color: $grey-color;
+        width: 5px;
+        height: 30px;
+        display: inline-block;
+    }
+}
