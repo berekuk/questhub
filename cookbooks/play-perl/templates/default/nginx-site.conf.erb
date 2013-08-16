@@ -58,3 +58,10 @@ server {
     try_files $uri /index.html;
   }
 }
+
+server {
+  listen       80;
+  server_name www.questhub.io;
+
+  rewrite  ^/(.*)$  http://questhub.io/$1 redirect;
+}
