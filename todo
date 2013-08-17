@@ -1,0 +1,17 @@
+# vim: ft=markdown
+# TODO
+
+Design
+Widget in /profile tab
+Tooltip
+
+Store statistics (per day? per week? rotate?)
+Retroactively restore statistics (from backups)
+`users.points_history` - array with $slice (need to upgrade to 2.4)
+
+rph: [
+    { perl: 0, chaos: 5 },
+    { perl: 0, chaos: 6 },
+    { perl: 3, chaos: 6 },
+    { perl: 50, chaos: 7 }
+]
