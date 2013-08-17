@@ -1,3 +1,3 @@
 name "common"
-description "common functionality for dev and production play perl instances"
-run_list "recipe[play-perl]"
+description "common functionality for dev and production instances"
+run_list "recipe[questhub]"

@@ -6,8 +6,8 @@ end
 package 'make' # for building cpan modules
 
 include_recipe "perl"
-include_recipe "play-perl::frontend"
-include_recipe "play-perl::backend"
+include_recipe "questhub::frontend"
+include_recipe "questhub::backend"
 
 # for development, but listed here and not in dev.rb because these can useful in production too
 package 'vim'
@@ -31,7 +31,7 @@ execute "install-Net-HTTP" do
 end
 cpan_module 'Dancer'
 cpan_module 'YAML'
-cpan_module 'Module::Install' # needed by MongoDB due to packaging issues - see https://github.com/berekuk/play-perl/issues/70
+cpan_module 'Module::Install' # needed by MongoDB due to packaging issues - see https://github.com/berekuk/questhub/issues/70
 cpan_module 'http://cpan.metacpan.org/authors/id/F/FR/FRIEDO/MongoDB-0.503.3.tar.gz'
 cpan_module 'JSON'
 cpan_module 'Moo'

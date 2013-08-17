@@ -37,8 +37,8 @@ How to reconfigure the environment
 =========
 
 The VM contents is configured with [Chef](http://www.opscode.com/chef/).
-If you need a new debian package, add `package %package_name%` line to `cookbooks/play-perl/recipes/default.rb` file.
-If you need a new CPAN module, add `cpan_module %module_name%` line to `cookbooks/play-perl/recipes/default.rb` file.
+If you need a new debian package, add `package %package_name%` line to `cookbooks/questhub/recipes/default.rb` file.
+If you need a new CPAN module, add `cpan_module %module_name%` line to `cookbooks/questhub/recipes/default.rb` file.
 
 You can re-deploy a new chef configuration into an existing VM by running `vagrant provision`.
 

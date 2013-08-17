@@ -5,4 +5,4 @@ override_attributes(
         :hostport => 'localhost:3000'
     }
 )
-run_list "role[common]", "recipe[play-perl::dev]", "recipe[phantomjs]"
+run_list "role[common]", "recipe[questhub::dev]", "recipe[phantomjs]"

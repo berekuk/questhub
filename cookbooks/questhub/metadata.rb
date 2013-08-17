@@ -1,7 +1,7 @@
 maintainer       "Vyacheslav Matyukhin"
 maintainer_email "me@berekuk.ru"
 
-recipe "play-perl",            "Configure play-perl website"
+recipe "questhub",            "Configure questhub website"
 
 depends "perl"
 depends "ubic"
