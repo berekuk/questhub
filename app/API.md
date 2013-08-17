@@ -434,5 +434,3 @@ Event:
         quest: { ... },
         invitee: 'bar' # only for 'invite-quest' type
     }
-
-# vim: ft=markdown
