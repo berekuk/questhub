@@ -98,7 +98,7 @@ sub list {
         entity => $entity,
         eid => $eid,
     })->sort({
-        _id => 'asc'
+        _id => 1
     })->all;
     $self->_prepare_comment($_) for @comments;
 
