@@ -3,6 +3,7 @@ use 5.010;
 use lib 'lib';
 use Play::Test::App;
 use parent qw(Test::Class);
+use Test::Deep qw(bag);
 
 sub setup :Tests(setup => no_plan) {
     Dancer::session->destroy;
@@ -33,7 +34,7 @@ sub list :Tests {
     } };
 
     my $result = http_json GET => "/api/stencil?realm=europe";
-    cmp_deeply $result, [
+    cmp_deeply $result, bag(
         # TODO - sorting order?
         superhashof({
             name => 'Do something',
@@ -42,7 +43,7 @@ sub list :Tests {
         superhashof({
             name => 'Do something else',
         }),
-    ];
+    );
 }
 
 sub get_one :Tests {
