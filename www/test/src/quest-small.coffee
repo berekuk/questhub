@@ -5,7 +5,7 @@ define ["views/quest/small", "models/quest", "jasmine-jquery"], (QuestSmall, Que
             status: "closed"
             _id: "5112f9577a8f1d370b000002"
             team: ["berekuk", "bessarabov"]
-            name: "Fix Google Analytics code on play-perl.org"
+            name: "Fix Google Analytics code"
             author: "mmcleric"
             tags: ["bug"]
             likes: ["bessarabov", "kappa"]
