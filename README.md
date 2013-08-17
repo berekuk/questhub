@@ -48,4 +48,4 @@ You can re-deploy a new chef configuration into an existing VM by running `vagra
 
 See `app/API.md` for backend API documentation.
 
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/dc0a21c134dfc82a4ad4bff12f727ee7 "githalytics.com")](http://githalytics.com/berekuk/play-perl)
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/b51c1d8598e1739b36f08b6ff21a0622 "githalytics.com")](http://githalytics.com/berekuk/questhub)
