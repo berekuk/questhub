@@ -6,7 +6,7 @@ file '/etc/nginx/sites-enabled/default' do
   action :delete
 end
 
-template "/etc/nginx/sites-enabled/play-perl.org" do
+template "/etc/nginx/sites-enabled/questhub" do
   source "nginx-site.conf.erb"
   owner "root"
   group "root"
