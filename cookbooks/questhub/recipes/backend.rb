@@ -8,7 +8,7 @@ apt_repository '10gen' do
     action :add
 end
 for p in %w{ mongodb mongodb-clients mongodb-dev mongodb-server }
-    package 'mongodb' do
+    package p do
         action :purge
     end
 end
