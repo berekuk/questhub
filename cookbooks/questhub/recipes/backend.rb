@@ -1,3 +1,19 @@
+# There is a mongodb cookbook, but it's too generic and tries to do too many things.
+apt_repository '10gen' do
+    uri 'http://downloads-distro.mongodb.org/repo/ubuntu-upstart'
+    distribution 'dist'
+    components ['10gen']
+    keyserver "keyserver.ubuntu.com"
+    key "7F0CEB10"
+    action :add
+end
+for p in %w{ mongodb mongodb-clients mongodb-dev mongodb-server }
+    package 'mongodb' do
+        action :purge
+    end
+end
+package 'mongodb-10gen'
+
 cpan_module 'Flux::File'
 cpan_module 'Flux::Format::JSON'
 cpan_module 'Log::Any::Adapter'
