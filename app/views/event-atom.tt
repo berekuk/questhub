@@ -100,7 +100,7 @@
         <content type="html" xml:lang="en">
             <![CDATA[
                 <p>This is a bug! We probably forgot to add a rendering template for this event type.</p>
-                <p>Please report it to the <a href="https://github.com/berekuk/play-perl/issues/new">Github Issues</a>.</p>
+                <p>Please <a href="http://questhub.io/about/feedback">report it</a>.</p>
             ]]>
         </content>
 

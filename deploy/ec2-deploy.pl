@@ -74,7 +74,7 @@ sub checkout_code {
     # maybe it's worth refactoring
     INFO 'Updating /play code';
     system(qq{ssh -t $USER\@$IP "sudo apt-get install git"});
-    system(qq{ssh -t $USER\@$IP "sudo -i sh -c '[ -d /play ] || git clone https://github.com/berekuk/play-perl.git /play'"});
+    system(qq{ssh -t $USER\@$IP "sudo -i sh -c '[ -d /play ] || git clone https://github.com/berekuk/questhub.git /play'"});
     system(qq{ssh -t $USER\@$IP "sudo -i sh -c 'cd /play && git pull'"});
 }
 
