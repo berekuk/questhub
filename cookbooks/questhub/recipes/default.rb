@@ -17,10 +17,6 @@ package 'perl-doc'
 
 package 'libssl-dev' # used by Net::Twitter
 
-# There is a mongodb cookbook, but it's too generic and tries to do too many things to be portable.
-# I think the stock mongodb deb package will suffice for now.
-package 'mongodb'
-
 # forcing Net-HTTP=6.03 until https://rt.cpan.org/Ticket/Display.html?id=81237 is fixed
 execute "install-Net-HTTP" do
   environment "HOME" => "/root"
