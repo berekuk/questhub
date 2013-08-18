@@ -28,7 +28,7 @@ define [
             @$(".comment-edit-buttons").show()
 
             @$(".comment-edit").html("")
-            @textarea = new Textarea()
+            @textarea = new Textarea realm: @options.realm
             @textarea.render()
             @$(".comment-edit").append @textarea.$el
             @$(".comment-edit").show()
