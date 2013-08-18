@@ -15,3 +15,10 @@ rph: [
     { perl: 3, chaos: 6 },
     { perl: 50, chaos: 7 }
 ]
+
+# Restore
+
+for each tar.gz:
+    - unpack
+    - restore
+    - save users.rp somewhere

@@ -1,10 +1,10 @@
 define [
-    "underscore"
+    "underscore", "jquery"
     "views/proto/common"
     "models/current-user"
     "views/quest/add"
     "text!templates/user/big.html"
-], (_, Common, currentUser, QuestAdd, html) ->
+], (_, $, Common, currentUser, QuestAdd, html) ->
     class extends Common
         template: _.template(html)
 
@@ -31,6 +31,18 @@ define [
             params.following = @model.get("login") in (currentUser.get('fu') || [])
             params.tab = @tab
             params
+
+        render: ->
+            super
+            histogram = @model.histogramPoints()
+            max = _.max(histogram)
+            bars = @$(".user-big-points-bars")
+            for i in [0 .. histogram.length - 1]
+                bar = $("<div data-toggle='tooltip' data-placement='top' title='#{i} weeks ago'></div>")
+                h = (100 * (histogram[i] / max))
+                bar.css("height", (if h > 1 then "#{h}%" else "1px"))
+                bars.append bar
+            @$("[data-toggle=tooltip]").tooltip()
 
         newQuestDialog: ->
             questAdd = new QuestAdd()
