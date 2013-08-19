@@ -8,8 +8,9 @@ define [
 
         render: ->
             super
-            histogram = @model.histogramPoints()
-            max = _.max(histogram)
+            globalHistogram = @model.histogramPoints() # for normalization
+            histogram = if @options.realm then @model.histogramPoints @options.realm else globalHistogram
+            max = _.max(globalHistogram)
             bars = @$(".user-points-histogram")
             for i in [0 .. histogram.length - 1]
                 weeks_back = histogram.length - i - 1

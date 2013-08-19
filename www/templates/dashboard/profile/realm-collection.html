@@ -1,18 +1,6 @@
 <div class="well dashboard-profile-realm-collection">
   <% if (obj.rp && _.size(obj.rp)) { %>
   <ul>
-    <% _.each(rp, function (points, realm) { %>
-    <li>
-    <a class="_realm-link" href="/realm/<%- realm %>">
-      <img src="/i/<%- realm %>.png"/>
-    </a>
-    <span class="dashboard-profile-text">
-      <a href="/realm/<%- realm %>/players">
-        <%- points %> points
-      </a>
-    </span>
-    </li>
-    <% }) %>
   </ul>
   <% } else { %>
   <span class="dashboard-profile-text">
