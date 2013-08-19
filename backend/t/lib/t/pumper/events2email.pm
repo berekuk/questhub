@@ -14,6 +14,7 @@ my $email_in;
 my $quest;
 
 sub startup :Test(startup => 2) {
+    reset_db();
     $pumper = pumper('events2email');
     $email_in = Play::Flux->email->in('test');
 

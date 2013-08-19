@@ -59,9 +59,11 @@ server {
   }
 }
 
+<% unless @dev %>
 server {
   listen       80;
   server_name www.questhub.io;
 
   rewrite  ^/(.*)$  http://questhub.io/$1 redirect;
 }
+<% end %>

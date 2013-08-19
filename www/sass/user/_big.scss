@@ -41,3 +41,57 @@
         padding-top: 0;
     }
 }
+
+.user-big-points {
+    margin: 0;
+
+    height: 36px;
+    @include breakpoint(lessThanA) {
+    }
+    @include breakpoint(lessThanB) {
+        padding-top: 10px;
+        clear: both;
+    }
+    @include breakpoint(A) {
+        float: left;
+    }
+    @include breakpoint(B) {
+        margin-left: 30px;
+        height: 48px;
+    }
+    .user-big-points-bars {
+        display: inline-block;
+        height: 100%;
+        // bar container
+        > div {
+            display: inline-block;
+
+            height: 100%;
+            width: 8px;
+            position: relative;
+            margin-right: 5px;
+
+            // bar
+            > div {
+                position: absolute;
+                bottom: 0px;
+                left: 0px;
+                width: 100%;
+                background-color: $grey-color;
+                &:hover {
+                    background-color: $green-color;
+                }
+            }
+        }
+    }
+    > figcaption {
+        display: inline;
+    }
+    .user-big-points-total {
+        font-size: 24px;
+        @include breakpoint(B) {
+            font-size: 36px;
+        }
+        font-weight: 200;
+    }
+}

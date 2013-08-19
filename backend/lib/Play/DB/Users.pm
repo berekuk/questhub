@@ -17,6 +17,8 @@ use Play::WWW;
 
 with 'Play::DB::Role::Common';
 
+our $POINTS_HISTORY_DEPTH = 9; # 9 weeks - enough for 2 months histogram
+
 =head1 METHODS
 
 =over
@@ -658,6 +660,30 @@ sub autocomplete {
     }, { login => 1 })->limit(5)->all;
 
     return [ sort map { $_->{login} } @users ];
+}
+
+sub rotate_points {
+    my $self = shift;
+    state $check = compile();
+    $check->(@_);
+
+    my $total = 0;
+    for my $user ($self->collection->find->all) {
+        $self->collection->update(
+            { login => $user->{login} },
+            {
+                '$push' => {
+                    rph => {
+                        '$each' => [ $user->{rp} || {} ],
+                        '$slice' => -$POINTS_HISTORY_DEPTH,
+                    }
+                }
+            },
+            { safe => 1 }
+        );
+        $total++;
+    }
+    return $total;
 }
 
 =back
