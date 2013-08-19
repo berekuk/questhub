@@ -25,7 +25,6 @@ define [
             beforeEach -> createModel()
 
             it "all realms", ->
-                console.log model.histogramPoints()
                 expect(
                     _.isEqual(
                         model.histogramPoints()
@@ -34,7 +33,6 @@ define [
                 ).toEqual true
 
             it "single realm", ->
-                console.log model.histogramPoints()
                 expect(
                     _.isEqual(
                         model.histogramPoints("asia")
