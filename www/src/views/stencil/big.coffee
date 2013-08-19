@@ -97,5 +97,6 @@ define [
         closeEdit: =>
             @$("._edit").hide()
             @$("._editable").show()
+            @description().hide()
 
         features: ['timeago', 'tooltip']
