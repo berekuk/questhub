@@ -43,46 +43,24 @@
 }
 
 .user-big-points {
-    margin: 0;
+    clear: both;
+    float: left;
 
+    margin: 0;
+    padding-top: 10px;
     height: 36px;
-    @include breakpoint(lessThanA) {
-    }
-    @include breakpoint(lessThanB) {
-        padding-top: 10px;
-        clear: both;
-    }
-    @include breakpoint(A) {
-        float: left;
-    }
+
     @include breakpoint(B) {
+        clear: none;
+
+        padding-top: 0px;
         margin-left: 30px;
         height: 48px;
     }
-    .user-big-points-bars {
+
+    .user-big-histogram-sv {
         display: inline-block;
         height: 100%;
-        // bar container
-        > div {
-            display: inline-block;
-
-            height: 100%;
-            width: 8px;
-            position: relative;
-            margin-right: 5px;
-
-            // bar
-            > div {
-                position: absolute;
-                bottom: 0px;
-                left: 0px;
-                width: 100%;
-                background-color: $grey-color;
-                &:hover {
-                    background-color: $green-color;
-                }
-            }
-        }
     }
     > figcaption {
         display: inline;

@@ -2,18 +2,20 @@ define [
     "underscore", "jquery"
     "views/proto/common"
     "models/current-user"
-    "views/quest/add"
+    "views/user/points-histogram"
     "text!templates/user/big.html"
-], (_, $, Common, currentUser, QuestAdd, html) ->
+], (_, $, Common, currentUser, UserPointsHistogram, html) ->
     class extends Common
         template: _.template(html)
 
         events:
-            "click .quest-add-dialog": "newQuestDialog"
             "click .settings": "settingsDialog"
             "click .user-big-tabs div._icon": "switch"
             "click button.user-big-follow": "follow"
             "click button.user-big-unfollow": "unfollow"
+
+        subviews:
+            ".user-big-histogram-sv": -> new UserPointsHistogram model: @model
 
         initialize: ->
             @tab = @options.tab || 'quests'
@@ -47,11 +49,6 @@ define [
                 bar = $("<div></div>").append(bar)
                 bars.append bar
             @$("[data-toggle=tooltip]").tooltip()
-
-        newQuestDialog: ->
-            questAdd = new QuestAdd()
-            @$el.append questAdd.$el # FIXME - DOM memory leak
-            ga "send", "event", "quest", "new-dialog"
 
         follow: -> currentUser.followUser @model.get("login")
         unfollow: -> currentUser.unfollowUser @model.get("login")

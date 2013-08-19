@@ -11,9 +11,9 @@
 
 .dashboard-profile {
     .well {
-        padding: 20px;
+        padding: 15px;
         @include breakpoint(B) {
-            padding: 30px;
+            padding: 20px;
         }
     }
 
@@ -26,21 +26,24 @@
     }
 }
 
-.dashboard-profile-scores {
+.dashboard-profile-realm-collection {
     position: relative;
     ul {
         list-style-type: none;
         margin: 0 auto;
     }
 
-    @include breakpoint(B) {
+    @include breakpoint(C) {
         ul {
             margin-left: 30px;
         }
     }
     img {
         display: inline;
-        margin-right: 20px;
+        margin-right: 10px;
+        @include breakpoint(C) {
+            margin-right: 20px;
+        }
         width: 50px;
         height: 50px;
 
@@ -59,15 +62,29 @@
         right: 8px;
         color: $dark-grey;
     }
+
+    li {
+        line-height: 36px;
+        @include breakpoint(B) {
+            line-height: 48px;
+        }
+    }
+    .histogram-sv {
+        display: inline-block;
+        height: 36px;
+        @include breakpoint(B) {
+            height: 48px;
+        }
+    }
+}
+.dashboard-profile-realm {
+    display: inline-block;
+    position: relative;
+    top: 15px;
 }
 
 .dashboard-profile-text {
     font-size: 18px;
     line-height: 24px;
     font-weight: 200;
-
-    @include breakpoint(B) {
-        font-size: 24px;
-        line-height: 36px;
-    }
 }
