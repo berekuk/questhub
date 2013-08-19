@@ -34,7 +34,3 @@ define ["models/event"], (EventModel) ->
 
             it "name", ->
                 expect(model.name()).toEqual "add-comment"
-
-
-
-

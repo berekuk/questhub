@@ -69,7 +69,7 @@
             'spec/event',
             'spec/realm', 'spec/realm-controls',
             'spec/dashboard', 'spec/user-big',
-            'spec/model/quest', 'spec/model/event', 'spec/model/current-user', 'spec/model/realm'
+            'spec/model/quest', 'spec/model/event', 'spec/model/current-user', 'spec/model/realm', 'spec/model/user'
         );
 
         // evil mocks
