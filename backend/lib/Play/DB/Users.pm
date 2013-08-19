@@ -17,7 +17,7 @@ use Play::WWW;
 
 with 'Play::DB::Role::Common';
 
-our $POINTS_HISTORY_DEPTH = 28;
+our $POINTS_HISTORY_DEPTH = 9; # 9 weeks - enough for 2 months histogram
 
 =head1 METHODS
 
