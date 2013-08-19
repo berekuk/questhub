@@ -4,22 +4,25 @@ define [
     class extends Backbone.Model
         initialize: -> alert "trying to instantiate abstract base class"
 
-        histogramPoints: ->
+        histogramPoints: (realm) ->
             rph = _.clone @get "rph"
             rph ?= []
 
             reducePoints = (ph) ->
                 return 0 unless ph?
-                _.reduce(
-                    _.values(ph),
-                    ((memo, value) -> memo + value),
-                    0
-                )
+                if realm?
+                    ph[realm] || 0
+                else
+                    _.reduce(
+                        _.values(ph),
+                        ((memo, value) -> memo + value),
+                        0
+                    )
 
             history = [reducePoints @get "rp"]
             for [1..8]
-                rph.splice -1, 1
                 sum = reducePoints rph[rph.length - 1]
+                rph.splice -1, 1
                 history.unshift sum
 
             result = []
