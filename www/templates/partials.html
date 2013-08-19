@@ -1,6 +1,6 @@
 <div>
   <!-- avoiding extra spaces - we need to put an apostrophe after the user's login sometimes -->
-  <script type="text/template" class="user"><% if (login) { %><a href="/player/<%= login %>" class="user-link"><%= login + (obj.colon ? ':' : '') %></a><% } %></script>
+  <script type="text/template" class="user"><% if (obj.pic) { %><img src="/api/user/<%- login %>/pic?s=small" width=20 height=20> <% } %><% if (login) { %><a href="/player/<%- login %>" class="user-link"><%= login + (obj.colon ? ':' : '') %></a><% } %></script>
 
   <script type="text/template" class="quest-labels">
     <span class="quest-tags">
