@@ -61,3 +61,11 @@ end
 execute "start upic_fetcher" do
   command "ubic start pumper.upic_fetcher"
 end
+
+directory "/data/backend_scripts"
+cron "rotate_points" do
+    weekday "1"
+    minute "0"
+    hour "12"
+    command "/play/backend/script/rotate_points.pl >>/data/rotate_points.log 2>>/data/backend_scripts/rotate_points.err.log"
+end
