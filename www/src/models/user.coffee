@@ -6,6 +6,7 @@ define [
 
         histogramPoints: ->
             rph = _.clone @get "rph"
+            rph ?= []
 
             reducePoints = (ph) ->
                 return 0 unless ph?
