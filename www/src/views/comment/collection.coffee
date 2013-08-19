@@ -86,7 +86,7 @@ define [
                 success: @resetForm
 
         composeComment: (opt) ->
-            @textarea().reveal("@#{opt.reply}: ")
+            @textarea().reveal("@#{opt.reply}, ")
             @textarea
             $('html, body').animate {
                 scrollTop: @$('.comment-add').offset().top
