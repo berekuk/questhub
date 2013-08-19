@@ -1,12 +1,17 @@
 # vim: ft=markdown
+
 # TODO
 
-Design
-Widget in /profile tab
-Tooltip
+cron in chef configuration
+- rudimentary tasks? (once per week - avoid schedule issues)
 
-Store statistics (per day? per week? rotate?)
-Retroactively restore statistics (from backups)
+Widget in /profile tab
+
+Run restore on production
+
+# DONE
+
+Design
 `users.points_history` - array with $slice (need to upgrade to 2.4)
 
 rph: [
@@ -16,9 +21,19 @@ rph: [
     { perl: 50, chaos: 7 }
 ]
 
-# Restore
+Store statistics (per week, 9 times)
+Retroactively restore statistics (from backups)
+
+Tooltip
+
+mobile
+vertical-align
+check for follow button + long login
+
+## Restore details
 
 for each tar.gz:
     - unpack
     - restore
     - save users.rp somewhere
+
