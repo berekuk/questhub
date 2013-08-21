@@ -1,0 +1,47 @@
+# Comments TODO
+
+mobile
+
+## Comments Done
+
+upic inside or outside the well
+comment-edit buttons margin
+"commented:" text in top line
+top line font size
+"completed" and other comment types
+normal or small upics
+
+# Feed TODO
+
+/api/feed
+
+`db->events->feed({ for => 'berekuk' })`
+
+    [
+        {
+            quest: ...
+            comments: [
+                ...
+            ]
+        },
+        ...
+    ]
+
+optimize fetching comments
+order by bump
+
+`db->quests->bump` method
+call bump on comment
+
+hide extra comments
+cut for comments and quests
+
+stencils in feed
+
+think about representing user/realm chambers
+
+realm name/icon on quest
+comment form
+
+backend tests
+frontend tests

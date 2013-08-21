@@ -1,5 +1,12 @@
-define ["jquery", "underscore", "views/proto/common", "models/event-collection", "views/event/collection", "models/current-user", "text!templates/news-feed.html", "bootstrap"], ($, _, Common, EventCollectionModel, EventCollection, currentUser, html) ->
-    Common.extend
+define [
+    "jquery", "underscore"
+    "views/proto/common"
+    "models/feed/collection", "views/feed/collection"
+    "models/current-user"
+    "text!templates/news-feed.html"
+    "bootstrap"
+], ($, _, Common, FeedCollectionModel, FeedCollection, currentUser, html) ->
+    class extends Common
         template: _.template(html)
         className: "news-feed-view"
         activeMenuItem: "feed"
@@ -7,15 +14,12 @@ define ["jquery", "underscore", "views/proto/common", "models/event-collection",
             ".subview": "eventCollection"
 
         eventCollection: ->
-            collection = new EventCollectionModel([],
-                limit: 50
+            collection = new FeedCollectionModel([],
+                limit: 20
                 for: @model.get("login")
             )
             collection.fetch()
-            new EventCollection(
-                collection: collection
-                showRealm: true
-            )
+            new FeedCollection collection: collection
 
         serialize: ->
             login: @model.get("login")
