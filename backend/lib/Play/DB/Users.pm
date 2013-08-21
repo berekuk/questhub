@@ -47,6 +47,20 @@ sub get_by_email {
     return $self->collection->find_one({ 'settings.email' => $email });
 }
 
+sub _upstream_upic {
+    my $self = shift;
+    my ($user) = @_;
+    if (not $user->{twitter}{profile_image_url} and $user->{settings}{email}) {
+        return db->images->upic_by_email($user->{settings}{email});
+    }
+    elsif ($user->{twitter}{profile_image_url}) {
+        return db->images->upic_by_twitter_data($user->{twitter});
+    }
+    else {
+        return db->images->upic_default();
+    }
+}
+
 sub _prepare_user {
     my $self = shift;
     my ($user) = @_;
@@ -54,15 +68,11 @@ sub _prepare_user {
     $user->{rp} //= {};
     $user->{rp}{$_} //= 0 for @{ $user->{realms} };
 
-    if (not $user->{twitter}{profile_image_url} and $user->{settings}{email}) {
-        $user->{pic} = db->images->upic_by_email($user->{settings}{email});
-    }
-    elsif ($user->{twitter}{profile_image_url}) {
-        $user->{pic} = db->images->upic_by_twitter_data($user->{twitter});
-    }
-    else {
-        $user->{pic} = db->images->upic_default();
-    }
+    # deprecated, can be removed in the future - it's a useless extra load
+    $user->{pic} = {
+        small => Play::WWW->upic_url($user->{login}, 'small'),
+        normal => Play::WWW->upic_url($user->{login}, 'normal'),
+    };
 
     delete $user->{settings};
     return $user;
@@ -110,6 +120,7 @@ sub add {
     };
 
     my $id = $self->collection->insert($params, { safe => 1 });
+    db->images->enqueue_fetch_upic($params->{login} => $self->_upstream_upic($params));
 
     for my $realm (@{ $params->{realms} }) {
         db->events->add({
@@ -135,34 +146,52 @@ sub list {
         order => Optional[Str], # regex => qr/^asc|desc$/
         limit => Optional[Int],
         offset => Optional[Int],
-        realm => Str,
+        realm => Optional[Str],
     ]);
     $params //= {};
     $params->{order} //= 'asc';
     $params->{offset} //= 0;
 
     my $realm = $params->{realm};
+    if (
+        not $realm
+        and ($params->{sort} and ($params->{sort} eq 'leaderboard' or $params->{sort} eq 'points'))
+    ) {
+        die "Sorting by points or leaderboard requires realm to be specified";
+    }
+
+
+    my $condition = {};
+    if ($realm) {
+        $condition = { realms => $realm };
+    }
 
     # fetch everyone
     # note that sorting is always by _id, see the explanation and manual sorting below
-    my @users = $self->collection->find({ realms => $realm })->sort({ '_id' => 1 })->all;
+    my @users = $self->collection->find($condition)->sort({ '_id' => 1 })->all;
 
     $self->_prepare_user($_) for @users;
 
     # filling 'open_quests' field
-    my $quests = db->quests->list({ status => 'open', realm => $realm });
-    my %users = map { $_->{login} => $_ } @users;
-    for my $quest (@$quests) {
-        for my $qlogin (@{ $quest->{team} }) {
-            my $quser = $users{$qlogin};
-            next unless $quser; # I guess user can be deleted and leave user-less quests behind, that's not a good reason for a failure
-            $quser->{open_quests}++;
+    {
+        my $quests_condition = { status => 'open' };
+        if ($realm) {
+            $quests_condition->{realm} = $realm;
+        }
+        my $quests = db->quests->list($quests_condition); # FIXME! this totally won't scale
+        my %users = map { $_->{login} => $_ } @users;
+        for my $quest (@$quests) {
+            for my $qlogin (@{ $quest->{team} }) {
+                my $quser = $users{$qlogin};
+                next unless $quser; # I guess user can be deleted and leave user-less quests behind, that's not a good reason for a failure
+                $quser->{open_quests}++;
+            }
         }
     }
 
     # Sorting on the client side, because 'open_quests' is not a user's attribute.
     # Besides fetching the whole DB even if limit is set, this means we're N^2 on paging (see the frontend /players implementation).
-    # Let's hope that Play Perl will grow popular enough that it'll need to be fixed :)
+    # Let's hope that Questhub will grow popular enough that it'll need to be fixed :)
     if ($params->{sort} and $params->{sort} eq 'leaderboard') {
         # special sorting, composite points->open_quests order
         @users = sort {

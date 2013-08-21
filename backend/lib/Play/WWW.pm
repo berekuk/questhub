@@ -5,7 +5,7 @@ use warnings;
 
 use Type::Params qw(compile);
 use Types::Standard qw(HashRef Str Optional);
-use Play::Types qw(Login);
+use Play::Types qw(Login ImageSize);
 use Type::Utils qw(enum);
 
 use Play::Config qw(setting);
@@ -58,6 +58,14 @@ sub confirm_email_url {
     my ($login, $secret) = @_;
 
     return "http://".setting('hostport')."/register/confirm/$login/$secret";
+}
+
+sub upic_url {
+    my $class = shift;
+    state $check = compile(Login, ImageSize);
+    my ($login, $size) = @_;
+
+    return "http://".setting('hostport')."/api/user/$login/pic?s=$size";
 }
 
 1;

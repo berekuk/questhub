@@ -18,6 +18,20 @@ has 'in' => (
     default => sub { Play::Flux->upic->in('/data/storage/upic/pos') },
 );
 
+sub reschedule {
+    my $self = shift;
+    my ($item) = @_;
+
+    if ($item->{retries} and $item->{retries} >= 3) {
+        return;
+    }
+
+    $item->{retries}++;
+    my $storage = Play::Flux->upic;
+    $storage->write($item); # TODO - DelayedQueue
+    $storage->commit;
+}
+
 sub run_once {
     my $self = shift;
 
@@ -29,6 +43,7 @@ sub run_once {
         }
         catch {
             $log->warn("Failed to fetch upic for $item->{login}: $_");
+            $self->reschedule($item);
             $self->add_stat('failed');
         };
         $self->in->commit;
