@@ -1,6 +1,6 @@
 <article class="comment comment-type-<%- type %>">
   <aside>
-    <img src="/api/user/<%- author %>/pic?s=small">
+    <%= partial.upic_small({ login: author }) %>
   </aside>
 
   <div class="comment-inner">
