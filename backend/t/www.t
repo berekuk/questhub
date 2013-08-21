@@ -40,4 +40,16 @@ sub settings :Tests {
     );
 }
 
+sub upic :Tests {
+    is(
+        Play::WWW->upic_url('foo', 'small'),
+        'http://localhost:3000/api/user/foo/pic?s=small'
+    );
+
+    is(
+        Play::WWW->upic_url('foo', 'normal'),
+        'http://localhost:3000/api/user/foo/pic?s=normal'
+    );
+}
+
 __PACKAGE__->new->runtests;

@@ -47,6 +47,20 @@ sub get_by_email {
     return $self->collection->find_one({ 'settings.email' => $email });
 }
 
+sub _upstream_upic {
+    my $self = shift;
+    my ($user) = @_;
+    if (not $user->{twitter}{profile_image_url} and $user->{settings}{email}) {
+        return db->images->upic_by_email($user->{settings}{email});
+    }
+    elsif ($user->{twitter}{profile_image_url}) {
+        return db->images->upic_by_twitter_data($user->{twitter});
+    }
+    else {
+        return db->images->upic_default();
+    }
+}
+
 sub _prepare_user {
     my $self = shift;
     my ($user) = @_;
@@ -54,15 +68,11 @@ sub _prepare_user {
     $user->{rp} //= {};
     $user->{rp}{$_} //= 0 for @{ $user->{realms} };
 
-    if (not $user->{twitter}{profile_image_url} and $user->{settings}{email}) {
-        $user->{pic} = db->images->upic_by_email($user->{settings}{email});
-    }
-    elsif ($user->{twitter}{profile_image_url}) {
-        $user->{pic} = db->images->upic_by_twitter_data($user->{twitter});
-    }
-    else {
-        $user->{pic} = db->images->upic_default();
-    }
+    # deprecated, can be removed in the future - it's a useless extra load
+    $user->{pic} = {
+        small => Play::WWW->upic_url($user->{login}, 'small'),
+        normal => Play::WWW->upic_url($user->{login}, 'normal'),
+    };
 
     delete $user->{settings};
     return $user;
@@ -110,6 +120,7 @@ sub add {
     };
 
     my $id = $self->collection->insert($params, { safe => 1 });
+    db->images->enqueue_fetch_upic($params->{login} => $self->_upstream_upic($params));
 
     for my $realm (@{ $params->{realms} }) {
         db->events->add({

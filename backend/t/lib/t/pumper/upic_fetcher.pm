@@ -71,7 +71,7 @@ sub invalid_pic :Tests {
     );
     $self->{pumper}->run;
 
-    $log->contains_ok(qr/1 failed, 1 ok/);
+    $log->contains_ok(qr/4 failed, 1 ok/); # 3 retries
 
     is db->images->upic_file('neilb', 'small'), 'tfiles/images/pic/neilb.small';
     is db->images->upic_file('neilb', 'normal'), 'tfiles/images/pic/neilb.normal';
