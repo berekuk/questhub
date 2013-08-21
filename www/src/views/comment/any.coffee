@@ -16,8 +16,11 @@ define [
             "click .comment-edit-button-cancel": "cancelEdit"
             "click .comment-edit-button-save": "saveEdit"
             "click .comment-reply-link": "reply"
-            mouseenter: (e) -> @subview(".likes").showButton()
-            mouseleave: (e) -> @subview(".likes").hideButton()
+            "mouseenter": "mouseenter"
+            "mouseleave": "mouseleave"
+
+        mouseenter: -> @subview(".likes").showButton()
+        mouseleave: -> @subview(".likes").hideButton()
 
         subviews:
             ".likes": ->

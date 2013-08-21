@@ -4,3 +4,16 @@
     }
     margin-bottom: 20px;
 }
+.feed-item-comments {
+    padding-left: 30px;
+}
+.feed-item-expand-comments-panel {
+    padding: 5px;
+    background-color: rgba(223, 223, 223, 1);
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    font-size: 12px;
+    > .icon-comments {
+        color: $dark-grey;
+    }
+}

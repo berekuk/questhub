@@ -12,6 +12,9 @@ define [
             @questModel = new QuestModel @model.get("quest")
             super
 
+        events: ->
+            "click .feed-item-expand-comments": "expandComments"
+
         subviews:
             ".quest-sv": ->
                 new Quest
@@ -28,5 +31,22 @@ define [
                     object: @questModel
                     commentBox: false
 
-                commentsModel.reset @model.get "comments"
+                comments = @model.get "comments"
+                unless @expanded
+                    if comments.length
+                        comments = comments[ comments.length - 1 ]
+                    else
+                        comments = []
+                commentsModel.reset comments
+
                 view
+
+        expandComments: ->
+            @expanded = true
+            @rebuildSubview ".comments-sv" # FIXME - preserve textarea if necessary
+            @render()
+
+
+        serialize: ->
+            expand: not @expanded and (@model.get("comments").length > 1)
+            expandCount: @model.get("comments").length - 1
