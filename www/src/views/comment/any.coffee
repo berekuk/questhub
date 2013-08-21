@@ -7,6 +7,8 @@ define [
     "text!templates/comment.html"
 ], (_, Common, CommentLike, currentUser, Textarea, html) ->
     class extends Common
+        className: "comment-outer"
+
         template: _.template(html)
         events:
             "click .delete": "destroy"
