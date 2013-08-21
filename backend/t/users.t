@@ -3,6 +3,7 @@ use Play::Test;
 use parent qw(Test::Class);
 
 use Play::DB qw(db);
+use Play::Flux;
 
 sub setup :Test(setup) {
     reset_db();
@@ -273,6 +274,25 @@ sub autocomplete :Tests {
         [qw( fo foo foo2 foo3 foo4 )],
         '5 results max';
 
+}
+
+sub upic_on_add :Tests {
+    my $upic_in = Play::Flux->upic->in('test');
+    $upic_in->read_chunk(1000);
+    $upic_in->commit;
+
+    db->users->add({ login => 'foo' });
+    cmp_deeply
+        $upic_in->read_chunk(10),
+        [
+            {
+                'login' => 'foo',
+                'upic' => {
+                    'normal' => re('^http://www.gravatar.com/'),
+                    'small' => re('^http://www.gravatar.com/'),
+                }
+            }
+        ];
 }
 
 __PACKAGE__->new->runtests;

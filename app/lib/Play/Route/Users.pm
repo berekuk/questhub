@@ -244,9 +244,18 @@ post '/register/confirm_email' => sub {
 };
 
 get '/user' => sub {
-    return db->users->list({
-        map { param($_) ? ($_ => param($_)) : () } qw/ sort order limit offset realm /,
-    });
+    # optional fields
+    my $params = {
+        map { param($_) ? ($_ => param($_)) : () } qw/ sort order limit offset /,
+    };
+    # required fields
+    for (qw/ realm /) {
+        my $value = param($_) or die "'$_' is not set";
+        $params->{$_} = $value;
+    }
+    $params->{limit} ||= 50;
+
+    return db->users->list($params);
 };
 
 get '/user/:login/unsubscribe/:field' => sub {

@@ -3,6 +3,45 @@
     margin-top: 10px;
 }
 
+.comment {
+    padding: 7px;
+    padding-bottom: 5px;
+    > aside {
+        float: left;
+    }
+    > .comment-inner {
+        margin-left: 32px;
+    }
+
+    // TODO - move these styles to the generic "multi-well" mixin or css class
+    min-height: 20px;
+    background-color: $mat;
+    blockquote {
+        border-color: #ddd;
+        border-color: rgba(0,0,0,.15);
+    }
+    margin-bottom: 0px;
+    border-left: 1px solid darken($grey, 5%);
+    border-right: 1px solid darken($grey, 5%);
+    border-bottom: 1px solid darken($grey, 5%);
+}
+.comment-outer {
+    &:last-of-type > .comment {
+        margin-bottom: 12px;
+        border-bottom-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+    }
+    &:first-of-type > .comment {
+        border-top-right-radius: 3px;
+        border-top-left-radius: 3px;
+        border-top: 1px solid darken($grey, 5%);
+    }
+}
+
+.comment-inner > .object-top-line {
+    font-size: 12px;
+}
+
 textarea.comment-edit {
     width: 95%;
     height: 100%;
@@ -11,29 +50,23 @@ textarea.comment-edit {
 .comment-type-close {
     @include mark($closed-quest-color);
 }
-
 .comment-type-reopen {
     @include mark($open-quest-color);
 }
-
 .comment-type-abandon {
     @include mark($abandoned-quest-color);
 }
-
 .comment-type-join {
     @include mark($join-color);
 }
-
 .comment-type-invite {
     @include mark($invite-color);
 }
-
 .comment-type-leave {
     @include mark($abandoned-quest-color);
 }
-
 .comment-type-resurrect {
-    @include mark(white);
+    @include mark($open-quest-color);
 }
 
 .comment-edit-buttons {
@@ -41,9 +74,21 @@ textarea.comment-edit {
     float: right;
 }
 
+.comment-content-special {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    position: relative;
+    font-style: italic;
+    [class^="icon-"] {
+        position: absolute;
+        color: $dark-grey;
+        font-size: 18px;
+        left: -29px;
+        top: 2px;
+    }
+}
 .comment-content-reward {
     margin-top: 8px;
-    margin-bottom: 8px;
 }
 
 @include breakpoint(B) {
