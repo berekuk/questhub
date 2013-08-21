@@ -22,7 +22,7 @@ div.quest-big-unclaimed {
     }
 
     .object-bottom-line {
-        margin-top: 20px;
+        margin-top: 10px;
     }
 }
 .quest-big-note {
@@ -37,3 +37,23 @@ div.quest-big-unclaimed {
     margin-bottom: 5px;
 }
 
+.quest-big-tags {
+    margin-bottom: 4px;
+}
+
+.quest-big-realm {
+    position: absolute;
+    bottom: 3px;
+    right: 7px;
+    @include opacity(70);
+    &:hover {
+        @include opacity(100);
+    }
+    a {
+        color: $text-color;
+        &:hover {
+            color: $text-color;
+            text-decoration: none;
+        }
+    }
+}

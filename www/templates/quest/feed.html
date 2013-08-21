@@ -71,14 +71,22 @@
 
 
   <footer class="object-bottom-line">
+    <div class="quest-big-tags">
+      <%= partial.quest_labels(obj) %>
+    </div>
+
     <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
 
     <span class="likes-subview"></span>
     <%= partial.watchers(obj) %>
 
-    <div class="quest-big-labels">
-      <%= partial.quest_labels(obj) %>
-    </div>
   </footer>
+
+  <div class="quest-big-realm">
+    <a href="/realm/<%- realm %>">
+      <img src="<%- realmData.pic %>" width="30" height="30">
+      <%- realmData.name %>
+    </a>
+  </div>
 
 </div>
