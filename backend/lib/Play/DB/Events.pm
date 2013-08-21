@@ -126,6 +126,7 @@ sub list {
         realm => Optional[Str],
         for => Optional[Str],
         author => Optional[Login],
+        type => Optional[Str],
     ]);
     $params //= {};
     $params->{limit} //= 100;
@@ -156,6 +157,7 @@ sub list {
     }
 
     $search_opt->{author} = $params->{author} if defined $params->{author};
+    $search_opt->{type} = $params->{type} if defined $params->{type};
 
     my ($limit, $offset) = ($params->{limit}, $params->{offset});
 
@@ -187,6 +189,27 @@ sub list {
         }
     }
 
+    return \@result;
+}
+
+sub feed {
+    my $self = shift;
+    my ($params) = validate(\@_, Undef|Dict[
+        limit => Optional[Int],
+        offset => Optional[Int],
+        for => Str,
+    ]);
+    $params->{type} = 'add-quest'; # FIXME - stencils
+    my $add_quest_events = $self->list($params); # TODO - use db->quests, order by bump date
+    my @quests = map { $_->{quest} } @{ $add_quest_events };
+
+    my @result;
+    for my $quest (@quests) {
+        push @result, {
+            quest => $quest,
+            comments => db->comments->list('quest', $quest->{_id}), # TODO - slow, optimize
+        };
+    }
     return \@result;
 }
 
