@@ -146,34 +146,52 @@ sub list {
         order => Optional[Str], # regex => qr/^asc|desc$/
         limit => Optional[Int],
         offset => Optional[Int],
-        realm => Str,
+        realm => Optional[Str],
     ]);
     $params //= {};
     $params->{order} //= 'asc';
     $params->{offset} //= 0;
 
     my $realm = $params->{realm};
+    if (
+        not $realm
+        and ($params->{sort} and ($params->{sort} eq 'leaderboard' or $params->{sort} eq 'points'))
+    ) {
+        die "Sorting by points or leaderboard requires realm to be specified";
+    }
+
+
+    my $condition = {};
+    if ($realm) {
+        $condition = { realms => $realm };
+    }
 
     # fetch everyone
     # note that sorting is always by _id, see the explanation and manual sorting below
-    my @users = $self->collection->find({ realms => $realm })->sort({ '_id' => 1 })->all;
+    my @users = $self->collection->find($condition)->sort({ '_id' => 1 })->all;
 
     $self->_prepare_user($_) for @users;
 
     # filling 'open_quests' field
-    my $quests = db->quests->list({ status => 'open', realm => $realm });
-    my %users = map { $_->{login} => $_ } @users;
-    for my $quest (@$quests) {
-        for my $qlogin (@{ $quest->{team} }) {
-            my $quser = $users{$qlogin};
-            next unless $quser; # I guess user can be deleted and leave user-less quests behind, that's not a good reason for a failure
-            $quser->{open_quests}++;
+    {
+        my $quests_condition = { status => 'open' };
+        if ($realm) {
+            $quests_condition->{realm} = $realm;
+        }
+        my $quests = db->quests->list($quests_condition); # FIXME! this totally won't scale
+        my %users = map { $_->{login} => $_ } @users;
+        for my $quest (@$quests) {
+            for my $qlogin (@{ $quest->{team} }) {
+                my $quser = $users{$qlogin};
+                next unless $quser; # I guess user can be deleted and leave user-less quests behind, that's not a good reason for a failure
+                $quser->{open_quests}++;
+            }
         }
     }
 
     # Sorting on the client side, because 'open_quests' is not a user's attribute.
     # Besides fetching the whole DB even if limit is set, this means we're N^2 on paging (see the frontend /players implementation).
-    # Let's hope that Play Perl will grow popular enough that it'll need to be fixed :)
+    # Let's hope that Questhub will grow popular enough that it'll need to be fixed :)
     if ($params->{sort} and $params->{sort} eq 'leaderboard') {
         # special sorting, composite points->open_quests order
         @users = sort {
