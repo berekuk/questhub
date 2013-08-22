@@ -329,6 +329,7 @@ sub add {
     }
 
     $params->{author} = $params->{team}[0];
+    $params->{bump} = time;
     my $id = $self->collection->insert($params, { safe => 1 });
 
     my $quest = { %$params, _id => $id };
@@ -376,6 +377,7 @@ sub update {
 
     my $quest_after_update = { %$quest, %$params };
 
+    # TODO - to bump or not to bump?
     $self->collection->update(
         { _id => MongoDB::OID->new(value => $id) },
         $quest_after_update,
@@ -828,6 +830,22 @@ sub move_to_realm {
     }
 
     $self->_update_user_realms($quest);
+}
+
+sub bump {
+    my $self = shift;
+    state $check = compile(Id);
+    my ($id) = $check->(@_);
+
+    $self->collection->update(
+        {
+            _id => MongoDB::OID->new(value => $id),
+        },
+        {
+            '$set' => { bump => time },
+        },
+        { safe => 1 }
+    );
 }
 
 1;

@@ -60,6 +60,7 @@ sub add {
     if ($params->{entity} eq 'quest') {
         my $quest = db->quests->get($params->{eid}) or die "quest '$params->{eid}' not found";
         $realm = $quest->{realm};
+        db->quests->bump($params->{eid});
     }
     elsif ($params->{entity} eq 'stencil') {
         my $stencil = db->stencils->get($params->{eid}) or die "stencil '$params->{eid}' not found";

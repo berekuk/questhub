@@ -633,4 +633,22 @@ sub checkin :Tests {
         [re('^\d+$'), re('^\d+$')];
 }
 
+sub bump :Tests {
+    db->users->add({ login => 'foo' });
+
+    my $quest = db->quests->add({
+        name => 'q1',
+        user => 'foo',
+        realm => 'europe',
+    });
+    my $initial_bump = db->quests->get($quest->{_id})->{bump};
+    like $initial_bump, qr/^\d+$/;
+
+    sleep 1;
+    db->quests->bump($quest->{_id});
+    my $bump = db->quests->get($quest->{_id})->{bump};
+    my $diff = $bump - $initial_bump;
+    ok($diff > 0 and $diff < 3);
+}
+
 __PACKAGE__->new->runtests;
