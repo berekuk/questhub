@@ -199,6 +199,7 @@ sub feed {
         offset => Optional[Int],
         for => Str,
     ]);
+    $params->{limit} //= 30;
     $params->{type} = 'add-quest'; # FIXME - stencils
     my $add_quest_events = $self->list($params); # TODO - use db->quests, order by bump date
     my @quests = map { $_->{quest} } @{ $add_quest_events };
