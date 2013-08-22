@@ -633,6 +633,139 @@ sub checkin :Tests {
         [re('^\d+$'), re('^\d+$')];
 }
 
+sub _cmp_list {
+    my ($query, $types) = @_;
+
+    cmp_deeply(
+        db->quests->list($query),
+        [ map { superhashof({ name => $_ }) } @$types ]
+    );
+}
+
+sub list_for_self :Tests {
+    db->users->add({ login => 'foo' });
+    db->users->add({ login => 'bar' });
+
+    db->quests->add({
+        name => 'q1',
+        user => 'foo',
+        realm => 'europe',
+    });
+    db->quests->add({
+        name => 'q2',
+        user => 'foo',
+        realm => 'europe',
+    });
+    db->quests->add({
+        name => 'q3',
+        user => 'bar',
+        realm => 'europe',
+    });
+
+    _cmp_list
+        { for => 'foo' },
+        [qw( q2 q1 )];
+}
+
+sub list_for_fr :Tests {
+    db->users->add({ login => 'foo', fr => ['asia'] });
+    db->users->add({ login => 'bar' });
+    db->users->add({ login => 'baz', fr => ['asia', 'europe'] });
+
+    db->quests->add({
+        name => 'q1',
+        user => 'bar',
+        realm => 'europe',
+    });
+    db->quests->add({
+        name => 'q2',
+        user => 'bar',
+        realm => 'asia',
+    });
+    db->quests->add({
+        name => 'q3',
+        user => 'bar',
+        realm => 'asia',
+    });
+
+    _cmp_list
+        { for => 'foo' },
+        [qw( q3 q2 )];
+    _cmp_list
+        { for => 'baz' },
+        [qw( q3 q2 q1 )];
+}
+
+sub list_for_fu :Tests {
+    db->users->add({ login => 'foo', fu => ['bar'] });
+    db->users->add({ login => 'bar' });
+    db->users->add({ login => 'baz', fu => ['foo', 'bar'] });
+
+    db->quests->add({
+        name => 'q1',
+        user => 'foo',
+        realm => 'europe',
+    });
+    db->quests->add({
+        name => 'q2',
+        user => 'bar',
+        realm => 'asia',
+    });
+    db->quests->add({
+        name => 'q3',
+        user => 'baz',
+        realm => 'asia',
+    });
+
+    _cmp_list
+        { for => 'foo' },
+        [qw( q2 q1 )];
+    _cmp_list
+        { for => 'bar' },
+        [qw( q2 )];
+    _cmp_list
+        { for => 'baz' },
+        [qw( q3 q2 q1 )];
+}
+
+sub list_for_mixed :Tests {
+    db->users->add({ login => 'foo', fu => ['bar', 'baz'], fr => ['asia'] });
+    db->users->add({ login => 'bar' });
+    db->users->add({ login => 'baz' });
+    db->users->add({ login => 'yarr' });
+    db->users->add({ login => 'arrgh' });
+
+    db->quests->add({
+        name => 'q1',
+        user => 'foo',
+        realm => 'europe',
+    });
+    db->quests->add({
+        name => 'q2',
+        user => 'bar',
+        realm => 'europe',
+    });
+    db->quests->add({
+        name => 'q3',
+        user => 'baz',
+        realm => 'europe',
+    });
+    db->quests->add({
+        name => 'q4',
+        user => 'yarr',
+        realm => 'europe',
+    });
+    db->quests->add({
+        name => 'q5',
+        user => 'arrgh',
+        realm => 'asia',
+    });
+
+    _cmp_list
+        { for => 'foo' },
+        [qw( q5 q3 q2 q1 )];
+}
+
 sub bump :Tests {
     db->users->add({ login => 'foo' });
 

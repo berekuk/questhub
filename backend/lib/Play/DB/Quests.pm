@@ -51,7 +51,7 @@ use utf8;
 use Moo;
 
 use Type::Params qw( compile validate );
-use Types::Standard qw( Undef Bool Int Str Optional Dict ArrayRef HashRef );
+use Types::Standard qw( Undef Bool Int Str StrMatch Optional Dict ArrayRef HashRef );
 use Play::Types qw( Id Login Realm );
 
 use Play::Config qw(setting);
@@ -143,13 +143,15 @@ sub list {
         realm => Optional[Realm],
         unclaimed => Optional[Bool],
         status => Optional[Str],
+        for => Optional[Login],
         # flag meaning "fetch comment_count too"
         comment_count => Optional[Bool],
         # sorting and paging
-        sort => Optional[Str], # regex => qr/^(leaderboard|ts|manual)$/ }
-        order => Optional[Str], # regex => qr/^asc|desc$/, default => 'desc' },
+        sort => Optional[StrMatch[ qr/^(?:leaderboard|ts|manual|bump)$/ ]],
+        order => Optional[StrMatch[ qr/^(?:asc|desc)$/ ]],
         limit => Optional[Int],
         offset => Optional[Int],
+
         tags => Optional[Str],
         watchers => Optional[Str],
         stencil => Optional[Id],
@@ -174,19 +176,37 @@ sub list {
         $query->{team} = { '$size' => 0 };
     }
 
+    if (defined $params->{for}) {
+        my $user = db->users->get_by_login($params->{for}) or die "User '$params->{for}' not found";
+
+        my @subqueries;
+        if ($user->{fr}) {
+            push @subqueries, { realm => { '$in' => $user->{fr} } };
+        }
+        $user->{fu} ||= [];
+        push @{ $user->{fu} }, $user->{login};
+        push @subqueries, { team => { '$in' => $user->{fu} } };
+
+        if (@subqueries) {
+            $query->{'$or'} = \@subqueries;
+        }
+        else {
+            $query->{no_such_field} = 'no_such_value';
+        }
+    }
+
     my $cursor = $self->collection->query($query);
 
     # if sort=leaderboard, we have to fetch everything and sort manually
-    if (not $params->{sort}) {
+    if (not $params->{sort} or $params->{sort} eq 'manual' or $params->{sort} eq 'bump') {
         my $order_flag = ($params->{order} eq 'asc' ? 1 : -1);
-        $cursor = $cursor->sort({ _id => $order_flag });
-
-        $cursor = $cursor->limit($params->{limit}) if $params->{limit};
-        $cursor = $cursor->skip($params->{offset}) if $params->{offset};
-    }
-    elsif ($params->{sort} eq 'manual') {
-        # there's no order=ask in manual
-        $cursor = $cursor->sort({ order => 1 });
+        my $sort_field = '_id';
+        if ($params->{sort} and $params->{sort} eq 'manual') {
+            $sort_field = 'order';
+            $order_flag = 1;
+        }
+        $sort_field = 'bump' if $params->{sort} and $params->{sort} eq 'bump';
+        $cursor = $cursor->sort({ $sort_field => $order_flag });
 
         $cursor = $cursor->limit($params->{limit}) if $params->{limit};
         $cursor = $cursor->skip($params->{offset}) if $params->{offset};
