@@ -149,7 +149,7 @@ sub list {
         push @subqueries, { author => { '$in' => $user->{fu} } };
 
         if (@subqueries) {
-            $search_opt->{'$or'} = \@subqueries
+            $search_opt->{'$or'} = \@subqueries;
         }
         else {
             $search_opt->{no_such_field} = 'no_such_value';
@@ -200,12 +200,12 @@ sub feed {
         for => Str,
     ]);
     $params->{limit} //= 30;
-    $params->{type} = 'add-quest'; # FIXME - stencils
-    my $add_quest_events = $self->list($params); # TODO - use db->quests, order by bump date
-    my @quests = map { $_->{quest} } @{ $add_quest_events };
+    $params->{sort} = 'bump';
+    my $quests = db->quests->list($params);
+    # FIXME - fetch stencils too
 
     my @result;
-    for my $quest (@quests) {
+    for my $quest (@$quests) {
         push @result, {
             quest => $quest,
             comments => db->comments->list('quest', $quest->{_id}), # TODO - slow, optimize

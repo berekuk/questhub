@@ -247,19 +247,21 @@ sub feed :Tests {
         realm => 'europe',
     }) for 1..3;
 
+    sleep 1;
     db->comments->add({ entity => 'quest', eid => $quests[0]->{_id}, author => 'foo', body => 'c1' });
+    sleep 1;
     db->comments->add({ entity => 'quest', eid => $quests[0]->{_id}, author => 'foo', body => 'c2' });
+    sleep 1;
     db->comments->add({ entity => 'quest', eid => $quests[2]->{_id}, author => 'foo', body => 'c3' });
 
     my $feed = db->events->feed({ for => 'foo' });
 
-    # TODO - test bumping - order with bumping would be q3, q1, q2
     cmp_deeply
         $feed,
         [
             {
                 quest => superhashof({
-                    name => 'q3',
+                    name => 'q3', # bumped last
                 }),
                 comments => [
                     superhashof({ body => 'c3' }),
@@ -267,18 +269,18 @@ sub feed :Tests {
             },
             {
                 quest => superhashof({
-                    name => 'q2',
-                }),
-                comments => [],
-            },
-            {
-                quest => superhashof({
-                    name => 'q1',
+                    name => 'q1', # bumped before q3
                 }),
                 comments => [
                     superhashof({ body => 'c1' }),
                     superhashof({ body => 'c2' }),
                 ],
+            },
+            {
+                quest => superhashof({
+                    name => 'q2', # never bumped
+                }),
+                comments => [],
             },
         ];
 }
