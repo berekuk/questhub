@@ -10,10 +10,7 @@ mobile
 
 # Feed TODO
 
-stencils in feed
-- fill bumps
-- reusable `bumpable` role
-- events->feed fetches stencils
+merge stencils and quests collections
 
 think about representing user/realm chambers
 think about hide
@@ -49,3 +46,45 @@ realm name/icon on quest
 order by bump
 `db->quests->bump` method
 call bump on comment
+
+stencils in feed
+[x] fill bumps
+[x] reusable `bumpable` role
+[x] events->feed fetches stencils
+
+## DB SCHEMA
+
+# feed storage
+
+{
+    entity: /quest|stencil/
+    bump: $ts
+}
+
+# merge stencils and quests
+
+common:
+- comments
+- bump
+- name+description
+- realm
+- points
+- author
+
+potentially common:
+- tags
+- watchers
+
+not common:
+- quest.note
+- quest.base_points
+- quest.status
+- quest.team
+- quest.stencil
+
+downsides:
+- awkward queries from CLI (collection name - objects? entities?)
+
+chambers/discussions
+- realm chamber - object with entity=realm
+- personal chamber - object with entity=wall
