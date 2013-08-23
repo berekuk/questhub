@@ -2,14 +2,18 @@ define [
     "underscore"
     "views/proto/common"
     "views/quest/feed", "models/quest"
+    "views/stencil/big", "models/stencil"
     "views/comment/collection", "models/comment-collection"
     "text!templates/feed/item.html"
-], (_, Common, Quest, QuestModel, CommentCollection, CommentCollectionModel, html) ->
+], (_, Common, Quest, QuestModel, Stencil, StencilModel, CommentCollection, CommentCollectionModel, html) ->
     class extends Common
         template: _.template html
 
         initialize: ->
-            @questModel = new QuestModel @model.get("quest")
+            @objectModel = switch @model.get("entity")
+                when "quest" then new QuestModel @model.get "object"
+                when "stencil" then new StencilModel @model.get "object"
+                else throw "oops"
             super
 
         events: ->
@@ -17,18 +21,20 @@ define [
 
         subviews:
             ".quest-sv": ->
-                new Quest
-                    model: @questModel
+                return switch @model.get("entity")
+                    when "quest" then new Quest model: @objectModel
+                    when "stencil" then new Stencil model: @objectModel
+                    else throw "oops"
             ".comments-sv": ->
                 # note: already fetched
                 commentsModel = new CommentCollectionModel [],
-                    entity: 'quest'
-                    eid: @questModel.id
+                    entity: @model.get("entity")
+                    eid: @objectModel.id
 
                 view = new CommentCollection
                     collection: commentsModel
-                    realm: @questModel.get("realm")
-                    object: @questModel
+                    realm: @objectModel.get("realm")
+                    object: @objectModel
                     commentBox: false
 
                 comments = @model.get "comments"

@@ -201,17 +201,34 @@ sub feed {
     ]);
     $params->{limit} //= 30;
     $params->{sort} = 'bump';
-    my $quests = db->quests->list($params);
-    # FIXME - fetch stencils too
 
-    my @result;
-    for my $quest (@$quests) {
-        push @result, {
-            quest => $quest,
-            comments => db->comments->list('quest', $quest->{_id}), # TODO - slow, optimize
-        };
+    my $quests = db->quests->list($params);
+    my $stencils = db->stencils->list({ for => $params->{for} }); # FIXME - limit, offset!
+    my @items = (
+        (map {
+            {
+                object => $_,
+                entity => 'quest',
+            }
+        } @$quests),
+        (map {
+            {
+                object => $_,
+                entity => 'stencil',
+            }
+        } @$stencils),
+    );
+    @items = sort {
+        ($b->{object}{bump} || 0)
+        <=>
+        ($a->{object}{bump} || 0)
+    } @items;
+    @items = @items[0 .. $params->{limit} - 1] if @items > $params->{limit};
+
+    for my $item (@items) {
+        $item->{comments} = db->comments->list($item->{entity}, $item->{object}{_id}), # TODO - slow, optimize
     }
-    return \@result;
+    return \@items;
 }
 
 1;
