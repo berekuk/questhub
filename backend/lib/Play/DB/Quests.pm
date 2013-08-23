@@ -17,12 +17,12 @@ package Play::DB::Quests;
 
 =head1 OBJECT FORMAT
 
-  $quest = {
-      team => ['...'],
-      status => qr/ open | closed | stalled | abandoned /,
-      name => 'quest name',
-      description => 'markdown text',
-      ...
+  {
+      ... # common entity fields - see Play::DB::Role::Posts
+      'team': ['...'],
+      'status': qr/ open | closed | stalled | abandoned /,
+      'base_points': N
+      'stencil': $stencil_id
   }
 
 =head1 DESCRIPTION
@@ -61,7 +61,7 @@ use Play::WWW;
 
 use Play::DB::Role::PushPull;
 with
-    'Play::DB::Role::Entities',
+    'Play::DB::Role::Posts',
     PushPull(
         field => 'likes',
         except_field => 'team', # team members can't like their own quest
@@ -78,7 +78,7 @@ with
 sub _build_entity_name { 'post' }; # FIXME - this is confusing; entity_name means collection in Mongo, while 'entity' refers to /quest|stencil/
 sub _build_entity { 'quest' };
 
-around '_prepare' => sub {
+around prepare => sub {
     my $orig = shift;
     my $quest = $orig->(@_);
 
@@ -173,7 +173,7 @@ sub list {
     }
 
     my @quests = $cursor->all;
-    $self->_prepare($_) for @quests;
+    $self->prepare($_) for @quests;
 
     if ($params->{comment_count} or $params->{sort} eq 'leaderboard') {
         my $comment_stat = db->comments->bulk_count(

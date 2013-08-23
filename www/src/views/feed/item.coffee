@@ -10,9 +10,10 @@ define [
         template: _.template html
 
         initialize: ->
-            @objectModel = switch @model.get("entity")
-                when "quest" then new QuestModel @model.get "post"
-                when "stencil" then new StencilModel @model.get "post"
+            post = @model.get "post"
+            @postModel = switch post.entity
+                when "quest" then new QuestModel post
+                when "stencil" then new StencilModel post
                 else throw "oops"
             super
 
@@ -21,20 +22,20 @@ define [
 
         subviews:
             ".quest-sv": ->
-                return switch @model.get("entity")
-                    when "quest" then new Quest model: @objectModel
-                    when "stencil" then new Stencil model: @objectModel
+                return switch @postModel.get("entity")
+                    when "quest" then new Quest model: @postModel
+                    when "stencil" then new Stencil model: @postModel
                     else throw "oops"
             ".comments-sv": ->
                 # note: already fetched
                 commentsModel = new CommentCollectionModel [],
-                    entity: @model.get("entity")
-                    eid: @objectModel.id
+                    entity: @postModel.get("entity")
+                    eid: @postModel.id
 
                 view = new CommentCollection
                     collection: commentsModel
-                    realm: @objectModel.get("realm")
-                    object: @objectModel
+                    realm: @postModel.get("realm")
+                    object: @postModel
                     commentBox: false
 
                 comments = @model.get "comments"

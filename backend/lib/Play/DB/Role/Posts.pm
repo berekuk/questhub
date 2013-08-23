@@ -1,4 +1,4 @@
-package Play::DB::Role::Entities;
+package Play::DB::Role::Posts;
 
 =head1 DB OBJECT FORMAT
 
@@ -35,7 +35,7 @@ has 'entity' => (
     isa => Str,
 );
 
-sub _prepare {
+sub prepare {
     my $self = shift;
     my ($post) = @_;
     $post->{ts} = $post->{_id}->get_time;
@@ -65,7 +65,7 @@ sub get {
         die "$entity $id is deleted";
     }
 
-    $post = $self->_prepare($post);
+    $post = $self->prepare($post);
     return $post;
 }
 
@@ -85,7 +85,7 @@ sub bulk_get {
         }
     })->all;
     @posts = grep { ($_->{status} || '') ne 'deleted' } @posts;
-    $self->_prepare($_) for @posts;
+    $self->prepare($_) for @posts;
 
     return {
         map {
@@ -104,7 +104,7 @@ sub inner_add {
 
     my $id = $self->collection->insert($params, { safe => 1 });
     my $post = { %$params, _id => $id };
-    $self->_prepare($post);
+    $self->prepare($post);
 
     return $post;
 }

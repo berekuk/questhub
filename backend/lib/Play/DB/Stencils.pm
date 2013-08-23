@@ -11,7 +11,7 @@ use utf8;
 
 use Moo;
 with
-    'Play::DB::Role::Entities';
+    'Play::DB::Role::Posts';
 
 sub _build_entity_name { 'post' }; # FIXME
 sub _build_entity { 'stencil' };
@@ -24,7 +24,7 @@ use Type::Params qw( compile );
 use Types::Standard qw( Undef Dict Str StrMatch Optional Bool ArrayRef );
 use Play::Types qw( Id Login Realm StencilPoints );
 
-around '_prepare' => sub {
+around prepare => sub {
     my $orig = shift;
     my $stencil = $orig->(@_);
 
@@ -163,7 +163,7 @@ sub list {
     }
     my @stencils = $cursor->all;
 
-    $self->_prepare($_) for @stencils;
+    $self->prepare($_) for @stencils;
     if ($fetch_quests) {
         $self->_fill_quests($_) for @stencils;
     }

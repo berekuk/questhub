@@ -262,8 +262,8 @@ sub feed :Tests {
             {
                 post => superhashof({
                     name => 'q3', # bumped last
+                    entity => 'quest',
                 }),
-                entity => 'quest',
                 comments => [
                     superhashof({ body => 'c3' }),
                 ],
@@ -271,8 +271,8 @@ sub feed :Tests {
             {
                 post => superhashof({
                     name => 'q1', # bumped before q3
+                    entity => 'quest',
                 }),
-                entity => 'quest',
                 comments => [
                     superhashof({ body => 'c1' }),
                     superhashof({ body => 'c2' }),
@@ -281,8 +281,8 @@ sub feed :Tests {
             {
                 post => superhashof({
                     name => 'q2', # never bumped
+                    entity => 'quest',
                 }),
-                entity => 'quest',
                 comments => [],
             },
         ];

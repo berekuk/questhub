@@ -202,31 +202,48 @@ sub feed {
     $params->{limit} //= 30;
     $params->{sort} = 'bump';
 
-    my $quests = db->quests->list($params);
-    my $stencils = db->stencils->list({ for => $params->{for} }); # FIXME - limit, offset!
-    my @items = (
-        (map {
-            {
-                post => $_,
-                entity => 'quest',
-            }
-        } @$quests),
-        (map {
-            {
-                post => $_,
-                entity => 'stencil',
-            }
-        } @$stencils),
-    );
+    my $query = {};
+    {
+        my $user = db->users->get_by_login($params->{for}) or die "User '$params->{for}' not found";
+
+        my @subqueries;
+        if ($user->{fr}) {
+            push @subqueries, { realm => { '$in' => $user->{fr} } };
+        }
+        $user->{fu} ||= [];
+        push @{ $user->{fu} }, $user->{login};
+        push @subqueries, { team => { '$in' => $user->{fu} } };
+        push @subqueries, { author => { '$in' => $user->{fu} } };
+
+        if (@subqueries) {
+            $query->{'$or'} = \@subqueries;
+        }
+        else {
+            $query->{no_such_field} = 'no_such_value';
+        }
+        $query->{status} = { '$ne' => 'deleted' };
+    }
+    my $cursor = Play::Mongo->db->get_collection('posts')->find($query);
+    $cursor = $cursor->limit($params->{limit});
+    $cursor = $cursor->skip($params->{offset}) if $params->{offset};
+    $cursor = $cursor->sort({ bump => -1 });
+    my @posts = $cursor->all;
+
+    $_ = db->quests->prepare($_) for grep { $_->{entity} eq 'quest' } @posts;
+    $_ = db->stencils->prepare($_) for grep { $_->{entity} eq 'stencil' } @posts;
+
+    my @items = map {
+        { post => $_ }
+    } @posts;
+
     @items = sort {
         ($b->{post}{bump} || 0)
         <=>
         ($a->{post}{bump} || 0)
     } @items;
-    @items = @items[0 .. $params->{limit} - 1] if @items > $params->{limit};
 
     for my $item (@items) {
-        $item->{comments} = db->comments->list($item->{entity}, $item->{post}{_id}), # TODO - slow, optimize
+        $item->{comments} = db->comments->list($item->{post}{entity}, $item->{post}{_id}); # TODO - slow, optimize
     }
     return \@items;
 }
