@@ -1,7 +1,3 @@
-# Comments TODO
-
-mobile
-
 ## Comments Done
 
 upic inside or outside the well
@@ -10,8 +6,28 @@ comment-edit buttons margin
 top line font size
 "completed" and other comment types
 normal or small upics
+mobile
 
 # Feed TODO
+
+stencils in feed
+- fill bumps
+- reusable `bumpable` role
+- events->feed fetches stencils
+
+think about representing user/realm chambers
+think about hide
+
+comment form
+frontend tests
+
+mobile
+border-radius between expand-panel and comments
+optimize fetching comments
+cut for comments and quests
+fill bumps before deploy
+
+## Done
 
 /api/feed
 
@@ -27,21 +43,9 @@ normal or small upics
         ...
     ]
 
-optimize fetching comments
-order by bump
+hide extra comments
+realm name/icon on quest
 
+order by bump
 `db->quests->bump` method
 call bump on comment
-
-hide extra comments
-cut for comments and quests
-
-stencils in feed
-
-think about representing user/realm chambers
-
-realm name/icon on quest
-comment form
-
-backend tests
-frontend tests
