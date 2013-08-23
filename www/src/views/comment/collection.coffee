@@ -30,6 +30,7 @@ define [
                 model: model
                 realm: @options.realm
                 object: @options.object
+                commentBox: @options.commentBox
             )
 
         listSelector: ".comments-list"

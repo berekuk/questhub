@@ -58,7 +58,16 @@
       <span class="likes"></span>
 
       <% if (currentUser) { %>
-      <span class="muted comment-interact">&bull; <a href="#" class="comment-reply-link">Reply</a></span>
+      <span class="muted comment-interact">&bull;
+        <% console.log(obj.commentBox) %>
+        <% if (commentBox) { %>
+          <a href="#" class="comment-reply-link">
+        <% } else { %>
+          <a href="/realm/<%- realm %>/<%- object.entity %>/<%- object._id %>/reply/<%- author %>">
+        <% } %>
+          Reply
+        </a>
+      </span>
       <% } %>
 
       <div class="comment-edit-buttons">
