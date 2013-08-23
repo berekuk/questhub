@@ -10,8 +10,6 @@ mobile
 
 # Feed TODO
 
-merge stencils and quests collections
-
 think about representing user/realm chambers
 think about hide
 
@@ -52,6 +50,8 @@ stencils in feed
 [x] reusable `bumpable` role
 [x] events->feed fetches stencils
 
+merge stencils and quests collections
+
 ## DB SCHEMA
 
 # feed storage
@@ -88,3 +88,9 @@ downsides:
 chambers/discussions
 - realm chamber - object with entity=realm
 - personal chamber - object with entity=wall
+
+list all posts for news feed:
+- sort by bump
+- no CC (?)
+- limit, offset
+- realm OR author OR team
