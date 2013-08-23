@@ -15,7 +15,7 @@ define [
         events:
             "click ul.news-feed-tabs a": "switchTab"
 
-        tab: 'ungrouped'
+        tab: 'grouped'
         tabSubview: '.news-feed-sv'
         urlRoot: -> "/"
         tabs:

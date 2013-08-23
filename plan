@@ -17,7 +17,6 @@ mobile
 border-radius between expand-panel and comments
 optimize fetching comments
 cut for comments and quests
-fill bumps before deploy
 rendering speed
 
 ## Done
@@ -54,6 +53,8 @@ think about representing user/realm chambers - posts with entity="discussion"
 think about hide - later
 
 stencil/feed view
+
+fill bumps before deploy
 
 ## DB SCHEMA
 
