@@ -17,6 +17,13 @@ div.quest-big-unclaimed {
 }
 
 .quest-big {
+    > aside {
+        float: left;
+    }
+    > .quest-big-inner {
+        margin-left: 32px;
+    }
+
     h2 {
         overflow: auto;
     }
@@ -24,6 +31,9 @@ div.quest-big-unclaimed {
     .object-bottom-line {
         margin-top: 10px;
     }
+}
+.quest-big-upic-box {
+    margin-bottom: 3px;
 }
 .quest-big-note {
     // TODO - dotted border? colored background? how else can we emphasize that this is an uneditable part of stencil?
