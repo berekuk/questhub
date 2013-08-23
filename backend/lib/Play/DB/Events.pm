@@ -207,26 +207,26 @@ sub feed {
     my @items = (
         (map {
             {
-                object => $_,
+                post => $_,
                 entity => 'quest',
             }
         } @$quests),
         (map {
             {
-                object => $_,
+                post => $_,
                 entity => 'stencil',
             }
         } @$stencils),
     );
     @items = sort {
-        ($b->{object}{bump} || 0)
+        ($b->{post}{bump} || 0)
         <=>
-        ($a->{object}{bump} || 0)
+        ($a->{post}{bump} || 0)
     } @items;
     @items = @items[0 .. $params->{limit} - 1] if @items > $params->{limit};
 
     for my $item (@items) {
-        $item->{comments} = db->comments->list($item->{entity}, $item->{object}{_id}), # TODO - slow, optimize
+        $item->{comments} = db->comments->list($item->{entity}, $item->{post}{_id}), # TODO - slow, optimize
     }
     return \@items;
 }

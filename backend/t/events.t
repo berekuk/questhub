@@ -260,26 +260,29 @@ sub feed :Tests {
         $feed,
         [
             {
-                quest => superhashof({
+                post => superhashof({
                     name => 'q3', # bumped last
                 }),
+                entity => 'quest',
                 comments => [
                     superhashof({ body => 'c3' }),
                 ],
             },
             {
-                quest => superhashof({
+                post => superhashof({
                     name => 'q1', # bumped before q3
                 }),
+                entity => 'quest',
                 comments => [
                     superhashof({ body => 'c1' }),
                     superhashof({ body => 'c2' }),
                 ],
             },
             {
-                quest => superhashof({
+                post => superhashof({
                     name => 'q2', # never bumped
                 }),
+                entity => 'quest',
                 comments => [],
             },
         ];

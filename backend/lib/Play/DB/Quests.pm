@@ -61,8 +61,7 @@ use Play::WWW;
 
 use Play::DB::Role::PushPull;
 with
-    'Play::DB::Role::Common',
-    'Play::DB::Role::Bumpable',
+    'Play::DB::Role::Entities',
     PushPull(
         field => 'likes',
         except_field => 'team', # team members can't like their own quest
@@ -76,62 +75,19 @@ with
         pull_method => 'unwatch',
     );
 
-sub _prepare {
-    my $self = shift;
-    my ($quest) = @_;
-    $quest->{ts} = $quest->{_id}->get_time;
-    $quest->{_id} = $quest->{_id}->to_string;
+sub _build_entity_name { 'post' }; # FIXME - this is confusing; entity_name means collection in Mongo, while 'entity' refers to /quest|stencil/
+sub _build_entity { 'quest' };
+
+around '_prepare' => sub {
+    my $orig = shift;
+    my $quest = $orig->(@_);
 
     $quest->{team} ||= [];
-
     $quest->{base_points} ||= 1;
     $quest->{points} = $quest->{base_points};
     $quest->{points} += scalar @{ $quest->{likes} } if $quest->{likes};
-
     return $quest;
-}
-
-=item B<get($id)>
-
-=cut
-sub get {
-    my $self = shift;
-    state $check = compile(Id);
-    my ($id) = $check->(@_);
-
-    my $quest = $self->collection->find_one({
-        _id => MongoDB::OID->new(value => $id)
-    });
-    die "quest $id not found" unless $quest;
-    die "quest $id is deleted" if $quest->{status} eq 'deleted';
-    $self->_prepare($quest);
-    return $quest;
-}
-
-=item B<bulk_get(\@ids)>
-
-=cut
-sub bulk_get {
-    my $self = shift;
-    state $check = compile(ArrayRef[Id]);
-    my ($ids) = $check->(@_);
-
-    my @quests = $self->collection->find({
-        '_id' => {
-            '$in' => [
-                map { MongoDB::OID->new(value => $_) } @$ids
-            ]
-        }
-    })->all;
-    @quests = grep { $_->{status} ne 'deleted' } @quests;
-    $self->_prepare($_) for @quests;
-
-    return {
-        map {
-            $_->{_id} => $_
-        } @quests
-    };
-}
+};
 
 =item B<list($filter_hashref)>
 
@@ -172,6 +128,7 @@ sub list {
     };
     $query->{team} = $params->{user} if defined $params->{user};
     $query->{status} ||= { '$ne' => 'deleted' };
+    $query->{entity} = $self->entity;
 
     if (delete $params->{unclaimed}) {
         die "Can't set both 'user' and 'unclaimed' at the same time" if defined $params->{user};
@@ -292,6 +249,7 @@ sub count {
     $params ||= {};
 
     $params->{team} = delete $params->{user} if exists $params->{user};
+    $params->{entity} = $self->entity;
 
     my $count = $self->collection->find($params)->count;
     return $count;
@@ -352,28 +310,35 @@ sub add {
     }
 
     $params->{author} = $params->{team}[0];
-    $params->{bump} = time;
-    my $id = $self->collection->insert($params, { safe => 1 });
 
-    my $quest = { %$params, _id => $id };
-    $self->_prepare($quest);
+    my $quest = $self->inner_add($params);
 
     db->events->add({
         type => 'add-quest',
-        author => $params->{author},
-        quest_id => $id->to_string,
-        realm => $params->{realm},
+        author => $quest->{author},
+        quest_id => $quest->{_id},
+        realm => $quest->{realm},
     });
 
-    db->realms->inc_quests($params->{realm});
+    db->realms->inc_quests($quest->{realm});
 
     return $quest;
 }
 
 =item B<update($id, $fields_to_update_hashref)>
 
+Deprecated alias to quests->edit.
+
 =cut
 sub update {
+    my $self = shift;
+    $self->edit(@_);
+}
+
+=item B<edit($id, $fields_to_update_hashref)>
+
+=cut
+sub edit {
     my $self = shift;
     state $check = compile(Id, Dict[
         user => Login,
@@ -402,7 +367,10 @@ sub update {
 
     # TODO - to bump or not to bump?
     $self->collection->update(
-        { _id => MongoDB::OID->new(value => $id) },
+        {
+            _id => MongoDB::OID->new(value => $id),
+            entity => $self->entity,
+        },
         $quest_after_update,
         { safe => 1 }
     );
@@ -424,6 +392,7 @@ sub set_manual_order {
         $self->collection->update(
             {
                 _id => MongoDB::OID->new(value => $id),
+                entity => $self->entity,
                 team => $user,
             },
             {
@@ -465,7 +434,10 @@ sub _set_status {
     }
 
     $self->collection->update(
-        { _id => MongoDB::OID->new(value => $params->{id}) },
+        {
+            _id => MongoDB::OID->new(value => $params->{id}),
+            entity => $self->entity,
+        },
         {
             '$set' => { status => $params->{new_status} },
             ($params->{clear_invitees} ? ('$unset' => { 'invitee' => '' }) : ()),
@@ -643,7 +615,10 @@ sub remove {
 
     delete $quest->{_id};
     $self->collection->update(
-        { _id => MongoDB::OID->new(value => $id) },
+        {
+            _id => MongoDB::OID->new(value => $id),
+            entity => $self->entity,
+        },
         { '$set' => { status => 'deleted' } },
         { safe => 1 }
     );
@@ -664,6 +639,7 @@ sub invite {
     my $result = $self->collection->update(
         {
             _id => MongoDB::OID->new(value => $id),
+            entity => $self->entity,
             '$and' => [
                 { team => { '$ne' => $user } }, # team members can't invite themselves to join a quest
                 { team => $actor },  # only team members can invite other players
@@ -705,6 +681,7 @@ sub uninvite {
     my $result = $self->collection->update(
         {
             _id => MongoDB::OID->new(value => $id),
+            entity => $self->entity,
             '$and' => [
                 { team => { '$ne' => $user } },
                 { team => $actor },
@@ -734,6 +711,7 @@ sub join {
     my $result = $self->collection->update(
         {
             _id => MongoDB::OID->new(value => $id),
+            entity => $self->entity,
             '$or' => [
                 { invitee => $user },
                 { team => { '$size' => 0 } },
@@ -773,6 +751,7 @@ sub leave {
     my $result = $self->collection->update(
         {
             _id => MongoDB::OID->new(value => $id),
+            entity => $self->entity,
             team => $user,
         },
         {
@@ -801,6 +780,7 @@ sub checkin {
     my $result = $self->collection->update(
         {
             _id => MongoDB::OID->new(value => $id),
+            entity => $self->entity,
             team => $user,
         },
         {
@@ -836,6 +816,7 @@ sub move_to_realm {
     my $result = $self->collection->update(
         {
             _id => MongoDB::OID->new(value => $id),
+            entity => $self->entity,
         },
         {
             '$set' => { realm => $realm }

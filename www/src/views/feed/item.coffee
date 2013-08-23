@@ -11,8 +11,8 @@ define [
 
         initialize: ->
             @objectModel = switch @model.get("entity")
-                when "quest" then new QuestModel @model.get "object"
-                when "stencil" then new StencilModel @model.get "object"
+                when "quest" then new QuestModel @model.get "post"
+                when "stencil" then new StencilModel @model.get "post"
                 else throw "oops"
             super
 

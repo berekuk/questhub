@@ -61,7 +61,7 @@ sub self_like_quest :Tests {
     });
     my $id = $quest->{_id};
 
-    like exception { db->quests->like($id, 'blah') }, qr/unable to like your own quest/;
+    like exception { db->quests->like($id, 'blah') }, qr/unable to like your own post/;
 }
 
 __PACKAGE__->new->runtests;

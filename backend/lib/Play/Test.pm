@@ -20,7 +20,10 @@ use Play::DB qw(db);
 use Email::Sender::Simple;
 
 sub reset_db {
-    for (qw/ quests comments users events notifications stencils realms /) {
+    for (qw(
+        comments users events notifications stencils realms posts
+        quests stencils
+    )) {
         Play::Mongo->db->get_collection($_)->remove({});
     }
     db->realms->reset_to_initial;

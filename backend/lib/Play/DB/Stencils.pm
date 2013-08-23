@@ -11,8 +11,10 @@ use utf8;
 
 use Moo;
 with
-    'Play::DB::Role::Common',
-    'Play::DB::Role::Bumpable';
+    'Play::DB::Role::Entities';
+
+sub _build_entity_name { 'post' }; # FIXME
+sub _build_entity { 'stencil' };
 
 use Play::Mongo;
 use Play::DB qw(db);
@@ -22,15 +24,13 @@ use Type::Params qw( compile );
 use Types::Standard qw( Undef Dict Str StrMatch Optional Bool ArrayRef );
 use Play::Types qw( Id Login Realm StencilPoints );
 
-sub _prepare {
-    my $self = shift;
-    my ($stencil) = @_;
-    $stencil->{ts} = $stencil->{_id}->get_time;
-    $stencil->{_id} = $stencil->{_id}->to_string;
-    $stencil->{points} ||= 1;
+around '_prepare' => sub {
+    my $orig = shift;
+    my $stencil = $orig->(@_);
 
+    $stencil->{points} ||= 1;
     return $stencil;
-}
+};
 
 sub _fill_quests {
     my $self = shift;
@@ -60,20 +60,16 @@ sub add {
 
     die "$params->{author} is not a keeper of $params->{realm}" unless db->realms->is_keeper($params->{realm}, $params->{author});
 
-    $params->{bump} = time;
-    my $id = $self->collection->insert($params, { safe => 1 });
-
-    my $stencil = { %$params, _id => $id };
-    $self->_prepare($stencil);
+    my $stencil = $self->inner_add($params);
 
     db->events->add({
         type => 'add-stencil',
-        author => $params->{author},
-        stencil_id => $id->to_string,
-        realm => $params->{realm},
+        author => $stencil->{author},
+        stencil_id => $stencil->{_id},
+        realm => $stencil->{realm},
     });
 
-    db->realms->inc_stencils($params->{realm});
+    db->realms->inc_stencils($stencil->{realm});
 
     return $stencil;
 }
@@ -104,7 +100,10 @@ sub edit {
     my $updated_stencil = { %$stencil, %$params };
 
     $self->collection->update(
-        { _id => MongoDB::OID->new(value => $id) },
+        {
+            _id => MongoDB::OID->new(value => $id),
+            entity => $self->entity,
+        },
         $updated_stencil,
         { safe => 1 }
     );
@@ -133,6 +132,8 @@ sub list {
     my $query = {
             map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ realm author /
     };
+    $query->{entity} = $self->entity;
+
     if (defined $params->{for}) {
         # shamelessly copy-pasted (with minor tweaks) from db->events->list and db->quests->list
         my $user = db->users->get_by_login($params->{for}) or die "User '$params->{for}' not found";
@@ -191,12 +192,14 @@ sub count {
     ]);
     my ($params) = $check->(@_);
     $params ||= {};
+    $params->{entity} = $self->entity;
 
     my $count = $self->collection->find($params)->count;
     return $count;
 }
 
-sub get {
+around 'get' => sub {
+    my $orig = shift;
     my $self = shift;
     state $check = compile(Id, Optional[
         Dict[
@@ -206,39 +209,11 @@ sub get {
     my ($id, $options) = $check->(@_);
     $options ||= {};
 
-    my $stencil = $self->collection->find_one({
-        _id => MongoDB::OID->new(value => $id)
-    });
-    die "stencil $id not found" unless $stencil;
-
-    $self->_prepare($stencil);
+    my $stencil = $orig->($self, $id);
     $self->_fill_quests($stencil) if $options->{quests};
 
     return $stencil;
-}
-
-sub bulk_get {
-    my $self = shift;
-    state $check = compile(ArrayRef[Id]);
-    my ($ids) = $check->(@_);
-    # TODO - quests flag
-
-    my @stencils = $self->collection->find({
-        '_id' => {
-            '$in' => [
-                map { MongoDB::OID->new(value => $_) } @$ids
-            ]
-        }
-    })->all;
-    $self->_prepare($_) for @stencils;
-
-
-    return {
-        map {
-            $_->{_id} => $_
-        } @stencils
-    };
-}
+};
 
 sub take {
     my $self = shift;
