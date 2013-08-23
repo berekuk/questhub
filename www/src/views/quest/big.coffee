@@ -15,6 +15,7 @@ define [
             "click .delete": "destroy"
             "click .edit": "startEdit"
             "click button.save": "saveEdit"
+            "click .quest-big-note-expand": "expandNote"
             "keyup input": "edit"
             mouseenter: (e) -> @subview(".likes-subview").showButton()
             mouseleave: (e) -> @subview(".likes-subview").hideButton()
@@ -33,6 +34,10 @@ define [
         initialize: ->
             super
             @listenTo @model, "change", @render
+
+        expandNote: ->
+            @$(".quest-big-note").show()
+            @$(".quest-big-note-expand").hide()
 
         join: -> @model.join()
 

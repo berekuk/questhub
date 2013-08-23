@@ -35,8 +35,22 @@ div.quest-big-unclaimed {
 .quest-big-upic-box {
     margin-bottom: 3px;
 }
+
+.quest-feed-title {
+    margin-bottom: 5px;
+}
+
+.quest-big-note-expand {
+    border-bottom: 1px blue dotted;
+    &:hover {
+        border: none;
+    }
+}
+.quest-big-note-outer {
+    margin-bottom: 5px;
+}
 .quest-big-note {
-    // TODO - dotted border? colored background? how else can we emphasize that this is an uneditable part of stencil?
+    color: $dark-grey;
 }
 .quest-big-labels {
     display: block;

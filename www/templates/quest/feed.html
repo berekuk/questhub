@@ -35,7 +35,7 @@
       <% } %>
     </div>
 
-    <div>
+    <div class="quest-feed-title">
       <% if (obj.stencil) { %>
         <a href="/realm/<%- realm %>/stencil/<%- stencil %>" class="grey-link">
           <i class="icon-book"></i>
@@ -54,8 +54,11 @@
     </div>
 
     <% if (obj.note && note) { %>
-    <div class="quest-big-note">
-      <%= partial.markdown(note, realm) %>
+    <div class="quest-big-note-outer">
+      <small><a href="#" class="quest-big-note-expand">Show stencil's description</a></small>
+      <div class="quest-big-note hide">
+        <%= partial.markdown(note, realm) %>
+      </div>
     </div>
     <% } %>
 
