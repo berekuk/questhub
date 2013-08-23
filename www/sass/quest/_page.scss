@@ -51,7 +51,7 @@
 
 @media (max-width: 767px) {
     .quest-page-sidebar {
-        min-height: 80px !important;
+        min-height: 95px !important;
         @include clearfix;
     }
 
@@ -134,5 +134,12 @@
                 width: 64px;
             }
         }
+    }
+}
+
+.quest-page-reward {
+    text-align: center !important;
+    > .label {
+        margin-top: 5px;
     }
 }

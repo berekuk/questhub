@@ -4,9 +4,9 @@ define [
     "views/proto/common"
     "views/quest/like"
     "views/helper/textarea"
-    "models/current-user"
+    "models/current-user", "models/shared-models"
     "text!templates/quest/big.html"
-], (_, Backbone, $, bootbox, Common, Like, Textarea, currentUser, html) ->
+], (_, Backbone, $, bootbox, Common, Like, Textarea, currentUser, sharedModels, html) ->
     "use strict"
     class extends Common
         template: _.template(html)
@@ -121,7 +121,8 @@ define [
             params = super
             params.currentUser = currentUser.get("login")
             params.meGusta = _.contains(params.likes or [], params.currentUser)
-            params.showStatus = true
+            params.showStatus = false
+            params.realmData = sharedModels.realms.findWhere(id: @model.get("realm")).toJSON()
             params
 
         render: ->

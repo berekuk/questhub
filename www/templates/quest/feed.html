@@ -13,9 +13,10 @@
 
   <div class="post-big-inner">
     <div>
-      <small>
+
+      <small class="muted">
       <% if (team.length == 0) { %>
-        <%= partial.user({ realm: realm, login: obj.author }) %><span class="muted"> suggests a quest:</span>
+        <%= partial.user({ realm: realm, login: obj.author }) %> suggests a quest:
       <% } else { %>
         <span class="muted">
         <%= _.map(team, function (member) { return partial.user({ realm: realm, login: member }); }).join(', ') %>
@@ -26,7 +27,17 @@
         <% } else { %>
           <%= (team.length == 1 ? 'is' : 'are') %> on
         <% } %>
-        a quest<%= (_.first(team) == obj.author) ? '' : ' by ' + partial.user({ realm: realm, login: obj.author }) %>:</span>
+        a quest<%= (_.first(team) == obj.author) ? '' : ' by ' + partial.user({ realm: realm, login: obj.author }) %><!--
+
+     --><% if (obj.stencil) { %>
+          based on a
+          <a href="/realm/<%- realm %>/stencil/<%- stencil %>" class="grey-link">
+            <i class="icon-book"></i>
+          </a>
+          <a href="/realm/<%- realm %>/stencil/<%- stencil %>">
+            stencil</a><!--
+       --><% } %>:
+        </span>
       <% } %>
       </small>
 
@@ -36,12 +47,6 @@
     </div>
 
     <div class="quest-feed-title">
-      <% if (obj.stencil) { %>
-        <a href="/realm/<%- realm %>/stencil/<%- stencil %>" class="grey-link">
-          <i class="icon-book"></i>
-        </a>
-      <% } %>
-
       <a href="/realm/<%- realm %>/quest/<%- _id %>">
         <span class="quest-big-editable"><%- name %></span>
       </a>
@@ -55,7 +60,7 @@
 
     <% if (obj.note && note) { %>
     <div class="quest-big-note-outer">
-      <small><a href="#" class="quest-big-note-expand">Show stencil's description</a></small>
+      <small><a href="#" class="quest-big-note-expand">Show stencil description</a></small>
       <div class="quest-big-note hide">
         <%= partial.markdown(note, realm) %>
       </div>

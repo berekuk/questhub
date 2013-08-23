@@ -13,9 +13,10 @@
 
   <div class="post-big-inner">
     <div>
-      <small>
+
+      <small class="muted">
       <% if (team.length == 0) { %>
-        <%= partial.user({ realm: realm, login: obj.author }) %><span class="muted"> suggests a quest:</span>
+        <%= partial.user({ realm: realm, login: obj.author }) %> suggests a quest:
       <% } else { %>
         <span class="muted">
         <%= _.map(team, function (member) { return partial.user({ realm: realm, login: member }); }).join(', ') %>
@@ -26,20 +27,26 @@
         <% } else { %>
           <%= (team.length == 1 ? 'is' : 'are') %> on
         <% } %>
-        a quest<%= (_.first(team) == obj.author) ? '' : ' by ' + partial.user({ realm: realm, login: obj.author }) %>:</span>
-      </small>
+        a quest<%= (_.first(team) == obj.author) ? '' : ' by ' + partial.user({ realm: realm, login: obj.author }) %><!--
+
+     --><% if (obj.stencil) { %>
+          based on a
+          <a href="/realm/<%- realm %>/stencil/<%- stencil %>" class="grey-link">
+            <i class="icon-book"></i>
+          </a>
+          <a href="/realm/<%- realm %>/stencil/<%- stencil %>">
+            stencil</a><!--
+       --><% } %>:
+        </span>
       <% } %>
+      </small>
+
       <% if (my) { %>
         <%= partial.edit_tools({ remove: true }) %>
       <% } %>
     </div>
 
     <h2>
-      <% if (obj.stencil) { %>
-        <a href="/realm/<%- realm %>/stencil/<%- stencil %>" class="grey-link">
-          <i class="icon-book"></i>
-        </a>
-      <% } %>
 
       <span class="quest-big-editable"><%- name %></span>
 
@@ -80,15 +87,23 @@
 
 
     <footer class="object-bottom-line">
+      <div class="quest-big-tags">
+        <%= partial.quest_labels(obj) %>
+      </div>
+
       <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
 
       <span class="likes-subview"></span>
       <%= partial.watchers(obj) %>
 
-      <div class="quest-big-labels">
-        <%= partial.quest_labels(obj) %>
-      </div>
     </footer>
+
+    <div class="post-realm">
+      <a href="/realm/<%- realm %>">
+        <img src="<%- realmData.pic %>" width="30" height="30">
+        <%- realmData.name %>
+      </a>
+    </div>
   </div>
 
 </div>
