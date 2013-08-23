@@ -62,6 +62,7 @@ use Play::WWW;
 use Play::DB::Role::PushPull;
 with
     'Play::DB::Role::Common',
+    'Play::DB::Role::Bumpable',
     PushPull(
         field => 'likes',
         except_field => 'team', # team members can't like their own quest
@@ -850,22 +851,6 @@ sub move_to_realm {
     }
 
     $self->_update_user_realms($quest);
-}
-
-sub bump {
-    my $self = shift;
-    state $check = compile(Id);
-    my ($id) = $check->(@_);
-
-    $self->collection->update(
-        {
-            _id => MongoDB::OID->new(value => $id),
-        },
-        {
-            '$set' => { bump => time },
-        },
-        { safe => 1 }
-    );
 }
 
 1;
