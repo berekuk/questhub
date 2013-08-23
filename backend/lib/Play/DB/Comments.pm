@@ -65,6 +65,7 @@ sub add {
     elsif ($params->{entity} eq 'stencil') {
         my $stencil = db->stencils->get($params->{eid}) or die "stencil '$params->{eid}' not found";
         $realm = $stencil->{realm};
+        db->stencils->bump($params->{eid});
     }
     else {
         die "Unknown entity '$params->{entity}'";

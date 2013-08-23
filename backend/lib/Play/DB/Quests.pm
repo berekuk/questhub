@@ -45,7 +45,7 @@ Allowed status transitions:
 
 =cut
 
-use 5.010;
+use 5.014;
 use utf8;
 
 use Moo;
@@ -161,6 +161,7 @@ sub list {
     $params ||= {};
     $params->{order} //= 'desc';
     $params->{offset} //= 0;
+    $params->{sort} //= 'ts';
 
     if (($params->{status} || '') eq 'deleted') {
         die "Can't list deleted quests";
@@ -178,6 +179,7 @@ sub list {
     }
 
     if (defined $params->{for}) {
+        # shamelessly copy-pasted from db->events->list and db->stencils->list
         my $user = db->users->get_by_login($params->{for}) or die "User '$params->{for}' not found";
 
         my @subqueries;
@@ -199,14 +201,14 @@ sub list {
     my $cursor = $self->collection->query($query);
 
     # if sort=leaderboard, we have to fetch everything and sort manually
-    if (not $params->{sort} or $params->{sort} eq 'manual' or $params->{sort} eq 'bump') {
+    if ($params->{sort} eq 'ts' or $params->{sort} eq 'manual' or $params->{sort} eq 'bump') {
         my $order_flag = ($params->{order} eq 'asc' ? 1 : -1);
         my $sort_field = '_id';
-        if ($params->{sort} and $params->{sort} eq 'manual') {
+        if ($params->{sort} eq 'manual') {
             $sort_field = 'order';
             $order_flag = 1;
         }
-        $sort_field = 'bump' if $params->{sort} and $params->{sort} eq 'bump';
+        $sort_field = 'bump' if $params->{sort} eq 'bump';
         $cursor = $cursor->sort({ $sort_field => $order_flag });
 
         $cursor = $cursor->limit($params->{limit}) if $params->{limit};
@@ -216,7 +218,7 @@ sub list {
     my @quests = $cursor->all;
     $self->_prepare_quest($_) for @quests;
 
-    if ($params->{comment_count} or ($params->{sort} || '') eq 'leaderboard') {
+    if ($params->{comment_count} or $params->{sort} eq 'leaderboard') {
         my $comment_stat = db->comments->bulk_count(
             'quest',
             [
@@ -230,7 +232,7 @@ sub list {
         }
     }
 
-    if ($params->{sort} and $params->{sort} eq 'leaderboard') {
+    if ($params->{sort} eq 'leaderboard') {
         # composite likes->comments order
         @quests = sort {
             my $c1 = (
@@ -248,7 +250,7 @@ sub list {
         }
     }
 
-    if ($params->{sort} and $params->{sort} eq 'manual') {
+    if ($params->{sort} eq 'manual') {
         # Manual sorting uses additional sorting by timestamp, since it's a good default.
         # Which means we could avoid sorting on DB side at all, because manual sorting
         # is used only on per-user basis, and "open quests" in profiles always fetch everything... oh well.

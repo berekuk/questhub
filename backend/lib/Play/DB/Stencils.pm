@@ -6,18 +6,20 @@ package Play::DB::Stencils;
 
 =cut
 
-use 5.010;
+use 5.014;
 use utf8;
 
 use Moo;
-with 'Play::DB::Role::Common';
+with
+    'Play::DB::Role::Common',
+    'Play::DB::Role::Bumpable';
 
 use Play::Mongo;
 use Play::DB qw(db);
 use MongoDB::OID;
 
 use Type::Params qw( compile );
-use Types::Standard qw( Undef Dict Str Optional Bool ArrayRef );
+use Types::Standard qw( Undef Dict Str StrMatch Optional Bool ArrayRef );
 use Play::Types qw( Id Login Realm StencilPoints );
 
 sub _prepare {
@@ -58,6 +60,7 @@ sub add {
 
     die "$params->{author} is not a keeper of $params->{realm}" unless db->realms->is_keeper($params->{realm}, $params->{author});
 
+    $params->{bump} = time;
     my $id = $self->collection->insert($params, { safe => 1 });
 
     my $stencil = { %$params, _id => $id };
@@ -115,17 +118,49 @@ sub list {
         realm => Optional[Realm],
         author => Optional[Login],
         quests => Optional[Bool],
+        for => Optional[Login],
         # flag meaning "fetch comment_count too"; copy-pasted from db->quests->list
         comment_count => Optional[Bool],
+        sort => Optional[StrMatch[ qr/^(?:points|bump)$/ ]],
     ]);
     my ($params) = $check->(@_);
     $params ||= {};
+    $params->{sort} //= 'points';
 
     my $comment_count = delete $params->{comment_count};
-
     my $fetch_quests = delete $params->{quests};
 
-    my @stencils = $self->collection->find($params)->sort({ points => 1 })->all;
+    my $query = {
+            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ realm author /
+    };
+    if (defined $params->{for}) {
+        # shamelessly copy-pasted (with minor tweaks) from db->events->list and db->quests->list
+        my $user = db->users->get_by_login($params->{for}) or die "User '$params->{for}' not found";
+
+        my @subqueries;
+        if ($user->{fr}) {
+            push @subqueries, { realm => { '$in' => $user->{fr} } };
+        }
+        $user->{fu} ||= [];
+        push @{ $user->{fu} }, $user->{login};
+        push @subqueries, { author => { '$in' => $user->{fu} } };
+
+        if (@subqueries) {
+            $query->{'$or'} = \@subqueries;
+        }
+        else {
+            $query->{no_such_field} = 'no_such_value';
+        }
+    }
+    my $cursor = $self->collection->find($query);
+
+    if ($params->{sort} eq 'points') {
+        $cursor->sort({ points => 1 });
+    }
+    elsif ($params->{sort} eq 'bump') {
+        $cursor->sort({ bump => -1 });
+    }
+    my @stencils = $cursor->all;
 
     $self->_prepare($_) for @stencils;
     if ($fetch_quests) {
