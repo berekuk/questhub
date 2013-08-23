@@ -231,6 +231,7 @@ sub feed {
 
     $_ = db->quests->prepare($_) for grep { $_->{entity} eq 'quest' } @posts;
     $_ = db->stencils->prepare($_) for grep { $_->{entity} eq 'stencil' } @posts;
+    db->stencils->_fill_quests($_) for grep { $_->{entity} eq 'stencil' } @posts;
 
     my @items = map {
         { post => $_ }
