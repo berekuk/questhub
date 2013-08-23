@@ -6,53 +6,22 @@ use Moo;
 
 use Play::Mongo;
 use Tie::IxHash;
+use Class::Load qw(load_class);
 
 use parent qw(Exporter);
 our @EXPORT_OK = qw( db );
 
-# TODO - singleton
 sub db {
-    return __PACKAGE__->new;
+    return __PACKAGE__; # singleton
 }
 
-sub quests {
-    require Play::DB::Quests;
-    return Play::DB::Quests->new;
-}
-
-sub events {
-    require Play::DB::Events;
-    return Play::DB::Events->new;
-}
-
-sub users {
-    require Play::DB::Users;
-    return Play::DB::Users->new;
-}
-
-sub comments {
-    require Play::DB::Comments;
-    return Play::DB::Comments->new;
-}
-
-sub notifications {
-    require Play::DB::Notifications;
-    return Play::DB::Notifications->new;
-}
-
-sub images {
-    require Play::DB::Images;
-    return Play::DB::Images->new;
-}
-
-sub realms {
-    require Play::DB::Realms;
-    return Play::DB::Realms->new;
-}
-
-sub stencils {
-    require Play::DB::Stencils;
-    return Play::DB::Stencils->new;
+for my $type (qw( quests events users comments notifications images realms stencils )) {
+    my $package = "Play::DB::".ucfirst($type);
+    load_class $package;
+    no strict 'refs';
+    *{$type} = sub {
+        return state $cache = $package->new;
+    }
 }
 
 sub ensure_indices {
