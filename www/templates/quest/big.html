@@ -1,79 +1,109 @@
-<div class="<%= "quest-big-" + ext_status %> quest-big well clearfix">
-
-  <div>
+<div class="post-big quest-big <%= "quest-big-" + ext_status %>">
+  <aside>
     <% if (team.length == 0) { %>
-      <%= partial.user({ realm: realm, login: obj.author }) %><span class="muted"> suggests a quest:</span>
+      <%= partial.upic_small({ login: author }) %>
     <% } else { %>
-      <span class="muted">
-      <%= _.map(team, function (member) { return partial.user({ realm: realm, login: member }); }).join(', ') %>
-      <% if (status == 'abandoned') { %>
-        <%= (team.length == 1 ? 'was' : 'were') %> on
-      <% } else if (status == 'closed') { %>
-        completed
+      <% _.each(team, function(user) { %>
+      <div class="post-big-upic-box">
+        <%= partial.upic_small({ login: user }) %>
+      </div>
+      <% }) %>
+    <% } %>
+  </aside>
+
+  <div class="post-big-inner">
+    <div>
+
+      <small class="muted">
+      <% if (team.length == 0) { %>
+        <%= partial.user({ realm: realm, login: obj.author }) %> suggests a quest:
       <% } else { %>
-        <%= (team.length == 1 ? 'is' : 'are') %> on
+        <span class="muted">
+        <%= _.map(team, function (member) { return partial.user({ realm: realm, login: member }); }).join(', ') %>
+        <% if (status == 'abandoned') { %>
+          <%= (team.length == 1 ? 'was' : 'were') %> on
+        <% } else if (status == 'closed') { %>
+          completed
+        <% } else { %>
+          <%= (team.length == 1 ? 'is' : 'are') %> on
+        <% } %>
+        a quest<%= (_.first(team) == obj.author) ? '' : ' by ' + partial.user({ realm: realm, login: obj.author }) %><!--
+
+     --><% if (obj.stencil) { %>
+          based on a
+          <a href="/realm/<%- realm %>/stencil/<%- stencil %>" class="grey-link">
+            <i class="icon-book"></i>
+          </a>
+          <a href="/realm/<%- realm %>/stencil/<%- stencil %>">
+            stencil</a><!--
+       --><% } %>:
+        </span>
       <% } %>
-      a quest<%= (_.first(team) == obj.author) ? '' : ' by ' + partial.user({ realm: realm, login: obj.author }) %>:</span>
+      </small>
+
       <% if (my) { %>
         <%= partial.edit_tools({ remove: true }) %>
       <% } %>
+    </div>
+
+    <header class="post-big-title">
+
+      <span class="quest-big-editable"><%- name %></span>
+
+      <% if (my) { %>
+        <span class="control-group quest-big-edit">
+          <input class="input-large" name="name" type="text" placeholder="Quest title is required!">
+        </span>
+      <% } %>
+    </header>
+
+    <% if (obj.note && note) { %>
+    <div class="quest-big-note">
+      <%= partial.markdown(note, realm) %>
+    </div>
     <% } %>
-  </div>
 
-  <h2>
-    <% if (obj.stencil) { %>
-      <a href="/realm/<%- realm %>/stencil/<%- stencil %>" class="grey-link">
-        <i class="icon-book"></i>
-      </a>
+    <% if (obj.description && description) { %>
+      <div class="quest-big-editable">
+        <% if (obj.note && note) { %><hr><% } %>
+        <%= partial.markdown(description, realm) %>
+      </div>
     <% } %>
-
-    <span class="quest-big-editable"><%- name %></span>
-
     <% if (my) { %>
-      <span class="control-group quest-big-edit">
-        <input class="input-large" name="name" type="text" placeholder="Quest title is required!">
-      </span>
+      <div class="quest-big-edit description-sv"></div>
     <% } %>
-  </h2>
 
-  <% if (obj.note && note) { %>
-  <div class="quest-big-note">
-    <%= partial.markdown(note, realm) %>
+    <span class="muted quest-big-edit control-group">
+      <input name="tags" type="text" placeholder="Tags" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
+
+      <button class="btn btn-primary save pull-right">Save</button>
+    </span>
+    <% if (team.length == 0 && currentUser) { %>
+      <div>
+        <span class="muted">This quest is not claimed by anybody. Would you like to take it?</span>
+        <button class="quest-join btn btn-primary">Take</button>
+      </div>
+    <% } %>
+
+
+    <footer class="object-bottom-line">
+      <div class="quest-big-tags">
+        <%= partial.quest_labels(obj) %>
+      </div>
+
+      <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
+
+      <span class="likes-subview"></span>
+      <%= partial.watchers(obj) %>
+
+    </footer>
+
+    <div class="post-realm">
+      <a href="/realm/<%- realm %>">
+        <img src="<%- realmData.pic %>" width="30" height="30">
+        <%- realmData.name %>
+      </a>
+    </div>
   </div>
-  <% } %>
-
-  <% if (obj.description && description) { %>
-    <div class="quest-big-editable">
-      <% if (obj.note && note) { %><hr><% } %>
-      <%= partial.markdown(description, realm) %>
-    </div>
-  <% } %>
-  <% if (my) { %>
-    <div class="quest-big-edit description-sv"></div>
-  <% } %>
-
-  <span class="muted quest-big-edit control-group">
-    <input name="tags" type="text" placeholder="Tags" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
-
-    <button class="btn btn-primary save pull-right">Save</button>
-  </span>
-  <% if (team.length == 0 && currentUser) { %>
-    <div>
-      <span class="muted">This quest is not claimed by anybody. Would you like to take it?</span>
-      <button class="quest-join btn btn-primary">Take</button>
-    </div>
-  <% } %>
-
-
-  <footer class="object-bottom-line">
-    <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
-
-    <span class="likes-subview"></span>
-    <%= partial.watchers(obj) %>
-
-    <div class="quest-big-labels">
-      <%= partial.quest_labels(obj) %>
-    </div>
-  </footer>
 
 </div>

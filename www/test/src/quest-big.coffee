@@ -14,7 +14,7 @@ define [
                 author: "jonti"
                 tags: ["feature"]
                 likes: ["mushroom", "snake"]
-                realm: "chaos"
+                realm: "europe"
             )
             spyOn $, "ajax"
             sinon.spy mixpanel, "track"
@@ -89,7 +89,7 @@ define [
 
             describe "before edit is clicked", ->
                 it "title is visible", ->
-                    expect(view.$el.find("h2 .quest-big-editable")).not.toHaveCss display: "none"
+                    expect(view.$el.find(".post-big-title .quest-big-editable")).not.toHaveCss display: "none"
 
                 it "'start edit' event not tracked yet", ->
                     expect(mixpanel.track.calledOnce).not.toBe true
@@ -100,7 +100,7 @@ define [
                     view.$(".edit").click()
 
                 it "title is hidden", ->
-                    expect(view.$el.find("h2 .quest-big-editable")).toHaveCss display: "none"
+                    expect(view.$el.find(".post-big-title .quest-big-editable")).toHaveCss display: "none"
 
                 it "'start edit' event tracked", ->
                     expect(mixpanel.track.calledOnce).toBe true
@@ -117,7 +117,7 @@ define [
                     view.$("[name=name]").trigger e
 
                 it "title is visible", ->
-                    expect(view.$el.find("h2 .quest-big-editable")).not.toHaveCss display: "none"
+                    expect(view.$el.find(".post-big-title .quest-big-editable")).not.toHaveCss display: "none"
 
                 it "model is saved", ->
                     expect(view.model.save).toHaveBeenCalledWith
@@ -136,7 +136,7 @@ define [
                     view.$("[name=tags]").trigger e
 
                 it "title is hidden", ->
-                    expect(view.$el.find("h2 .quest-big-editable")).toHaveCss display: "none"
+                    expect(view.$el.find(".post-big-title .quest-big-editable")).toHaveCss display: "none"
 
                 it "model is not saved", ->
                     expect(view.model.save).not.toHaveBeenCalled()
@@ -152,13 +152,13 @@ define [
                     view.$("[name=name]").trigger e
 
                 it "title is visible", ->
-                    expect(view.$el.find("h2 .quest-big-editable")).not.toHaveCss display: "none"
+                    expect(view.$el.find(".post-big-title .quest-big-editable")).not.toHaveCss display: "none"
 
                 it "model is not saved", ->
                     expect(view.model.save).not.toHaveBeenCalled()
 
                 it "title is not changed", ->
-                    expect(view.$el.find("h2 .quest-big-editable").text()).toEqual "Badger Badger"
+                    expect(view.$el.find(".post-big-title .quest-big-editable").text()).toEqual "Badger Badger"
 
 
             describe "if escape is pressed on invalid data", ->
@@ -171,10 +171,10 @@ define [
                     view.$("[name=tags]").trigger e
 
                 it "title is visible", ->
-                    expect(view.$el.find("h2 .quest-big-editable")).not.toHaveCss display: "none"
+                    expect(view.$el.find(".post-big-title .quest-big-editable")).not.toHaveCss display: "none"
 
                 it "model is not saved", ->
                     expect(view.model.save).not.toHaveBeenCalled()
 
                 it "title is not changed", ->
-                    expect(view.$el.find("h2 .quest-big-editable").text()).toEqual "Badger Badger"
+                    expect(view.$el.find(".post-big-title .quest-big-editable").text()).toEqual "Badger Badger"

@@ -4,9 +4,9 @@ define [
     "views/proto/common"
     "views/quest/like"
     "views/helper/textarea"
-    "models/current-user"
+    "models/current-user", "models/shared-models"
     "text!templates/quest/big.html"
-], (_, Backbone, $, bootbox, Common, Like, Textarea, currentUser, html) ->
+], (_, Backbone, $, bootbox, Common, Like, Textarea, currentUser, sharedModels, html) ->
     "use strict"
     class extends Common
         template: _.template(html)
@@ -15,6 +15,7 @@ define [
             "click .delete": "destroy"
             "click .edit": "startEdit"
             "click button.save": "saveEdit"
+            "click .quest-big-note-expand": "expandNote"
             "keyup input": "edit"
             mouseenter: (e) -> @subview(".likes-subview").showButton()
             mouseleave: (e) -> @subview(".likes-subview").hideButton()
@@ -33,6 +34,10 @@ define [
         initialize: ->
             super
             @listenTo @model, "change", @render
+
+        expandNote: ->
+            @$(".quest-big-note").show()
+            @$(".quest-big-note-expand").hide()
 
         join: -> @model.join()
 
@@ -116,7 +121,8 @@ define [
             params = super
             params.currentUser = currentUser.get("login")
             params.meGusta = _.contains(params.likes or [], params.currentUser)
-            params.showStatus = true
+            params.showStatus = false
+            params.realmData = sharedModels.realms.findWhere(id: @model.get("realm")).toJSON()
             params
 
         render: ->
