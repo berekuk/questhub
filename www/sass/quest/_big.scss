@@ -17,23 +17,9 @@ div.quest-big-unclaimed {
 }
 
 .quest-big {
-    > aside {
-        float: left;
-    }
-    > .quest-big-inner {
-        margin-left: 32px;
-    }
-
     h2 {
         overflow: auto;
     }
-
-    .object-bottom-line {
-        margin-top: 10px;
-    }
-}
-.quest-big-upic-box {
-    margin-bottom: 3px;
 }
 
 .quest-feed-title {

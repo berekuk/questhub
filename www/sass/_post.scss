@@ -15,3 +15,20 @@
         }
     }
 }
+
+.post-big {
+    @include well;
+    @include clearfix;
+    > aside {
+        float: left;
+    }
+    .post-big-inner {
+        margin-left: 32px;
+    }
+    .object-bottom-line {
+        margin-top: 10px;
+    }
+}
+.post-big-upic-box {
+    margin-bottom: 3px;
+}

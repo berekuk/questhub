@@ -1,17 +1,17 @@
-<div class="<%= "quest-big-" + ext_status %> quest-big well clearfix">
+<div class="post-big quest-big <%= "quest-big-" + ext_status %>">
   <aside>
     <% if (team.length == 0) { %>
       <%= partial.upic_small({ login: author }) %>
     <% } else { %>
       <% _.each(team, function(user) { %>
-      <div class="quest-big-upic-box">
+      <div class="post-big-upic-box">
         <%= partial.upic_small({ login: user }) %>
       </div>
       <% }) %>
     <% } %>
   </aside>
 
-  <div class="quest-big-inner">
+  <div class="post-big-inner">
     <div>
       <small>
       <% if (team.length == 0) { %>

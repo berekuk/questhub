@@ -12,6 +12,11 @@
     position: relative;
 }
 
+.stencil-feed > aside a {
+    @include grey-link;
+    font-size: 24px;
+}
+
 // FIXME - copy-pasted from .realm-big-tabs
 .stencil-big-tabs {
     position: absolute;

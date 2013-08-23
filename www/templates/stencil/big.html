@@ -1,58 +1,61 @@
-<div class="well stencil-big">
-  <span class="muted">Stencil by <%= partial.user({ login: author }) %>:</span>
+<div class="post-big stencil-big">
+  <aside>&nbsp;</aside>
+  <div class="post-big-inner">
+    <small class="muted">Stencil by <%= partial.user({ login: author }) %>:</small>
 
-  <% if (isKeeper) { %>
-    <%= partial.edit_tools() %>
-  <% } %>
+    <% if (isKeeper) { %>
+      <%= partial.edit_tools() %>
+    <% } %>
 
-  <div class="_editable">
-    <h2><%- name %></h2>
-  </div>
-  <% if (isKeeper) { %>
-  <div class="_edit form-row control-group">
-    <input class="input-large" name="name" type="text" placeholder="Stencil title is required!">
-  </div>
-  <% } %>
-
-  <% if (obj.description) { %>
     <div class="_editable">
-      <%= partial.markdown(description, realm) %>
+      <h2><%- name %></h2>
     </div>
-  <% } %>
-  <% if (isKeeper) { %>
-  <div class="_edit form-row">
-    <div class="description-sv"></div>
-  </div>
-  <div class="_edit clearfix">
-    <small class="muted">Reward:</small>
-    <div class="btn-group stencil-big-reward" data-toggle="buttons-radio">
-      <% _.each([1,2,3], function(p) { %>
-      <button class="btn <%- (p == points) ? 'active' : '' %>" data-points="<%- p %>"><%- p %> point<%- p == 1 ? '' : 's' %></button>
-      <% }) %>
+    <% if (isKeeper) { %>
+    <div class="_edit form-row control-group">
+      <input class="input-large" name="name" type="text" placeholder="Stencil title is required!">
+    </div>
+    <% } %>
+
+    <% if (obj.description) { %>
+      <div class="_editable">
+        <%= partial.markdown(description, realm) %>
+      </div>
+    <% } %>
+    <% if (isKeeper) { %>
+    <div class="_edit form-row">
+      <div class="description-sv"></div>
+    </div>
+    <div class="_edit clearfix">
+      <small class="muted">Reward:</small>
+      <div class="btn-group stencil-big-reward" data-toggle="buttons-radio">
+        <% _.each([1,2,3], function(p) { %>
+        <button class="btn <%- (p == points) ? 'active' : '' %>" data-points="<%- p %>"><%- p %> point<%- p == 1 ? '' : 's' %></button>
+        <% }) %>
+      </div>
+
+      <button class="btn btn-primary save pull-right">Save</button>
+    </div>
+    <% } %>
+
+    <div class="object-bottom-line">
+      <em><span class="muted">Created</span></em> <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
     </div>
 
-    <button class="btn btn-primary save pull-right">Save</button>
+    <nav class="round-tabs stencil-big-tabs">
+      <ul>
+        <%
+        _.each({
+        'comments': { icon: 'comments', tooltip: 'Comments' },
+        'quests': { icon: 'list-ul', tooltip: 'Quests' }
+        }, function (o, t) {
+        %>
+        <li>
+          <div data-toggle="tooltip" data-placement="top" title="<%- o.tooltip %>" data-tab="<%- t %>" class="_icon _switch-<%- t %> <%- tab == t ? '_active' : '' %>">
+            <i class="icon-<%- o.icon %>"></i>
+          </div>
+        </li>
+        <% }) %>
+      </ul>
+    </nav>
   </div>
-  <% } %>
-
-  <div class="object-bottom-line">
-    <em><span class="muted">Created</span></em> <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
-  </div>
-
-  <nav class="round-tabs stencil-big-tabs">
-    <ul>
-      <%
-      _.each({
-      'comments': { icon: 'comments', tooltip: 'Comments' },
-      'quests': { icon: 'list-ul', tooltip: 'Quests' }
-      }, function (o, t) {
-      %>
-      <li>
-        <div data-toggle="tooltip" data-placement="top" title="<%- o.tooltip %>" data-tab="<%- t %>" class="_icon _switch-<%- t %> <%- tab == t ? '_active' : '' %>">
-          <i class="icon-<%- o.icon %>"></i>
-        </div>
-      </li>
-      <% }) %>
-    </ul>
-  </nav>
 </div>
