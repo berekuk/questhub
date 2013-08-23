@@ -76,7 +76,7 @@ with
         pull_method => 'unwatch',
     );
 
-sub _prepare_quest {
+sub _prepare {
     my $self = shift;
     my ($quest) = @_;
     $quest->{ts} = $quest->{_id}->get_time;
@@ -104,7 +104,7 @@ sub get {
     });
     die "quest $id not found" unless $quest;
     die "quest $id is deleted" if $quest->{status} eq 'deleted';
-    $self->_prepare_quest($quest);
+    $self->_prepare($quest);
     return $quest;
 }
 
@@ -124,7 +124,7 @@ sub bulk_get {
         }
     })->all;
     @quests = grep { $_->{status} ne 'deleted' } @quests;
-    $self->_prepare_quest($_) for @quests;
+    $self->_prepare($_) for @quests;
 
     return {
         map {
@@ -216,7 +216,7 @@ sub list {
     }
 
     my @quests = $cursor->all;
-    $self->_prepare_quest($_) for @quests;
+    $self->_prepare($_) for @quests;
 
     if ($params->{comment_count} or $params->{sort} eq 'leaderboard') {
         my $comment_stat = db->comments->bulk_count(
@@ -356,7 +356,7 @@ sub add {
     my $id = $self->collection->insert($params, { safe => 1 });
 
     my $quest = { %$params, _id => $id };
-    $self->_prepare_quest($quest);
+    $self->_prepare($quest);
 
     db->events->add({
         type => 'add-quest',

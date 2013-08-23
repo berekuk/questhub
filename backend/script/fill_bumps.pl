@@ -18,28 +18,33 @@ use List::Util qw(max);
 binmode STDOUT, ':utf8';
 
 sub main {
-    my @quests = db->quests->collection->find->all;
+    my @entities = @_;
+    @entities = qw( quest stencil ) unless @entities;
+    for my $entity (@entities) {
+        my $db_method = "${entity}s";
+        my @objects = db->$db_method->collection->find->all;
 
-    my $i = 0;
-    my $total = scalar @quests;
-    say "Updating $total quests";
+        my $i = 0;
+        my $total = scalar @objects;
+        say "Updating $total ${entity}s";
 
-    for my $quest (@quests) {
-        say "$i / $total" unless $i++ % 100;
-        $quest = db->quests->_prepare_quest($quest);
-        my $bump = $quest->{ts};
+        for my $object (@objects) {
+            say "$i / $total" unless $i++ % 100;
+            $object = db->$db_method->_prepare($object);
+            my $bump = $object->{ts};
 
-        my $comments = db->comments->list('quest', $quest->{_id});
-        $bump = max map { $_->{ts} } @$comments if @$comments;
+            my $comments = db->comments->list($entity, $object->{_id});
+            $bump = max map { $_->{ts} } @$comments if @$comments;
 
-        db->quests->collection->update(
-            { _id => MongoDB::OID->new(value => $quest->{_id}) },
-            { '$set' => { bump => $bump } },
-            { safe => 1 }
-        );
+            db->$db_method->collection->update(
+                { _id => MongoDB::OID->new(value => $object->{_id}) },
+                { '$set' => { bump => $bump } },
+                { safe => 1 }
+            );
+        }
+        say "$total / $total";
     }
-    say "$total / $total";
 }
 
 
-main unless caller;
+main(@ARGV) unless caller;
