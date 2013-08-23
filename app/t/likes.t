@@ -20,7 +20,7 @@ sub like_quest :Tests {
 
     my $response = dancer_response POST => "/api/quest/$id/like"; # self-like!
     is $response->status, 500, 'self-like is forbidden';
-    like $response->content, qr/unable to like your own quest/;
+    like $response->content, qr/unable to like your own post/;
 
     http_json GET => "/api/fakeuser/blah2";
     http_json POST => "/api/quest/$id/like";

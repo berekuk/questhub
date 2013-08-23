@@ -32,7 +32,7 @@ sub like_quest :Tests {
 
     cmp_deeply
         db->quests->get($id),
-        {
+        superhashof({
             _id => re('^\S+$'),
             ts => re('^\d+$'),
             likes => [
@@ -45,7 +45,7 @@ sub like_quest :Tests {
             realm => 'europe',
             base_points => 1,
             points => 3,
-        };
+        });
 
     is db->users->get_by_login('blah')->{rp}{europe}, 3;
 }
@@ -61,7 +61,7 @@ sub self_like_quest :Tests {
     });
     my $id = $quest->{_id};
 
-    like exception { db->quests->like($id, 'blah') }, qr/unable to like your own quest/;
+    like exception { db->quests->like($id, 'blah') }, qr/unable to like your own post/;
 }
 
 __PACKAGE__->new->runtests;

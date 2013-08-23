@@ -149,7 +149,7 @@ sub list {
         push @subqueries, { author => { '$in' => $user->{fu} } };
 
         if (@subqueries) {
-            $search_opt->{'$or'} = \@subqueries
+            $search_opt->{'$or'} = \@subqueries;
         }
         else {
             $search_opt->{no_such_field} = 'no_such_value';
@@ -199,18 +199,54 @@ sub feed {
         offset => Optional[Int],
         for => Str,
     ]);
-    $params->{type} = 'add-quest'; # FIXME - stencils
-    my $add_quest_events = $self->list($params); # TODO - use db->quests, order by bump date
-    my @quests = map { $_->{quest} } @{ $add_quest_events };
+    $params->{limit} //= 30;
+    $params->{sort} = 'bump';
 
-    my @result;
-    for my $quest (@quests) {
-        push @result, {
-            quest => $quest,
-            comments => db->comments->list('quest', $quest->{_id}), # TODO - slow, optimize
-        };
+    my $query = {};
+    {
+        my $user = db->users->get_by_login($params->{for}) or die "User '$params->{for}' not found";
+
+        my @subqueries;
+        if ($user->{fr}) {
+            push @subqueries, { realm => { '$in' => $user->{fr} } };
+        }
+        $user->{fu} ||= [];
+        push @{ $user->{fu} }, $user->{login};
+        push @subqueries, { team => { '$in' => $user->{fu} } };
+        push @subqueries, { author => { '$in' => $user->{fu} } };
+
+        if (@subqueries) {
+            $query->{'$or'} = \@subqueries;
+        }
+        else {
+            $query->{no_such_field} = 'no_such_value';
+        }
+        $query->{status} = { '$ne' => 'deleted' };
     }
-    return \@result;
+    my $cursor = Play::Mongo->db->get_collection('posts')->find($query);
+    $cursor = $cursor->limit($params->{limit});
+    $cursor = $cursor->skip($params->{offset}) if $params->{offset};
+    $cursor = $cursor->sort({ bump => -1 });
+    my @posts = $cursor->all;
+
+    $_ = db->quests->prepare($_) for grep { $_->{entity} eq 'quest' } @posts;
+    $_ = db->stencils->prepare($_) for grep { $_->{entity} eq 'stencil' } @posts;
+    db->stencils->_fill_quests($_) for grep { $_->{entity} eq 'stencil' } @posts;
+
+    my @items = map {
+        { post => $_ }
+    } @posts;
+
+    @items = sort {
+        ($b->{post}{bump} || 0)
+        <=>
+        ($a->{post}{bump} || 0)
+    } @items;
+
+    for my $item (@items) {
+        $item->{comments} = db->comments->list($item->{post}{entity}, $item->{post}{_id}); # TODO - slow, optimize
+    }
+    return \@items;
 }
 
 1;

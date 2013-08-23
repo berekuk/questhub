@@ -206,8 +206,10 @@ sub add_quest :Tests {
             author => $user,
             _id => re('^\S+$'),
             ts => re('^\d+$'),
+            bump => re('^\d+$'),
             base_points => 1, # impossible to set points through http API
             points => 1,
+            entity => 'quest',
         },
         'add response';
 
@@ -222,8 +224,10 @@ sub add_quest :Tests {
             author => $user,
             _id => re('^\S+$'),
             ts => re('^\d+$'),
+            bump => re('^\d+$'),
             base_points => 1,
             points => 1,
+            entity => 'quest',
         },
         'get response';
 }

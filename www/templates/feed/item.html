@@ -1,0 +1,13 @@
+<div class="feed-item">
+  <div class="quest-sv"></div>
+
+  <div class="feed-item-comments">
+    <% if (expand) { %>
+      <div class="feed-item-expand-comments-panel">
+        <i class="icon-comments"></i>
+        <a href="#" class="feed-item-expand-comments">Show <%- expandCount %> more comment<%- (expandCount == 1) ? '' : 's' %></a>
+      </div>
+    <% } %>
+    <div class="comments-sv"></div>
+  </div>
+</div>

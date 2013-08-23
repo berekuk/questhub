@@ -23,6 +23,7 @@ define [
 
         serialize: ->
             currentUser: currentUser.get("login")
+            commentBox: @options.commentBox
 
         generateItem: (model) ->
             new Comment(
@@ -35,6 +36,7 @@ define [
 
         initialize: ->
             @listenTo @options.object, "compose-comment", @composeComment
+            @options.commentBox ?= true
             super
 
         render: ->

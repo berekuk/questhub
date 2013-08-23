@@ -1,0 +1,70 @@
+<div class="well stencil-big stencil-feed">
+  <small class="muted"><i class="icon-book"></i> Stencil by <%= partial.user({ login: author }) %>:</small>
+
+  <% if (isKeeper) { %>
+    <%= partial.edit_tools() %>
+  <% } %>
+
+  <div class="_editable">
+    <a href="/realm/<%- realm %>/stencil/<%- _id %>">
+      <%- name %>
+    </a>
+  </div>
+  <% if (isKeeper) { %>
+  <div class="_edit form-row control-group">
+    <input class="input-large" name="name" type="text" placeholder="Stencil title is required!">
+  </div>
+  <% } %>
+
+  <% if (obj.description) { %>
+    <div class="_editable">
+      <%= partial.markdown(description, realm) %>
+    </div>
+    <div class="_editable stencil-big-reward">
+      <header>Reward:</header>
+      <div class="stencil-big-reward-circle">
+        <div class="reward-big" data-toggle="tooltip" data-placement="top" title="Reward&nbsp;for&nbsp;taking and&nbsp;completing&nbsp;this&nbsp;stencil">
+          <div class="_content">
+            <span class="_points"><%- points %></span>
+            <span class="_points-text">points</span>
+          </div>
+        </div>
+      </div>
+      <div class="stencil-big-reward-controls">
+        <div class="stencil-big-reward-controls-inner">
+          <% if (myQuests.length) { %>
+            <a href="/realm/<%- myQuests[0].realm %>/quest/<%- myQuests[0]._id %>">(You have a quest based on this stencil)</a>
+          <% } else { %>
+            <button class="btn btn-primary js-stencil-take">Take <span class="desktop-text">this quest</span></button>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  <% } %>
+  <% if (isKeeper) { %>
+  <div class="_edit form-row">
+    <div class="description-sv"></div>
+  </div>
+  <div class="_edit clearfix">
+    <small class="muted">Reward:</small>
+    <div class="btn-group stencil-big-reward" data-toggle="buttons-radio">
+      <% _.each([1,2,3], function(p) { %>
+      <button class="btn <%- (p == points) ? 'active' : '' %>" data-points="<%- p %>"><%- p %> point<%- p == 1 ? '' : 's' %></button>
+      <% }) %>
+    </div>
+
+    <button class="btn btn-primary save pull-right">Save</button>
+  </div>
+  <% } %>
+
+  <div class="object-bottom-line">
+    <em><span class="muted">Created</span></em> <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
+  </div>
+
+  <div class="post-realm">
+    <a href="/realm/<%- realm %>">
+      <img src="<%- realmData.pic %>" width="30" height="30">
+      <%- realmData.name %>
+    </a>
+  </div>
+</div>

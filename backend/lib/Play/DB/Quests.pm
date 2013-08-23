@@ -17,12 +17,12 @@ package Play::DB::Quests;
 
 =head1 OBJECT FORMAT
 
-  $quest = {
-      team => ['...'],
-      status => qr/ open | closed | stalled | abandoned /,
-      name => 'quest name',
-      description => 'markdown text',
-      ...
+  {
+      ... # common entity fields - see Play::DB::Role::Posts
+      'team': ['...'],
+      'status': qr/ open | closed | stalled | abandoned /,
+      'base_points': N
+      'stencil': $stencil_id
   }
 
 =head1 DESCRIPTION
@@ -45,13 +45,13 @@ Allowed status transitions:
 
 =cut
 
-use 5.010;
+use 5.014;
 use utf8;
 
 use Moo;
 
 use Type::Params qw( compile validate );
-use Types::Standard qw( Undef Bool Int Str Optional Dict ArrayRef HashRef );
+use Types::Standard qw( Undef Bool Int Str StrMatch Optional Dict ArrayRef HashRef );
 use Play::Types qw( Id Login Realm );
 
 use Play::Config qw(setting);
@@ -61,7 +61,7 @@ use Play::WWW;
 
 use Play::DB::Role::PushPull;
 with
-    'Play::DB::Role::Common',
+    'Play::DB::Role::Posts',
     PushPull(
         field => 'likes',
         except_field => 'team', # team members can't like their own quest
@@ -75,62 +75,19 @@ with
         pull_method => 'unwatch',
     );
 
-sub _prepare_quest {
-    my $self = shift;
-    my ($quest) = @_;
-    $quest->{ts} = $quest->{_id}->get_time;
-    $quest->{_id} = $quest->{_id}->to_string;
+sub _build_entity_name { 'post' }; # FIXME - this is confusing; entity_name means collection in Mongo, while 'entity' refers to /quest|stencil/
+sub _build_entity { 'quest' };
+
+around prepare => sub {
+    my $orig = shift;
+    my $quest = $orig->(@_);
 
     $quest->{team} ||= [];
-
     $quest->{base_points} ||= 1;
     $quest->{points} = $quest->{base_points};
     $quest->{points} += scalar @{ $quest->{likes} } if $quest->{likes};
-
     return $quest;
-}
-
-=item B<get($id)>
-
-=cut
-sub get {
-    my $self = shift;
-    state $check = compile(Id);
-    my ($id) = $check->(@_);
-
-    my $quest = $self->collection->find_one({
-        _id => MongoDB::OID->new(value => $id)
-    });
-    die "quest $id not found" unless $quest;
-    die "quest $id is deleted" if $quest->{status} eq 'deleted';
-    $self->_prepare_quest($quest);
-    return $quest;
-}
-
-=item B<bulk_get(\@ids)>
-
-=cut
-sub bulk_get {
-    my $self = shift;
-    state $check = compile(ArrayRef[Id]);
-    my ($ids) = $check->(@_);
-
-    my @quests = $self->collection->find({
-        '_id' => {
-            '$in' => [
-                map { MongoDB::OID->new(value => $_) } @$ids
-            ]
-        }
-    })->all;
-    @quests = grep { $_->{status} ne 'deleted' } @quests;
-    $self->_prepare_quest($_) for @quests;
-
-    return {
-        map {
-            $_->{_id} => $_
-        } @quests
-    };
-}
+};
 
 =item B<list($filter_hashref)>
 
@@ -143,13 +100,15 @@ sub list {
         realm => Optional[Realm],
         unclaimed => Optional[Bool],
         status => Optional[Str],
+        for => Optional[Login],
         # flag meaning "fetch comment_count too"
         comment_count => Optional[Bool],
         # sorting and paging
-        sort => Optional[Str], # regex => qr/^(leaderboard|ts|manual)$/ }
-        order => Optional[Str], # regex => qr/^asc|desc$/, default => 'desc' },
+        sort => Optional[StrMatch[ qr/^(?:leaderboard|ts|manual|bump)$/ ]],
+        order => Optional[StrMatch[ qr/^(?:asc|desc)$/ ]],
         limit => Optional[Int],
         offset => Optional[Int],
+
         tags => Optional[Str],
         watchers => Optional[Str],
         stencil => Optional[Id],
@@ -158,6 +117,7 @@ sub list {
     $params ||= {};
     $params->{order} //= 'desc';
     $params->{offset} //= 0;
+    $params->{sort} //= 'ts';
 
     if (($params->{status} || '') eq 'deleted') {
         die "Can't list deleted quests";
@@ -168,34 +128,54 @@ sub list {
     };
     $query->{team} = $params->{user} if defined $params->{user};
     $query->{status} ||= { '$ne' => 'deleted' };
+    $query->{entity} = $self->entity;
 
     if (delete $params->{unclaimed}) {
         die "Can't set both 'user' and 'unclaimed' at the same time" if defined $params->{user};
         $query->{team} = { '$size' => 0 };
     }
 
+    if (defined $params->{for}) {
+        # shamelessly copy-pasted from db->events->list and db->stencils->list
+        my $user = db->users->get_by_login($params->{for}) or die "User '$params->{for}' not found";
+
+        my @subqueries;
+        if ($user->{fr}) {
+            push @subqueries, { realm => { '$in' => $user->{fr} } };
+        }
+        $user->{fu} ||= [];
+        push @{ $user->{fu} }, $user->{login};
+        push @subqueries, { team => { '$in' => $user->{fu} } };
+
+        if (@subqueries) {
+            $query->{'$or'} = \@subqueries;
+        }
+        else {
+            $query->{no_such_field} = 'no_such_value';
+        }
+    }
+
     my $cursor = $self->collection->query($query);
 
     # if sort=leaderboard, we have to fetch everything and sort manually
-    if (not $params->{sort}) {
+    if ($params->{sort} eq 'ts' or $params->{sort} eq 'manual' or $params->{sort} eq 'bump') {
         my $order_flag = ($params->{order} eq 'asc' ? 1 : -1);
-        $cursor = $cursor->sort({ _id => $order_flag });
-
-        $cursor = $cursor->limit($params->{limit}) if $params->{limit};
-        $cursor = $cursor->skip($params->{offset}) if $params->{offset};
-    }
-    elsif ($params->{sort} eq 'manual') {
-        # there's no order=ask in manual
-        $cursor = $cursor->sort({ order => 1 });
+        my $sort_field = '_id';
+        if ($params->{sort} eq 'manual') {
+            $sort_field = 'order';
+            $order_flag = 1;
+        }
+        $sort_field = 'bump' if $params->{sort} eq 'bump';
+        $cursor = $cursor->sort({ $sort_field => $order_flag });
 
         $cursor = $cursor->limit($params->{limit}) if $params->{limit};
         $cursor = $cursor->skip($params->{offset}) if $params->{offset};
     }
 
     my @quests = $cursor->all;
-    $self->_prepare_quest($_) for @quests;
+    $self->prepare($_) for @quests;
 
-    if ($params->{comment_count} or ($params->{sort} || '') eq 'leaderboard') {
+    if ($params->{comment_count} or $params->{sort} eq 'leaderboard') {
         my $comment_stat = db->comments->bulk_count(
             'quest',
             [
@@ -209,7 +189,7 @@ sub list {
         }
     }
 
-    if ($params->{sort} and $params->{sort} eq 'leaderboard') {
+    if ($params->{sort} eq 'leaderboard') {
         # composite likes->comments order
         @quests = sort {
             my $c1 = (
@@ -227,7 +207,7 @@ sub list {
         }
     }
 
-    if ($params->{sort} and $params->{sort} eq 'manual') {
+    if ($params->{sort} eq 'manual') {
         # Manual sorting uses additional sorting by timestamp, since it's a good default.
         # Which means we could avoid sorting on DB side at all, because manual sorting
         # is used only on per-user basis, and "open quests" in profiles always fetch everything... oh well.
@@ -269,6 +249,7 @@ sub count {
     $params ||= {};
 
     $params->{team} = delete $params->{user} if exists $params->{user};
+    $params->{entity} = $self->entity;
 
     my $count = $self->collection->find($params)->count;
     return $count;
@@ -329,27 +310,35 @@ sub add {
     }
 
     $params->{author} = $params->{team}[0];
-    my $id = $self->collection->insert($params, { safe => 1 });
 
-    my $quest = { %$params, _id => $id };
-    $self->_prepare_quest($quest);
+    my $quest = $self->inner_add($params);
 
     db->events->add({
         type => 'add-quest',
-        author => $params->{author},
-        quest_id => $id->to_string,
-        realm => $params->{realm},
+        author => $quest->{author},
+        quest_id => $quest->{_id},
+        realm => $quest->{realm},
     });
 
-    db->realms->inc_quests($params->{realm});
+    db->realms->inc_quests($quest->{realm});
 
     return $quest;
 }
 
 =item B<update($id, $fields_to_update_hashref)>
 
+Deprecated alias to quests->edit.
+
 =cut
 sub update {
+    my $self = shift;
+    $self->edit(@_);
+}
+
+=item B<edit($id, $fields_to_update_hashref)>
+
+=cut
+sub edit {
     my $self = shift;
     state $check = compile(Id, Dict[
         user => Login,
@@ -376,8 +365,12 @@ sub update {
 
     my $quest_after_update = { %$quest, %$params };
 
+    # TODO - to bump or not to bump?
     $self->collection->update(
-        { _id => MongoDB::OID->new(value => $id) },
+        {
+            _id => MongoDB::OID->new(value => $id),
+            entity => $self->entity,
+        },
         $quest_after_update,
         { safe => 1 }
     );
@@ -399,6 +392,7 @@ sub set_manual_order {
         $self->collection->update(
             {
                 _id => MongoDB::OID->new(value => $id),
+                entity => $self->entity,
                 team => $user,
             },
             {
@@ -440,7 +434,10 @@ sub _set_status {
     }
 
     $self->collection->update(
-        { _id => MongoDB::OID->new(value => $params->{id}) },
+        {
+            _id => MongoDB::OID->new(value => $params->{id}),
+            entity => $self->entity,
+        },
         {
             '$set' => { status => $params->{new_status} },
             ($params->{clear_invitees} ? ('$unset' => { 'invitee' => '' }) : ()),
@@ -618,7 +615,10 @@ sub remove {
 
     delete $quest->{_id};
     $self->collection->update(
-        { _id => MongoDB::OID->new(value => $id) },
+        {
+            _id => MongoDB::OID->new(value => $id),
+            entity => $self->entity,
+        },
         { '$set' => { status => 'deleted' } },
         { safe => 1 }
     );
@@ -639,6 +639,7 @@ sub invite {
     my $result = $self->collection->update(
         {
             _id => MongoDB::OID->new(value => $id),
+            entity => $self->entity,
             '$and' => [
                 { team => { '$ne' => $user } }, # team members can't invite themselves to join a quest
                 { team => $actor },  # only team members can invite other players
@@ -680,6 +681,7 @@ sub uninvite {
     my $result = $self->collection->update(
         {
             _id => MongoDB::OID->new(value => $id),
+            entity => $self->entity,
             '$and' => [
                 { team => { '$ne' => $user } },
                 { team => $actor },
@@ -709,6 +711,7 @@ sub join {
     my $result = $self->collection->update(
         {
             _id => MongoDB::OID->new(value => $id),
+            entity => $self->entity,
             '$or' => [
                 { invitee => $user },
                 { team => { '$size' => 0 } },
@@ -748,6 +751,7 @@ sub leave {
     my $result = $self->collection->update(
         {
             _id => MongoDB::OID->new(value => $id),
+            entity => $self->entity,
             team => $user,
         },
         {
@@ -776,6 +780,7 @@ sub checkin {
     my $result = $self->collection->update(
         {
             _id => MongoDB::OID->new(value => $id),
+            entity => $self->entity,
             team => $user,
         },
         {
@@ -811,6 +816,7 @@ sub move_to_realm {
     my $result = $self->collection->update(
         {
             _id => MongoDB::OID->new(value => $id),
+            entity => $self->entity,
         },
         {
             '$set' => { realm => $realm }

@@ -1,0 +1,17 @@
+// common styles for quest and stencil blocks
+.post-realm {
+    position: absolute;
+    bottom: 3px;
+    right: 7px;
+    a {
+        @include opacity(70);
+        &:hover {
+            @include opacity(100);
+        }
+        color: $text-color;
+        &:hover {
+            color: $text-color;
+            text-decoration: none;
+        }
+    }
+}

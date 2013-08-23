@@ -27,15 +27,17 @@
 
 @import 'explore';
 
+@import 'dashboard/profile';
+@import 'dashboard/activity';
+
+@import 'post';
+
 @import 'quest/collection';
 @import 'quest/page';
 @import 'quest/big';
 @import 'quest/add';
 @import 'quest/completed';
 @import 'quest/checkins';
-
-@import 'dashboard/profile';
-@import 'dashboard/activity';
 
 @import 'stencil/overview';
 @import 'stencil/small';
@@ -50,5 +52,7 @@
 @import 'user/big';
 @import 'user/points-histogram';
 @import 'user/unsubscribe';
+
+@import 'feed/item';
 
 @import 'comment';

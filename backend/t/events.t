@@ -238,4 +238,54 @@ sub stencil_comments :Tests {
     ];
 }
 
+sub feed :Tests {
+    db->users->add({ login => 'foo' });
+    my @quests;
+    push @quests, db->quests->add({
+        name => "q$_",
+        user => 'foo',
+        realm => 'europe',
+    }) for 1..3;
+
+    sleep 1;
+    db->comments->add({ entity => 'quest', eid => $quests[0]->{_id}, author => 'foo', body => 'c1' });
+    sleep 1;
+    db->comments->add({ entity => 'quest', eid => $quests[0]->{_id}, author => 'foo', body => 'c2' });
+    sleep 1;
+    db->comments->add({ entity => 'quest', eid => $quests[2]->{_id}, author => 'foo', body => 'c3' });
+
+    my $feed = db->events->feed({ for => 'foo' });
+
+    cmp_deeply
+        $feed,
+        [
+            {
+                post => superhashof({
+                    name => 'q3', # bumped last
+                    entity => 'quest',
+                }),
+                comments => [
+                    superhashof({ body => 'c3' }),
+                ],
+            },
+            {
+                post => superhashof({
+                    name => 'q1', # bumped before q3
+                    entity => 'quest',
+                }),
+                comments => [
+                    superhashof({ body => 'c1' }),
+                    superhashof({ body => 'c2' }),
+                ],
+            },
+            {
+                post => superhashof({
+                    name => 'q2', # never bumped
+                    entity => 'quest',
+                }),
+                comments => [],
+            },
+        ];
+}
+
 __PACKAGE__->new->runtests;
