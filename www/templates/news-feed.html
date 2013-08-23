@@ -30,5 +30,20 @@
     </aside>
   <% } %>
 
-  <div class="main subview"></div>
+  <ul class="nav nav-pills news-feed-tabs">
+    <%
+    _.each({
+    'ungrouped': { title: 'Ungrouped' },
+    'grouped': { title: 'Grouped' },
+    }, function (o, tab) {
+    %>
+    <li>
+      <a href="#" data-tab="<%- tab %>">
+        <%- o.title %>
+      </a>
+    </li>
+    <% }) %>
+  </ul>
+
+  <div class="main news-feed-sv"></div>
 </div>
