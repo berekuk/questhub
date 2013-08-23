@@ -40,20 +40,3 @@ div.quest-big-unclaimed {
 .quest-big-tags {
     margin-bottom: 4px;
 }
-
-.quest-big-realm {
-    position: absolute;
-    bottom: 3px;
-    right: 7px;
-    @include opacity(70);
-    &:hover {
-        @include opacity(100);
-    }
-    a {
-        color: $text-color;
-        &:hover {
-            color: $text-color;
-            text-decoration: none;
-        }
-    }
-}

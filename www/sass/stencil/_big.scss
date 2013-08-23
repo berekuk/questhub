@@ -18,3 +18,32 @@
     right: 8px;
     bottom: 8px;
 }
+
+.stencil-big-reward {
+    > header {
+        @include bg-header;
+        float: left;
+        margin: 0px;
+        line-height: 67px;
+    }
+    @include clearfix;
+}
+.stencil-big-reward-circle {
+    float: left;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.stencil-big-reward-controls {
+    display: table;
+    height: 67px;
+}
+.stencil-big-reward-controls-inner {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.stencil-feed {
+    .object-bottom-line {
+        margin-top: 10px;
+    }
+}

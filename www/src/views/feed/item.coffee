@@ -2,7 +2,7 @@ define [
     "underscore"
     "views/proto/common"
     "views/quest/feed", "models/quest"
-    "views/stencil/big", "models/stencil"
+    "views/stencil/feed", "models/stencil"
     "views/comment/collection", "models/comment-collection"
     "text!templates/feed/item.html"
 ], (_, Common, Quest, QuestModel, Stencil, StencilModel, CommentCollection, CommentCollectionModel, html) ->
