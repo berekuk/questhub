@@ -10,9 +10,6 @@ mobile
 
 # Feed TODO
 
-think about representing user/realm chambers
-think about hide
-
 comment form
 frontend tests
 
@@ -21,6 +18,7 @@ border-radius between expand-panel and comments
 optimize fetching comments
 cut for comments and quests
 fill bumps before deploy
+rendering speed
 
 ## Done
 
@@ -51,6 +49,11 @@ stencils in feed
 [x] events->feed fetches stencils
 
 merge stencils and quests collections
+
+think about representing user/realm chambers - posts with entity="discussion"
+think about hide - later
+
+stencil/feed view
 
 ## DB SCHEMA
 
