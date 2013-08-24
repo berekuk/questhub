@@ -6,6 +6,7 @@
 }
 
 .mainarea {
+    @include clearfix;
     @include breakpoint(B) {
         margin-left: 2.5%;
         width: 74.5%;
