@@ -4,16 +4,16 @@ div.quest-big-open, div.quest-big-closed, div.quest-big-abandoned, div.quest-big
 }
 
 div.quest-big-open {
-    @include mark($open-quest-color);
+    @include mark-big($open-quest-color);
 }
 div.quest-big-closed {
-    @include mark($closed-quest-color);
+    @include mark-big($closed-quest-color);
 }
 div.quest-big-abandoned {
-    @include mark($abandoned-quest-color);
+    @include mark-big($abandoned-quest-color);
 }
 div.quest-big-unclaimed {
-    @include mark($unclaimed-quest-color);
+    @include mark-big($unclaimed-quest-color);
 }
 
 .quest-big {

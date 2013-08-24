@@ -1,9 +1,9 @@
 .stencil-small {
-    @include mark($mat);
+    @include mark-big($mat);
     @include clearfix;
 }
 .stencil-small-my {
-    @include mark($highlight);
+    @include mark-big($highlight);
 }
 
 .stencil-small-title {
