@@ -47,48 +47,33 @@ textarea.comment-edit {
     height: 100%;
 }
 
-.comment-type-close {
-    @include mark($closed-quest-color);
-}
-.comment-type-reopen {
-    @include mark($open-quest-color);
-}
-.comment-type-abandon {
-    @include mark($abandoned-quest-color);
-}
-.comment-type-join {
-    @include mark($join-color);
-}
-.comment-type-invite {
-    @include mark($invite-color);
-}
-.comment-type-leave {
-    @include mark($abandoned-quest-color);
-}
-.comment-type-resurrect {
-    @include mark($open-quest-color);
-}
-
 .comment-edit-buttons {
     display: none;
     float: right;
 }
 
 .comment-content-special {
-    margin-top: 12px;
-    margin-bottom: 12px;
-    position: relative;
-    font-style: italic;
-    [class^="icon-"] {
-        position: absolute;
-        color: $dark-grey;
-        font-size: 18px;
-        left: -29px;
-        top: 2px;
+    @include breakpoint(lessThanA) {
+        margin-top: 5px;
+        margin-bottom: 5px;
     }
-}
-.comment-content-reward {
-    margin-top: 8px;
+    position: relative;
+    color: $dark-grey;
+    text-align: center;
+    > i {
+        color: $grey-color;
+        font-size: 48px;
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 5px;
+    }
+    > i.icon-check {
+        color: $closed-quest-color;
+    }
+    > div {
+        display: inline-block;
+        vertical-align: middle;
+    }
 }
 
 @include breakpoint(B) {

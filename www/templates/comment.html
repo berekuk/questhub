@@ -20,32 +20,48 @@
         <div class="comment-content-special">
         <% if (type == 'close') { %>
           <i class="icon-check"></i>
-          Quest completed.
-
-          <div class="comment-content-reward">
-            <%= partial.reward_list({ quest: object, partial: partial }) %>
+          <div>
+            Quest completed.
+            <div class="comment-content-reward">
+              <%= partial.reward_list({ quest: object, partial: partial }) %>
+            </div>
           </div>
         <% } else if (type == 'reopen') { %>
           <i class="icon-backward"></i>
-          Quest reopened.
+          <div>
+            Quest reopened.
+          </div>
         <% } else if (type == 'abandon') { %>
           <i class="icon-eject"></i>
-          Quest abandoned.
+          <div>
+            Quest abandoned.
+          </div>
         <% } else if (type == 'resurrect') { %>
           <i class="icon-play"></i>
-          Quest resurrected.
+          <div>
+            Quest resurrected.
+          </div>
         <% } else if (type == 'leave') { %>
           <i class="icon-signout"></i>
-          Leaving the quest.
+          <div>
+            Leaving the quest.
+          </div>
         <% } else if (type == 'join') { %>
           <i class="icon-signin"></i>
-          Joining the quest.
+          <div>
+            Joining the quest.
+          </div>
         <% } else if (type == 'invite') { %>
           <i class="icon-group"></i>
-          Invited:
-          <%= partial.user({ realm: realm, login: invitee }) %>
+          <div>
+            Invited:
+            <%= partial.user({ realm: realm, login: invitee }) %>
+          </div>
         <% } else { %>
-          Unknown comment type! Please report this bug.
+          <i class="icon-question"></i>
+          <div>
+            Unknown comment type! Please report this bug.
+          </div>
         <% } %>
         </div>
       <% } %>

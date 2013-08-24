@@ -2,16 +2,26 @@
     .quest-big {
         margin-bottom: 5px;
     }
+    .stencil-big {
+        margin-bottom: 5px;
+    }
     margin-bottom: 20px;
 }
 .feed-item-comments {
-    padding-left: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+    @include breakpoint(B) {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
 }
 .feed-item-expand-comments-panel {
+    @include well;
     padding: 5px;
-    background-color: rgba(223, 223, 223, 1);
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
+    margin-bottom: 4px;
+//    background-color: rgba(223, 223, 223, 1);
+//    border-top-left-radius: 3px;
+//    border-top-right-radius: 3px;
     font-size: 12px;
     > .icon-comments {
         color: $dark-grey;
