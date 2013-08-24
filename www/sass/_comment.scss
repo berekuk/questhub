@@ -53,7 +53,7 @@ textarea.comment-edit {
 }
 
 .comment-content-special {
-    @include breakpoint(lessThanA) {
+    @include breakpoint(lessThanB) {
         margin-top: 5px;
         margin-bottom: 5px;
     }
