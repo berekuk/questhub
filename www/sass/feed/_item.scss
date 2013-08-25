@@ -5,12 +5,12 @@
     .stencil-big {
         margin-bottom: 4px;
     }
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 .feed-item-comments {
     padding-left: 20px;
     @include breakpoint(B) {
-        padding-left: 32px;
+        padding-left: 36px;
     }
 }
 .feed-item-expand-comments-panel {
@@ -20,7 +20,7 @@
     font-size: 12px;
     > a {
         display: block;
-        line-height: 24px;
+        line-height: 26px;
         padding-left: 8px;
         text-align: center;
         background-color: #fcfcfc;
