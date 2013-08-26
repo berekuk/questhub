@@ -50,11 +50,8 @@ define [
             if @options.reply
                 @options.object.trigger "compose-comment", reply: @options.reply
                 @options.reply = false
-
-# we could clean the comment on cancel, but it would be too annoying to lose your data accidentally
-# TODO - think through if this is useful
-#            @textarea().on "cancel", @resetForm
-
+            # we could also clean the comment on cancel, but it would be too annoying to lose your data accidentally
+            # TODO - think through if this is useful
 
         # set the appropriate "add comment" button style
         validate: (e) =>
@@ -89,6 +86,7 @@ define [
                 success: @resetForm
 
         composeComment: (opt) ->
+            @$(".comment-add").show()
             @textarea().reveal("@#{opt.reply}, ")
             @textarea
             $('html, body').animate {

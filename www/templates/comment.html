@@ -75,11 +75,7 @@
 
       <% if (currentUser) { %>
       <span class="muted comment-interact">&bull;
-        <% if (commentBox) { %>
-          <a href="#" class="comment-reply-link">
-        <% } else { %>
-          <a href="/realm/<%- realm %>/<%- object.entity %>/<%- object._id %>/reply/<%- author %>">
-        <% } %>
+        <a href="#" class="comment-reply-link">
           Reply
         </a>
       </span>

@@ -1,18 +1,21 @@
 <div class="comments-list" style="display:none">
 </div>
 
-<% if (commentBox) { %>
-  <% if (currentUser) { %>
-  <div class="comment-add">
+<% if (currentUser) { %>
+<div class="comment-add <%- commentBox ? '' : 'hide' %>">
+  <aside>
+    <%= partial.upic_small({ login: currentUser }) %>
+  </aside>
+  <div class="comment-add-inner">
     <div class="comment-add-sv"></div>
     <div>
-      <button class="btn btn-primary btn-large submit disabled">Post comment</button>
+      <button class="btn btn-primary submit disabled">Post comment</button>
     </div>
   </div>
-  <% } else { %>
-  <div class="comment-add-signin">
-    <h3>Sign in to comment:</h3>
-    <span class="signin"></span>
-  </div>
-  <% } %>
+</div>
+<% } else { %>
+<div class="comment-add-signin">
+  <h3>Sign in to comment:</h3>
+  <span class="signin"></span>
+</div>
 <% } %>
