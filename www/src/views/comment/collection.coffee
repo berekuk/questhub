@@ -46,6 +46,7 @@ define [
             @textarea().reveal()
             @textarea().on "edit", @validate
             @textarea().on "save", @postComment
+            @textarea().on "cancel", @cancelComment
 
             if @options.reply
                 @options.object.trigger "compose-comment", reply: @options.reply
@@ -84,6 +85,11 @@ define [
                 wait: true
                 error: @enableForm
                 success: @resetForm
+
+        cancelComment: =>
+            return if @textarea().value().length > 20
+            @textarea().hide()
+            @$(".comment-add").hide()
 
         composeComment: (opt) ->
             opt ?= {}

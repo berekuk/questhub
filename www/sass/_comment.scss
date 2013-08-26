@@ -94,10 +94,10 @@ textarea.comment-edit {
 .comment-add {
     @include clearfix;
     margin-left: 7px;
-    .btn-primary.submit {
-        float: right;
-    }
     @include media-with-upic('.comment-add-inner');
+}
+.comment-add-buttons {
+    float: right;
 }
 
 .comment-add-signin {
