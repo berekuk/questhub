@@ -16,6 +16,7 @@ define [
             "click .edit": "startEdit"
             "click button.save": "saveEdit"
             "click .quest-big-note-expand": "expandNote"
+            "click .post-big-compose-comment": "composeComment"
             "keyup input": "edit"
             mouseenter: (e) -> @subview(".likes-subview").showButton()
             mouseleave: (e) -> @subview(".likes-subview").hideButton()
@@ -116,6 +117,9 @@ define [
                     @model.destroy success: (model, response) ->
                         Backbone.history.navigate "/",
                             trigger: true
+
+        composeComment: ->
+            @model.trigger "compose-comment"
 
         serialize: ->
             params = super
