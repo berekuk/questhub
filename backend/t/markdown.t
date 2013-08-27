@@ -44,4 +44,9 @@ sub cpan_module :Tests {
     }
 }
 
+sub realm_param :Tests {
+    is markdown('DBIx::Class', 'perl'), qq[<a href="http://metacpan.org/module/DBIx::Class">DBIx::Class</a>\n];
+    is markdown('DBIx::Class'), qq[DBIx::Class\n];
+}
+
 __PACKAGE__->new->runtests;

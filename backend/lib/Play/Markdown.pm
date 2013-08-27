@@ -8,25 +8,27 @@ use Play::WWW;
 use parent qw(Text::Markdown);
 our @EXPORT_OK = qw(markdown);
 
+use Types::Standard qw(Str);
+
 our $REALM; # pre-set this before calling markdown
 our @MENTIONS; # will be filled after markdown() call
 
 my $obj = __PACKAGE__->new;
 sub markdown {
-    my ($self) = @_;
+    my $self = (ref $_[0] ? shift : undef);
+    my ($original_text, @rest) = @_;
+    local $REALM = $rest[0] if @rest == 1 and Str->check($rest[0]);
 
     @MENTIONS = ();
 
     my $result;
     if (ref $self) {
-        shift;
-        $result = $self->SUPER::markdown(@_);
+        $result = $self->SUPER::markdown($original_text);
     }
     else {
-        $result = $obj->markdown(@_);
+        $result = $obj->markdown($original_text);
     }
 
-    my ($original_text) = $_[0];
     if ($original_text !~ /\n/) {
         # remove surrounding <p>, but only if text is a single line
         $result =~ s{^<p>}{};
