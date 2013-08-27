@@ -1,0 +1,11 @@
+.timeago {
+    color: $dark-grey;
+    font-style: italic;
+}
+
+a.time-anchor {
+    color: $dark-grey;
+    &:hover {
+        color: $dark-grey;
+    }
+}

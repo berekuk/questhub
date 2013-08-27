@@ -1,11 +1,11 @@
 define [
-    "underscore"
+    "underscore", "jquery"
     "views/proto/common"
     "views/comment/like"
     "models/current-user"
     "views/helper/textarea"
     "text!templates/comment.html"
-], (_, Common, CommentLike, currentUser, Textarea, html) ->
+], (_, $, Common, CommentLike, currentUser, Textarea, html) ->
     class extends Common
         className: "comment-outer"
 
@@ -87,5 +87,13 @@ define [
             @textarea?.remove()
             delete @textarea
             super
+
+        highlight: ->
+            $('html, body').animate {
+                scrollTop: @$el.offset().top - $(".navbar").height() - 5
+            }, {
+                complete: => @$(".comment").addClass "flash"
+                duration: 0
+            }
 
         features: ["timeago"]

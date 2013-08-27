@@ -67,10 +67,6 @@ tbody tr.show-more > td {
     vertical-align: middle;
 }
 
-time.timeago {
-    color: $dark-grey;
-    font-style: italic;
-}
 
 a.mini-button {
     color: $dark-grey;
@@ -165,6 +161,6 @@ td {
     }
 }
 
-.grey-link {
+a.grey-link {
     @include grey-link;
 }

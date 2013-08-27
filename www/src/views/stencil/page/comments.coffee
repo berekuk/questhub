@@ -18,4 +18,5 @@ define [
                     realm: @model.get("realm")
                     object: @model
                     reply: @options.reply
+                    anchor: @options.anchor
                 )

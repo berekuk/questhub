@@ -70,7 +70,9 @@
       <div class="comment-edit"></div>
     <% } %>
     <footer class="object-bottom-line">
-      <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
+      <a href="/realm/<%- realm %>/<%- entity %>/<%- eid %>/comment/<%- _id %>" class="time-anchor"><time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>">
+          <%= new Date(ts * 1000).toISOString() %>
+      </time></a>
 
       <% if (currentUser) { %>
       <span class="muted">&bull;

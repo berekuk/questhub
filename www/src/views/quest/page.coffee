@@ -51,6 +51,7 @@ define [
                     realm: @realm()
                     object: @model
                     reply: @options.reply
+                    anchor: @options.anchor
                 )
 
         inviteDialog: ->

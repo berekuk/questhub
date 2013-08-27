@@ -41,6 +41,9 @@ define [
             if @options.reply
                 @options.object.trigger "compose-comment", reply: @options.reply
                 @options.reply = false
+            if @options.anchor
+                comment = _.find @itemSubviews, (sv) => sv.model.id == @options.anchor
+                comment?.highlight()
 
         composeComment: (opt) ->
             @initLazySubview(".comment-add-sv").composeComment(opt)

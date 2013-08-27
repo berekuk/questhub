@@ -99,3 +99,14 @@ textarea.comment-edit {
         margin-right: 15px;
     }
 }
+
+@include keyframes(flash) {
+    0% { background-color: none; }
+    50% { background-color: lighten($highlight, 30%); }
+    100% { background-color: none; }
+}
+
+.flash {
+    @include animation(flash 1s ease-out);
+    @include animation-iteration-count(1);
+}

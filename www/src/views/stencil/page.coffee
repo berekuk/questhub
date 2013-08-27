@@ -16,6 +16,12 @@ define [
         pageTitle: -> @model.get 'name'
         urlRoot: -> "/realm/#{@realm()}/stencil/#{ @model.id }"
 
+        url: ->
+            url = super
+            if @tab == 'comments' and @options.anchor
+                url += '/comment/' + @options.anchor
+            url
+
         subviews: ->
             subviews = super
             subviews[".realm-submenu-sv"] = -> new RealmSubmenu model: @realmModel()
@@ -39,6 +45,7 @@ define [
                     new StencilPageComments
                         model: @model
                         reply: reply
+                        anchor: @options.anchor
 
         initialize: ->
             super

@@ -8,6 +8,7 @@ define [
             ts: 1363395653
             body_html: "aaa\n"
             entity: "quest"
+            _id: "1234"
             eid: "5143c351dd3d73910c00000e"
             author: "ooo"
             type: "text"

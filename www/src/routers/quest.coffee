@@ -1,11 +1,11 @@
 define [
-    "backbone"
+    "underscore", "backbone"
     "routers/proto/common"
     "models/current-user"
     "views/quest/page", "models/quest"
     "views/quest/add"
     "models/stencil", "views/stencil/page"
-], (Backbone, Common, currentUser, QuestPage, QuestModel, QuestAdd, StencilModel, StencilPage) ->
+], (_, Backbone, Common, currentUser, QuestPage, QuestModel, QuestAdd, StencilModel, StencilPage) ->
     class extends Common
         routes:
             "quest/add": "questAdd"
@@ -13,19 +13,23 @@ define [
             "quest/:id": "questPage"
             "realm/:realm/quest/:id": "realmQuestPage"
             "realm/:realm/quest/:id/reply/:reply": "realmQuestPage"
+            "realm/:realm/quest/:id/comment/:cid": "anchorQuestPage"
             "stencil/:id": "stencilPage"
             "realm/:realm/stencil/:id": "realmStencilPage"
             "realm/:realm/stencil/:id/quests": "realmStencilPageQuests"
             "realm/:realm/stencil/:id/reply/:reply": "stencilReply"
+            "realm/:realm/stencil/:id/comment/:cid": "anchorStencilPage"
 
-        questPage: (id, reply) ->
+        questPage: (id, opts) ->
+            opts ?= {}
             model = new QuestModel _id: id
-            view = new QuestPage
-                model: model
-                reply: reply
+            view = new QuestPage _.extend { model: model }, opts
 
             model.fetch success: =>
-                Backbone.history.navigate "/realm/" + model.get("realm") + "/quest/" + model.id,
+                realUrl = "/realm/" + model.get("realm") + "/quest/" + model.id
+                if opts.anchor
+                    realUrl += "/comment/#{opts.anchor}"
+                Backbone.history.navigate realUrl,
                     replace: true
 
                 view.activate()
@@ -34,14 +38,18 @@ define [
             @appView.setPageView view
 
         realmQuestPage: (realm, id, reply) ->
-            @questPage id, reply
+            @questPage id, { reply: reply }
 
-        stencilPage: (id, tab, reply) ->
+        anchorQuestPage: (realm, id, cid) ->
+            @questPage id, { anchor: cid }
+
+        stencilPage: (id, tab, opts) ->
+            opts ?= {}
             model = new StencilModel _id: id
-            view = new StencilPage
+            view = new StencilPage _.extend {
                 model: model
                 tab: tab
-                reply: reply
+            }, opts
 
             model.fetch success: =>
                 Backbone.history.navigate view.url(),
@@ -58,7 +66,10 @@ define [
             @stencilPage id, 'quests'
 
         stencilReply: (realm, id, reply) ->
-            @stencilPage id, 'comments', reply
+            @stencilPage id, 'comments', { reply: reply }
+
+        anchorStencilPage: (realm, id, cid) ->
+            @stencilPage id, 'comments', { anchor: cid }
 
         questAdd: (realm) ->
             unless currentUser.get("registered")
