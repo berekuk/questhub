@@ -93,13 +93,20 @@ define [
 
         composeComment: (opt) ->
             opt ?= {}
-            @$(".comment-add").show()
+            el = @$(".comment-add")
+            el.show()
             @textarea().reveal(if opt.reply then "@#{opt.reply}, " else "")
             @textarea
-            $('html, body').animate {
-                scrollTop: @$('.comment-add').offset().top
-            }, {
-                complete: => @textarea().focus()
-            }
+
+            newTop = el.offset().top + el.height() + 10 - window.innerHeight
+            if newTop > $('body').scrollTop()
+                $('html, body').animate {
+                    scrollTop: newTop
+                }, {
+                    complete: => @textarea().focus()
+                    duration: 250
+                }
+            else
+                @textarea().focus()
 
 # on success, 'add' will fire and form will be resetted
