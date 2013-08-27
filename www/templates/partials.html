@@ -4,7 +4,23 @@
 
   <script type="text/template" class="upic-small"><a href="/player/<%- login %>"><img src="/api/user/<%- login %>/pic?s=small" alt="<%- login %>" title="<%- login %>" class="upic-small"/></a></script>
   <script type="text/template" class="upic-normal"><img src="/api/user/<%- login %>/pic?s=normal" class="upic-normal"/></script>
+  
+  <script type="text/template" class="likers">
 
+	<div class="likers"> 
+		<span class="like-icon"> 
+			<i class="<%- (_.contains(list,currentUser)) ? 'icon-thumbs-up' : 'icon-thumbs-up-alt' %>"></i>
+		</span>
+	
+	<% if(list.length) { %>Liked by <% } %>
+	<% if (_.contains(list,currentUser)) { %>
+		<a class="user-link" href="/player/<%- currentUser %>">Me,</a><% } %>
+		<% _.each(list.slice(0, 3), function(t,index) { %><%= partial.user({login:t})%><% if(index!=2) { %>, <% } %></a> <% } ) %>
+		<%= (_.contains(list,currentUser) ?  (list.length <= 3) :  (list.length <= 4)) ? "" : " and " + (_.contains(list,currentUser) ?  (list.length - 4) :  (list.length - 3)) + " more" %>
+		
+	</div>		
+  </script>
+	
   <script type="text/template" class="quest-labels">
     <span class="quest-tags">
     <% if (obj.showRealm) { %>
