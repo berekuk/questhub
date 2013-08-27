@@ -49,6 +49,18 @@ sub _RunSpanGamut {
             }ge;
     }
 
+    # expand CPAN module names
+    {
+        if ($REALM and $REALM eq 'perl') {
+            $text =~
+                s{\b(\w+(?:::\w+)+)(?![^<>]*>)(?![^<>]*(?:>|<\/a>|<\/code>))}
+                 {<a href=\"http://metacpan.org/module/$1\">$1</a>}g;
+            $text =~
+                s{\bcpan:(\w+)(?![^<>]*>)(?![^<>]*(?:>|<\/a>|<\/code>))}
+                 {<a href=\"http://metacpan.org/module/$1\">$1</a>}g;
+        }
+    }
+
     return $text;
 
 }
