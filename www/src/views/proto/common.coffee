@@ -37,12 +37,14 @@ define [
             @initSubviews() if @activated
             @render() if @selfRender
 
+        lazySubviews: []
+
         initSubviews: ->
             # this was a warning situation in the past, but now views/explore.js legitimately re-initializes subviews
             # (TODO - hmm, or does it?)
             #            console.log('initSubviews is called twice!');
             @_subviewInstances = {}
-            _.each _.keys(_.result(this, "subviews")), (key) =>
+            _.each _.difference(_.keys(_.result(@, "subviews")), @lazySubviews), (key) =>
                 @subview key # will perform the lazy init
 
 
@@ -64,6 +66,10 @@ define [
 
             subview
 
+        initLazySubview: (key) ->
+            sv = @subview(key)
+            sv.render() unless sv.$el.html()
+            return sv
 
         # get a subview from cache, lazily instantiate it if necessary
         subview: (key) ->
@@ -89,7 +95,7 @@ define [
             @render()
 
         render: ->
-            return  unless @activated
+            return unless @activated
             params = @serialize()
             params.partial = @partial
             @$el.html @template(params)

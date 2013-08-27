@@ -20,6 +20,15 @@ define [
         events: ->
             "click .feed-item-expand-comments": "expandComments"
 
+        comments: ->
+            comments = @model.get "comments"
+            unless @expanded
+                if comments.length
+                    comments = comments[ comments.length - 1 ]
+                else
+                    comments = []
+            return comments
+
         subviews:
             ".quest-sv": ->
                 return switch @postModel.get("entity")
@@ -38,21 +47,14 @@ define [
                     object: @postModel
                     commentBox: false
 
-                comments = @model.get "comments"
-                unless @expanded
-                    if comments.length
-                        comments = comments[ comments.length - 1 ]
-                    else
-                        comments = []
-                commentsModel.reset comments
+                commentsModel.reset @comments()
 
                 view
 
         expandComments: ->
             @expanded = true
-            @rebuildSubview ".comments-sv" # FIXME - preserve textarea if necessary
-            @render()
-
+            @subview(".comments-sv").collection.reset @comments()
+            @$(".feed-item-expand-comments-panel").hide()
 
         serialize: ->
             expand: not @expanded and (@model.get("comments").length > 1)

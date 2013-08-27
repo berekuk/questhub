@@ -145,7 +145,7 @@ define [
         render: ->
             @destroyHelp()
             super
-            @restoreFromCache()
+            @restoreFromCache() or @updatePreview()
             if @$el.is(":visible")
                 @$("textarea").autosize append: "\n"
 
