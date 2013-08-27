@@ -73,7 +73,6 @@ define [
             params.currentUser = currentUser.get("login")
             params.realm = @options.realm
             params.object = @options.object.toJSON()
-            params.commentBox = @options.commentBox
             params
 
         isOwned: ->

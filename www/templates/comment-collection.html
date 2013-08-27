@@ -1,18 +1,11 @@
 <div class="comments-list" style="display:none">
 </div>
 
-<% if (commentBox) { %>
-  <% if (currentUser) { %>
-  <div class="comment-add">
-    <div class="comment-add-sv"></div>
-    <div>
-      <button class="btn btn-primary btn-large submit disabled">Post comment</button>
-    </div>
-  </div>
-  <% } else { %>
-  <div class="comment-add-signin">
-    <h3>Sign in to comment:</h3>
-    <span class="signin"></span>
-  </div>
-  <% } %>
+<% if (currentUser) { %>
+<div class="comment-add-sv"></div>
+<% } else { %>
+<div class="comment-add-signin">
+  <h3>Sign in to comment:</h3>
+  <span class="signin"></span>
+</div>
 <% } %>

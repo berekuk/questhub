@@ -3,15 +3,19 @@
     margin-top: 10px;
 }
 
-.comment {
-    padding: 7px;
-    padding-bottom: 5px;
+@mixin media-with-upic($inner-selector) {
     > aside {
         float: left;
     }
-    > .comment-inner {
+    > #{$inner-selector} {
         margin-left: 32px;
     }
+}
+
+.comment {
+    padding: 7px;
+    padding-bottom: 5px;
+    @include media-with-upic('.comment-inner');
 
     // TODO - move these styles to the generic "multi-well" mixin or css class
     min-height: 20px;
@@ -89,9 +93,11 @@ textarea.comment-edit {
 
 .comment-add {
     @include clearfix;
-    .btn-primary.submit {
-        float: right;
-    }
+    margin-left: 7px;
+    @include media-with-upic('.comment-add-inner');
+}
+.comment-add-buttons {
+    float: right;
 }
 
 .comment-add-signin {

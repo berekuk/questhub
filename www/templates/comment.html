@@ -71,19 +71,14 @@
     <% } %>
     <footer class="object-bottom-line">
       <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>"><%= new Date(ts * 1000).toISOString() %></time>
-      <span class="likes"></span>
 
       <% if (currentUser) { %>
       <span class="muted comment-interact">&bull;
-        <% if (commentBox) { %>
-          <a href="#" class="comment-reply-link">
-        <% } else { %>
-          <a href="/realm/<%- realm %>/<%- object.entity %>/<%- object._id %>/reply/<%- author %>">
-        <% } %>
-          Reply
-        </a>
+        <a href="#" class="comment-reply-link">Reply</a>
       </span>
       <% } %>
+
+      <span class="likes"></span>
 
       <div class="comment-edit-buttons">
         <button class="btn btn-mini comment-edit-button-cancel">Cancel</button>

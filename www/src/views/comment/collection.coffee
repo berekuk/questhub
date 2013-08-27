@@ -1,37 +1,30 @@
 define [
-    "underscore", "jquery", "markdown"
+    "underscore", "jquery"
     "views/proto/any-collection"
     "models/current-user"
-    "views/user/signin", "views/comment/any"
-    "views/helper/textarea"
+    "views/comment/any"
+    "views/comment/add"
     "text!templates/comment-collection.html"
-], (_, $, markdown, AnyCollection, currentUser, Signin, Comment, Textarea, html) ->
+], (_, $, AnyCollection, currentUser, Comment, CommentAdd, html) ->
     class extends AnyCollection
-        template: _.template(html)
-        events:
-            "click .submit": "postComment"
+        template: _.template html
 
         subviews:
-            ".signin": ->
-                new Signin()
             ".comment-add-sv": ->
-                new Textarea
+                new CommentAdd
                     realm: @options.realm
-                    placeholder: "Comment (Markdown syntax supported)"
-
-        textarea: -> @subview ".comment-add-sv"
+                    collection: @collection
+                    cancelable: !@options.commentBox
+        lazySubviews: [".comment-add-sv"]
 
         serialize: ->
             currentUser: currentUser.get("login")
-            commentBox: @options.commentBox
 
         generateItem: (model) ->
-            new Comment(
+            new Comment
                 model: model
                 realm: @options.realm
                 object: @options.object
-                commentBox: @options.commentBox
-            )
 
         listSelector: ".comments-list"
 
@@ -43,58 +36,11 @@ define [
         render: ->
             super
             return unless @activated
-            @textarea().reveal()
-            @textarea().on "edit", @validate
-            @textarea().on "save", @postComment
-
+            if @options.commentBox
+                @initLazySubview(".comment-add-sv")
             if @options.reply
                 @options.object.trigger "compose-comment", reply: @options.reply
                 @options.reply = false
 
-# we could clean the comment on cancel, but it would be too annoying to lose your data accidentally
-# TODO - think through if this is useful
-#            @textarea().on "cancel", @resetForm
-
-
-        # set the appropriate "add comment" button style
-        validate: (e) =>
-            text = @textarea().value()
-            @$(".submit").toggleClass "disabled", !text
-
-        disableForm: =>
-            return unless @activated
-            @textarea().disable()
-            @$(".submit").addClass "disabled"
-
-        resetForm: =>
-            return unless @activated
-            @textarea().enable()
-            @textarea().clear()
-            @validate()
-
-        # the difference from resetForm() is that we don't clear textarea's val() to prevent the comment from vanishing
-        enableForm: =>
-            return unless @activated
-            @textarea.enable()
-            @validate()
-
-        postComment: =>
-            return if @$(".submit").hasClass("disabled")
-            @disableForm()
-            ga "send", "event", "comment", "add"
-            mixpanel.track "add comment"
-            @collection.createTextComment @textarea().value(),
-                wait: true
-                error: @enableForm
-                success: @resetForm
-
         composeComment: (opt) ->
-            @textarea().reveal("@#{opt.reply}, ")
-            @textarea
-            $('html, body').animate {
-                scrollTop: @$('.comment-add').offset().top
-            }, {
-                complete: => @textarea().focus()
-            }
-
-# on success, 'add' will fire and form will be resetted
+            @initLazySubview(".comment-add-sv").composeComment(opt)

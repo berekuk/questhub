@@ -12,7 +12,7 @@ define [
         template: _.template html
 
         @active: ->
-            !!(_.size _.find cachedText, (v) -> v? and v.length > 0)
+            !!(_.size _.find cachedText, (v) -> v? and v.length > 20)
 
         events:
             "keydown textarea": "preEdit"
@@ -30,6 +30,7 @@ define [
 
         reveal: (text) ->
             @$el.show()
+            @$("textarea").autosize append: "\n"
             @restoreFromCache() or @setValue(text)
             if text and text.length
                 len = text.length * 2 # http://stackoverflow.com/a/1675345/137062
@@ -144,8 +145,9 @@ define [
         render: ->
             @destroyHelp()
             super
-            @restoreFromCache()
-            @$("textarea").autosize append: "\n"
+            @restoreFromCache() or @updatePreview()
+            if @$el.is(":visible")
+                @$("textarea").autosize append: "\n"
 
         serialize: ->
             placeholder: @options.placeholder
