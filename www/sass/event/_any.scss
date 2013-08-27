@@ -46,7 +46,6 @@
     @include mark($red-color);
 }
 
-// copy-pasted from comment+comment-interact
 @include breakpoint(B) {
     .event-interact {
         visibility: hidden;

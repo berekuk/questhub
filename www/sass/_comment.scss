@@ -82,15 +82,6 @@ textarea.comment-edit {
     }
 }
 
-@include breakpoint(B) {
-    .comment-interact {
-        visibility: hidden;
-    }
-    .comment:hover .comment-interact {
-        visibility: visible;
-    }
-}
-
 .comment-add {
     @include clearfix;
     margin-left: 7px;
