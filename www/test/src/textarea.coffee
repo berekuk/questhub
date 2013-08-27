@@ -20,7 +20,11 @@ define [
             view = create()
             expect(Textarea.active()).not.toBe true
 
-        it "is active if has revealed content", ->
+        it "is active if has long revealed content", ->
+            view = create("something something something")
+            expect(Textarea.active()).toBe true
+
+        it "is active if has short revealed content", ->
             view = create("something")
             expect(Textarea.active()).toBe true
 
