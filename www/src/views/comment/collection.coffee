@@ -43,21 +43,22 @@ define [
         render: ->
             super
             return unless @activated
-            @textarea().reveal()
-            @textarea().on "edit", @validate
-            @textarea().on "save", @postComment
-            @textarea().on "cancel", @cancelComment
-
+            if @options.commentBox
+                @setupForm()
+                @textarea().reveal()
             if @options.reply
                 @options.object.trigger "compose-comment", reply: @options.reply
                 @options.reply = false
-            # we could also clean the comment on cancel, but it would be too annoying to lose your data accidentally
-            # TODO - think through if this is useful
 
         # set the appropriate "add comment" button style
         validate: (e) =>
             text = @textarea().value()
             @$(".submit").toggleClass "disabled", !text
+
+        setupForm: =>
+            @textarea().on "edit", @validate
+            @textarea().on "save", @postComment
+            @textarea().on "cancel", @cancelComment
 
         disableForm: =>
             return unless @activated
@@ -95,8 +96,8 @@ define [
             opt ?= {}
             el = @$(".comment-add")
             el.show()
+            @setupForm()
             @textarea().reveal(if opt.reply then "@#{opt.reply}, " else "")
-            @textarea
 
             newTop = el.offset().top + el.height() + 10 - window.innerHeight
             if newTop > $('body').scrollTop()
@@ -108,5 +109,6 @@ define [
                 }
             else
                 @textarea().focus()
+            @validate()
 
 # on success, 'add' will fire and form will be resetted

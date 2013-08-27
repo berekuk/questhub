@@ -30,6 +30,7 @@ define [
 
         reveal: (text) ->
             @$el.show()
+            @$("textarea").autosize append: "\n"
             @restoreFromCache() or @setValue(text)
             if text and text.length
                 len = text.length * 2 # http://stackoverflow.com/a/1675345/137062
@@ -145,7 +146,8 @@ define [
             @destroyHelp()
             super
             @restoreFromCache()
-            @$("textarea").autosize append: "\n"
+            if @$el.is(":visible")
+                @$("textarea").autosize append: "\n"
 
         serialize: ->
             placeholder: @options.placeholder
