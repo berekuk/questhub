@@ -13,10 +13,7 @@ mobile
 comment form
 frontend tests
 
-mobile
-border-radius between expand-panel and comments
 optimize fetching comments
-cut for comments and quests
 rendering speed
 
 ## Done
@@ -56,6 +53,12 @@ stencil/feed view
 
 fill bumps before deploy
 upics
+border-radius between expand-panel and comments
+mobile
+
+## Later
+#
+cut for comments and quests
 
 ## DB SCHEMA
 
@@ -99,3 +102,21 @@ list all posts for news feed:
 - no CC (?)
 - limit, offset
 - realm OR author OR team
+
+## Comments form
+
+Don't lose form on "show more comments"
+- expand as a comment-collection feature
+- custom render-all
+- prepend on expand
+- for each model: visible vs hidden; on expand: for (hidden) { prepend }
+
+"Comment" link below comments if there are many
+
+### Done
+
+"Comment" link in quest
+"Comment" link on stencil
+Cancel button
+Confirm navigation on long texts only
+Scroll distance
