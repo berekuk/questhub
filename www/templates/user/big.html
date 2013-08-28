@@ -1,4 +1,6 @@
 <div class="well user-big">
+	
+	
   <div class="user-big-avatar">
     <%= partial.upic_normal({ login: login }) %>
   </div>
@@ -14,7 +16,7 @@
         </a>
     <% } } %>
   </div>
-
+  
   <div class="user-big-actions">
     <% if (registered && !my) { %>
       <% if (following) { %>
@@ -30,7 +32,7 @@
     <figcaption>
       <% var pTotal = _.reduce(_.values(obj.rp || {}), function(total, num) { return total + num; }, 0) %>
       <span class="user-big-points-total"><%- pTotal %></span>
-      point<%- (pTotal == 1) ? '' : 's' %>
+      point<%- (pTotal == 1) ? "" : "s" %>
     </figcaption>
   </figure>
 
