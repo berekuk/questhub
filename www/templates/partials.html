@@ -5,6 +5,30 @@
   <script type="text/template" class="upic-small"><a href="/player/<%- login %>"><img src="/api/user/<%- login %>/pic?s=small" alt="<%- login %>" title="<%- login %>" class="upic-small"/></a></script>
   <script type="text/template" class="upic-normal"><img src="/api/user/<%- login %>/pic?s=normal" class="upic-normal"/></script>
 
+  <script type="text/template" class="likers">
+
+    <% if (list && list.length) { %>
+      <div class="likers">
+        <% var meGusta = _.contains(list, currentUser); %>
+        <% var topLikes = _.without(list, currentUser).slice(0, 3); %>
+        <% var otherLikes = _.without(list, currentUser).slice(3); %>
+        <span class="like-icon">
+          <i class="<%- meGusta ? 'icon-thumbs-up' : 'icon-thumbs-up-alt' %>"></i>
+        </span>
+
+        Liked by
+        <% if (meGusta) { %>you<% } %><!--
+     --><% _.each(topLikes, function(t, index) { %><!--
+       --><% if (index > 0 || meGusta) { %>, <% } %>
+          <%= partial.user({login: t}) %><!--
+     --><% }) %><!--
+     --><% if (otherLikes.length) { %>
+          and <%- otherLikes.length %> more<!--
+     --><% } %>.
+      </div>
+    <% } %>
+  </script>
+
   <script type="text/template" class="quest-labels">
     <span class="quest-tags">
     <% if (obj.showRealm) { %>

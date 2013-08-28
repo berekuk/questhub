@@ -4,14 +4,10 @@
     }
 }
 
-.like-button {
-    @include border-radius(9px);
-    @include badge();
-    padding: 2px 9px;
-    color: white;
-    background-color: lighten($like-color, 30%);
+.like-icon {
+    color: $dark-grey;
 }
 
-.like-button-liked {
-    background-color: $like-color;
+.like-button {
+    color: $dark-grey;
 }
