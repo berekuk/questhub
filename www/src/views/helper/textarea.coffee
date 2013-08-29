@@ -41,7 +41,7 @@ define [
             @$("textarea").val(val)
             cachedText[@cid] = val
             @updatePreview()
-            $("textarea").trigger "autosize"
+            @$("textarea").trigger "autosize"
             return
 
         hide: ->
