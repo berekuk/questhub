@@ -89,40 +89,34 @@ define [
             if !@helpLink().is(e.target) and @helpLink().has(e.target).length == 0 and @helpPopover().has(e.target).length == 0
                 @helpLink().popover('hide')
 
+        initPopover: ->
+            @helpLink().popover(
+                placement: "top"
+                title: "Formatting cheat sheet"
+                html: true
+                content: """
+                  <div class="helper-textarea-cheatsheet">
+                    <code>*Italic*</code><br>
+                    <code>**Bold**</code><br>
+                    <code># Header1</code><br>
+                    <code>## Header2</code><br>
+                    <code>&gt; Blockquote</code><br>
+                    <code>@login</code><br>
+                    <code>[Link title](Link URL)</code><br>
+                    <a href="/about/syntax" target="_blank" class="helper-textarea-cheatsheet-link">Full cheat sheat &rarr;</a>
+                  </div>
+                """
+                container: @$el
+                trigger: "manual"
+            )
+
         toggleHelp: ->
-            if not @popoverInitialized
-                # for some reason this code doesn't work from render()
-                @helpLink().popover(
-                    placement: "top"
-                    title: "Formatting cheat sheet"
-                    html: true
-                    content: """
-                      <div class="helper-textarea-cheatsheet">
-                        <code>*Italic*</code><br>
-                        <code>**Bold**</code><br>
-                        <code># Header1</code><br>
-                        <code>## Header2</code><br>
-                        <code>&gt; Blockquote</code><br>
-                        <code>@login</code><br>
-                        <code>[Link title](Link URL)</code><br>
-                        <a href="/about/syntax" target="_blank" class="helper-textarea-cheatsheet-link">Full cheat sheat &rarr;</a>
-                      </div>
-                    """
-                    container: @$el
-                    trigger: "manual"
-                )
-                @popoverInitialized = true
             @helpLink().popover "toggle"
-
             return false
-
-        destroyHelp: ->
-            @popoverInitialized = false
-            @helpLink().popover "destroy"
 
         selfDestruct: ->
             delete cachedText[@cid]
-            @destroyHelp()
+            @helpLink().popover "destroy"
 
         remove: ->
             $("body").off "click", @blurHelp # avoiding event handler leaks
@@ -143,8 +137,9 @@ define [
             @trigger "edit"
 
         render: ->
-            @destroyHelp()
+            @helpLink().popover "destroy"
             super
+            @initPopover()
             @restoreFromCache() or @updatePreview()
             if @$el.is(":visible")
                 @$("textarea").autosize append: "\n"
