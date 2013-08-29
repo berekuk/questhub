@@ -7,14 +7,13 @@ margins:
 
 [x] icon in dashboard-profile
 
-points for each quest in feed
-
-tooltip
+[x] tooltip
 
 color on stencil-page
-
 color in stencils dependent on whether stencil is completed
 
 user-small
 
 quest-completed modal
+
+points for each quest in feed
