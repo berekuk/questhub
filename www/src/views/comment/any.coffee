@@ -97,3 +97,11 @@ define [
             }
 
         features: ["timeago"]
+
+        detachFromDOM: ->
+            super
+            @textarea?.detachFromDOM()
+
+        reattachToDOM: ->
+            super
+            @textarea?.reattachToDOM()

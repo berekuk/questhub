@@ -11,7 +11,6 @@ define ["backbone", "underscore", "views/proto/common"], (Backbone, _, Common) -
             @listenTo @collection, "reset", => if @activated then @render() else @activate()
             @listenTo @collection, "add", @onAdd
             @listenTo @collection, "remove destroy", @render # TODO: optimize
-            @listenTo @collection, "all", (e) => console.log e
             super
 
         itemSubviews: []
@@ -33,9 +32,30 @@ define ["backbone", "underscore", "views/proto/common"], (Backbone, _, Common) -
 
         render: ->
             super
-            @removeItemSubviews()
-            @$(@listSelector).show() if @collection.length # collection table is hidden initially - see https://github.com/berekuk/questhub/issues/61
-            @collection.each @renderOne, this
+
+            # caching old itemSubviews to preserve them over re-rendering
+            oldSubviews = {}
+            for sv in @itemSubviews
+                sv.detachFromDOM()
+                oldSubviews[sv.model.id] = sv
+            @itemSubviews = []
+
+            # collection table is hidden initially - see https://github.com/berekuk/questhub/issues/61
+            @$(@listSelector).show() if @collection.length
+
+            @collection.each (model) =>
+                if oldSubviews[model.id]
+                    sv = oldSubviews[model.id]
+                    delete oldSubviews[model.id]
+                    @insertOne sv.el
+                    sv.reattachToDOM()
+                else
+                    # new model in collection, let's create a view for it
+                    @renderOne(model)
+
+            # these subviews refer to models which are not present in collection anymore, so we're removing them
+            for id, sv of oldSubviews
+                sv.remove()
 
         generateItem: (model) ->
             alert "not implemented"
@@ -53,3 +73,13 @@ define ["backbone", "underscore", "views/proto/common"], (Backbone, _, Common) -
         remove: ->
             @removeItemSubviews()
             super
+
+        detachFromDOM: ->
+            super
+            for sv in @itemSubviews
+                sv.detachFromDOM()
+
+        reattachToDOM: ->
+            super
+            for sv in @itemSubviews
+                sv.reattachToDOM()

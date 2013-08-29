@@ -8,6 +8,11 @@ define [
         initialize: (models, args) ->
             @eid = args.eid
             @entity = args.entity
+            cmp = (a, b) ->
+                return 1 if a > b
+                return -1 if a < b
+                return 0
+            @comparator = (m1, m2) -> cmp m1.get("ts"), m2.get("ts")
 
         createTextComment: (body, options) ->
 

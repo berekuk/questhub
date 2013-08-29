@@ -33,4 +33,14 @@ define [
 
         expand: ->
             @expanded = true
-            @commentsCollection.reset @comments()
+            comments = @get("comments")
+            for comment in comments.slice(0, comments.length - 1).reverse()
+                @commentsCollection.add(comment, prepend: true)
+
+            ## alternative version; it would be nice to refetch comments, but it's broken:
+            ## it appends comments to the last, visible comment, which turns out on top when it should be on bottom
+            ## see also: views/feed/item expandComments()
+            #
+            #deferred = @commentsCollection.fetch()
+            #deferred.success => @expanded = true
+            #return deferred

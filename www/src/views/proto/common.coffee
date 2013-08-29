@@ -126,3 +126,13 @@ define [
         remove: ->
             @removeSubviews()
             super
+
+        detachFromDOM: ->
+            @undelegateEvents()
+            _.each @_subviewInstances, (sv) =>
+                sv.detachFromDOM()
+
+        reattachToDOM: ->
+            @delegateEvents()
+            _.each @_subviewInstances, (sv) =>
+                sv.delegateEvents()
