@@ -31,8 +31,11 @@
     }
 }
 
-.reward-status-closed .icon-stack, .reward-small.reward-status-closed .icon-star {
+.reward-status-closed .icon-stack {
     color: $closed-quest-color;
+}
+.reward-small.reward-status-closed .icon-star {
+    color: darken($closed-quest-color, 10%);
 }
 .reward-status-open .icon-stack, .reward-small.reward-status-open .icon-star {
     color: $highlight;
@@ -50,6 +53,6 @@
         left: 1px;
     }
     .icon-star {
-        color: $closed-quest-color;
+        color: darken($closed-quest-color, 10%);
     }
 }
