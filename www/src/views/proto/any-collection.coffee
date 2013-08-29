@@ -10,7 +10,8 @@ define ["backbone", "underscore", "views/proto/common"], (Backbone, _, Common) -
             @listenToOnce @collection, "sync", @activate
             @listenTo @collection, "reset", => if @activated then @render() else @activate()
             @listenTo @collection, "add", @onAdd
-            @listenTo @collection, "remove", @render # TODO: optimize
+            @listenTo @collection, "remove destroy", @render # TODO: optimize
+            @listenTo @collection, "all", (e) => console.log e
             super
 
         itemSubviews: []

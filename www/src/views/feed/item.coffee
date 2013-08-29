@@ -1,61 +1,37 @@
 define [
     "underscore"
     "views/proto/common"
-    "views/quest/feed", "models/quest"
-    "views/stencil/feed", "models/stencil"
+    "views/quest/feed"
+    "views/stencil/feed"
     "views/comment/collection", "models/comment-collection"
     "text!templates/feed/item.html"
-], (_, Common, Quest, QuestModel, Stencil, StencilModel, CommentCollection, CommentCollectionModel, html) ->
+], (_, Common, Quest, Stencil, CommentCollection, CommentCollectionModel, html) ->
     class extends Common
         template: _.template html
-
-        initialize: ->
-            post = @model.get "post"
-            @postModel = switch post.entity
-                when "quest" then new QuestModel post
-                when "stencil" then new StencilModel post
-                else throw "oops"
-            super
 
         events: ->
             "click .feed-item-expand-comments": "expandComments"
 
-        comments: ->
-            comments = @model.get "comments"
-            unless @expanded
-                if comments.length
-                    comments = comments[ comments.length - 1 ]
-                else
-                    comments = []
-            return comments
-
         subviews:
             ".quest-sv": ->
-                return switch @postModel.get("entity")
-                    when "quest" then new Quest model: @postModel
-                    when "stencil" then new Stencil model: @postModel
+                postModel = @model.postModel
+                return switch postModel.get("entity")
+                    when "quest" then new Quest model: postModel
+                    when "stencil" then new Stencil model: postModel
                     else throw "oops"
             ".comments-sv": ->
-                # note: already fetched
-                commentsModel = new CommentCollectionModel [],
-                    entity: @postModel.get("entity")
-                    eid: @postModel.id
-
                 view = new CommentCollection
-                    collection: commentsModel
-                    realm: @postModel.get("realm")
-                    object: @postModel
+                    collection: @model.commentsCollection
+                    realm: @model.postModel.get("realm")
+                    object: @model.postModel
                     commentBox: false
-
-                commentsModel.reset @comments()
-
-                view
+                view.activate()
+                return view
 
         expandComments: ->
-            @expanded = true
-            @subview(".comments-sv").collection.reset @comments()
+            @model.expand()
             @$(".feed-item-expand-comments-panel").hide()
 
         serialize: ->
-            expand: not @expanded and (@model.get("comments").length > 1)
-            expandCount: @model.get("comments").length - 1
+            expand: @model.needsExpand()
+            expandCount: @model.expandCount()
