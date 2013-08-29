@@ -28,8 +28,8 @@
     > header {
         @include bg-header;
         float: left;
-        margin: 0px;
-        line-height: 67px;
+        margin: 5px 0px;
+        line-height: 32px;
     }
     @include clearfix;
 }
@@ -40,7 +40,7 @@
 }
 .stencil-big-reward-controls {
     display: table;
-    height: 67px;
+    height: 44px;
 }
 .stencil-big-reward-controls-inner {
     display: table-cell;

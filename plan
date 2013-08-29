@@ -1,0 +1,20 @@
+margins:
+- quest-page
+- stencil-page
+- user-big
+- stencil-feed
+- mobile
+
+icon in dashboard-profile
+
+points for each quest in feed
+
+tooltip
+
+color on stencil-page
+
+color in stencils dependent on whether stencil is completed
+
+user-small
+
+quest-completed modal

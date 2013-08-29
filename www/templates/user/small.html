@@ -2,7 +2,7 @@
   <div class="user-small-inner <%- (currentUser && login == currentUser) ? 'user-small-current' : '' %>">
     <%= partial.upic_small({ login: login }) %>
     <a href="/player/<%= login %>"><%= login %></a>
-    <span class="badge badge-info"><%= rp[realm] %></span>
+    <%= partial.reward({ size: "small", points: rp[realm] }) %>
 
     <% if (currentUser && login == currentUser) { %>
       <div class="current-user-leaderboard-tip">

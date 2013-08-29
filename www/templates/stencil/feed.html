@@ -27,12 +27,7 @@
       <div class="_editable stencil-big-reward">
         <header>Reward:</header>
         <div class="stencil-big-reward-circle">
-          <div class="reward-big" data-toggle="tooltip" data-placement="top" title="Reward&nbsp;for&nbsp;taking and&nbsp;completing&nbsp;this&nbsp;stencil">
-            <div class="_content">
-              <span class="_points"><%- points %></span>
-              <span class="_points-text">points</span>
-            </div>
-          </div>
+          <%= partial.reward({ points: points, status: "open" }) %>
         </div>
         <div class="stencil-big-reward-controls">
           <div class="stencil-big-reward-controls-inner">

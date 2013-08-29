@@ -1,49 +1,55 @@
-@mixin reward-circle($size, $font-size, $note-size) {
-    @include border-radius(50%);
+//.reward-big {
+//    @include reward-circle-color($highlight);
+//}
+//.reward-big-closed {
+//    @include reward-circle-color($closed-quest-color);
+//}
+//.reward-big-abandoned {
+//    @include reward-circle-color($abandoned-quest-color);
+//}
 
-    width: $size;
-    height: $size;
-
-    display: table;
-    cursor: pointer;
-    background-color: $mat;
-    transition: background-color 0.5s ease;
-    text-align: center;
-
-    ._content {
-        display: table-cell;
+.reward {
+    font-size: 24px;
+    font-weight: 200;
+    display: inline-block;
+    position: relative;
+    .reward-points {
         vertical-align: middle;
+        position: relative;
+        left: 2px;
+        top: -1px;
     }
-    ._points {
-        display: block;
-        font-size: $font-size;
+    .icon-stack {
+        position: relative;
+        left: -2px;
+        vertical-align: middle;
+        font-size: 18px;
+        color: $closed-quest-color;
     }
-    ._points-text {
-        display: block;
-        font-size: $note-size;
-    }
-}
-
-@mixin reward-circle-color($color) {
-    border: 3px $color solid;
-    &:hover {
-        background-color: $color;
+    .icon-star {
+        color: $mat;
     }
 }
 
-.reward-big {
-    @include reward-circle(67px, 22px, 12px);
-    @include reward-circle-color($highlight);
+.reward-status-closed .icon-stack, .reward-small.reward-status-closed .icon-star {
+    color: $closed-quest-color;
 }
-.reward-big-closed {
-    @include reward-circle-color($closed-quest-color);
+.reward-status-open .icon-stack, .reward-small.reward-status-open .icon-star {
+    color: $highlight;
 }
-.reward-big-abandoned {
-    @include reward-circle-color($abandoned-quest-color);
+.reward-status-abandoned .icon-stack, .reward-small.reward-status-abandoned .icon-star {
+    color: $abandoned-quest-color;
 }
 
 .reward-small {
-    color: darken(saturate($highlight, 10%), 10%);
-    display: inline-block;
-    font-weight: bold;
+    font-size: 14px;
+    display: inline;
+    position: relative;
+    .reward-points {
+        position: relative;
+        left: 1px;
+    }
+    .icon-star {
+        color: $closed-quest-color;
+    }
 }
