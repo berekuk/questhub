@@ -7,12 +7,6 @@
         top: 12px;
     }
 
-    .open-quest-count-label {
-        float: right;
-        position: relative;
-        top: 3px;
-    }
-
     td.user-small {
         padding: 0px;
     }
@@ -31,4 +25,14 @@
     width: 24px;
     height: 24px;
     margin-right: 4px;
+}
+
+.user-small-points {
+    min-width: 50px;
+    display: inline-block;
+    text-align: center;
+}
+.user-small-quests {
+    float: right;
+    font-size: 12px;
 }

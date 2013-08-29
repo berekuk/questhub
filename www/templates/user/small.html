@@ -1,8 +1,10 @@
 <td class="user-small">
   <div class="user-small-inner <%- (currentUser && login == currentUser) ? 'user-small-current' : '' %>">
+    <span class="user-small-points">
+      <%= partial.reward({ size: "small", points: rp[realm] }) %>
+    </span>
     <%= partial.upic_small({ login: login }) %>
-    <a href="/player/<%= login %>"><%= login %></a>
-    <%= partial.reward({ size: "small", points: rp[realm] }) %>
+    <%= partial.user({ login: login }) %>
 
     <% if (currentUser && login == currentUser) { %>
       <div class="current-user-leaderboard-tip">
@@ -12,9 +14,11 @@
     <% } %>
 
     <% if (obj.open_quests) { %>
+    <span class="user-small-quests">
       <a href="/player/<%= login %>">
-        <span class="label label-inverse open-quest-count-label"><%= obj.open_quests %> quest<%= obj.open_quests > 1 ? 's' : '' %></span>
+        <%= obj.open_quests %> open quest<%= obj.open_quests > 1 ? 's' : '' %>
       </a>
+    </span>
     <% } %>
   </div>
 </td>
