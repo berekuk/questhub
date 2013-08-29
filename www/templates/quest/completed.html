@@ -5,10 +5,15 @@
   </div>
   <div class="modal-body">
     <p>
-    You completed a quest.
-    Congratulations, you get <%= points %> points!<br>
+      <div>
+        You completed a quest.
+        Congratulations, you get <%= partial.reward({ size: "small", points: points }) %>!
+      </div>
+    </p>
     <p>
-    Your total score: <span class="badge badge-info"><%= totalPoints %></span>
+      <div>
+        Your total score: <%= partial.reward({ size: "small", points: totalPoints }) %>.
+      </div>
     </p>
 
     <% if (gotTwitter) { %>
