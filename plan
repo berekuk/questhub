@@ -1,9 +1,9 @@
 margins:
-- quest-page
-- stencil-page
-- user-big
-- stencil-feed
-- mobile
+- [x] quest-page
+- [x] stencil-page
+- [x] user-big
+- [x] stencil-feed 
+- [x] mobile
 
 icon in dashboard-profile
 

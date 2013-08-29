@@ -62,8 +62,11 @@
         display: inline-block;
         height: 100%;
     }
-    > figcaption, > figcaption .reward {
-        display: inline;
+    > figcaption {
+        display: inline-block;
+    }
+    > figcaption .reward {
+        top: -3px;
     }
     .user-big-points-total {
         font-size: 24px;

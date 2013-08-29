@@ -17,6 +17,9 @@
     @else if $point == lessThanA {
         @media (max-width: 480px)  { @content; }
     }
+    @else if $point == AtoB {
+        @media (min-width: 481px) and (max-width: 767px) { @content; }
+    }
 }
 
 @mixin box-sizing($bs) {
