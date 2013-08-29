@@ -24,11 +24,14 @@
       <div class="_editable">
         <%= partial.markdown(description, realm) %>
       </div>
-      <div class="_editable stencil-big-reward">
-        <header>Reward:</header>
-        <div class="stencil-big-reward-points">
-          <%= partial.reward({ points: points, status: "open" }) %>
-        </div>
+    <% } %>
+
+    <div class="_editable stencil-big-reward">
+      <header>Reward:</header>
+      <div class="stencil-big-reward-points">
+        <%= partial.reward({ points: points, status: myStatus }) %>
+      </div>
+      <% if (myStatus != 'closed') { %>
         <div class="stencil-big-reward-controls">
           <div class="stencil-big-reward-controls-inner">
             <% if (myQuests.length) { %>
@@ -38,8 +41,9 @@
             <% } %>
           </div>
         </div>
-      </div>
-    <% } %>
+      <% } %>
+    </div>
+
     <% if (isKeeper) { %>
     <div class="_edit form-row">
       <div class="description-sv"></div>

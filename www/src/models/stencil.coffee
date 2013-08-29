@@ -27,6 +27,16 @@ define [
         serialize: ->
             params = @toJSON()
             params.myQuests = @myQuests()
+
+            allMyQuests = _.where @get("quests"), { author: currentUser.get("login") }
+            console.log allMyQuests
+            if _.findWhere allMyQuests, { status: "open" }
+                params.myStatus = "open"
+            else if _.findWhere allMyQuests, { status: "closed" }
+                params.myStatus = "closed"
+            else
+                params.myStatus = "none"
+            console.log params.myStatus
             params.otherQuests = @otherQuests()
             params.currentUser = currentUser.get "login"
             params

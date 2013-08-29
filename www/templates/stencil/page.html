@@ -17,7 +17,7 @@
   <aside class="sidebar stencil-page-sidebar">
 
     <div class="stencil-page-reward">
-      Reward: <%= partial.reward({ points: points }) %>
+      Reward: <%= partial.reward({ points: points, status: myStatus }) %>
     </div>
 
     <% if (currentUser) { %>
@@ -27,7 +27,7 @@
             <a href="/realm/<%- myQuests[0].realm %>/quest/<%- myQuests[0]._id %>">See your <span class="desktop-text">open</span> quest</a>
           </div>
         <% } else { %>
-          <button class="btn btn-primary _take">Take this quest</button>
+          <button class="btn btn-primary _take">Take this quest<%- myStatus == 'closed' ? ' again' : '' %></button>
         <% } %>
       </div>
     <% } %>

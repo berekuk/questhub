@@ -24,7 +24,7 @@
         left: -2px;
         vertical-align: middle;
         font-size: 18px;
-        color: $closed-quest-color;
+        color: darken($abandoned-quest-color, 10%);
     }
     .icon-star {
         color: $mat;

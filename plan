@@ -9,8 +9,7 @@ margins:
 
 [x] tooltip
 
-color on stencil-page
-color in stencils dependent on whether stencil is completed
+[x] color in stencils dependent on whether stencil is completed
 
 user-small
 

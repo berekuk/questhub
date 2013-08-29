@@ -1,8 +1,8 @@
 <article class="well stencil-small <%- (currentUser && myQuests.length) ? 'stencil-small-my' : '' %>">
 
   <aside class="stencil-small-reward">
-    <%= partial.reward({ points: points, status: "open" }) %>
-    <% if (currentUser) { %>
+    <%= partial.reward({ points: points, status: myStatus }) %>
+    <% if (currentUser && myStatus != 'closed') { %>
       <div class="stencil-small-relation">
         <% if (myQuests.length) { %>
         <strong><a href="/realm/<%- myQuests[0].realm %>/quest/<%- myQuests[0]._id %>">Your quest</a></strong>
