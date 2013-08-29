@@ -2,8 +2,8 @@
 .post-realm {
     position: absolute;
     bottom: 3px;
-    right: 7px;
-    a {
+    right: 9px;
+    .post-realm-link {
         @include opacity(70);
         &:hover {
             @include opacity(100);

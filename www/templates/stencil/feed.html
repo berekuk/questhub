@@ -24,27 +24,26 @@
       <div class="_editable">
         <%= partial.markdown(description, realm) %>
       </div>
-      <div class="_editable stencil-big-reward">
-        <header>Reward:</header>
-        <div class="stencil-big-reward-circle">
-          <div class="reward-big" data-toggle="tooltip" data-placement="top" title="Reward&nbsp;for&nbsp;taking and&nbsp;completing&nbsp;this&nbsp;stencil">
-            <div class="_content">
-              <span class="_points"><%- points %></span>
-              <span class="_points-text">points</span>
-            </div>
-          </div>
-        </div>
+    <% } %>
+
+    <div class="_editable stencil-big-reward">
+      <header>Reward:</header>
+      <div class="stencil-big-reward-points">
+        <%= partial.reward({ points: points, status: myStatus }) %>
+      </div>
+      <% if (myStatus != 'closed') { %>
         <div class="stencil-big-reward-controls">
           <div class="stencil-big-reward-controls-inner">
             <% if (myQuests.length) { %>
-              <a href="/realm/<%- myQuests[0].realm %>/quest/<%- myQuests[0]._id %>">(You have a quest based on this stencil)</a>
+              <a href="/realm/<%- myQuests[0].realm %>/quest/<%- myQuests[0]._id %>">(See your quest.)</a>
             <% } else { %>
               <button class="btn btn-primary js-stencil-take">Take <span class="desktop-text">this quest</span></button>
             <% } %>
           </div>
         </div>
-      </div>
-    <% } %>
+      <% } %>
+    </div>
+
     <% if (isKeeper) { %>
     <div class="_edit form-row">
       <div class="description-sv"></div>

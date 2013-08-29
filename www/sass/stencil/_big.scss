@@ -28,19 +28,20 @@
     > header {
         @include bg-header;
         float: left;
-        margin: 0px;
-        line-height: 67px;
+        margin: 5px 0px;
+        line-height: 32px;
     }
     @include clearfix;
 }
-.stencil-big-reward-circle {
+.stencil-big-reward-points {
     float: left;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 8px;
 }
 .stencil-big-reward-controls {
     display: table;
-    height: 67px;
+    height: 44px;
 }
 .stencil-big-reward-controls-inner {
     display: table-cell;

@@ -4,11 +4,11 @@
 <div class="dashboard-profile-realm">
   <div class="histogram-sv"></div>
   <span class="dashboard-profile-text">
-    <a href="/realm/<%- realm %>/players">
-      <%- points %>
-      <span class="dashboard-profile-realm-points">
-        point<%- points == 1 ? '' : 's' %>
-      </span>
-    </a>
+    <% if (points) { %>
+      <a href="/realm/<%- realm %>/players">
+        <%- points %>
+        <i class="icon-star"></i>
+      </a>
+    <% } %>
   </span>
 </div>

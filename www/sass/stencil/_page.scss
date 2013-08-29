@@ -1,56 +1,74 @@
-.stencil-page-icon {
-    font-size: 72px;
-    float: left;
-    margin-right: 20px;
-
-    @include breakpoint(B) {
-        float: none;
-        text-align: right;
-        margin-right: 0px;
+.stencil-page-top-row {
+    @include breakpoint(lessThanA) {
+        > aside {
+            display: none;
+        }
     }
 }
+.stencil-page .realm-submenu-sv {
+    float: right;
+}
+
+.stencil-page-icon {
+    @include bg-header;
+    margin-bottom: 0px;
+    float: left;
+    position: relative;
+    top: -3px;
+    @include breakpoint(lessThanA) {
+        display: none;
+    }
+}
+
 .stencil-page-sidebar {
     margin-bottom: 5px;
-    position: relative;
-    @include clearfix;
+    @include breakpoint(AtoB) {
+        text-align: center;
+    }
+}
 
-    .stencil-page-reward {
-        display: inline-block;
-        float: left;
-        margin-right: 15px;
-        @include breakpoint(B) {
-            margin-right: 0px;
-            position: absolute;
-            right: 80px;
-            top: 0;
-        }
+.stencil-page-reward {
+    @include bg-header;
+    margin-bottom: 0px;
+    margin-top: 3px;
+
+    position: relative;
+    .reward {
+        top: -2px;
     }
 
+    text-align: center;
+
+    @include breakpoint(AtoB) {
+        display: inline-block;
+    }
+}
+
+.stencil-page-take {
     ._take {
-        float: left;
-        margin-left: 20px;
-        @include breakpoint(lessThanA) {
-            margin-left: 0;
-            float: none;
-            width: 100%;
-            margin-top: 5px;
-        }
-        @include breakpoint(B) {
-            margin-left: 0;
-            float: none;
-            margin-top: 20px;
-            width: 100%;
+        width: 100%;
+    }
+    margin-top: 3px;
+
+    @include breakpoint(AtoB) {
+        display: inline-block;
+        margin-left: 10px;
+        margin-top: 0;
+        ._take {
+            position: relative;
+            top: -5px;
+            width: auto;
         }
     }
 }
 
 .stencil-page-my-instance {
-    margin-top: 20px;
     font-weight: 200;
-    font-size: 24px;
+    font-size: 18px;
+    text-align: center;
 
-    @include breakpoint(B) {
-        text-align: right;
+    @include breakpoint(AtoB) {
+        text-align: left;
     }
 }
 

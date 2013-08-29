@@ -49,9 +49,9 @@ define [
         describe "when rendering empty user", ->
             beforeEach -> prepareView emptyModel()
             it "points total is zero", ->
-                expect(view.$(".user-big-points-total").html()).toEqual '0'
+                expect(view.$(".user-big-points .reward-points").html()).toEqual '0'
 
         describe "when rendering scored user", ->
             beforeEach -> prepareView scoredModel()
             it "points total is the sum of all realms", ->
-                expect(view.$(".user-big-points-total").html()).toEqual '12'
+                expect(view.$(".user-big-points .reward-points").html()).toEqual '12'

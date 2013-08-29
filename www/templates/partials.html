@@ -54,11 +54,21 @@
     <% _.each(quest.team, function (u) { %>
     <div>
       <%= partial.user({ login: u }) %>:
-      <div class="reward-small">
-        +<%- quest.points %>
-      </div>
-      point<%- (quest.likes && quest.likes.length) ? 's' : '' %>!
+      <%= partial.reward({ points: quest.points, size: "small", plus: true }) %>
     </div>
     <% }) %>
   </script>
+
+  <script type="text/template" class="reward">
+    <div class="<%- obj.size ? 'reward-' + obj.size : 'reward' %> <%- obj.status ? 'reward-status-' + status : '' %>">
+      <%- obj.plus ? "+" : "" %><span class="reward-points"><%- points %></span>
+      <% if (obj.size && obj.size == 'small') { %>
+        <i class="icon-star"></i><!--
+   --><% } else { %>
+        <span class="icon-stack" data-toggle="tooltip" title="Reward&nbsp;points">
+          <i class="icon-circle icon-stack-base"></i>
+          <i class="icon-star icon-light"></i>
+        </span>
+      <% } %><!--
+ --></div></script>
 </div>
