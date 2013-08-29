@@ -92,11 +92,9 @@ textarea.comment-edit {
 }
 
 .comment-add-signin {
-    h3, > .signin {
-        float: left;
-    }
-    h3 {
-        margin-right: 15px;
+    > header {
+        @include bg-header;
+        margin-bottom: 10px;
     }
 }
 

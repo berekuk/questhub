@@ -1,11 +1,18 @@
 <div class="comment-add">
-  <aside>
-    <%= partial.upic_small({ login: currentUser }) %>
-  </aside>
-  <div class="comment-add-inner">
-    <div class="comment-add-textarea-sv"></div>
-    <div class="comment-add-buttons">
-      <button class="btn btn-primary submit disabled">Comment</button>
+  <% if (currentUser) { %>
+    <aside>
+      <%= partial.upic_small({ login: currentUser }) %>
+    </aside>
+    <div class="comment-add-inner">
+      <div class="comment-add-textarea-sv"></div>
+      <div class="comment-add-buttons">
+        <button class="btn btn-primary submit disabled">Comment</button>
+      </div>
     </div>
-  </div>
+  <% } else { %>
+    <div class="comment-add-signin">
+      <header>Sign in to comment:</header>
+      <span class="signin"></span>
+    </div>
+  <% } %>
 </div>

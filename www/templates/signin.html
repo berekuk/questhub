@@ -1,4 +1,4 @@
-<div class="signin">
-  <button class="btn btn-large btn-primary login-with-twitter">Sign Up with Twitter</button>
-  <button class="btn btn-large btn-primary login-with-persona">Sign Up with Email</button>
+<div class="signin <%- obj.size && obj.size == 'large' ? 'signin-large' : '' %>">
+  <button class="btn <%- obj.size && obj.size == 'large' ? 'btn-large' : '' %> btn-primary login-with-twitter">Sign Up with Twitter</button>
+  <button class="btn <%- obj.size && obj.size == 'large' ? 'btn-large' : '' %> btn-primary login-with-persona">Sign Up with Email</button>
 </div>

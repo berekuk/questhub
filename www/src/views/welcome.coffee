@@ -12,7 +12,7 @@ define [
 
         subviews:
             ".signin": ->
-                new Signin()
+                new Signin(size: "large")
 
             ".realms-subview": ->
                 collection = sharedModels.realms
