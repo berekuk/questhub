@@ -33,4 +33,8 @@ get '/realm/:realm/quest/:id' => sub {
     };
 };
 
+get '/realm/:realm/quest/:id/comment/:cid' => sub {
+    redirect "/realm/".param('realm')."/quest/".param('id');
+};
+
 1;
