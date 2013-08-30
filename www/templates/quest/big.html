@@ -95,9 +95,11 @@
           <%= new Date(ts * 1000).toISOString() %>
       </time></a>
 
-      <span class="muted">&bull;
-        <a href="#" class="post-big-compose-comment">Comment</a>
-      </span>
+      <% if (currentUser) { %>
+        <span class="muted">&bull;
+          <a href="#" class="post-big-compose-comment">Comment</a>
+        </span>
+      <% } %>
 
       <span class="likes-subview"></span>
       <%= partial.watchers(obj) %>

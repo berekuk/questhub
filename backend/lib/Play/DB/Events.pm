@@ -22,7 +22,7 @@ use Play::DB qw(db);
 
 use Type::Params qw(validate);
 use Types::Standard qw(Undef Int Str Optional HashRef ArrayRef Dict);
-use Play::Types qw(Login);
+use Play::Types qw(Login Realm);
 
 sub _prepare_event {
     my $self = shift;
@@ -192,15 +192,11 @@ sub list {
     return \@result;
 }
 
-sub feed {
+sub _feed_for_query {
     my $self = shift;
     my ($params) = validate(\@_, Undef|Dict[
-        limit => Optional[Int],
-        offset => Optional[Int],
         for => Str,
     ]);
-    $params->{limit} //= 30;
-    $params->{sort} = 'bump';
 
     my $query = {};
     {
@@ -223,7 +219,39 @@ sub feed {
         }
         $query->{status} = { '$ne' => 'deleted' };
     }
+    return $query;
+}
+
+sub _feed_realm_query {
+    my $self = shift;
+    my ($params) = validate(\@_, Undef|Dict[
+        realm => Realm,
+    ]);
+
+    my $query = {};
+    $query->{realm} = $params->{realm};
+    $query->{status} = { '$ne' => 'deleted' };
+    return $query;
+
+}
+
+sub feed {
+    my $self = shift;
+    my ($params) = validate(\@_, Undef|Dict[
+        limit => Optional[Int],
+        offset => Optional[Int],
+        for => Optional[Str],
+        realm => Optional[Realm],
+    ]);
+    $params->{limit} //= 30;
+    $params->{sort} = 'bump';
+
+    my $query;
+    $query = $self->_feed_for_query({ for => $params->{for} }) if defined $params->{for};
+    $query = $self->_feed_realm_query({ realm => $params->{realm} }) if defined $params->{realm};
+    die "no for and no realm" unless $query;
     my $cursor = Play::Mongo->db->get_collection('posts')->find($query);
+
     $cursor = $cursor->limit($params->{limit});
     $cursor = $cursor->skip($params->{offset}) if $params->{offset};
     $cursor = $cursor->sort({ bump => -1 });

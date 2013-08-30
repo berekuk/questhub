@@ -37,7 +37,9 @@
             <% if (myQuests.length) { %>
               <a href="/realm/<%- myQuests[0].realm %>/quest/<%- myQuests[0]._id %>">(See your quest.)</a>
             <% } else { %>
-              <button class="btn btn-primary js-stencil-take">Take <span class="desktop-text">this quest</span></button>
+              <% if (currentUser) { %>
+                <button class="btn btn-primary js-stencil-take">Take <span class="desktop-text">this quest</span></button>
+              <% } %>
             <% } %>
           </div>
         </div>
@@ -68,9 +70,11 @@
         </time><!--
    --></a>
 
-      <span class="muted">&bull;
-        <a href="#" class="post-big-compose-comment">Comment</a>
-      </span>
+      <% if (currentUser) { %>
+        <span class="muted">&bull;
+          <a href="#" class="post-big-compose-comment">Comment</a>
+        </span>
+      <% } %>
     </div>
 
     <div class="post-realm">

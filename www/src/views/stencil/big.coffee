@@ -1,10 +1,10 @@
 define [
     "underscore"
     "views/proto/common"
-    "models/shared-models"
+    "models/shared-models", "models/current-user"
     "views/helper/textarea"
     "text!templates/stencil/big.html"
-], (_, Common, sharedModels, Textarea, html) ->
+], (_, Common, sharedModels, currentUser, Textarea, html) ->
     class extends Common
         template: _.template html
 
@@ -49,6 +49,7 @@ define [
         serialize: ->
             params = super
 
+            params.currentUser = currentUser.get("login")
             # TODO - move to model.serialize?
             realm = sharedModels.realms.findWhere { id: @model.get("realm") }
             params.isKeeper = realm.isKeeper()
