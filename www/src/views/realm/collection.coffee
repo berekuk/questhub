@@ -5,7 +5,6 @@ define [
 ], (RealmSmall, AnyCollection, html) ->
     class extends AnyCollection
         template: _.template(html)
-        activated: true
         generateItem: (model) ->
             new RealmSmall(model: model)
 
