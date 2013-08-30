@@ -1,0 +1,334 @@
+<html lang="en" class="wf-doppioone-n4-active wf-active"><head>
+    <meta charset="utf-8">
+    <meta name="fragment" content="!">
+    <title><% quest.name %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="alternate" type="application/atom+xml" title="News Feed" href="/api/event/atom">
+
+    <link href="/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <div style="width: 80%; height: 80%; left: 10%; top: 10%; text-align: center; position: fixed; background-color: white; z-index: 5000; border: 3px #999 solid; padding: 20px">
+        <h1>You are using an outdated version of Internet Explorer.</h1>
+        <h2>To use Questhub, upgrade at least to IE 9, or install any of the following:<br>
+          <a href="https://www.google.com/chrome">Google Chrome</a><br>
+          <a href="https://mozilla.org/firefox">Firefox</a><br>
+          <a href="http://opera.com">Opera</a><br>
+          <a href="http://browser.yandex.com/">Yandex.Browser</a>
+        </h2>
+      </div>
+    <![endif]-->
+
+    <link href="/css/main.css" rel="stylesheet">
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.ico" sizes="16x16" type="image/x-icon">
+    <link rel="icon" href="/favicon.png" sizes="16x16" type="image/png">
+
+    <!-- Google Analytics -->
+    <script type="text/javascript" async="" src="http://cdn.mxpnl.com/libs/mixpanel-2.2.min.js"></script><script type="text/javascript" async="" src="http://api.flattr.com/js/0.6/load.js?mode=auto"></script><script async="" src="//www.google-analytics.com/analytics.js"></script><script type="text/javascript">
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    </script>
+
+    <!-- Flattr -->
+    <script type="text/javascript">
+    /* <![CDATA[ */
+        (function() {
+            var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+            s.type = 'text/javascript';
+            s.async = true;
+            s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+            t.parentNode.insertBefore(s, t);
+        })();
+    /* ]]> */</script>
+
+    <!-- start Mixpanel -->
+    <script type="text/javascript">(function(e,b){if(!b.__SV){var a,f,i,g;window.mixpanel=b;a=e.createElement("script");a.type="text/javascript";a.async=!0;a.src=("https:"===e.location.protocol?"https:":"http:")+'//cdn.mxpnl.com/libs/mixpanel-2.2.min.js';f=e.getElementsByTagName("script")[0];f.parentNode.insertBefore(a,f);b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==
+typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.track_charge people.clear_charges people.delete_user".split(" ");for(g=0;g<i.length;g++)f(c,i[g]);
+b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);</script>
+    <!-- end Mixpanel --><link rel="stylesheet" href="http://use.edgefonts.net/c/c23b82/doppio-one:n4.Wdw:N:2/d">
+  </head>
+
+  <body>
+    <div id="wrap"><div class="navbar-subview"><nav class="navbar">
+  <div class="nav-inner">
+  <ul class="top-nav">
+    <li class="menu-item-feed">
+      <a class="brand" href="/">
+
+          <span class="mobile-text">
+            QH
+          </span>
+
+        <span class="desktop-text">
+          Questhub.io
+        </span>
+      </a>
+    </li>
+  </ul><ul class="nav-menu top-nav">
+    <li class="menu-item-realms">
+      <a href="/realms">
+        <i class="icon-puzzle-piece"></i>
+        <span class="desktop-text">
+          Realms
+        </span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="current-user-box"><!-- current user widget from right-top corner -->
+<ul class="top-nav">
+  <li class="dropdown">
+
+      <!-- TODO: refactor to use views/user/signin.js -->
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="icon-signin"></i>
+        <span class="desktop-text">
+          Sign In
+        </span>
+      </a>
+      <ul class="dropdown-menu">
+        <li>
+          <a href="#" class="login-with-twitter">with Twitter</a>
+          <a href="#" class="login-with-persona">with Email</a>
+        </li>
+      </ul>
+
+  </li>
+</ul>
+</div>
+
+  </div>
+</nav>
+</div>
+<div class="app-view-container">
+<div class="app-view-notifies"></div>
+<div><article class="quest-page-unregistered">
+
+<aside class="sidebar quest-page-sidebar">
+
+  <div class="quest-page-reward">
+    <div>
+
+    <div class="reward reward-status-open">
+      <span class="reward-points"><% quest.points %></span>
+
+        <span class="icon-stack" data-toggle="tooltip" title="" data-original-title="Reward&nbsp;points">
+          <i class="icon-circle icon-stack-base"></i>
+          <i class="icon-star icon-light"></i>
+        </span>
+      <!--
+ --></div>
+    </div>
+    <span class="label label-warning"><% quest.status %></span>
+  </div>
+
+
+
+
+
+  <div class="quest-checkins-sv"><div class="quest-checkins hide">
+  <header>Checkins:</header>
+  <div class="quest-checkin-none">None so far</div> <!-- TODO -->
+
+
+</div>
+</div>
+
+</aside>
+
+<div class="mainarea">
+  <div class="main">
+    <div class="quest-big"><div class="post-big quest-big quest-big-open">
+  <aside>
+
+
+    <% FOREACH user in quest.team %>
+      <div class="post-big-upic-box">
+        <a href="/player/<% user %>"><img src="/api/user/<% user %>/pic?s=small" alt="<% user %>" title="<% user %>" class="upic-small"></a>
+      </div>
+    <% END %>
+
+
+  </aside>
+
+  <div class="post-big-inner">
+    <div>
+      <small class="muted">
+        <span class="muted">
+          <% IF quest.tealm.size %>
+            <% FOREACH user in quest.team %>
+            <a href="/player/<% user %>" class="user-link"><% user %></a><% ", " UNLESS loop.last %>
+            <% END %>
+            <% IF quest.status == 'open' %>
+              <% quest.team.size == 1 ? 'is' : 'are' %> on a quest: <!-- TODO - "completed", "suggests" -->
+            <% ELSIF quest.status == 'closed' %>
+              completed a quest:
+            <% ELSE %>
+              was on a quest:
+            <% END %>
+          <% ELSE %>
+            <a href="/player/<% quest.author %>" class="user-link"><% quest.author %></a> suggests a quest:
+          <% END %>
+
+        </span>
+      </small>
+    </div>
+
+    <header class="post-big-title">
+      <span class="quest-big-editable"><% quest.name %></span>
+    </header>
+
+    <span class="muted quest-big-edit control-group">
+      <input name="tags" type="text" placeholder="Tags" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
+
+      <div class="post-edit-controls pull-right">
+        <button class="btn cancel">Cancel</button>
+        <button class="btn btn-primary save">Save</button>
+      </div>
+    </span>
+
+
+    <footer class="object-bottom-line">
+      <div class="quest-big-tags">
+        <span class="quest-tags">
+          <% FOREACH tag IN quest.tags %>
+            <a href="/realm/<% quest.realm %>/explore/latest/tag/<% tag %>" class="tag ">
+              <% tag %>
+            </a>
+          <% END %>
+        </span>
+      </div>
+
+      <a href="/realm/<% quest.realm %>/quest/<% quest.item('_id') %>" class="time-anchor"><time class="timeago" datetime="<% quest.updated %>" title="<% quest.updated %>"><% quest.updated %></time></a>
+
+      <span class="likes-subview">
+    <!--
+
+ --><span class="like-button " data-toggle="tooltip" title="" data-original-title="<% quest.likes.join(', ') %>">
+      <i class="icon-thumbs-up-alt"></i>
+      <% quest.likes ? quest.likes.size : 0 %>
+  </span><!--
+
+ -->
+
+</span>
+
+    </footer>
+
+    <div class="post-realm">
+      <a href="/realm/<% quest.realm %>" class="post-realm-link">
+        <img src="/i/<% quest.realm %>.png" width="30" height="30">
+        Meta
+      </a>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div class="comments"><div class="comments-list" style="">
+
+<% FOREACH comment IN comments %>
+<div class="comment-outer">
+<article class="comment comment-type-text">
+  <aside>
+    <a href="/player/<% comment.author %>"><img src="/api/user/<% comment.author %>/pic?s=small" alt="<% comment.author %>" title="<% comment.author %>" class="upic-small"></a>
+  </aside>
+
+  <div class="comment-inner">
+
+    <header class="object-top-line">
+      <a href="/player/<% comment.author %>" class="user-link"><% comment.author %></a>
+    </header>
+
+    <div class=" comment-content">
+      <% markdown(comment.body, quest.realm) %>
+    </div>
+
+    <footer class="object-bottom-line">
+      <a href="/realm/<% quest.realm %>/quest/<% quest.item('_id') %>/comment/<% comment.item('_id') %>" class="time-anchor">
+        <time class="timeago" datetime="<% comment.updated %>" title="<% comment.updated %>"><% comment.updated %></time>
+      </a>
+
+    <span class="likes">
+      <span class="like-button  like-button-hide" data-toggle="tooltip" title="" data-original-title="">
+      <i class="icon-thumbs-up-alt"></i>
+      <% comment.likes ? comment.likes.size : 0 %>
+  </span><!--
+
+ -->
+
+</span>
+    </footer>
+  </div>
+</article></div>
+<% END %>
+
+</div>
+
+<div class="comment-add-sv"><div class="comment-add">
+
+    <div class="comment-add-signin">
+      <header>Sign in to comment:</header>
+      <span class="signin"><div class="signin ">
+  <button class="btn  btn-primary login-with-twitter">Sign Up with Twitter</button>
+  <button class="btn  btn-primary login-with-persona">Sign Up with Email</button>
+</div>
+</span>
+    </div>
+
+</div>
+</div>
+</div>
+  </div>
+</div>
+
+</article>
+</div></div>
+<div id="push"></div>
+</div>
+    <footer id="footer">
+      <p class="muted credit">
+        <span class="footer-line">
+          <a href="/about/feedback">Report a bug</a>
+          &nbsp; | &nbsp;
+          <a href="/about">About</a>
+          &nbsp; | &nbsp;
+          <a href="http://blogs.perl.org/mt/mt-search.fcgi?blog_id=310&amp;tag=play-perl&amp;limit=20">Blog</a>
+        </span>
+        <span class="footer-separator footer-separator-first">&nbsp; | &nbsp;</span>
+        <span class="footer-line">
+          © 2012-2013 <a href="https://github.com/berekuk">berekuk</a> and <a href="https://github.com/berekuk/questhub/graphs/contributors">other contributors</a>
+        </span>
+        <span class="footer-separator footer-separator-tail">&nbsp; | &nbsp;</span>
+        <span class="footer-line">
+          <span class="flattr-wrapper">
+            <iframe src="http://api.flattr.com/button/view/?url=http%3A%2F%2Fquesthub.io%2F&amp;button=compact&amp;popout=0&amp;" class="FlattrButton" width="110" height="20" frameborder="0" scrolling="no" title="Flattr" border="0" marginheight="0" marginwidth="0" allowtransparency="true"></iframe>
+          </span>
+          <span class="mixpanel-badge">
+            <a href="http://mixpanel.com/f/partner"><img src="http://mixpanel.com/site_media/images/partner/badge_light.png" alt="Mobile Analytics"></a>
+          </span>
+        </span>
+      </p>
+    </footer>
+
+    <!-- Placeholders for modal views -->
+    <div id="modal-storage">
+      <div id="user-settings"></div>
+      <div id="notifications"></div>
+      <div id="quest-completed-modal"></div>
+    </div>
+
+    <!-- Mozilla recommends not to self-host persona JS code while Persona is still in beta -->
+    <script src="https://login.persona.org/include.js"></script>
+    <script src="http://use.edgefonts.net/doppio-one.js"></script>
+
+
+<iframe src="https://login.persona.org/communication_iframe" style="display: none;"></iframe><textarea tabindex="-1" style="position: absolute; top: -999px; left: 0px; right: auto; bottom: auto; border: 0px; box-sizing: content-box; word-wrap: break-word; overflow: hidden; height: 0px !important; min-height: 0px !important;"></textarea></body></html>
