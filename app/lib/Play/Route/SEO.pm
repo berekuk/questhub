@@ -8,8 +8,14 @@ use DateTime::Format::RFC3339;
 
 use Play::DB qw(db);
 use Play::Markdown qw(markdown);
+use Play::Config qw(setting);
 
 my $rfc3339 = DateTime::Format::RFC3339->new;
+
+get '/quest/:id' => sub {
+    my $quest = db->quests->get(param('id'));
+    redirect "/realm/$quest->{realm}/quest/".param('id');
+};
 
 get '/realm/:realm/quest/:id' => sub {
     my $quest = db->quests->get(param('id'));
