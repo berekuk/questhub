@@ -206,7 +206,7 @@ b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);</script>
         </span>
       </div>
 
-      <a href="/realm/<% quest.realm %>/quest/<% quest.item('_id') %>" class="time-anchor"><time class="timeago" datetime="<% quest.updated %>" title="<% quest.updated %>"><% quest.updated %></time></a>
+      <time class="timeago" datetime="<% quest.updated %>" title="<% quest.updated %>"><% quest.updated %></time>
 
       <span class="likes-subview">
     <!--
@@ -253,9 +253,7 @@ b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);</script>
     </div>
 
     <footer class="object-bottom-line">
-      <a href="/realm/<% quest.realm %>/quest/<% quest.item('_id') %>/comment/<% comment.item('_id') %>" class="time-anchor">
-        <time class="timeago" datetime="<% comment.updated %>" title="<% comment.updated %>"><% comment.updated %></time>
-      </a>
+      <time class="timeago" datetime="<% comment.updated %>" title="<% comment.updated %>"><% comment.updated %></time>
 
     <span class="likes">
       <span class="like-button  like-button-hide" data-toggle="tooltip" title="" data-original-title="">
