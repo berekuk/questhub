@@ -14,11 +14,11 @@ define [
         subviews:
             ".progress-spin": -> new Progress()
 
-        insertOne: (el, options) ->
+        insertOne: (view, options) ->
             if options and options.prepend
-                @$(@listSelector).prepend el
+                @$(@listSelector).prepend view.el
             else
-                @$(".show-more").before el
+                @$(".show-more").before view.el
 
         activated: true
         pageSize: 100

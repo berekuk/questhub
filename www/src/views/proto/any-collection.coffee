@@ -16,18 +16,17 @@ define ["backbone", "underscore", "views/proto/common"], (Backbone, _, Common) -
         itemSubviews: []
 
         # can be overriden if 'append' strategy doesn't fit you
-        insertOne: (el, options) ->
+        insertOne: (view, options) ->
+            @itemSubviews.push view
             if options and options.prepend
 
                 # this branch is not used in any real code, but still supported for the consistency with proto-paged.js implementation
-                @$(@listSelector).prepend el
+                @$(@listSelector).prepend view.el
             else
-                @$(@listSelector).append el
+                @$(@listSelector).append view.el
 
         removeItemSubviews: ->
-            _.each @itemSubviews, (subview) ->
-                subview.remove()
-
+            sv.remove() for sv in @itemSubviews
             @itemSubviews = []
 
         render: ->
@@ -47,24 +46,22 @@ define ["backbone", "underscore", "views/proto/common"], (Backbone, _, Common) -
                 if oldSubviews[model.id]
                     sv = oldSubviews[model.id]
                     delete oldSubviews[model.id]
-                    @insertOne sv.el
+                    @insertOne sv
                     sv.reattachToDOM()
                 else
                     # new model in collection, let's create a view for it
                     @renderOne(model)
 
             # these subviews refer to models which are not present in collection anymore, so we're removing them
-            for id, sv of oldSubviews
-                sv.remove()
+            sv.remove() for id, sv of oldSubviews
 
         generateItem: (model) ->
             alert "not implemented"
 
         renderOne: (model, options) ->
             view = @generateItem(model)
-            @itemSubviews.push view
             view.render()
-            @insertOne view.el, options
+            @insertOne view, options
 
         onAdd: (model, collection, options) ->
             @$(@listSelector).show()

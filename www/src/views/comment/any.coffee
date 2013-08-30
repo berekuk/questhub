@@ -89,6 +89,12 @@ define [
             super
 
         highlight: ->
+            # don't flash on re-render
+            if @highlighted
+                @$(".comment").removeClass "flash"
+                return
+            @highlighted = true
+
             $('html, body').animate {
                 scrollTop: @$el.offset().top - $(".navbar").height() - 5
             }, {
