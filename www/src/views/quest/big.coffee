@@ -14,7 +14,8 @@ define [
             "click .quest-join": "join"
             "click .delete": "destroy"
             "click .edit": "startEdit"
-            "click button.save": "saveEdit"
+            "click .post-edit-controls .save": "saveEdit"
+            "click .post-edit-controls .cancel": "closeEdit"
             "click .quest-big-note-expand": "expandNote"
             "click .post-big-compose-comment": "composeComment"
             "keyup input": "edit"
@@ -78,9 +79,9 @@ define [
                     $(oldFocus).focus()
                 ok = false
             if ok
-                @$("button.save").removeClass "disabled"
+                @$(".post-edit-controls .save").removeClass "disabled"
             else
-                @$("button.save").addClass "disabled"
+                @$(".post-edit-controls .save").addClass "disabled"
             ok
 
         edit: (e) ->
@@ -98,7 +99,7 @@ define [
 
         saveEdit: =>
             # so, we're using DOM data to cache validation status... this is a slippery slope.
-            return if @$("button.save").hasClass("disabled")
+            return if @$(".post-edit-controls .save").hasClass("disabled")
 
             # form is validated already by edit() method
             name = @$("[name=name]").val()

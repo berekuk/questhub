@@ -10,7 +10,8 @@ define [
 
         events:
             "click .edit": "startEdit"
-            "click button.save": "saveEdit"
+            "click .post-edit-controls .save": "saveEdit"
+            "click .post-edit-controls .cancel": "closeEdit"
             "click .stencil-big-tabs div._icon": "switch"
             "keyup input": "edit"
 
@@ -72,14 +73,14 @@ define [
                 ok = false
 
             if ok
-                @$("button.save").removeClass "disabled"
+                @$(".post-edit-controls .save").removeClass "disabled"
             else
-                @$("button.save").addClass "disabled"
+                @$(".post-edit-controls .save").addClass "disabled"
             ok
 
         saveEdit: =>
             # so, we're using DOM data to cache validation status... this is a slippery slope.
-            return if @$("button.save").hasClass("disabled")
+            return if @$(".post-edit-controls .save").hasClass("disabled")
 
             @model.save
                 name: @$("[name=name]").val()

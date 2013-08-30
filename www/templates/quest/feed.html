@@ -79,9 +79,9 @@
 
     <span class="muted quest-big-edit control-group">
       <input name="tags" type="text" placeholder="Tags" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
-
-      <button class="btn btn-primary save pull-right">Save</button>
+      <%= partial.post_edit_controls() %>
     </span>
+
     <% if (team.length == 0 && currentUser) { %>
       <div>
         <span class="muted">This quest is not claimed by anybody. Would you like to take it?</span>
