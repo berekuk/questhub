@@ -13,7 +13,6 @@
       <%= partial.user({ realm: realm, login: author }) %>
     </header>
 
-    <% console.log(type) %>
     <div class="<%- type == 'text' ? 'widetext' : '' %> comment-content">
       <% if (type == 'text') { %>
         <%= partial.markdown(body, realm) %>
