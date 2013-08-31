@@ -58,7 +58,7 @@ sub _RunSpanGamut {
                 s{\b(\w+(?:::\w+)+)(?![^<>]*>)(?![^<>]*(?:>|<\/a>|<\/code>))}
                  {<a href=\"http://metacpan.org/module/$1\">$1</a>}g;
             $text =~
-                s{\bcpan:(\w+)(?![^<>]*>)(?![^<>]*(?:>|<\/a>|<\/code>))}
+                s{\bcpan:([\w-]+)(?![^<>]*>)(?![^<>]*(?:>|<\/a>|<\/code>))}
                  {<a href=\"http://metacpan.org/module/$1\">$1</a>}g;
         }
     }
