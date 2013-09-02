@@ -98,6 +98,8 @@ sub store_upic_by_content {
     my ($login, $content) = validate(\@_, Login, Str);
 
     my $gd = GD::Image->new($content);
+    $gd->saveAlpha(1);
+    $gd->alphaBlending(0);
 
     for my $size (keys %SIZE_TO_WIDTH) {
         my $width = $SIZE_TO_WIDTH{$size};
