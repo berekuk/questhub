@@ -4,6 +4,36 @@
     <span class="progress-load-sv"></span>
   </header>
   <div class="well user-settings-well">
+    <div class="user-settings-name-and-pic">
+
+      <div class="user-settings-names">
+        <span class="user-settings-login"><%= user.login %></span>
+        <% if (user.twitter) {
+          if (user.twitter.screen_name) { %>
+            <div>
+              <i class="icon-twitter"></i>
+              <a href="https://twitter.com/<%= user.twitter.screen_name %>">
+                @<%= user.twitter.screen_name %>
+              </a>
+            </div>
+        <% } } %>
+      </div>
+      <div class="user-settings-upic">
+
+        <form class="pic-upload-form" enctype="multipart/form-data" action="/api/current_user/pic" method="post">
+          <div class="user-settings-upic-preview">
+            <%= partial.upic_normal({ login: user.login }) %>
+          </div>
+          <span class="btn btn-mini btn-file">
+            <span><i class="icon-pencil"></i> Change picture</span>
+            <input name="pic" type="file" />
+          </span>
+        </form>
+
+      </div>
+
+    </div>
+
     <div class="form-horizontal user-settings-email">
       <% if (obj.email_confirmed == 'persona') { %>
         <h4><%- obj.email || 'oops' %>
@@ -21,6 +51,8 @@
         </span>
       <% } %>
     </div>
+    <hr>
+
     <div class="user-settings-checkboxes">
       <div class="muted notify-text">Notify me by email when someone...</div>
       <label class="checkbox">
@@ -43,11 +75,12 @@
       </label>
     </div>
 
+    <hr>
     <div class="user-settings-token">
       <span class="muted">API token:</span>
       <% if (obj.api_token) { %>
         <span class="_token"><%- obj.api_token %></span>
-        <br><button class="btn btn-small js-generate-token js-regenerate-token regenerate-token">Regenerate</button>
+        <br><button class="btn btn-small js-generate-token js-regenerate-token regenerate-token"><i class="icon-refresh"></i> Regenerate</button>
       <% } else { %>
         <button class="btn btn-small js-generate-token generate-token">Generate</button>
       <% } %>
