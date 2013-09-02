@@ -47,6 +47,10 @@ cpan_module 'Template'
 cpan_module 'DateTime'
 cpan_module 'DateTime::Format::RFC3339'
 
+package 'libgd2-noxpm'
+package 'libgd2-xpm-dev'
+cpan_module 'Image::Resize'
+
 cpan_module 'T/TO/TOBYINK/Type-Tiny-0.022.tar.gz'
 
 directory '/data' # logs
