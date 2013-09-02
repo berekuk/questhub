@@ -137,6 +137,7 @@ sub users_list :Tests {
                     screen_name => $_,
                 },
                 _id => re('\S+'),
+                age => re('\d'),
                 login => $_,
                 rp => {
                     europe => 0,
@@ -164,6 +165,7 @@ sub users_list_limit_offset :Tests {
                         screen_name => $_,
                     },
                     _id => re('\S+'),
+                    age => re('\d'),
                     login => $_,
                     rp => {
                         europe => 0,
