@@ -89,7 +89,7 @@ define [
                         "warning"
                         """Your email address is not confirmed. Click the link we sent to #{ @model.get("settings").email } to confirm it.<br>(You can resend it from <a href="/settings">your settings</a> if necessary.)"""
                     )
-                else if @model.get("default_upic")
+                else if @model.get("default_upic") and @model.get("age") > 30
                     Backbone.trigger(
                         "pp:notify"
                         "warning"
