@@ -79,6 +79,7 @@ get '/current_user' => sub {
 
         $user->{settings} = db->users->get_settings($login);
         $user->{notifications} = db->notifications->list($login);
+        $user->{default_upic} = db->images->is_upic_default($login);
     }
     else {
         $user->{registered} = 0;
