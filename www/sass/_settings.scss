@@ -52,3 +52,21 @@
 .settings-conflict-email {
     display: none;
 }
+
+.user-settings-names {
+    margin-bottom: 10px;
+}
+.user-settings-login {
+    font-size: 22px;
+    font-weight: 200;
+}
+
+.user-settings-upic {
+    .btn-file {
+        margin-left: 2px;
+        vertical-align: bottom;
+    }
+}
+.user-settings-upic-preview {
+    display: inline-block;
+}

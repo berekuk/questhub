@@ -82,12 +82,19 @@ define [
             @checkEmailConfirmed()
 
         checkEmailConfirmed: ->
-            if @model.get("registered") and @model.get("settings").email and not @model.get("settings").email_confirmed
-                Backbone.trigger(
-                    "pp:notify"
-                    "warning"
-                    "Your email address is not confirmed. Click the link we sent to #{ @model.get("settings").email } to confirm it. (You can resend it from your settings if necessary.)"
-                )
+            if @model.get("registered")
+                if @model.get("settings").email and not @model.get("settings").email_confirmed
+                    Backbone.trigger(
+                        "pp:notify"
+                        "warning"
+                        """Your email address is not confirmed. Click the link we sent to #{ @model.get("settings").email } to confirm it.<br>(You can resend it from <a href="/settings">your settings</a> if necessary.)"""
+                    )
+                else if @model.get("default_upic")
+                    Backbone.trigger(
+                        "pp:notify"
+                        "warning"
+                        """You don't have a profile picture yet. You can upload one <a href="/settings">upload one from your settings</a>."""
+                    )
 
         backendLogout: ->
             transitional = new Transitional message: 'Logging out...'

@@ -100,4 +100,25 @@ sub enqueue :Tests {
     );
 }
 
+sub store_upic_by_content :Tests {
+    my $content = do { local (@ARGV, $/) = 'pic/default/normal'; <> };
+    db->images->store_upic_by_content('foo', $content);
+
+    ok -e 'tfiles/images/pic/foo.normal';
+    ok -e 'tfiles/images/pic/foo.small';
+    like qx(file tfiles/images/pic/foo.normal), qr/48 x 48/;
+    like qx(file tfiles/images/pic/foo.small), qr/24 x 24/;
+}
+
+sub is_upic_default :Tests {
+    prepare_data_dir();
+
+    ok db->images->is_upic_default('berekuk');
+    db->images->fetch_upic(
+        db->images->upic_default,
+        'berekuk'
+    );
+    ok not db->images->is_upic_default('berekuk');
+}
+
 __PACKAGE__->new->runtests;

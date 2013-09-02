@@ -13,6 +13,8 @@ use Play::DB qw(db);
 
 use Play::App::Util qw( login try_login );
 
+use Image::Resize;
+
 get '/auth/twitter' => sub {
     if (not session('twitter_user')) {
         redirect auth_twitter_authenticate_url;
@@ -77,6 +79,7 @@ get '/current_user' => sub {
 
         $user->{settings} = db->users->get_settings($login);
         $user->{notifications} = db->notifications->list($login);
+        $user->{default_upic} = db->images->is_upic_default($login);
     }
     else {
         $user->{registered} = 0;
@@ -98,6 +101,17 @@ get '/current_user' => sub {
 # user settings are private; you can't get settings of other users
 get '/current_user/settings' => sub {
     return db->users->get_settings(login);
+};
+
+post '/current_user/pic' => sub {
+    my $login = login;
+    my $file = upload('pic');
+    unless ($file) {
+        die "No pic provided";
+    }
+
+    db->images->store_upic_by_content($login, $file->content);
+    redirect '/settings';
 };
 
 any ['put', 'post'] => '/current_user/settings' => sub {

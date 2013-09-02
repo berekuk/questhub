@@ -12,6 +12,7 @@ define [
             "keyup [name=email]": "typing"
             "click button.js-generate-token": "generateApiToken"
             "click button.submit": "submit"
+            "change [name=pic]": "uploadPic"
 
         subviews:
             ".progress-load-sv": -> new Progress()
@@ -45,6 +46,7 @@ define [
         serialize: ->
             params = super
             params.hideEmailStatus = @hideEmailStatus
+            params.user = currentUser.toJSON()
             params
 
         enable: ->
@@ -103,3 +105,8 @@ define [
                     @subview(".progress-save-sv").off()
                     Backbone.trigger "pp:notify", "error", "Failed to save new settings"
                     @enable()
+
+        uploadPic: ->
+            act = => @$(".pic-upload-form").submit()
+            mixpanel.track "upload pic", for: "user", act
+            window.setTimeout act, 300

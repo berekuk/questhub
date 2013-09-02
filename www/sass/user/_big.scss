@@ -13,11 +13,11 @@
     @include breakpoint(B) {
         margin-left: 20px;
     }
-    .user-big-player-login {
-        font-size: 18px;
-        vertical-align: middle;
-        line-height: 30px;
-    }
+}
+.user-big-player-login {
+    font-size: 18px;
+    vertical-align: middle;
+    line-height: 30px;
 }
 
 .user-big-actions {
