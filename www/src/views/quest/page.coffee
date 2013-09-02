@@ -17,13 +17,15 @@ define [
             "click .quest-page-action .resurrect": "resurrect"
             "click .quest-page-action .reopen": "reopen"
             "click .invite": "inviteDialog"
+            "click .invite-cancel": "inviteActionCancel"
+            "click .invite-send": "inviteActionSend"
+            "keyup #inputInvitee": "inviteAction"
             "click .uninvite": "uninvite"
             "click .join": "join"
             "click .like": -> @model.like()
             "click .unlike": -> @model.unlike()
             "click .watch": -> @model.act "watch"
             "click .unwatch": -> @model.act "unwatch"
-            "keyup #inputInvitee": "inviteAction"
 
         realm: -> @model.get "realm"
         pageTitle: -> @model.get "name"
@@ -57,25 +59,29 @@ define [
         inviteDialog: ->
             @$(".invite.button").hide()
             @$(".invite-dialog").show 0, =>
-                @$(".invite-dialog input").typeahead
-                    name: "users"
-                    remote: "/api/user/%QUERY/autocomplete"
+                if not @inviteDialogIsActive
+                    @$(".invite-dialog input").typeahead
+                        name: "users"
+                        remote: "/api/user/%QUERY/autocomplete"
+                    @inviteDialogIsActive = true
                 @$(".invite-dialog input").focus()
 
 
+        inviteActionCancel: ->
+            @$(".invite-dialog input").typeahead "destroy"
+            @inviteDialogIsActive = false
+            @$(".invite-dialog").hide()
+            @$(".invite-dialog input").val ""
+            @$(".invite.button").show()
+
+        inviteActionSend: ->
+            @model.invite @$("#inputInvitee").val()
+
         inviteAction: (e) ->
-
-            # escape
             if e.keyCode is 27
-                @$(".invite-dialog input").typeahead "destroy"
-                @$(".invite-dialog").hide()
-                @$(".invite-dialog input").val ""
-                @$(".invite.button").show()
-                return
-
-            # enter
-            @model.invite @$("#inputInvitee").val()  if e.keyCode is 13
-            return
+                @inviteActionCancel()
+            else if e.keyCode is 13
+                @inviteActionSend()
 
         uninvite: (e) ->
             @model.uninvite $(e.target).parent().attr("data-login")
