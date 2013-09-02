@@ -107,4 +107,6 @@ define [
                     @enable()
 
         uploadPic: ->
-            @$(".pic-upload-form").submit()
+            act = => @$(".pic-upload-form").submit()
+            mixpanel.track "upload pic", for: "user", act
+            window.setTimeout act, 300
