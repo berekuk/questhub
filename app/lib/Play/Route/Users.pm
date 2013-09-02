@@ -222,10 +222,9 @@ post '/register' => sub {
     # note that race condition is still possible after these checks
     # that's ok, mongodb will throw an exception
 
-    db->users->add($user);
-
-    db->users->set_settings(
-        $login => $settings,
+    db->users->add(
+        $user,
+        $settings,
         (session('persona_email') ? 1 : 0) # force 'email_confirmed' setting
     );
 
