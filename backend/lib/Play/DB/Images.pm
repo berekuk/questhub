@@ -42,7 +42,7 @@ sub upic_by_email {
     my $pic = 'http://www.gravatar.com/avatar/'.md5_hex(lc($email));
     return {
         map {
-            $_ => "$pic?s=$SIZE_TO_WIDTH{$_}"
+            $_ => "$pic?s=$SIZE_TO_WIDTH{$_}&d=404"
         } keys %SIZE_TO_WIDTH
     };
 }
