@@ -49,21 +49,21 @@ sub get_by_email {
 
 sub _upstream_upic {
     my $self = shift;
-    my ($user) = @_;
-    if (not $user->{twitter}{profile_image_url} and $user->{settings}{email}) {
-        return db->images->upic_by_email($user->{settings}{email});
+    my ($user, $settings) = @_;
+    $settings ||= {}; # just be safe, although it'd auto-vivify anyway...
+    if (not $user->{twitter}{profile_image_url} and $settings->{email}) {
+        return db->images->upic_by_email($settings->{email});
     }
     elsif ($user->{twitter}{profile_image_url}) {
         return db->images->upic_by_twitter_data($user->{twitter});
     }
-    else {
-        return db->images->upic_default();
-    }
+    return;
 }
 
 sub _prepare_user {
     my $self = shift;
     my ($user) = @_;
+    $user->{age} = time - $user->{_id}->get_time;
     $user->{_id} = $user->{_id}->to_string;
     $user->{rp} //= {};
     $user->{rp}{$_} //= 0 for @{ $user->{realms} };
@@ -112,7 +112,7 @@ Add a new user.
 =cut
 sub add {
     my $self = shift;
-    my ($params) = validate(\@_, HashRef);
+    my ($params, $settings, $persona) = validate(\@_, HashRef, Optional[HashRef], Optional[Bool]);
 
     $params->{realms} ||= [];
     $params->{rp} = {
@@ -120,7 +120,11 @@ sub add {
     };
 
     my $id = $self->collection->insert($params, { safe => 1 });
-    db->images->enqueue_fetch_upic($params->{login} => $self->_upstream_upic($params));
+
+    my $upstream_upic = $self->_upstream_upic($params, $settings);
+    db->images->enqueue_fetch_upic($params->{login} => $upstream_upic) if $upstream_upic;
+
+    $self->set_settings($params->{login}, $settings, $persona) if $settings;
 
     for my $realm (@{ $params->{realms} }) {
         db->events->add({

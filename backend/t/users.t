@@ -281,7 +281,12 @@ sub upic_on_add :Tests {
     $upic_in->read_chunk(1000);
     $upic_in->commit;
 
-    db->users->add({ login => 'foo' });
+    db->users->add({ login => 'foo' }, { email => 'foo@example.com' }, 1); # confirmed by persona
+    db->users->add({ login => 'bar' }, { email => 'bar@example.com' }); # not confirmed
+    db->users->add({ login => 'baz', twitter => { profile_image_url => 'http://twitter.com/pic1?normal' } }, { email => 'baz@example.com' }); # both email and twitter
+    db->users->add({ login => 'baz2', twitter => { profile_image_url => 'http://twitter.com/pic2?normal' } }); # only twitter
+    db->users->add({ login => 'baz3' }); # nothing at all
+
     cmp_deeply
         $upic_in->read_chunk(10),
         [
@@ -291,7 +296,28 @@ sub upic_on_add :Tests {
                     'normal' => re('^http://www.gravatar.com/'),
                     'small' => re('^http://www.gravatar.com/'),
                 }
-            }
+            },
+            {
+                'login' => 'bar',
+                'upic' => {
+                    'normal' => re('^http://www.gravatar.com/'),
+                    'small' => re('^http://www.gravatar.com/'),
+                }
+            },
+            {
+                'login' => 'baz',
+                'upic' => {
+                    'normal' => re('twitter.com/pic1'),
+                    'small' => re('twitter.com/pic1'),
+                }
+            },
+            {
+                'login' => 'baz2',
+                'upic' => {
+                    'normal' => re('twitter.com/pic2'),
+                    'small' => re('twitter.com/pic2'),
+                }
+            },
         ];
 }
 
