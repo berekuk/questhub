@@ -138,6 +138,13 @@ sub upic_file {
     return "/play/backend/pic/default/$size";
 }
 
+sub is_upic_default {
+    my $self = shift;
+    my ($login) = validate(\@_, Login);
+    my $file = $self->_storage_file($login, 'normal');
+    return not -e $file;
+}
+
 sub enqueue_fetch_upic {
     my $self = shift;
     my ($login, $upic) = validate(\@_, Login, ImageUpic);

@@ -110,4 +110,15 @@ sub store_upic_by_content :Tests {
     like qx(file tfiles/images/pic/foo.small), qr/24 x 24/;
 }
 
+sub is_upic_default :Tests {
+    prepare_data_dir();
+
+    ok db->images->is_upic_default('berekuk');
+    db->images->fetch_upic(
+        db->images->upic_default,
+        'berekuk'
+    );
+    ok not db->images->is_upic_default('berekuk');
+}
+
 __PACKAGE__->new->runtests;
