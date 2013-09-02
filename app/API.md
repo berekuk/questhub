@@ -55,6 +55,10 @@ Get current user's settings.
 
 Update current user's settings.
 
+##### POST /api/current_user/pic
+
+Upload a pic.
+
 ##### POST /api/current_user/settings
 
 Same as `PUT` - both rewrite settings entirely.
