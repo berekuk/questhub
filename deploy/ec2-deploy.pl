@@ -33,6 +33,7 @@ $Term::ANSIColor::AUTORESET = 1;
 
 my %INSTANCES = (
     'questhub.io' => '54.225.128.184',
+    'lw.questhub.io' => '184.72.252.27',
 );
 my $USER = 'ubuntu';
 
