@@ -1,7 +1,10 @@
 .about {
     max-width: 650px;
     margin: 0 auto;
-
+    blockquote {
+        margin-top: 5px;
+        margin-bottom: 15px;
+    }
 }
 
 .about-inner {
