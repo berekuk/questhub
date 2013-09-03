@@ -3,9 +3,9 @@ define [
     "views/proto/common"
     "views/comment/like"
     "models/current-user"
-    "views/helper/textarea"
+    "views/helper/textarea", "views/helper/markdown"
     "text!templates/comment.html"
-], (_, $, Common, CommentLike, currentUser, Textarea, html) ->
+], (_, $, Common, CommentLike, currentUser, Textarea, Markdown, html) ->
     class extends Common
         className: "comment-outer"
 
@@ -25,6 +25,15 @@ define [
         subviews:
             ".likes": ->
                 new CommentLike model: @model
+            ".body-sv": ->
+                # TODO - make this subview optional and lazy
+                new Markdown
+                    realm: @model.get "realm"
+                    text: @model.get "body"
+
+        initialize: ->
+            super
+            @listenTo @model, "change:body", -> @subview(".body-sv").setText @model.get("body")
 
         edit: ->
             return unless @isOwned()

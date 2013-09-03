@@ -15,7 +15,7 @@
 
     <div class="<%- type == 'text' ? 'widetext' : '' %> comment-content">
       <% if (type == 'text') { %>
-        <%= partial.markdown(body, realm) %>
+        <div class="body-sv"></div>
       <% } else { %>
         <div class="comment-content-special">
         <% if (type == 'close') { %>
