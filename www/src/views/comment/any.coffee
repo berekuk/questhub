@@ -27,9 +27,16 @@ define [
                 new CommentLike model: @model
             ".body-sv": ->
                 # TODO - make this subview optional and lazy
-                new Markdown
+                sv = new Markdown
                     realm: @model.get "realm"
                     text: @model.get "body"
+                    editable: @isOwned()
+                sv.on "change", =>
+                    @model.set "body", sv.getText()
+                    sv.startSyncing()
+                    @model.save().always ->
+                        sv.stopSyncing()
+                return sv
 
         initialize: ->
             super
