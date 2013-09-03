@@ -93,7 +93,7 @@ define [
                     Backbone.trigger(
                         "pp:notify"
                         "warning"
-                        """You don't have a profile picture yet. You can upload one <a href="/settings">upload one from your settings</a>."""
+                        """You don't have a profile picture yet. You can <a href="/settings">upload one from your settings</a>."""
                     )
 
         backendLogout: ->
