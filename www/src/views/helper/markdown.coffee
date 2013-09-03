@@ -5,11 +5,13 @@ define [
     class extends Backbone.View
 
         events:
-            "click input.md-task": "markTask"
+            "click .md-task-icon": "markTask"
 
         render: ->
             @$el.html """<div class="md #{if @options.editable then "md-editable" else ""}">#{markdown(@options.text || "", @options.realm)}</div>"""
             @$("input[type=checkbox]").prop('disabled', true) unless @options.editable
+            @$("input[type=checkbox]:checked").after('<i class="md-task-icon icon-check"></i>')
+            @$("input[type=checkbox]:not(:checked)").after('<i class="md-task-icon icon-check-empty"></i>')
             @renderSyncing() if @syncing
 
         setText: (text) ->
@@ -19,7 +21,9 @@ define [
         getText: -> @options.text
 
         markTask: (e) ->
-            classes = e.target.className.split /\s+/
+            return unless @options.editable
+            target = $(e.target).prev()
+            classes = target[0].className.split /\s+/
             for c in classes
                 groups = c.match(/^task(\d+)/)
                 continue unless groups

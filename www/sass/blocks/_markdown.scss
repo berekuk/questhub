@@ -1,10 +1,30 @@
 .md {
     position: relative;
     input[type=checkbox] {
-        position: relative;
-        top: -2px;
+        display: none;
+    }
+    .md-task-icon {
+        display: inline-block;
+        width: 13px;
+        font-size: 14px;
+        color: $dark-grey;
     }
 }
+.md-editable {
+    .md-task-icon {
+        color: $text-color;
+        cursor: pointer;
+    }
+    .md-task-icon.icon-check {
+        color: darken($blue-color, 20%);
+    }
+    .md-task-icon.icon-check-empty {
+        &:hover {
+            color: darken($blue-color, 20%);
+        }
+    }
+}
+
 .md-syncing {
     float: right;
 }
