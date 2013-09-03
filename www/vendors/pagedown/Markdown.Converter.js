@@ -146,6 +146,17 @@ define(function () {
         // (see _ProcessListItems() for details):
         var g_list_level;
 
+        this.markTask = function (text, id) {
+            g_task_id = 0;
+            text = text.replace(/~/g, "~T");
+            text = _MarkTasks(text);
+            text = _CheckTask(text, id);
+            text = _UnmarkTasks(text);
+            text = text.replace(/~T/g, "~");
+            g_task_id = null;
+            return text;
+        };
+
         this.makeHtml = function (text) {
 
             //
@@ -174,6 +185,10 @@ define(function () {
             // The choice of character is arbitray; anything that isn't
             // magic in Markdown will work.
             text = text.replace(/~/g, "~T");
+
+            // set up ~X..X marks for all potential task list checkboxes
+            // we're doing this as early as possible, because we want to reverse the process and restore the original text
+            text = _MarkTasks(text);
 
             // attacklab: Replace $ with ~D
             // RegExp interprets $ as a special character
@@ -204,9 +219,6 @@ define(function () {
             // Strip link definitions, store in hashes.
             text = _StripLinkDefinitions(text);
 
-            // set up ~X..X marks for all potential task list checkboxes
-            text = _MarkTasks(text);
-
             text = _RunBlockGamut(text);
 
             text = _UnescapeSpecialChars(text);
@@ -236,6 +248,22 @@ define(function () {
 
         function _UnmarkTasks(text) {
             text = text.replace(/~X\d+X/gm, "");
+            return text;
+        };
+
+        function _CheckTask(text, id) {
+            text = text.replace(/(~X(\d+)X)(\[[ x]\])/gm, function (wholeMatch, prefix, matchId, checkbox) {
+                if (matchId != id) {
+                    return wholeMatch;
+                }
+                if (checkbox == "[ ]") {
+                    checkbox = "[x]";
+                }
+                else {
+                    checkbox = "[ ]";
+                }
+                return prefix + checkbox;
+            });
             return text;
         };
 
