@@ -1,5 +1,5 @@
-define ["backbone", "underscore", "markdown", "settings", "views/partials"], (Backbone, _, markdown, settings, partials) ->
-    Backbone.View.extend
+define ["backbone", "underscore", "views/partials"], (Backbone, _, partials) ->
+    class extends Backbone.View
         partial: partials
         initialize: ->
             @listenTo Backbone, "pp:logviews", ->
