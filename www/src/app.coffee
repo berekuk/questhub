@@ -1,18 +1,19 @@
 # move these into appropriate modules
 require [
     "jquery",
-    "routers/main", "routers/user", "routers/realm", "routers/quest", "routers/about", "routers/legacy"
+    "routers/main", "routers/user", "routers/realm", "routers/quest", "routers/about", "routers/legacy", "routers/not-found"
     "views/app",
     "models/current-user",
     "views/helper/textarea"
     "bootstrap", "jquery.autosize", "jquery.timeago"
-], ($, MainRouter, UserRouter, RealmRouter, QuestRouter, AboutRouter, LegacyRouter, App, currentUser, TextArea) ->
+], ($, MainRouter, UserRouter, RealmRouter, QuestRouter, AboutRouter, LegacyRouter, NotFoundRouter, App, currentUser, TextArea) ->
     appView = new App(el: $("#wrap"))
     appView.render()
     $(document).ajaxError ->
         appView.notify "error", "Internal HTTP error"
         ga "send", "event", "server", "error"
 
+    new NotFoundRouter(appView)
     new MainRouter(appView)
     new RealmRouter(appView)
     new QuestRouter(appView)
