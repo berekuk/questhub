@@ -6,7 +6,7 @@ define ["jquery", "vendors/pagedown/Markdown.Sanitizer"], ($, Markdown) ->
     _markdownConverter.autoNewLine = true
     _markdownConverter.hooks.chain "postSpanGamut", (text) ->
         text = text.replace /~X(\d+)X\[([x ])\]/g, (wm, m1, m2) ->
-            return """<input class="task#{m1}" #{if m2 == "x" then "checked" else ""} type="checkbox">"""
+            return """<input class="md-task task#{m1}" #{if m2 == "x" then "checked" else ""} type="checkbox">"""
 
         if realm_id is "perl"
             text = text.replace /\b(\w+(?:::\w+)+)(?![^<>]*>)(?![^<>]*(?:>|<\/a>|<\/code>))/g, "<a href=\"http://metacpan.org/module/$1\">$1</a>"
