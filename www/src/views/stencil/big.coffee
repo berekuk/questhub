@@ -3,8 +3,9 @@ define [
     "views/proto/common"
     "models/shared-models", "models/current-user"
     "views/helper/textarea"
+    "views/helper/markdown"
     "text!templates/stencil/big.html"
-], (_, Common, sharedModels, currentUser, Textarea, html) ->
+], (_, Common, sharedModels, currentUser, Textarea, Markdown, html) ->
     class extends Common
         template: _.template html
 
@@ -25,17 +26,23 @@ define [
             t.addClass "_active"
 
         subviews:
-            ".description-sv": ->
+            ".description-edit-sv": ->
                 new Textarea
                     realm: @model.get("realm")
                     placeholder: "Stencil description"
+            ".description-sv": ->
+                new Markdown
+                    realm: @model.get("realm")
+                    text: @model.get("description")
 
-        description: -> @subview(".description-sv")
+        description: -> @subview(".description-edit-sv")
 
         initialize: ->
             @tab = @options.tab || 'comments'
             super
             @listenTo @model, "change", @render
+            @listenTo @model, "change:description", ->
+                @subview(".description-sv").setText @model.get("description")
 
         render: ->
             # wait for realm data - copy-pasted from views/quest/add

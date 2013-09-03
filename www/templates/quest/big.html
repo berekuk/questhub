@@ -59,18 +59,18 @@
 
     <% if (obj.note && note) { %>
     <div class="quest-big-note">
-      <%= partial.markdown(note, realm) %>
+      <div class="quest-big-note-sv"></div>
     </div>
     <% } %>
 
     <% if (obj.description && description) { %>
       <div class="quest-big-editable widetext">
         <% if (obj.note && note) { %><hr><% } %>
-        <%= partial.markdown(description, realm) %>
+        <div class="quest-big-description-sv"></div>
       </div>
     <% } %>
     <% if (my) { %>
-      <div class="quest-big-edit description-sv"></div>
+      <div class="quest-big-edit description-edit-sv"></div>
     <% } %>
 
     <span class="muted quest-big-edit control-group">

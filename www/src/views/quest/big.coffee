@@ -3,10 +3,10 @@ define [
     "jquery", "bootbox"
     "views/proto/common"
     "views/quest/like"
-    "views/helper/textarea"
+    "views/helper/textarea", "views/helper/markdown"
     "models/current-user", "models/shared-models"
     "text!templates/quest/big.html"
-], (_, Backbone, $, bootbox, Common, Like, Textarea, currentUser, sharedModels, html) ->
+], (_, Backbone, $, bootbox, Common, Like, Textarea, Markdown, currentUser, sharedModels, html) ->
     "use strict"
     class extends Common
         template: _.template(html)
@@ -28,14 +28,28 @@ define [
                     model: @model
                     hidden: true
                 )
-            ".description-sv": ->
+            ".description-edit-sv": ->
                 new Textarea
                     realm: @model.get("realm")
                     placeholder: "Quest description"
+            ".quest-big-description-sv": ->
+                new Markdown
+                    realm: @model.get("realm")
+                    text: @model.get("description")
+            ".quest-big-note-sv": ->
+                new Markdown
+                    realm: @model.get("realm")
+                    text: @model.get("note")
 
         initialize: ->
             super
             @listenTo @model, "change", @render
+            @listenTo @model, "change:description", ->
+                @subview(".quest-big-description-sv").setText @model.get("description")
+
+            # this doesn't usually happen
+            @listenTo @model, "change:note", ->
+                @subview(".quest-big-note-sv").setText @model.get("note")
 
         expandNote: ->
             @$(".quest-big-note").show()
@@ -43,7 +57,7 @@ define [
 
         join: -> @model.join()
 
-        description: -> @subview(".description-sv")
+        description: -> @subview(".description-edit-sv")
 
         startEdit: ->
             return unless @model.isOwned()
