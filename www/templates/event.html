@@ -79,7 +79,7 @@
 
   <% if (type == 'add-stencil') { %>
     <% if (stencil.description) { %>
-      <div class="event-well-quest-description widetext">
+      <div class="event-well-quest-description widetext md">
         <%= partial.markdown(stencil.description, realm) %>
       </div>
     <% } %>
@@ -87,14 +87,14 @@
 
   <% if (type == 'add-quest' && quest.description) { %>
     <% if (quest.description) { %>
-      <div class="event-well-quest-description widetext">
+      <div class="event-well-quest-description widetext md">
         <%= partial.markdown(quest.description, realm) %>
       </div>
     <% } %>
   <% } %>
 
   <% if (obj.comment && (comment.type == undefined || comment.type == 'text')) { %>
-    <div class="widetext">
+    <div class="widetext md">
       <%= partial.markdown(comment.body, realm) %>
     </div>
   <% } %>

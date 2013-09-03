@@ -16,7 +16,7 @@ define([
     }
 
     // (tags that can be opened/closed) | (tags that stand alone)
-    var basic_tag_whitelist = /^(<\/?(b|blockquote|code|del|dd|dl|dt|em|h1|h2|h3|i|kbd|li|ol|p|pre|s|sup|sub|strong|strike|ul)>|<(br|hr)\s?\/?>)$/i;
+    var basic_tag_whitelist = /^(<\/?(b|blockquote|code|del|dd|dl|dt|em|h1|h2|h3|i|kbd|li|ol|p|pre|s|sup|sub|strong|strike|ul)>|<(br|hr)\s?\/?>|<input class="md-task task\d+" (checked)? type="checkbox">)$/i;
     // <a href="url..." optional title>|</a>
     var a_white = /^(<a\shref="((https?|ftp):\/\/|\/)[-A-Za-z0-9+&@#\/%?=~_|!:,.;\(\)]+"(\stitle="[^"<>]+")?\s?>|<\/a>)$/i;
 
@@ -54,7 +54,7 @@ define([
             return html;
 
         var tagname, tag;
-        var ignoredtags = "<p><img><br><li><hr>";
+        var ignoredtags = "<p><img><br><li><hr><input>";
         var match;
         var tagpaired = [];
         var tagremove = [];

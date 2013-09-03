@@ -109,9 +109,10 @@ define [
 
         initialize: ->
             super
-            @listenTo @model, "change", =>
-                @render()
-                @trigger "change:page-title"
+            # TODO - it's easy to forget a field, figure out how to avoid such bugs
+            # but re-rendering on changing a description (e.g. when we check an item in task list) is too annoying and unnecessary
+            @listenTo @model, "change:status change:team change:likes change:watchers change:invitee change:points", @render
+            @listenTo @model, "change:name", -> @trigger "change:page-title"
 
             @listenTo @model, "act", ->
                 @subview(".comments").collection.fetch()

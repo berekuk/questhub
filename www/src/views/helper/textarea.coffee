@@ -1,9 +1,10 @@
 define [
-    "underscore", "jquery", "markdown"
+    "underscore", "jquery"
     "views/proto/common"
+    "views/helper/markdown"
     "models/current-user"
     "text!templates/helper/textarea.html"
-], (_, $, markdown, Common, currentUser, html) ->
+], (_, $, Common, Markdown, currentUser, html) ->
 
     previewMode = undefined
     cachedText = {}
@@ -61,6 +62,13 @@ define [
 
             $("body").on "click", @blurHelp
 
+        subviews:
+            ".helper-textarea-preview ._content": ->
+                new Markdown
+                    realm: @options.realm
+
+        md: -> @subview(".helper-textarea-preview ._content")
+
         preview: -> @$(".helper-textarea-preview")
         switchPreview: (value) ->
             previewMode = value
@@ -78,7 +86,7 @@ define [
 
             if text and previewMode
                 preview.show()
-                preview.find("._content").html markdown(text, @options.realm)
+                @md().setText(text)
             else
                 preview.hide()
 

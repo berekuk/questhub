@@ -42,13 +42,13 @@ define [
             it "is not updated on reveal by default", ->
                 view = create("blah")
                 expect(view.$(".helper-textarea-preview")).not.toBeVisible()
-                expect(view.$(".helper-textarea-preview ._content").html()).toEqual ""
+                expect(view.$(".helper-textarea-preview ._content .md").html()).toEqual ""
 
             it "is updated on reveal if preview is on", ->
                 view = create("blah")
                 view.$(".helper-textarea-show-preview").click()
                 expect(view.$(".helper-textarea-preview")).toBeVisible()
-                expect(view.$(".helper-textarea-preview ._content").html()).toEqual "<p>blah</p>"
+                expect(view.$(".helper-textarea-preview ._content .md").html()).toEqual "<p>blah</p>"
 
             it "is cleared on clear()", ->
                 view = create("blah")
@@ -61,11 +61,11 @@ define [
                 view.$("textarea").val("A")
                 view.$("textarea").trigger e
                 expect(view.$(".helper-textarea-preview")).toBeVisible()
-                expect(view.$(".helper-textarea-preview ._content").html()).toEqual "<p>A</p>"
+                expect(view.$(".helper-textarea-preview ._content .md").html()).toEqual "<p>A</p>"
 
             it "looks like markdown", ->
                 view = create("*blah*")
                 view.$(".helper-textarea-show-preview").click()
                 expect(view.$(".helper-textarea-preview")).toBeVisible()
-                expect(view.$(".helper-textarea-preview ._content").html()).toEqual "<p><em>blah</em></p>"
+                expect(view.$(".helper-textarea-preview ._content .md").html()).toEqual "<p><em>blah</em></p>"
 
