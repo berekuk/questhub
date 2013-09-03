@@ -130,7 +130,7 @@ define [
         detachFromDOM: ->
             @undelegateEvents()
             _.each @_subviewInstances, (sv) =>
-                sv.detachFromDOM()
+                sv.detachFromDOM() if sv.detachFromDOM?
 
         reattachToDOM: ->
             @delegateEvents()

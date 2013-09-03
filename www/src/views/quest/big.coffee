@@ -33,9 +33,16 @@ define [
                     realm: @model.get("realm")
                     placeholder: "Quest description"
             ".quest-big-description-sv": ->
-                new Markdown
+                sv = new Markdown
                     realm: @model.get("realm")
                     text: @model.get("description")
+                    editable: @model.isOwned()
+                sv.on "change", =>
+                    @model.set "description", sv.getText()
+                    sv.startSyncing()
+                    @model.save().always ->
+                        sv.stopSyncing()
+                return sv
             ".quest-big-note-sv": ->
                 new Markdown
                     realm: @model.get("realm")
@@ -43,9 +50,13 @@ define [
 
         initialize: ->
             super
-            @listenTo @model, "change", @render
+            @listenTo @model, "change:status", @render
             @listenTo @model, "change:description", ->
                 @subview(".quest-big-description-sv").setText @model.get("description")
+            @listenTo @model, "change:team", =>
+                @rebuildSubview ".quest-big-description-sv" # make it non-editable if user left the team
+                @rebuildSubview ".quest-big-note-sv"
+                @render()
 
             # this doesn't usually happen
             @listenTo @model, "change:note", ->
