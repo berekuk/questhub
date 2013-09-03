@@ -140,6 +140,7 @@ define(function () {
         var g_urls;
         var g_titles;
         var g_html_blocks;
+        var g_task_id;
 
         // Used to track when we're inside an ordered or unordered list
         // (see _ProcessListItems() for details):
@@ -164,6 +165,7 @@ define(function () {
             g_titles = new SaveHash();
             g_html_blocks = [];
             g_list_level = 0;
+            g_task_id = 0;
 
             text = pluginHooks.preConversion(text);
 
@@ -202,6 +204,9 @@ define(function () {
             // Strip link definitions, store in hashes.
             text = _StripLinkDefinitions(text);
 
+            // set up ~X..X marks for all potential task list checkboxes
+            text = _MarkTasks(text);
+
             text = _RunBlockGamut(text);
 
             text = _UnescapeSpecialChars(text);
@@ -209,13 +214,28 @@ define(function () {
             // attacklab: Restore dollar signs
             text = text.replace(/~D/g, "$$");
 
+            text = _UnmarkTasks(text);
+
             // attacklab: Restore tildes
             text = text.replace(/~T/g, "~");
 
             text = pluginHooks.postConversion(text);
 
-            g_html_blocks = g_titles = g_urls = null;
+            g_html_blocks = g_titles = g_urls = g_task_id = null;
 
+            return text;
+        };
+
+        function _MarkTasks(text) {
+            text = text.replace(/^\[[ x]\]\s.*/gm, function (wholeMatch) {
+                g_task_id++;
+                return "~X" + g_task_id + "X" + wholeMatch;
+            });
+            return text;
+        };
+
+        function _UnmarkTasks(text) {
+            text = text.replace(/~X\d+X/gm, "");
             return text;
         };
 
