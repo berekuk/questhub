@@ -186,6 +186,14 @@ b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);</script>
       <span class="quest-big-editable"><% quest.name %></span>
     </header>
 
+    <% IF quest.description %>
+    <div class="widetext">
+      <div class="quest-big-description-sv">
+        <% markdown(quest.description, quest.realm) %>
+      </div>
+    </div>
+    <% END %>
+
     <span class="muted quest-big-edit control-group">
       <input name="tags" type="text" placeholder="Tags" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
 
