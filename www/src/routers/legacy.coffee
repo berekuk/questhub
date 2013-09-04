@@ -13,6 +13,7 @@ define [
 
     class extends Backbone.Router
         routes:
+            "!": redirect("")
             "feed": redirect("")
             "perl": redirect("realm/perl")
             "perl/": redirect("realm/perl")
