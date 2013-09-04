@@ -25,6 +25,7 @@ package 'libssl-dev'
 cpan_module 'Authen::SASL'
 cpan_module 'Net::SMTP::SSL'
 cpan_module 'Email::Sender::Transport::SMTP::TLS'
+cpan_module 'Email::MIME' # for multipart emails
 
 package 'sendmail'
 
