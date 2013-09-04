@@ -37,4 +37,9 @@ get '/realm/:realm/quest/:id/comment/:cid' => sub {
     redirect "/realm/".param('realm')."/quest/".param('id');
 };
 
+get '/welcome' => sub {
+    header 'Content-Type' => 'text/html';
+    template 'seo/welcome' => {};
+};
+
 1;
