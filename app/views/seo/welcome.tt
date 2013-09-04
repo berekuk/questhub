@@ -329,5 +329,4 @@ b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);</script>
     <script src="https://login.persona.org/include.js"></script>
     <script src="http://use.edgefonts.net/doppio-one.js"></script>
 
-    <!-- <script src="/built.js"></script> --> <!-- don't want to get a /welcome -> / redirect if I'm testing in browser -->
 <iframe style="display: none;" src="https://login.persona.org/communication_iframe"></iframe></body></html>
