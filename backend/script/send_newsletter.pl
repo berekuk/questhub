@@ -15,7 +15,7 @@ use Type::Params qw(compile);
 use Play::Types qw( Id Login );
 
 use autodie qw(open);
-use Email::Simple;
+use Email::MIME;
 use Play::Email;
 use Encode qw(encode_utf8);
 use MIME::Base64 qw(encode_base64);
@@ -45,7 +45,8 @@ sub load_targets {
 sub send_one {
     state $check = compile(Dict[
         title => Str,
-        body => Str,
+        text_body => Str,
+        html_body => Str,
         login => Login,
         user_id => Id,
         to => Str,
@@ -53,14 +54,14 @@ sub send_one {
         campaign => Str,
     ]);
     my ($params) = $check->(@_);
-    my ($title, $body, $login, $user_id, $to, $dump, $campaign) = @$params{qw/ title body login user_id to dump campaign /};
+    my ($title, $text_body, $html_body, $login, $user_id, $to, $dump, $campaign) = @$params{qw/ title text_body html_body login user_id to dump campaign /};
 
-    $body =~ s/{{login}}/$login/ or die "Login placeholder not found in newsletter";
+    $_ =~ s/{{login}}/$login/ or die "Login placeholder not found in newsletter" for $text_body, $html_body;
 
     my $secret = db->users->unsubscribe_secret($login);
     my $unsubscribe_link = "http://".setting('hostport')."/api/user/$login/unsubscribe/newsletter?secret=$secret";
 
-    $body =~ s/{{unsubscribe}}/$unsubscribe_link/ or die "Unsubscribe placeholder not found in newsletter";
+    $_ =~ s/{{unsubscribe}}/$unsubscribe_link/ or die "Unsubscribe placeholder not found in newsletter" for $text_body, $html_body;
 
     my $data = encode_base64(
         JSON->new->encode({
@@ -73,18 +74,29 @@ sub send_one {
         }),
         ''
     );
-    $body .= qq{<img src="http://api.mixpanel.com/track/?data=$data&ip=1&img=1" width="1" height="1"/>};
+    $html_body .= qq{<img src="http://api.mixpanel.com/track/?data=$data&ip=1&img=1" width="1" height="1"/>};
 
     # TODO - send via sendmail queue
     # (need to support custom From in sendmail pumper first or decide that sending newsletter from notification@questhub.io is ok)
-    my $email = Email::Simple->create(
-        header => [
-            To => $to,
+    my $email = Email::MIME->create(
+        attributes => {
+            content_type => 'multipart/alternative',
+        },
+        header_str => [
             From => 'Vyacheslav Matyukhin <me@berekuk.ru>',
+            To => $to,
             Subject => $title,
-            'Content-Type' => 'text/html; charset=utf-8',
         ],
-        body => encode_utf8($body),
+        parts => [
+            Email::MIME->create(
+                attributes => { content_type => 'text/plain' },
+                body => $text_body,
+            ),
+            Email::MIME->create(
+                attributes => { content_type => 'text/html; charset=utf-8' },
+                body => $html_body,
+            )
+        ],
     );
 
     if ($dump) {
@@ -126,6 +138,8 @@ sub main {
     $body =~ /{{login}}/ or die;
     $body =~ /{{unsubscribe}}/ or die;
 
+    my ($text_body, $html_body) = split /__SPLIT__/, $body, 2 or die "No __SPLIT__ marker found";
+
     my @targets = load_targets();
     my $total_number = @targets;
 
@@ -140,7 +154,8 @@ sub main {
         send_one({
             %$target,
             title => $title,
-            body => $body,
+            text_body => $text_body,
+            html_body => $html_body,
             dump => $dump,
             campaign => $campaign,
         });
