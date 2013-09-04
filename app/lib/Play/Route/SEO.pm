@@ -16,7 +16,6 @@ get '/quest/:id' => sub {
     my $quest = db->quests->get(param('id'));
     redirect "/realm/$quest->{realm}/quest/".param('id');
 };
-
 get '/realm/:realm/quest/:id' => sub {
     my $quest = db->quests->get(param('id'));
     my $comments = db->comments->list('quest', param('id'));
@@ -28,6 +27,26 @@ get '/realm/:realm/quest/:id' => sub {
     header 'Content-Type' => 'text/html';
     template 'seo/quest' => {
         quest => $quest,
+        comments => $comments,
+        markdown => \&markdown,
+    };
+};
+
+get '/stencil/:id' => sub {
+    my $stencil = db->stencils->get(param('id'));
+    redirect "/realm/$stencil->{realm}/stencil/".param('id');
+};
+get '/realm/:realm/stencil/:id' => sub {
+    my $stencil = db->stencils->get(param('id'));
+    my $comments = db->comments->list('stencil', param('id'));
+
+    $_->{updated} = $rfc3339->format_datetime(
+        DateTime->from_epoch(epoch => $_->{ts})
+    ) for $stencil, @$comments;
+
+    header 'Content-Type' => 'text/html';
+    template 'seo/stencil' => {
+        stencil => $stencil,
         comments => $comments,
         markdown => \&markdown,
     };

@@ -2,7 +2,7 @@
 <html lang="en" class="wf-doppioone-n4-active wf-active"><head>
     <meta charset="utf-8">
     <meta name="fragment" content="!">
-    <title><% quest.name %> - Questhub.io</title>
+    <title><% stencil.name %> - Questhub.io</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="alternate" type="application/atom+xml" title="News Feed" href="/api/event/atom">
@@ -62,11 +62,11 @@ b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);</script>
   <ul class="top-nav">
     <li class="menu-item-feed">
       <a class="brand" href="/">
-
+        
           <span class="mobile-text">
             QH
           </span>
-
+        
         <span class="desktop-text">
           Questhub.io
         </span>
@@ -86,7 +86,7 @@ b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);</script>
   <div class="current-user-box"><!-- current user widget from right-top corner -->
 <ul class="top-nav">
   <li class="dropdown">
-
+    
       <!-- TODO: refactor to use views/user/signin.js -->
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         <i class="icon-signin"></i>
@@ -100,7 +100,7 @@ b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);</script>
           <a href="#" class="login-with-persona">with Email</a>
         </li>
       </ul>
-
+    
   </li>
 </ul>
 </div>
@@ -110,139 +110,146 @@ b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);</script>
 </div>
 <div class="app-view-container">
 <div class="app-view-notifies"></div>
-<div><article class="quest-page-unregistered">
+<div><article class="stencil-page">
 
-<aside class="sidebar quest-page-sidebar">
+<div class="stencil-page-top-row">
+  <aside class="sidebar">&nbsp;</aside>
+  <div class="mainarea">
+    <div class="stencil-page-icon">
+      <a href="/realm/<% stencil.realm %>/stencils" class="grey-link">
+        <i class="icon-book"></i> Stencil
+      </a>
+    </div>
 
-  <div class="quest-page-reward">
-    <div>
+    <div class="realm-submenu-sv"><div class="realm-submenu">
+  <div class="realm-submenu-inner">
 
-    <div class="reward reward-status-open">
-      <span class="reward-points"><% quest.points %></span>
+    <h4>
+      <a href="/realm/<% stencil.realm %>">
+        <img src="/i/<% stencil.realm %>.png" width="30" height="30">
+        Perl
+      </a>
+    </h4>
+    <div class="realm-tabs-sv"><nav class="round-tabs round-tabs-small">
+  <ul>
+    
+    <li>
+      <a href="/realm/<% stencil.realm %>">
+        <div data-toggle="tooltip" data-placement="top" title="" data-tab="activity" class="_icon _switch-activity " data-original-title="Activity">
+          <i class="icon-film"></i>
+        </div>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/realm/<% stencil.realm %>/stencils">
+        <div data-toggle="tooltip" data-placement="top" title="" data-tab="stencils" class="_icon _switch-stencils " data-original-title="Stencils">
+          <i class="icon-book"></i>
+        </div>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/realm/<% stencil.realm %>/explore">
+        <div data-toggle="tooltip" data-placement="top" title="" data-tab="quests" class="_icon _switch-quests " data-original-title="Quests">
+          <i class="icon-list-ul"></i>
+        </div>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/realm/<% stencil.realm %>/players">
+        <div data-toggle="tooltip" data-placement="top" title="" data-tab="players" class="_icon _switch-players " data-original-title="Players">
+          <i class="icon-group"></i>
+        </div>
+      </a>
+    </li>
+    
+  </ul>
+</nav>
+</div>
 
-        <span class="icon-stack" data-toggle="tooltip" title="" data-original-title="Reward&nbsp;points">
+  </div>
+</div>
+</div>
+  </div>
+</div>
+
+<div>
+  <aside class="sidebar stencil-page-sidebar">
+
+    <div class="stencil-page-reward">
+      Reward: 
+    <div class="reward reward-status-none">
+      <span class="reward-points"><% stencil.points %></span>
+      
+        <span class="icon-stack" data-toggle="tooltip" title="" data-original-title="Reward&nbsp;point<% points == 1 ? '' : 's' %>">
           <i class="icon-circle icon-stack-base"></i>
           <i class="icon-star icon-light"></i>
         </span>
       <!--
  --></div>
     </div>
-    <span class="label label-warning"><% quest.status %></span>
-  </div>
 
-
-
-
-
-  <div class="quest-checkins-sv"><div class="quest-checkins hide">
-  <header>Checkins:</header>
-  <div class="quest-checkin-none">None so far</div> <!-- TODO -->
-
-
-</div>
-</div>
-
-</aside>
-
-<div class="mainarea">
-  <div class="main">
-    <div class="quest-big"><div class="post-big quest-big quest-big-open">
-  <aside>
-
-
-    <% FOREACH user in quest.team %>
-      <div class="post-big-upic-box">
-        <a href="/player/<% user %>"><img src="/api/user/<% user %>/pic?s=small" alt="<% user %>" title="<% user %>" class="upic-small"></a>
-      </div>
-    <% END %>
-
-
+    
   </aside>
 
+  <div class="mainarea">
+    <div class="stencil-big-sv"><div class="post-big stencil-big">
+  <aside>&nbsp;</aside>
   <div class="post-big-inner">
-    <div>
-      <small class="muted">
-        <span class="muted">
-          <% IF quest.tealm.size %>
-            <% FOREACH user in quest.team %>
-            <a href="/player/<% user %>" class="user-link"><% user %></a><% ", " UNLESS loop.last %>
-            <% END %>
-            <% IF quest.status == 'open' %>
-              <% quest.team.size == 1 ? 'is' : 'are' %> on a quest: <!-- TODO - "completed", "suggests" -->
-            <% ELSIF quest.status == 'closed' %>
-              completed a quest:
-            <% ELSE %>
-              was on a quest:
-            <% END %>
-          <% ELSE %>
-            <a href="/player/<% quest.author %>" class="user-link"><% quest.author %></a> suggests a quest:
-          <% END %>
+    <small class="muted">Stencil by <a href="/player/<% stencil.author %>" class="user-link"><% stencil.author %></a>:</small>
 
-        </span>
-      </small>
+    
+
+    <div class="_editable">
+      <header class="post-big-title"><% stencil.name %></header>
     </div>
-
-    <header class="post-big-title">
-      <span class="quest-big-editable"><% quest.name %></span>
-    </header>
-
-    <% IF quest.description %>
-    <div class="widetext">
-      <div class="quest-big-description-sv">
-        <% markdown(quest.description, quest.realm) %>
+    
+    <% IF stencil.description %>
+      <div class="_editable widetext">
+        <div class="description-sv">
+          <div class="md ">
+            <% markdown(stencil.description, stencil.realm) %>
+          </div>
+        </div>
       </div>
-    </div>
     <% END %>
 
-    <span class="muted quest-big-edit control-group">
-      <input name="tags" type="text" placeholder="Tags" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
-
-      <div class="post-edit-controls pull-right">
-        <button class="btn cancel">Cancel</button>
-        <button class="btn btn-primary save">Save</button>
-      </div>
-    </span>
-
-
-    <footer class="object-bottom-line">
-      <div class="quest-big-tags">
-        <span class="quest-tags">
-          <% FOREACH tag IN quest.tags %>
-            <a href="/realm/<% quest.realm %>/explore/latest/tag/<% tag %>" class="tag ">
-              <% tag %>
-            </a>
-          <% END %>
-        </span>
-      </div>
-
-      <time class="timeago" datetime="<% quest.updated %>" title="<% quest.updated %>"><% quest.updated %></time>
-
-      <span class="likes-subview">
-    <!--
-
- --><span class="like-button " data-toggle="tooltip" title="" data-original-title="<% quest.likes.join(', ') %>">
-      <i class="icon-thumbs-up-alt"></i>
-      <% quest.likes ? quest.likes.size : 0 %>
-  </span><!--
-
- -->
-
-</span>
-
-    </footer>
-
-    <div class="post-realm">
-      <a href="/realm/<% quest.realm %>" class="post-realm-link">
-        <img src="/i/<% quest.realm %>.png" width="30" height="30">
-        Meta
-      </a>
+    <div class="object-bottom-line">
+      <em><span class="muted">Created</span></em>
+      <time class="timeago" datetime="<% stencil.updated %>" title="<% stencil.updated %>"><% stencil.updated %></time>
     </div>
+
+    <nav class="round-tabs stencil-big-tabs">
+      <ul>
+        
+        <li>
+          <div data-toggle="tooltip" data-placement="top" title="" data-tab="comments" class="_icon _switch-comments _active" data-original-title="Comments">
+            <i class="icon-comments"></i>
+          </div>
+        </li>
+        
+        <li>
+          <div data-toggle="tooltip" data-placement="top" title="" data-tab="quests" class="_icon _switch-quests " data-original-title="Quests">
+            <i class="icon-list-ul"></i>
+          </div>
+        </li>
+        
+      </ul>
+    </nav>
   </div>
-
 </div>
 </div>
+  </div>
+</div>
 
-<div class="comments"><div class="comments-list" style="">
+<div class="stencil-page-sv"><div class="sidebar">
+  <header class="sidebar-header">Discussion</header>
+</div>
+<div class="mainarea">
+
+<div class="stencil-page-comments-sv"><div class="comments-list" style="">
 
 <% FOREACH comment IN comments %>
 <div class="comment-outer">
@@ -281,20 +288,20 @@ b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);</script>
 </div>
 
 <div class="comment-add-sv"><div class="comment-add">
-
+  
     <div class="comment-add-signin">
       <header>Sign in to comment:</header>
       <span class="signin"><div class="signin ">
-  <button class="btn  btn-primary login-with-twitter">Sign Up with Twitter</button>
-  <button class="btn  btn-primary login-with-persona">Sign Up with Email</button>
+  <button class="btn  btn-success login-with-twitter">Sign Up with Twitter</button>
+  <button class="btn  btn-success login-with-persona">Sign Up with Email</button>
 </div>
 </span>
     </div>
-
+  
 </div>
 </div>
 </div>
-  </div>
+</div>
 </div>
 
 </article>
@@ -337,5 +344,8 @@ b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);</script>
     <script src="https://login.persona.org/include.js"></script>
     <script src="http://use.edgefonts.net/doppio-one.js"></script>
 
+    <script src="/built.js"></script>
+
+  
 
 <iframe src="https://login.persona.org/communication_iframe" style="display: none;"></iframe><textarea tabindex="-1" style="position: absolute; top: -999px; left: 0px; right: auto; bottom: auto; border: 0px; box-sizing: content-box; word-wrap: break-word; overflow: hidden; height: 0px !important; min-height: 0px !important;"></textarea></body></html>
