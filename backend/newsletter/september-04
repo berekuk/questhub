@@ -134,7 +134,7 @@ Do you want to try your hand at community building?
 If so, you should apply to become a Realm Keeper. Respond to this email and let's talk about it!
 </p>
 
-<h2>Other stuff</h2>
+<h2 style="font-weight: 200">Other stuff</h2>
 <p>
 Lots of small features and fixes, as usual. <a href="http://questhub.io/realm/meta/quest/5204085a5b02e5f60400004f">Points histogram</a> in profiles, <a href="http://questhub.io/realm/meta/quest/521fcfab77c1b19a73000020">new style for points and rewards</a>, and <a href="http://questhub.io/realm/meta/quest/521541687e43195b6b00000d">support for uploading a userpic</a> are most notable among those.
 </p>
