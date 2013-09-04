@@ -42,4 +42,9 @@ get '/welcome' => sub {
     template 'seo/welcome' => {};
 };
 
+get '/realms' => sub {
+    header 'Content-Type' => 'text/html';
+    template 'seo/realms' => {};
+};
+
 1;
