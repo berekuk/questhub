@@ -1,0 +1,156 @@
+Questhub news: task lists, news feed, new realms
+
+Hi, {{login}}!
+
+Irregular Questhub newsletter has arrived. Here's what happened on http://questhub.io in the last month:
+
+1. TASK LISTS
+
+Just yesterday, I rolled out new Github-like Task lists (http://questhub.io/realm/meta/quest/51f69ba788a70b5e74000004).
+
+Outline your sub-tasks using this special formatting:
+
+    [x] do this
+    [ ] do that
+    [ ] do something else
+
+You can use these both in quests and comments. By the way, the full cheat sheet for text formatting is documented in About section (http://questhub.io/about/syntax).
+
+2. NEW NEWS FEED
+
+Your personal news feed and realm activity feeds are now grouped by quest or stencil, with comments listed below and profile pictures on the left.
+
+You can comment on quests directly from news feed. If your Realm Keeper creates a new stencil, you can take on a quest right from the news feed too. More features for inlined interaction are yet to come, but the bottom line is, you don't have to click around as much as before.
+
+3. NEW REALMS
+
+After last weekend's unexpected traffic surge from Hacker News, we got several proposals for new realms.
+
+Meet our new realms:
+
+* Big Data: http://questhub.io/realm/bigdata
+* Japanese: http://questhub.io/realm/japanese
+* Haskell: http://questhub.io/realm/haskell
+
+I'm always looking for new Realm Keepers, both for starting new realms, and helping with existing ones. (For example, Code and Fitness would benefit greatly if someone populated them with stencils.)
+
+Are you a member of a community which shares common goals and does various tasks to achieve those goals?
+Do you want to try your hand at community building?
+If so, you should apply to become a Realm Keeper. Respond to this email and let's talk about it!
+
+4. OTHER STUFF
+
+Lots of small features and fixes, as usual. Points histogram in profiles (http://questhub.io/realm/meta/quest/5204085a5b02e5f60400004f), new style for points and rewards (http://questhub.io/realm/meta/quest/521fcfab77c1b19a73000020), and support for uploading a userpic (http://questhub.io/realm/meta/quest/521541687e43195b6b00000d) are most notable among those.
+
+Oh, and I also gave a talk about Questhub at YAPC::EU in Kiev last month. There's no video yet, but here are the slides: https://speakerdeck.com/berekuk/questhub-dot-io-yapc-eu-2013-talk.
+
+You can follow Questhub on Twitter (https://twitter.com/questhubio) and on Facebook (http://facebook.com/questhubio). If you do it, you can also claim the http://questhub.io/realm/meta/stencil/51e4125891198f3e1f000011 stencil on Meta realm.
+
+PS: If you don't want to get these emails, you can always unsubscribe: {{unsubscribe}}. I'm keeping this newsletter low-volume, approximately once per 2-3 weeks.
+- Vyacheslav (@berekuk, http://questhub.io/player/berekuk)
+
+__SPLIT__
+
+<table cellspacing="0" cellpadding="0" border="0" width="650">
+<tr><td>
+<p>
+Hi, {{login}}!
+</p>
+<p>
+Irregular Questhub newsletter has arrived. Here's what happened on <a href="http://questhub.io">Questhub</a> in the last month:
+</p>
+
+<h2 style="font-weight: 200">Task lists</h2>
+<p>
+Just yesterday, I rolled out new Github-like <a href="http://questhub.io/realm/meta/quest/51f69ba788a70b5e74000004">Task Lists</a>:<br>
+<table cellspacing="0" cellpadding="10" border="0">
+<tr><td style="border-radius: 5px; border: 1px solid #ddd">
+    <a href="http://questhub.io/realm/meta/quest/51f69ba788a70b5e74000004/comment/52266cf31f40305f7d000016"><img src="http://i.imgur.com/hWsJgwp.png"></a>
+</td></tr>
+</table>
+<br>
+Outline your sub-tasks using this special formatting:
+<table cellspacing="0" cellpadding="0" border="0">
+<tr><td style="border-left: 5px solid #ddd; padding-left: 10px">
+<pre><code>[x] do this
+[ ] do that
+[ ] do something else</code></pre>
+</td></tr>
+</table>
+<br>
+You can use these both in quests and comments. (By the way, the full cheat sheet for text formatting is documented in <a href="http://questhub.io/about/syntax">About</a> section.)
+</div>
+</p>
+
+<h2 style="font-weight: 200">New news feed</h2>
+<p>
+Your personal news feed and realm activity feeds are now grouped by quest or stencil, with comments listed below and profile pictures on the left.
+</p>
+<p>
+You can comment on quests directly from news feed. If your Realm Keeper creates a new stencil, you can take on a quest right from the news feed too. More features for inlined interaction are yet to come, but the bottom line is, you don't have to click around as much as before.
+</p>
+
+<h2 style="font-weight: 200">New realms</h2>
+<p>
+After last weekend's unexpected traffic surge from Hacker News, we got several <a href="http://questhub.io/realm/meta/quest/5222a756159e97f33c000016">proposals</a> <a href="http://questhub.io/realm/meta/quest/5221f0256284c46d7900002c">for</a> <a href="http://questhub.io/realm/meta/quest/5224a51f159e973d2c00002d">new realms</a>.
+</p>
+<p>
+Meet our new realms:
+</p>
+<table cellspacing="0" cellpadding="10" border="0">
+<tr>
+    <td style="text-align: center" width="140">
+    <a href="http://questhub.io/realm/bigdata"><img src="http://questhub.io/i/bigdata.png"></a>
+    </td>
+    <td style="text-align: center" width="140">
+    <a href="http://questhub.io/realm/japanese"><img src="http://questhub.io/i/japanese.png"></a>
+    </td>
+    <td style="text-align: center" width="140">
+    <a href="http://questhub.io/realm/haskell"><img src="http://questhub.io/i/haskell.png"></a>
+    </td>
+</tr>
+<tr>
+    <td style="text-align: center" width="140">
+    <a href="http://questhub.io/realm/bigdata">Big Data</a>
+    </td>
+    <td style="text-align: center" width="140">
+    <a href="http://questhub.io/realm/japanese">Japanese</a>
+    </td>
+    <td style="text-align: center" width="140">
+    <a href="http://questhub.io/realm/haskell">Haskell</a>
+    </td>
+</tr>
+</table>
+<p>
+I'm always looking for new Realm Keepers, both for starting new realms, and helping with existing ones. (For example, <a href="http://questhub.io/realm/code">Code</a> and <a href="http://questhub.io/realm/fitness">Fitness</a> would benefit greatly if someone populated them with stencils.)
+</p>
+<p>
+Are you a member of a community which shares common goals and does various tasks to achieve those goals?
+</p>
+<p>
+Do you want to try your hand at community building?
+</p>
+<p>
+If so, you should apply to become a Realm Keeper. Respond to this email and let's talk about it!
+</p>
+
+<h2>Other stuff</h2>
+<p>
+Lots of small features and fixes, as usual. <a href="http://questhub.io/realm/meta/quest/5204085a5b02e5f60400004f">Points histogram</a> in profiles, <a href="http://questhub.io/realm/meta/quest/521fcfab77c1b19a73000020">new style for points and rewards</a>, and <a href="http://questhub.io/realm/meta/quest/521541687e43195b6b00000d">support for uploading a userpic</a> are most notable among those.
+</p>
+<p>
+Oh, and I also gave a talk about Questhub at YAPC::EU in Kiev last month. There's no video yet, but here are <a href="https://speakerdeck.com/berekuk/questhub-dot-io-yapc-eu-2013-talk">the slides</a>.
+</p>
+
+<hr>
+<p style="color:#999;">
+You can follow Questhub <a href="https://twitter.com/questhubio">on Twitter</a> and <a href="http://facebook.com/questhubio">on Facebook</a>. If you do it, you can also claim <a href="http://questhub.io/realm/meta/stencil/51e4125891198f3e1f000011">this stencil</a> on Meta realm.
+</p>
+<hr>
+<p style="color:#999;">
+PS: If you don't want to get these emails, you can always <a href="{{unsubscribe}}">unsubscribe</a>. I'm keeping this newsletter low-volume, approximately once per 2-3 weeks.
+</p><p style="color:#999;">
+- Vyacheslav (<a href="http://questhub.io/player/berekuk">@berekuk</a>)
+</p>
+</td></tr>
+</table>

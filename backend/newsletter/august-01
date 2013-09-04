@@ -1,0 +1,28 @@
+Questhub news: stencils, new realms, call for realm keepers
+
+<p>
+Hi, {{login}}!
+</p><p>
+<a href="http://questhub.io">Questhub</a>'s got a couple of new features in the last few weeks.
+</p><p>
+First and most important, <b>stencils</b>. Stencils are pre-composed quest prototypes, ideas which players can take on as quests.
+Stencils usually have well thought-out descriptions with itemized steps for completing them, making it easier than ever to take on a new task.
+</p><p>
+We've got <a href="http://questhub.io/realm/perl/stencils">25 stencils</a> in Perl realm. If you're from the Perl community, you might have already seen <a href="http://blogs.perl.org/users/vyacheslav_matjukhin/2013/07/contribute-to-perl-by-completing-quests-on-questhub.html">my blog post</a> explaining them in more details.
+</p><p>
+It's also possible to <b>comment on stencils</b>. You can discuss stencil's conditions for completion and post hints for future players in comments.
+</p><p>
+Last week, we got <b>three new realms</b>: <a href="http://questhub.io/realm/read">Read</a>, <a href="http://questhub.io/realm/fitness">Fitness</a> and <a href="http://questhub.io/realm/code">Code</a>. There's not enough interesting content on those realms yet, so I'm looking for <b>Realm Keepers</b> who would fill these realms with stencils and bootstrap their local communities. Do you want to become a Realm Keeper? Respond to this email and I'll be happy to grant you the rights.
+<p></p>
+Just yesterday, I added another experimental feature: tag your quest with secret <i>checkin</i> tag and <b>track habits</b> by checking in on quest. Pressing the "Checkin" button (look for on in the sidebar on quest's page) records the current timestamp, so you get a nice history of all days when you worked on your quest. Checking in doesn't bring you any points, though, so don't forget to complete your quest eventually.
+</p><p>
+There were some other minor improvements, such as "reply" link for each comment, new "New quest" dialog, Persona bugfixes and markdown cheatsheet. If you want to follow Questhub development more closely, follow <a href="http://questhub.io/realm/meta">Meta</a> realm, I announce and explain each new feature there in details.
+</p>
+<hr>
+<p style="color:#999;">
+You can follow Questhub <a href="https://twitter.com/questhubio">on Twitter</a> and <a href="http://facebook.com/questhubio">on Facebook</a>. If you do it, you can also claim <a href="http://questhub.io/realm/meta/stencil/51e4125891198f3e1f000011">this stencil</a> on Meta realm.
+</p><p style="color:#999;">
+PS: If you don't want to get these emails, you can always <a href="{{unsubscribe}}">unsubscribe</a>. I'm keeping this newsletter low-volume, approximately once per 2-3 weeks.
+</p><p style="color:#999;">
+- Vyacheslav (<a href="http://questhub.io/player/berekuk">@berekuk</a>)
+</p>
