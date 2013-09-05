@@ -19,9 +19,24 @@
         margin-bottom: 0;
     }
     .object-bottom-line {
-        margin-top: 36px;
+        clear: both;
+        margin-right: 60px;
     }
     position: relative;
+}
+
+@include breakpoint(A) {
+    .stencil-big-edit-aux {
+        float: left;
+    }
+    .stencil-big-edit-controls {
+        float: right;
+    }
+}
+@include breakpoint(lessThanA) {
+    .stencil-big-edit-controls .post-edit-controls {
+        float: none;
+    }
 }
 
 .stencil-feed > aside a {
