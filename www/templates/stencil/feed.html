@@ -95,11 +95,6 @@
       <% } %>
     </div>
 
-    <div class="post-realm">
-      <a href="/realm/<%- realm %>" class="post-realm-link">
-        <img src="<%- realmData.pic %>" width="30" height="30">
-        <%- realmData.name %>
-      </a>
-    </div>
+    <%= partial.post_realm(obj) %>
   </div>
 </div>

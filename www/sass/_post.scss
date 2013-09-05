@@ -1,18 +1,30 @@
 // common styles for quest and stencil blocks
+
 .post-realm {
     position: absolute;
     bottom: 3px;
-    right: 9px;
-    .post-realm-link {
-        @include opacity(70);
-        &:hover {
-            @include opacity(100);
-        }
+
+    @include breakpoint(lessThanA) {
+        left: 5px;
+    }
+    @include breakpoint(A) {
+        right: 9px;
+    }
+}
+.post-realm-link {
+    @include opacity(70);
+    &:hover {
+        @include opacity(100);
+    }
+    color: $text-color;
+    &:hover {
         color: $text-color;
-        &:hover {
-            color: $text-color;
-            text-decoration: none;
-        }
+        text-decoration: none;
+    }
+}
+.post-realm-name {
+    @include breakpoint(lessThanA) {
+        display: none;
     }
 }
 
