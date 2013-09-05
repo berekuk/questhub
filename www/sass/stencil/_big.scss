@@ -36,26 +36,29 @@
     bottom: 8px;
 }
 
+.stencil-big-reward-outer {
+    text-align: center;
+}
 .stencil-big-reward {
-    margin: 0 auto;
-    display: table;
+    display: inline-block;
     > header {
         @include bg-header;
         float: left;
-        margin: 5px 0px;
+        margin: 2px 0px;
         line-height: 32px;
     }
     @include clearfix;
 }
 .stencil-big-reward-points {
     float: left;
-    margin-top: 5px;
-    margin-left: 5px;
+    margin-top: 2px;
+    margin-left: 2px;
     margin-right: 8px;
 }
 .stencil-big-reward-controls {
+    float: left;
     display: table;
-    height: 44px;
+    height: 38px;
 }
 .stencil-big-reward-controls-inner {
     display: table-cell;

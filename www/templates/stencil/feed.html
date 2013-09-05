@@ -26,24 +26,26 @@
       </div>
     <% } %>
 
-    <div class="_editable stencil-big-reward">
-      <header>Reward:</header>
-      <div class="stencil-big-reward-points">
-        <%= partial.reward({ points: points, status: myStatus }) %>
-      </div>
-      <% if (myStatus != 'closed') { %>
-        <div class="stencil-big-reward-controls">
-          <div class="stencil-big-reward-controls-inner">
-            <% if (myQuests.length) { %>
-              <a href="/realm/<%- myQuests[0].realm %>/quest/<%- myQuests[0]._id %>">(See your quest.)</a>
-            <% } else { %>
-              <% if (currentUser) { %>
-                <button class="btn btn-mini btn-primary js-stencil-take">Take <span class="desktop-text">this quest</span></button>
-              <% } %>
-            <% } %>
-          </div>
+    <div class="_editable stencil-big-reward-outer">
+      <div class="stencil-big-reward">
+        <header>Reward:</header>
+        <div class="stencil-big-reward-points">
+          <%= partial.reward({ points: points, status: myStatus }) %>
         </div>
-      <% } %>
+        <% if (myStatus != 'closed') { %>
+          <div class="stencil-big-reward-controls">
+            <div class="stencil-big-reward-controls-inner">
+              <% if (myQuests.length) { %>
+                <a href="/realm/<%- myQuests[0].realm %>/quest/<%- myQuests[0]._id %>">(See your quest.)</a>
+              <% } else { %>
+                <% if (currentUser) { %>
+                  <button class="btn btn-mini btn-primary js-stencil-take">Take <span class="desktop-text">this quest</span></button>
+                <% } %>
+              <% } %>
+            </div>
+          </div>
+        <% } %>
+      </div>
     </div>
 
     <% if (isKeeper) { %>
