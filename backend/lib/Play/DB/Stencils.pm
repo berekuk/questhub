@@ -79,6 +79,7 @@ sub edit {
     my $self = shift;
     state $check = compile(Id, Dict[
         user => Login,
+        tags => Optional[ArrayRef[Str]],
         name => Optional[Str],
         description => Optional[Str],
         points => Optional[StencilPoints],
@@ -88,6 +89,10 @@ sub edit {
 
     # explicitly specifying that we don't want any quest info - just in case stencils->get defaults change in the future
     my $stencil = $self->get($id, { quests => 0 });
+
+    if ($params->{tags}) {
+        $params->{tags} = [ sort @{ $params->{tags} } ];
+    }
 
     delete $stencil->{_id};
     delete $stencil->{ts};
