@@ -42,6 +42,8 @@ define [
                 @fetched = true
                 @showOrHide()
 
+            @listenTo @collection, "reset sync", -> @$(".sidebar").show()
+
             @subview(".progress-subview").on()
 
         showOrHide: ->
