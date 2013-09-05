@@ -14,6 +14,7 @@ sub add :Tests {
         author => 'foo',
         name => 'Start the World War I',
         points => 2,
+        tags => ['aaa', 'bbb'],
     });
     my $stencil2 = db->stencils->add({
         realm => 'europe',
@@ -28,6 +29,7 @@ sub add :Tests {
         _id => re('^\w{24}$'),
         ts => re('^\d+'),
         points => 2,
+        tags => ['aaa', 'bbb'],
     };
 }
 
@@ -90,6 +92,7 @@ sub take :Tests {
         author => 'foo',
         name => 'Do something',
         description => 'Just do anything',
+        tags => ['aaa', 'bbb'],
     });
 
     my $take_result = db->stencils->take($stencil->{_id}, 'foo');
@@ -97,6 +100,7 @@ sub take :Tests {
         team => ['foo'],
         name => 'Do something',
         note => 'Just do anything',
+        tags => ['aaa', 'bbb'],
         realm => 'europe',
         stencil => $stencil->{_id},
         _id => $take_result->{_id},
