@@ -22,6 +22,18 @@ define [
             mouseenter: (e) -> @subview(".likes-subview").showButton()
             mouseleave: (e) -> @subview(".likes-subview").hideButton()
 
+        _textSubview: (field) ->
+            sv = new Markdown
+                realm: @model.get("realm")
+                text: @model.get(field)
+                editable: @model.isOwned()
+            sv.on "change", =>
+                @model.set field, sv.getText()
+                sv.startSyncing()
+                @model.save().always ->
+                    sv.stopSyncing()
+            return sv
+
         subviews:
             ".likes-subview": ->
                 new Like(
@@ -32,21 +44,8 @@ define [
                 new Textarea
                     realm: @model.get("realm")
                     placeholder: "Quest description"
-            ".quest-big-description-sv": ->
-                sv = new Markdown
-                    realm: @model.get("realm")
-                    text: @model.get("description")
-                    editable: @model.isOwned()
-                sv.on "change", =>
-                    @model.set "description", sv.getText()
-                    sv.startSyncing()
-                    @model.save().always ->
-                        sv.stopSyncing()
-                return sv
-            ".quest-big-note-sv": ->
-                new Markdown
-                    realm: @model.get("realm")
-                    text: @model.get("note")
+            ".quest-big-description-sv": -> @_textSubview "description"
+            ".quest-big-note-sv": -> @_textSubview "note"
 
         initialize: ->
             super
