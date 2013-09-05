@@ -307,6 +307,7 @@ Possible parameters:
 
 * `name`
 * `description`
+* `note` (this shouldn't be possible, but necessary for stencil task lists to work correctly)
 
 ##### POST /api/stencil/{id}/take
 
