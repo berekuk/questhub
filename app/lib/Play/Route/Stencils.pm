@@ -14,7 +14,7 @@ post '/stencil' => sub {
     };
 
     # optional fields
-    for (qw/ description points /) {
+    for (qw/ description points tags /) {
         $params->{$_} = param($_) if defined param($_);
     };
 
@@ -44,7 +44,7 @@ put '/stencil/:id' => sub {
 
     my $params = {
         user => $login,
-        map { defined(param($_)) ? ($_ => param($_)) : () } qw/ name description points /,
+        map { defined(param($_)) ? ($_ => param($_)) : () } qw/ name description points tags /,
     };
 
     my $updated_id = db->stencils->edit(

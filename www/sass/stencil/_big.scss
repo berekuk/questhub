@@ -2,9 +2,21 @@
     @include mark-big($stencil-color);
     ._edit {
         display: none;
+        > small {
+            // field name
+            display: inline-block;
+            width: 42px;
+            margin-right: 3px;
+            line-height: 30px;
+            vertical-align: middle;
+            text-align: right;
+        }
     }
     [name=name] {
         margin-top: 10px;
+    }
+    [name=tags] {
+        margin-bottom: 0;
     }
     .object-bottom-line {
         margin-top: 36px;
@@ -25,6 +37,8 @@
 }
 
 .stencil-big-reward {
+    margin: 0 auto;
+    display: table;
     > header {
         @include bg-header;
         float: left;

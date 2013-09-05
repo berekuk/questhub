@@ -13,7 +13,7 @@ package Play::DB::Quests;
     $quests->like($object_id, $liker);
     $quests->unlike($object_id, $liker);
 
-    $quests->update($object_id, { ...new fields... });
+    $quests->edit($object_id, { ...new fields... });
 
 =head1 OBJECT FORMAT
 
@@ -345,6 +345,7 @@ sub edit {
         tags => Optional[ArrayRef[Str]],
         name => Optional[Str],
         description => Optional[Str],
+        note => Optional[Str],
     ]);
     my ($id, $params) = $check->(@_);
 

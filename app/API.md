@@ -298,8 +298,9 @@ Parameters:
 Optional parameters:
 
 * `description`
+* `tags`
 
-##### PUT /api/quest/{id}
+##### PUT /api/stencil/{id}
 
 Edit a stencil.
 
@@ -307,6 +308,7 @@ Possible parameters:
 
 * `name`
 * `description`
+* `tags`
 
 ##### POST /api/stencil/{id}/take
 

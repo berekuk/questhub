@@ -17,6 +17,7 @@ define [
         events:
             "click ._go": "submit"
             "keyup [name=name]": "nameEdit"
+            "keyup [name=tags]": "tagsEdit"
 
         initialize: ->
             super
@@ -40,13 +41,35 @@ define [
         getDescription: -> @$("[name=description]").val()
         getPoints: -> @$(".stencil-add-reward .active").attr "data-points"
 
+        getTags: ->
+            tagLine = @$("[name=tags]").val()
+            Model::tagline2tags tagLine
+
         validate: (options) ->
+            qt = @$(".stencil-tags-edit")
+            tagLine = @$("[name=tags]").val()
+            if Model::validateTagline(tagLine)
+                qt.removeClass "error"
+                qt.find("input").tooltip "hide"
+            else
+                unless qt.hasClass("error")
+                    qt.addClass "error"
+
+                    oldFocus = $(":focus")
+                    qt.find("input").tooltip "show"
+                    $(oldFocus).focus()
+                @disable()
+                return
             if @submitted or not @getName()
                 @disable()
                 return
             @enable()
 
         nameEdit: (e) ->
+            @validate()
+            @checkEnter e
+
+        tagsEdit: (e) ->
             @validate()
             @checkEnter e
 
@@ -68,6 +91,8 @@ define [
             description = @getDescription()
             params.description = description if description
             params.points = @getPoints()
+            tags = @getTags()
+            params.tags = tags if tags
 
             mixpanel.track "add stencil"
             model = new Model()

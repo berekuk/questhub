@@ -33,3 +33,14 @@
     margin: 0 auto;
     text-align: center;
 }
+
+.stencil-small-footer {
+    > div {
+        text-align: center;
+        margin-top: 2px;
+        > :first-child {
+            font-size: 12px;
+            color: $dark-grey;
+        }
+    }
+}

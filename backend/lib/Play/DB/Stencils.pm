@@ -54,6 +54,7 @@ sub add {
         description => Optional[Str],
         author => Login,
         points => Optional[StencilPoints],
+        tags => Optional[ArrayRef[Str]],
     ]);
     my ($params) = $check->(@_);
     $params->{points} ||= 1;
@@ -78,6 +79,7 @@ sub edit {
     my $self = shift;
     state $check = compile(Id, Dict[
         user => Login,
+        tags => Optional[ArrayRef[Str]],
         name => Optional[Str],
         description => Optional[Str],
         points => Optional[StencilPoints],
@@ -87,6 +89,10 @@ sub edit {
 
     # explicitly specifying that we don't want any quest info - just in case stencils->get defaults change in the future
     my $stencil = $self->get($id, { quests => 0 });
+
+    if ($params->{tags}) {
+        $params->{tags} = [ sort @{ $params->{tags} } ];
+    }
 
     delete $stencil->{_id};
     delete $stencil->{ts};
@@ -230,6 +236,7 @@ sub take {
         base_points => $stencil->{points},
     };
     $quest_params->{note} = $stencil->{description} if defined $stencil->{description};
+    $quest_params->{tags} = $stencil->{tags} if defined $stencil->{tags};
 
     my $quest = db->quests->add($quest_params);
     return $quest;
