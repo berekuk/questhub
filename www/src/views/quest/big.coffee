@@ -89,6 +89,7 @@ define [
             else
                 @$("[name=name]").parent().addClass "error"
                 ok = false
+
             cg = @$("[name=tags]").parent() # control-group
             if @model.validateTagline(cg.find("input").val())
                 cg.removeClass "error"
@@ -102,6 +103,7 @@ define [
                     cg.find("input").tooltip "show"
                     $(oldFocus).focus()
                 ok = false
+
             if ok
                 @$(".post-edit-controls .save").removeClass "disabled"
             else

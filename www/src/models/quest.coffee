@@ -1,5 +1,9 @@
-define ["backbone", "jquery", "models/current-user"], (Backbone, $, currentUser) ->
-    Backbone.Model.extend
+define [
+    "jquery"
+    "models/proto/post"
+    "models/current-user"
+], ($, Post, currentUser) ->
+    class extends Post
         idAttribute: "_id"
         urlRoot: "/api/quest"
 
@@ -63,20 +67,3 @@ define ["backbone", "jquery", "models/current-user"], (Backbone, $, currentUser)
             params.my = @isOwned()
             params.likes = []  unless params.likes
             params
-
-
-        # static methods
-        tagline2tags: (tagLine) ->
-            tags = tagLine.split(",")
-            tags = _.map(tags, (tag) ->
-                tag = tag.replace(/^\s+|\s+$/g, "")
-                tag
-            )
-            tags = _.filter(tags, (tag) ->
-                tag isnt ""
-            )
-            tags = _.uniq(tags)
-            tags.sort()
-
-        validateTagline: (tagLine) ->
-            Boolean tagLine.match(/^\s*([\w-]+\s*,\s*)*([\w-]+\s*)?$/)

@@ -26,18 +26,26 @@
       <div class="description-edit-sv"></div>
     </div>
 
-    <div class="_edit clearfix">
+    <div class="_edit clearfix form-row">
       <small class="muted">Reward:</small>
-      <div class="btn-group stencil-big-reward" data-toggle="buttons-radio">
+      <div class="btn-group stencil-big-reward-pick" data-toggle="buttons-radio">
         <% _.each([1,2,3], function(p) { %>
         <button class="btn <%- (p == points) ? 'active' : '' %>" data-points="<%- p %>"><%- p %> point<%- p == 1 ? '' : 's' %></button>
         <% }) %>
       </div>
+    </div>
+    <div class="_edit form-row">
+      <small class="muted">Tags:</small>
+      <input name="tags" type="text" placeholder="Tags" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
       <%= partial.post_edit_controls() %>
     </div>
     <% } %>
 
     <div class="object-bottom-line">
+      <div class="post-big-tags _editable">
+        <%= partial.quest_labels(obj) %>
+      </div>
+
       <a href="/realm/<%- realm %>/stencil/<%- _id %>" class="time-anchor">
         <em><span class="muted">Created</span></em>
         <time class="timeago" datetime="<%= new Date(ts * 1000).toISOString() %>">

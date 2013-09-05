@@ -1,8 +1,9 @@
 define [
-    "underscore", "backbone"
+    "underscore"
+    "models/proto/post"
     "models/current-user"
-], (_, Backbone, currentUser) ->
-    class extends Backbone.Model
+], (_, Post, currentUser) ->
+    class extends Post
         idAttribute: "_id"
         urlRoot: "/api/stencil"
 

@@ -66,8 +66,13 @@ define [
         startEdit: ->
             @$("._edit").show()
             @$("._editable").hide()
+
             @$("[name=name]").val @model.get("name")
             @$("[name=name]").focus()
+
+            tags = @model.get("tags") or []
+            @$("[name=tags]").val tags.join(", ")
+
             @validateForm()
             mixpanel.track "start edit", entity: "stencil"
             @description().reveal @model.get("description")
@@ -80,6 +85,20 @@ define [
                 @$("[name=name]").parent().addClass "error"
                 ok = false
 
+            # copy-pasted from views/quest/big
+            cg = @$("[name=tags]").parent() # control-group
+            if @model.validateTagline(cg.find("input").val())
+                cg.removeClass "error"
+                cg.find("input").tooltip "hide"
+            else
+                unless cg.hasClass("error")
+                    cg.addClass "error"
+
+                    oldFocus = $(":focus")
+                    cg.find("input").tooltip "show"
+                    $(oldFocus).focus()
+                ok = false
+
             if ok
                 @$(".post-edit-controls .save").removeClass "disabled"
             else
@@ -90,10 +109,15 @@ define [
             # so, we're using DOM data to cache validation status... this is a slippery slope.
             return if @$(".post-edit-controls .save").hasClass("disabled")
 
+            name = @$("[name=name]").val()
+            tagline = @$("[name=tags]").val()
+            points = @$(".stencil-big-reward-pick .active").attr "data-points"
+
             @model.save
-                name: @$("[name=name]").val()
+                name: name
                 description: @description().value()
-                points: @$(".stencil-big-reward .active").attr "data-points"
+                tags: @model.tagline2tags(tagline)
+                points: points
             @closeEdit()
 
         edit: (e) ->

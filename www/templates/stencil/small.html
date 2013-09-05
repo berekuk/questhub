@@ -23,19 +23,33 @@
     </div>
   <% } %>
 
-  <footer class="stencil-small-bottom-line">
-    <% if (obj.stat) { %>
-      <span class="stencil-small-stat">
-      <% _.each(stat, function (count, status) { %>
-        <a href="/realm/<%- realm %>/stencil/<%- _id %>/quests"><span class="label label-<%= status === 'open' && 'warning' %>">
-          <%- count %> <%= status === 'closed' ? 'completed' : status %>
-        </span></a>
-      <% }) %>
-      </span>
+  <footer class="stencil-small-footer">
+    <% if (obj.tags && obj.tags.length) { %>
+    <div>
+      <span>Tags:</span> <%= partial.quest_labels(obj) %>
+    </div>
     <% } %>
 
+    <div>
+      <span>Quests:</span>
+      <span>
+        <% if (obj.stat && _.keys(obj.stat).length) { %>
+          <% _.each(stat, function (count, status) { %>
+            <a href="/realm/<%- realm %>/stencil/<%- _id %>/quests"><span class="label label-<%= status === 'open' && 'warning' %>">
+              <%- count %> <%= status === 'closed' ? 'completed' : status %>
+            </span></a>
+          <% }) %>
+        <% } else { %>
+          <small class="muted">none so far.</small>
+        <% } %>
+      </span>
+    </div>
+
     <% if (obj.comment_count) { %>
+    <div>
+      <small class="muted">Comments:</small>
       <a href="/realm/<%- realm %>/stencil/<%= _id %>"><span class="badge badge-info"><i class="icon-comment"></i> <%= comment_count %></span></a>
+    </div>
     <% } %>
   </footer>
 </article>
