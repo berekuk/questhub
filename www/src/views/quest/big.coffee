@@ -120,6 +120,7 @@ define [
             @$(".quest-big-edit").hide()
             @$(".quest-big-editable").show()
             @description().hide()
+            @render()
 
 
         saveEdit: =>

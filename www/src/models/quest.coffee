@@ -75,6 +75,7 @@ define ["backbone", "jquery", "models/current-user"], (Backbone, $, currentUser)
             tags = _.filter(tags, (tag) ->
                 tag isnt ""
             )
+            tags = _.uniq(tags)
             tags.sort()
 
         validateTagline: (tagLine) ->
