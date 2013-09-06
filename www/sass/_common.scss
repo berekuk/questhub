@@ -180,39 +180,3 @@ a.grey-link {
     text-align: center;
     color: $dark-grey;
 }
-
-.btn {
-//    border-radius: 50px;
-//    border-bottom-right-radius: 20px;
-    border: 1px solid darken($grey, 10%);
-    border-bottom-width: 2px;
-//    @include box-shadow(0 2px 5px 2px darken($grey, 5%));
-//    background-color: #fcfcfc;
-    background-color: $mat;
-    color: $text-color;
-    &:hover {
-        background-color: darken($mat, 2%);
-        color: $text-color;
-//        border-color: darken($grey, 25%);
-    }
-    i {
-        margin-right: 2px;
-    }
-}
-.btn-primary {
-    background-color: hsl(200, 75%, 90%);
-    border-color: darken($blue-color, 5%);
-    &.disabled {
-        background-color: hsl(200, 75%, 90%);
-        border-color: $dark-grey;
-    }
-    .icon-check {
-//        color: darken($blue-color, 30%);
-    }
-//    border: 1px darken($blue-color, 15%) solid;
-//    border-bottom: 2px darken($blue-color, 15%) solid;
-    &:hover {
-        background-color: darken(hsl(200, 75%, 90%), 5%);
-        border-color: darken($blue-color, 10%);
-    }
-}

@@ -1,0 +1,53 @@
+.btn {
+    border-radius: 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-bottom-width: 2px;
+    @include box-shadow(0 5px 2px -2px darken($grey, 0%));
+    i {
+        margin-right: 2px;
+    }
+
+    color: $text-color;
+    text-shadow: 0 1px 1px rgba($dark-grey, 0.25);
+    &:hover {
+        color: $text-color;
+        @include box-shadow(0 5px 2px -2px darken($grey, 5%));
+    }
+}
+.btn-mini, .btn-small {
+    border-bottom-width: 1px;
+    @include box-shadow(0 3px 1px -1px darken($grey, 8%));
+}
+
+@mixin btn-colored-inner($color, $hued) {
+    background-color: $hued;
+    border-color: $color;
+    border-bottom-color: darken($color, 15%);
+    &.disabled {
+        background-color: $hued;
+        border-color: $dark-grey;
+    }
+    &:hover {
+        background-color: darken($hued, 5%);
+        border-color: darken($color, 5%) !important;
+        border-bottom-color: darken($color, 20%) !important;
+    }
+}
+
+@mixin btn-colored($color) {
+    @include btn-colored-inner($color, hsl(hue($color), 75%, 88%));
+}
+
+.btn-default {
+    @include btn-colored-inner(darken($grey, 10%), #fcfcfc);
+}
+.btn-primary {
+    @include btn-colored($blue-color);
+}
+.btn-success {
+    @include btn-colored($green-color);
+}
+.btn-warning {
+    @include btn-colored($orange-color);
+}
