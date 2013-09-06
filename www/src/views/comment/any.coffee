@@ -28,7 +28,7 @@ define [
             ".body-sv": ->
                 # TODO - make this subview optional and lazy
                 sv = new Markdown
-                    realm: @model.get "realm"
+                    realm: @options.realm
                     text: @model.get "body"
                     editable: @isOwned()
                 sv.on "change", =>
