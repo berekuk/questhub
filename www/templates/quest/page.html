@@ -19,12 +19,12 @@
           Complete
         </button>
 
-        <button class="leave btn" data-toggle="tooltip" data-placement="right" title="Leave&nbsp;the&nbsp;quest&nbsp;to&nbsp;the&nbsp;others. Maybe&nbsp;someone&nbsp;else&nbsp;will&nbsp;do&nbsp;it&nbsp;for&nbsp;you.">
+        <button class="leave btn btn-default" data-toggle="tooltip" data-placement="right" title="Leave&nbsp;the&nbsp;quest&nbsp;to&nbsp;the&nbsp;others. Maybe&nbsp;someone&nbsp;else&nbsp;will&nbsp;do&nbsp;it&nbsp;for&nbsp;you.">
           <i class="icon-minus"></i>
           Leave
         </button>
 
-        <button class="abandon btn" data-toggle="tooltip" data-placement="right" title="This&nbsp;will&nbsp;never&nbsp;happen. Let's&nbsp;just&nbsp;forget&nbsp;about&nbsp;it&nbsp;and&nbsp;move&nbsp;on.">
+        <button class="abandon btn btn-default" data-toggle="tooltip" data-placement="right" title="This&nbsp;will&nbsp;never&nbsp;happen. Let's&nbsp;just&nbsp;forget&nbsp;about&nbsp;it&nbsp;and&nbsp;move&nbsp;on.">
           <i class="icon-eject"></i>
           Abandon
         </button>
@@ -38,7 +38,7 @@
 
         <% } else if (status === 'abandoned') { %>
 
-          <button class="resurrect btn">
+          <button class="resurrect btn btn-default">
             <i class="icon-play"></i>
             Resurrect
           </button>
@@ -47,28 +47,28 @@
       <% } else { %>
         <!-- watch, like -->
         <% if (meGusta) { %>
-          <button class="btn unlike">
+          <button class="unlike btn btn-default">
             <span class="muted">
             <i class="icon-thumbs-up-alt"></i>
             Unlike
             </span>
           </button>
         <% } else { %>
-          <button class="btn btn-success like">
+          <button class="like btn btn-success">
             <i class="icon-thumbs-up"></i>
             Like
           </button>
         <% } %>
 
         <% if (obj.watchers && _.contains(watchers, currentUser)) { %>
-          <button class="btn unwatch muted">
+          <button class="unwatch muted btn btn-default">
             <span class="muted">
             <i class="icon-eye-close"></i>
             Unwatch
             </span>
           </button>
         <% } else { %>
-          <button class="btn watch">
+          <button class="watch btn btn-default">
             <i class="icon-eye-open"></i>
             Watch
           </button>
@@ -77,11 +77,11 @@
       <% } %>
 
       <% if (invited) { %>
-      <span>You're invited! <button class="btn btn-danger join">Join this quest</button></span>
+      <span>You're invited! <button class="join btn btn-danger">Join this quest</button></span>
       <% } %>
 
       <% if (my) { %>
-        <button class="invite btn" data-toggle="tooltip" data-placement="right" title="Invite&nbsp;another&nbsp;player&nbsp;to&nbsp;work&nbsp;with&nbsp;you.">
+        <button class="invite btn btn-default" data-toggle="tooltip" data-placement="right" title="Invite&nbsp;another&nbsp;player&nbsp;to&nbsp;work&nbsp;with&nbsp;you.">
           <i class="icon-user"></i>
           Invite
         </button>
@@ -89,7 +89,7 @@
           <label class="muted">Invite:</label>
           <input id="inputInvitee" type="text" placeholder="Login">
           <div class="invite-dialog-controls">
-            <a href="#" class="btn btn-mini invite-cancel">Cancel</a>
+            <a href="#" class="btn btn-mini invite-cancel btn-default">Cancel</a>
             <a href="#" class="btn btn-mini invite-send btn-primary">Send</a>
           </div>
         </form>

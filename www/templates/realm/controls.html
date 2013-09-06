@@ -1,6 +1,6 @@
 <% if (currentUser.get('registered')) { %>
   <% if (currentUser.get('fr') && _.contains(currentUser.get('fr'), id)) { %>
-    <button class="btn realm-unfollow">Unfollow</button>
+    <button class="btn btn-default realm-unfollow">Unfollow</button>
   <% } else { %>
     <button class="btn btn-primary realm-follow">Follow</button>
   <% } %>

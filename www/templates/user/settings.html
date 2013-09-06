@@ -24,7 +24,7 @@
           <div class="user-settings-upic-preview">
             <%= partial.upic_normal({ login: user.login }) %>
           </div>
-          <span class="btn btn-mini btn-file">
+          <span class="btn btn-default btn-mini btn-file">
             <span><i class="icon-pencil"></i> Change picture</span>
             <input name="pic" type="file" />
           </span>
@@ -80,9 +80,9 @@
       <span class="muted">API token:</span>
       <% if (obj.api_token) { %>
         <span class="_token"><%- obj.api_token %></span>
-        <br><button class="btn btn-small js-generate-token js-regenerate-token regenerate-token"><i class="icon-refresh"></i> Regenerate</button>
+        <br><button class="btn btn-small btn-default js-generate-token js-regenerate-token regenerate-token"><i class="icon-refresh"></i> Regenerate</button>
       <% } else { %>
-        <button class="btn btn-small js-generate-token generate-token">Generate</button>
+        <button class="btn btn-small btn-default js-generate-token generate-token">Generate</button>
       <% } %>
       <br>
       <small><a href="/about/api" target="_blank">About API</a></small>
