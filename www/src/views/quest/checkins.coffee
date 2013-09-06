@@ -17,4 +17,8 @@ define [
             enabled: "checkin" in (@model.get("tags") || [])
             isOwned: @model.isOwned()
 
+        initialize: ->
+            super
+            @listenTo @model, "change:checkins", @render
+
         features: ['timeago']
