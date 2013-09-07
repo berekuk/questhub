@@ -32,6 +32,13 @@ define [
 
             params
 
+        subviews:
+            ".current-user-box": ->
+                new CurrentUser model: currentUserModel
+
+        lazySubviews: [".current-user-box"]
+        currentUser: -> @subview ".current-user-box"
+
         getRealm: ->
             return unless @options.realm
             realm = sharedModels.realms.findWhere(id: @options.realm)
@@ -41,7 +48,8 @@ define [
         setRealm: (realm_id) ->
             @options.realm = realm_id
             @render()
-            @currentUser.setRealm realm_id
+
+            @currentUser().setRealm realm_id
 
         render: ->
 
@@ -53,11 +61,8 @@ define [
 
             super
 
-            unless @currentUser
-                @currentUser = new CurrentUser(model: currentUserModel)
-                @currentUser.setElement @$el.find(".current-user-box")
-            else
-                @currentUser.setElement(@$el.find(".current-user-box")).render()
+            @currentUser() # force init/render
+
             @$el.find(".menu-item-" + @active).addClass "active" if @active
 
         setActive: (selector) ->
