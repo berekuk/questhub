@@ -8,10 +8,6 @@
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
  */
 
-.clearfix {
-  *zoom: 1;
-}
-
 .clearfix:before,
 .clearfix:after {
   display: table;
@@ -57,8 +53,6 @@ audio,
 canvas,
 video {
   display: inline-block;
-  *display: inline;
-  *zoom: 1;
 }
 
 audio:not([controls]) {
@@ -123,7 +117,6 @@ textarea {
 
 button,
 input {
-  *overflow: visible;
   line-height: normal;
 }
 
@@ -473,10 +466,6 @@ dd {
   margin-left: 10px;
 }
 
-.dl-horizontal {
-  *zoom: 1;
-}
-
 .dl-horizontal:before,
 .dl-horizontal:after {
   display: table;
@@ -766,7 +755,8 @@ input[type="radio"],
 input[type="checkbox"] {
   margin: 4px 0 0;
   margin-top: 1px \9;
-  *margin-top: 0;
+  /* IE8-9 */
+
   line-height: normal;
 }
 
@@ -784,9 +774,6 @@ select,
 input[type="file"] {
   height: 30px;
   /* In IE7, the height of the select element cannot be changed by height, only font-size */
-
-  *margin-top: 4px;
-  /* For IE7, add top margin to align select with labels */
 
   line-height: 30px;
 }
@@ -1008,10 +995,6 @@ textarea.span1,
   width: 46px;
 }
 
-.controls-row {
-  *zoom: 1;
-}
-
 .controls-row:before,
 .controls-row:after {
   display: table;
@@ -1228,7 +1211,6 @@ select:focus:invalid:focus {
   margin-bottom: 20px;
   background-color: #f5f5f5;
   border-top: 1px solid #e5e5e5;
-  *zoom: 1;
 }
 
 .form-actions:before,
@@ -1288,7 +1270,6 @@ select:focus:invalid:focus {
 .input-prepend .uneditable-input {
   position: relative;
   margin-bottom: 0;
-  *margin-left: 0;
   vertical-align: top;
   border-radius: 0 4px 4px 0;
 }
@@ -1505,7 +1486,6 @@ legend + .control-group {
 
 .form-horizontal .control-group {
   margin-bottom: 20px;
-  *zoom: 1;
 }
 
 .form-horizontal .control-group:before,
@@ -1527,14 +1507,7 @@ legend + .control-group {
 }
 
 .form-horizontal .controls {
-  *display: inline-block;
-  *padding-left: 20px;
   margin-left: 180px;
-  *margin-left: 0;
-}
-
-.form-horizontal .controls:first-child {
-  *padding-left: 180px;
 }
 
 .form-horizontal .help-block {
@@ -1608,7 +1581,6 @@ table {
 .table-bordered {
   border: 1px solid #dddddd;
   border-collapse: separate;
-  *border-collapse: collapse;
   border-left: 0;
   border-radius: 4px;
 }
@@ -2416,10 +2388,6 @@ table th[class*="span"],
   position: relative;
 }
 
-.dropdown-toggle {
-  *margin-bottom: -3px;
-}
-
 .dropdown-toggle:active,
 .open .dropdown-toggle {
   outline: 0;
@@ -2455,8 +2423,6 @@ table th[class*="span"],
   background-color: #ffffff;
   border: 1px solid #ccc;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  *border-right-width: 2px;
-  *border-bottom-width: 2px;
   border-radius: 6px;
   -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
      -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
@@ -2472,10 +2438,8 @@ table th[class*="span"],
 }
 
 .dropdown-menu .divider {
-  *width: 100%;
   height: 1px;
   margin: 9px 1px;
-  *margin: -5px 0 5px;
   overflow: hidden;
   background-color: #e5e5e5;
   border-bottom: 1px solid #ffffff;
@@ -2536,10 +2500,6 @@ table th[class*="span"],
   background-color: transparent;
   background-image: none;
   filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-}
-
-.open {
-  *z-index: 1000;
 }
 
 .open > .dropdown-menu {
@@ -3126,9 +3086,7 @@ input[type="button"].btn-block {
 }
 
 .btn-group > .btn + .dropdown-toggle {
-  *padding-top: 5px;
   padding-right: 8px;
-  *padding-bottom: 5px;
   padding-left: 8px;
   -webkit-box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.125), inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
      -moz-box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.125), inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -3136,21 +3094,12 @@ input[type="button"].btn-block {
 }
 
 .btn-group > .btn-mini + .dropdown-toggle {
-  *padding-top: 2px;
   padding-right: 5px;
-  *padding-bottom: 2px;
   padding-left: 5px;
 }
 
-.btn-group > .btn-small + .dropdown-toggle {
-  *padding-top: 5px;
-  *padding-bottom: 4px;
-}
-
 .btn-group > .btn-large + .dropdown-toggle {
-  *padding-top: 7px;
   padding-right: 12px;
-  *padding-bottom: 7px;
   padding-left: 12px;
 }
 
@@ -3396,18 +3345,11 @@ input[type="button"].btn-block {
 }
 
 .nav-list .divider {
-  *width: 100%;
   height: 1px;
   margin: 9px 1px;
-  *margin: -5px 0 5px;
   overflow: hidden;
   background-color: #e5e5e5;
   border-bottom: 1px solid #ffffff;
-}
-
-.nav-tabs,
-.nav-pills {
-  *zoom: 1;
 }
 
 .nav-tabs:before,
@@ -3589,10 +3531,6 @@ input[type="button"].btn-block {
   border-color: #999999;
 }
 
-.tabbable {
-  *zoom: 1;
-}
-
 .tabbable:before,
 .tabbable:after {
   display: table;
@@ -3681,7 +3619,6 @@ input[type="button"].btn-block {
 .tabs-left > .nav-tabs .active > a:hover,
 .tabs-left > .nav-tabs .active > a:focus {
   border-color: #ddd transparent #ddd #ddd;
-  *border-right-color: #ffffff;
 }
 
 .tabs-right > .nav-tabs {
@@ -3704,7 +3641,6 @@ input[type="button"].btn-block {
 .tabs-right > .nav-tabs .active > a:hover,
 .tabs-right > .nav-tabs .active > a:focus {
   border-color: #ddd #ddd #ddd transparent;
-  *border-left-color: #ffffff;
 }
 
 .nav > .disabled > a {
@@ -3862,7 +3798,6 @@ input[type="button"].btn-block {
   margin: 20px 0;
   text-align: center;
   list-style: none;
-  *zoom: 1;
 }
 
 .pager:before,
@@ -3944,7 +3879,6 @@ input[type="button"].btn-block {
   background-color: #ffffff;
   border: 1px solid #999;
   border: 1px solid rgba(0, 0, 0, 0.3);
-  *border: 1px solid #999;
   border-radius: 6px;
   outline: none;
   -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
@@ -3999,7 +3933,6 @@ input[type="button"].btn-block {
   background-color: #f5f5f5;
   border-top: 1px solid #ddd;
   border-radius: 0 0 6px 6px;
-  *zoom: 1;
   -webkit-box-shadow: inset 0 1px 0 #ffffff;
      -moz-box-shadow: inset 0 1px 0 #ffffff;
           box-shadow: inset 0 1px 0 #ffffff;
@@ -4258,7 +4191,6 @@ input[type="button"].btn-block {
 .thumbnails {
   margin-left: -20px;
   list-style: none;
-  *zoom: 1;
 }
 
 .thumbnails:before,
@@ -4320,7 +4252,6 @@ a.thumbnail:focus {
 .media,
 .media-body {
   overflow: hidden;
-  *overflow: visible;
   zoom: 1;
 }
 
