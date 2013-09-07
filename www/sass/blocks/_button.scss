@@ -12,7 +12,9 @@
     text-shadow: 0 1px 1px rgba($dark-grey, 0.25);
     &:hover {
         color: $text-color;
-        @include box-shadow(0 5px 2px -2px darken($grey, 5%));
+        &:not(.active) {
+            @include box-shadow(0 5px 2px -2px darken($grey, 3%));
+        }
     }
 }
 .btn-mini, .btn-small {
@@ -24,11 +26,11 @@
     background-color: $hued;
     border-color: $color;
     border-bottom-color: darken($color, 15%);
-    &.disabled {
+    &.disabled, &[disabled], fieldset[disabled] & {
         background-color: $hued;
         border-color: $dark-grey;
     }
-    &:hover {
+    &:hover:not(.active) {
         background-color: darken($hued, 5%);
         border-color: darken($color, 5%) !important;
         border-bottom-color: darken($color, 20%) !important;
