@@ -4,10 +4,12 @@ define [
     "views/helper/markdown"
     "models/current-user"
     "text!templates/helper/textarea.html"
-], (_, $, Common, Markdown, currentUser, html) ->
+    "models/quest"
+], (_, $, Common, Markdown, currentUser, html, QuestModel) ->
 
     previewMode = undefined
     cachedText = {}
+    cachedLinks = {}
 
     class extends Common
         template: _.template html
@@ -17,7 +19,8 @@ define [
 
         events:
             "keydown textarea": "preEdit"
-            "keyup textarea": "postEdit"
+            "input textarea": "postEdit"
+            "click textarea": "autosuggest"
             "click .helper-textarea-show-preview": -> @switchPreview(true)
             "click .helper-textarea-hide-preview": -> @switchPreview(false)
             "click .helper-textarea-show-help": "toggleHelp"
@@ -61,6 +64,7 @@ define [
             @on 'detach-subview', @selfDestruct, @
 
             $("body").on "click", @blurHelp
+            $("body").on "click", @hideSuggest
 
         subviews:
             ".helper-textarea-preview ._content": ->
@@ -124,6 +128,7 @@ define [
 
         selfDestruct: ->
             delete cachedText[@cid]
+            @$("textarea").popover "destroy"
             @helpLink().popover "destroy"
 
         remove: ->
@@ -141,8 +146,13 @@ define [
         postEdit: (e) ->
             return false if @disabled()
             cachedText[@cid] = @value()
+            @autosuggest()
             @updatePreview()
             @trigger "edit"
+
+        autosuggest: =>
+            @hideSuggest()
+            @checkQuestLinks()
 
         render: ->
             @helpLink().popover "destroy"
@@ -159,3 +169,59 @@ define [
         setRealm: (realm) ->
             @options.realm = realm
             @updatePreview()
+
+        hideSuggest: (e) =>
+            textarea = @$("textarea")
+            if (!e || e.target != textarea[0])
+                textarea.popover("destroy")
+
+        suggestEdit: (start, end, edit, label) ->
+            # Display suggestion
+            @$("textarea").popover(
+                title: "Insert link with quest title?"
+                content: '<button class="btn helper-textarea-suggest">' +
+                    label + '</button>'
+                html: true
+                placement: "bottom"
+                trigger: "manual"
+            ).popover("show")
+
+            # Insert suggestion on button click
+            @$(".helper-textarea-suggest").on "click", =>
+                val = cachedText[@cid]
+                newVal = val.substring(0, start) + edit + val.substring(end)
+                @setValue(newVal)
+
+        wordAtPoint: ->
+            cursor = @$("textarea").prop "selectionStart"
+            text = cachedText[@cid]
+            start = text.lastIndexOf(' ', cursor)
+            if (start == cursor)
+                start = text.lastIndexOf(' ', cursor - 1)
+            start += 1
+            end = text.indexOf(' ', cursor)
+            if (end == -1)
+                end = text.length
+            [text.substring(start, end), start, end]
+
+        checkQuestLinks: ->
+            [word, start, end] = @wordAtPoint()
+            if (!word)
+                return
+            display = =>
+                questName = cachedLinks[word]
+                @suggestEdit(start, end,
+                    "[" + questName + "](" + word + ")", questName)
+            if word of cachedLinks
+                display()
+            else
+                questRe = "://" + location.host + "/.*/?quest/([a-z0-9]{24,})$"
+                match = word.match(questRe)
+                if (match)
+                    model = new QuestModel _id: match[1]
+                    model.fetch success: =>
+                        cachedLinks[word] = model.get "name"
+                        #[newWord] = @wordAtPoint()
+                        #if (newWord == word)
+                        #    display()
+                        display() # display even if cursor moved
