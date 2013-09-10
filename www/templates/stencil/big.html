@@ -32,7 +32,7 @@
           <small class="muted">Reward:</small>
           <div class="btn-group stencil-big-reward-pick" data-toggle="buttons-radio">
             <% _.each([1,2,3], function(p) { %>
-            <button class="btn <%- (p == points) ? 'active' : '' %>" data-points="<%- p %>"><%- p %> point<%- p == 1 ? '' : 's' %></button>
+            <button class="btn btn-default <%- (p == points) ? 'active' : '' %>" data-points="<%- p %>"><%- p %> point<%- p == 1 ? '' : 's' %></button>
             <% }) %>
           </div>
         </div>
