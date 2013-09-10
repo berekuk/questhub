@@ -128,3 +128,25 @@
   animation-iteration-count: $count;
 }
 // etc - see http://codepen.io/sawmac/pen/rjHFd
+
+// COPIED FROM BOOTSTRAP
+
+// User select
+// For selecting text on the page
+@mixin user-select($select) {
+    -webkit-user-select: $select;
+    -moz-user-select: $select;
+    -ms-user-select: $select;
+    -o-user-select: $select;
+    user-select: $select;
+}
+
+// Webkit-style focus
+// ------------------
+@mixin tab-focus {
+    // Default
+    outline: thin dotted #333;
+    // Webkit
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}

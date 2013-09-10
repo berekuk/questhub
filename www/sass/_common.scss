@@ -23,6 +23,9 @@ $highlight: $bright-color;
 $like-color: hsl(120, 30%, 40%);
 $ground-color: #f5f5f5;
 
+$base-font-size: 14px; // TODO - use everywhere
+$base-line-height: 20px; // copied from variables.less
+
 body { background-color: $ground-color }
 
 // html5 outline tags - do we really need this if we don't support IE <9?
