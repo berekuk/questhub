@@ -14,12 +14,11 @@
     @include user-select(none);
     background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
 
-    transition: background-color 0.2s ease, border-bottom-color 0.2s ease, box-shadow 0.2s ease;
+    transition: background-color 0.2s ease, background-image 0.2 ease, border-bottom-color 0.2s ease;
 
     border-radius: 5px;
     border-width: 1px;
     border-style: solid;
-    border-bottom-width: 2px;
     i {
         margin-right: 2px;
     }
@@ -29,7 +28,6 @@
     &:hover, &:focus {
         color: $text-color;
         text-decoration: none;
-        @include box-shadow(0 4px 2px -2px rgba($dark-grey, 0.10));
     }
     &:active, &.active {
         outline: 0;
@@ -42,8 +40,7 @@
     fieldset[disabled] & {
         cursor: default;
         pointer-events: none; // Future-proof disabling of clicks
-        @include opacity(65);
-        @include box-shadow(none);
+        @include opacity(60);
     }
 
     // Focus state for keyboard and accessibility
@@ -53,11 +50,11 @@
 }
 .btn-mini, .btn-small {
     border-bottom-width: 1px;
-//    @include box-shadow(0 3px 1px -1px rgba($dark-grey, 0.25));
 }
 
 @mixin btn-colored-inner($color, $hued) {
     background-color: $hued;
+    @include gradient-vertical($start-color: $hued, $end-color: darken($hued, 8%));
     border-color: $color;
     border-bottom-color: darken($color, 10%);
 
@@ -73,21 +70,22 @@
     }
     &:hover, &:focus, &:active, &.active {
         background-color: darken($hued, 4%);
+        @include gradient-vertical($start-color: darken($hued, 4%), $end-color: darken($hued, 12%));
         border-color: darken($color, 5%);
         border-bottom-color: darken($color, 15%);
     }
     &:active, &.active {
-        background-image: none;
+        @include gradient-vertical($start-color: darken($hued, 10%), $end-color: darken($hued, 18%));
         border-bottom-color: darken($color, 5%);
     }
 }
 
 @mixin btn-colored($color) {
-    @include btn-colored-inner(hsl(hue($color), 60%, 65%), hsl(hue($color), 75%, 80%));
+    @include btn-colored-inner(hsl(hue($color), 60%, 70%), hsl(hue($color), 75%, 85%));
 }
 
 .btn-default {
-    @include btn-colored-inner(darken($grey, 10%), #fcfcfc);
+    @include btn-colored-inner(darken($grey, 10%), white);
 }
 .btn-primary {
     @include btn-colored($blue-color);
