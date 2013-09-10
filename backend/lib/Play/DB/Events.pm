@@ -210,6 +210,7 @@ sub _feed_for_query {
         push @{ $user->{fu} }, $user->{login};
         push @subqueries, { team => { '$in' => $user->{fu} } };
         push @subqueries, { author => { '$in' => $user->{fu} } };
+        push @subqueries, { watchers => $user->{login} };
 
         if (@subqueries) {
             $query->{'$or'} = \@subqueries;
