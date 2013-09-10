@@ -18,7 +18,6 @@
     border-width: 1px;
     border-style: solid;
     border-bottom-width: 2px;
-    @include box-shadow(0 3px 2px -2px rgba($dark-grey, 0.15));
     i {
         margin-right: 2px;
     }
@@ -28,7 +27,7 @@
     &:hover, &:focus {
         color: $text-color;
         text-decoration: none;
-        @include box-shadow(0 4px 2px -2px rgba($dark-grey, 0.20));
+        @include box-shadow(0 4px 2px -2px rgba($dark-grey, 0.10));
     }
     &:active, &.active {
         outline: 0;
@@ -58,7 +57,7 @@
 @mixin btn-colored-inner($color, $hued) {
     background-color: $hued;
     border-color: $color;
-    border-bottom-color: darken($color, 15%);
+    border-bottom-color: darken($color, 10%);
     &.disabled, &[disabled], fieldset[disabled] & {
         &,
         &:hover,
@@ -72,7 +71,7 @@
     &:hover, &:focus, &:active, &.active {
         background-color: darken($hued, 4%);
         border-color: darken($color, 5%);
-        border-bottom-color: darken($color, 20%);
+        border-bottom-color: darken($color, 15%);
     }
     &:active, &.active {
         background-image: none;
