@@ -14,6 +14,8 @@
     @include user-select(none);
     background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
 
+    transition: background-color 0.2s ease, border-bottom-color 0.2s ease, box-shadow 0.2s ease;
+
     border-radius: 5px;
     border-width: 1px;
     border-style: solid;
@@ -58,6 +60,7 @@
     background-color: $hued;
     border-color: $color;
     border-bottom-color: darken($color, 10%);
+
     &.disabled, &[disabled], fieldset[disabled] & {
         &,
         &:hover,
