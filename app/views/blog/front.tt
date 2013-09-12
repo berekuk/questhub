@@ -1,11 +1,13 @@
-<aside class="sidebar">
-  Questhub is for motivation.<br>
-  Questhub is for fun.<br>
-  Questhub is for geting things done.
-</aside>
+<!--
+vim: ft=html
+-->
+<% INCLUDE blog/blocks/sidebar.tt %>
 <div class="mainarea">
-  <article class="qh-blog-post-summary">
-    <header>First post!</header>
-    Questhub rules. Right?
-  </article>
+  <% FOREACH post IN posts %>
+    <article class="qh-blog-post-summary">
+      <header class="qh-blog-post-title"><a href="/blog/post/<% post.name %>"><% post.title %></a></header>
+      <% post.body %>
+      <% INCLUDE blog/blocks/post_footer.tt %>
+    </article>
+  <% END %>
 </div>

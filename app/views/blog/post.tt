@@ -1,0 +1,13 @@
+<!--
+vim: ft=html
+-->
+<% INCLUDE blog/blocks/sidebar.tt %>
+<div class="mainarea">
+  <article class="qh-blog-post">
+    <header class="qh-blog-post-title"><% post.title %></header>
+    <div class="qh-blog-post-content">
+      <% post.body %>
+      <% INCLUDE blog/blocks/post_footer.tt %>
+    </div>
+  </article>
+</div>
