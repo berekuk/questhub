@@ -11,6 +11,7 @@ use Play::Route::Events;
 use Play::Route::Realms;
 
 use Play::Route::SEO;
+use Play::Route::Blog;
 
 use Play::Route::Dev;
 

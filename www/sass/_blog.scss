@@ -1,0 +1,49 @@
+body.qh-blog {
+    > header {
+        @include well;
+    }
+}
+
+.qh-blog-header-inner {
+    @include clearfix;
+    margin: 0 auto;
+    max-width: 980px;
+    img {
+        border-radius: 5px;
+        height: 60px;
+        width: 60px;
+        margin-right: 10px;
+        float: left;
+    }
+    ._mainheader {
+        font-size: 24px;
+        font-weight: 200;
+        line-height: 36px;
+    }
+    ._subheader {
+        display: block;
+        font-size: $base-font-size;
+        line-height: 24px;
+    }
+}
+
+.qh-blog-container {
+    max-width: 980px;
+    margin: 0 auto;
+    margin-top: 40px;
+}
+
+.qh-blog-post-summary {
+    @include well;
+    padding: {
+        left: 20px;
+        right: 20px;
+        bottom: 20px;
+    }
+    header {
+        font-size: 24px;
+        line-height: 36px;
+        font-weight: 200;
+        margin-bottom: 8px;
+    }
+}

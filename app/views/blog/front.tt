@@ -1,0 +1,11 @@
+<aside class="sidebar">
+  Questhub is for motivation.<br>
+  Questhub is for fun.<br>
+  Questhub is for geting things done.
+</aside>
+<div class="mainarea">
+  <article class="qh-blog-post-summary">
+    <header>First post!</header>
+    Questhub rules. Right?
+  </article>
+</div>

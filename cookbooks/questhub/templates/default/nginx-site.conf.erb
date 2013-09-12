@@ -31,6 +31,12 @@ server {
     expires 0;
   }
 
+  location /blog {
+    try_files $uri @proxy;
+    access_log off;
+    expires 0;
+  }
+
   location /auth {
     try_files $uri @proxy;
     access_log off;
