@@ -1,0 +1,13 @@
+<!--
+vim: ft=html
+-->
+<% INCLUDE blog/blocks/sidebar.tt %>
+<div class="mainarea">
+  <% FOREACH post IN posts %>
+    <article class="qh-blog-post-summary">
+      <header class="qh-blog-post-title"><a href="/blog/post/<% post.name %>"><% post.title %></a></header>
+      <% post.body %>
+      <% INCLUDE blog/blocks/post_footer.tt %>
+    </article>
+  <% END %>
+</div>

@@ -1,0 +1,4 @@
+<footer class="qh-blog-post-footer">
+  <a href="/blog/post/<% post.name %>" class="time-anchor"><time class="timeago" datetime="<% post.posted %>"><% post.posted %></time></a>
+  by <a href="/player/berekuk" class="user-link">berekuk</a>
+</footer>

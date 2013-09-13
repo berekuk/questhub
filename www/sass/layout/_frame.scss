@@ -60,7 +60,7 @@ input {
     // which included clearfix, and somehow vertically aligned <p> to the middle.
     @include clearfix;
 
-    font-size: 11.844px;
+    font-size: $small-font-size;
     background-color: $mat;
     padding-left: 10px;
     padding-right: 10px;

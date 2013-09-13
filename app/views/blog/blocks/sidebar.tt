@@ -1,0 +1,14 @@
+<aside class="sidebar qh-blog-sidebar">
+  <p>
+    <a href="/">Questhub.io</a> is your public todo list.
+  </p>
+  <p class="desktop-block">
+    It's optimized for fun and productivity. You can connect with accomplices, you can choose your task from pre-scripted quests or invent unique quests, and you get points for each quest you complete.
+  </p>
+  <header>Follow Questhub.io:</header>
+  <p>
+    <a href="https://twitter.com/questhubio"><i class="icon-twitter"></i> @questhubio</a><br class="desktop-block"><span class="mobile-text muted"> &bull; </span>
+    <a href="https://facebook.com/questhubio"><i class="icon-facebook"></i> Questhub.io</a><br class="desktop-block"><span class="mobile-text muted"> &bull; </span>
+    <a href="http://<% settings.hostport %>/blog/atom" class="btn btn-mini btn-rss"><i class="icon-rss"></i> RSS</a>
+  </p>
+</aside>

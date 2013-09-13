@@ -1,0 +1,139 @@
+.qh-blog-container {
+    padding-top: 25px !important; // blog doesn't have a fixed navbar, 55px of padding in the main QH instance is excessive
+}
+
+.qh-blog-navbar {
+    @include well;
+}
+
+.qh-blog-header-inner {
+    @include clearfix;
+    margin: 0 auto;
+    max-width: 980px;
+    position: relative;
+    img {
+        border-radius: 5px;
+        height: 50px;
+        width: 50px;
+        margin-right: 10px;
+        float: left;
+    }
+    ._mainheader {
+        font-size: 26px;
+        font-weight: 200;
+        line-height: 28px;
+    }
+    ._subheader {
+        display: block;
+        font-size: $base-font-size;
+        line-height: $base-font-size;
+        position: absolute;
+        bottom: 0px;
+        left: 60px;
+    }
+    a {
+        color: $text-color;
+    }
+}
+
+.qh-blog-sidebar {
+    margin-top: 10px;
+    > header {
+        @include bg-header;
+        margin-top: 16px;
+        margin-bottom: 12px;
+    }
+    .icon-twitter {
+        margin-left: 4px;
+    }
+    .icon-facebook {
+        margin-left: 6px;
+        margin-right: 5px;
+    }
+    .btn-rss {
+        margin-top: 2px;
+    }
+}
+
+@mixin qh-blog-post-box {
+    @include well;
+    border-top: 5px solid $blue-color;
+    padding: {
+        top: 8px;
+        bottom: 8px;
+        left: 12px;
+        right: 12px;
+    }
+    @include breakpoint(A) {
+        font-weight: 200;
+        font-size: 18px;
+        line-height: 26px;
+        padding: {
+            left: 20px;
+            right: 20px;
+        }
+    }
+    @include breakpoint(C) {
+        font-weight: 200;
+        font-size: 19px;
+        line-height: 29px;
+        padding: {
+            left: 30px;
+            right: 30px;
+        }
+    }
+    p {
+        margin-bottom: 20px;
+    }
+}
+
+.qh-blog-post-summary {
+    @include qh-blog-post-box;
+    header {
+        margin-top: 12px;
+        margin-bottom: 12px;
+        a {
+            color: $text-color;
+        }
+    }
+    @include breakpoint(C) {
+        margin-bottom: 30px;
+    }
+}
+
+.qh-blog-post-content {
+    @include qh-blog-post-box;
+    padding-top: 16px;
+}
+
+.qh-blog-post-title {
+    font-weight: 200;
+    font-size: 22px;
+    line-height: 22px;
+    @include breakpoint(A) {
+        font-size: 26px;
+        line-height: 26px;
+    }
+    @include breakpoint(C) {
+        font-size: 30px;
+        line-height: 30px;
+    }
+}
+
+.qh-blog-post {
+    header {
+        margin-bottom: 12px;
+    }
+}
+
+.qh-blog-post-footer {
+    color: $dark-grey;
+    font-style: italic;
+    font-size: $small-font-size;
+}
+
+.qh-blog-footer {
+    color: $dark-grey;
+    text-align: center;
+    line-height: 100%;
+}
