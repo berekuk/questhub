@@ -63,7 +63,7 @@ mixpanel.init(<% settings.mixpanel_token %>);</script>
           &nbsp; | &nbsp;
           <a href="/about">About</a>
           &nbsp; | &nbsp;
-          <a href="http://blogs.perl.org/mt/mt-search.fcgi?blog_id=310&tag=play-perl&limit=20">Blog</a>
+          <a href="/blog">Blog</a>
         </span>
         <span class="footer-separator footer-separator-first">&nbsp; | &nbsp;</span>
         <span class="footer-line">

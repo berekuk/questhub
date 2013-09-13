@@ -64,7 +64,7 @@
         left: 12px;
         right: 12px;
     }
-    @include breakpoint(AtoB) {
+    @include breakpoint(A) {
         font-weight: 200;
         font-size: 18px;
         line-height: 26px;
@@ -73,7 +73,7 @@
             right: 20px;
         }
     }
-    @include breakpoint(B) {
+    @include breakpoint(C) {
         font-weight: 200;
         font-size: 19px;
         line-height: 29px;
@@ -96,6 +96,9 @@
             color: $text-color;
         }
     }
+    @include breakpoint(C) {
+        margin-bottom: 30px;
+    }
 }
 
 .qh-blog-post-content {
@@ -107,11 +110,11 @@
     font-weight: 200;
     font-size: 22px;
     line-height: 22px;
-    @include breakpoint(AtoB) {
+    @include breakpoint(A) {
         font-size: 26px;
         line-height: 26px;
     }
-    @include breakpoint(B) {
+    @include breakpoint(C) {
         font-size: 30px;
         line-height: 30px;
     }
