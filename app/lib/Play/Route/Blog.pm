@@ -38,6 +38,7 @@ sub load_post {
         name => $name,
         posted_ts => $posted_ts,
         posted => $posted,
+        author => 'berekuk',
     };
 }
 
@@ -59,6 +60,14 @@ get '/post/:name' => sub {
     template 'blog/post' => {
         post => load_post(param('name').".html")
     }, { layout => 'blog' };
+};
+
+get '/atom' => sub {
+    header 'Content-Type' => 'application/xml';
+    template 'blog/atom' => {
+        posts => load_all_posts()
+    };
+
 };
 
 1;

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Questhub.io Blog</title>
+    <link rel="alternate" type="text/html" href="http://<% settings.hostport %>/blog" />
+    <id>tag:<% settings.hostport %>,2013-09-13:blog</id>
+
+<% BLOCK post_link %>
+<link rel="alternate" type="text/html" href="http://<% settings.hostport %>/blog/post/<% post.name %>" />
+<% END %>
+
+<% FOREACH post IN posts %>
+<entry>
+    <updated><% post.posted %></updated>
+    <id>tag:<% settings.hostport %>,2013-05-09:qh_blog_post/<% post.name %></id>
+    <author>
+        <name><% post.author %></name>
+        <uri>http://<% settings.hostport %>/player/<% post.author %></uri>
+    </author>
+
+    <title><% post.title | xml %></title>
+    <content type="html">
+        <![CDATA[
+        <% post.body %>
+        ]]>
+    </content>
+    <% PROCESS post_link %>
+</entry>
+<% END %>
+</feed>

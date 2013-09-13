@@ -9,6 +9,6 @@
   <p>
     <a href="https://twitter.com/questhubio"><i class="icon-twitter"></i> @questhubio</a><br class="desktop-block"><span class="mobile-text muted"> &bull; </span>
     <a href="https://facebook.com/questhubio"><i class="icon-facebook"></i> Questhub.io</a><br class="desktop-block"><span class="mobile-text muted"> &bull; </span>
-    <a href="http://questhub.io/blog/rss" class="btn btn-mini btn-rss"><i class="icon-rss"></i> RSS</a>
+    <a href="http://<% settings.hostport %>/blog/atom" class="btn btn-mini btn-rss"><i class="icon-rss"></i> RSS</a>
   </p>
 </aside>
