@@ -96,6 +96,9 @@
 .btn-warning {
     @include btn-colored-inner(hsl(50, 60%, 65%), hsl(50, 90%, 80%));
 }
+.btn-danger {
+    @include btn-colored-inner(hsl(1, 60%, 65%), hsl(1, 90%, 80%));
+}
 .btn-rss {
     @include btn-colored-inner(hsl(35, 35%, 69%), hsl(35, 95%, 60%));
     &, &:hover, &:active {
