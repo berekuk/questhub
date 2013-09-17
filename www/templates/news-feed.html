@@ -7,9 +7,19 @@
 
 <aside class="sidebar">
   <header class="sidebar-header">
+    <i class="icon-question-sign" data-toggle="tooltip" title='Your personal news feed. Follow more realms or players to see more news.'></i>
     <a href="http://<%= window.location.host %>/api/event/atom?for=<%- login %>" class="btn btn-mini btn-rss"><i class="icon-rss"></i> RSS</a>
     News feed
   </header>
+
+  <ul class="nav nav-pills news-feed-tabs">
+    <li class="active"><a href="#">Players and realms</a></li>
+    <li><a href="#">Players</a></li>
+    <li><a href="#">Realms</a></li>
+    <li><a href="#">Watched quests</a></li>
+    <li><a href="#">Everything</a></li>
+  </ul>
+  <!--
   <section class="well">
     <p>
       Your personal news feed.
@@ -18,6 +28,7 @@
     <p>
     </p>
   </section>
+  -->
 </aside>
 
 <div class="mainarea">
@@ -29,21 +40,6 @@
     </h3>
     </aside>
   <% } %>
-
-  <ul class="nav nav-pills news-feed-tabs">
-    <%
-    _.each({
-    'grouped': { title: 'Grouped' },
-    'ungrouped': { title: 'Ungrouped' },
-    }, function (o, tab) {
-    %>
-    <li>
-      <a href="#" data-tab="<%- tab %>">
-        <%- o.title %>
-      </a>
-    </li>
-    <% }) %>
-  </ul>
 
   <div class="main news-feed-sv"></div>
 </div>
