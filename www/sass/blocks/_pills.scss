@@ -1,0 +1,26 @@
+ul.pills {
+    margin: 0;
+    margin-bottom: 15px;
+    > li {
+        display: inline-block;
+        padding-bottom: 3px;
+
+        > a {
+            text-align: center;
+            display: block;
+            padding: 6px 10px;
+            border-radius: 5px;
+            border: 1px solid $ground-color;
+            &:hover {
+                text-decoration: none;
+                background-color: $grey;
+                border-color: $grey-color;
+            }
+        }
+        &.active > a {
+            color: $text-color;
+            background-color: lighten($blue-color, 10%);
+            border-color: $blue-color;
+        }
+    }
+}

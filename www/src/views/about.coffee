@@ -19,7 +19,7 @@ define [
         pageTitle: -> "About"
 
         events:
-            "click .nav li a": "switchTab"
+            "click .pills li a": "switchTab"
 
         urlRoot: '/about'
         tab: 'main'

@@ -5,30 +5,37 @@
 </aside>
 <% } %>
 
-<aside class="sidebar">
+<aside class="news-feed-sidebar sidebar">
   <header class="sidebar-header">
     <i class="icon-question-sign" data-toggle="tooltip" title='Your personal news feed. Follow more realms or players to see more news.'></i>
-    <a href="http://<%= window.location.host %>/api/event/atom?for=<%- login %>" class="btn btn-mini btn-rss"><i class="icon-rss"></i> RSS</a>
     News feed
   </header>
 
-  <ul class="nav nav-pills news-feed-tabs">
-    <%
-    _.each({
-      'default': { title: 'Players and realms' },
-      'users': { title: 'Players' },
-      'realms': { title: 'Realms' },
-      'watched': { title: 'Watched quests' },
-      'global': { title: 'Everything' }
-    }, function (o, tab) {
-    %>
-    <li>
-      <a href="#" data-tab="<%- tab %>">
-        <%- o.title %>
-      </a>
-    </li>
-    <% }) %>
-  </ul>
+  <nav>
+    <ul class="pills news-feed-tabs">
+      <%
+      _.each({
+        'default': { title: 'Friends and realms', tooltip: 'Everything you follow.', rss: true },
+        'users': { title: 'Friends', tooltip: 'Follow other players to see their quests in this feed.' },
+        'realms': { title: 'Realms', tooltip: 'Quests from realms you follow.' },
+        'watched': { title: 'Watched quests', tooltip: "Only the quests you're actively watching." },
+        'global': { title: 'Everything', tooltip: 'News from all over the world.' }
+      }, function (o, tab) {
+      %>
+      <li>
+        <% if (o.rss) { %>
+          <div class="news-feed-rss">
+            <a href="http://<%= window.location.host %>/api/event/atom?for=<%- login %>" class="btn btn-mini btn-rss"><i class="icon-rss"></i> RSS</a>
+          </div>
+        <% } %>
+        <a href="#" data-tab="<%- tab %>">
+          <i class="icon-question-sign" data-toggle="tooltip" title='<%- o.tooltip %>'></i>
+          <%- o.title %>
+        </a>
+      </li>
+      <% }) %>
+    </ul>
+  </nav>
   <!--
   <section class="well">
     <p>
