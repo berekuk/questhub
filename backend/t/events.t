@@ -254,7 +254,7 @@ sub feed :Tests {
     sleep 1;
     db->comments->add({ entity => 'quest', eid => $quests[2]->{_id}, author => 'foo', body => 'c3' });
 
-    my $feed = db->events->feed({ for => 'foo' });
+    my $feed = db->feeds->feed({ for => 'foo' });
 
     cmp_deeply
         $feed,

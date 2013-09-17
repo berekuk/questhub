@@ -15,7 +15,7 @@ sub db {
     return __PACKAGE__; # singleton
 }
 
-for my $type (qw( quests events users comments notifications images realms stencils )) {
+for my $type (qw( quests events users comments notifications images realms stencils feeds )) {
     my $package = "Play::DB::".ucfirst($type);
     load_class $package;
     no strict 'refs';
