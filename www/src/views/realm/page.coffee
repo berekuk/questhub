@@ -20,7 +20,10 @@ define [
         tabs:
             stencils:
                 url: '/stencils'
-                subview: -> new RealmPageStencils model: @model
+                subview: ->
+                    options = model: @model
+                    options.tag = @options.stencils.tag if @options.stencils?.tag?
+                    return new RealmPageStencils options
             activity:
                 url: ''
                 subview: -> new RealmPageActivity model: @model

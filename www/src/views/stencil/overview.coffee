@@ -14,8 +14,10 @@ define [
 
         subviews:
             '.stencil-collection-sv': ->
-                collection = new CollectionModel [],
-                    realm: @model.id
+                options = realm: @model.id
+                options.tags = @options.tag if @options.tag?
+                collection = new CollectionModel [], options
+
                 view = new Collection collection: collection
                 collection.fetch()
                 view

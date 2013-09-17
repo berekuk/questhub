@@ -12,6 +12,7 @@ define [
             "realms": "realms"
             "realm/:realm": "realmActivity"
             "realm/:realm/stencils": "realmStencils"
+            "realm/:realm/stencils/tag/:tag": "realmStencils"
             "realm/:realm/players": "realmPlayers"
             "realm/:realm/explore(/:tab)": "realmExplore"
             "realm/:realm/explore/:tab/tag/:tag": "realmExplore"
@@ -44,8 +45,11 @@ define [
                 .success -> view.activate()
             @appView.setPageView view
 
-        realmStencils: (realm) ->
-            @_realm realm, tab: 'stencils'
+        realmStencils: (realm, tag) ->
+            @_realm realm,
+                tab: 'stencils'
+                stencils:
+                    tag: tag
 
         realmActivity: (realm) ->
             @_realm realm, tab: 'activity'

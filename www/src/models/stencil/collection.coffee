@@ -5,5 +5,5 @@ define [
     class extends Parent
         defaultCgi: ["comment_count=1"]
         baseUrl: "/api/stencil"
-        cgi: ["realm"]
+        cgi: ["realm", "tags"]
         model: Stencil
