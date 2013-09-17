@@ -280,6 +280,7 @@ Options:
 
 * `realm`
 * `comment_count`
+* `tag`
 
 ##### GET /api/stencil/{id}
 
