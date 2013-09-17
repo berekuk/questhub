@@ -41,6 +41,7 @@ define [
             tour: currentUser.onTour("feed")
             followingRealms: currentUser.get("fr")
             followingUsers: currentUser.get("fu")
+            tab: @tab
 
         render: ->
             super

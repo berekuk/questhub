@@ -35,24 +35,30 @@
       <% }) %>
     </ul>
   </nav>
-  <!--
-  <section class="well">
-    <p>
-      Your personal news feed.
-    <p>
-      Follow more realms or players to see more news.
-    <p>
-    </p>
-  </section>
-  -->
 </aside>
 
 <div class="mainarea">
-  <% if ( (!followingRealms || !followingRealms.length) && (!followingUsers || !followingUsers.length) ) { %>
+  <% if (tab == 'default' && !followingRealms.length && (!followingUsers || !followingUsers.length)) { %>
     <aside class="alert alert-warning">
     <h3>
-      You're not following any players or realms yet.<br>
+      You're not following any realms or players yet.<br>
+      Go to <a href="/realms">Realms</a> tab and follow some realms, or look around and find yourself some friends.
+    </h3>
+    </aside>
+  <% } %>
+  <% if (tab == 'realms' && !followingRealms.length) { %>
+    <aside class="alert alert-warning">
+    <h3>
+      You're not following any realms yet.<br>
       Go to <a href="/realms">Realms</a> tab and follow some realms.
+    </h3>
+    </aside>
+  <% } %>
+  <% if (tab == 'users' && (!followingUsers || !followingUsers.length)) { %>
+    <aside class="alert alert-warning">
+    <h3>
+      You're not following any other players yet.<br>
+      Look around and find yourself some friends!
     </h3>
     </aside>
   <% } %>
