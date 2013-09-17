@@ -121,7 +121,7 @@ sub list {
     my $self = shift;
     state $check = compile(Undef|Dict[
         realm => Optional[Realm],
-        tag => Optional[Tag],
+        tags => Optional[Tag],
         author => Optional[Login],
         quests => Optional[Bool],
         for => Optional[Login],
@@ -137,7 +137,7 @@ sub list {
     my $fetch_quests = delete $params->{quests};
 
     my $query = {
-            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ realm author tag /
+            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ realm author tags /
     };
     $query->{entity} = $self->entity;
 
