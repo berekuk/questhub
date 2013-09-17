@@ -1,2 +1,46 @@
-.news-feed-view {
+.news-feed-sidebar .sidebar-header {
+    .icon-question-sign {
+        font-size: $base-font-size;
+        position: relative;
+        top: -3px;
+    }
+}
+
+.pills.news-feed-tabs {
+    position: relative;
+    @include breakpoint(B) {
+        width: 180px;
+        float: right;
+        > li {
+            display: block;
+            > a {
+//                text-align: left;
+            }
+        }
+    }
+    .icon-question-sign {
+        color: $dark-grey;
+        @include breakpoint(lessThanB) {
+            display: none;
+        }
+    }
+    li.active .icon-question-sign {
+        color: $text-color;
+    }
+}
+
+.news-feed-rss {
+    display: none;
+}
+@include breakpoint(C) {
+    .news-feed-rss {
+        display: block;
+        position: absolute;
+        left: -55px;
+        top: 5px;
+        visibility: hidden;
+    }
+    li.active .news-feed-rss {
+        visibility: visible;
+    }
 }

@@ -7,36 +7,29 @@ define [
     "text!templates/news-feed.html"
     "bootstrap"
 ], ($, _, Tabbed, EventCollectionModel, EventCollection, FeedCollectionModel, FeedCollection, currentUser, html) ->
+    tabs = ["default", "users", "realms", "watched", "global"]
+
     class extends Tabbed
         template: _.template(html)
-        className: "news-feed-view"
         activeMenuItem: "feed"
 
         events:
             "click ul.news-feed-tabs a": "switchTab"
 
-        tab: 'grouped'
+        tab: 'default'
         tabSubview: '.news-feed-sv'
         urlRoot: -> "/"
-        tabs:
-            grouped:
-                url: ''
-                subview: ->
-                    collection = new FeedCollectionModel([],
-                        limit: 20
-                        for: @model.get("login")
-                    )
-                    collection.fetch()
-                    new FeedCollection collection: collection
-            ungrouped:
-                url: ''
-                subview: ->
-                    collection = new EventCollectionModel([],
-                        limit: 50
-                        for: @model.get("login")
-                    )
-                    collection.fetch()
-                    new EventCollection collection: collection
+
+        tabs: _.object tabs, _.map tabs, (t) ->
+            url: ''
+            subview: ->
+                collection = new FeedCollectionModel([],
+                    limit: 20
+                    for: @model.get("login")
+                    tab: t
+                )
+                collection.fetch()
+                new FeedCollection collection: collection
 
         switchTab: (e) ->
             return if e.ctrlKey or e.metaKey # link clicked and will be opened in new tab
@@ -52,3 +45,5 @@ define [
         render: ->
             super
             @$(".news-feed-tabs [data-tab=" + @tab + "]").parent().addClass "active"
+
+        features: ["tooltip"]

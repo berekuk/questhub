@@ -39,11 +39,4 @@ get '/event/atom' => sub {
     };
 };
 
-get '/feed' => sub {
-    return db->events->feed({
-        limit => 30,
-        map { param($_) ? ( $_ => param($_) ): () } qw/ limit offset for realm /,
-    });
-};
-
 true;

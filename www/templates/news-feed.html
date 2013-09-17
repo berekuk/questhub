@@ -5,11 +5,37 @@
 </aside>
 <% } %>
 
-<aside class="sidebar">
+<aside class="news-feed-sidebar sidebar">
   <header class="sidebar-header">
-    <a href="http://<%= window.location.host %>/api/event/atom?for=<%- login %>" class="btn btn-mini btn-rss"><i class="icon-rss"></i> RSS</a>
+    <i class="icon-question-sign" data-toggle="tooltip" title='Your personal news feed. Follow more realms or players to see more news.'></i>
     News feed
   </header>
+
+  <nav>
+    <ul class="pills news-feed-tabs">
+      <%
+      _.each({
+        'default': { title: 'Friends and realms', tooltip: 'Everything you follow.', rss: true },
+        'users': { title: 'Friends', tooltip: 'Follow other players to see their quests in this feed.' },
+        'realms': { title: 'Realms', tooltip: 'Quests from the realms you follow.' },
+        'watched': { title: 'Watched quests', tooltip: "Only the quests you're watching." },
+        'global': { title: 'Everything', tooltip: 'News from all over the world.' }
+      }, function (o, tab) {
+      %>
+      <li>
+        <% if (o.rss) { %>
+          <div class="news-feed-rss">
+            <a href="http://<%= window.location.host %>/api/event/atom?for=<%- login %>" class="btn btn-mini btn-rss"><i class="icon-rss"></i> RSS</a>
+          </div>
+        <% } %>
+        <a href="#" data-tab="<%- tab %>" data-toggle="tooltip" title="<%- o.tooltip %>" data-placement="top" data-delay="100">
+          <%- o.title %>
+        </a>
+      </li>
+      <% }) %>
+    </ul>
+  </nav>
+  <!--
   <section class="well">
     <p>
       Your personal news feed.
@@ -18,6 +44,7 @@
     <p>
     </p>
   </section>
+  -->
 </aside>
 
 <div class="mainarea">
@@ -29,21 +56,6 @@
     </h3>
     </aside>
   <% } %>
-
-  <ul class="nav nav-pills news-feed-tabs">
-    <%
-    _.each({
-    'grouped': { title: 'Grouped' },
-    'ungrouped': { title: 'Ungrouped' },
-    }, function (o, tab) {
-    %>
-    <li>
-      <a href="#" data-tab="<%- tab %>">
-        <%- o.title %>
-      </a>
-    </li>
-    <% }) %>
-  </ul>
 
   <div class="main news-feed-sv"></div>
 </div>

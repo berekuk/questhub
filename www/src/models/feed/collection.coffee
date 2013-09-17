@@ -4,5 +4,5 @@ define [
 ], (Parent, Item) ->
     class extends Parent
         baseUrl: "/api/feed"
-        cgi: ["limit", "offset", "for", "realm"]
+        cgi: ["limit", "offset", "for", "realm", "tab"]
         model: Item
