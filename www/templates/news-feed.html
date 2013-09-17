@@ -17,8 +17,8 @@
       _.each({
         'default': { title: 'Friends and realms', tooltip: 'Everything you follow.', rss: true },
         'users': { title: 'Friends', tooltip: 'Follow other players to see their quests in this feed.' },
-        'realms': { title: 'Realms', tooltip: 'Quests from realms you follow.' },
-        'watched': { title: 'Watched quests', tooltip: "Only the quests you're actively watching." },
+        'realms': { title: 'Realms', tooltip: 'Quests from the realms you follow.' },
+        'watched': { title: 'Watched quests', tooltip: "Only the quests you're watching." },
         'global': { title: 'Everything', tooltip: 'News from all over the world.' }
       }, function (o, tab) {
       %>
@@ -28,8 +28,7 @@
             <a href="http://<%= window.location.host %>/api/event/atom?for=<%- login %>" class="btn btn-mini btn-rss"><i class="icon-rss"></i> RSS</a>
           </div>
         <% } %>
-        <a href="#" data-tab="<%- tab %>">
-          <i class="icon-question-sign" data-toggle="tooltip" title='<%- o.tooltip %>'></i>
+        <a href="#" data-tab="<%- tab %>" data-toggle="tooltip" title="<%- o.tooltip %>" data-placement="top" data-delay="100">
           <%- o.title %>
         </a>
       </li>
