@@ -12,6 +12,7 @@ use Type::Library
         StencilPoints
         ImageSize ImageUpic
         CommentParams
+        NewsFeedTab
     );
 use Type::Utils;
 use Types::Standard qw( Str StrMatch Dict Int );
@@ -56,5 +57,8 @@ declare CommentParams,
             invitee => Login,
         ]
     );
+
+declare NewsFeedTab,
+    as enum([qw( default users realms watched global )]);
 
 1;

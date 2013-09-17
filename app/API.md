@@ -351,6 +351,25 @@ Get the Atom feed with 30 last events.
 
 Supported options: `realm`, `for`, `author`, `limit`.
 
+##### GET /api/feed
+
+Get the news feed, grouped by quest.
+
+There are two possible modes:
+
+1. Per-realm feed, if you pass `realm` parameter.
+2. Personal feed, if you pass `for` parameter (with login as its value).
+
+In the case of personal feed, you can also pass `tab` option, with one of these values:
+
+* default
+* users
+* realms
+* watched
+* global
+
+Also supports common `offset` and `limit` options.
+
 ##### GET /api/dev/session/{name}
 
 Get session value. Dev mode only.

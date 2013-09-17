@@ -5,38 +5,65 @@ use Moo;
 
 use Type::Params qw(validate);
 use Types::Standard qw(Undef Int Str Optional HashRef ArrayRef Dict);
-use Play::Types qw(Login Realm);
+use Play::Types qw(Login Realm NewsFeedTab);
 
 use Play::DB qw(db);
 
 sub _feed_for_query {
     my $self = shift;
     my ($params) = validate(\@_, Undef|Dict[
-        for => Str,
+        for => Login,
+        tab => NewsFeedTab,
     ]);
 
-    my $query = {};
-    {
-        my $user = db->users->get_by_login($params->{for}) or die "User '$params->{for}' not found";
+    my $user = db->users->get_by_login($params->{for}) or die "User '$params->{for}' not found";
 
-        my @subqueries;
+    my $query = {};
+    my @subqueries;
+
+    my $add_realms = sub {
         if ($user->{fr}) {
             push @subqueries, { realm => { '$in' => $user->{fr} } };
         }
+    };
+    my $add_users = sub {
         $user->{fu} ||= [];
         push @{ $user->{fu} }, $user->{login};
         push @subqueries, { team => { '$in' => $user->{fu} } };
         push @subqueries, { author => { '$in' => $user->{fu} } };
+    };
+    my $add_watched = sub {
         push @subqueries, { watchers => $user->{login} };
+    };
 
-        if (@subqueries) {
-            $query->{'$or'} = \@subqueries;
-        }
-        else {
-            $query->{no_such_field} = 'no_such_value';
-        }
-        $query->{status} = { '$ne' => 'deleted' };
+    if ($params->{tab} eq 'default') {
+        $add_realms->();
+        $add_users->();
+        $add_watched->();
     }
+    elsif ($params->{tab} eq 'users') {
+        $add_users->();
+    }
+    elsif ($params->{tab} eq 'realms') {
+        $add_realms->();
+    }
+    elsif ($params->{tab} eq 'watched') {
+        $add_watched->();
+    }
+    elsif ($params->{tab} eq 'global') {
+        # will handle this case later
+    }
+    else {
+        die "Unknown tab '$params->{tab}'";
+    }
+
+    if (@subqueries) {
+        $query->{'$or'} = \@subqueries;
+    }
+    elsif ($params->{tab} ne 'global') {
+        $query->{no_such_field} = 'no_such_value';
+    }
+    $query->{status} = { '$ne' => 'deleted' };
     return $query;
 }
 
@@ -58,16 +85,28 @@ sub feed {
     my ($params) = validate(\@_, Undef|Dict[
         limit => Optional[Int],
         offset => Optional[Int],
-        for => Optional[Str],
+        for => Optional[Login],
+        tab => Optional[NewsFeedTab],
         realm => Optional[Realm],
     ]);
     $params->{limit} //= 30;
+    $params->{tab} //= 'default';
     $params->{sort} = 'bump';
 
     my $query;
-    $query = $self->_feed_for_query({ for => $params->{for} }) if defined $params->{for};
-    $query = $self->_feed_realm_query({ realm => $params->{realm} }) if defined $params->{realm};
-    die "no for and no realm" unless $query;
+    if (defined $params->{for}) {
+        $query = $self->_feed_for_query({
+            for => $params->{for},
+            tab => $params->{tab},
+        });
+    }
+    elsif (defined $params->{realm}) {
+        $query = $self->_feed_realm_query({ realm => $params->{realm} });
+    }
+    else {
+        die "no for and no realm";
+    }
+
     my $cursor = Play::Mongo->db->get_collection('posts')->find($query);
 
     $cursor = $cursor->limit($params->{limit});
