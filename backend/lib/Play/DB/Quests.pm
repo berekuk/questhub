@@ -52,7 +52,7 @@ use Moo;
 
 use Type::Params qw( compile validate );
 use Types::Standard qw( Undef Bool Int Str StrMatch Optional Dict ArrayRef HashRef );
-use Play::Types qw( Id Login Realm );
+use Play::Types qw( Id Login Realm Tag );
 
 use Play::Config qw(setting);
 use Play::DB qw(db);
@@ -109,7 +109,7 @@ sub list {
         limit => Optional[Int],
         offset => Optional[Int],
 
-        tags => Optional[Str],
+        tags => Optional[Tag],
         watchers => Optional[Str],
         stencil => Optional[Id],
     ]);
@@ -279,7 +279,7 @@ sub add {
         description => Optional[Str],
         user => Optional[Login],
         team => Optional[ArrayRef[Login]],
-        tags => Optional[ArrayRef[Str]],
+        tags => Optional[ArrayRef[Tag]],
         status => Optional[Str],
         # stencil-specific fields
         stencil => Optional[Id],
@@ -342,7 +342,7 @@ sub edit {
     my $self = shift;
     state $check = compile(Id, Dict[
         user => Login,
-        tags => Optional[ArrayRef[Str]],
+        tags => Optional[ArrayRef[Tag]],
         name => Optional[Str],
         description => Optional[Str],
         note => Optional[Str],
