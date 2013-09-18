@@ -38,7 +38,7 @@
 </aside>
 
 <div class="mainarea">
-  <% if (tab == 'default' && !followingRealms.length && (!followingUsers || !followingUsers.length)) { %>
+  <% if (tab == 'default' && (!followingRealms || !followingRealms.length) && (!followingUsers || !followingUsers.length)) { %>
     <aside class="alert alert-warning">
     <h3>
       You're not following any realms or players yet.<br>
@@ -46,7 +46,7 @@
     </h3>
     </aside>
   <% } %>
-  <% if (tab == 'realms' && !followingRealms.length) { %>
+  <% if (tab == 'realms' && (!followingRealms || !followingRealms.length)) { %>
     <aside class="alert alert-warning">
     <h3>
       You're not following any realms yet.<br>
