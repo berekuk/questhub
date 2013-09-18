@@ -20,7 +20,12 @@ define [
 
                 view = new Collection collection: collection
                 collection.fetch()
+                @setCollection collection
                 view
+
+        setCollection: (collection) ->
+            @collection = collection
+            @listenTo @collection, "reset sync", @render
 
         addDialog: ->
             new StencilAdd realm: @model.id
@@ -29,4 +34,8 @@ define [
             params = super
             params.currentUser = sharedModels.currentUser.get "login"
             params.isKeeper = (params.currentUser && @model.get("keepers") && _.contains(@model.get("keepers"), params.currentUser))
+            params.tags = @collection?.allTags()
+            params.activeTag = @options.tag
             params
+
+        features: ["tooltip"]
