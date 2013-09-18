@@ -21,6 +21,18 @@
 </aside>
 
 <div class="mainarea">
+  <% if (tags) { %>
+    <div class="stencil-overview-tags">
+      <% if (activeTag) { %>
+        <span class="tag tag-active"><%- activeTag %></span>
+        <a href="/realm/<%- id %>/stencils" class="delete mini-button" data-toggle="tooltip" title="Show all stencils."><i class="icon-remove"></i></a>
+      <% } else { %>
+        <% _.each(tags, function(tag) { %>
+        <a href="/realm/<%- id %>/stencils/tag/<%- tag %>"><span class="tag<%- (activeTag == tag) ? ' tag-active' : '' %>"><%- tag %></span></a>
+        <% }) %>
+      <% } %>
+    </div>
+  <% } %>
   <div class="stencil-collection-sv"></div>
   <% if (!isKeeper) { %>
     <p class="muted">

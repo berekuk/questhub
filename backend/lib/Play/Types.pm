@@ -6,7 +6,7 @@ use warnings;
 use Type::Library
     -base,
     -declare => qw(
-        Id Login
+        Id Login Tag
         Realm RealmName
         Entity
         StencilPoints
@@ -21,6 +21,7 @@ declare Login, as StrMatch[ qr/^\w{1,16}$/ ];
 declare Realm, as StrMatch[ qr/^\w{1,16}$/ ];
 declare RealmName, as StrMatch[ qr/^.{1,16}$/ ];
 declare Id, as StrMatch[ qr/^[0-9a-f]{24}$/ ];
+declare Tag, as StrMatch[ qr/^[\w-]{1,24}$/ ];
 
 declare StencilPoints,
     as Int,

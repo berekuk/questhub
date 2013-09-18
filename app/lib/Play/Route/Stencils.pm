@@ -29,7 +29,7 @@ post '/stencil' => sub {
 
 get '/stencil' => sub {
     my $params = {
-        map { param($_) ? ($_ => param($_)) : () } qw/ realm comment_count /,
+        map { param($_) ? ($_ => param($_)) : () } qw/ realm comment_count tags /,
     };
     $params->{quests} = 1; # TODO - param
     return db->stencils->list($params);

@@ -22,7 +22,7 @@ use MongoDB::OID;
 
 use Type::Params qw( compile );
 use Types::Standard qw( Undef Dict Str StrMatch Optional Bool ArrayRef );
-use Play::Types qw( Id Login Realm StencilPoints );
+use Play::Types qw( Id Login Tag Realm StencilPoints );
 
 around prepare => sub {
     my $orig = shift;
@@ -54,7 +54,7 @@ sub add {
         description => Optional[Str],
         author => Login,
         points => Optional[StencilPoints],
-        tags => Optional[ArrayRef[Str]],
+        tags => Optional[ArrayRef[Tag]],
     ]);
     my ($params) = $check->(@_);
     $params->{points} ||= 1;
@@ -79,7 +79,7 @@ sub edit {
     my $self = shift;
     state $check = compile(Id, Dict[
         user => Login,
-        tags => Optional[ArrayRef[Str]],
+        tags => Optional[ArrayRef[Tag]],
         name => Optional[Str],
         description => Optional[Str],
         points => Optional[StencilPoints],
@@ -121,6 +121,7 @@ sub list {
     my $self = shift;
     state $check = compile(Undef|Dict[
         realm => Optional[Realm],
+        tags => Optional[Tag],
         author => Optional[Login],
         quests => Optional[Bool],
         for => Optional[Login],
@@ -136,7 +137,7 @@ sub list {
     my $fetch_quests = delete $params->{quests};
 
     my $query = {
-            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ realm author /
+            map { defined($params->{$_}) ? ($_ => $params->{$_}) : () } qw/ realm author tags /
     };
     $query->{entity} = $self->entity;
 

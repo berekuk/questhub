@@ -194,7 +194,7 @@ Options:
 * `status`
 * `comment_count`
 * `unclaimed` - if true, return unclaimed quests (user='')
-* `tags` - filter by tag; only one-tag-per-query filtering is supported now
+* `tags` - filter by tag (option name is plural, but only single tag name is allowed as a value for now)
 * `watchers` - filter by watcher; only one-watcher-per-query filtering is supported
 * `fmt` - if set to `atom`, return atom instead of json
 
@@ -280,6 +280,7 @@ Options:
 
 * `realm`
 * `comment_count`
+* `tags` (option name is plural, but only single tag name is allowed as a value for now)
 
 ##### GET /api/stencil/{id}
 

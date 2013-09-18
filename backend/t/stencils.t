@@ -38,12 +38,14 @@ sub list :Tests {
         realm => 'europe',
         author => 'foo',
         name => 'Start the World War I',
+        tags => ['war'],
     });
     db->stencils->add({
         realm => 'europe',
         author => 'foo',
         name => 'Start the World War II',
         points => 3,
+        tags => ['war'],
     });
     db->stencils->add({
         realm => 'asia',
@@ -61,6 +63,12 @@ sub list :Tests {
 
     $stencils = db->stencils->list({ realm => 'europe' });
     is scalar @$stencils, 2;
+
+    $stencils = db->stencils->list({ realm => 'europe', tags => 'war' });
+    is scalar @$stencils, 2;
+
+    $stencils = db->stencils->list({ realm => 'europe', tags => 'peace' });
+    is scalar @$stencils, 0;
 }
 
 sub get :Tests {
