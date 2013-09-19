@@ -42,19 +42,20 @@ define [
             p2w = (points) =>
                 maxPoints = Math.max currentWeekPoints, lastWeekPoints, 1
                 # we never go over 70%
-                widthPerPoint = 52 / maxPoints
+                widthPerPoint = 70 / maxPoints
                 (points * widthPerPoint) + "%"
 
             prepareBar = (el, points) ->
                 el.find("._bar").css("width", p2w(points))
                 el.find(".reward-points").html(points)
 
-            @$(".modal").on("shown", =>
+            @$(".modal").on "shown", (e) =>
+                return unless $(e.target).hasClass("modal")
                 prepareBar @$(".last-week-bar"), lastWeekPoints
                 prepareBar @$(".current-week-bar"), oldCurrentWeekPoints
 
                 duration = 400
-                duration += 200 * @model.get("points") # slow down if there are many points
+                duration += 200 * @model.get "points" # slow down if there are many points
                 easing = 'easeInSine'
 
                 currentBar = @$(".current-week-bar")
@@ -65,10 +66,15 @@ define [
                     complete: =>
                         currentBar.removeClass "quest-completed-bar-animated"
                 })
+
                 $({ points: oldCurrentWeekPoints }).animate({ points: currentWeekPoints }, {
                     duration: duration
                     easing: easing
                     step: (now) =>
                         @$(".current-week-bar .reward-points").html(Math.floor(now))
+                    complete: =>
+                        # can't trust Math.floor to round up correctly ("now" can stop at .99999999)
+                        @$(".current-week-bar .reward-points").html(currentWeekPoints)
                 })
-            )
+
+        features: ["tooltip"]

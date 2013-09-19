@@ -4,18 +4,20 @@
     <h3><%- name %></h3>
   </div>
   <div class="modal-body">
-    <p>
-      <div>
-        You completed a quest.
-        Congratulations, you get <%= partial.reward({ size: "small", points: points }) %>!
-      </div>
-    </p>
-    <p>
-      <div>
-        Your total score in <span class="tag tag-realm"><%- realm %></span> realm: <%= partial.reward({ size: "small", points: totalPoints }) %>.
-      </div>
-    </p>
 
+    <div class="pull-left desktop-block">
+      <img src="/i/<%- realm %>.png"/>
+    </div>
+    <div class="quest-completed-congratulations">
+      <header>Congratulations! You get:</header>
+      <%= partial.reward({ points: points, status: "closed" }) %>
+    </div>
+    <div class="quest-completed-total">
+      <header>Total in <span class="tag tag-realm"><%- realm %></span> realm:</header>
+      <%= partial.reward({ points: totalPoints, status: "closed" }) %>
+    </div>
+
+    <hr>
     <div class="quest-completed-bars">
       <%
       _.each({

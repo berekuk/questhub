@@ -1,3 +1,8 @@
+.quest-completed {
+    .modal-body {
+        overflow-y: visible;
+    }
+}
 .quest-completed-bar {
     position: relative;
     > header {
@@ -12,7 +17,7 @@
         text-align: right;
         line-height: 24px;
         width: 0;
-        min-width: 30px;
+        min-width: 40px;
         padding-right: 5px;
     }
     margin-bottom: 12px;
@@ -21,6 +26,24 @@
     ._bar {
         background-color: $mat;
     }
+}
+
+.quest-completed-congratulations, .quest-completed-total {
+    > header {
+        color: $dark-grey;
+        line-height: 34px;
+        font-size: 18px;
+        font-weight: 200;
+        vertical-align: bottom;
+        display: inline-block;
+    }
+    text-align: center;
+}
+.quest-completed-congratulations {
+    margin-bottom: 2px;
+}
+.quest-completed-total {
+    margin-bottom: 15px;
 }
 
 .quest-completed-share {
