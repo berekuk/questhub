@@ -1,3 +1,28 @@
+.quest-completed-bar {
+    position: relative;
+    > header {
+        display: inline-block;
+        color: $dark-grey;
+        min-width: 72px;
+    }
+    ._bar {
+        display: inline-block;
+        background-color: lighten($blue-color, 20%);
+        border: 1px solid darken($blue-color, 0%);
+        text-align: right;
+        line-height: 24px;
+        width: 0;
+        min-width: 30px;
+        padding-right: 5px;
+    }
+    margin-bottom: 12px;
+}
+.quest-completed-bar-animated {
+    ._bar {
+        background-color: $mat;
+    }
+}
+
 .quest-completed-share {
     @include clearfix;
 }

@@ -1,4 +1,4 @@
-<div class="quest-completed modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="quest-completed modal hide" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     <h3><%- name %></h3>
@@ -12,9 +12,27 @@
     </p>
     <p>
       <div>
-        Your total score: <%= partial.reward({ size: "small", points: totalPoints }) %>.
+        Your total score in <span class="tag tag-realm"><%- realm %></span> realm: <%= partial.reward({ size: "small", points: totalPoints }) %>.
       </div>
     </p>
+
+    <div class="quest-completed-bars">
+      <%
+      _.each({
+        'current': { title: 'This week' },
+        'last': { title: 'Last week' }
+      }, function (o, type) {
+      %>
+      <div class="quest-completed-bar <%- type %>-week-bar">
+        <header><%- o.title %>:</header>
+        <div class="_bar">
+          <span class="_points-wrapper">
+            <%= partial.reward({ size: "small", points: 0 }) %>
+          </span>
+        </div>
+      </div>
+      <% }) %>
+    </div>
 
     <% if (gotTwitter) { %>
     <hr>

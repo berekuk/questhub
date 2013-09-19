@@ -87,9 +87,11 @@ define [
             @model.uninvite $(e.target).parent().attr("data-login")
 
         close: ->
-            @model.close()
-            modal = new QuestCompleted(model: @model)
+            modal = new QuestCompleted
+                model: @model
+                user: currentUser.clone() # cloning guarantees that Completed modal gets points values from *before* we closed the quest
             modal.start()
+            @model.close()
 
         reopen: -> @model.reopen()
 

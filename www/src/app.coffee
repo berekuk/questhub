@@ -5,7 +5,7 @@ require [
     "views/app",
     "models/current-user",
     "views/helper/textarea"
-    "bootstrap", "jquery.autosize", "jquery.timeago"
+    "bootstrap", "jquery.autosize", "jquery.timeago", "jquery.easing"
 ], ($, MainRouter, UserRouter, RealmRouter, QuestRouter, AboutRouter, LegacyRouter, NotFoundRouter, App, currentUser, TextArea) ->
     appView = new App(el: $("#wrap"))
     appView.render()

@@ -1,9 +1,8 @@
 define [
-    "underscore"
+    "underscore", "jquery"
     "views/proto/common"
-    "models/current-user"
     "text!templates/quest/completed.html"
-], (_, Common, currentUser, html) ->
+], (_, $, Common, html) ->
     class extends Common
         template: _.template(html)
         events:
@@ -12,6 +11,7 @@ define [
         initialize: ->
             super
             @setElement $("#quest-completed-modal")
+            @user = @options.user
 
         start: ->
             @render()
@@ -23,6 +23,52 @@ define [
 
         serialize: ->
             params = super
-            params.gotTwitter = Boolean(currentUser.get("twitter"))
-            params.totalPoints = params.points + (currentUser.get("rp")[@model.get("realm")] || 0)
+            params.gotTwitter = Boolean(@user.get("twitter"))
+            params.totalPoints = @user.get("rp")[@model.get("realm")]
+            params.totalPoints ?= 0
+            params.totalPoints += params.points
             params
+
+        render: ->
+            super
+
+            histogram = @user.histogramPoints(@model.get("realm"))
+            oldCurrentWeekPoints = histogram[histogram.length - 1]
+            oldCurrentWeekPoints ?= 0
+            currentWeekPoints = oldCurrentWeekPoints + @model.get("points")
+            lastWeekPoints = histogram[histogram.length - 2]
+            lastWeekPoints ?= 0
+
+            p2w = (points) =>
+                maxPoints = Math.max currentWeekPoints, lastWeekPoints, 1
+                # we never go over 70%
+                widthPerPoint = 52 / maxPoints
+                (points * widthPerPoint) + "%"
+
+            prepareBar = (el, points) ->
+                el.find("._bar").css("width", p2w(points))
+                el.find(".reward-points").html(points)
+
+            @$(".modal").on("shown", =>
+                prepareBar @$(".last-week-bar"), lastWeekPoints
+                prepareBar @$(".current-week-bar"), oldCurrentWeekPoints
+
+                duration = 400
+                duration += 200 * @model.get("points") # slow down if there are many points
+                easing = 'easeInSine'
+
+                currentBar = @$(".current-week-bar")
+                currentBar.addClass "quest-completed-bar-animated"
+                currentBar.find("._bar").animate({ "width": p2w(currentWeekPoints) }, {
+                    duration: duration
+                    easing: easing
+                    complete: =>
+                        currentBar.removeClass "quest-completed-bar-animated"
+                })
+                $({ points: oldCurrentWeekPoints }).animate({ points: currentWeekPoints }, {
+                    duration: duration
+                    easing: easing
+                    step: (now) =>
+                        @$(".current-week-bar .reward-points").html(Math.floor(now))
+                })
+            )

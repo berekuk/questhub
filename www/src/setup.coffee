@@ -6,6 +6,7 @@ requirejs.config
         "jquery.autosize": "vendors/autosize/jquery.autosize"
         "jquery.timeago": "vendors/jquery.timeago"
         "jquery.typeahead": "vendors/typeahead"
+        "jquery.easing": "vendors/jquery.easing.1.3"
         bootstrap: "vendors/bootstrap/js/bootstrap"
         bootbox: "vendors/bootbox"
         "jquery-ui": "vendors/jquery-ui/js/jquery-ui-1.10.3.custom"
@@ -22,6 +23,7 @@ requirejs.config
         "jquery.autosize": ["jquery"]
         "jquery.timeago": ["jquery"]
         "jquery.typeahead": ["jquery"]
+        "jquery.easing": ["jquery"]
         "jquery-ui":
             exports: "$"
             deps: ["jquery"]
