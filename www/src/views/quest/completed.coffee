@@ -55,19 +55,20 @@ define [
                 prepareBar @$(".current-week-bar"), oldCurrentWeekPoints
 
                 duration = 400
-                duration += 200 * @model.get "points" # slow down if there are many points
+                delay = 500
+                duration += 100 * @model.get "points" # slow down if there are many points
                 easing = 'easeInSine'
 
                 currentBar = @$(".current-week-bar")
                 currentBar.addClass "quest-completed-bar-animated"
-                currentBar.find("._bar").animate({ "width": p2w(currentWeekPoints) }, {
+                currentBar.find("._bar").delay(delay).animate({ "width": p2w(currentWeekPoints) }, {
                     duration: duration
                     easing: easing
                     complete: =>
                         currentBar.removeClass "quest-completed-bar-animated"
                 })
 
-                $({ points: oldCurrentWeekPoints }).animate({ points: currentWeekPoints }, {
+                $({ points: oldCurrentWeekPoints }).delay(delay).animate({ points: currentWeekPoints }, {
                     duration: duration
                     easing: easing
                     step: (now) =>
