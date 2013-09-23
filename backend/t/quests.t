@@ -387,6 +387,8 @@ sub update :Tests {
         user => 'foo',
     });
 
+    like exception { db->quests->update($quest->{_id}, { name => '' }) }, qr/type constraint/;
+
     $quest = db->quests->get($quest->{_id});
     cmp_deeply $quest, superhashof({
         team => ['foo'],

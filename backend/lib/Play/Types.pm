@@ -7,6 +7,7 @@ use Type::Library
     -base,
     -declare => qw(
         Id Login Tag
+        NonEmptyStr
         Realm RealmName
         Entity
         StencilPoints
@@ -22,6 +23,10 @@ declare Realm, as StrMatch[ qr/^\w{1,16}$/ ];
 declare RealmName, as StrMatch[ qr/^.{1,16}$/ ];
 declare Id, as StrMatch[ qr/^[0-9a-f]{24}$/ ];
 declare Tag, as StrMatch[ qr/^[\w-]{1,24}$/ ];
+
+declare NonEmptyStr,
+    as Str,
+    where { length $_ };
 
 declare StencilPoints,
     as Int,

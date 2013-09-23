@@ -52,7 +52,7 @@ use Moo;
 
 use Type::Params qw( compile validate );
 use Types::Standard qw( Undef Bool Int Str StrMatch Optional Dict ArrayRef HashRef );
-use Play::Types qw( Id Login Realm Tag );
+use Play::Types qw( Id Login Realm Tag NonEmptyStr );
 
 use Play::Config qw(setting);
 use Play::DB qw(db);
@@ -274,8 +274,8 @@ sub _update_user_realms {
 sub add {
     my $self = shift;
     state $check = compile(Dict[
-        realm => Str,
-        name => Str,
+        realm => Realm,
+        name => NonEmptyStr,
         description => Optional[Str],
         user => Optional[Login],
         team => Optional[ArrayRef[Login]],
@@ -343,7 +343,7 @@ sub edit {
     state $check = compile(Id, Dict[
         user => Login,
         tags => Optional[ArrayRef[Tag]],
-        name => Optional[Str],
+        name => Optional[NonEmptyStr],
         description => Optional[Str],
         note => Optional[Str],
     ]);
