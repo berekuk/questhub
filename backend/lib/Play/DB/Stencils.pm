@@ -22,7 +22,7 @@ use MongoDB::OID;
 
 use Type::Params qw( compile );
 use Types::Standard qw( Undef Dict Str StrMatch Optional Bool ArrayRef );
-use Play::Types qw( Id Login Tag Realm StencilPoints );
+use Play::Types qw( Id Login Tag Realm StencilPoints NonEmptyStr );
 
 around prepare => sub {
     my $orig = shift;
@@ -50,7 +50,7 @@ sub add {
     my $self = shift;
     state $check = compile(Dict[
         realm => Realm,
-        name => Str,
+        name => NonEmptyStr,
         description => Optional[Str],
         author => Login,
         points => Optional[StencilPoints],
@@ -80,7 +80,7 @@ sub edit {
     state $check = compile(Id, Dict[
         user => Login,
         tags => Optional[ArrayRef[Tag]],
-        name => Optional[Str],
+        name => Optional[NonEmptyStr],
         description => Optional[Str],
         points => Optional[StencilPoints],
     ]);
