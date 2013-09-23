@@ -41,9 +41,12 @@ define [
                     hidden: true
                 )
             ".description-edit-sv": ->
-                new Textarea
+                sv = new Textarea
                     realm: @model.get("realm")
                     placeholder: "Quest description"
+                @listenTo sv, "save", @saveEdit
+                @listenTo sv, "cancel", @closeEdit
+                return sv
             ".quest-big-description-sv": -> @_textSubview "description"
             ".quest-big-note-sv": -> @_textSubview "note"
 
@@ -157,9 +160,5 @@ define [
             params.realmData = sharedModels.realms.findWhere(id: @model.get("realm")).toJSON()
             params
 
-        render: ->
-            super
-            @listenTo @description(), "save", @saveEdit
-            @listenTo @description(), "cancel", @closeEdit
 
         features: ["tooltip", "timeago"]

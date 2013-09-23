@@ -27,9 +27,12 @@ define [
 
         subviews:
             ".description-edit-sv": ->
-                new Textarea
+                sv = new Textarea
                     realm: @model.get("realm")
                     placeholder: "Stencil description"
+                @listenTo sv, "save", @saveEdit
+                @listenTo sv, "cancel", @closeEdit
+                return sv
             ".description-sv": ->
                 new Markdown
                     realm: @model.get("realm")
@@ -50,8 +53,6 @@ define [
                 sharedModels.realms.fetch().success => @render()
                 return
             super
-            @listenTo @description(), "save", @saveEdit
-            @listenTo @description(), "cancel", @closeEdit
 
         serialize: ->
             params = super
