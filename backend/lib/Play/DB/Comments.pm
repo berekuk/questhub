@@ -244,7 +244,34 @@ sub reveal {
     my $check = compile(Id);
     my ($id) = $check->(@_);
 
-    ... # TBD
+    my $comment = $self->get_one($id);
+    unless ($comment->{type} eq 'secret') {
+        die "$id is not a secret comment";
+    }
+
+    my ($secret) = $self->secret_collection->find_one({
+        _id => MongoDB::OID->new(value => $comment->{secret_id}),
+    });
+
+    my $result = $self->collection->update(
+        { _id => MongoDB::OID->new(value => $id) },
+        {
+            '$set' => { body => $secret->{body} },
+            '$unset' => { secret_id => '' },
+        },
+        { safe => 1 }
+    );
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "Can't update comment body, huh.";
+    }
+
+    # cleanup
+    $self->secret_collection->remove(
+        {
+            _id => MongoDB::OID->new(value => $comment->{secret_id}),
+        }
+    );
 }
 
 =over

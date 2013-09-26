@@ -198,4 +198,39 @@ sub add_secret :Tests {
     ok Id->check($comment->{secret_id}), "secret comment 'secret_id' field";
 }
 
+sub reveal :Tests {
+    db->users->add({ login => 'blah' });
+
+    my $quest = db->quests->add({
+        user => 'blah',
+        name => 'foo',
+        realm => 'europe',
+    });
+
+    my $text_result = db->comments->add({
+        entity => 'quest',
+        eid => $quest->{_id},
+        author => 'blah',
+        body => 'discuss',
+    });
+    my $secret_result = db->comments->add({
+        entity => 'quest',
+        eid => $quest->{_id},
+        author => 'blah',
+        type => 'secret',
+        body => 'reward',
+    });
+
+    like exception {
+        db->comments->reveal($text_result->{_id})
+    }, qr/is not a secret comment/;
+
+    db->comments->reveal($secret_result->{_id});
+
+    my $revealed = db->comments->get_one($secret_result->{_id});
+    is $revealed->{type}, 'secret', 'type is still "secret"';
+    is $revealed->{body}, 'reward', 'comment body is visible';
+    is $revealed->{secret_id}, undef, 'secret_id is unset after revealing';
+}
+
 __PACKAGE__->new->runtests;
