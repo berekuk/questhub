@@ -14,15 +14,13 @@ define [
                 return 0
             @comparator = (m1, m2) -> cmp m1.get("ts"), m2.get("ts")
 
-        createTextComment: (body, options) ->
+        createComment: (comment, options) ->
 
-            # 'author', 'type' and 'ts' attributes will (hopefully) be ignored by server,
+            # 'author' and 'ts' attributes will (hopefully) be ignored by server,
             # but we're going to use them for rendering
-            @create
+            comment = _.extend comment,
                 author: currentUser.get("login")
-                body: body
                 entity: @entity
                 eid: @eid
-                type: "text"
                 ts: Math.floor(new Date().getTime() / 1000)
-            , options
+            @create comment, options

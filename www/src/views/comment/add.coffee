@@ -61,7 +61,7 @@ define [
             return if @$(".submit").hasClass("disabled")
             @disableForm()
             mixpanel.track "add comment"
-            @collection.createTextComment @textarea().value(),
+            @collection.createComment { body: @textarea().value(), type: @commentType },
                 wait: true
                 error: @enableForm
                 success: @resetForm

@@ -77,6 +77,7 @@ sub add {
     }
 
     if ($params->{type} and $params->{type} eq 'secret') {
+        die "Only quests support secret comments" unless $params->{entity} eq 'quest';
         my $secret_id = $self->secret_collection->insert({
             body => $params->{body},
         }, { safe => 1 });

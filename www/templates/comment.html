@@ -1,6 +1,12 @@
 <article class="comment comment-type-<%- type %>">
+  <% var _unlocked = (type == 'secret' && obj.body && obj.body.length && !obj.secret_id) %>
   <aside>
     <%= partial.upic_small({ login: author }) %>
+    <% if (_unlocked) { %>
+    <div class="comment-aside-icon">
+      <i class="icon-trophy"></i>
+    </div>
+    <% } %>
   </aside>
 
   <div class="comment-inner">
@@ -14,7 +20,7 @@
     </header>
 
     <div class="<%- type == 'text' ? 'widetext' : '' %> comment-content">
-      <% if (type == 'text') { %>
+      <% if (type == 'text' || _unlocked) { %>
         <div class="body-sv"></div>
       <% } else { %>
         <div class="comment-content-special">
@@ -56,6 +62,14 @@
           <div>
             Invited:
             <%= partial.user({ realm: realm, login: invitee }) %>
+          </div>
+        <% } else if (type == 'secret') { %>
+          <i class="icon-lock"></i>
+          <div>
+            Hidden comment!
+            <div>
+              Complete this quest to reveal it.
+            </div>
           </div>
         <% } else { %>
           <i class="icon-question"></i>

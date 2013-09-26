@@ -1,13 +1,11 @@
 * rendering
 lock icon (or chest?)
-
-* show the number of hidden comments
+render revealed
 
 * reveal on completion
 call comments->reveal on quests->close
 
-* notify about revealing
-send email on comments->reveal
+* check email notifications on posting a secret comment
 
 * posting secret comments
 support in /api
@@ -15,6 +13,13 @@ pass 'secret' flag from frontend
 forbid "promise reward" comments on completed quests
 - on backend
 - on frontend
+
+# OPTIONAL
+
+* show the number of hidden comments
+
+* notify about revealing
+send email on comments->reveal
 
 # DONE
 
@@ -29,3 +34,7 @@ comments->reveal($id)
 dropdown:
 - "reward"
 - "discuss"
+
+* posting secret comments
+support in /api
+pass 'secret' flag from frontend

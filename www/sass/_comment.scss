@@ -29,6 +29,12 @@
     border-right: 1px solid darken($grey, 5%);
     border-bottom: 1px solid darken($grey, 5%);
 }
+.comment-aside-icon {
+    margin-top: 4px;
+    margin-left: 4px;
+    font-size: 18px;
+    color: $dark-grey;
+}
 .comment-outer {
     &:last-of-type > .comment {
         margin-bottom: 12px;
