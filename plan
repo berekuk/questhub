@@ -1,23 +1,31 @@
-* comment.secret = true
-comments->add({ ..., secret => 1 })
-=> save body to secret_comments collection
-
 * rendering
 lock icon (or chest?)
 
 * show the number of hidden comments
 
 * reveal on completion
-comments->reveal($id)
-=> restore body from secret_comments
+call comments->reveal on quests->close
 
 * notify about revealing
 send email on comments->reveal
 
+* posting secret comments
+support in /api
+pass 'secret' flag from frontend
+forbid "promise reward" comments on completed quests
+- on backend
+- on frontend
+
+# DONE
+
+* comment.type = 'secret'
+comments->add({ ..., secret => 1 })
+=> save body to secret_comments collection
+
+comments->reveal($id)
+=> restore body from secret_comments
+
 * "secret" checkbox
 dropdown:
 - "reward"
-- "... and complete"
-- "... and abandon"
-- "... and leave"
-- "... and like" (?)
+- "discuss"
