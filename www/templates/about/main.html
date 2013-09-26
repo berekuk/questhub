@@ -14,52 +14,115 @@
 <div>
   <h3>Tasks, gamified</h3>
   <p>
-  Gamification is great for tuning motivations in a positive way.<br>
-  Questhub gives you points and achievements for each task you complete.
+    Gamification is great for tuning motivations in a positive way.
+  </p>
+  <p>
+    Questhub gives you points and achievements for each task you complete.
+  </p>
   </p>
 </div>
 <div>
   <h3>Collaborative prioritization</h3>
   <p>
-  By liking other people's quests, you promise them points, or give them points immediately if they already completed the quest.<br>
-  So, people can quickly gather opinions on what the community would prefer you to do.
+    By liking other people's quests, you promise them points, or give them points immediately if they already completed the quest.
+  </p>
+  <p>
+    So, people can quickly gather opinions on what the community would prefer you to do.
   </p>
 </div>
 <hr>
 <div>
   <h2>FAQ</h2>
   <dl>
-    <dt>"Quest"? "Player"? What is this?</dt>
-    <dd>Quest is the any kind of task you're planning to do. Player is you, and other people are players too. You get 1+{number-of-likes} points for each quest you close.</dd>
+    <dt>"Quest"? "Player"? "Stencil"? What is this?</dt>
+    <dd>
+    <p>
+      Quest is any kind of task you're planning to do.
+    </p>
+    <p>
+      Player is you, and other people are players too. You get 1 point for each quest you complete, and 1 point for each upvote you receive on your quests.
+    </p>
+    <p>
+      Stencil is a blueprint for your quest. You can choose your quest from realm's stencils, or you can invent your own unique quest.
+    </p>
+    </dd>
 
     <dt>There are many other bug trackers and to-do lists! How is Questhub different?</dt>
     <dd>
-    Questhub considers people to be more important than projects, and fun to be more important than planning. We're going to optimize its mechanics for:
-    <ol>
+    <p>
+      Questhub is less about planning, and more about fun, motivation, knowledge reuse, and people interaction. We're optimizing Questhub for:
+    </p>
+    <ul>
       <li>People feeling appreciated;</li>
       <li>Praise being granted and received wherever and whenever necessary;</li>
-      <li>Contribution simplified as much as possible.</li>
+      <li>Reusing knowledge about the best approach to common tasks;</li>
+      <li>Connecting people to let them have more fun together.</li>
+    </ul>
+    </dd>
+
+    <dt>I want a realm about [X], where do I start?</dt>
+    <dd>
+    <p>
+      <a href="mailto:me@berekuk.ru">Send me an email</a> and let's talk about it.
+      People asking for new realms become Realm Keepers, and there are two things I ask of them:
+    </p>
+    <ol>
+      <li>Evangelize your realm. Blog about it, tell people about it, bring them here. You'd be lonely and sad there otherwise.</li>
+      <li>Fill it with stencils, at least 5 to get people started. Check out <a href="/realm/perl/stencils">Perl realm's stencils</a> as a good reference point.</li>
     </ol>
-    There are many more ideas for future features, check out our <a href="https://github.com/berekuk/questhub/wiki/DesignDraft">DesignDraft</a>.
+    <p>
+      If you want to try your hand at it, I'll be happy to hear from you, and generally you'll get your realm in the next 24 hours. But if you abandon your Keeper job and the realm doesn't lift off on its own in a few weeks, I retain the right to merge it and all its quests back into <a href="/realm/chaos">Chaos</a>.
+    </p>
+    <p>
+      If you're an experienced community manager, or want to bring an existing community over to Questhub, I'll be especially happy to hear from you.
+    </p>
     </dd>
 
-    <dt>Is Perl realm for Perl 5 or for Perl 6?</dt>
+    <dt>Can I use Questhub for claiming a task I already completed, if I didn't create a quest in advance?</dt>
     <dd>
-    Both.<br>
-    And also Moe, p2 and anything else that will grow out of Perl community in the future.
+    <p>
+      <a href="/realm/meta/quest/51e9340b7deb5b521800004f">We think</a> it's ok to retrospectively claim a quest, as long as it wasn't too long ago. How long ago depends on the nature / size of the quest.
+    </p>
+    <p>
+    You should only claim retrospective quests based on stencils if they were appropriate challenges for you. If you're a seasoned perl hacker, then don't hoover up the stencils aimed at learners, for example.
+    </p>
+    <p>
+      All this is intentionally somewhat vague, but the <a href="http://en.wikipedia.org/wiki/Peanut_gallery">peanut gallery</a> reserves the right to throw nuts and other things at people <a href="http://en.wiktionary.org/wiki/take_the_mickey">taking the mickey</a>.
+    </p>
+    <p>
+      (This is the informal policy; there are no formal policies around here, apart from not harassing other users.)
+    </p>
     </dd>
-
-    <dt>Can I use this for my non-Perl tasks?</dt>
-    <dd>
-    Yes! Just add them in a different realm, or if you can't find one that fits, use <a href="/realm/chaos">Chaos</a> realm.
-    </dd>
-
-    <dt>This doesn't motivate me.</dt>
-    <dd>That's ok. <a href="http://berekuk.github.com/perl-motivation-survey/">People are different.</a></dd>
 
     <dt>I can't use this without feature X.</dt>
     <dd>
-    See our <a href="/about/feedback">Feedback</a> page.
+    <p>
+      See our <a href="/about/feedback">Feedback</a> page.
+    </p>
+    </dd>
+
+    <dt>How can I create a sub-quest for my quest?</dt>
+    <dd>
+    <p>
+      You can't organize quests hierarchically, but you can add a task list to your quest's description.
+      Read <a href="/about/syntax">Syntax</a> for more details.
+      If you're doing a bigger project, you can also use tags.
+    </p>
+    </dd>
+
+    <dt>What if I want to do create a habit of doing something every day?</dt>
+    <dd>
+    <p>
+      Creating a quest every day would be burdensome. Rephrase your quest into "Do X every day for a month" (or a week, or whatever you like).
+    </p>
+    <p>
+      If you mark your quest with <code>checkin</code> tag, you will be able to check-in into it. Each checkin saves the current date and time to your quest for tracking. Just try it, it's easier to see than to explain.
+    </p>
+    </dd>
+
+    <dt>Can I set a deadline for my quest?</dt>
+    <dd>
+    Not yet. Upvote <a href="/realm/meta/quest/522dcad7968d34df5300006d">this</a> if you want to see it done.
     </dd>
 
     <dt>How can I add a link to a CPAN module in comments easily?</dt>
@@ -72,7 +135,12 @@
 <hr>
 <div>
   <h2>Testimonials and announcements</h2>
-  <p>
+  <ul>
+    <li><a href="http://thechangelog.com/questhub-social-task-tracker/">Questhub, the social task tracker (The Changelog blog)</a></li>
+  </ul>
+  <p class="muted">
+    (Play Perl is the predecessor of Questhub. It lives on as <a href="/realm/perl">Perl</a> realm.)
+  </p>
   <ul>
     <li><a href="http://blogs.perl.org/users/david_mertens/2013/02/i-3-play-perl.html">David Mertens: I &lt;3 play-perl</a></li>
     <li><a href="http://enetdown.org/dot-plan/posts/2013/02/12/play_perl_is_a_game_changer/">zmughal: Play Perl is a game changer</a></li>
@@ -82,21 +150,21 @@
     <li><a href="http://blogs.perl.org/users/vyacheslav_matjukhin/2013/02/play-perl-is-online.html">Play Perl is online</a></li>
     <li><a href="http://blogs.perl.org/users/vyacheslav_matjukhin/2013/02/play-perl-first-24-hours-and-the-power-of-likes.html">Play Perl: first 24 hours and the power of likes</a></li>
     <li><a href="http://blogs.perl.org/users/vyacheslav_matjukhin/2013/02/play-perl-is-more-popular-than-rtcpanorg.html">Play Perl is more popular than rt.cpan.org!</a></li>
-    </p>
   </ul>
-  <span class="muted">(Play Perl is the predecessor of Questhub. It lives on as <a href="/realm/perl">Perl</a> realm.)</span>
 </div>
 <hr>
 <div>
   <h2>Technology</h2>
-  Questhub is built with:
-  <ul>
-    <li><a href="http://perldancer.org/">Perl Dancer</a></li>
-    <li><a href="http://www.mongodb.org/">MongoDB</a></li>
-    <li><a href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
-    <li><a href="http://documentcloud.github.com/backbone/">Backbone.js</a></li>
-    <li><a href="http://coffeescript.org/">CoffeeScript</a></li>
-  </ul>
+  <p>
+    Questhub is built with:
+    <ul>
+      <li><a href="http://perldancer.org/">Perl Dancer</a></li>
+      <li><a href="http://www.mongodb.org/">MongoDB</a></li>
+      <li><a href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
+      <li><a href="http://documentcloud.github.com/backbone/">Backbone.js</a></li>
+      <li><a href="http://coffeescript.org/">CoffeeScript</a></li>
+    </ul>
+  </p>
   <p>
     Backend is completely separated from the frontend. <a href="/about/api">Backend API is open</a>, feel free to use it.
   </p>
