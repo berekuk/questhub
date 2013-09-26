@@ -4,6 +4,8 @@ use parent qw(Test::Class);
 
 use Play::DB qw(db);
 
+use Play::Types qw(Id);
+
 sub setup :Test(setup) {
     reset_db();
 }
@@ -170,6 +172,30 @@ sub bulk_count :Tests {
             $q2->{_id} => 1,
         }
     );
+}
+
+sub add_secret :Tests {
+    db->users->add({ login => 'blah' });
+
+    my $quest = db->quests->add({
+        user => 'blah',
+        name => 'foo',
+        realm => 'europe',
+    });
+
+    my $result = db->comments->add({
+        entity => 'quest',
+        eid => $quest->{_id},
+        author => 'blah',
+        type => 'secret',
+        body => 'secret reward',
+    });
+
+    my $comment = db->comments->get_one($result->{_id});
+    diag explain $comment;
+    is $comment->{_id}, $result->{_id}, "got a secret comment";
+    is $comment->{body}, undef, "secret comment has no body";
+    ok Id->check($comment->{secret_id}), "secret comment 'secret_id' field";
 }
 
 __PACKAGE__->new->runtests;

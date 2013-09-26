@@ -25,6 +25,11 @@ use Play::Types qw(Entity Id Login CommentParams);
 
 use Play::Markdown qw(markdown);
 
+has 'secret_collection' => (
+    is => 'lazy',
+);
+sub _build_secret_collection { Play::Mongo->db->get_collection('secret_comments') }
+
 sub _prepare_comment {
     my $self = shift;
     my ($comment) = @_;
@@ -69,6 +74,14 @@ sub add {
     }
     else {
         die "Unknown entity '$params->{entity}'";
+    }
+
+    if ($params->{type} and $params->{type} eq 'secret') {
+        my $secret_id = $self->secret_collection->insert({
+            body => $params->{body},
+        }, { safe => 1 });
+        $params->{secret_id} = $secret_id->to_string;
+        delete $params->{body};
     }
 
     my $id = $self->collection->insert($params, { safe => 1 });
@@ -224,6 +237,14 @@ sub update {
     );
 
     return $id;
+}
+
+sub reveal {
+    my $self = shift;
+    my $check = compile(Id);
+    my ($id) = $check->(@_);
+
+    ... # TBD
 }
 
 =over
