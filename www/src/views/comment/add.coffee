@@ -10,6 +10,7 @@ define [
 
         events:
             "click .submit": "postComment"
+            "click .comment-add-aux-controls .dropdown-menu a": "changeType"
 
         subviews:
             ".signin": ->
@@ -21,8 +22,11 @@ define [
 
         textarea: -> @subview ".comment-add-textarea-sv"
 
+        commentType: "text"
+
         serialize: ->
             currentUser: currentUser.get("login")
+            commentType: @commentType
 
         # set the appropriate "add comment" button style
         validate: (e) =>
@@ -84,3 +88,7 @@ define [
             else
                 @textarea().focus()
             @validate()
+
+        changeType: (e) ->
+            @commentType = $(e.target).closest("a").attr "data-comment-type"
+            @render()

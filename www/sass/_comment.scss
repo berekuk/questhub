@@ -82,22 +82,6 @@ textarea.comment-edit {
     }
 }
 
-.comment-add {
-    @include clearfix;
-    margin-left: 7px;
-    @include media-with-upic('.comment-add-inner');
-}
-.comment-add-buttons {
-    float: right;
-}
-
-.comment-add-signin {
-    > header {
-        @include bg-header;
-        margin-bottom: 10px;
-    }
-}
-
 @include keyframes(flash) {
     0% { background-color: none; }
     50% { background-color: lighten($highlight, 30%); }
