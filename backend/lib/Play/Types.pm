@@ -16,7 +16,7 @@ use Type::Library
         NewsFeedTab
     );
 use Type::Utils;
-use Types::Standard qw( Str StrMatch Dict Int );
+use Types::Standard qw( Str StrMatch Dict Int Optional );
 
 declare Login, as StrMatch[ qr/^\w{1,16}$/ ];
 declare Realm, as StrMatch[ qr/^\w{1,16}$/ ];
@@ -46,17 +46,24 @@ declare CommentParams,
             entity => Entity,
             eid => Id,
             author => Login,
-#            type => enum['text'], # default?
+#            type => enum['text'], # default
             body => Str,
         ] |
         Dict[
-            entity => enum([qw( quest )]),
+            entity => Entity,
+            eid => Id,
+            author => Login,
+            type => enum(['secret']),
+            body => Str,
+        ] |
+        Dict[
+            entity => enum(['quest']),
             eid => Id,
             author => Login,
             type => enum([qw( like close reopen abandon resurrect leave join )]),
         ] |
         Dict[
-            entity => enum([qw( quest )]),
+            entity => enum(['quest']),
             eid => Id,
             author => Login,
             type => enum([qw( invite )]),

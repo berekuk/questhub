@@ -10,12 +10,16 @@ for my $entity (qw( quest stencil )) {
     post "/$entity/:eid/comment" => sub {
         my $login = login;
 
-        return db->comments->add({
+        my $comment = {
             entity => $entity,
             eid => param('eid'),
             body => param('body'),
             author => $login,
-        });
+        };
+        my $type = param('type');
+        $comment->{type} = 'secret' if $type and $type eq 'secret';
+
+        return db->comments->add($comment);
     };
 
     get "/$entity/:eid/comment" => sub {

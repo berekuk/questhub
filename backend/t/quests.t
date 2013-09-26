@@ -786,4 +786,41 @@ sub bump :Tests {
     ok($diff > 0 and $diff < 3);
 }
 
+sub reveal_comments_on_close :Tests {
+    db->users->add({ login => 'foo' });
+
+    my $quest = db->quests->add({
+        name => 'q1',
+        user => 'foo',
+        status => 'open',
+        realm => 'europe',
+    });
+
+    my $text_result = db->comments->add({
+        entity => 'quest',
+        eid => $quest->{_id},
+        author => 'foo',
+        body => 'discuss',
+    });
+    my $secret_result = db->comments->add({
+        entity => 'quest',
+        eid => $quest->{_id},
+        author => 'foo',
+        type => 'secret',
+        body => 'reward',
+    });
+
+    db->quests->close($quest->{_id}, 'foo');
+    my $comments = db->comments->list('quest', $quest->{_id});
+    is $comments->[1]->{body}, 'reward';
+
+    db->quests->reopen($quest->{_id}, 'foo');
+    $comments = db->comments->list('quest', $quest->{_id});
+    is $comments->[1]->{body}, 'reward'; # still revealed, oh well
+
+    db->quests->close($quest->{_id}, 'foo');
+    $comments = db->comments->list('quest', $quest->{_id});
+    is $comments->[1]->{body}, 'reward';
+}
+
 __PACKAGE__->new->runtests;

@@ -5,8 +5,23 @@
     </aside>
     <div class="comment-add-inner">
       <div class="comment-add-textarea-sv"></div>
+      <div class="comment-add-aux-controls dropdown">
+        <% var type2name = { "text": "Discuss", "secret": "Hidden comment" } %>
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><%- type2name[commentType] %> <i class="icon-caret-down"></i></a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+        <% _.each(types, function (t) { %>
+          <li><a href="#" data-comment-type="<%- t %>">
+            <% if (t == commentType) { %>
+              <strong><%- type2name[t] %></strong>
+            <% } else { %>
+              <%- type2name[t] %>
+            <% } %>
+          </a></li>
+        <% }) %>
+        </ul>
+      </div>
       <div class="comment-add-buttons">
-        <button class="btn btn-primary submit disabled">Comment</button>
+        <button class="btn btn-primary submit">Comment</button>
       </div>
     </div>
   <% } else { %>

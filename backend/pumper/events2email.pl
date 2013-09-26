@@ -29,7 +29,7 @@ sub _object_url {
     die "unknown entity '$entity'";
 }
 
-sub process_add_comment {
+sub process_text_comment {
     my $self = shift;
     my ($event) = @_;
 
@@ -46,7 +46,10 @@ sub process_add_comment {
 
         $er->add_logins($object->{team}, 'team') if $object->{team};
         $er->add_logins($object->{watchers}, 'watcher') if $object->{watchers};
-        $er->add_logins([ $object->{author} ], 'author') if $object->{author} and $comment->{entity} eq 'stencil'; # TODO - should quest authors who left the team get emails too?
+
+        # TODO - should quest authors who left the team get emails too?
+        $er->add_logins([ $object->{author} ], 'author') if $object->{author} and $comment->{entity} eq 'stencil';
+
         $er->add_logins($markdown_extra->{mentions}, 'mention') if $markdown_extra->{mentions};
 
         $er->exclude($comment->{author});
@@ -86,6 +89,59 @@ sub process_add_comment {
         db->events->email({
             address => $recipient->{email},
             subject => "$comment->{author} commented on '$object->{name}'",
+            body => $email_body,
+            notify_field => $recipient->{notify_field},
+            login => $recipient->{login},
+        });
+        $self->add_stat('emails sent');
+    }
+}
+
+sub process_secret_comment {
+    my $self = shift;
+    my ($event) = @_;
+
+    my $comment = $event->{comment};
+    my $quest = $event->{quest};
+    unless ($quest) {
+        die "Didn't expect a secret comment on non-quest entity";
+    }
+    return unless $comment->{type} eq 'secret'; # just a precaution
+
+    my @recipients;
+    {
+        my $er = Play::EmailRecipients->new;
+
+        $er->add_logins($quest->{team}, 'team') if $quest->{team};
+        $er->add_logins($quest->{watchers}, 'watcher') if $quest->{watchers};
+        $er->exclude($comment->{author});
+
+        @recipients = $er->get_all;
+    }
+
+    for my $recipient (@recipients) {
+        my $email_body =
+            '<p><a href="' . Play::WWW->player_url($comment->{author}) . qq[">$comment->{author}</a> ]
+            . 'left a secret comment on <a href="' . _object_url($quest, 'quest'). qq[">$quest->{name}</a>.</p>];
+
+        my $reason = $recipient->{reason};
+        if ($reason eq 'watcher') {
+            $email_body .= qq[
+                <p>
+                Wait until the quest is completed to find out what it says.
+                </p>
+            ];
+        } else {
+            $email_body .= qq[
+                <p>
+                Complete the quest to find out what it says!
+                </p>
+            ];
+        }
+
+        db->events->email({
+            address => $recipient->{email},
+            subject => "$comment->{author} left a secret comment on '$quest->{name}'",
             body => $email_body,
             notify_field => $recipient->{notify_field},
             login => $recipient->{login},
@@ -169,13 +225,16 @@ sub run_once {
 
         if ($event->{type} eq 'add-comment') {
             if ($event->{comment}{type} eq 'text') {
-                $self->process_add_comment($event);
+                $self->process_text_comment($event);
             }
             elsif ($event->{comment}{type} eq 'close' and $event->{comment}{entity} eq 'quest') {
                 $self->process_close_quest($event);
             }
             elsif ($event->{comment}{type} eq 'invite' and $event->{comment}{entity} eq 'quest') {
                 $self->process_invite_quest($event);
+            }
+            elsif ($event->{comment}{type} eq 'secret') {
+                $self->process_secret_comment($event);
             }
             # TODO - send emails on join, leave and other comment types
         }

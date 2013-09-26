@@ -1,0 +1,44 @@
+* email notifications on posting a secret comment
+- body
+- mailcatcher
+
+* posting secret comments
+forbid "promise reward" comments on completed quests
+- on backend
+- on frontend
+
+# OPTIONAL
+
+* show the number of hidden comments
+
+* notify about revealing
+send email on comments->reveal
+
+* make revealing more robust in case of DB or code failures
+
+* wait until quest is completed before showing quest-completed modal
+
+# DONE
+
+* comment.type = 'secret'
+comments->add({ ..., secret => 1 })
+=> save body to secret_comments collection
+
+comments->reveal($id)
+=> restore body from secret_comments
+
+* "secret" checkbox
+dropdown:
+- "reward"
+- "discuss"
+
+* posting secret comments
+support in /api
+pass 'secret' flag from frontend
+
+* rendering
+lock icon (or chest?)
+render revealed
+
+* reveal on completion
+call comments->reveal on quests->close

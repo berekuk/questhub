@@ -4,6 +4,8 @@ use parent qw(Test::Class);
 
 use Play::DB qw(db);
 
+use Play::Types qw(Id);
+
 sub setup :Test(setup) {
     reset_db();
 }
@@ -170,6 +172,64 @@ sub bulk_count :Tests {
             $q2->{_id} => 1,
         }
     );
+}
+
+sub add_secret :Tests {
+    db->users->add({ login => 'blah' });
+
+    my $quest = db->quests->add({
+        user => 'blah',
+        name => 'foo',
+        realm => 'europe',
+    });
+
+    my $result = db->comments->add({
+        entity => 'quest',
+        eid => $quest->{_id},
+        author => 'blah',
+        type => 'secret',
+        body => 'secret reward',
+    });
+
+    my $comment = db->comments->get_one($result->{_id});
+    is $comment->{_id}, $result->{_id}, "got a secret comment";
+    is $comment->{body}, undef, "secret comment has no body";
+    ok Id->check($comment->{secret_id}), "secret comment 'secret_id' field";
+}
+
+sub reveal :Tests {
+    db->users->add({ login => 'blah' });
+
+    my $quest = db->quests->add({
+        user => 'blah',
+        name => 'foo',
+        realm => 'europe',
+    });
+
+    my $text_result = db->comments->add({
+        entity => 'quest',
+        eid => $quest->{_id},
+        author => 'blah',
+        body => 'discuss',
+    });
+    my $secret_result = db->comments->add({
+        entity => 'quest',
+        eid => $quest->{_id},
+        author => 'blah',
+        type => 'secret',
+        body => 'reward',
+    });
+
+    like exception {
+        db->comments->reveal($text_result->{_id})
+    }, qr/is not a secret comment/;
+
+    db->comments->reveal($secret_result->{_id});
+
+    my $revealed = db->comments->get_one($secret_result->{_id});
+    is $revealed->{type}, 'secret', 'type is still "secret"';
+    is $revealed->{body}, 'reward', 'comment body is visible';
+    is $revealed->{secret_id}, undef, 'secret_id is unset after revealing';
 }
 
 __PACKAGE__->new->runtests;

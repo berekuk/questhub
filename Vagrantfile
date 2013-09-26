@@ -13,6 +13,7 @@ Vagrant::Config.run do |config|
   # Production and dev http ports.
   config.vm.forward_port 80, 3000
   config.vm.forward_port 81, 3001
+  config.vm.forward_port 1080, 3080
 
   # bind source code to /play in addition to /vagrant
   # all code should use /play, because we have no vagrant in production environment, and it would be weird to keep /vagrant folder there

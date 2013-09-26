@@ -21,7 +21,7 @@ use Email::Sender::Simple;
 
 sub reset_db {
     for (qw(
-        comments users events notifications stencils realms posts
+        comments secret_comments users events notifications stencils realms posts
         quests stencils
     )) {
         Play::Mongo->db->get_collection($_)->remove({});

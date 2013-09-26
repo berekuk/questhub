@@ -29,6 +29,12 @@
     border-right: 1px solid darken($grey, 5%);
     border-bottom: 1px solid darken($grey, 5%);
 }
+.comment-secret-revealed {
+    float: left;
+    font-size: 20px;
+    color: $dark-grey;
+    margin-right: 6px;
+}
 .comment-outer {
     &:last-of-type > .comment {
         margin-bottom: 12px;
@@ -79,22 +85,6 @@ textarea.comment-edit {
     > div {
         display: inline-block;
         vertical-align: middle;
-    }
-}
-
-.comment-add {
-    @include clearfix;
-    margin-left: 7px;
-    @include media-with-upic('.comment-add-inner');
-}
-.comment-add-buttons {
-    float: right;
-}
-
-.comment-add-signin {
-    > header {
-        @include bg-header;
-        margin-bottom: 10px;
     }
 }
 

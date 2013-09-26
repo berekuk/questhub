@@ -25,6 +25,11 @@ use Play::Types qw(Entity Id Login CommentParams);
 
 use Play::Markdown qw(markdown);
 
+has 'secret_collection' => (
+    is => 'lazy',
+);
+sub _build_secret_collection { Play::Mongo->db->get_collection('secret_comments') }
+
 sub _prepare_comment {
     my $self = shift;
     my ($comment) = @_;
@@ -57,8 +62,9 @@ sub add {
     my ($params) = $check->(@_);
 
     my $realm;
+    my $quest;
     if ($params->{entity} eq 'quest') {
-        my $quest = db->quests->get($params->{eid}) or die "quest '$params->{eid}' not found";
+        $quest = db->quests->get($params->{eid}) or die "quest '$params->{eid}' not found";
         $realm = $quest->{realm};
         db->quests->bump($params->{eid});
     }
@@ -69,6 +75,17 @@ sub add {
     }
     else {
         die "Unknown entity '$params->{entity}'";
+    }
+
+    if ($params->{type} and $params->{type} eq 'secret') {
+        die "Only quests support secret comments" unless $params->{entity} eq 'quest';
+        if ($quest->{status} ne 'closed') {
+            my $secret_id = $self->secret_collection->insert({
+                body => $params->{body},
+            }, { safe => 1 });
+            $params->{secret_id} = $secret_id->to_string;
+            delete $params->{body};
+        }
     }
 
     my $id = $self->collection->insert($params, { safe => 1 });
@@ -224,6 +241,41 @@ sub update {
     );
 
     return $id;
+}
+
+sub reveal {
+    my $self = shift;
+    my $check = compile(Id);
+    my ($id) = $check->(@_);
+
+    my $comment = $self->get_one($id);
+    unless ($comment->{type} eq 'secret') {
+        die "$id is not a secret comment";
+    }
+
+    my ($secret) = $self->secret_collection->find_one({
+        _id => MongoDB::OID->new(value => $comment->{secret_id}),
+    });
+
+    my $result = $self->collection->update(
+        { _id => MongoDB::OID->new(value => $id) },
+        {
+            '$set' => { body => $secret->{body} },
+            '$unset' => { secret_id => '' },
+        },
+        { safe => 1 }
+    );
+    my $updated = $result->{n};
+    unless ($updated) {
+        die "Can't update comment body, huh.";
+    }
+
+    # cleanup
+    $self->secret_collection->remove(
+        {
+            _id => MongoDB::OID->new(value => $comment->{secret_id}),
+        }
+    );
 }
 
 =over

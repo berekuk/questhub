@@ -40,7 +40,13 @@ define [
 
         initialize: ->
             super
-            @listenTo @model, "change:body", -> @subview(".body-sv").setText @model.get("body")
+            @listenTo @model, "change:body", ->
+                if @model.get("type") == "secret" and @model.get("body")
+                    # collection.fetch() doesn't unset secret_id, which prevents us from revealing the comment on quest completion, so we have to do this hack.
+                    # we can't do collection.fetch({ reset: true }), because full reset would cause other issues
+                    @model.unset("secret_id")
+                    @render()
+                @subview(".body-sv").setText @model.get("body")
 
         edit: ->
             return unless @isOwned()
