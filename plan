@@ -1,7 +1,23 @@
 * comment.secret = true
-* delete comment.body if secret *and* quest is not completed
+comments->add({ ..., secret => 1 })
+=> save body to secret_comments collection
+
 * rendering
+lock icon (or chest?)
+
 * show the number of hidden comments
+
 * reveal on completion
+comments->reveal($id)
+=> restore body from secret_comments
+
 * notify about revealing
+send email on comments->reveal
+
 * "secret" checkbox
+dropdown:
+- "reward"
+- "... and complete"
+- "... and abandon"
+- "... and leave"
+- "... and like" (?)
