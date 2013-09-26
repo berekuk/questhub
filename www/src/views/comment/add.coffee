@@ -25,13 +25,17 @@ define [
         commentType: "text"
 
         serialize: ->
+            types = ["text"]
+            types.push "secret" unless @options.object.get("status") == "closed"
+
             currentUser: currentUser.get("login")
             commentType: @commentType
+            types: types
 
         # set the appropriate "add comment" button style
         validate: (e) =>
             text = @textarea().value()
-            @$(".submit").toggleClass "disabled", !text
+            @$(".submit").prop "disabled", !text
 
         initialize: =>
             super
@@ -43,7 +47,7 @@ define [
         disableForm: =>
             return unless @activated
             @textarea().disable()
-            @$(".submit").addClass "disabled"
+            @$(".submit").prop "disabled", true
 
         resetForm: =>
             return unless @activated
@@ -58,13 +62,16 @@ define [
             @validate()
 
         postComment: =>
-            return if @$(".submit").hasClass("disabled")
+            return if @$(".submit").prop("disabled")
             @disableForm()
             mixpanel.track "add comment"
             @collection.createComment { body: @textarea().value(), type: @commentType },
                 wait: true
                 error: @enableForm
-                success: @resetForm
+                success: =>
+                    @resetForm()
+                    @commentType = "text"
+                    @render()
 
         cancelComment: =>
             return if @textarea().value().length > 20

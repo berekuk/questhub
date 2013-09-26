@@ -15,6 +15,7 @@ define [
                     realm: @options.realm
                     collection: @collection
                     cancelable: !@options.commentBox
+                    object: @options.object
         lazySubviews: [".comment-add-sv"]
 
         serialize: ->
