@@ -56,3 +56,11 @@ end
 ubic_service "coffee-test" do
   action [:install, :start]
 end
+
+package 'sqlite3'
+package 'libsqlite3-dev'
+package 'g++'
+gem_package 'mailcatcher'
+ubic_service "mailcatcher" do
+  action [:install, :start]
+end
