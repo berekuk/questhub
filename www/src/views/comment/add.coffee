@@ -92,3 +92,7 @@ define [
         changeType: (e) ->
             @commentType = $(e.target).closest("a").attr "data-comment-type"
             @render()
+
+        render: ->
+            super
+            @$(".submit").prop "disabled", true unless @textarea().value()
