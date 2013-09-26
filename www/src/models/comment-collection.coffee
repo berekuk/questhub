@@ -23,4 +23,5 @@ define [
                 entity: @entity
                 eid: @eid
                 ts: Math.floor(new Date().getTime() / 1000)
+                secret_id: "fake"
             @create comment, options
