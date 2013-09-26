@@ -29,11 +29,11 @@
     border-right: 1px solid darken($grey, 5%);
     border-bottom: 1px solid darken($grey, 5%);
 }
-.comment-aside-icon {
-    margin-top: 4px;
-    margin-left: 4px;
-    font-size: 18px;
+.comment-secret-revealed {
+    float: left;
+    font-size: 20px;
     color: $dark-grey;
+    margin-right: 6px;
 }
 .comment-outer {
     &:last-of-type > .comment {

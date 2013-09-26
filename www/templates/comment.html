@@ -2,11 +2,6 @@
   <% var _unlocked = (type == 'secret' && obj.body && obj.body.length && !obj.secret_id) %>
   <aside>
     <%= partial.upic_small({ login: author }) %>
-    <% if (_unlocked) { %>
-    <div class="comment-aside-icon">
-      <i class="icon-trophy"></i>
-    </div>
-    <% } %>
   </aside>
 
   <div class="comment-inner">
@@ -20,8 +15,15 @@
     </header>
 
     <div class="<%- type == 'text' ? 'widetext' : '' %> comment-content">
-      <% if (type == 'text' || _unlocked) { %>
+      <% if (type == 'text') { %>
         <div class="body-sv"></div>
+      <% } else if (_unlocked) { %>
+        <div class="clearfix">
+          <div class="comment-secret-revealed">
+            <i class="icon-trophy"></i>
+          </div>
+          <div class="body-sv"></div>
+        </div>
       <% } else { %>
         <div class="comment-content-special">
         <% if (type == 'close') { %>
