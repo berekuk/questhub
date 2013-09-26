@@ -9,7 +9,7 @@ use Type::Utils qw(class_type);
 use Play::Config qw(setting);
 use Email::Sender::Simple sendmail => { -as => 'email_sender_sendmail' };
 use Email::Sender::Transport::SMTP::TLS;
-use Email::Sender::Transport::DevNull;
+use Email::Sender::Transport::SMTP;
 use Email::Sender::Transport::Test;
 
 sub _build_transport {
@@ -17,7 +17,10 @@ sub _build_transport {
         return Email::Sender::Transport::Test->new;
     }
     elsif (not setting('ses') or not setting('ses')->{username} or setting('ses')->{username} eq 'NONE') {
-        return Email::Sender::Transport::DevNull->new;
+        return Email::Sender::Transport::SMTP->new(
+            host => 'localhost',
+            port => 1025,
+        );
     }
 
     return Email::Sender::Transport::SMTP::TLS->new(
