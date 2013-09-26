@@ -18,6 +18,13 @@
             text-decoration: none;
         }
     }
+    .dropdown-menu {
+        min-width: 140px;
+        a {
+            padding-left: 10px;
+            line-height: 18px;
+        }
+    }
 }
 
 .comment-add-signin {
