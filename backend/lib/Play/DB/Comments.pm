@@ -62,8 +62,9 @@ sub add {
     my ($params) = $check->(@_);
 
     my $realm;
+    my $quest;
     if ($params->{entity} eq 'quest') {
-        my $quest = db->quests->get($params->{eid}) or die "quest '$params->{eid}' not found";
+        $quest = db->quests->get($params->{eid}) or die "quest '$params->{eid}' not found";
         $realm = $quest->{realm};
         db->quests->bump($params->{eid});
     }
@@ -78,11 +79,13 @@ sub add {
 
     if ($params->{type} and $params->{type} eq 'secret') {
         die "Only quests support secret comments" unless $params->{entity} eq 'quest';
-        my $secret_id = $self->secret_collection->insert({
-            body => $params->{body},
-        }, { safe => 1 });
-        $params->{secret_id} = $secret_id->to_string;
-        delete $params->{body};
+        if ($quest->{status} ne 'closed') {
+            my $secret_id = $self->secret_collection->insert({
+                body => $params->{body},
+            }, { safe => 1 });
+            $params->{secret_id} = $secret_id->to_string;
+            delete $params->{body};
+        }
     }
 
     my $id = $self->collection->insert($params, { safe => 1 });
