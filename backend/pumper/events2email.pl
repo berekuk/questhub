@@ -120,10 +120,29 @@ sub process_secret_comment {
     }
 
     for my $recipient (@recipients) {
+        my $email_body =
+            '<p><a href="' . Play::WWW->player_url($comment->{author}) . qq[">$comment->{author}</a> ]
+            . 'left a secret comment on <a href="' . _object_url($quest, 'quest'). qq[">$quest->{name}</a>.</p>];
+
+        my $reason = $recipient->{reason};
+        if ($reason eq 'watcher') {
+            $email_body .= qq[
+                <p>
+                Wait until the quest is completed to find out what it says.
+                </p>
+            ];
+        } else {
+            $email_body .= qq[
+                <p>
+                Complete the quest to find out what it says!
+                </p>
+            ];
+        }
+
         db->events->email({
             address => $recipient->{email},
             subject => "$comment->{author} left a secret comment on '$quest->{name}'",
-            body => "TBD",
+            body => $email_body,
             notify_field => $recipient->{notify_field},
             login => $recipient->{login},
         });
