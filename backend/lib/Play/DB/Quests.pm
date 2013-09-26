@@ -474,6 +474,9 @@ sub close {
         points => 1,
         clear_invitees => 1,
     });
+
+    my $comments = db->comments->list('quest', $id);
+    db->comments->reveal($_->{_id}) for grep { $_->{type} eq 'secret' and defined $_->{secret_id} } @$comments;
 }
 
 =item B<reopen($id, $user)>
