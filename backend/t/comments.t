@@ -192,7 +192,6 @@ sub add_secret :Tests {
     });
 
     my $comment = db->comments->get_one($result->{_id});
-    diag explain $comment;
     is $comment->{_id}, $result->{_id}, "got a secret comment";
     is $comment->{body}, undef, "secret comment has no body";
     ok Id->check($comment->{secret_id}), "secret comment 'secret_id' field";
