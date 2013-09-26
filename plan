@@ -1,15 +1,8 @@
-* rendering
-lock icon (or chest?)
-render revealed
-
-* reveal on completion
-call comments->reveal on quests->close
-
-* check email notifications on posting a secret comment
+* email notifications on posting a secret comment
+- body
+- mailcatcher
 
 * posting secret comments
-support in /api
-pass 'secret' flag from frontend
 forbid "promise reward" comments on completed quests
 - on backend
 - on frontend
@@ -20,6 +13,10 @@ forbid "promise reward" comments on completed quests
 
 * notify about revealing
 send email on comments->reveal
+
+* make revealing more robust in case of DB or code failures
+
+* wait until quest is completed before showing quest-completed modal
 
 # DONE
 
@@ -38,3 +35,10 @@ dropdown:
 * posting secret comments
 support in /api
 pass 'secret' flag from frontend
+
+* rendering
+lock icon (or chest?)
+render revealed
+
+* reveal on completion
+call comments->reveal on quests->close
