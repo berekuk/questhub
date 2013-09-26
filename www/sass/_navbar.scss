@@ -83,12 +83,6 @@ nav.sticked {
         }
     }
 
-    @include breakpoint(B) {
-        .nav-realm-title, .menu-item-my-quests, .quest-add-nav-button, .menu-item-realms, .dropdown-toggle {
-//            font-weight: bold;
-        }
-    }
-
     .current-user-box {
 
         @include breakpoint(B) {
