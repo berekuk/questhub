@@ -138,13 +138,6 @@ define [
             tagLine = @$("[name=tags]").val()
             QuestModel::tagline2tags tagLine
 
-        initRealm: ->
-            id = @options.realm
-            unless id
-                userRealms = sharedModels.currentUser.get("realms")
-                id = userRealms[0] if userRealms and userRealms.length is 1
-            @updateRealm id
-
         setRealm: (id) ->
             @_realmId = id
             if id
@@ -167,10 +160,16 @@ define [
             unless sharedModels.realms.length
                 sharedModels.realms.fetch().success => @activate()
                 return
+
+            id = @options.realm
+            unless id
+                userRealms = sharedModels.currentUser.get("realms")
+                id = userRealms[0] if userRealms and userRealms.length is 1
+            @setRealm id
+
             super
 
         render: ->
-            @initRealm()
             super
             @setRealmList @getRealmId()
             @setRealmSelect @getRealmId()
