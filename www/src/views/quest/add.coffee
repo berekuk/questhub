@@ -9,6 +9,8 @@ define [
     class extends Common
         template: _.template(html)
 
+        activated: false # look below for activate() override
+
         activeMenuItem: -> "new-quest"
         pageTitle: -> "New quest"
 
@@ -34,7 +36,7 @@ define [
         initialize: ->
             super
             _.bindAll this
-            @render()
+            @activate()
 
         setRealmList: (realm) ->
             @$(".quest-add-realm-list ul li").removeClass("active")
@@ -161,11 +163,13 @@ define [
             realms: sharedModels.realms.toJSON()
             selectedRealm: @getRealmId()
 
-        render: ->
+        activate: ->
             unless sharedModels.realms.length
-                sharedModels.realms.fetch().success => @render()
+                sharedModels.realms.fetch().success => @activate()
                 return
+            super
 
+        render: ->
             @initRealm()
             super
             @setRealmList @getRealmId()
