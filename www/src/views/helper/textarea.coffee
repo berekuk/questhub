@@ -158,4 +158,5 @@ define [
 
         setRealm: (realm) ->
             @options.realm = realm
+            @md().setRealm(realm)
             @updatePreview()

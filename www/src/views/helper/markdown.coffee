@@ -14,6 +14,10 @@ define [
             @$("input[type=checkbox]:not(:checked)").after('<i class="md-task-icon icon-check-empty"></i>')
             @renderSyncing() if @syncing
 
+        # doesn't re-render
+        setRealm: (id) ->
+            @options.realm = id
+
         setText: (text) ->
             @options.text = text
             @render()
