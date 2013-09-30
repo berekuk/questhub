@@ -3,7 +3,7 @@ requirejs.config
         backbone: "vendors/backbone"
         underscore: "vendors/underscore"
         jquery: "vendors/jquery-1.9.1"
-        "jquery.autosize": "vendors/autosize/jquery.autosize"
+        "jquery.autosize": "vendors/jquery.autosize"
         "jquery.timeago": "vendors/jquery.timeago"
         "jquery.typeahead": "vendors/typeahead"
         "jquery.easing": "vendors/jquery.easing.1.3"
