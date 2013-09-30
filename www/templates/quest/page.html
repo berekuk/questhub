@@ -14,20 +14,20 @@
       <% if (my) { %> <!-- quest belongs to the current user -->
         <% if (status === 'open') { %>
 
-        <button class="complete btn btn-primary" data-toggle="tooltip" data-placement="right" title="Claim&nbsp;your&nbsp;points!">
-          <i class="icon-check"></i>
-          Complete
-        </button>
+          <button class="complete btn btn-primary" data-toggle="tooltip" data-placement="right" title="Claim&nbsp;your&nbsp;points!">
+            <i class="icon-check"></i>
+            Complete
+          </button>
 
-        <button class="leave btn btn-default" data-toggle="tooltip" data-placement="right" title="Leave&nbsp;the&nbsp;quest&nbsp;to&nbsp;the&nbsp;others. Maybe&nbsp;someone&nbsp;else&nbsp;will&nbsp;do&nbsp;it&nbsp;for&nbsp;you.">
-          <i class="icon-minus"></i>
-          Leave
-        </button>
+          <button class="leave btn btn-default" data-toggle="tooltip" data-placement="right" title="Leave&nbsp;the&nbsp;quest&nbsp;to&nbsp;the&nbsp;others. Maybe&nbsp;someone&nbsp;else&nbsp;will&nbsp;do&nbsp;it&nbsp;for&nbsp;you.">
+            <i class="icon-minus"></i>
+            Leave
+          </button>
 
-        <button class="abandon btn btn-default" data-toggle="tooltip" data-placement="right" title="This&nbsp;will&nbsp;never&nbsp;happen. Let's&nbsp;just&nbsp;forget&nbsp;about&nbsp;it&nbsp;and&nbsp;move&nbsp;on.">
-          <i class="icon-eject"></i>
-          Abandon
-        </button>
+          <button class="abandon btn btn-default" data-toggle="tooltip" data-placement="right" title="This&nbsp;will&nbsp;never&nbsp;happen. Let's&nbsp;just&nbsp;forget&nbsp;about&nbsp;it&nbsp;and&nbsp;move&nbsp;on.">
+            <i class="icon-eject"></i>
+            Abandon
+          </button>
 
         <% } else if (status === 'closed') { %>
 
@@ -44,6 +44,12 @@
           </button>
 
         <% } %>
+
+        <button class="clone btn btn-default">
+          <i class="icon-question"></i>
+          Clone
+        </button>
+
       <% } else { %>
         <!-- watch, like -->
         <% if (meGusta) { %>

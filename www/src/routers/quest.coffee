@@ -9,6 +9,7 @@ define [
     class extends Common
         routes:
             "quest/add": "questAdd"
+            "quest/clone/:id": "questClone"
             "realm/:realm/quest/add": "questAdd"
             "quest/:id": "questPage"
             "realm/:realm/quest/:id": "realmQuestPage"
@@ -71,16 +72,28 @@ define [
         anchorStencilPage: (realm, id, cid) ->
             @stencilPage id, 'comments', { anchor: cid }
 
-        questAdd: (realm) ->
+        questAdd: (realm, cloned_id) ->
             unless currentUser.get("registered")
                 @navigate "/",
                     trigger: true
                     replace: true
                 return
 
-            if realm
-                # we'd have to update url when realm is changed in quest-add dialog otherwise
-                Backbone.history.navigate "/quest/add", replace: true
+            options = realm: realm
 
-            view = new QuestAdd(realm: realm)
-            @appView.setPageView view
+            go = =>
+                if realm or cloned_id
+                    # we'd have to update url when realm is changed in quest-add dialog otherwise
+                    Backbone.history.navigate "/quest/add", replace: true
+                view = new QuestAdd(options)
+                @appView.setPageView view
+
+            if cloned_id
+                model = new QuestModel _id: cloned_id
+                options.cloned_from = model
+                model.fetch success: go
+            else
+                go()
+
+        questClone: (cloned_id) ->
+            @questAdd(undefined, cloned_id)

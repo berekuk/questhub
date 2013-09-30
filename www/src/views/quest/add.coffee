@@ -16,6 +16,7 @@ define [
 
         events:
             "click ._go": "submit"
+            "click .rerender": "render" # FIXME - temporary debug button
             "click ._cancel": "close"
             "click .quest-add-close": "close"
             "keyup [name=name]": "nameEdit"
@@ -153,15 +154,25 @@ define [
             @description().setRealm(id)
 
         serialize: ->
-            realms: sharedModels.realms.toJSON()
-            selectedRealm: @getRealmId()
+            params = super
+            params.realms = sharedModels.realms.toJSON()
+            params.selectedRealm = @getRealmId()
+            params
 
         activate: ->
             unless sharedModels.realms.length
                 sharedModels.realms.fetch().success => @activate()
                 return
 
-            id = @options.realm
+            @model = new QuestModel()
+            if @options.cloned_from
+                @model.set
+                    name: @options.cloned_from.get("name")
+                    description: @options.cloned_from.get("description")
+                    tags: @options.cloned_from.get("tags")
+                    realm: @options.cloned_from.get("realm")
+
+            id = @model.get("realm") || @options.realm
             unless id
                 userRealms = sharedModels.currentUser.get("realms")
                 id = userRealms[0] if userRealms and userRealms.length is 1
@@ -169,8 +180,17 @@ define [
 
             super
 
+        form2model: ->
+            @model.set
+                name: @getName()
+                realm: @getRealmId()
+                description: @description().value()
+                tags: @getTags()
+
         render: ->
+            @form2model() if @rendered # don't want to lose data on accidental re-render
             super
+            @rendered = true
             @setRealmList @getRealmId()
             @setRealmSelect @getRealmId()
 
@@ -179,7 +199,7 @@ define [
             @submitted = false
             @validate()
 
-            @description().reveal ""
+            @description().reveal @model.get("description") || ""
             window.setTimeout =>
                 @$("[name=name]").focus()
             , 100
@@ -187,17 +207,13 @@ define [
 
         submit: ->
             return unless @enabled
-            model_params =
-                name: @getName()
-                realm: @getRealmId()
 
-            description = @description().value()
-            model_params.description = description if description
-            tags = @getTags()
-            model_params.tags = tags if tags
-            model = new QuestModel()
-            model.save model_params,
-                success: @onSuccess
+            @form2model()
+
+            @model.save {},
+                success: =>
+                    Backbone.trigger "pp:quest-add", @model
+                    @close()
 
             ga "send", "event", "quest", "add"
             mixpanel.track "add quest"
@@ -207,10 +223,6 @@ define [
 
         checkEnter: (e) ->
             @submit() if e.keyCode is 13
-
-        onSuccess: (model) ->
-            Backbone.trigger "pp:quest-add", model
-            @close()
 
         close: ->
             Backbone.history.navigate "/", trigger: true, replace: true

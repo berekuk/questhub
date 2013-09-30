@@ -22,6 +22,7 @@ define [
             "keyup #inputInvitee": "inviteAction"
             "click .uninvite": "uninvite"
             "click .join": "join"
+            "click .clone": "clone"
             "click .like": -> @model.like()
             "click .unlike": -> @model.unlike()
             "click .watch": -> @model.act "watch"
@@ -99,6 +100,9 @@ define [
         resurrect: -> @model.resurrect()
         leave: -> @model.leave()
         join: -> @model.join()
+
+        clone: ->
+            Backbone.history.navigate "/quest/clone/#{ @model.id }", trigger: true
 
         serialize: ->
             params = super

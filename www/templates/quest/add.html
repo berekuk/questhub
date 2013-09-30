@@ -29,12 +29,13 @@
         <% }) %>
       </select>
     </div>
+    <button class="rerender btn btn-default"><i class="icon-refresh"></i></button> <!-- FIXME - temporary debug button -->
     </header>
 
     <div class="well clearfix quest-add-form">
       <div class="form-row">
         <label><small class="muted">Write a short description of the task here.</small></label>
-        <input name="name" type="text" class="input-large" placeholder="What's your next goal?">
+        <input name="name" type="text" class="input-large" placeholder="What's your next goal?" value="<%- name %>">
       </div>
 
       <div class="form-row">
@@ -45,7 +46,7 @@
       <div class="form-row">
         <div class="quest-tags-edit control-group">
           <label><small class="muted">Tags are optional. Enter them comma-separated here (for example: "bug,dancer"):</small></label>
-          <input name="tags" type="text" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual">
+          <input name="tags" type="text" data-placement="top" data-title="tags must be alphanumerical" data-animation="false" data-trigger="manual" value="<%- tags.join(', ') %>">
         </div>
       </div>
 
