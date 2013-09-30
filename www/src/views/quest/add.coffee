@@ -176,7 +176,6 @@ define [
             @submitted = false
             @validate()
 
-            @$(".quest-add-backdrop").addClass "quest-add-backdrop-fade"
             @description().reveal ""
             window.setTimeout =>
                 @$("[name=name]").focus()
