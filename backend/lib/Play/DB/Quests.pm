@@ -330,6 +330,7 @@ sub add {
             author => $quest->{author},
             type => 'clone',
             cloned_to => $quest->{_id},
+            sage => 1,
         });
     }
 

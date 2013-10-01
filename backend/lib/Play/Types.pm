@@ -16,7 +16,7 @@ use Type::Library
         NewsFeedTab
     );
 use Type::Utils;
-use Types::Standard qw( Str StrMatch Dict Int Optional );
+use Types::Standard qw( Str StrMatch Dict Int Optional Bool );
 
 declare Login, as StrMatch[ qr/^\w{1,16}$/ ];
 declare Realm, as StrMatch[ qr/^\w{1,16}$/ ];
@@ -75,6 +75,7 @@ declare CommentParams,
             author => Login,
             type => enum(['clone']),
             cloned_to => Id,
+            sage => Bool, # TODO - allow saging for all comments?
         ]
     );
 

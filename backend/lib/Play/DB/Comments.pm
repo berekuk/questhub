@@ -76,16 +76,17 @@ sub add {
     if ($params->{entity} eq 'quest') {
         $quest = db->quests->get($params->{eid}) or die "quest '$params->{eid}' not found";
         $realm = $quest->{realm};
-        db->quests->bump($params->{eid});
+        db->quests->bump($params->{eid}) unless $params->{sage};
     }
     elsif ($params->{entity} eq 'stencil') {
         my $stencil = db->stencils->get($params->{eid}) or die "stencil '$params->{eid}' not found";
         $realm = $stencil->{realm};
-        db->stencils->bump($params->{eid});
+        db->stencils->bump($params->{eid}) unless $params->{sage};
     }
     else {
         die "Unknown entity '$params->{entity}'";
     }
+    delete $params->{sage};
 
     if ($params->{type} and $params->{type} eq 'secret') {
         die "Only quests support secret comments" unless $params->{entity} eq 'quest';
