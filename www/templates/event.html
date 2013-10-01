@@ -1,14 +1,27 @@
 <article class="event well <%- 'event-type-' + type %> <%- obj.comment ? 'comment-type-' + obj.comment.type : '' %>">
   <header>
+    <% var _unlocked = (obj.comment && comment.type == 'secret' && comment.body && comment.body.length && !comment.secret_id) %>
 
     <% if (type == 'add-quest') { %>
       <i class="icon-plus"></i>
       <%= partial.user({ realm: realm, login: author }) %> started a new quest:
 
-    <% } else if (type == 'add-comment' && (comment.type == undefined || comment.type == 'text')) { %>
-      <i class="icon-comment"></i>
+    <% } else if (type == 'add-comment' && (comment.type == undefined || comment.type == 'text' || comment.type == 'secret')) { %>
+      <% if (comment.type == 'secret') { %>
+        <i class="icon-<%- _unlocked ? 'trophy' : 'lock' %>"></i>
+      <% } else { %>
+        <i class="icon-comment"></i>
+      <% } %>
+
       <%= partial.user({ realm: realm, login: author }) %>
-      commented on
+
+      <% if (comment.type == 'secret') { %>
+        left a secret comment
+      <% } else { %>
+        commented
+      <% } %>
+
+      on
       <% if (comment.entity == 'quest' && quest.team && quest.team.length > 0) { %>
         <%= partial.user({ realm: realm, login: _.first(quest.team) }) %>'s quest:
       <% } else if (comment.entity == 'quest') { %>
@@ -46,6 +59,10 @@
     <% } else if (type == 'add-comment' && comment.type == 'join') { %>
       <i class="icon-signin"></i>
       <%= partial.user({ realm: realm, login: author }) %> joined a quest:
+
+    <% } else if (type == 'add-comment' && comment.type == 'clone') { %>
+      <i class="icon-signin"></i>
+      <%= partial.user({ realm: realm, login: author }) %> cloned a quest:
 
     <% } else if (type == 'add-user') { %>
       <i class="icon-user"></i>
@@ -93,15 +110,26 @@
     <% } %>
   <% } %>
 
-  <% if (obj.comment && (comment.type == undefined || comment.type == 'text')) { %>
+  <% if (obj.comment && (comment.type == undefined || comment.type == 'text' || (comment.type == 'secret' && _unlocked))) { %>
     <div class="widetext md">
       <%= partial.markdown(comment.body, realm) %>
     </div>
   <% } %>
+  <% if (obj.comment && comment.type == 'secret' && !_unlocked) { %>
+    <div class="widetext muted">
+      This comment will be revealed on quest completion.
+    </div>
+  <% } %>
 
   <% if (type == 'add-comment' && comment.type == 'close') { %>
-    <div class="event-quest-reward">
+    <div class="event-content">
       <%= partial.reward_list({ quest: quest, partial: partial }) %>
+    </div>
+  <% } %>
+
+  <% if (type == 'add-comment' && comment.type == 'clone') { %>
+    <div class="event-content">
+      Cloned as: <%= partial.quest_link(comment.cloned_to_object) %>
     </div>
   <% } %>
 
