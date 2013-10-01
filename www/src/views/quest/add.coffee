@@ -16,7 +16,6 @@ define [
 
         events:
             "click ._go": "submit"
-            "click .rerender": "render" # FIXME - temporary debug button
             "click ._cancel": "close"
             "click .quest-add-close": "close"
             "keyup [name=name]": "nameEdit"
