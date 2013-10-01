@@ -823,4 +823,32 @@ sub reveal_comments_on_close :Tests {
     is $comments->[1]->{body}, 'reward';
 }
 
+sub clone :Tests {
+    db->users->add({ login => $_ }) for qw( foo bar );
+    my $first = db->quests->add({
+        name => 'Original',
+        user => 'foo',
+        status => 'open',
+        realm => 'europe',
+    });
+    my $second = db->quests->add({
+        name => 'Clone',
+        user => 'bar',
+        status => 'open',
+        realm => 'europe',
+        cloned_from => $first->{_id},
+    });
+
+    my $comments = db->comments->list('quest', $first->{_id});
+    cmp_deeply $comments, [
+        superhashof({
+            type => 'clone',
+            cloned_to => $second->{_id},
+            cloned_to_object => superhashof({
+                name => 'Clone',
+            }),
+        })
+    ];
+}
+
 __PACKAGE__->new->runtests;

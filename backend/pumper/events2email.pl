@@ -184,6 +184,45 @@ sub process_close_quest {
     }
 }
 
+sub process_clone_comment {
+    my $self = shift;
+    my ($event) = @_;
+
+    my $quest = $event->{quest};
+
+    my $recipient = $event->{comment}{invitee};
+    my @recipients;
+    {
+        my $er = Play::EmailRecipients->new;
+        $er->add_logins($quest->{team}, 'team');
+        $er->add_logins($quest->{watchers}, 'watcher') if $quest->{watchers};
+        $er->exclude($event->{author});
+
+        @recipients = $er->get_all;
+    }
+
+    for my $recipient (@recipients) {
+        my $email_body = qq[
+            <p>
+            <a href="] . Play::WWW->player_url($event->{author}) . qq[">$event->{author}</a>
+            cloned a quest you're watching: <a href="] . _object_url($quest, 'quest') .qq[">$quest->{name}</a>.
+            </p>
+            <p>
+            Cloned quest: <a href="] . _object_url($event->{comment}{cloned_to_object}, 'quest') .qq[">$event->{comment}{cloned_to_object}{name}</a>.
+            </p>
+        ];
+        db->events->email({
+            address => $recipient->{email},
+            subject => "$event->{author} cloned a quest: '$quest->{name}'",
+            body => $email_body,
+            notify_field => $recipient->{notify_field},
+            login => $recipient->{login},
+        });
+        $self->add_stat('emails sent');
+    }
+}
+
+
 sub process_invite_quest {
     my $self = shift;
     my ($event) = @_;
@@ -235,6 +274,9 @@ sub run_once {
             }
             elsif ($event->{comment}{type} eq 'secret') {
                 $self->process_secret_comment($event);
+            }
+            elsif ($event->{comment}{type} eq 'clone') {
+                $self->process_clone_comment($event);
             }
             # TODO - send emails on join, leave and other comment types
         }

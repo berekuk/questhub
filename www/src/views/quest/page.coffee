@@ -1,22 +1,23 @@
 define [
     "underscore"
+    "bootbox"
     "views/proto/common"
     "views/quest/completed"
     "views/realm/submenu", "views/quest/checkins", "views/quest/big", "views/comment/collection"
     "models/comment-collection", "models/current-user", "models/shared-models"
     "text!templates/quest/page.html"
     "jquery.typeahead"
-], (_, Common, QuestCompleted, RealmSubmenu, QuestCheckins, QuestBig, CommentCollection, CommentCollectionModel, currentUser, sharedModels, html) ->
+], (_, bootbox, Common, QuestCompleted, RealmSubmenu, QuestCheckins, QuestBig, CommentCollection, CommentCollectionModel, currentUser, sharedModels, html) ->
     class extends Common
         activated: false
         template: _.template(html)
         events:
-            "click .quest-page-action .complete": "close"
-            "click .quest-page-action .abandon": "abandon"
-            "click .quest-page-action .leave": "leave"
-            "click .quest-page-action .resurrect": "resurrect"
-            "click .quest-page-action .reopen": "reopen"
-            "click .invite": "inviteDialog"
+            "click .js-quest-page-action .complete": "close"
+            "click .js-quest-page-action .drop-out": "dropOut"
+            "click .js-quest-page-action .resurrect": "resurrect"
+            "click .js-quest-page-action .reopen": "reopen"
+            "click .js-quest-page-action .clone": "clone"
+            "click .js-quest-page-action .invite": "inviteDialog"
             "click .invite-cancel": "inviteActionCancel"
             "click .invite-send": "inviteActionSend"
             "keyup #inputInvitee": "inviteAction"
@@ -95,10 +96,31 @@ define [
 
         reopen: -> @model.reopen()
 
-        abandon: -> @model.abandon()
+        dropOut: ->
+            if @model.get("team").length > 1
+                message = "Would you like to leave the quest's team, or abandon it entirely?"
+            else
+                message = "Would you like to leave the quest open for other to pick up, or abandon it entirely?"
+
+            bootbox.dialog
+                title: "Leave or Abandon?"
+                message: message
+                animate: false
+                buttons:
+                    "Leave":
+                        label: """<i class="icon-signout"></i> Leave"""
+                        className: "btn-default"
+                        callback: => @model.leave()
+                    "Abandon":
+                        label: """<i class="icon-eject"></i> Abandon"""
+                        className: "btn-default"
+                        callback: => @model.abandon()
+
         resurrect: -> @model.resurrect()
-        leave: -> @model.leave()
         join: -> @model.join()
+
+        clone: ->
+            Backbone.history.navigate "/quest/clone/#{ @model.id }", trigger: true
 
         serialize: ->
             params = super

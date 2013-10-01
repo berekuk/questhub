@@ -9,11 +9,14 @@ define [
     class extends Common
         template: _.template(html)
 
+        activated: false # look below for activate() override
+
         activeMenuItem: -> "new-quest"
         pageTitle: -> "New quest"
 
         events:
             "click ._go": "submit"
+            "click .rerender": "render" # FIXME - temporary debug button
             "click ._cancel": "close"
             "click .quest-add-close": "close"
             "keyup [name=name]": "nameEdit"
@@ -34,7 +37,7 @@ define [
         initialize: ->
             super
             _.bindAll this
-            @render()
+            @activate()
 
         setRealmList: (realm) ->
             @$(".quest-add-realm-list ul li").removeClass("active")
@@ -136,13 +139,6 @@ define [
             tagLine = @$("[name=tags]").val()
             QuestModel::tagline2tags tagLine
 
-        initRealm: ->
-            id = @options.realm
-            unless id
-                userRealms = sharedModels.currentUser.get("realms")
-                id = userRealms[0] if userRealms and userRealms.length is 1
-            @updateRealm id
-
         setRealm: (id) ->
             @_realmId = id
             if id
@@ -158,16 +154,44 @@ define [
             @description().setRealm(id)
 
         serialize: ->
-            realms: sharedModels.realms.toJSON()
-            selectedRealm: @getRealmId()
+            params = super
+            params.realms = sharedModels.realms.toJSON()
+            params.selectedRealm = @getRealmId()
+            params
 
-        render: ->
+        activate: ->
             unless sharedModels.realms.length
-                sharedModels.realms.fetch().success => @render()
+                sharedModels.realms.fetch().success => @activate()
                 return
 
-            @initRealm()
+            @model = new QuestModel()
+            if @options.cloned_from
+                @model.set
+                    name: @options.cloned_from.get("name")
+                    description: @options.cloned_from.get("description")
+                    tags: @options.cloned_from.get("tags")
+                    realm: @options.cloned_from.get("realm")
+                    cloned_from: @options.cloned_from.id
+
+            id = @model.get("realm") || @options.realm
+            unless id
+                userRealms = sharedModels.currentUser.get("realms")
+                id = userRealms[0] if userRealms and userRealms.length is 1
+            @setRealm id
+
             super
+
+        form2model: ->
+            @model.set
+                name: @getName()
+                realm: @getRealmId()
+                description: @description().value()
+                tags: @getTags()
+
+        render: ->
+            @form2model() if @rendered # don't want to lose data on accidental re-render
+            super
+            @rendered = true
             @setRealmList @getRealmId()
             @setRealmSelect @getRealmId()
 
@@ -176,8 +200,7 @@ define [
             @submitted = false
             @validate()
 
-            @$(".quest-add-backdrop").addClass "quest-add-backdrop-fade"
-            @description().reveal ""
+            @description().reveal @model.get("description") || ""
             window.setTimeout =>
                 @$("[name=name]").focus()
             , 100
@@ -185,17 +208,13 @@ define [
 
         submit: ->
             return unless @enabled
-            model_params =
-                name: @getName()
-                realm: @getRealmId()
 
-            description = @description().value()
-            model_params.description = description if description
-            tags = @getTags()
-            model_params.tags = tags if tags
-            model = new QuestModel()
-            model.save model_params,
-                success: @onSuccess
+            @form2model()
+
+            @model.save {},
+                success: =>
+                    Backbone.trigger "pp:quest-add", @model
+                    @close()
 
             ga "send", "event", "quest", "add"
             mixpanel.track "add quest"
@@ -205,10 +224,6 @@ define [
 
         checkEnter: (e) ->
             @submit() if e.keyCode is 13
-
-        onSuccess: (model) ->
-            Backbone.trigger "pp:quest-add", model
-            @close()
 
         close: ->
             Backbone.history.navigate "/", trigger: true, replace: true

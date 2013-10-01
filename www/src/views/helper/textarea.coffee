@@ -42,7 +42,7 @@ define [
             @$("textarea").val(val)
             cachedText[@cid] = val
             @updatePreview()
-            @$("textarea").trigger "autosize"
+            @$("textarea").trigger "autosize.resize"
             return
 
         hide: ->
@@ -158,4 +158,5 @@ define [
 
         setRealm: (realm) ->
             @options.realm = realm
+            @md().setRealm(realm)
             @updatePreview()

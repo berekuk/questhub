@@ -1,4 +1,4 @@
-<article class="<%- currentUser ? 'quest-page-registered' : 'quest-page-unregistered' %>">
+<article class="quest-page <%- currentUser ? 'quest-page-registered' : 'quest-page-unregistered' %>">
 
 <aside class="sidebar quest-page-sidebar">
 
@@ -10,24 +10,18 @@
   </div>
 
   <% if (currentUser) { %>
-    <div class="quest-page-action">
+    <div class="js-quest-page-action quest-page-action">
       <% if (my) { %> <!-- quest belongs to the current user -->
         <% if (status === 'open') { %>
+            <button class="complete btn btn-primary" data-toggle="tooltip" data-placement="right" title="Claim&nbsp;your&nbsp;points!">
+              <i class="icon-check"></i>
+              Complete
+            </button>
 
-        <button class="complete btn btn-primary" data-toggle="tooltip" data-placement="right" title="Claim&nbsp;your&nbsp;points!">
-          <i class="icon-check"></i>
-          Complete
-        </button>
-
-        <button class="leave btn btn-default" data-toggle="tooltip" data-placement="right" title="Leave&nbsp;the&nbsp;quest&nbsp;to&nbsp;the&nbsp;others. Maybe&nbsp;someone&nbsp;else&nbsp;will&nbsp;do&nbsp;it&nbsp;for&nbsp;you.">
-          <i class="icon-minus"></i>
-          Leave
-        </button>
-
-        <button class="abandon btn btn-default" data-toggle="tooltip" data-placement="right" title="This&nbsp;will&nbsp;never&nbsp;happen. Let's&nbsp;just&nbsp;forget&nbsp;about&nbsp;it&nbsp;and&nbsp;move&nbsp;on.">
-          <i class="icon-eject"></i>
-          Abandon
-        </button>
+          <button class="drop-out btn btn-default" data-toggle="tooltip" data-placement="right" title="Give&nbsp;up&nbsp;on&nbsp;this&nbsp;quest.">
+            <i class="icon-eject"></i>
+            Drop out
+          </button>
 
         <% } else if (status === 'closed') { %>
 
@@ -44,6 +38,12 @@
           </button>
 
         <% } %>
+
+        <button class="clone btn btn-default" data-toggle="tooltip" data-placement="right" title="Create&nbsp;a&nbsp;new&nbsp;quest&nbsp;based&nbsp;on&nbsp;this&nbsp;one.">
+          <i class="icon-copy"></i>
+          Clone
+        </button>
+
       <% } else { %>
         <!-- watch, like -->
         <% if (meGusta) { %>

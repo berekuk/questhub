@@ -285,6 +285,7 @@ sub add {
         stencil => Optional[Id],
         base_points => Optional[Int],
         note => Optional[Str],
+        cloned_from => Optional[Id],
     ]);
     my ($params) = $check->(@_);
     $params->{status} //= 'open';
@@ -321,6 +322,17 @@ sub add {
     });
 
     db->realms->inc_quests($quest->{realm});
+
+    if ($params->{cloned_from}) {
+        db->comments->add({
+            entity => 'quest',
+            eid => $params->{cloned_from},
+            author => $quest->{author},
+            type => 'clone',
+            cloned_to => $quest->{_id},
+            sage => 1,
+        });
+    }
 
     return $quest;
 }
