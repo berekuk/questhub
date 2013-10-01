@@ -68,6 +68,13 @@ declare CommentParams,
             author => Login,
             type => enum([qw( invite )]),
             invitee => Login,
+        ] |
+        Dict[
+            entity => enum(['quest']),
+            eid => Id,
+            author => Login,
+            type => enum(['clone']),
+            cloned_to => Id,
         ]
     );
 

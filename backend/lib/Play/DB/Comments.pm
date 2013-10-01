@@ -36,6 +36,16 @@ sub _prepare_comment {
     $comment->{ts} = $comment->{_id}->get_time;
     $comment->{_id} = $comment->{_id}->to_string;
     $comment->{type} ||= 'text';
+
+    if ($comment->{type} eq 'clone') {
+        # quest could be deleted
+        eval {
+            $comment->{cloned_to_object} = db->quests->get($comment->{cloned_to});
+        };
+        if ($@) {
+            return;
+        }
+    }
     return $comment;
 }
 
@@ -119,7 +129,7 @@ sub list {
     })->sort({
         _id => 1
     })->all;
-    $self->_prepare_comment($_) for @comments;
+    @comments = map { $self->_prepare_comment($_) } @comments;
 
     return \@comments;
 }
@@ -138,7 +148,7 @@ sub get_one {
         _id => MongoDB::OID->new(value => $comment_id)
     });
     die "comment $comment_id not found" unless $comment;
-    $self->_prepare_comment($comment);
+    $comment = $self->_prepare_comment($comment) or die "Can't prepare the comment $comment_id";
     return $comment;
 }
 
@@ -159,7 +169,7 @@ sub bulk_get {
             ]
         }
     })->all;
-    $self->_prepare_comment($_) for @comments;
+    @comments = map { $self->_prepare_comment($_) } @comments;
 
     return {
         map {
