@@ -25,7 +25,7 @@
           <div class="body-sv"></div>
         </div>
       <% } else { %>
-        <div class="comment-content-special">
+      <div class="comment-content-special comment-content-type-<%- type %>">
         <% if (type == 'close') { %>
           <i class="icon-check"></i>
           <div>
@@ -71,6 +71,18 @@
             Hidden comment!
             <div>
               Complete this quest to reveal it.
+            </div>
+          </div>
+        <% } else if (type == 'clone') { %>
+          <i class="icon-copy"></i>
+          <div>
+            Quest cloned as:
+            <div>
+              <%= partial.quest_link({
+                realm: cloned_to_object.realm,
+                _id: cloned_to_object._id,
+                name: cloned_to_object.name
+              }) %>
             </div>
           </div>
         <% } else { %>

@@ -171,6 +171,7 @@ define [
                     description: @options.cloned_from.get("description")
                     tags: @options.cloned_from.get("tags")
                     realm: @options.cloned_from.get("realm")
+                    cloned_from: @options.cloned_from.id
 
             id = @model.get("realm") || @options.realm
             unless id

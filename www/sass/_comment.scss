@@ -87,6 +87,9 @@ textarea.comment-edit {
         vertical-align: middle;
     }
 }
+.comment-content-type-clone {
+    margin-bottom: 5px;
+}
 
 @include keyframes(flash) {
     0% { background-color: none; }
