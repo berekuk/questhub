@@ -79,6 +79,19 @@
         <title><% event.author %> joined a quest: <% event.quest.name | xml %></title>
         <% PROCESS quest_link %>
 
+    <% ELSIF event.type == 'add-comment' && event.comment.type == 'secret' %>
+        <title><% event.author %> posted a secret comment on: <% event.quest.name | xml %></title>
+        <% PROCESS quest_link %>
+
+    <% ELSIF event.type == 'add-comment' && event.comment.type == 'clone' %>
+        <title><% event.author %> cloned a quest: <% event.quest.name | xml %></title>
+        <% PROCESS quest_link %>
+        <content type="html">
+            <![CDATA[
+            Cloned as <a href="http://<% settings.hostport %>/realm/<% event.comment.cloned_to_object.realm %>/quest/<%= event.comment.cloned_to %>"><% event.comment.cloned_to_object.name %></a>
+            ]]>
+        </content>
+
     <% ELSIF event.type == 'invite-quest' || (event.type == 'add-comment' && event.comment.type == 'invite') %>
         <title><% event.author %> invited <% event.invitee || event.comment.invitee %> to work on a quest: <% event.quest.name | xml %></title>
         <% PROCESS quest_link %>
