@@ -41,7 +41,7 @@ post '/quest' => sub {
 
     # optional fields
     my $params = {
-        map { param($_) ? ($_ => param($_)) : () } qw/ tags description /,
+        map { param($_) ? ($_ => param($_)) : () } qw/ tags description cloned_from /,
     };
 
     # required fields

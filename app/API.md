@@ -143,6 +143,7 @@ Optional parameters:
 
 * `description`
 * `tags`
+* `cloned_from`
 
 ##### PUT /api/quest/{id}
 
