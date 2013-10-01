@@ -7,7 +7,7 @@
             'backbone': 'vendors/backbone',
             'underscore': 'vendors/underscore',
             'jquery': 'vendors/jquery-1.9.1',
-            'jquery.autosize': 'vendors/autosize/jquery.autosize',
+            'jquery.autosize': 'vendors/jquery.autosize',
             'jquery.timeago': 'vendors/jquery.timeago',
             'bootstrap': 'vendors/bootstrap/js/bootstrap',
             'bootbox': 'vendors/bootbox',
