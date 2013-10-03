@@ -28,3 +28,11 @@
 .md-syncing {
     float: right;
 }
+
+.md-task-stat {
+//    color: $dark-grey;
+    font-size: $small-font-size;
+}
+.md-task-stat-ready {
+    color: darken($blue-color, 25%);
+}

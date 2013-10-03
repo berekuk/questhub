@@ -20,4 +20,18 @@ define ["jquery", "vendors/pagedown/Markdown.Sanitizer"], ($, Markdown) ->
         el = $("<div>#{html}</div>")
         el.find("a[href^='/player/']").attr "class", "user-link"
         el.find("a[href^='/player/']").attr "class", "user-link"
+
+        # uncomment to enable task stats
+        # TODO - don't show stats in stencils
+        #tasks = el.find(".md-task")
+        #if tasks.length
+        #    totalTasks = tasks.length
+        #    checkedTasks = tasks.filter(":checked").length
+        #    if checkedTasks == totalTasks
+        #        allChecked = true
+        #    el.append("""
+        #        <div class="md-task-stat #{ if allChecked then "md-task-stat-ready" else "" }">
+        #            #{checkedTasks}/#{totalTasks} tasks done.
+        #        </div>
+        #    """)
         el.html()
