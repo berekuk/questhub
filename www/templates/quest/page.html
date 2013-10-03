@@ -39,11 +39,6 @@
 
         <% } %>
 
-        <button class="clone btn btn-default" data-toggle="tooltip" data-placement="right" title="Create&nbsp;a&nbsp;new&nbsp;quest&nbsp;based&nbsp;on&nbsp;this&nbsp;one.">
-          <i class="icon-copy"></i>
-          Clone
-        </button>
-
       <% } else { %>
         <!-- watch, like -->
         <% if (meGusta) { %>
@@ -75,6 +70,11 @@
         <% } %>
 
       <% } %>
+
+      <button class="clone btn btn-default" data-toggle="tooltip" data-placement="right" title="Create&nbsp;a&nbsp;new&nbsp;quest&nbsp;based&nbsp;on&nbsp;this&nbsp;one.">
+        <i class="icon-copy"></i>
+        Clone
+      </button>
 
       <% if (invited) { %>
       <span>You're invited! <button class="join btn btn-danger">Join this quest</button></span>
