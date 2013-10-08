@@ -857,19 +857,29 @@ sub search {
     state $check = compile(Dict[
         query => Str,
         limit => Optional[Int],
+        offset => Optional[Int],
     ]);
     my ($params) = $check->(@_);
-    $params->{limit} ||= 10;
+
+    my $mongo_limit = int($params->{limit}) || 100;
+    $mongo_limit += $params->{offset} if $params->{offset};
 
     # via http://grokbase.com/t/gg/mongodb-user/134t6phwsc/mongodb-perl-with-text-search#20130807jz6i25tf23v6ky5xq4szwlxtrm
     my $result = Play::Mongo->db->run_command([
         text => 'posts',
         search => $params->{query},
-        limit => $params->{limit},
+        limit => $mongo_limit,
+        filter => {
+            status => { '$ne' => 'deleted' },
+        },
     ]);
 
     my @items = map { $_->{obj} } @{ $result->{results} };
-    $_->{_id} = $_->{_id}->to_string for @items;
+    $self->prepare($_) for @items;
+
+    if ($params->{offset}) {
+        @items = splice @items, $params->{offset};
+    }
 
     return \@items;
 }
