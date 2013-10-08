@@ -38,6 +38,7 @@ sub ensure_indices {
     $posts_collection->ensure_index({ 'watchers' => 1 });
     $posts_collection->ensure_index({ 'realm' => 1 });
     $posts_collection->ensure_index({ 'stencil' => 1 });
+    $posts_collection->ensure_index({ 'name' => 'text', 'description' => 'text' });
 
     my $events_collection = Play::Mongo->db->get_collection('events');
     $events_collection->drop_indexes;
