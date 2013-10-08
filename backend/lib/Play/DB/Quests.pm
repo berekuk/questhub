@@ -852,4 +852,26 @@ sub move_to_realm {
     $self->_update_user_realms($quest);
 }
 
+sub search {
+    my $self = shift;
+    state $check = compile(Dict[
+        query => Str,
+        limit => Optional[Int],
+    ]);
+    my ($params) = $check->(@_);
+    $params->{limit} ||= 10;
+
+    # via http://grokbase.com/t/gg/mongodb-user/134t6phwsc/mongodb-perl-with-text-search#20130807jz6i25tf23v6ky5xq4szwlxtrm
+    my $result = Play::Mongo->db->run_command([
+        text => 'posts',
+        search => $params->{query},
+        limit => $params->{limit},
+    ]);
+
+    my @items = map { $_->{obj} } @{ $result->{results} };
+    $_->{_id} = $_->{_id}->to_string for @items;
+
+    return \@items;
+}
+
 1;
