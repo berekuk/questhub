@@ -331,6 +331,16 @@ Parameters:
 * `name`
 * `description`
 
+### Search
+
+##### GET /api/search
+
+Search quests.
+
+Parameters:
+
+* `q` - text query
+
 ### Other
 
 ##### GET /api/event
@@ -461,3 +471,5 @@ Event:
         quest: { ... },
         invitee: 'bar' # only for 'invite-quest' type
     }
+
+# vim: ft=markdown
