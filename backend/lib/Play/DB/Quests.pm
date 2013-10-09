@@ -871,6 +871,7 @@ sub search {
         limit => $mongo_limit,
         filter => {
             status => { '$ne' => 'deleted' },
+            entity => 'quest',
         },
     ]);
 
