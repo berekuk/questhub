@@ -341,6 +341,11 @@ Parameters:
 
 * `q` - text query
 
+Options:
+
+* `limit`
+* `offset`
+
 ### Other
 
 ##### GET /api/event

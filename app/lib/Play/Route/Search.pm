@@ -6,9 +6,14 @@ prefix '/api';
 use Play::DB qw(db);
 
 get '/search' => sub {
-    return db->quests->search({
+    my $params = {
         query => param('q'),
-    });
+    };
+
+    for (qw( limit offset )) {
+        $params->{$_} = param($_) if defined param($_);
+    }
+    return db->quests->search($params);
 };
 
 1;
