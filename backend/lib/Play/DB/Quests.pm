@@ -861,7 +861,7 @@ sub search {
     ]);
     my ($params) = $check->(@_);
 
-    my $mongo_limit = int($params->{limit}) || 100;
+    my $mongo_limit = int($params->{limit} || 100);
     $mongo_limit += $params->{offset} if $params->{offset};
 
     # via http://grokbase.com/t/gg/mongodb-user/134t6phwsc/mongodb-perl-with-text-search#20130807jz6i25tf23v6ky5xq4szwlxtrm
