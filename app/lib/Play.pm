@@ -10,6 +10,7 @@ use Play::Route::Comments;
 use Play::Route::Events;
 use Play::Route::Realms;
 use Play::Route::Feeds;
+use Play::Route::Search;
 
 use Play::Route::SEO;
 use Play::Route::Blog;

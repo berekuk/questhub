@@ -13,6 +13,10 @@ for p in %w{ mongodb mongodb-clients mongodb-dev mongodb-server }
     end
 end
 package 'mongodb-10gen'
+template "/etc/mongodb.conf" do
+  source "mongodb.conf.erb"
+  mode 0644
+end
 
 cpan_module 'Flux::File'
 cpan_module 'Flux::Format::JSON'

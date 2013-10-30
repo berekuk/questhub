@@ -25,10 +25,6 @@ nav.sticked {
         list-style-type: none;
     }
 
-    .nav-menu-separator {
-        color: $dark-grey;
-    }
-
     @mixin nav-underline($color) {
         border-bottom: {
             color: $color;
@@ -98,6 +94,30 @@ nav.sticked {
                     text-decoration: none;
                 }
             }
+        }
+    }
+}
+
+.navbar-search {
+    float: right;
+    position: relative;
+    top: 4px;
+    input {
+        margin-bottom: 0;
+        border-radius: 20px;
+        height: 15px;
+        line-height: 14px;
+        max-width: 140px;
+    }
+    .navbar-search-icon {
+        position: relative;
+        left: -24px;
+        font-size: 13px;
+        color: $dark-grey;
+        cursor: pointer;
+        &:hover {
+            text-decoration: none;
+            color: $text-color;
         }
     }
 }

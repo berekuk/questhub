@@ -1,0 +1,7 @@
+.search-page {
+    .sidebar {
+        @include bg-header;
+        text-align: right;
+        line-height: 28px;
+    }
+}

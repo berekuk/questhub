@@ -851,4 +851,47 @@ sub clone :Tests {
     ];
 }
 
+sub search :Tests {
+    db->users->add({ login => 'reggie' });
+    db->quests->add({
+        name => 'Word. Adjective.',
+        description => 'first half of first line',
+        user => 'reggie',
+        status => 'open',
+        realm => 'europe',
+    });
+    db->quests->add({
+        name => 'Pronoun. Adverb.',
+        description => 'second half of first line',
+        user => 'reggie',
+        status => 'open',
+        realm => 'europe',
+    });
+
+    cmp_deeply
+        db->quests->search({ query => 'word' }),
+        [
+            superhashof({
+                name => 'Word. Adjective.'
+            })
+        ],
+        'simple search';
+
+    cmp_deeply
+        db->quests->search({ query => 'words' }),
+        [ignore],
+        'stemming';
+
+    cmp_deeply
+        db->quests->search({ query => 'abracadabra' }),
+        [],
+        'empty search results';
+
+    cmp_deeply
+        db->quests->search({ query => 'line' }),
+        [ignore, ignore],
+        'multiple results';
+
+}
+
 __PACKAGE__->new->runtests;

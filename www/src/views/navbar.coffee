@@ -6,7 +6,10 @@ define [
     "text!templates/navbar.html"
 ], ($, Backbone, Common, currentUserModel, sharedModels, CurrentUser, QuestAdd, html) ->
     class extends Common
-        template: _.template(html)
+        template: _.template html
+
+        events:
+            "keyup [name=search]": "keyPressSearch"
 
         initialize: ->
             super
@@ -67,3 +70,10 @@ define [
 
         setActive: (selector) ->
             @active = selector # don't render - views/app will call render() itself soon
+
+        keyPressSearch: (e) ->
+            @doSearch() if e.keyCode is 13
+
+        doSearch: ->
+            Backbone.history.navigate "/search?q=" + encodeURIComponent(@$("[name=search]").val()),
+                trigger: true

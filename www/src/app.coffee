@@ -1,12 +1,12 @@
 # move these into appropriate modules
 require [
     "jquery",
-    "routers/main", "routers/user", "routers/realm", "routers/quest", "routers/about", "routers/legacy", "routers/not-found"
+    "routers/main", "routers/user", "routers/realm", "routers/quest", "routers/about", "routers/legacy", "routers/not-found", "routers/search"
     "views/app",
     "models/current-user",
     "views/helper/textarea"
     "bootstrap", "jquery.autosize", "jquery.timeago", "jquery.easing"
-], ($, MainRouter, UserRouter, RealmRouter, QuestRouter, AboutRouter, LegacyRouter, NotFoundRouter, App, currentUser, TextArea) ->
+], ($, MainRouter, UserRouter, RealmRouter, QuestRouter, AboutRouter, LegacyRouter, NotFoundRouter, SearchRouter, App, currentUser, TextArea) ->
     appView = new App(el: $("#wrap"))
     appView.render()
     $(document).ajaxError ->
@@ -19,6 +19,7 @@ require [
     new QuestRouter(appView)
     new UserRouter(appView)
     new AboutRouter(appView)
+    new SearchRouter(appView)
     new LegacyRouter(appView)
 
     Backbone.on "pp:notify", (type, message) ->
