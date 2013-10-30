@@ -24,8 +24,10 @@ define [
         serialize: ->
             params = super
             params.gotTwitter = Boolean(@user.get("twitter"))
+            params.points = parseInt(params.points)
             params.totalPoints = @user.get("rp")[@model.get("realm")]
             params.totalPoints ?= 0
+            params.totalPoints = parseInt(params.totalPoints)
             params.totalPoints += params.points
             params
 
