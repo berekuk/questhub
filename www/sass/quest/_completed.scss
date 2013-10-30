@@ -25,6 +25,7 @@
 .quest-completed-bar-animated {
     ._bar {
         background-color: $mat;
+        overflow: visible !important; // hacking jquery's overflow: hidden behavior
     }
 }
 
