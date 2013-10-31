@@ -102,19 +102,21 @@ nav.sticked {
     float: right;
     position: relative;
     top: 4px;
+    margin-right: 4px;
     input {
         margin-bottom: 0;
         padding-left: 8px;
         padding-right: 21px;
         border-radius: 20px;
-        height: 15px;
+        height: 13px;
         line-height: 14px;
         max-width: 140px;
     }
     .navbar-search-icon {
-        position: relative;
-        left: -24px;
-        font-size: 13px;
+        position: absolute;
+        top: 1px;
+        right: 8px;
+        font-size: 12px;
         color: $dark-grey;
         cursor: pointer;
         &:hover {
