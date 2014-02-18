@@ -18,8 +18,9 @@ use autodie qw(:all);
 sub main {
     GetOptions() or pod2usage(2);
 
-    pod2usage(2) unless @ARGV == 0;
-    my $name = 'questhub.io';
+    pod2usage(2) unless @ARGV == 0 or @ARGV == 1;
+    my $name = shift @ARGV;
+    $name ||= 'questhub.io';
 
     system(qq{ssh ubuntu\@$name "sh -c 'rm -rf dump && rm -f backup.tar.gz && mongodump -d play && tar cfvz backup.tar.gz dump'"});
     system(qq{scp ubuntu\@$name:backup.tar.gz .});
