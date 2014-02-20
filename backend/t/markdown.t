@@ -41,6 +41,9 @@ sub cpan_module :Tests {
         is
             markdown('cpan:Moose, `and maybe cpan:Mouse`, and cpan:Moo.'),
             qq[<a href="http://metacpan.org/module/Moose">Moose</a>, <code>and maybe cpan:Mouse</code>, and <a href="http://metacpan.org/module/Moo">Moo</a>.\n];
+	is
+	    markdown ('Task-BeLike-MELO - pull request'),
+	    qq[<a href="http://metacpan.org/release/Task-BeLike-MELO">Task-BeLike-MELO</a> - pull request];
     }
 }
 
