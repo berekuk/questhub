@@ -25,7 +25,7 @@
       <li>
         <% if (o.rss) { %>
           <div class="news-feed-rss">
-            <a href="http://<%= window.location.host %>/api/event/atom?for=<%- login %>" class="btn btn-mini btn-rss"><i class="icon-rss"></i> RSS</a>
+            <a href="<%= window.location.protocol %>//<%= window.location.host %>/api/event/atom?for=<%- login %>" class="btn btn-mini btn-rss"><i class="icon-rss"></i> RSS</a>
           </div>
         <% } %>
         <a href="#" data-tab="<%- tab %>" data-toggle="tooltip" title="<%- o.tooltip %>" data-placement="top" data-delay="100">
