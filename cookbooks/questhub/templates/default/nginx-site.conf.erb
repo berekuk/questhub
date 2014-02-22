@@ -5,11 +5,28 @@ log_format qh_log_format<%= @dev ? '_dev' : '' %>
     '$request_time $upstream_response_time $pipe';
 
 server {
-  listen       <%= @port %>;
+
+# test
 
   <% if @dev %>
+  listen       <%= @port %>;
   server_name localhost;
+  <% elsif @ssl %>
+  listen 443 ssl;
+  server_name questhub.io;
+
+  ssl_prefer_server_ciphers on;
+  ssl_protocols             TLSv1 TLSv1.1 TLSv1.2;
+  ssl_stapling              on;
+  ssl_stapling_verify       on;
+  ssl_trusted_certificate   /data/ssl/PositiveSSLCA2.crt;
+
+  ssl_dhparam               /data/ssl/dhparam_4096.pem;
+
+  ssl_certificate           /data/ssl/questhub_io.crt;
+  ssl_certificate_key       /data/ssl/questhub.key;
   <% else %>
+  listen       <%= @port %>;
   server_name questhub.io;
   <% end %>
 
@@ -68,9 +85,16 @@ server {
 
 <% unless @dev %>
 server {
+    listen 80;
+    server_name questhub.io;
+
+    return 301 https://questhub.io$request_uri;
+}
+
+server {
   listen       80;
   server_name www.questhub.io;
 
-  rewrite  ^/(.*)$  http://questhub.io/$1 redirect;
+  return 301 https://questhub.io$request_uri;
 }
 <% end %>

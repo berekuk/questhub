@@ -16,7 +16,7 @@ ubic_service "dancer-dev" do
   action [:install, :start]
 end
 
-template "/etc/nginx/sites-enabled/questhub-dev" do
+template "/etc/nginx/conf.d/questhub-dev.conf" do
   source "nginx-site.conf.erb"
   owner "root"
   group "root"
