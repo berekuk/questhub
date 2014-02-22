@@ -1,1 +1,1 @@
-run_list "role[questhub::production]", "role[common]"
+run_list "recipe[questhub::production]", "role[common]"
