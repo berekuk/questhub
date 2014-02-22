@@ -13,7 +13,7 @@ server {
   server_name localhost;
   <% elsif @ssl %>
   listen 443 ssl;
-  server_name questhub.io;
+  server_name <%= @host %>;
 
   ssl_prefer_server_ciphers on;
   ssl_protocols             TLSv1 TLSv1.1 TLSv1.2;
@@ -27,7 +27,7 @@ server {
   ssl_certificate_key       /data/ssl/questhub.key;
   <% else %>
   listen       <%= @port %>;
-  server_name questhub.io;
+  server_name <%= @host %>;
   <% end %>
 
   <% if @dev %>
@@ -83,18 +83,18 @@ server {
   }
 }
 
-<% unless @dev %>
+<% if not @dev and @ssl %>
 server {
     listen 80;
-    server_name questhub.io;
+    server_name <%= @host %>;
 
-    return 301 https://questhub.io$request_uri;
+    return 301 https://<%= @host %>$request_uri;
 }
 
 server {
   listen       80;
-  server_name www.questhub.io;
+  server_name www.<%= @host %>;
 
-  return 301 https://questhub.io$request_uri;
+  return 301 https://<%= @host %>$request_uri;
 }
 <% end %>

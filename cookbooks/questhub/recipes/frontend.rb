@@ -32,6 +32,7 @@ template "/etc/nginx/conf.d/questhub.conf" do
     :dancer_port => 3000,
     :static_root => '/play/www-build',
     :ssl => node['play_perl']['ssl']
+    :host => node['play_perl']['hostport']
   })
   notifies :restart, "service[nginx]"
 end
