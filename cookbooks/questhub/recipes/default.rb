@@ -51,7 +51,7 @@ package 'libgd2-noxpm'
 package 'libgd2-xpm-dev'
 cpan_module 'Image::Resize'
 
-cpan_module 'T/TO/TOBYINK/Type-Tiny-0.022.tar.gz'
+cpan_module 'T/TO/TOBYINK/Type-Tiny-0.038.tar.gz'
 
 directory '/data' # logs
 
