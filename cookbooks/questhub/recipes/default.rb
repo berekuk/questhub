@@ -41,7 +41,7 @@ cpan_module 'Try::Tiny'
 
 cpan_module 'Dancer::Serializer::JSON'
 cpan_module 'Dancer::Session::MongoDB'
-cpan_module 'YANICK/Dancer-Plugin-Auth-Twitter-0.05.tar.gz'
+cpan_module 'YANICK/Dancer-Plugin-Auth-Twitter-0.06.tar.gz'
 cpan_module 'LWP::Protocol::https'
 cpan_module 'Template'
 cpan_module 'DateTime'
