@@ -17,14 +17,7 @@ package 'perl-doc'
 
 package 'libssl-dev' # used by Net::Twitter
 
-# forcing Net-HTTP=6.03 until https://rt.cpan.org/Ticket/Display.html?id=81237 is fixed
-execute "install-Net-HTTP" do
-  environment "HOME" => "/root"
-  path [ "/usr/local/bin", "/usr/bin", "/bin" ]
-  cwd "/root"
-  not_if "perl -mNet::HTTP -e 'exit 1 unless Net::HTTP->VERSION eq \"6.03\"'"
-  command "cpanm --reinstall --notest GAAS/Net-HTTP-6.03.tar.gz"
-end
+cpan_module 'Net::HTTP'
 cpan_module 'Dancer'
 cpan_module 'YAML'
 cpan_module 'Module::Install' # needed by MongoDB due to packaging issues - see https://github.com/berekuk/questhub/issues/70
