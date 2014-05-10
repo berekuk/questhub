@@ -50,7 +50,7 @@ sub main {
         system("tar xfvz ~/Dropbox/backup/$HOST/$backup_file");
     }
 
-    system(q{vagrant ssh -c 'cd /play && mongorestore'});
+    system(q{vagrant ssh -c 'cd /play && mongorestore --drop'});
 
     # to avoid accidentally sending emails to users while debugging
     system(q[vagrant ssh -c '(echo '\''use play'\''; echo '\''db.users.update({}, {"$unset": { "settings" : 1 } }, false, true)'\'') | mongo']) unless $keep_settings;
