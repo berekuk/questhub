@@ -6,10 +6,12 @@ ec2-deploy.pl - deploy questhub.io code to Amazon EC2
 
 =head1 SYNOPSIS
 
-  ec2-deploy.pl [--create] NAME
+  ec2-deploy.pl [OPTIONS] NAME
     options:
       --create      Create the new instance
       --magic       Rebuild static and push code (can be dangerously, but automates my usual workflow)
+      --provision   Provision with Chef cookbooks
+      --no-restart  Don't restart Dancer backend
 
 =head1 DESCRIPTION
 
