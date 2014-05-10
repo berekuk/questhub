@@ -6,7 +6,7 @@ default.play_perl.hostport = 'questhub.io'
 default.play_perl.service_name = 'Questhub.io'
 default.play_perl.unsubscribe_salt = '1234567890'
 default.play_perl.mixpanel_token = '1234567890'
-default.play_perl.ssl = true
+default.play_perl.ssl = false
 
 include_attribute 'nodejs'
 normal['nodejs']['install_method'] = 'package'
