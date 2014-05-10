@@ -16,7 +16,9 @@ package 'mongodb-10gen'
 template "/etc/mongodb.conf" do
   source "mongodb.conf.erb"
   mode 0644
+  notifies :restart, "service[mongodb]"
 end
+service "mongodb"
 
 cpan_module 'Flux::File'
 cpan_module 'Flux::Format::JSON'
