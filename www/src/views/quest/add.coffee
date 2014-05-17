@@ -1,11 +1,11 @@
 define [
-    "underscore", "jquery"
+    "underscore", "jquery", "react"
     "views/proto/common"
     "views/helper/textarea", "views/quest/add/realm-helper"
     "models/shared-models", "models/quest"
     "text!templates/quest/add.html"
-    "bootstrap", "jquery.autosize"
-], (_, $, Common, Textarea, RealmHelper, sharedModels, QuestModel, html) ->
+    "bootstrap"
+], (_, $, React, Common, Textarea, RealmHelper, sharedModels, QuestModel, html) ->
     class extends Common
         template: _.template(html)
 
@@ -28,8 +28,6 @@ define [
                 new Textarea
                     realm: @getRealmId()
                     placeholder: "Quest details are optional. You can always add them later."
-            ".realm-sv": ->
-                new RealmHelper model: @getRealm()
 
         description: -> @subview(".description-sv")
 
@@ -145,10 +143,12 @@ define [
             else
                 @_realm = null
 
+        rerenderRealmHelper: ->
+            React.renderComponent(RealmHelper(model: @getRealm()), @$(".realm-sv")[0])
+
         updateRealm: (id) ->
             @setRealm id
-            @rebuildSubview ".realm-sv"
-            @subview(".realm-sv").render()
+            @rerenderRealmHelper()
             @$(".quest-add-sidebar").removeClass("quest-add-realm-unpicked")
             @description().setRealm(id)
 
@@ -190,6 +190,7 @@ define [
         render: ->
             @form2model() if @rendered # don't want to lose data on accidental re-render
             super
+            @rerenderRealmHelper()
             @rendered = true
             @setRealmList @getRealmId()
             @setRealmSelect @getRealmId()
