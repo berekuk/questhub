@@ -1,214 +1,224 @@
 define [
-    "underscore", "jquery"
-    "views/proto/common"
-    "views/helper/textarea", "views/quest/add/realm-helper"
+    "underscore", "jquery", "react"
+    "views/helper/textarea-react"
+    "views/helper/tags-input"
+    "views/quest/add/realm-helper"
     "models/shared-models", "models/quest"
-    "text!templates/quest/add.html"
-    "bootstrap", "jquery.autosize"
-], (_, $, Common, Textarea, RealmHelper, sharedModels, QuestModel, html) ->
-    class extends Common
-        template: _.template(html)
+    "bootstrap"
+], (_, $, React, Textarea, TagsInput, RealmHelper, sharedModels, QuestModel) ->
 
-        activated: false # look below for activate() override
+    {div,section,header,ul,li,select,option,label,small,input,i,button,a} = React.DOM
 
-        activeMenuItem: -> "new-quest"
-        pageTitle: -> "New quest"
+    MobileRealmSelector = React.createClass
+        displayName: "QuestAdd.MobileRealmSelector"
 
-        events:
-            "click ._go": "submit"
-            "click ._cancel": "close"
-            "click .quest-add-close": "close"
-            "keyup [name=name]": "nameEdit"
-            "keyup [name=tags]": "tagsEdit"
-            "change [name=realm]": "switchRealmSelect"
-            "click .quest-add-realm-list li a": "switchRealmList"
+        propTypes:
+            realm: React.PropTypes.string
+            onSwitchRealm: React.PropTypes.func
 
-        subviews:
-            ".description-sv": ->
-                new Textarea
-                    realm: @getRealmId()
-                    placeholder: "Quest details are optional. You can always add them later."
-            ".realm-sv": ->
-                new RealmHelper model: @getRealm()
+        render: ->
+            div className: "mobile-inline-block",
+                "in"
+                select
+                    name: "realm"
+                    className: "quest-add-realm-select"
+                    value: @props.realm
+                    onChange: (event) => @props.onSwitchRealm event.target.value
+                    option
+                        value: "",
+                        "Pick a realm:"
+                    for r in sharedModels.realms.models
+                        do (r) => # creating a variable for each loop iteration
+                            option
+                                value: r.get('id')
+                                key: r.get('id')
+                                r.get('name')
 
-        description: -> @subview(".description-sv")
 
-        initialize: ->
-            super
-            _.bindAll this
-            @activate()
+    RealmSelector = React.createClass
+        displayName: "QuestAdd.RealmSelector"
 
-        setRealmList: (realm) ->
-            @$(".quest-add-realm-list ul li").removeClass("active")
-            @$(".quest-add-realm-list ul li[data-realm=#{realm}]").addClass("active")
+        propTypes:
+            realm: React.PropTypes.string
+            onSwitchRealm: React.PropTypes.func
 
-        setRealmSelect: (realm) ->
-            @$(".quest-add-realm-select :selected").prop "selected", false
-            @$(".quest-add-realm-select [value=#{realm}]").prop "selected", true
-            @$("[name=name]").focus()
+        render: ->
+            section className: "quest-add-sidebar sidebar desktop-block #{'quest-add-realm-unpicked' unless @props.realm}",
+                div className: "quest-add-realm-list clearfix",
+                    header null, "Realm:"
+                    ul
+                        className: "pills"
+                        for r in sharedModels.realms.models
+                            do (r) => # creating a variable for each loop iteration
+                                li
+                                    key: r.get('id')
+                                    className: 'active' if r.get('id') == @props.realm
+                                    a
+                                        href: '#'
+                                        onClick: => @props.onSwitchRealm r.get('id')
+                                        r.get('name')
+                RealmHelper model: sharedModels.realms.findWhere id: @props.realm if @props.realm
 
-        switchRealmList: (e) ->
-            id = $(e.target).closest("a").parent().attr("data-realm")
-            @setRealmList id
-            @setRealmSelect id
-            @updateRealm id
-            @validate()
-            @$("[name=name]").focus()
+    NameInput = React.createClass
+        displayName: "QuestAdd.NameInput"
 
-        switchRealmSelect: ->
-            id = @$(".quest-add-realm-select :selected").val()
-            @setRealmList id
-            @updateRealm id
-            @validate()
+        propTypes:
+            value: React.PropTypes.string
 
-        disable: ->
-            @$("._go").addClass "disabled"
-            @enabled = false
+        handleChange: (event) ->
+            @props.onChange event.target.value
 
-        enable: ->
-            @$("._go").removeClass "disabled"
-            @enabled = true
-            @submitted = false
+        componentDidUpdate: ->
+            @optimizeFont()
 
-        validate: (options) ->
-            @$("._go").tooltip("destroy")
-            qt = @$(".quest-tags-edit")
-            tagLine = @$("[name=tags]").val()
-            if QuestModel::validateTagline(tagLine)
-                qt.removeClass "error"
-                qt.find("input").tooltip "hide"
-            else
-                unless qt.hasClass("error")
-                    qt.addClass "error"
-
-                    # .tooltip() loses focus for some reason, so we have to save it and restore
-                    #
-                    # Note that animation for this tooltip is disabled, to avoid race conditions.
-                    # I'm not sure how to fix them...
-                    # http://ricostacruz.com/backbone-patterns/#animation_buffer talks about animation buffers,
-                    # but I don't know how to integrate it with bootstrap-tooltip.js code - it doesn't accept any "onShown" callback.
-                    oldFocus = $(":focus")
-                    qt.find("input").tooltip "show"
-                    $(oldFocus).focus()
-                @disable()
-                return
-            if @submitted or not @getName()
-                @disable()
-                return
-            if not @getRealmId()
-                @$("._go").tooltip()
-                @disable()
-                return
-            @enable()
-
-        nameEdit: (e) ->
-            @validate()
-            @optimizeNameFont()
-            @checkEnter e
-
-        tagsEdit: (e) ->
-            @validate()
-            @checkEnter e
-
-        optimizeNameFont: ->
-            input = @$("[name=name]")
-            testerId = "#quest-add-test-span"
-            tester = $(testerId)
+        optimizeFont: ->
+            el = $(@getDOMNode())
+            testerId = "quest-add-test-span"
+            tester = $("#" + testerId)
             unless tester.length
                 tester = $("<span id=\"#{testerId}\"></span>")
                 tester.css "display", "none"
-                tester.css "fontFamily", input.css("fontFamily")
-                @$el.append tester
-            tester.css "fontSize", input.css("fontSize")
-            tester.css "lineHeight", input.css("lineHeight")
-            tester.text input.val()
-            if tester.width() > input.width()
-                newFontSize = parseInt(input.css("fontSize")) - 1
+                tester.css "fontFamily", el.css("fontFamily")
+                $("body").append tester
+            tester.css "fontSize", el.css("fontSize")
+            tester.css "lineHeight", el.css("lineHeight")
+            tester.text el.val()
+            if tester.width() > el.width()
+                newFontSize = parseInt(el.css("fontSize")) - 1
                 if newFontSize > 14
                     newFontSize += "px"
-                    input.css "fontSize", newFontSize
-                    input.css "lineHeight", newFontSize
+                    el.css "fontSize", newFontSize
+                    el.css "lineHeight", newFontSize
 
-        getName: -> @$("[name=name]").val()
-        getDescription: -> @description().value()
-        getRealmId: -> @_realmId
-        getRealm: -> @_realm
+        handleKeyDown: (event) ->
+            if event.which is 13
+                @props.onSubmit()
 
-        getTags: ->
-            tagLine = @$("[name=tags]").val()
-            QuestModel::tagline2tags tagLine
-
-        setRealm: (id) ->
-            @_realmId = id
-            if id
-                @_realm = sharedModels.realms.findWhere id: id
-            else
-                @_realm = null
-
-        updateRealm: (id) ->
-            @setRealm id
-            @rebuildSubview ".realm-sv"
-            @subview(".realm-sv").render()
-            @$(".quest-add-sidebar").removeClass("quest-add-realm-unpicked")
-            @description().setRealm(id)
-
-        serialize: ->
-            params = super
-            params.realms = sharedModels.realms.toJSON()
-            params.selectedRealm = @getRealmId()
-            params
-
-        activate: ->
-            unless sharedModels.realms.length
-                sharedModels.realms.fetch().success => @activate()
-                return
-
-            @model = new QuestModel()
-            if @options.cloned_from
-                @model.set
-                    name: @options.cloned_from.get("name")
-                    description: @options.cloned_from.get("description")
-                    tags: @options.cloned_from.get("tags")
-                    realm: @options.cloned_from.get("realm")
-                    cloned_from: @options.cloned_from.id
-
-            id = @model.get("realm") || @options.realm
-            unless id
-                userRealms = sharedModels.currentUser.get("realms")
-                id = userRealms[0] if userRealms and userRealms.length is 1
-            @setRealm id
-
-            super
-
-        form2model: ->
-            @model.set
-                name: @getName()
-                realm: @getRealmId()
-                description: @description().value()
-                tags: @getTags()
+        focus: -> @getDOMNode().focus()
 
         render: ->
-            @form2model() if @rendered # don't want to lose data on accidental re-render
-            super
-            @rendered = true
-            @setRealmList @getRealmId()
-            @setRealmSelect @getRealmId()
+            input
+                name: "name"
+                type: "text"
+                className: "input-large"
+                placeholder: "What's your next goal?"
+                value: @props.value
+                onChange: (event) => @props.onChange event.target.value
+                onKeyDown: @handleKeyDown
 
-            @$(".btn-group").button()
-            @$(".icon-spinner").hide()
-            @submitted = false
-            @validate()
+    Form = React.createClass
+        displayName: "QuestAdd.Form"
 
-            @description().reveal @model.get("description") || ""
-            window.setTimeout =>
-                @$("[name=name]").focus()
-            , 100
+        propTypes:
+            realm: React.PropTypes.string
+            name: React.PropTypes.string
+            tags: React.PropTypes.array
+            description: React.PropTypes.string
 
+        focus: ->
+            @refs.name.focus()
+
+        render: ->
+            div className: "well clearfix quest-add-form",
+                div className: "form-row",
+                    label null,
+                        small className: "muted", "Write a short description of the task here."
+                    NameInput
+                        ref: "name"
+                        value: @props.name
+                        onChange: @props.onNameChange
+                        onSubmit: @props.onSubmit
+
+                div className: "form-row",
+                    label null,
+                        small className: "muted", "Description:"
+                    Textarea
+                        realm: @props.realm # TODO
+                        text: @props.description
+                        placeholder: "Quest details are optional. You can always add them later."
+                        onTextChange: @props.onDescriptionChange
+                        onSubmit: @props.onSubmit
+
+                div className: "form-row",
+                    label null,
+                        small className: "muted", 'Tags are optional. Enter them comma-separated here (for example: "bug,dancer"):'
+                    TagsInput
+                        tags: @props.tags
+                        onChange: @props.onTagsChange
+                        onValid: @props.onFormIsValid
+                        onSubmit: @props.onSubmit
+
+    Buttons = React.createClass
+        displayName: "QuestAdd.Buttons"
+
+        propTypes:
+            submittable: React.PropTypes.bool
+            submitted: React.PropTypes.bool
+
+        render: ->
+            div className: "pull-right",
+                i className: "icon-spinner icon-spin" if @props.submitted
+                button
+                    className: "btn btn-large btn-default"
+                    onClick: @props.onClose
+                    "Cancel"
+                " "
+                button
+                    className: "btn btn-large btn-primary #{'disabled' unless @props.submittable}"
+                    dataPlacement: "top"
+                    dataTitle: "pick a realm first"
+                    dataAnimation: "false"
+                    dataTrigger: "hover"
+                    onClick: @props.onSubmit
+                    "Start quest"
+
+    React.createClass
+        displayName: "QuestAdd"
+
+        propTypes:
+            realm: React.PropTypes.string
+            cloned_from: React.PropTypes.any # Backbone model
+
+        getInitialState: ->
+            if @props.cloned_from
+                state =
+                    name: @props.cloned_from.get('name')
+                    realm: @props.cloned_from.get('realm')
+                    description: @props.cloned_from.get("description")
+                    tags: @props.cloned_from.get("tags")
+            else
+                state =
+                    name: ""
+                    realm: @props.realm # copying over, that's ok
+                    description: ""
+                    tags: []
+
+            unless state.realm
+                # TODO - untested!
+                userRealms = sharedModels.currentUser.get("realms")
+                state.realm = userRealms[0] if userRealms and userRealms.length is 1
+
+            state.submitted = false
+            state.valid = true
+            return state
+
+        submittable: -> Boolean not @state.submitted and @state.name and @state.realm and @state.valid
 
         submit: ->
-            return unless @enabled
+            return unless @submittable()
 
-            @form2model()
+            @model = new QuestModel()
+
+            modelProps =
+                name: @state.name
+                realm: @state.realm
+                description: @state.description # to be filled
+                tags: @state.tags
+
+            if @props.cloned_from
+                modelProps.cloned_from = @props.cloned_from.id
+
+            @model.set modelProps
 
             @model.save {},
                 success: =>
@@ -217,12 +227,45 @@ define [
 
             ga "send", "event", "quest", "add"
             mixpanel.track "add quest"
-            @submitted = true
-            @$(".icon-spinner").show()
-            @validate()
 
-        checkEnter: (e) ->
-            @submit() if e.keyCode is 13
+            # the component will be destroyed now, but whatever
+            @setState submitted: true
 
         close: ->
             Backbone.history.navigate "/", trigger: true, replace: true
+
+        handleSwitchRealm: (realm) ->
+            @setState realm: realm
+            @refs.form.focus()
+
+        componentDidMount: ->
+            @props.onTitleChange? "New quest"
+            @props.onActiveMenuItemChange? "new-quest"
+
+        render: ->
+            div className: "quest-add",
+                RealmSelector
+                    realm: @state.realm
+                    onSwitchRealm: @handleSwitchRealm
+                section className: "quest-add-mainarea mainarea",
+                    header null,
+                        "Go on a quest"
+                        MobileRealmSelector
+                            realm: @state.realm
+                            onSwitchRealm: @handleSwitchRealm
+                    Form
+                        ref: "form"
+                        realm: @state.realm
+                        name: @state.name
+                        tags: @state.tags
+                        description: @state.description
+                        onTagsChange: (tags) => @setState tags: tags
+                        onNameChange: (name) => @setState name: name
+                        onDescriptionChange: (description) => @setState description: description
+                        onFormIsValid: (valid) => @setState valid: valid
+                        onSubmit: @submit
+                    Buttons
+                        submitted: @state.submitted
+                        submittable: @submittable()
+                        onClose: @close
+                        onSubmit: @submit

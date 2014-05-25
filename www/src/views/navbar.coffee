@@ -69,7 +69,11 @@ define [
             @$el.find(".menu-item-" + @active).addClass "active" if @active
 
         setActive: (selector) ->
-            @active = selector # don't render - views/app will call render() itself soon
+            @active = selector
+            # Older comment: "don't render - views/app will call render() itself soon"
+            # But now we have to render because React views call this at another time.
+            # Hopefully I'll rewrite this view using React soon.
+            @render()
 
         keyPressSearch: (e) ->
             @doSearch() if e.keyCode is 13
