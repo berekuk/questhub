@@ -5,6 +5,9 @@ define [
 ], (_, React, Common) ->
     {div,img,p,span,br,a} = React.DOM
     React.createClass
+        propTypes:
+            model: React.PropTypes.any.isRequired
+
         render: ->
             model = @props.model
             if model and model.get('pic')

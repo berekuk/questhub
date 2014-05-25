@@ -6,6 +6,7 @@
             // copy-pasted from /setup.js
             'backbone': 'vendors/backbone',
             'underscore': 'vendors/underscore',
+            'react': "vendors/react/react",
             'jquery': 'vendors/jquery-1.9.1',
             'jquery.autosize': 'vendors/jquery.autosize',
             'jquery.timeago': 'vendors/jquery.timeago',

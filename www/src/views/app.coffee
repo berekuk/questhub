@@ -34,16 +34,21 @@ define [
             # (note that the article is dated - it's pre-0.9.2, Backbone didn't have .listenTo() back then
             @_page.remove() if @_page
             @_page = page
+
             @$(".app-view-container").append page.$el
-            menuItem = _.result(page, "activeMenuItem") or "none"
-            @subview(".navbar-subview").setActive menuItem
 
-            @_page.on "change:page-title", => @updateTitle()
+            unless @_page.isReactComponent
+                menuItem = _.result(page, "activeMenuItem") or "none"
+                @setActiveMenuItem menuItem
 
-            # FIXME - this leads to double-rendering navbar on the initial page load
-            @updateRealm()
-            @updateTitle()
+                @_page.on "change:page-title", => @updateTitle()
+                @updateTitle()
+
+                # FIXME - this leads to double-rendering navbar on the initial page load
+                @updateRealm()
+
             window.scrollTo 0, 0
+
 
         updateRealm: ->
             realm = ((if @_page.realm then @_page.realm() else null))
@@ -52,11 +57,16 @@ define [
 
         updateTitle: ->
             title = if @_page.pageTitle then @_page.pageTitle() else null
+            @setWindowTitle title
+
+        setWindowTitle: (title) ->
             if title
                 window.document.title = "#{title} - Questhub.io"
             else
                 window.document.title = "Questhub.io"
 
+        setActiveMenuItem: (menuItem) ->
+            @subview(".navbar-subview").setActive menuItem
 
         settingsDialog: ->
             @subview(".navbar-subview").currentUser.settingsDialog()

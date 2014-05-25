@@ -2,7 +2,8 @@
     cursor: default; // override bootstrap's "pointer" cursor style, it's confusing
 }
 
-.quest-tags-edit input {
+// TODO - move somewhere else, this is a separate component now
+.tags-edit input {
     background-color: lighten($orange-color, 20%);
 }
 

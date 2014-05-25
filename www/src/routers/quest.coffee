@@ -1,11 +1,12 @@
 define [
     "underscore", "backbone"
     "routers/proto/common"
+    "views/helper/react-container"
     "models/current-user"
     "views/quest/page", "models/quest"
     "views/quest/add"
     "models/stencil", "views/stencil/page"
-], (_, Backbone, Common, currentUser, QuestPage, QuestModel, QuestAdd, StencilModel, StencilPage) ->
+], (_, Backbone, Common, ReactContainer, currentUser, QuestPage, QuestModel, QuestAdd, StencilModel, StencilPage) ->
     class extends Common
         routes:
             "quest/add": "questAdd"
@@ -79,13 +80,18 @@ define [
                     replace: true
                 return
 
-            options = realm: realm
+            options =
+                realm: realm
+                onTitleChange: (title) => @appView.setWindowTitle title
+                onActiveMenuItemChange: (menuItem) => @appView.setActiveMenuItem menuItem
 
             go = =>
                 if realm or cloned_id
                     # we'd have to update url when realm is changed in quest-add dialog otherwise
                     Backbone.history.navigate "/quest/add", replace: true
-                view = new QuestAdd(options)
+                view = new ReactContainer
+                    component: QuestAdd options
+                view.render()
                 @appView.setPageView view
 
             if cloned_id
