@@ -9,7 +9,7 @@ ec2-deploy.pl - deploy questhub.io code to Amazon EC2
   ec2-deploy.pl [OPTIONS] NAME
     options:
       --create      Create the new instance
-      --magic       Rebuild static and push code (can be dangerously, but automates my usual workflow)
+      --magic       Rebuild static and push code (can be dangerous, but automates my usual workflow)
       --provision   Provision with Chef cookbooks
       --no-restart  Don't restart Dancer backend
 
