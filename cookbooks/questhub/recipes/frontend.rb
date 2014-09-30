@@ -13,7 +13,7 @@ package 'nginx-full' do
     action :remove
 end
 package 'nginx' do
-    version "1.6.0-1~precise"
+    version "1.6.2-1~precise"
 end
 
 directory '/data' # logs
