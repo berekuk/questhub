@@ -46,8 +46,8 @@ ubic_service "sass" do
   action [:install, :start]
 end
 
-include_recipe "npm"
-npm_package "coffee-script"
+include_recipe "questhub::node"
+nodejs_npm "coffee-script"
 ubic_service "coffee" do
   action [:install, :start]
 end
@@ -58,7 +58,12 @@ end
 package 'sqlite3'
 package 'libsqlite3-dev'
 package 'g++'
-gem_package 'mailcatcher'
+gem_package 'i18n' do
+  version '0.6.11'
+end
+gem_package 'mailcatcher' do
+  version '0.5.12'
+end
 ubic_service "mailcatcher" do
   action [:install, :start]
 end
