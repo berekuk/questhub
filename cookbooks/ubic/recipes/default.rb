@@ -1,4 +1,7 @@
-ppa "berekuk/ubic"
+apt_repository 'ubic' do
+  uri          'ppa:berekuk/ubic'
+  distribution node['lsb']['codename']
+end
 
 execute "ubic apt-get update" do
     command "apt-get update"
