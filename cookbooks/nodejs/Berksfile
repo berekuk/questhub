@@ -1,5 +1,8 @@
-site :opscode
+source 'https://supermarket.getchef.com'
+
 metadata
 
-cookbook 'apt', '~> 1.7.0'
-cookbook 'build-essential'
+group :integration do
+  cookbook 'apt'
+  cookbook 'nodejs_test', :path => './test/cookbooks/nodejs_test'
+end

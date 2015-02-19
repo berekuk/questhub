@@ -1,0 +1,40 @@
+AlignParameters:
+  Enabled: false
+
+Encoding:
+  Enabled: false
+
+ClassLength:
+  Enabled: false
+
+MethodLength:
+  Enabled: false
+
+LineLength:
+  Enabled: false
+
+HashSyntax:
+  Enabled: false
+  EnforcedStyle: hash_rockets
+
+Documentation:
+  Enabled: false
+
+PerceivedComplexity:
+  Enabled: false
+
+CyclomaticComplexity:
+  Enabled: false
+
+PerceivedComplexity:
+  Enabled: false
+
+Style/FileName:
+  Enabled: false
+
+AllCops:
+  Exclude:
+    - 'Guardfile'
+
+Style/Next:
+  Enabled: false

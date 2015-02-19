@@ -1,21 +1,20 @@
-maintainer       "Promet Solutions"
-maintainer_email "marius@promethost.com"
-license          "Apache 2.0"
-description      "Installs/Configures nodejs"
+name 'nodejs'
+maintainer 'redguide'
+maintainer_email 'guilhem@lettron.fr'
+license 'Apache 2.0'
+description 'Installs/Configures nodejs'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "1.1.2"
-name             "nodejs"
-provides         "nodejs"
+version '2.2.1'
 
-recipe "nodejs", "Installs Node.JS based on the default installation method"
-recipe "nodejs::install_from_source", "Installs Node.JS from source"
-recipe "nodejs::install_from_binary", "Installs Node.JS from official binaries"
-recipe "nodejs::install_from_package", "Installs Node.JS from packages"
-recipe "nodejs::npm", "Installs npm from source - a package manager for node"
+conflicts 'node'
 
-depends "build-essential"
-depends "apt"
+depends 'yum-epel'
+depends 'build-essential'
+depends 'ark'
+depends 'apt'
 
-%w{ debian ubuntu centos redhat smartos }.each do |os|
-    supports os
+%w(debian ubuntu centos redhat smartos).each do |os|
+  supports os
 end
+
+suggests 'application_nodejs'

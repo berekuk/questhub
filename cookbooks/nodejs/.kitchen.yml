@@ -1,32 +1,28 @@
 ---
 driver_plugin: vagrant
 driver_config:
+  require_chef_omnibus: true
   customize:
     memory: 512
     cpus: 4
+
 platforms:
+- name: ubuntu-14.04
+  run_list:
+  - recipe[apt]
 - name: ubuntu-12.04
-  driver_config:
-    box: opscode-ubuntu-12.04
-    box_url: https://opscode-vm.s3.amazonaws.com/vagrant/boxes/opscode-ubuntu-12.04.box
-    require_chef_omnibus: 11.4.0
   run_list:
   - recipe[apt]
 - name: ubuntu-10.04
-  driver_config:
-    box: opscode-ubuntu-10.04
-    box_url: https://opscode-vm.s3.amazonaws.com/vagrant/boxes/opscode-ubuntu-10.04.box
   run_list:
   - recipe[apt]
-- name: centos-6.3
-  driver_config:
-    box: opscode-centos-6.3
-    box_url: https://opscode-vm.s3.amazonaws.com/vagrant/boxes/opscode-centos-6.3.box
-- name: centos-5.8
-  driver_config:
-    box: opscode-centos-5.8
-    box_url: https://opscode-vm.s3.amazonaws.com/vagrant/boxes/opscode-centos-5.8.box
+- name: centos-6.5
+- name: centos-5.10
+
 suites:
+- name: default
+  run_list:
+  - recipe[nodejs]
 - name: package
   run_list:
   - recipe[nodejs]
@@ -42,7 +38,37 @@ suites:
 - name: source
   run_list:
   - recipe[nodejs]
-  - recipe[nodejs::npm]
   attributes:
     nodejs:
       install_method: source
+- name: npm
+  run_list:
+  - recipe[nodejs::npm]
+  - recipe[nodejs_test::npm]
+- name: npm_embedded
+  run_list:
+  - recipe[nodejs::npm]
+  - recipe[nodejs_test::npm]
+  attributes:
+    nodejs:
+      npm:
+        install_method: embedded
+- name: npm_source
+  run_list:
+  - recipe[nodejs::npm]
+  - recipe[nodejs_test::npm]
+  attributes:
+    nodejs:
+      npm:
+        install_method: source
+- name: npm_packages
+  run_list: recipe[nodejs]
+  attributes:
+    nodejs:
+      npm_packages:
+        - name: express
+        - name: socket.io
+          version: 1.0.4
+        - name: express
+          action: uninstall
+

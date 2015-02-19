@@ -1,0 +1,23 @@
+---
+driver_plugin: 'vagrant'
+driver_config:
+  require_chef_omnibus: true
+
+platforms:
+- name: ubuntu-12.04
+  run_list:
+    - recipe[apt]
+- name: ubuntu-10.04
+  run_list:
+    - recipe[apt]
+- name: centos-6.4
+- name: centos-5.9
+- name: omnios-r151006c
+  driver_config:
+    box: omnios-r151006c
+    box_url: http://omnios.omniti.com/media/OmniOS_r151006c-r1.box
+
+suites:
+- name: default
+  run_list: ["recipe[perl]"]
+  attributes: {}

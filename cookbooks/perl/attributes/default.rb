@@ -2,7 +2,7 @@
 # Cookbook Name:: perl
 # Attributes:: default
 #
-# Copyright 2009, Opscode, Inc.
+# Copyright 2009, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,23 +17,41 @@
 # limitations under the License.
 #
 
-case node['platform']
-when "redhat","centos","scientific","amazon","oracle","fedora"
-  default['perl']['packages'] = %w{ perl perl-libwww-perl perl-CPAN }
+case node['platform_family']
+when 'rhel'
+  default['perl']['packages'] = %w(perl perl-libwww-perl perl-CPAN)
+
   case node['platform_version'].to_i
   when 5
-    default['perl']['packages'] = %w{ perl perl-libwww-perl  }
+    default['perl']['packages'] = %w(perl perl-libwww-perl)
   when 6
-    default['perl']['packages'] = %w{ perl perl-libwww-perl perl-CPAN }
+    default['perl']['packages'] = %w(perl perl-libwww-perl perl-CPAN)
   end
-when "debian","ubuntu","mint"
-  default['perl']['packages'] = %w{ perl libperl-dev }
-when "arch"
-  default['perl']['packages'] = %w{ perl perl-libwww }
+
+when 'debian'
+  default['perl']['packages'] = %w(perl libperl-dev)
+when 'arch'
+  default['perl']['packages'] = %w(perl perl-libwww)
+when 'omnios'
+  default['perl']['packages'] = %w(perl)
+when 'windows'
+  default['perl']['maj_version'] = '5'
+  default['perl']['min_version'] = '16'
+  default['perl']['sub_version'] = '1.1'
+
+  case node['kernel']['machine'].to_s
+  when 'x86_64'
+    default['perl']['bitness'] = '64bit'
+  else
+    default['perl']['bitness'] = '32bit'
+  end
+
 else
-  default['perl']['packages'] = %w{ perl libperl-dev }
+  default['perl']['packages'] = %w(perl libperl-dev)
 end
 
-default['perl']['cpanm']['url'] = 'https://raw.github.com/miyagawa/cpanminus/1.7001/cpanm'
-default['perl']['cpanm']['checksum'] = '378e16f3b9bb8ad2eda3'
+default['perl']['cpanm']['url'] = 'https://raw.github.com/miyagawa/cpanminus/1.6922/cpanm'
+default['perl']['cpanm']['checksum'] = 'cb35d3f1ac8f59c1458e1f67308c9caa4959f3912dfeac603b8aff29c6fe643d'
 default['perl']['cpanm']['path'] = '/usr/local/bin/cpanm'
+
+default['perl']['install_dir'] = 'C:\\perl\\'

@@ -2,7 +2,7 @@
 # Cookbook Name:: perl
 # Recipe:: default
 #
-# Copyright 2009, Opscode, Inc.
+# Copyright 2009-2013, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,16 +17,27 @@
 # limitations under the License.
 #
 
-node['perl']['packages'].each do |perl_pkg|
-  package perl_pkg
-end
+case node['platform']
+when 'windows'
+  include_recipe 'perl::_windows'
 
-cpanm = node['perl']['cpanm'].to_hash
-root_group = (node[:platform] == "mac_os_x") ? "admin" : "root"
-remote_file cpanm['path'] do
-  source cpanm['url']
-  checksum cpanm['checksum']
-  owner "root"
-  group root_group
-  mode 0755
+else
+  node['perl']['packages'].each do |perl_pkg|
+    package perl_pkg
+  end
+
+  cpanm = node['perl']['cpanm'].to_hash
+  root_group = node['platform'] == 'mac_os_x' ? 'admin' : 'root'
+
+  directory File.dirname(cpanm['path']) do
+    recursive true
+  end
+
+  remote_file cpanm['path'] do
+    source cpanm['url']
+    checksum cpanm['checksum']
+    owner 'root'
+    group root_group
+    mode 0755
+  end
 end
