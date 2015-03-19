@@ -1,8 +1,13 @@
-.welcome {
+.welcome-header {
+    text-align: center;
+
+    @include breakpoint(lessThanB) {
+        margin-top: -8px;
+    }
 
     h1 {
         font-size: 48px;
-        line-height: 56px;
+        line-height: 48px;
 
         @include breakpoint(B) {
             font-size: 80px;
@@ -21,21 +26,12 @@
     }
 }
 
-.welcome-header {
-    text-align: center;
-}
-
 .welcome-signin {
     text-align: center;
     margin-bottom: 10px;
     @include breakpoint(B) {
         margin-bottom: 30px;
     }
-}
-
-.welcome-block-text {
-    margin-top: 15px;
-    margin-right: 5px;
 }
 
 .welcome-megablock {
@@ -85,6 +81,10 @@
             margin-bottom: 5px;
         }
     }
+}
+.welcome-block-text {
+    margin-top: 15px;
+    margin-right: 5px;
 }
 
 .welcome-realms {
