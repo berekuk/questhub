@@ -37,21 +37,20 @@
     margin-top: 15px;
     margin-right: 5px;
 }
-.welcome-row {
-    @include clearfix;
+
+.welcome-megablock {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: -5px -10px;
 }
 
 .welcome-block {
-    @include breakpoint(B) {
-        float: left;
-        width: 49%;
-        margin-right: 2%;
-        &:last-of-type {
-            margin-right: 0%;
-        }
-    }
-
-    @include clearfix;
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 350px;
+    margin: 5px 10px;
 
     header {
         text-align: center;
