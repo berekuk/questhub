@@ -18,19 +18,16 @@
             </div>
         <% } } %>
       </div>
-      <div class="user-settings-upic">
 
-        <form class="pic-upload-form" enctype="multipart/form-data" action="/api/current_user/pic" method="post">
-          <div class="user-settings-upic-preview">
-            <%= partial.upic_normal({ login: user.login }) %>
-          </div>
-          <span class="btn btn-default btn-mini btn-file">
-            <span><i class="icon-pencil"></i> Change picture</span>
-            <input name="pic" type="file" />
-          </span>
-        </form>
-
-      </div>
+      <form class="user-settings-upic pic-upload-form" enctype="multipart/form-data" action="/api/current_user/pic" method="post">
+        <div class="user-settings-upic-preview">
+          <%= partial.upic_normal({ login: user.login }) %>
+        </div>
+        <span class="btn btn-default btn-mini btn-file">
+          <span><i class="icon-pencil"></i> Change picture</span>
+          <input name="pic" type="file" />
+        </span>
+      </form>
 
     </div>
 

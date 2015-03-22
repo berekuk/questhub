@@ -62,11 +62,7 @@
 }
 
 .user-settings-upic {
-    .btn-file {
-        margin-left: 2px;
-        vertical-align: bottom;
-    }
-}
-.user-settings-upic-preview {
-    display: inline-block;
+    display: flex;
+    align-items: flex-end;
+    @include flex-row-margins(2px);
 }

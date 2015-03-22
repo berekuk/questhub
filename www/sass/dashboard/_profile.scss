@@ -39,7 +39,6 @@
         }
     }
     img {
-        display: inline;
         margin-right: 10px;
         @include breakpoint(C) {
             margin-right: 20px;
@@ -64,23 +63,17 @@
     }
 
     li {
-        line-height: 36px;
-        @include breakpoint(B) {
-            line-height: 48px;
-        }
-    }
-    .histogram-sv {
-        display: inline-block;
-        height: 36px;
-        @include breakpoint(B) {
-            height: 48px;
-        }
+        display: flex;
+        align-items: center;
     }
 }
 .dashboard-profile-realm {
-    display: inline-block;
-    position: relative;
-    top: 15px;
+    display: flex;
+    align-items: flex-end;
+    .dashboard-profile-text {
+        position: relative;
+        top: 5px;
+    }
 }
 
 .dashboard-profile-text {
