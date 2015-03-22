@@ -1,25 +1,22 @@
 .user-points-histogram {
-    height: 100%; // external container determines the height
+    height: 36px;
+    @include breakpoint(B) {
+        height: 46px;
+    }
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
 
     // bar container
     > div {
-        display: inline-block;
-
-        height: 100%;
-        width: 7px;
-        position: relative;
-        margin-right: 4px;
-
-        // bar
-        > div {
-            position: absolute;
-            bottom: 0px;
-            left: 0px;
-            width: 100%;
-            background-color: $dark-grey;
-            &:hover {
-                background-color: $orange-color;
-            }
+        background-color: $dark-grey;
+        &:hover {
+            background-color: $orange-color;
         }
+        width: 5px;
+        @include breakpoint(A) {
+            width: 7px;
+        }
+        margin-right: 4px;
     }
 }

@@ -9,10 +9,12 @@
 
     ul {
         list-style-type: none;
+        display: flex;
         margin: 0px;
+        margin-left: -3px;
     }
     li {
-        display: inline-block;
+        margin-left: 3px;
     }
 
     @mixin switch-circle($color) {

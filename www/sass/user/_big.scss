@@ -1,78 +1,55 @@
 .user-big {
-    position: relative;
-    @include clearfix;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    @include flex-column-margins(5px);
+    @include flex-row-margins(10px);
 }
 
-.user-big-avatar {
-    float: left;
+.user-big-line1 {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    @include flex-row-margins(5px);
+    @include breakpoint(A) {
+        @include flex-row-margins(10px);
+    }
 }
 
 .user-big-names {
-    float: left;
-    margin-left: 10px;
-    @include breakpoint(B) {
-        margin-left: 20px;
-    }
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
+
 .user-big-player-login {
     font-size: 18px;
-    vertical-align: middle;
     line-height: 30px;
 }
 
-.user-big-actions {
-    position: absolute;
-    right: 15px;
-    bottom: 15px;
-
-    @include breakpoint(A) {
-        position: static;
-        float: left;
-        margin-left: 15px;
-    }
+.user-big-line2-outer {
+    flex-grow: 1;
 }
 
-.user-big-tabs {
-    clear: both;
-    padding-top: 8px;
+.user-big-line2 {
+    display: flex;
+    justify-content: space-between;
     @include breakpoint(A) {
-        float: right;
-        clear: none;
-        padding-top: 0;
+        @include flex-row-margins(10px);
     }
 }
 
 .user-big-points {
-    clear: both;
-    float: left;
+    align-self: flex-end;
 
-    margin: 0;
-    padding-top: 10px;
-    height: 36px;
-
-    @include breakpoint(B) {
-        clear: none;
-
-        padding-top: 0px;
-        margin-left: 30px;
-        height: 48px;
+    figure {
+        margin: 0;
+        display: flex;
+        align-items: flex-end;
     }
 
-    .user-big-histogram-sv {
-        display: inline-block;
-        height: 100%;
-    }
-    > figcaption {
-        display: inline-block;
-    }
-    > figcaption .reward {
-        top: -3px;
-    }
-    .user-big-points-total {
-        font-size: 24px;
-        @include breakpoint(B) {
-            font-size: 36px;
-        }
-        font-weight: 200;
+    .reward {
+        position: relative;
+        top: 5px;
     }
 }

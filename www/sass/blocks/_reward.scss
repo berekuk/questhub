@@ -1,28 +1,10 @@
-//.reward-big {
-//    @include reward-circle-color($highlight);
-//}
-//.reward-big-closed {
-//    @include reward-circle-color($closed-quest-color);
-//}
-//.reward-big-abandoned {
-//    @include reward-circle-color($abandoned-quest-color);
-//}
-
 .reward {
+    display: flex;
+    align-items: center;
     font-size: 24px;
     font-weight: 200;
-    display: inline-block;
-    position: relative;
-    .reward-points {
-        vertical-align: middle;
-        position: relative;
-        left: 2px;
-        top: -1px;
-    }
     .icon-stack {
-        position: relative;
-        left: -2px;
-        vertical-align: middle;
+        margin-left: 2px;
         font-size: 18px;
         color: darken($abandoned-quest-color, 10%);
     }
