@@ -1,64 +1,70 @@
-.stencil-page-top-row {
-    @include breakpoint(lessThanA) {
+.stencil-page-topline-layout {
+    @include breakpoint(lessThanB) {
         > aside {
             display: none;
         }
     }
 }
-.stencil-page .realm-submenu-sv {
-    float: right;
+
+.stencil-page-topline {
+    display: flex;
+    justify-content: space-between;
+    @include breakpoint(lessThanA) {
+        justify-content: flex-end;
+    }
 }
 
-.stencil-page-icon {
+.stencil-page-topline-icon {
     @include bg-header;
     margin-bottom: 0px;
-    float: left;
-    position: relative;
-    top: -3px;
     @include breakpoint(lessThanA) {
         display: none;
     }
 }
 
+// layout for -reward and -take
 .stencil-page-sidebar {
-    margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .stencil-page-take {
+        align-self: stretch;
+    }
+
+    @include breakpoint(lessThanB) {
+        margin-bottom: 10px;
+    }
+
     @include breakpoint(AtoB) {
-        text-align: center;
+        .stencil-page-reward {
+            margin-right: 8px;
+        }
+        .stencil-page-take {
+            align-self: center;
+            margin-top: 3px;
+        }
+        flex-direction: row;
+        justify-content: center;
+
     }
 }
 
 .stencil-page-reward {
     @include bg-header;
-    margin-bottom: 0px;
-    margin-top: 3px;
+    margin: 0px;
 
-    position: relative;
     .reward {
-        top: -2px;
+        margin-left: 4px;
     }
 
-    text-align: center;
-
-    @include breakpoint(AtoB) {
-        display: inline-block;
-    }
+    display: flex;
+    align-items: center;
 }
 
 .stencil-page-take {
     ._take {
         width: 100%;
-    }
-    margin-top: 3px;
-
-    @include breakpoint(AtoB) {
-        display: inline-block;
-        margin-left: 10px;
-        margin-top: 0;
-        ._take {
-            position: relative;
-            top: -5px;
-            width: auto;
-        }
     }
 }
 

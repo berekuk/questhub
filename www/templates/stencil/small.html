@@ -25,14 +25,15 @@
 
   <footer class="stencil-small-footer">
     <% if (obj.tags && obj.tags.length) { %>
-    <div>
-      <span>Tags:</span> <%= partial.quest_labels(obj) %>
+    <div class="stencil-small-footer-line">
+      <header>Tags:</header>
+      <%= partial.quest_labels(obj) %>
     </div>
     <% } %>
 
-    <div>
-      <span>Quests:</span>
-      <span>
+    <div class="stencil-small-footer-line">
+      <header>Quests:</header>
+      <div>
         <% if (obj.stat && _.keys(obj.stat).length) { %>
           <% _.each(stat, function (count, status) { %>
             <a href="/realm/<%- realm %>/stencil/<%- _id %>/quests"><span class="label label-<%= status === 'open' && 'warning' %>">
@@ -42,7 +43,7 @@
         <% } else { %>
           <small class="muted">none so far.</small>
         <% } %>
-      </span>
+      </div>
     </div>
 
     <% if (obj.comment_count) { %>
