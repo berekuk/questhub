@@ -1,55 +1,70 @@
-<div class="well user-big">
-  <div class="user-big-avatar">
-    <%= partial.upic_normal({ login: login }) %>
-  </div>
-  <div class="user-big-names">
-    <div>
-      <span class="user-big-player-login"><%= login %></span>
-    </div>
-    <% if (obj.twitter) {
-      if (twitter.screen_name) { %>
-        <i class="icon-twitter"></i>
-        <a href="https://twitter.com/<%= twitter.screen_name %>">
-          @<%= twitter.screen_name %>
-        </a>
-    <% } } %>
-  </div>
-
-  <div class="user-big-actions">
-    <% if (registered && !my) { %>
-      <% if (following) { %>
-        <button class="btn btn-default user-big-unfollow">Unfollow</button>
-      <% } else { %>
-        <button class="btn btn-primary user-big-follow">Follow</button>
-      <% } %>
-    <% } %>
-  </div>
-
-  <figure class="user-big-points">
-    <div class="user-big-histogram-sv"></div>
-    <figcaption>
-      <% var pTotal = _.reduce(_.values(obj.rp || {}), function(total, num) { return total + num; }, 0) %>
-      <%= partial.reward({ points: pTotal, status: "closed" }) %>
-    </figcaption>
-  </figure>
-
-  <nav class="round-tabs user-big-tabs">
-    <ul>
-      <%
-        _.each({
-          'quests': { icon: 'list-ul', tooltip: 'Quests' },
-          'activity': { icon: 'film', tooltip: 'Activity' },
-          'profile': { icon: 'user', tooltip: 'Profile' }
-        }, function (o, t) {
-      %>
-      <li>
-        <a href="<%= partial.user_link(login, t) %>">
-          <div data-toggle="tooltip" data-placement="top" title="<%- o.tooltip %>" data-tab="<%- t %>" class="_icon _switch-<%- t %> <%- tab == t ? '_active' : '' %>">
-            <i class="icon-<%- o.icon %>"></i>
+<div class="well">
+  <div class="user-big">
+    <div class="user-big-line">
+      <div class="user-big-line1">
+        <div class="user-big-avatar">
+          <%= partial.upic_normal({ login: login }) %>
+        </div>
+        <div class="user-big-names">
+          <div class="user-big-player-login">
+            <%= login %>
           </div>
-        </a>
-      </li>
-      <% }) %>
-    </ul>
-  </nav>
+          <% if (obj.twitter) {
+            if (twitter.screen_name) { %>
+              <div>
+                <i class="icon-twitter"></i>
+                <a href="https://twitter.com/<%= twitter.screen_name %>">
+                  @<%= twitter.screen_name %>
+                </a>
+              </div>
+          <% } } %>
+        </div>
+
+        <div class="user-big-actions">
+          <% if (registered && !my) { %>
+            <% if (following) { %>
+              <button class="btn btn-default user-big-unfollow">Unfollow</button>
+            <% } else { %>
+              <button class="btn btn-primary user-big-follow">Follow</button>
+            <% } %>
+          <% } %>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="user-big-line user-big-line2-outer">
+      <div class="user-big-line2">
+        <div class="user-big-points">
+          <figure>
+            <div class="user-big-histogram-sv"></div>
+            <figcaption>
+              <% var pTotal = _.reduce(_.values(obj.rp || {}), function(total, num) { return total + num; }, 0) %>
+              <%= partial.reward({ points: pTotal, status: "closed" }) %>
+            </figcaption>
+          </figure>
+        </div>
+
+        <nav class="round-tabs user-big-tabs">
+          <ul>
+            <%
+              _.each({
+                'quests': { icon: 'list-ul', tooltip: 'Quests' },
+                'activity': { icon: 'film', tooltip: 'Activity' },
+                'profile': { icon: 'user', tooltip: 'Profile' }
+              }, function (o, t) {
+            %>
+            <li>
+              <a href="<%= partial.user_link(login, t) %>">
+                <div data-toggle="tooltip" data-placement="top" title="<%- o.tooltip %>" data-tab="<%- t %>" class="_icon _switch-<%- t %> <%- tab == t ? '_active' : '' %>">
+                  <i class="icon-<%- o.icon %>"></i>
+                </div>
+              </a>
+            </li>
+            <% }) %>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
 </div>

@@ -19,6 +19,5 @@ define [
                 bar = $("<div data-toggle='tooltip' data-placement='bottom' data-container='.user-big' title='#{title}'></div>")
                 h = (100 * (histogram[i] / max))
                 bar.css("height", (if h > 1 then "#{h}%" else "1px"))
-                bar = $("<div></div>").append(bar)
                 bars.append bar
             @$("[data-toggle=tooltip]").tooltip()

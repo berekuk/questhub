@@ -92,6 +92,24 @@
     }
 }
 
+@mixin flex-row-margins($value) {
+    margin-left: -$value;
+    margin-right: -$value;
+    > * {
+        margin-left: $value;
+        margin-right: $value;
+    }
+}
+
+@mixin flex-column-margins($value) {
+    margin-top: -$value;
+    margin-bottom: -$value;
+    > * {
+        margin-top: $value;
+        margin-bottom: $value;
+    }
+}
+
 @mixin bg-header {
     margin-top: 8px;
     font-size: 24px;

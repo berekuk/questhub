@@ -1,8 +1,13 @@
-.welcome {
+.welcome-header {
+    text-align: center;
+
+    @include breakpoint(lessThanB) {
+        margin-top: -8px;
+    }
 
     h1 {
         font-size: 48px;
-        line-height: 56px;
+        line-height: 48px;
 
         @include breakpoint(B) {
             font-size: 80px;
@@ -21,10 +26,6 @@
     }
 }
 
-.welcome-header {
-    text-align: center;
-}
-
 .welcome-signin {
     text-align: center;
     margin-bottom: 10px;
@@ -33,25 +34,19 @@
     }
 }
 
-.welcome-block-text {
-    margin-top: 15px;
-    margin-right: 5px;
-}
-.welcome-row {
-    @include clearfix;
+.welcome-megablock {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: -5px -10px;
 }
 
 .welcome-block {
-    @include breakpoint(B) {
-        float: left;
-        width: 49%;
-        margin-right: 2%;
-        &:last-of-type {
-            margin-right: 0%;
-        }
-    }
-
-    @include clearfix;
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 350px;
+    margin: 5px 10px;
 
     header {
         text-align: center;
@@ -86,6 +81,10 @@
             margin-bottom: 5px;
         }
     }
+}
+.welcome-block-text {
+    margin-top: 15px;
+    margin-right: 5px;
 }
 
 .welcome-realms {
