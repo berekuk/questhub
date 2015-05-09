@@ -1,0 +1,6 @@
+requires 'Dancer';
+requires 'Starman';
+requires 'Dancer::Serializer::JSON';
+requires 'Dancer::Session::MongoDB';
+requires 'Dancer::Plugin::Auth::Twitter';
+requires 'Template';
