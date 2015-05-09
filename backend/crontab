@@ -1,0 +1,1 @@
+0 12 * * 1 root /play/backend/script/rotate_points.pl >>/data/backend_scripts/rotate_points.log 2>>/data/backend_scripts/rotate_points.err.log

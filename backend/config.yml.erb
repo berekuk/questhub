@@ -1,0 +1,8 @@
+hostport: <%= ENV['QH_HOST'] %>:<%= ENV['QH_PORT'] %>
+service_name: Questhub.io
+ses:
+    username: <%= ENV['SES_USERNAME'] || 'NONE' %>
+    password: <%= ENV['SES_PASSWORD'] || 'NONE' %>
+unsubscribe_salt: <%= ENV['UNSUBSCRIBE_SALT'] || 1234567890 %>
+mixpanel_token: <%= ENV['MIXPANEL_TOKEN'] || 1234567890 %>
+data_dir: "/data"

@@ -1,11 +1,11 @@
-hostport: "localhost:3000"
+hostport: "localhost:8000"
 service_name: "Play Perl - testing instance"
 test: 1
 realms:
 - europe
 - asia
-aws:
-    access_key: 'NONE'
-    secret_key: 'NONE'
+ses:
+    username: 'NONE'
+    password: 'NONE'
 unsubscribe_salt: '42'
 data_dir: 'tfiles'

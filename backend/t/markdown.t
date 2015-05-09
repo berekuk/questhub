@@ -12,7 +12,7 @@ sub basic :Tests {
 sub mentions :Tests {
     is
         markdown('@blah, hello'),
-        qq[<a href="http://localhost:3000/player/blah">blah</a>, hello\n];
+        qq[<a href="http://localhost:8000/player/blah">blah</a>, hello\n];
 
     cmp_deeply \@Play::Markdown::MENTIONS, ['blah'];
 

@@ -14,7 +14,7 @@ sub setting {
 
     unless ($config) {
         # ENV overloading is for tests
-        my $yaml = YAML::Tiny->read($ENV{PLAY_CONFIG_FILE} || '/data/config.yml');
+        my $yaml = YAML::Tiny->read($ENV{PLAY_CONFIG_FILE} || '/play/backend/config.yml');
         $config = $yaml->[0];
     }
     return $config->{$name};

@@ -12,7 +12,7 @@ BEGIN {
 
 use Play::Config qw(setting);
 
-is setting('hostport'), 'localhost:3000';
+is setting('hostport'), 'localhost:8000';
 is setting('service_name'), 'Play Perl - testing instance';
 is setting('test'), 1;
 

@@ -55,8 +55,8 @@ sub comment_on_other_users_quest :Tests {
     my $email = $email_in->read;
     $email_in->commit;
     like $email->{body}, qr/commented on your quest/;
-    like $email->{body}, qr{"http://localhost:3000/player/bar"};
-    like $email->{body}, qr["http://localhost:3000/realm/europe/quest/$quest->{_id}"];
+    like $email->{body}, qr{"http://localhost:8000/player/bar"};
+    like $email->{body}, qr["http://localhost:8000/realm/europe/quest/$quest->{_id}"];
 
     is $email_in->read, undef;
 
