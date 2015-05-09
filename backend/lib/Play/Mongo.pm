@@ -7,9 +7,9 @@ use MongoDB;
 use Play::Config qw(setting);
 
 sub db {
-    my $connection = MongoDB::Connection->new(host => 'mongo', port => 27017);
+    my $client = MongoDB::MongoClient->new(host => 'mongo:27017');
     my $db = $ENV{TEST_DB} || 'play';
-    return $connection->get_database($db);
+    return $client->get_database($db);
 }
 
 if (setting('test')) {
