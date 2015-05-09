@@ -67,14 +67,14 @@ server {
     proxy_set_header X-Forwarded-Host $host;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_pass       http://app:<%= ENV['QH_APP_PORT'] %>;
+    proxy_pass       http://app;
   }
 
   location / {
     proxy_set_header X-Forwarded-Host localhost;
     if ($args ~ "_escaped_fragment_=$") {
         rewrite ^(.*) /seo$1 break;
-        proxy_pass       http://app:<%= ENV['QH_APP_PORT'] %>;
+        proxy_pass       http://app;
     }
 
     root /www;
