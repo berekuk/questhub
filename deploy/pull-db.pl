@@ -20,6 +20,19 @@ use Pod::Usage;
 use IPC::System::Simple;
 use autodie qw(system);
 
+sub docker_do {
+    my ($container, @args) = @_;
+    system('docker', 'exec', '-it', "questhub_${container}_1", @args);
+}
+
+sub mongo_do {
+    docker_do('mongo', @_);
+}
+
+sub app_do {
+    docker_do('app', @_);
+}
+
 sub main {
     my $from_production;
     my $keep_settings;
@@ -31,7 +44,8 @@ sub main {
 
     my $HOST = 'questhub.io';
 
-    system(q{vagrant ssh -c 'cd /play/app && ./clear_mongo.sh && (echo '\''use play'\''; echo '\''db.realms.drop()'\'') | mongo'});
+    app_do('./clear_mongo.sh');
+    mongo_do('mongo', 'play', '--eval', 'db.realms.drop()');
 
     system('rm -rf dump');
     system('mkdir dump');
@@ -50,10 +64,10 @@ sub main {
         system("tar xfvz ~/Dropbox/backup/$HOST/$backup_file");
     }
 
-    system(q{vagrant ssh -c 'cd /play && mongorestore --drop'});
+    system("tar -c dump | docker exec -i questhub_mongo_1 bash -c 'cd /data && rm -rf dump && tar -xv && cd dump && mongorestore --drop .'");
 
     # to avoid accidentally sending emails to users while debugging
-    system(q[vagrant ssh -c '(echo '\''use play'\''; echo '\''db.users.update({}, {"$unset": { "settings" : 1 } }, false, true)'\'') | mongo']) unless $keep_settings;
+    mongo_do('mongo', 'play', '--eval', 'db.users.update({}, {"$unset": { "settings" : 1 } }, false, true)') unless $keep_settings;
 }
 
 main unless caller;
