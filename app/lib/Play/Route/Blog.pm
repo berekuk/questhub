@@ -11,7 +11,7 @@ use DateTime::Format::RFC3339;
 my $rfc3339 = DateTime::Format::RFC3339->new;
 
 sub post_dir {
-    "/play/app/blog";
+    config->{appdir}."/blog";
 }
 
 sub load_post {

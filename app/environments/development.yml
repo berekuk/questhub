@@ -26,4 +26,4 @@ show_errors: 1
 # OR TINY KITTENS SHALL DIE WITH LOTS OF SUFFERING
 auto_reload: 1
 
-hostport: "localhost:3001"
+hostport: "localhost:80"

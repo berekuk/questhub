@@ -10,13 +10,13 @@ mongodb_session_coll: "sessions"
 
 serializer: JSON
 
-hostport: "<%= ENV['HOSTPORT'] %>"
-service_name: "<%= ENV['SERVICE_NAME'] %>"
+hostport: "<%= ENV['QH_HOST'] %>:<%= ENV['QH_PORT'] %>"
+service_name: Questhub.io
 
 plugins:
   "Auth::Twitter":
     consumer_key:     "<%= ENV['TWITTER_CONSUMER_KEY'] %>"
     consumer_secret:  "<%= ENV['TWITTER_CONSUMER_SECRET'] %>"
-    callback_url:     "http://<%= ENV['HOSTPORT'] %>/auth/twitter/callback"
+    callback_url:     "http://<%= ENV['QH_HOST'] %>:<%= ENV['QH_PORT'] %>/auth/twitter/callback"
     callback_success: "/auth/twitter"
     callback_fail:    "/fail"
