@@ -1,5 +1,5 @@
 #!/bin/bash
 set -euo pipefail
 
-erb /frontend-conf/conf/questhub.conf.erb >/etc/nginx/conf.d/questhub.conf
+erb /opt/main.conf.erb >/etc/nginx/conf.d/main.conf
 nginx
