@@ -12,8 +12,9 @@ RUN mkdir -p /play
 
 # will be remounted in development
 COPY . $APP_HOME
+COPY docker-entrypoint.sh /entrypoint.sh
 
 EXPOSE 80
 
 WORKDIR $APP_HOME
-CMD ./run.sh
+CMD /entrypoint.sh

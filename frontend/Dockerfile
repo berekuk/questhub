@@ -10,4 +10,5 @@ COPY . /frontend-conf
 VOLUME /data
 # expect to be mounted: /www
 
-CMD /frontend-conf/run.sh
+COPY docker-entrypoint.sh /entrypoint.sh
+CMD /entrypoint.sh
