@@ -1,6 +1,5 @@
 #!/bin/bash
-
-set -e
+set -euo pipefail
 
 mkdir -p /data/{pumper,storage/{email,events,upic},images/pic}
 touch /data/storage/{email,events,upic}/log

@@ -1,6 +1,5 @@
 #!/bin/bash
-
-set -e
+set -euo pipefail
 
 erb ./config.yml.erb >./config.yml
 LOG_DIR=/data/dancer
