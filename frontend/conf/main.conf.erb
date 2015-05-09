@@ -4,11 +4,19 @@ log_format qh_log_format
     '"$http_referer" "$http_user_agent" '
     '$request_time $upstream_response_time $pipe';
 
+upstream app_upstream {
+  <% if ENV['QH_APP_SCALE'] %>
+    <% (1..ENV['QH_APP_SCALE'].to_i).each do |app_id| %>
+      server app<%= app_id %>;
+    <% end %>
+  <% else %>
+    server app;
+  <% end %>
+}
+
 server {
 
-# test
-
-  <% if ENV['QH_SSL'] %>
+<% if ENV['QH_SSL'] %>
   listen 443 ssl;
   server_name <%= ENV['QH_HOST'] %>;
 
@@ -27,15 +35,16 @@ server {
 
   ssl_certificate           /config/ssl/questhub_io.crt;
   ssl_certificate_key       /config/ssl/questhub.key;
-  <% else %>
+<% else %>
   listen 80;
   server_name <%= ENV['QH_HOST'] %>;
-  <% end %>
+<% end %>
 
-  <% if ENV['QH_DEV'] %>
+<% if ENV['QH_DEV'] %>
   # Turn sendfile off because it behaves bad with vboxsf
+  # See: https://www.virtualbox.org/ticket/9069, https://www.virtualbox.org/ticket/12597
   sendfile off;
-  <% end %>
+<% end %>
 
   gzip             on;
   gzip_min_length  1000;
@@ -67,16 +76,10 @@ server {
     proxy_set_header X-Forwarded-Host $host;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_pass       http://app;
+    proxy_pass       http://app_upstream;
   }
 
   location / {
-    proxy_set_header X-Forwarded-Host localhost;
-    if ($args ~ "_escaped_fragment_=$") {
-        rewrite ^(.*) /seo$1 break;
-        proxy_pass       http://app;
-    }
-
     root /www;
 
     expires 0;
