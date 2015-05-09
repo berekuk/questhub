@@ -1,0 +1,22 @@
+appname: "Play"
+charset: "UTF-8"
+template: "template_toolkit"
+
+session: "MongoDB"
+session_expires: "10d"
+mongodb_host: "mongo"
+mongodb_session_db: "play"
+mongodb_session_coll: "sessions"
+
+serializer: JSON
+
+hostport: "<%= ENV['HOSTPORT'] %>"
+service_name: "<%= ENV['SERVICE_NAME'] %>"
+
+plugins:
+  "Auth::Twitter":
+    consumer_key:     "<%= ENV['TWITTER_CONSUMER_KEY'] %>"
+    consumer_secret:  "<%= ENV['TWITTER_CONSUMER_SECRET'] %>"
+    callback_url:     "http://<%= ENV['HOSTPORT'] %>/auth/twitter/callback"
+    callback_success: "/auth/twitter"
+    callback_fail:    "/fail"
