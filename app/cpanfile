@@ -3,6 +3,7 @@ requires 'Starman';
 requires 'Dancer::Serializer::JSON';
 requires 'Dancer::Session::MongoDB';
 requires 'Dancer::Plugin::Auth::Twitter';
+requires 'Net::OAuth';
 requires 'Template';
 
 # for development
