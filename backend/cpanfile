@@ -25,3 +25,11 @@ requires 'DateTime::Format::RFC3339';
 requires 'Image::Resize';
 requires 'Type::Tiny';
 requires 'Digest::SHA1';
+
+# development - mostly for tests
+requires 'IPC::System::Simple';
+requires 'Test::Deep';
+requires 'Test::Class';
+requires 'Import::Into';
+requires 'Carp::Always';
+requires 'Capture::Tiny';

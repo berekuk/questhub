@@ -8,10 +8,10 @@ WORKDIR $APP_HOME
 RUN apt-get update && apt-get install -y libssl-dev sendmail curl supervisor make perl libgd2-xpm-dev ruby
 
 RUN curl -L https://cpanmin.us | perl - --sudo App::cpanminus
-RUN cpanm --notest --installdeps .
 
 # will be remounted in development
 COPY . $APP_HOME
+RUN cpanm --notest --installdeps .
 
 COPY docker-entrypoint.sh /entrypoint.sh
 CMD /entrypoint.sh
