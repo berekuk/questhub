@@ -58,8 +58,9 @@ define [
         render: ->
 
             # wait for realms data; copy-paste from views/quest/add
-            unless sharedModels.realms.length
+            if not sharedModels.realms.length and not @fetchedRealms
                 sharedModels.realms.fetch().success =>
+                    @fetchedRealms = true
                     @render()
                 return
 
