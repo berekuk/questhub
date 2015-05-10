@@ -14,7 +14,7 @@ module.exports = {
 
   resolve: {
     root: srcRoot,
-    extensions: ['', '.js', '.coffee'],
+    extensions: ['', '.js', '.jsx', '.coffee'],
     fallback: [__dirname, __dirname + '/sass'], // for templates and styles
     alias: {
       jquery: "jquery/jquery.js",
@@ -22,7 +22,6 @@ module.exports = {
       "jquery.typeahead": __dirname + "/vendors/typeahead",
       "jquery.easing": __dirname + "/vendors/jquery.easing.1.3",
       bootstrap: __dirname + "/vendors/bootstrap/js/bootstrap",
-      bootbox: __dirname + "/vendors/bootbox",
       "jquery-ui": __dirname + "/vendors/jquery-ui/js/jquery-ui-1.10.3.custom",
     },
   },
@@ -32,6 +31,10 @@ module.exports = {
       {
         test: /\.coffee$/,
         loader: 'coffee-loader',
+      },
+      {
+        test: /\.jsx/,
+        loader: 'babel-loader',
       },
       {
         test: /\.scss$/,

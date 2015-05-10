@@ -1,6 +1,8 @@
 {
   "dependencies": {
+    "babel-loader": "^5.0.0",
     "backbone": "1.1.2",
+    "bootbox": "^4.4.0",
     "coffee-loader": "^0.7.2",
     "css-loader": "^0.12.0",
     "extract-text-webpack-plugin": "^0.7.1",

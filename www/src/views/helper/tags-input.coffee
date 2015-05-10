@@ -6,7 +6,7 @@ define [
 
     {input,span} = React.DOM
 
-    TagsInput = React.createClass
+    React.createClass
         displayName: "TagsInput"
 
         propTypes:
