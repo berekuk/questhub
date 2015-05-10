@@ -1,9 +1,10 @@
 define [
+    "underscore"
     "backbone"
     "views/proto/common"
     "views/user/signin", "models/current-user"
     "text!templates/user/unsubscribe.html"
-], (Backbone, Common, Signin, currentUser, html) ->
+], (_, Backbone, Common, Signin, currentUser, html) ->
     Common.extend
         template: _.template(html)
         selfRender: true

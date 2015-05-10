@@ -1,10 +1,11 @@
 define [
     "underscore"
+    "backbone"
     "views/proto/common"
     "views/user/signin", "views/realm/collection"
     "models/current-user", "models/shared-models"
     "text!templates/welcome.html"
-], (_, Common, Signin, RealmCollection, currentUser, sharedModels, html) ->
+], (_, Backbone, Common, Signin, RealmCollection, currentUser, sharedModels, html) ->
     class extends Common
         template: _.template(html)
         selfRender: true

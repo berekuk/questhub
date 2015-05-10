@@ -3,7 +3,7 @@ define [
     "views/helper/markdown-react"
     "views/helper/popover"
     "models/current-user"
-    "jquery.autosize"
+    "jquery-autosize"
 ], ($, React, Markdown, Popover, currentUser) ->
 
     {div,a,i,textarea,code,br} = React.DOM

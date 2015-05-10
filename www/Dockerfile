@@ -6,11 +6,8 @@ FROM node:0.12
 ENV APP_HOME /www
 WORKDIR $APP_HOME
 
-RUN apt-get update && apt-get install -y ruby ruby-dev supervisor
-RUN gem install sass rb-inotify
-RUN npm install -g coffee-script
-
-COPY . $APP_DIR
+COPY . $APP_HOME
+RUN npm install
 
 COPY docker-entrypoint.sh /entrypoint.sh
 CMD /entrypoint.sh

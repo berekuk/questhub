@@ -1,6 +1,7 @@
 define [
+    "backbone"
     "routers/proto/common", "views/not-found"
-], (Common, NotFound) ->
+], (Backbone, Common, NotFound) ->
     class extends Common
         routes:
             "*path": "notFound"

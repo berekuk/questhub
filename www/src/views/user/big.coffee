@@ -1,10 +1,11 @@
 define [
     "underscore", "jquery"
+    "backbone"
     "views/proto/common"
     "models/current-user"
     "views/user/points-histogram"
     "text!templates/user/big.html"
-], (_, $, Common, currentUser, UserPointsHistogram, html) ->
+], (_, $, Backbone, Common, currentUser, UserPointsHistogram, html) ->
     class extends Common
         template: _.template(html)
 
@@ -17,8 +18,8 @@ define [
         subviews:
             ".user-big-histogram-sv": -> new UserPointsHistogram model: @model
 
-        initialize: ->
-            @tab = @options.tab || 'quests'
+        initialize: (options) ->
+            @tab = options.tab || 'quests'
             super
             @listenTo currentUser, 'change', @render # re-render if "follow" is clicked
 

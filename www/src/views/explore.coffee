@@ -1,10 +1,11 @@
 define [
     "underscore"
+    "backbone"
     "views/proto/tabbed"
     "models/quest-collection", "views/quest/collection"
     "models/current-user"
     "text!templates/explore.html"
-], (_, Tabbed, QuestCollectionModel, QuestCollection, currentUser, html) ->
+], (_, Backbone, Tabbed, QuestCollectionModel, QuestCollection, currentUser, html) ->
     class extends Tabbed
         template: _.template html
         className: "explore"
@@ -13,8 +14,8 @@ define [
             "click ul.explore-nav a": "switchTab"
             "click .remove-filter": "removeFilter"
 
-        initialize: ->
-            @tag = @options.tag
+        initialize: (options) ->
+            @tag = options.tag
             super
 
         tab: "latest"

@@ -1,8 +1,8 @@
 define [
-    "jquery"
+    "underscore", "jquery"
     "models/proto/post"
     "models/current-user"
-], ($, Post, currentUser) ->
+], (_, $, Post, currentUser) ->
     class extends Post
         idAttribute: "_id"
         urlRoot: "/api/quest"

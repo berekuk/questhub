@@ -1,9 +1,8 @@
 define [
-    "underscore", "jquery", "markdown"
+    "underscore", "jquery", "views/proto/base", "markdown"
     "vendors/pagedown/Markdown.Sanitizer"
-], (_, $, markdown, VendorMarkdown) ->
-    class extends Backbone.View
-
+], (_, $, Base, markdown, VendorMarkdown) ->
+    class extends Base
         events:
             "click .md-task-icon": "markTask"
 

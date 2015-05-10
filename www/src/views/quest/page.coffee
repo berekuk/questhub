@@ -1,5 +1,6 @@
 define [
     "underscore"
+    "backbone"
     "bootbox"
     "views/proto/common"
     "views/quest/completed"
@@ -7,7 +8,7 @@ define [
     "models/comment-collection", "models/current-user", "models/shared-models"
     "text!templates/quest/page.html"
     "jquery.typeahead"
-], (_, bootbox, Common, QuestCompleted, RealmSubmenu, QuestCheckins, QuestBig, CommentCollection, CommentCollectionModel, currentUser, sharedModels, html) ->
+], (_, Backbone, bootbox, Common, QuestCompleted, RealmSubmenu, QuestCheckins, QuestBig, CommentCollection, CommentCollectionModel, currentUser, sharedModels, html) ->
     class extends Common
         activated: false
         template: _.template(html)

@@ -1,11 +1,12 @@
 # TODO - refactor into views/proto/form
 define [
     "underscore", "jquery"
+    "backbone"
     "views/proto/common"
     "models/current-user"
     "views/progress/big"
     "text!templates/register.html"
-], (_, $, Common, currentUser, ProgressBig, html) ->
+], (_, $, Backbone, Common, currentUser, ProgressBig, html) ->
     class extends Common
         template: _.template(html)
         activeMenuItem: "home"

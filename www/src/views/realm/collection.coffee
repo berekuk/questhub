@@ -1,8 +1,9 @@
 define [
+    "underscore"
     "views/realm/small"
     "views/proto/any-collection"
     "text!templates/realm/collection.html"
-], (RealmSmall, AnyCollection, html) ->
+], (_, RealmSmall, AnyCollection, html) ->
     class extends AnyCollection
         template: _.template(html)
         generateItem: (model) ->

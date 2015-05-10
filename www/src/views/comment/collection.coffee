@@ -29,9 +29,9 @@ define [
 
         listSelector: ".comments-list"
 
-        initialize: ->
-            @listenTo @options.object, "compose-comment", @composeComment
-            @options.commentBox ?= true
+        initialize: (options) ->
+            @listenTo options.object, "compose-comment", @composeComment
+            options.commentBox ?= true
             super
 
         render: ->

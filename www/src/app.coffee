@@ -1,12 +1,13 @@
 # move these into appropriate modules
 require [
-    "jquery",
+    "jquery", "backbone",
     "routers/main", "routers/user", "routers/realm", "routers/quest", "routers/about", "routers/legacy", "routers/not-found", "routers/search"
     "views/app",
     "models/current-user",
     "views/helper/textarea"
-    "bootstrap", "jquery.autosize", "jquery.timeago", "jquery.easing"
-], ($, MainRouter, UserRouter, RealmRouter, QuestRouter, AboutRouter, LegacyRouter, NotFoundRouter, SearchRouter, App, currentUser, TextArea) ->
+    "bootstrap", "jquery-autosize", "jquery.timeago", "jquery.easing"
+    "main.scss"
+], ($, Backbone, MainRouter, UserRouter, RealmRouter, QuestRouter, AboutRouter, LegacyRouter, NotFoundRouter, SearchRouter, App, currentUser, TextArea) ->
     appView = new App(el: $("#wrap"))
     appView.render()
     $(document).ajaxError ->

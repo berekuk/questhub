@@ -1,6 +1,6 @@
 define [
-    "backbone", "models/comment", "models/current-user"
-], (Backbone, Comment, currentUser) ->
+    "underscore", "backbone", "models/comment", "models/current-user"
+], (_, Backbone, Comment, currentUser) ->
     class extends Backbone.Collection
         model: Comment
         url: -> "/api/#{@entity}/#{@eid}/comment"

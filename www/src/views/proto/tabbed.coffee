@@ -1,7 +1,8 @@
 define [
     "underscore"
+    "backbone"
     "views/proto/common"
-], (_, Common) ->
+], (_, Backbone, Common) ->
     class extends Common
 
         tab: null # required
@@ -20,8 +21,8 @@ define [
                 console.trace "one of tabs[tab].url or tab2url must be set"
             url
 
-        initialize: ->
-            @tab = @options.tab if @options.tab?
+        initialize: (options) ->
+            @tab = options.tab if options.tab?
             super
 
         subviews: ->

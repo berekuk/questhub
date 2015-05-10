@@ -1,5 +1,7 @@
 /*.map
-/*.js
 /views
 /models
 /routers
+/node_modules
+/bundle.js
+/*.bundle.js

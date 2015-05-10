@@ -15,7 +15,7 @@ define [
             positionTop: React.PropTypes.number
             arrowOffsetLeft: React.PropTypes.number
             arrowOffsetTop: React.PropTypes.number
-            title: React.PropTypes.renderable
+            title: React.PropTypes.any
 
         getDefaultProps: ->
             placement: 'right'

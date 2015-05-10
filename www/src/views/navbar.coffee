@@ -1,10 +1,11 @@
 define [
+    "underscore"
     "jquery", "backbone",
     "views/proto/common",
     "models/current-user", "models/shared-models",
     "views/user/current", "views/quest/add",
     "text!templates/navbar.html"
-], ($, Backbone, Common, currentUserModel, sharedModels, CurrentUser, QuestAdd, html) ->
+], (_, $, Backbone, Common, currentUserModel, sharedModels, CurrentUser, QuestAdd, html) ->
     class extends Common
         template: _.template html
 

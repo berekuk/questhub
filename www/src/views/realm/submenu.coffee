@@ -1,8 +1,9 @@
 define [
+  "underscore"
   "views/proto/common"
   "views/realm/tabs"
   "text!templates/realm/submenu.html"
-], (Common, RealmTabs, html) ->
+], (_, Common, RealmTabs, html) ->
     class extends Common
         template: _.template(html)
 

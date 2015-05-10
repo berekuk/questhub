@@ -1,8 +1,8 @@
 define [
-    "underscore", "backbone"
+    "underscore", "views/proto/base"
     "react"
-], (_, Backbone, React) ->
-    class extends Backbone.View
+], (_, Base, React) ->
+    class extends Base
         template: _.template("<div></div>")
 
         isReactComponent: true

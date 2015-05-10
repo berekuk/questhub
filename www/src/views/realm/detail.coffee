@@ -1,8 +1,9 @@
 define [
+  "underscore"
   "views/proto/common"
   "views/realm/controls"
   "text!templates/realm/detail.html"
-], (Common, RealmControls, html) ->
+], (_, Common, RealmControls, html) ->
     Common.extend
         template: _.template(html)
         subviews:

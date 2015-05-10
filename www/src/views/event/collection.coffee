@@ -1,9 +1,10 @@
 define [
   "jquery", "underscore",
+  "backbone"
   "views/proto/paged-collection",
   "views/event/any",
   "text!templates/event-collection.html"
-], ($, _, PagedCollection, Event, html) ->
+], ($, _, Backbone, PagedCollection, Event, html) ->
     class extends PagedCollection
         template: _.template html
         listSelector: ".event-collection"

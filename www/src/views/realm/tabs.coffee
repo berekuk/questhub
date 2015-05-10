@@ -1,14 +1,16 @@
 define [
+  "underscore"
+  "backbone"
   "views/proto/common"
   "text!templates/realm/tabs.html"
-], (Common, html) ->
+], (_, Backbone, Common, html) ->
     class extends Common
         template: _.template(html)
         events:
             "click ._icon": "switch"
 
-        initialize: ->
-            @tab = @options.tab
+        initialize: (options) ->
+            @tab = options.tab
             super
 
         switch: (e) ->

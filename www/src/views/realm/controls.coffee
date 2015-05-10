@@ -1,8 +1,9 @@
 define [
+    "underscore"
     "views/proto/common"
     "models/current-user"
     "text!templates/realm/controls.html"
-], (Common, currentUser, html) ->
+], (_, Common, currentUser, html) ->
     class extends Common
         template: _.template(html)
         events:

@@ -1,11 +1,12 @@
 define [
     "underscore", "jquery", "react"
+    "backbone"
     "views/helper/textarea-react"
     "views/helper/tags-input"
     "views/quest/add/realm-helper"
     "models/shared-models", "models/quest"
     "bootstrap"
-], (_, $, React, Textarea, TagsInput, RealmHelper, sharedModels, QuestModel) ->
+], (_, $, React, Backbone, Textarea, TagsInput, RealmHelper, sharedModels, QuestModel) ->
 
     {div,section,header,ul,li,select,option,label,small,input,i,button,a} = React.DOM
 

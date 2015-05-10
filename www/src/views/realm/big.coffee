@@ -1,9 +1,10 @@
 define [
+  "underscore"
   "views/proto/common"
   "views/realm/controls", "views/realm/tabs"
   "views/helper/textarea"
   "text!templates/realm/big.html"
-], (Common, RealmControls, RealmTabs, Textarea, html) ->
+], (_, Common, RealmControls, RealmTabs, Textarea, html) ->
     class extends Common
         template: _.template(html)
 
@@ -25,8 +26,8 @@ define [
 
         description: -> @subview(".description-sv")
 
-        initialize: ->
-            @tab = @options.tab || 'stencils'
+        initialize: (options) ->
+            @tab = options.tab || 'stencils'
             super
             @listenTo @model, "change", @render
 

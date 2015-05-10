@@ -3,4 +3,5 @@
 set -e
 
 mkdir -p /data/dev
-/usr/bin/supervisord -c $APP_HOME/supervisord.conf
+
+./node_modules/.bin/webpack -wc 2>&1

@@ -16,8 +16,8 @@ define [
             "click .push-self": "push"
             "click .pull-self": "pull"
 
-        initialize: ->
-            @hidden = @options.hidden if @options.hidden?
+        initialize: (options) ->
+            @hidden = options.hidden if options.hidden?
             super
             @listenTo @model, "change", @render
 

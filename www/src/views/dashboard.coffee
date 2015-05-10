@@ -1,11 +1,12 @@
 define [
     "underscore"
+    "backbone"
     "views/proto/tabbed"
     "views/user/big",
     "views/dashboard/quests", "views/dashboard/activity", "views/dashboard/profile"
     "models/current-user",
     "text!templates/dashboard.html"
-], (_, Tabbed, UserBig, DashboardQuests, DashboardActivity, DashboardProfile, currentUser, html) ->
+], (_, Backbone, Tabbed, UserBig, DashboardQuests, DashboardActivity, DashboardProfile, currentUser, html) ->
     class extends Tabbed
         template: _.template(html)
         activated: false

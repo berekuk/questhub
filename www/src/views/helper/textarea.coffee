@@ -4,7 +4,7 @@ define [
     "views/helper/markdown"
     "models/current-user"
     "text!templates/helper/textarea.html"
-    "jquery.autosize"
+    "jquery-autosize"
 ], (_, $, Common, Markdown, currentUser, html) ->
 
     previewMode = undefined

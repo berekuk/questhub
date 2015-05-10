@@ -1,4 +1,5 @@
 define [
+    "underscore"
     "backbone"
     "routers/proto/common"
     "models/shared-models"
@@ -6,7 +7,7 @@ define [
     "views/explore"
     "models/user-collection", "views/user/collection"
     "views/realm/detail-collection", "models/realm"
-], (Backbone, Common, sharedModels, RealmPage, Explore, UserCollectionModel, UserCollection, RealmDetailCollection, RealmModel) ->
+], (_, Backbone, Common, sharedModels, RealmPage, Explore, UserCollectionModel, UserCollection, RealmDetailCollection, RealmModel) ->
     class extends Common
         routes:
             "realms": "realms"

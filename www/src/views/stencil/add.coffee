@@ -5,11 +5,12 @@ Lots of this code is copy-pasted from views/quest/add.coffee.
 ###
 define [
     "underscore", "jquery"
+    "backbone"
     "views/proto/common"
     "models/stencil"
     "text!templates/stencil/add.html"
-    "jquery.autosize"
-], (_, $, Common, Model, html) ->
+    "jquery-autosize"
+], (_, $, Backbone, Common, Model, html) ->
     class extends Common
         template: _.template html
         selfRender: true

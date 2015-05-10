@@ -40,8 +40,8 @@ define [
 
         description: -> @subview(".description-edit-sv")
 
-        initialize: ->
-            @tab = @options.tab || 'comments'
+        initialize: (options) ->
+            @tab = options.tab || 'comments'
             super
             @listenTo @model, "change", @render
             @listenTo @model, "change:description", ->

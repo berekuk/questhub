@@ -1,9 +1,10 @@
 define [
     "underscore", "jquery"
+    "backbone"
     "views/proto/common"
     "views/transitional"
     "text!templates/confirm-email.html"
-], (_, $, Common, Transitional, html) ->
+], (_, $, Backbone, Common, Transitional, html) ->
     class extends Common
         template: _.template(html)
         selfRender: true

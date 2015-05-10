@@ -9,8 +9,8 @@ define [
 ], (_, Common, Tabbed, html, mainHtml, apiHtml, syntaxHtml, feedbackHtml) ->
 
     subviewClass = class extends Common
-        initialize: ->
-            @template = @options.template
+        initialize: (options) ->
+            @template = options.template
             super
 
     class extends Tabbed
