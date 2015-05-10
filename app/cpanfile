@@ -4,3 +4,7 @@ requires 'Dancer::Serializer::JSON';
 requires 'Dancer::Session::MongoDB';
 requires 'Dancer::Plugin::Auth::Twitter';
 requires 'Template';
+
+# for development
+requires 'Module::Refresh'; # for Dancer's auto_reload
+requires 'XML::LibXML'; # for atom validation
