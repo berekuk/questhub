@@ -1,15 +1,16 @@
 define [
     "underscore"
+    "views/helper/react-container", "react"
     "views/proto/common"
     "views/notify", "views/navbar"
     "text!templates/app.html"
-], (_, Common, Notify, Navbar, html) ->
+], (_, ReactContainer, React, Common, Notify, Navbar, html) ->
     class extends Common
         template: _.template(html)
         realm_id: null
         subviews:
             ".navbar-subview": ->
-                new Navbar(realm: @realm_id)
+                new ReactContainer Navbar, realm: @realm_id, null
 
         initialize: ->
             super
@@ -53,7 +54,7 @@ define [
         updateRealm: ->
             realm = ((if @_page.realm then @_page.realm() else null))
             @realm_id = realm
-            @subview(".navbar-subview").setRealm(@realm_id)
+            @subview(".navbar-subview").setProp 'realm', @realm_id
 
         updateTitle: ->
             title = if @_page.pageTitle then @_page.pageTitle() else null
@@ -66,7 +67,4 @@ define [
                 window.document.title = "Questhub.io"
 
         setActiveMenuItem: (menuItem) ->
-            @subview(".navbar-subview").setActive menuItem
-
-        settingsDialog: ->
-            @subview(".navbar-subview").currentUser.settingsDialog()
+            @subview(".navbar-subview").setProp 'active', menuItem

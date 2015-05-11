@@ -3,11 +3,12 @@ require [
     "jquery", "backbone",
     "routers/main", "routers/user", "routers/realm", "routers/quest", "routers/about", "routers/legacy", "routers/not-found", "routers/search"
     "views/app",
-    "models/current-user",
+    "models/shared-models",
     "views/helper/textarea"
     "bootstrap", "jquery-autosize", "jquery.timeago", "jquery.easing"
+    "auth"
     "main.scss"
-], ($, Backbone, MainRouter, UserRouter, RealmRouter, QuestRouter, AboutRouter, LegacyRouter, NotFoundRouter, SearchRouter, App, currentUser, TextArea) ->
+], ($, Backbone, MainRouter, UserRouter, RealmRouter, QuestRouter, AboutRouter, LegacyRouter, NotFoundRouter, SearchRouter, App, sharedModels, TextArea) ->
     appView = new App(el: $("#wrap"))
     appView.render()
     $(document).ajaxError ->
@@ -27,15 +28,13 @@ require [
         appView.notify type, message
 
     Backbone.on "pp:settings-dialog", ->
-        appView.settingsDialog()
+        Backbone.history.navigate "/settings", trigger: true
         ga "send", "event", "settings", "open"
 
-    # TODO - try to refetch user in a loop until backends goes online
-    currentUser.fetch success: ->
-        # We're waiting for CurrentUser to be loaded before everything else.
-        # It's a bit slower than starting the router immediately, but it prevents a few nasty race conditions.
-        # Also, it's done just once, so all following navigation is actually *faster*.
-        Backbone.history.start pushState: true
+    # We're waiting for shared data to be loaded before everything else.
+    # It's a bit slower than starting the router immediately, but it prevents a few nasty race conditions.
+    # Also, it's done just once, so all following navigation is actually *faster*.
+    sharedModels.preload -> Backbone.history.start pushState: true
 
     window.onbeforeunload = ->
         if TextArea.active()

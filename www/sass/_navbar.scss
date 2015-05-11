@@ -1,6 +1,8 @@
-nav.sticked {
-    @include breakpoint(B) {
-        @include box-shadow(0 5px 5px -5px $text-color);
+@mixin nav-underline($color) {
+    border-bottom: {
+        color: $color;
+        width: 3px;
+        style: solid;
     }
 }
 
@@ -8,120 +10,103 @@ nav.sticked {
     position: fixed;
     width: 100%;
     z-index: 5;
-
-    @include breakpoint(B) {
-        .nav-inner {
-            max-width: 980px;
-            margin: 0 auto;
-        }
-    }
-
     background-color: $mat;
     border-bottom: 1px solid #ddd;
+}
+.navbar--sticked {
+    @include breakpoint(B) {
+        @include box-shadow(0 5px 5px -5px $text-color);
+    }
+}
 
-    ul {
-        margin: 0;
-        padding: 0;
-        list-style-type: none;
+.navbar__inner {
+    @include breakpoint(B) {
+        max-width: 980px;
+        margin: 0 auto;
+    }
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.navbar-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+a.navbar-link {
+
+    padding: 0 8px;
+    @include breakpoint(C) {
+        padding: 0 18px;
     }
 
-    @mixin nav-underline($color) {
-        border-bottom: {
-            color: $color;
-            width: 3px;
-            style: solid;
+    display: block;
+    line-height: 30px;
+    color: $text-color;
+    text-decoration: none;
+
+    @include nav-underline($mat);
+    &:hover {
+        color: $text-color;
+        background-color: $grey;
+        text-decoration: none;
+        @include nav-underline($text-color);
+    }
+
+    @include breakpoint(B) {
+        .icon-cog {
+            font-size: 15px;
         }
     }
+}
+a.navbar-link--active {
+    @include nav-underline($highlight);
+    &:hover {
+        @include nav-underline($highlight);
+    }
+}
 
-    .top-nav > li {
-        display: inline-block;
-        margin: 0;
-
-        > a {
-
-            padding: 0 8px;
-            @include breakpoint(C) {
-                padding: 0 18px;
-            }
-
-            display: inline-block;
-            line-height: 30px;
-            color: $text-color;
+.navbar-notifications {
+    > a, > a:active, > a:focus {
+        padding: 0 10px;
+        color: #f00;
+        &:hover {
             text-decoration: none;
-
-            &:hover {
-                color: $text-color;
-                background-color: $grey;
-                text-decoration: none;
-                @include nav-underline($text-color);
-            }
-            @include nav-underline($mat);
-        }
-
-        &.active a {
-            @include nav-underline($highlight);
-        }
-    }
-
-    .top-nav {
-        display: inline-block;
-    }
-
-    .current-user-box {
-        float: right;
-        .dropdown-menu {
-            min-width: 0px;
-            left: auto;
-            right: 0;
-        }
-        .current-user-notifications-icon a {
-            padding: 0 10px;
-        }
-    }
-
-    .current-user-box {
-
-        @include breakpoint(B) {
-            .icon-cog {
-                font-size: 15px;
-            }
-        }
-
-        .current-user-notifications-icon {
-            a, a:hover {
-                color: #f00;
-                &:hover {
-                    text-decoration: none;
-                }
-            }
         }
     }
 }
 
 .navbar-search {
-    float: right;
     position: relative;
-    top: 4px;
     margin-right: 4px;
-    input {
-        margin-bottom: 0;
-        padding-left: 8px;
-        padding-right: 21px;
-        border-radius: 20px;
-        height: 13px;
-        line-height: 14px;
-        max-width: 140px;
+}
+// 'input' prefix is necessary for specificity
+input.navbar-search__input {
+    border-radius: 20px;
+    height: 13px;
+    line-height: 14px;
+    padding-left: 8px;
+    padding-right: 21px;
+    max-width: 140px;
+    margin: 0;
+}
+.navbar-search__icon {
+    position: absolute;
+    top: 1px;
+    right: 8px;
+    font-size: 12px;
+    color: $dark-grey;
+    cursor: pointer;
+    &:hover {
+        text-decoration: none;
+        color: $text-color;
     }
-    .navbar-search-icon {
-        position: absolute;
-        top: 1px;
-        right: 8px;
-        font-size: 12px;
-        color: $dark-grey;
-        cursor: pointer;
-        &:hover {
-            text-decoration: none;
-            color: $text-color;
-        }
-    }
+}
+
+.navbar-bootstrap-dropdown {
+    min-width: 0px;
+    left: auto;
+    right: 0;
 }

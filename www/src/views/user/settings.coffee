@@ -8,6 +8,8 @@ define [
 ], (_, $, Backbone, Common, Progress, instanceSettings, UserSettingsModel, currentUser, html) ->
     class extends Common
         template: _.template(html)
+        activeMenuItem: "settings"
+
         events:
             "click .resend-email-confirmation": "resendEmailConfirmation"
             "keyup [name=email]": "typing"

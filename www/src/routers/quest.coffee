@@ -90,8 +90,7 @@ define [
                 if realm or cloned_id
                     # we'd have to update url when realm is changed in quest-add dialog otherwise
                     Backbone.history.navigate "/quest/add", replace: true
-                view = new ReactContainer
-                    component: React.createFactory(QuestAdd)(options)
+                view = new ReactContainer QuestAdd, options, null
                 view.render()
                 @appView.setPageView view
 

@@ -18,7 +18,7 @@ define [
             @setElement $("#notifications") # settings-box is a singleton
 
         start: ->
-            return  unless @current()
+            return unless @current()
             @render()
             @$(".modal").modal "show"
 

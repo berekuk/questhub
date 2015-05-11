@@ -10,7 +10,6 @@ define [
         template: _.template(html)
 
         events:
-            "click .settings": "settingsDialog"
             "click .user-big-tabs div._icon": "switch"
             "click button.user-big-follow": "follow"
             "click button.user-big-unfollow": "unfollow"
@@ -22,9 +21,6 @@ define [
             @tab = options.tab || 'quests'
             super
             @listenTo currentUser, 'change', @render # re-render if "follow" is clicked
-
-        settingsDialog: ->
-            Backbone.trigger "pp:settings-dialog"
 
         serialize: ->
             params = super
