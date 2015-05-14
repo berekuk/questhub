@@ -1,0 +1,11 @@
+{
+  'env': {
+    'browser': true,
+    'node': true,
+  },
+  'rules': {
+    'quotes': [1, 'single'],
+    'comma-dangle': [1, 'always-multiline'],
+    'key-spacing': 0,
+  }
+}
