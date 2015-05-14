@@ -254,7 +254,6 @@ export default React.createClass({
   },
 
   onScroll () {
-    console.log(window.scrollY);
     if (window.scrollY > 10) {
       this.setState({sticked: true});
     }
