@@ -9,6 +9,8 @@ import RealmHelper from 'views/quest/add/realm-helper';
 import sharedModels from 'models/shared-models';
 import QuestModel from 'models/quest';
 
+import ElasticInput from 'components/elastic-input';
+
 const MobileRealmSelector = React.createClass({
   displayName: 'QuestAdd.MobileRealmSelector',
 
@@ -28,7 +30,7 @@ const MobileRealmSelector = React.createClass({
 
     return (
       <div className="mobile-inline-block">
-        in
+        {' in '}
         <select
           name="realm"
           className="quest-add-realm-select"
@@ -100,71 +102,12 @@ const RealmSelector = React.createClass({
   },
 });
 
-const NameInput = React.createClass({
-  displayName: 'QuestAdd.NameInput',
-
-  propTypes: {
-    value: React.PropTypes.string,
-    onChange: React.PropTypes.func.isRequired,
-  },
-
-  handleChange (event) {
-    this.props.onChange(event.target.value);
-  },
-
-  componentDidUpdate () {
-    this.optimizeFont();
-  },
-
-  optimizeFont () {
-    const el = $(React.findDOMNode(this));
-
-    const testerId = 'quest-add-test-span';
-    let tester = $(`#${testerId}`);
-
-    if (!tester.length) {
-      tester = $(`<span id="${testerId}"></span>`)
-      tester.css('display', 'none');
-      tester.css('fontFamily', el.css('fontFamily'));
-      $('body').append(tester);
-    }
-
-    tester.css('fontSize', el.css('fontSize'));
-    tester.css('lineHeight', el.css('lineHeight'));
-
-    tester.text(el.val());
-
-    if (tester.width() > el.width()) {
-      let newFontSize = parseInt(el.css('fontSize')) - 1;
-      if (newFontSize > 14) {
-        newFontSize += 'px';
-        el.css('fontSize', newFontSize);
-        el.css('lineHeight', newFontSize);
-      }
-    }
-  },
-
-  handleKeyDown (event) {
-    if (event.which == 13) {
-      this.props.onSubmit();
-    }
-  },
-
-  focus () {
-    React.findDOMNode(this).focus();
-  },
-
+const FormLabel = React.createClass({
   render () {
     return (
-      <input
-        name='name'
-        type='text'
-        className='input-large'
-        placeholder="What's your next goal?"
-        value={this.props.value}
-        onChange={this.handleChange}
-        onKeyDown={this.handleKeyDown}
-      />
+      <label className='quest-add-form--label'>
+        <small className='muted'>{this.props.children}</small>
+      </label>
     );
   },
 });
@@ -188,24 +131,20 @@ const Form = React.createClass({
 
   render () {
     return (
-      <div className='well clearfix quest-add-form'>
+      <div className='quest-add-form'>
         <div className='form-row'>
-          <label>
-            <small className='muted'>Write a short description of the task here.</small>
-          </label>
-          <NameInput
+          <FormLabel>Write a short description of the task here.</FormLabel>
+          <ElasticInput
             ref='name'
             value={this.props.name}
             onChange={this.props.onNameChange}
             onSubmit={this.props.onSubmit}
+            placeholder="What's your next goal?"
           />
         </div>
 
         <div className='form-row'>
-          <label>
-            <small className='muted'>Description:</small>
-          </label>
-
+          <FormLabel>Description:</FormLabel>
           <Textarea
             realm={this.props.realm} // TODO
             text={this.props.description}
@@ -216,10 +155,7 @@ const Form = React.createClass({
         </div>
 
         <div className='form-row'>
-          <label>
-            <small className='muted'>Tags are optional. Enter them comma-separated here (for example: "bug,dancer"):</small>
-          </label>
-
+          <FormLabel>Tags are optional. Enter them comma-separated here (for example: "bug,dancer"):</FormLabel>
           <TagsInput
             tags={this.props.tags}
             onChange={this.props.onTagsChange}
@@ -287,8 +223,6 @@ export default React.createClass({
   propTypes: {
     realm: React.PropTypes.string,
     cloned_from: React.PropTypes.any, // Backbone model
-    onTitleChange: React.PropTypes.func.isRequired,
-    onActiveMenuItemChange: React.PropTypes.func.isRequired,
   },
 
   getInitialState () {
@@ -372,11 +306,6 @@ export default React.createClass({
   handleSwitchRealm (realm) {
     this.setState({realm});
     this.refs.form.focus();
-  },
-
-  componentDidMount () {
-    this.props.onTitleChange('New quest');
-    this.props.onActiveMenuItemChange('new-quest');
   },
 
   render () {

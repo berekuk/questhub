@@ -83,8 +83,6 @@ define [
 
             options =
                 realm: realm
-                onTitleChange: (title) => @appView.setWindowTitle title
-                onActiveMenuItemChange: (menuItem) => @appView.setActiveMenuItem menuItem
 
             go = =>
                 if realm or cloned_id
@@ -93,6 +91,8 @@ define [
                 view = new ReactContainer QuestAdd, options, null
                 view.render()
                 @appView.setPageView view
+                @appView.setWindowTitle 'New quest'
+                @appView.setActiveMenuItem 'new-quest'
 
             if cloned_id
                 model = new QuestModel _id: cloned_id

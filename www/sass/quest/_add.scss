@@ -1,4 +1,4 @@
-.quest-add label {
+.quest-add-form--label {
     cursor: default; // override bootstrap's "pointer" cursor style, it's confusing
 }
 
@@ -17,6 +17,7 @@
     }
 }
 .quest-add-form {
+    @include well;
     padding: 10px;
 }
 
