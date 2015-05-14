@@ -16,5 +16,8 @@
     "text-loader": "^0.0.1",
     "underscore": "1.4.4",
     "webpack": "^1.8.11"
+  },
+  "devDependencies": {
+    "eslint": "^0.21.0"
   }
 }
