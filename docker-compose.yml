@@ -1,0 +1,57 @@
+data:
+  image: busybox
+  command: cat
+  volumes:
+    - /data
+
+mongo:
+  image: mongo:2.4
+  volumes_from:
+    - data # for pull-db.pl
+  command: mongod --setParameter textSearchEnabled=true
+
+backend:
+  build: ./backend
+  links:
+    - mongo
+  volumes:
+    - backend:/play/backend
+  volumes_from:
+    - data
+  env_file: config/environment
+
+app:
+  build: ./app
+  links:
+    - mongo
+  volumes:
+    - backend:/play/backend
+    - app:/play/app
+  volumes_from:
+    - data
+  env_file: config/environment
+
+www:
+  build: ./www
+  volumes:
+    - www:/www
+
+frontend:
+  build: ./frontend
+  ports:
+    - "8000:80"
+  volumes_from:
+    - data
+    - www
+  links:
+    - app
+  env_file: config/environment
+
+# code editor
+dev:
+  build: ./dev
+  volumes_from:
+    - www
+    - app
+  environment:
+    TERM: xterm-256color
