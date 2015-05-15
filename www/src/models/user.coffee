@@ -1,6 +1,7 @@
 define [
-    "underscore", "backbone"
-], (_, Backbone) ->
+    "jquery", "underscore"
+    "backbone"
+], ($, _, Backbone) ->
     class extends Backbone.Model
         initialize: -> alert "trying to instantiate abstract base class"
 

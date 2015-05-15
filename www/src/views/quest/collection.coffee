@@ -1,9 +1,9 @@
 define [
-    "underscore"
+    "jquery", "underscore"
     "views/proto/paged-collection"
     "views/quest/small"
     "text!templates/quest/collection.html", "jquery-ui"
-], (_, PagedCollection, QuestSmall, html) ->
+], ($, _, PagedCollection, QuestSmall, html) ->
     class extends PagedCollection
         template: _.template(html)
         listSelector: ".quests-list"

@@ -1,8 +1,9 @@
 define [
+    "jquery"
     "models/current-user"
     "views/transitional"
     "backbone"
-], (currentUser, Transitional, Backbone) ->
+], ($, currentUser, Transitional, Backbone) ->
     # global backbone events for signing in and out
 
     personaWatch = false

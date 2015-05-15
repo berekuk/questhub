@@ -1,4 +1,6 @@
-define ["models/proto/paged-collection", "models/quest"], (Parent, Quest) ->
+define [
+    "jquery", "models/proto/paged-collection", "models/quest"
+], ($, Parent, Quest) ->
     class extends Parent
         defaultCgi: ["comment_count=1"]
         baseUrl: "/api/quest"

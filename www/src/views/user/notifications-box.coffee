@@ -1,9 +1,9 @@
 define [
-    "underscore"
+    "jquery", "underscore"
     "views/proto/common"
     "views/user/notifications"
     "text!templates/notifications-box.html"
-], (_, Common, Notifications, html) ->
+], ($, _, Common, Notifications, html) ->
     class extends Common
         template: _.template(html)
         events:

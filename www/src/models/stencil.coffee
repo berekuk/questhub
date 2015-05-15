@@ -1,8 +1,8 @@
 define [
-    "underscore"
+    "jquery", "underscore"
     "models/proto/post"
     "models/current-user"
-], (_, Post, currentUser) ->
+], ($, _, Post, currentUser) ->
     class extends Post
         idAttribute: "_id"
         urlRoot: "/api/stencil"
