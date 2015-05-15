@@ -44,7 +44,7 @@ module.exports = {
   },
 
   plugins: [
-    new ExtractTextPlugin('css/main.css', {allChunks: true }),
+    new ExtractTextPlugin('css/main.css', {allChunks: true}),
   ],
 
   amd: {
