@@ -1,0 +1,18 @@
+QH_DEV=1
+QH_HOST=localhost
+# This is a public port, as seen by the client's browser. It's used, for example, for generating URLs in emails.
+QH_PORT=8000
+
+# QH_SSL=1
+
+# Multiple app containers for nginx upstream.
+# Uncomment this in production for zero- (or at least less-) downtime deploys.
+# QH_APP_SCALE=2
+
+TWITTER_CONSUMER_KEY=IRUAzmA5AjwBTrPQWrCzIQ
+TWITTER_CONSUMER_SECRET=Cj4hB54BLMYeoG9eEX4fd5gexg02nQLIRJ2S3f0nAH4
+
+SES_USERNAME=NONE
+SES_PASSWORD=NONE
+UNSUBSCRIBE_SALT=1234567890
+MIXPANEL_TOKEN=1234567890
