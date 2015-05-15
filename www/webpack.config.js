@@ -21,7 +21,7 @@ module.exports = {
       'jquery.timeago':   path.join(__dirname, 'vendors', 'jquery.timeago'),
       'jquery.typeahead': path.join(__dirname, 'vendors', 'typeahead'),
       'jquery.easing':    path.join(__dirname, 'vendors', 'jquery.easing.1.3'),
-      'bootstrap':        path.join(__dirname, 'vendors', 'bootstrap/js/bootstrap'),
+      'bootstrap':        path.join(__dirname, 'vendors', 'bootstrap'),
       'jquery-ui':        path.join(__dirname, 'vendors', 'jquery-ui/js/jquery-ui-1.10.3.custom'),
     },
   },
