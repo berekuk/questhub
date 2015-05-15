@@ -1,3 +1,5 @@
+var jQuery = require('jquery'); // hacked by berekuk@ to fix webpack issues
+
 /*!
  * typeahead.js 0.9.3
  * https://github.com/twitter/typeahead
@@ -1128,7 +1130,7 @@
                 }
             }
         };
-        jQuery.fn.typeahead = function(method) {
+        $.fn.typeahead = function(method) {
             if (methods[method]) {
                 return methods[method].apply(this, [].slice.call(arguments, 1));
             } else {
@@ -1136,4 +1138,4 @@
             }
         };
     })();
-})(window.jQuery);
+})(jQuery);

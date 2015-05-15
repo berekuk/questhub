@@ -1,6 +1,7 @@
+var webpack = require('webpack');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var path = require('path');
 var srcRoot = path.join(__dirname, 'src');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   entry: './app.coffee',
@@ -17,7 +18,6 @@ module.exports = {
     extensions: ['', '.js', '.jsx', '.coffee'],
     fallback: [__dirname, path.join(__dirname, 'sass')], // for templates and styles
     alias: {
-      jquery: 'jquery/jquery.js',
       'jquery.timeago':   path.join(__dirname, 'vendors', 'jquery.timeago'),
       'jquery.typeahead': path.join(__dirname, 'vendors', 'typeahead'),
       'jquery.easing':    path.join(__dirname, 'vendors', 'jquery.easing.1.3'),
@@ -40,14 +40,6 @@ module.exports = {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader'),
       },
-      {
-        test: /vendors\/jquery\.timeago\.js$/,
-        loader: 'imports?define=>false',
-      },
-      {
-        test: /jquery\.autosize\.js$/,
-        loader: 'imports?define=>false',
-      },
     ],
   },
 
@@ -57,7 +49,9 @@ module.exports = {
 
   amd: {
     jQuery: true,
+    'jquery.timeago': true,
+    'jquery-autosize': true,
   },
 
-  devtool: 'eval',
+  devtool: 'eval-source-map',
 };
