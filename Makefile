@@ -30,3 +30,6 @@ hack:
 
 restart-www:
 	docker-compose kill www && docker-compose start www && docker-compose logs www
+
+restart-all:
+	docker-compose kill && docker-compose up -d
