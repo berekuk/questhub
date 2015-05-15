@@ -1,11 +1,5 @@
-.vagrant
 .ruby-version
 /www/.sass-cache/*
-app/twitter.yml
 *.swp
-/.cookbooks_path.json
-/cookbooks.tgz
-/dna.json
 /dump
-/.chef
-.sass-cache
+/data
