@@ -13,6 +13,14 @@ serializer: JSON
 hostport: "<%= ENV['QH_HOST'] %>:<%= ENV['QH_PORT'] %>"
 service_name: Questhub.io
 
+<% if ENV['QH_DEV'] == '0' %>
+environment: production
+<% elsif ENV['QH_DEV'] == '1' %>
+environment: development
+<% else %>
+<% throw 'oops' %>
+<% end %>
+
 plugins:
   "Auth::Twitter":
     consumer_key:     "<%= ENV['TWITTER_CONSUMER_KEY'] %>"
