@@ -1,8 +1,0 @@
-hostport: localhost:8000
-service_name: Questhub.io
-ses:
-    username: NONE
-    password: NONE
-unsubscribe_salt: 1234567890
-mixpanel_token: 1234567890
-data_dir: "/data"
