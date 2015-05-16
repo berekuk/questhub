@@ -17,7 +17,7 @@ my @comments;
 my @quests;
 my @events;
 
-system('./app/clear_mongo.sh');
+system('./backend/clear_mongo.sh');
 
 my @realms = qw( perl qh );
 for my $realm (@realms) {

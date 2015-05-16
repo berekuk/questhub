@@ -29,8 +29,8 @@ sub mongo_do {
     docker_do('mongo', @_);
 }
 
-sub app_do {
-    docker_do('app', @_);
+sub backend_do {
+    docker_do('backend', @_);
 }
 
 sub main {
@@ -44,7 +44,7 @@ sub main {
 
     my $HOST = 'questhub.io';
 
-    app_do('./clear_mongo.sh');
+    backend_do('./clear_mongo.sh');
     mongo_do('mongo', 'play', '--eval', 'db.realms.drop()');
 
     system('rm -rf dump');
