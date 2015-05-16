@@ -1,0 +1,39 @@
+data:
+  image: busybox
+  command: cat
+  volumes:
+    - /data
+
+mongo:
+  image: mongo:2.4
+  command: mongod --setParameter textSearchEnabled=true
+
+backend:
+  image: berekuk/questhub_backend
+  links:
+    - mongo
+  volumes_from:
+    - data
+  env_file: config/prod
+
+app:
+  image: berekuk/questhub_app
+  links:
+    - mongo
+  volumes_from:
+    - data
+  env_file: config/prod
+
+www:
+  image: berekuk/questhub_www
+
+frontend:
+  image: berekuk/questhub_frontend
+  ports:
+    - "80:80"
+  volumes_from:
+    - data
+    - www
+  links:
+    - app
+  env_file: config/prod

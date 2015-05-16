@@ -18,7 +18,7 @@ backend:
     - backend:/play/backend
   volumes_from:
     - data
-  env_file: config/environment
+  env_file: config/dev
 
 app:
   build: ./app
@@ -29,7 +29,7 @@ app:
     - app:/play/app
   volumes_from:
     - data
-  env_file: config/environment
+  env_file: config/dev
 
 www:
   build: ./www
@@ -45,7 +45,7 @@ frontend:
     - www
   links:
     - app
-  env_file: config/environment
+  env_file: config/dev
 
 # code editor
 dev:
