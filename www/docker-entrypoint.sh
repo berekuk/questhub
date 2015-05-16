@@ -1,6 +1,5 @@
 #!/bin/bash
-
-set -e
+set -euo pipefail
 
 if [ $QH_DEV = 0 ]; then
     ./node_modules/.bin/webpack --optimize-minimize --devtool source-map
