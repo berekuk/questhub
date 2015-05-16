@@ -7,7 +7,7 @@ LOG_DIR=/data/dancer
 mkdir -p $LOG_DIR
 
 PLACKUP_FLAGS=''
-if [ -n $QH_DEV ]; then
+if [ $QH_DEV = 0 ]; then
     PLACKUP_FLAGS=-r
     export DANCER_ENVIRONMENT=production
 else

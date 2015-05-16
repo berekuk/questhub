@@ -17,4 +17,5 @@ RUN npm install
 COPY . $APP_HOME
 COPY docker-entrypoint.sh /entrypoint.sh
 
+VOLUME $APP_HOME/public
 CMD /entrypoint.sh

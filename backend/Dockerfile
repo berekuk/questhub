@@ -9,9 +9,11 @@ RUN apt-get update && apt-get install -y libssl-dev sendmail curl supervisor mak
 
 RUN curl -L https://cpanmin.us | perl - --sudo App::cpanminus
 
+COPY cpanfile $APP_HOME/cpanfile
+RUN cpanm --notest --installdeps .
+
 # will be remounted in development
 COPY . $APP_HOME
-RUN cpanm --notest --installdeps .
 
 COPY docker-entrypoint.sh /entrypoint.sh
 CMD /entrypoint.sh
