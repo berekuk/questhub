@@ -8,7 +8,7 @@ mongo:
   image: mongo:2.4
   volumes_from:
     - data # for pull-db.pl
-  command: mongod --setParameter textSearchEnabled=true
+  command: mongod --setParameter textSearchEnabled=true --smallfiles
 
 backend:
   build: ./backend
