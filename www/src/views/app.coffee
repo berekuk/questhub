@@ -1,10 +1,10 @@
 define [
     "underscore"
-    "views/helper/react-container", "react"
+    "views/helper/react-container"
     "views/proto/common"
     "views/notify", "views/navbar"
     "text!templates/app.html"
-], (_, ReactContainer, React, Common, Notify, Navbar, html) ->
+], (_, ReactContainer, Common, Notify, Navbar, html) ->
     class extends Common
         template: _.template(html)
         realm_id: null
