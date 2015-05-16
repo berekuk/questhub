@@ -33,3 +33,21 @@ restart-www:
 
 restart-all:
 	docker-compose kill && docker-compose up -d
+
+release-all: release-app release-backend release-frontend release-www
+
+release-app:
+	docker build -t berekuk/questhub_app app
+	docker push berekuk/questhub_app
+
+release-backend:
+	docker build -t berekuk/questhub_backend backend
+	docker push berekuk/questhub_backend
+
+release-frontend:
+	docker build -t berekuk/questhub_frontend frontend
+	docker push berekuk/questhub_frontend
+
+release-www:
+	docker build -t berekuk/questhub_www www
+	docker push berekuk/questhub_www
