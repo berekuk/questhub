@@ -1,3 +1,6 @@
+label {
+    cursor: default; // override bootstrap's "pointer" cursor style, it's confusing
+}
 .form-row {
     margin-bottom: 8px;
 }

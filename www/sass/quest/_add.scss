@@ -1,57 +1,43 @@
-.quest-add-form--label {
-    cursor: default; // override bootstrap's "pointer" cursor style, it's confusing
-}
-
 // TODO - move somewhere else, this is a separate component now
 .tags-edit input {
     background-color: lighten($orange-color, 20%);
 }
 
-.quest-add-mainarea {
-    > header {
-        @include bg-header;
-        text-align: center;
-        @include breakpoint(lessThanA) {
-            font-size: 18px;
-        }
+.quest-add-header {
+    @include bg-header;
+    text-align: center;
+    @include breakpoint(lessThanA) {
+        font-size: 18px;
     }
-}
-.quest-add-form {
-    @include well;
-    padding: 10px;
 }
 
 .quest-add-realm-list {
     margin: 0 auto;
     max-width: 150px;
+}
+
+.quest-add-realm-selector {
+    border: 1px solid transparent;
     > header {
         @include bg-header;
         text-align: center;
     }
-    li {
-        display: block;
-        width: 100%;
-        text-align: center;
-    }
 }
-
-.quest-add-sidebar {
-    border: 1px solid transparent;
-}
-.quest-add-realm-unpicked {
+.quest-add-realm-selector__unpicked {
     border: 1px dashed $red-color;
     header {
         color: $red-color;
     }
 }
+
 .quest-add-realm-helper {
     clear: both;
-    img {
-        display: block;
-        margin: 0 auto;
-        width: 80px;
-        height: 80px;
-    }
+}
+.quest-add-realm-helper--image {
+    display: block;
+    margin: 0 auto;
+    width: 80px;
+    height: 80px;
 }
 
 .quest-add-realm-select {

@@ -12,13 +12,13 @@ export default React.createClass({
     if (!stencils) return;
 
     return (
-      <p>
+      <div>
         <span className='label label-important'>New!</span>
         <br/>
         <a href={`/realm/${model.get('id')}/stencils`}>
           Choose a quest from {model.get('stat').stencils} stencils.
         </a>
-      </p>
+      </div>
     );
   },
 
@@ -28,7 +28,7 @@ export default React.createClass({
 
     return (
       <div>
-        <img src={model.get('pic')}/>
+        <img src={model.get('pic')} className='quest-add-realm-helper--image'/>
         {this.renderStencilsNote()}
       </div>
     );

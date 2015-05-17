@@ -11,6 +11,9 @@ import QuestModel from 'models/quest';
 
 import ElasticInput from 'components/elastic-input';
 
+import {Sidebar, Mainarea} from 'components/layout';
+import * as Form from 'components/form';
+
 const MobileRealmSelector = React.createClass({
   displayName: 'QuestAdd.MobileRealmSelector',
 
@@ -32,7 +35,6 @@ const MobileRealmSelector = React.createClass({
       <div className="mobile-inline-block">
         {' in '}
         <select
-          name="realm"
           className="quest-add-realm-select"
           value={this.props.realm}
           onChange={event => this.props.onSwitchRealm(event.target.value)}
@@ -77,9 +79,9 @@ const RealmSelector = React.createClass({
   },
 
   render () {
-    let cs = 'quest-add-sidebar sidebar desktop-block';
+    let cs = 'quest-add-realm-selector';
     if (!this.props.realm) {
-      cs += ' quest-add-realm-unpicked';
+      cs += ' quest-add-realm-selector__unpicked';
     }
 
     const realms = sharedModels.realms.models.map(
@@ -87,32 +89,23 @@ const RealmSelector = React.createClass({
     );
 
     return (
-      <section className={cs}>
-        <div className='quest-add-realm-list clearfix'>
+      <Sidebar desktopOnly={true}>
+        <section className={cs}>
           <header>Realm:</header>
+          <div className='quest-add-realm-list'>
+            <ul className="pills pills__column">
+              {realms}
+            </ul>
+          </div>
 
-          <ul className="pills">
-            {realms}
-          </ul>
-        </div>
-
-        {this.renderSelectedRealm()}
-      </section>
+          {this.renderSelectedRealm()}
+        </section>
+      </Sidebar>
     );
   },
 });
 
-const FormLabel = React.createClass({
-  render () {
-    return (
-      <label className='quest-add-form--label'>
-        <small className='muted'>{this.props.children}</small>
-      </label>
-    );
-  },
-});
-
-const Form = React.createClass({
+const QuestAddForm = React.createClass({
   displayName: 'QuestAdd.Form',
 
   propTypes: {
@@ -131,9 +124,9 @@ const Form = React.createClass({
 
   render () {
     return (
-      <div className='quest-add-form'>
-        <div className='form-row'>
-          <FormLabel>Write a short description of the task here.</FormLabel>
+      <Form.Form>
+        <Form.Row>
+          <Form.Label>Write a short description of the task here.</Form.Label>
           <ElasticInput
             ref='name'
             value={this.props.name}
@@ -141,10 +134,10 @@ const Form = React.createClass({
             onSubmit={this.props.onSubmit}
             placeholder="What's your next goal?"
           />
-        </div>
+        </Form.Row>
 
-        <div className='form-row'>
-          <FormLabel>Description:</FormLabel>
+        <Form.Row>
+          <Form.Label>Description:</Form.Label>
           <Textarea
             realm={this.props.realm} // TODO
             text={this.props.description}
@@ -152,18 +145,18 @@ const Form = React.createClass({
             onTextChange={this.props.onDescriptionChange}
             onSubmit={this.props.onSubmit}
           />
-        </div>
+        </Form.Row>
 
-        <div className='form-row'>
-          <FormLabel>Tags are optional. Enter them comma-separated here (for example: "bug,dancer"):</FormLabel>
+        <Form.Row>
+          <Form.Label>Tags are optional. Enter them comma-separated here (for example: "bug,dancer"):</Form.Label>
           <TagsInput
             tags={this.props.tags}
             onChange={this.props.onTagsChange}
             onValid={this.props.onFormIsValid}
             onSubmit={this.props.onSubmit}
           />
-        </div>
-      </div>
+        </Form.Row>
+      </Form.Form>
     );
   },
 });
@@ -310,40 +303,42 @@ export default React.createClass({
 
   render () {
     return (
-      <div className='quest-add'>
+      <div>
         <RealmSelector
           realm={this.state.realm}
           onSwitchRealm={this.handleSwitchRealm}
         />
-        <section className='quest-add-mainarea mainarea'>
-          <header>
-            Go on a quest
-            <MobileRealmSelector
+        <Mainarea>
+          <section>
+            <header className='quest-add-header'>
+              <span>Go on a quest</span>
+              <MobileRealmSelector
+                realm={this.state.realm}
+                onSwitchRealm={this.handleSwitchRealm}
+              />
+            </header>
+
+            <QuestAddForm
+              ref='form'
               realm={this.state.realm}
-              onSwitchRealm={this.handleSwitchRealm}
+              name={this.state.name}
+              tags={this.state.tags}
+              description={this.state.description}
+              onNameChange={name => this.setState({name})}
+              onTagsChange={tags => this.setState({tags})}
+              onDescriptionChange={description => this.setState({description})}
+              onFormIsValid={valid => this.setState({valid})}
+              onSubmit={this.submit}
             />
-          </header>
 
-          <Form
-            ref='form'
-            realm={this.state.realm}
-            name={this.state.name}
-            tags={this.state.tags}
-            description={this.state.description}
-            onTagsChange={tags => this.setState({tags})}
-            onNameChange={name => this.setState({name})}
-            onDescriptionChange={description => this.setState({description})}
-            onFormIsValid={valid => this.setState({valid})}
-            onSubmit={this.submit}
-          />
-
-          <Buttons
-            submitted={this.state.submitted}
-            submittable={this.submittable()}
-            onClose={this.close}
-            onSubmit={this.submit}
-          />
-        </section>
+            <Buttons
+              submitted={this.state.submitted}
+              submittable={this.submittable()}
+              onClose={this.close}
+              onSubmit={this.submit}
+            />
+          </section>
+        </Mainarea>
       </div>
     );
   },

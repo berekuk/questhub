@@ -24,3 +24,10 @@ ul.pills {
         }
     }
 }
+ul.pills__column {
+    li {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+}
