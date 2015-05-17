@@ -1,0 +1,12 @@
+emails in dev - mailcatcher
+check backend/crontab
+node server
+images to S3
+investigate nginx-proxy
+
+# WWW
+
+Get rid of:
+- jquery-ui
+- bootstrap
+- backbone
