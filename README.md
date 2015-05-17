@@ -1,51 +1,49 @@
-Questhub.io
-=========
+# Questhub.io
 
 http://questhub.io sources.
 
-Quick start
-=========
+# Quick start
 
-1. Install http://vagrantup.com/
-2. Clone this repo
-3. Run `vagrant up`.
-(This step takes 15 minutes on my laptop.)
-4. Go to http://localhost:3001 in your browser.
+1. Install [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/).
+2. Clone this repo.
+3. Run `docker-compose up -d`.
+(This step takes about half an hour on my laptop.)
+4. Go to http://localhost:8000 in your browser.
+(If you have issues with accessing the port, but `docker-compose ps` shows that everything is running, check out [Port forwarding](https://github.com/boot2docker/boot2docker/blob/master/doc/WORKAROUNDS.md#port-forwarding) instructions.)
 
-Run `vagrant ssh` to access your VM.
+# Development
 
-How everything is configured
-=========
+## How everything is configured
 
-nginx listens to 80 and 81 ports. Port 80 is for production, 81 is for development.
-It serves static html/css/js files from `www` folder, except for `/api` calls, which it proxies to 3000 or 3001 ports.
-So `:80/api` is proxied to `:3000/api`, and `:81/api` is proxied to `:3001/api`.
+Questhub consists of the following containers:
 
-There are two Dancer instances, one for production on `:3000` and one for development on `:3001`.
-Both are running as Ubic services.
-Development Dancer instance should reload code changes automatically, thanks to Dancer's `auto_reload` option. (Upd: It doesn't, `auto_reload` is broken. Restart manually with `sudo ubic restart dancer-dev`.)
-To reload the production instance, run `sudo ubic restart dancer` inside the VM.
+* `backend` with background jobs
+* `app` with API server (written in Perl Dancer) serving JSON
+* `frontend` with NGINX which proxies API requests to `app` and serves other files statically
+* `www` with frontend JS code, webpack for development and some node modules
+* also, `mongo` with MongoDB
+* `data` with data volumes, mostly logs
+* `dev` for the editing environment (tuned for berekuk's comfort, check out the Dockerfile)
 
-Port 80 from VM is forwarded to port 3000 on your localhost, and port 81 to 3001.
-So, after starting VM using `vagrant up`, you can access the development instance by going to http://localhost:3001 in your browser.
+Read `docker-compose.yml` for the details how all these are linked together.
 
-Source code is stored (mounted) in `/play`. It's also mounted into `/vagrant`, but you shouldn't reference `/vagrant` dir in the code, because there's no `/vagrant` in production.
+Logs and other data, except for mongodb, is mounted to `data` via `data` container. Nginx logs are in `data/access.log` and `data/error.log`. Dancer logs are in `data/dancer`.
 
-Logs and other data, except for mongodb, is in `/data`. Nginx logs are in `/data/access.log` and `/data/error.log`. Dancer logs are in `/data/dancer` and `/data/dancer-dev`.
+## How development is different from production
 
-How to reconfigure the environment
-=========
+* code is mounted as volumes
+* (app) dancer in development mode
+* (www) generate JS code once instead of running webpack continously
+* two app instances for potential zero-downtime deployment
+* no SSL certificates
 
-The VM contents is configured with [Chef](http://www.opscode.com/chef/).
-If you need a new debian package, add `package %package_name%` line to `cookbooks/questhub/recipes/default.rb` file.
-If you need a new CPAN module, add `cpan_module %module_name%` line to `cookbooks/questhub/recipes/default.rb` file.
+# Deployment
 
-You can re-deploy a new chef configuration into an existing VM by running `vagrant provision`.
+1. Prepare a new production host with `docker-machine` (check out `deploy/new-host.pl` for an example). Point your docker client to it.
+2. Write `config/prod` based on `config/dev`.
+3. Optionally, if you'd like to use SSL, put your SSL certificates to `/home/ubuntu/ssl` on the production server.
+4. Run `docker-compose -f docker-compose.prod.yml up -d`.
 
-=========
-
-## API
+# API
 
 See `app/API.md` for backend API documentation.
-
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/b51c1d8598e1739b36f08b6ff21a0622 "githalytics.com")](http://githalytics.com/berekuk/questhub)
