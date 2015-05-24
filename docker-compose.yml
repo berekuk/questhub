@@ -35,15 +35,8 @@ www:
   build: ./www
   volumes:
     - www:/www
-  env_file: config/dev
-
-frontend:
-  build: ./frontend
   ports:
     - "8000:80"
-  volumes_from:
-    - data
-    - www
   links:
     - app
   env_file: config/dev
