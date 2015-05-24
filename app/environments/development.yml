@@ -11,10 +11,9 @@ logger: "console"
 # (debug, info, warning and error)
 log: "core"
 
-# should Dancer consider warnings as critical errors?
-warnings: 1
-
-# should Dancer show a stacktrace when an error is caught?
+# warnings are fatal
+#warnings: 1
+traces: 1
 show_errors: 1
 
 hostport: "localhost:80"
