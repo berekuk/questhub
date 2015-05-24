@@ -1,25 +1,15 @@
-test: test_backend test_app test_frontend
+test: test-backend test-app test-frontend
 
-test_backend:
+test-backend:
 	docker-compose run backend bash -c 'cd /play/backend && prove'
 
-test_app:
+test-app:
 	docker-compose run app bash -c 'cd /play/app && prove'
 
-test_frontend:
+test-frontend:
 	@echo "Frontend tests are temporarily broken due to problems with installing phantomjs in our containers"
 	# www is based on node:0.12, frontend is based on nginx:latest, both are Debian 8, there's no phantomjs for Debian 8 :(
 	# Command for running tests: phantomjs /www/tools/run-jasmine.js http://localhost:80/test/index.html
-
-release:
-	docker build -t berekuk/questhub_backend backend
-	docker push berekuk/questhub_backend
-	
-	docker build -t berekuk/questhub_app app
-	docker push berekuk/questhub_app
-	
-	docker build -t berekuk/questhub_frontend frontend
-	docker push berekuk/questhub_frontend
 
 hack:
 	@echo "Entering the docker container for editing the mounted code volumes."
@@ -31,10 +21,10 @@ hack:
 restart-www:
 	docker-compose kill www && docker-compose start www && docker-compose logs www
 
-restart-all:
+restart:
 	docker-compose kill && docker-compose up -d
 
-release-all: release-app release-backend release-frontend release-www
+release: release-app release-backend release-frontend release-www
 
 release-app:
 	docker build -t berekuk/questhub_app app
