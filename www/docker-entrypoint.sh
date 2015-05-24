@@ -1,8 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
-if [ $QH_DEV = 0 ]; then
-    ./node_modules/.bin/webpack --optimize-minimize --devtool source-map
+if [ $QH_DEV = 1 ]; then
+    export NODE_ENV=development
 else
-    ./node_modules/.bin/webpack -wc 2>&1
+    export NODE_ENV=production
 fi
+node index.js

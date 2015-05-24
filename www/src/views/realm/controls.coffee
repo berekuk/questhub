@@ -2,7 +2,7 @@ define [
     "underscore"
     "views/proto/common"
     "models/current-user"
-    "text!templates/realm/controls.html"
+    "raw!templates/realm/controls.html"
 ], (_, Common, currentUser, html) ->
     class extends Common
         template: _.template(html)

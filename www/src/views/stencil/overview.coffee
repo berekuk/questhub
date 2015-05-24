@@ -4,7 +4,7 @@ define [
     "models/shared-models"
     "models/stencil/collection", "views/stencil/collection"
     "views/stencil/add"
-    "text!templates/stencil/overview.html"
+    "raw!templates/stencil/overview.html"
 ], (_, Common, sharedModels, CollectionModel, Collection, StencilAdd, html) ->
     class extends Common
         template: _.template(html)

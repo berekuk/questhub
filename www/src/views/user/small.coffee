@@ -2,7 +2,7 @@ define [
     "underscore"
     "views/proto/common"
     "models/current-user"
-    "text!templates/user/small.html"
+    "raw!templates/user/small.html"
 ], (_, Common, currentUser, html) ->
     class extends Common
         template: _.template(html)

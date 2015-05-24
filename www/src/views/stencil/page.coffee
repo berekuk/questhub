@@ -4,7 +4,7 @@ define [
     "models/shared-models"
     "views/realm/submenu"
     "views/stencil/big", "views/stencil/page/quests", "views/stencil/page/comments"
-    "text!templates/stencil/page.html"
+    "raw!templates/stencil/page.html"
 ], (_, Tabbed, sharedModels, RealmSubmenu, StencilBig, StencilPageQuests, StencilPageComments, html) ->
     class extends Tabbed
         template: _.template html

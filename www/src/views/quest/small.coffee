@@ -2,7 +2,7 @@ define [
     "underscore"
     "views/proto/common"
     "views/quest/like"
-    "text!templates/quest/small.html"
+    "raw!templates/quest/small.html"
 ], (_, Common, Like, html) ->
     class extends Common
         template: _.template(html)

@@ -3,7 +3,7 @@ define [
     "backbone"
     "views/proto/common"
     "views/transitional"
-    "text!templates/confirm-email.html"
+    "raw!templates/confirm-email.html"
 ], (_, $, Backbone, Common, Transitional, html) ->
     class extends Common
         template: _.template(html)

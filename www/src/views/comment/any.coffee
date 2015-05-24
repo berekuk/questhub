@@ -4,7 +4,7 @@ define [
     "views/comment/like"
     "models/current-user"
     "views/helper/textarea", "views/helper/markdown"
-    "text!templates/comment.html"
+    "raw!templates/comment.html"
 ], (_, $, Common, CommentLike, currentUser, Textarea, Markdown, html) ->
     class extends Common
         className: "comment-outer"

@@ -1,21 +1,28 @@
 {
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
-    "babel-loader": "^5.0.0",
+    "express": "^4.12.4",
+    "http-proxy": "^1.11.1",
+    "react": "^0.13.3",
     "backbone": "1.1.2",
-    "bootbox": "^4.4.0",
+    "underscore": "1.4.4",
+    "jquery": "^1.9.1",
+    "jquery-autosize": "1.17.8",
+    "bootbox": "^4.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^0.21.0",
+    "webpack": "^1.8.11",
+    "babel-loader": "^5.0.0",
     "coffee-loader": "^0.7.2",
     "css-loader": "^0.12.0",
     "extract-text-webpack-plugin": "^0.7.1",
-    "jquery": "^1.9.1",
-    "jquery-autosize": "1.17.8",
     "node-sass": "^3.1.1",
-    "react": "^0.13.3",
     "sass-loader": "^1.0.1",
     "style-loader": "^0.12.2",
-    "underscore": "1.4.4",
-    "webpack": "^1.8.11"
-  },
-  "devDependencies": {
-    "eslint": "^0.21.0"
+    "raw-loader": "^0.5.1",
+    "webpack-dev-middleware": "^1.0.11"
   }
 }

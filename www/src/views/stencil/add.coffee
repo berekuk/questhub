@@ -8,7 +8,7 @@ define [
     "backbone"
     "views/proto/common"
     "models/stencil"
-    "text!templates/stencil/add.html"
+    "raw!templates/stencil/add.html"
     "jquery-autosize"
 ], (_, $, Backbone, Common, Model, html) ->
     class extends Common

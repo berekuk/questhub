@@ -2,7 +2,7 @@ define [
     "underscore"
     "views/proto/common"
     "views/quest/collection", "models/quest-collection"
-    "text!templates/stencil/page/quests.html"
+    "raw!templates/stencil/page/quests.html"
 ], (_, Common, QuestCollection, QuestCollectionModel, html) ->
     class extends Common
         template: _.template html

@@ -4,7 +4,7 @@ define [
     "models/shared-models", "models/current-user"
     "views/helper/textarea"
     "views/helper/markdown"
-    "text!templates/stencil/big.html"
+    "raw!templates/stencil/big.html"
 ], ($, _, Common, sharedModels, currentUser, Textarea, Markdown, html) ->
     class extends Common
         template: _.template html

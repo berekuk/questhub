@@ -6,7 +6,7 @@ define [
     "views/quest/completed"
     "views/realm/submenu", "views/quest/checkins", "views/quest/big", "views/comment/collection"
     "models/comment-collection", "models/current-user", "models/shared-models"
-    "text!templates/quest/page.html"
+    "raw!templates/quest/page.html"
     "jquery.typeahead"
 ], (_, Backbone, bootbox, Common, QuestCompleted, RealmSubmenu, QuestCheckins, QuestBig, CommentCollection, CommentCollectionModel, currentUser, sharedModels, html) ->
     class extends Common

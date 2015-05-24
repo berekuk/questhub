@@ -2,7 +2,7 @@ define [
     "underscore", "jquery"
     "views/proto/common"
     "views/dashboard/profile/realm-collection"
-    "text!templates/dashboard/profile.html"
+    "raw!templates/dashboard/profile.html"
 ], (_, $, Common, DashboardProfileRealmCollection, html) ->
     class extends Common
         template: _.template(html)

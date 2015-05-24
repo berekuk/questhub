@@ -4,7 +4,7 @@ define [
     "models/event-collection", "views/event/collection"
     "models/feed/collection", "views/feed/collection"
     "models/current-user"
-    "text!templates/news-feed.html"
+    "raw!templates/news-feed.html"
     "bootstrap"
 ], ($, _, Tabbed, EventCollectionModel, EventCollection, FeedCollectionModel, FeedCollection, currentUser, html) ->
     tabs = ["default", "users", "realms", "watched", "global"]

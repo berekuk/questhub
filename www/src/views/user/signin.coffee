@@ -1,7 +1,7 @@
 define [
     "underscore", "backbone"
     "views/proto/common"
-    "text!templates/signin.html"
+    "raw!templates/signin.html"
 ], (_, Backbone, Common, html) ->
     class extends Common
         template: _.template(html)

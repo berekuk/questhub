@@ -3,7 +3,7 @@ define [
     "views/proto/common"
     "views/quest/feed"
     "models/quest"
-    "text!templates/search/item.html"
+    "raw!templates/search/item.html"
 ], (_, Common, QuestBig, QuestModel, html) ->
     class extends Common
         template: _.template html

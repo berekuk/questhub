@@ -2,7 +2,7 @@ define [
     "underscore", "backbone"
     "views/proto/any-collection"
     "views/stencil/small"
-    "text!templates/stencil/collection.html"
+    "raw!templates/stencil/collection.html"
 ], (_, Backbone, Parent, StencilSmall, html) ->
     class extends Parent
         template: _.template(html)

@@ -3,7 +3,7 @@ define [
     "views/proto/common"
     "views/helper/markdown"
     "models/current-user"
-    "text!templates/helper/textarea.html"
+    "raw!templates/helper/textarea.html"
     "jquery-autosize"
 ], (_, $, Common, Markdown, currentUser, html) ->
 

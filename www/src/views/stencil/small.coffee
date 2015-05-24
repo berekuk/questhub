@@ -2,7 +2,7 @@ define [
     "underscore"
     "views/proto/common"
     "views/helper/markdown"
-    "text!templates/stencil/small.html"
+    "raw!templates/stencil/small.html"
 ], (_, Common, Markdown, html) ->
     class extends Common
         template: _.template html

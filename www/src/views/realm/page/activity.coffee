@@ -3,7 +3,7 @@ define [
     "views/proto/common"
     "models/event-collection", "views/event/collection"
     "models/feed/collection", "views/feed/collection"
-    "text!templates/realm/page/activity.html"
+    "raw!templates/realm/page/activity.html"
 ], (_, Common, EventCollectionModel, EventCollection, FeedCollectionModel, FeedCollection, html) ->
     class extends Common
         template: _.template(html)

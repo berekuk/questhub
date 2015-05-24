@@ -1,4 +1,4 @@
-define ["underscore", "views/proto/common", "text!templates/progress.html"], (_, Common, html) ->
+define ["underscore", "views/proto/common", "raw!templates/progress.html"], (_, Common, html) ->
     Common.extend
         template: _.template(html)
         on: ->

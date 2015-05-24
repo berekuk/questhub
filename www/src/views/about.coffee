@@ -1,11 +1,11 @@
 define [
     "jquery", "underscore"
     "views/proto/common", "views/proto/tabbed"
-    "text!templates/about.html"
-    "text!templates/about/main.html"
-    "text!templates/about/api.html"
-    "text!templates/about/syntax.html"
-    "text!templates/about/feedback.html"
+    "raw!templates/about.html"
+    "raw!templates/about/main.html"
+    "raw!templates/about/api.html"
+    "raw!templates/about/syntax.html"
+    "raw!templates/about/feedback.html"
 ], ($, _, Common, Tabbed, html, mainHtml, apiHtml, syntaxHtml, feedbackHtml) ->
 
     subviewClass = class extends Common

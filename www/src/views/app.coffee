@@ -3,7 +3,7 @@ define [
     "views/helper/react-container"
     "views/proto/common"
     "views/notify", "views/navbar"
-    "text!templates/app.html"
+    "raw!templates/app.html"
 ], (_, ReactContainer, Common, Notify, Navbar, html) ->
     class extends Common
         template: _.template(html)

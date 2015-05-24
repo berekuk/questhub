@@ -5,7 +5,7 @@ define [
     "views/stencil/feed"
     "views/comment/collection", "models/comment-collection"
     "views/progress"
-    "text!templates/feed/item.html"
+    "raw!templates/feed/item.html"
 ], (_, Common, Quest, Stencil, CommentCollection, CommentCollectionModel, Progress, html) ->
     class extends Common
         template: _.template html

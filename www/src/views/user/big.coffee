@@ -4,7 +4,7 @@ define [
     "views/proto/common"
     "models/current-user"
     "views/user/points-histogram"
-    "text!templates/user/big.html"
+    "raw!templates/user/big.html"
 ], (_, $, Backbone, Common, currentUser, UserPointsHistogram, html) ->
     class extends Common
         template: _.template(html)

@@ -2,7 +2,7 @@ define [
   "jquery", "underscore"
   "backbone"
   "views/proto/common"
-  "text!templates/realm/tabs.html"
+  "raw!templates/realm/tabs.html"
 ], ($, _, Backbone, Common, html) ->
     class extends Common
         template: _.template(html)

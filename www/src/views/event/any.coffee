@@ -4,7 +4,7 @@ define [
     "views/quest/like", "views/comment/like"
     "models/quest", "models/comment"
     "models/current-user"
-    "text!templates/event.html"
+    "raw!templates/event.html"
 ], (Backbone, _, $, Common, QuestLike, CommentLike, QuestModel, CommentModel, currentUser, html) ->
     class extends Common
         template: _.template(html)

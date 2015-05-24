@@ -2,7 +2,7 @@ define [
     "underscore"
     "views/stencil/big"
     "models/shared-models"
-    "text!templates/stencil/feed.html"
+    "raw!templates/stencil/feed.html"
 ], (_, StencilBig, sharedModels, html) ->
     class extends StencilBig
         template: _.template(html)

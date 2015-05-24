@@ -2,7 +2,7 @@ define [
     "underscore"
     "views/realm/small"
     "views/proto/any-collection"
-    "text!templates/realm/collection.html"
+    "raw!templates/realm/collection.html"
 ], (_, RealmSmall, AnyCollection, html) ->
     class extends AnyCollection
         template: _.template(html)

@@ -1,7 +1,7 @@
 define [
     "jquery", "underscore"
     "views/proto/common"
-    "text!templates/user/points-histogram.html"
+    "raw!templates/user/points-histogram.html"
 ], ($, _, Common, html) ->
     class extends Common
         template: _.template(html)

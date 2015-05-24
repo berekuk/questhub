@@ -2,7 +2,7 @@ define [
     "underscore"
     "views/proto/common"
     "models/user-collection", "views/user/collection"
-    "text!templates/realm/page/players.html"
+    "raw!templates/realm/page/players.html"
 ], (_, Common, UserCollectionModel, UserCollection, html) ->
     class extends Common
         template: _.template(html)

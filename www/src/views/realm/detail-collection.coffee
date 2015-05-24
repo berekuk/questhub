@@ -3,7 +3,7 @@ define [
   "views/proto/any-collection"
   "views/realm/detail"
   "models/current-user",
-  "text!templates/realm/detail-collection.html"
+  "raw!templates/realm/detail-collection.html"
 ], (_, AnyCollection, RealmDetail, currentUser, html) ->
     AnyCollection.extend
         template: _.template(html)

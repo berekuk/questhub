@@ -5,7 +5,7 @@ define [
     "views/user/big",
     "views/dashboard/quests", "views/dashboard/activity", "views/dashboard/profile"
     "models/current-user",
-    "text!templates/dashboard.html"
+    "raw!templates/dashboard.html"
 ], (_, Backbone, Tabbed, UserBig, DashboardQuests, DashboardActivity, DashboardProfile, currentUser, html) ->
     class extends Tabbed
         template: _.template(html)

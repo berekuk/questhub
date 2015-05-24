@@ -3,7 +3,7 @@ define [
     "views/proto/common"
     "models/search/collection"
     "views/search/collection"
-    "text!templates/search/page.html"
+    "raw!templates/search/page.html"
 ], (_, Common, SearchCollectionModel, SearchCollection, html) ->
     class extends Common
         template: _.template html

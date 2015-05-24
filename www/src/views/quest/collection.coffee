@@ -2,7 +2,7 @@ define [
     "jquery", "underscore"
     "views/proto/paged-collection"
     "views/quest/small"
-    "text!templates/quest/collection.html", "jquery-ui"
+    "raw!templates/quest/collection.html", "jquery-ui"
 ], ($, _, PagedCollection, QuestSmall, html) ->
     class extends PagedCollection
         template: _.template(html)

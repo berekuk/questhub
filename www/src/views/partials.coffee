@@ -1,7 +1,7 @@
 define [
     "jquery", "underscore"
     "markdown", "settings"
-    "text!templates/partials.html"
+    "raw!templates/partials.html"
 ], ($, _, markdown, settings, html) ->
     el = $(html)
 

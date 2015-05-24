@@ -4,7 +4,7 @@ define [
     "views/proto/common"
     "views/user/signin", "views/realm/collection"
     "models/current-user", "models/shared-models"
-    "text!templates/welcome.html"
+    "raw!templates/welcome.html"
 ], (_, Backbone, Common, Signin, RealmCollection, currentUser, sharedModels, html) ->
     class extends Common
         template: _.template(html)

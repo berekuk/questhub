@@ -4,7 +4,7 @@ define [
     "views/proto/common"
     "views/progress"
     "settings", "models/user-settings", "models/current-user"
-    "text!templates/user/settings.html"
+    "raw!templates/user/settings.html"
 ], (_, $, Backbone, Common, Progress, instanceSettings, UserSettingsModel, currentUser, html) ->
     class extends Common
         template: _.template(html)

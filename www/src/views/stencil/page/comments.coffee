@@ -2,7 +2,7 @@ define [
     "underscore"
     "views/proto/common"
     "views/comment/collection", "models/comment-collection"
-    "text!templates/stencil/page/comments.html"
+    "raw!templates/stencil/page/comments.html"
 ], (_, Common, CommentCollection, CommentCollectionModel, html) ->
     class extends Common
         template: _.template html

@@ -3,7 +3,7 @@ define [
     "backbone"
     "views/proto/common"
     "views/user/signin", "models/current-user"
-    "text!templates/user/unsubscribe.html"
+    "raw!templates/user/unsubscribe.html"
 ], (_, Backbone, Common, Signin, currentUser, html) ->
     Common.extend
         template: _.template(html)

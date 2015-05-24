@@ -3,7 +3,7 @@ define [
   "backbone"
   "views/proto/paged-collection",
   "views/event/any",
-  "text!templates/event-collection.html"
+  "raw!templates/event-collection.html"
 ], ($, _, Backbone, PagedCollection, Event, html) ->
     class extends PagedCollection
         template: _.template html

@@ -4,7 +4,7 @@ define [
     "models/current-user"
     "views/comment/any"
     "views/comment/add"
-    "text!templates/comment-collection.html"
+    "raw!templates/comment-collection.html"
 ], (_, $, AnyCollection, currentUser, Comment, CommentAdd, html) ->
     class extends AnyCollection
         template: _.template html

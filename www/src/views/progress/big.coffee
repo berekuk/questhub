@@ -1,5 +1,5 @@
 # FIXME - copypasted from views.progress.js
-define ["underscore", "views/proto/common", "text!templates/progress-big.html"], (_, Common, html) ->
+define ["underscore", "views/proto/common", "raw!templates/progress-big.html"], (_, Common, html) ->
     Common.extend
         template: _.template(html)
         on: ->

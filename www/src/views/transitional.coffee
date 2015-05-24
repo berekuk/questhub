@@ -1,6 +1,6 @@
 define [
     "underscore", "jquery"
-    "views/proto/common", "text!templates/transitional.html"
+    "views/proto/common", "raw!templates/transitional.html"
 ], (_, $, Common, html) ->
     class extends Common
         template: _.template(html)

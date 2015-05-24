@@ -4,7 +4,7 @@ define [
     "models/current-user"
     "views/quest/collection"
     "views/progress", "views/progress/big"
-    "text!templates/dashboard-quest-collection.html"
+    "raw!templates/dashboard-quest-collection.html"
 ], (_, Common, currentUser, QuestCollection, Progress, ProgressBig, html) ->
     class extends Common
         template: _.template(html)

@@ -3,7 +3,7 @@ define [
     "views/proto/common"
     "views/user/signin", "views/helper/textarea"
     "models/current-user"
-    "text!templates/comment/add.html"
+    "raw!templates/comment/add.html"
 ], ($, _, Common, Signin, Textarea, currentUser, html) ->
     class extends Common
         template: _.template html

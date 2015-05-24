@@ -2,8 +2,8 @@ define [
     "underscore"
     "views/proto/common"
     "views/user/points-histogram"
-    "text!templates/dashboard/profile/realm.html"
-    "text!templates/dashboard/profile/realm-collection.html"
+    "raw!templates/dashboard/profile/realm.html"
+    "raw!templates/dashboard/profile/realm-collection.html"
 ], (_, Common, UserPointsHistogram, itemHtml, html) ->
     ItemView = class extends Common
         tagName: 'li'

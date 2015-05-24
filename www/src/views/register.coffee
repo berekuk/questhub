@@ -5,7 +5,7 @@ define [
     "views/proto/common"
     "models/current-user"
     "views/progress/big"
-    "text!templates/register.html"
+    "raw!templates/register.html"
 ], (_, $, Backbone, Common, currentUser, ProgressBig, html) ->
     class extends Common
         template: _.template(html)

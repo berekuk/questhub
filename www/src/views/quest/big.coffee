@@ -5,7 +5,7 @@ define [
     "views/quest/like"
     "views/helper/textarea", "views/helper/markdown"
     "models/current-user", "models/shared-models"
-    "text!templates/quest/big.html"
+    "raw!templates/quest/big.html"
 ], (_, Backbone, $, bootbox, Common, Like, Textarea, Markdown, currentUser, sharedModels, html) ->
     "use strict"
     class extends Common
