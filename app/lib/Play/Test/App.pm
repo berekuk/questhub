@@ -27,7 +27,9 @@ sub http_json {
         $response->content(join '', <$fh>);
     }
 
-    return JSON::decode_json($response->content);
+    my $result = JSON::decode_json($response->content);
+    Dancer::SharedData->reset_all; # necessary because Dancer::Session::Simple somehow revives even after session->destroy
+    return $result;
 }
 
 # register_email 'foo' => { email => 'a@b.com', notify_likes => 1 }

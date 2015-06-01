@@ -1,3 +1,4 @@
+use 5.014;
 use lib 'lib';
 use Play::Test::App;
 use Play::DB qw(db);
@@ -7,6 +8,7 @@ use parent qw(Test::Class);
 sub setup :Tests(setup) {
     reset_db();
     Dancer::session->destroy;
+    Dancer::SharedData->reset_all;
 }
 
 sub users_list_empty :Tests {
@@ -414,7 +416,6 @@ sub register_login_validation :Tests {
 
 sub perl_get_by_email :Tests {
     # register user with settings
-    Dancer::session->destroy;
     Dancer::session twitter_user => { screen_name => 'john' };
     my $settings = {
         email => 'jack@example.com',

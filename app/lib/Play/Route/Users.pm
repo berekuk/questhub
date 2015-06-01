@@ -79,7 +79,7 @@ get '/current_user' => sub {
 
         $user->{settings} = db->users->get_settings($login);
         $user->{notifications} = db->notifications->list($login);
-        $user->{default_upic} = db->images->is_upic_default($login);
+        $user->{default_upic} = not db->images->has_key($login, 'small');
     }
     else {
         $user->{registered} = 0;
@@ -110,7 +110,7 @@ post '/current_user/pic' => sub {
         die "No pic provided";
     }
 
-    db->images->store_upic_by_content($login, $file->content);
+    db->images->store($login, $file->content);
     redirect '/settings';
 };
 
@@ -166,8 +166,10 @@ get '/user/:login/stat' => sub {
 
 get '/user/:login/pic' => sub {
     my $size = param('s');
-    my $file = db->images->upic_file(param('login'), $size);
-    send_file($file, content_type => 'image/jpg', system_path => 1);
+    my $content = db->images->load(param('login'), $size);
+
+    content_type 'image/jpg';
+    return $content;
 };
 
 
