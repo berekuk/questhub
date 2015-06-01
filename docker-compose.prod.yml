@@ -16,15 +16,7 @@ backend:
     - data
   env_file: config/prod
 
-app1:
-  image: berekuk/questhub_app
-  links:
-    - mongo
-  volumes_from:
-    - data
-  env_file: config/prod
-
-app2:
+app:
   image: berekuk/questhub_app
   links:
     - mongo
@@ -34,19 +26,8 @@ app2:
 
 www:
   image: berekuk/questhub_www
-  env_file: config/prod
-
-frontend:
-  image: berekuk/questhub_frontend
   ports:
-    - "80:80"
-    - "443:443"
-  volumes:
-    - /home/ubuntu/ssl:/config/ssl
-  volumes_from:
-    - data
-    - www
-  links:
-    - app1
-    - app2
+    - "8000:80"
   env_file: config/prod
+  environment:
+    VIRTUAL_HOST: questhub.io
