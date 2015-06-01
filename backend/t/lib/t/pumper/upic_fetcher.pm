@@ -40,10 +40,8 @@ sub one_pic :Tests {
     );
     $self->{pumper}->run;
 
-    is db->images->upic_file('berekuk', 'small'), 'tfiles/images/pic/berekuk.small';
-    is db->images->upic_file('berekuk', 'normal'), 'tfiles/images/pic/berekuk.normal';
-    ok -e 'tfiles/images/pic/berekuk.small';
-    ok -e 'tfiles/images/pic/berekuk.normal';
+    ok db->images->has_key('berekuk', 'small');
+    ok db->images->has_key('berekuk', 'normal');
 
     $log->contains_ok(qr/1 ok/);
 
@@ -73,10 +71,8 @@ sub invalid_pic :Tests {
 
     $log->contains_ok(qr/4 failed, 1 ok/); # 3 retries
 
-    is db->images->upic_file('neilb', 'small'), 'tfiles/images/pic/neilb.small';
-    is db->images->upic_file('neilb', 'normal'), 'tfiles/images/pic/neilb.normal';
-    ok -e 'tfiles/images/pic/neilb.small';
-    ok -e 'tfiles/images/pic/neilb.normal';
+    ok db->images->has_key('neilb', 'small');
+    ok db->images->has_key('neilb', 'normal');
 
     $log->clear;
     $self->{pumper}->run;

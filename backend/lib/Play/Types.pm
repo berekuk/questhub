@@ -11,7 +11,7 @@ use Type::Library
         Realm RealmName
         Entity
         StencilPoints
-        ImageSize ImageUpic
+        ImageSize ImageUpic ImageStorageKey
         CommentParams
         NewsFeedTab
     );
@@ -33,6 +33,10 @@ declare StencilPoints,
     where { $_ == 1 or $_ == 2 or $_ == 3 };
 
 declare ImageSize, as enum([qw/ small normal /]);
+
+# starts with alphanumerical to avoid '..'
+# actually we want this to be Login.ImageSize, but I'm not sure how to express that with Type::Tiny
+declare ImageStorageKey, as StrMatch[ qr/^\w[\w\.]*/ ];
 
 declare ImageUpic,
     as Dict[small => Str, normal => Str];

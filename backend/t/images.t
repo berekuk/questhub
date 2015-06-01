@@ -54,22 +54,6 @@ sub upic :Tests {
     );
 }
 
-sub fetch :Tests {
-    prepare_data_dir();
-
-    db->images->fetch_upic(
-        db->images->upic_default,
-        'berekuk'
-    );
-
-    ok -e 'tfiles/images/pic/berekuk.small';
-
-    is db->images->upic_file('berekuk', 'small'), 'tfiles/images/pic/berekuk.small';
-    is db->images->upic_file('berekuk', 'normal'), 'tfiles/images/pic/berekuk.normal';
-    is db->images->upic_file('nazer', 'normal'), '/play/backend/pic/default/normal';
-    like exception { db->images->upic_file('berekuk', 'blah') }, qr/type constraint/;
-}
-
 sub fetch_schema :Tests {
     prepare_data_dir();
 
@@ -100,9 +84,9 @@ sub enqueue :Tests {
     );
 }
 
-sub store_upic_by_content :Tests {
+sub store :Tests {
     my $content = do { local (@ARGV, $/) = 'pic/default/normal'; <> };
-    db->images->store_upic_by_content('foo', $content);
+    db->images->store('foo', $content);
 
     ok -e 'tfiles/images/pic/foo.normal';
     ok -e 'tfiles/images/pic/foo.small';
@@ -110,15 +94,16 @@ sub store_upic_by_content :Tests {
     like qx(file tfiles/images/pic/foo.small), qr/24 x 24/;
 }
 
-sub is_upic_default :Tests {
+sub has_key :Tests {
     prepare_data_dir();
 
-    ok db->images->is_upic_default('berekuk');
+    ok not db->images->has_key('berekuk', 'small');
     db->images->fetch_upic(
         db->images->upic_default,
         'berekuk'
     );
-    ok not db->images->is_upic_default('berekuk');
+    ok db->images->has_key('berekuk', 'small');
+    ok db->images->has_key('berekuk', 'normal');
 }
 
 __PACKAGE__->new->runtests;

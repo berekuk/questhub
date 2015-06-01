@@ -3,27 +3,26 @@ package Play::DB::Images;
 use Moo;
 
 use Type::Params qw(validate);
-use Types::Standard qw( Str Dict HashRef );
+use Types::Standard qw( Str HashRef );
 use Play::Types qw( Login ImageSize ImageUpic );
 
 use Digest::MD5 qw(md5_hex);
-
-use autodie qw(open close rename);
-
 use LWP::UserAgent;
-
-use Play::Flux;
-use Play::Config qw(setting);
-
 use GD;
 use Image::Resize;
+use autodie qw( open close );
+
+use Play::Flux;
+use Play::DB::Images::Local;
+
 
 my %SIZE_TO_WIDTH = (small => 24, normal => 48);
 
-has 'storage_dir' => (
-    is => 'ro',
-    isa => Str,
-    default => sub { setting('data_dir').'/images' },
+has 'local_storage' => (
+    is => 'lazy',
+    default => sub {
+        return Play::DB::Images::Local->new;
+    },
 );
 
 has 'ua' => (
@@ -47,6 +46,16 @@ sub upic_by_email {
     };
 }
 
+sub upic_default {
+    my $self = shift;
+    validate(\@_);
+    return {
+        map {
+            $_ => "http://www.gravatar.com/avatar/00000000000000000000000000000000?s=$SIZE_TO_WIDTH{$_}",
+        } keys %SIZE_TO_WIDTH
+    };
+}
+
 sub upic_by_twitter_data {
     my $self = shift;
     my ($twitter_data) = validate(\@_, HashRef);
@@ -60,15 +69,10 @@ sub upic_by_twitter_data {
     };
 }
 
-sub upic_default {
+sub key {
     my $self = shift;
-    validate(\@_);
-
-    return {
-        map {
-            $_ => "http://www.gravatar.com/avatar/00000000000000000000000000000000?s=$SIZE_TO_WIDTH{$_}",
-        } keys %SIZE_TO_WIDTH
-    };
+    my ($login, $size) = validate(\@_, Login, ImageSize);
+    return "$login.$size";
 }
 
 sub fetch_upic {
@@ -84,16 +88,17 @@ sub fetch_upic {
         my $response = $self->ua->get($url);
         die $response->status_line unless $response->is_success;
 
+        my $content = $response->content;
+
         # TODO - check that result is the valid image
-        my $file_name = $self->_storage_file($login, $size);
-        open my $fh, '>', "$file_name.new";
-        print {$fh} $response->content;
-        close $fh;
-        rename "$file_name.new" => $file_name;
+        $self->local_storage->store(
+            $self->key($login, $size),
+            $content
+        );
     }
 }
 
-sub store_upic_by_content {
+sub store {
     my $self = shift;
     my ($login, $content) = validate(\@_, Login, Str);
 
@@ -105,44 +110,41 @@ sub store_upic_by_content {
         my $width = $SIZE_TO_WIDTH{$size};
         my $resized = Image::Resize->new($gd)->resize($width, $width);
         my $resized_content = $resized->png;
-        $self->_save_file(
-            $self->_storage_file($login, $size),
+
+        $self->local_storage->store(
+            $self->key($login, $size),
             $resized_content
         );
     }
 }
 
-sub _save_file {
+sub _load_default {
     my $self = shift;
-    my ($filename, $content) = @_;
-
-    open my $fh, '>', "$filename.new";
-    print {$fh} $content;
+    my ($size) = validate(\@_, ImageSize);
+    open my $fh, '<', "/play/backend/pic/default/$size";
+    local $/ = undef;
+    my $content = <$fh>;
     close $fh;
-    rename "$filename.new" => $filename;
+    return $content;
 }
 
-sub _storage_file {
-    my $self = shift;
-    my ($login, $size) = @_;
-
-    return $self->storage_dir."/pic/$login.$size";
-}
-
-sub upic_file {
+sub has_key {
     my $self = shift;
     my ($login, $size) = validate(\@_, Login, ImageSize);
 
-    my $file = $self->_storage_file($login, $size);
-    return $file if -e $file;
-    return "/play/backend/pic/default/$size";
+    my $key = $self->key($login, $size);
+    return $self->local_storage->has_key($key);
 }
 
-sub is_upic_default {
+sub load {
     my $self = shift;
-    my ($login) = validate(\@_, Login);
-    my $file = $self->_storage_file($login, 'normal');
-    return not -e $file;
+    my ($login, $size) = validate(\@_, Login, ImageSize);
+
+    my $key = $self->key($login, $size);
+    if ($self->local_storage->has_key($key)) {
+        return $self->local_storage->load($key);
+    }
+    return $self->_load_default($size);
 }
 
 sub enqueue_fetch_upic {
