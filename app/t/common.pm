@@ -5,7 +5,7 @@ use lib 'lib';
 use Import::Into;
 
 BEGIN {
-    $ENV{DEV_MODE} = 1;
+    $ENV{QH_DEV} = 1;
 }
 
 use Play::Mongo qw(:test);

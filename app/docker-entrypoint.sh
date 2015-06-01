@@ -9,7 +9,6 @@ mkdir -p $LOG_DIR
 PLACKUP_FLAGS=''
 if [ $QH_DEV = 1 ]; then
     PLACKUP_FLAGS=-r
-    DEV_MODE=1
 fi
 
 (cd /play/backend && ./generate-backend-config.sh)

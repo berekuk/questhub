@@ -11,7 +11,7 @@ our @EXPORT = qw( http_json register_email );
 use lib '../backend/lib';
 
 BEGIN {
-    $ENV{DEV_MODE} = 1;
+    $ENV{QH_DEV} = 1;
 }
 
 use Import::Into;

@@ -321,7 +321,7 @@ get '/user/:prefix/autocomplete' => sub {
     return db->users->autocomplete(param('prefix'));
 };
 
-if ($ENV{DEV_MODE}) {
+if ($ENV{QH_DEV}) {
     get '/fakeuser/:login' => sub {
         my $login = param('login');
         session 'login' => $login;
