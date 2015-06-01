@@ -8,7 +8,7 @@ use Play::Types qw( Login ImageSize ImageUpic );
 
 use Digest::MD5 qw(md5_hex);
 
-use autodie qw(open close);
+use autodie qw(open close rename);
 
 use LWP::UserAgent;
 
