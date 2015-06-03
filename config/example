@@ -1,19 +1,25 @@
+# Replace with QH_DEV=0 in production.
 QH_DEV=1
+
 QH_HOST=localhost
+
 # This is a public port, as seen by the client's browser. It's used, for example, for generating URLs in emails.
 QH_PORT=8000
 
-# QH_SSL=1
-
-# Multiple app containers for nginx upstream.
-# Uncomment this in production for zero- (or at least less-) downtime deploys.
-# QH_APP_SCALE=2
-
+# These are my Twitter credentials for the *dev* account.
+# TODO - remove these and recommend users to register their own. (not sure how insecure this is)
 TWITTER_CONSUMER_KEY=IRUAzmA5AjwBTrPQWrCzIQ
 TWITTER_CONSUMER_SECRET=Cj4hB54BLMYeoG9eEX4fd5gexg02nQLIRJ2S3f0nAH4
 
+# Put your IAM credentials here if you like.
+# They will be used for:
+# 1. SES emails.
+# 2. S3 storage (if you specify S3_BUCKET, see below.)
+# You'll have to configure IAM policies accordingly. (I haven't automated this yet and don't provide the examples, sorry.)
 AWS_ACCESS_KEY_ID=NONE
 AWS_SECRET_ACCESS_KEY=NONE
+# Uncomment this and put your own bucket name here if you'd like to use S3 for userpic storage in development.
+# S3_BUCKET=...
 
 UNSUBSCRIBE_SALT=1234567890
 MIXPANEL_TOKEN=1234567890
