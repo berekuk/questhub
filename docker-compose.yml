@@ -44,6 +44,8 @@ www:
 # code editor
 dev:
   build: ./dev
+  links:
+    - mongo
   volumes_from:
     - www
     - app

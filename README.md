@@ -6,9 +6,10 @@ http://questhub.io sources.
 
 1. Install [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/).
 2. Clone this repo.
-3. Run `docker-compose up -d`.
+3. Copy `config/example` to `config/dev`. Configure manually as needed.
+4. Run `docker-compose up -d`.
 (This step takes about half an hour on my laptop.)
-4. Go to http://localhost:8000 in your browser.
+5. Go to http://localhost:8000 in your browser.
 (If you have issues with accessing the port, but `docker-compose ps` shows that everything is running, check out [Port forwarding](https://github.com/boot2docker/boot2docker/blob/master/doc/WORKAROUNDS.md#port-forwarding) instructions.)
 
 # Development
