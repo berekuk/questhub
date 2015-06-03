@@ -16,7 +16,7 @@ sub _build_transport {
     if (setting('test')) {
         return Email::Sender::Transport::Test->new;
     }
-    elsif (not setting('ses') or not setting('ses')->{username} or setting('ses')->{username} eq 'NONE') {
+    elsif (not setting('aws') or not setting('aws')->{access_key_id} or setting('aws')->{access_key_id} eq 'NONE') {
         return Email::Sender::Transport::SMTP->new(
             host => 'localhost',
             port => 1025,
@@ -26,8 +26,8 @@ sub _build_transport {
     return Email::Sender::Transport::SMTP::TLS->new(
         host => 'email-smtp.us-east-1.amazonaws.com',
         port => 587,
-        username => setting('ses')->{username},
-        password => setting('ses')->{password},
+        username => setting('aws')->{access_key_id},
+        password => setting('aws')->{secret_access_key},
     );
 }
 

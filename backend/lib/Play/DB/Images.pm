@@ -13,15 +13,25 @@ use Image::Resize;
 use autodie qw( open close );
 
 use Play::Flux;
-use Play::DB::Images::Local;
+use Play::Config qw(setting);
 
+use Play::DB::Images::Local;
+use Play::DB::Images::S3;
 
 my %SIZE_TO_WIDTH = (small => 24, normal => 48);
 
-has 'local_storage' => (
+has 'storage' => (
     is => 'lazy',
     default => sub {
-        return Play::DB::Images::Local->new;
+        if (setting('storage_type') eq 'local') {
+            return Play::DB::Images::Local->new;
+        }
+        elsif (setting('storage_type') eq 's3') {
+            return Play::DB::Images::S3->new;
+        }
+        else {
+            die 'Unknown storage type '.setting('storage_type');
+        }
     },
 );
 
@@ -91,7 +101,7 @@ sub fetch_upic {
         my $content = $response->content;
 
         # TODO - check that result is the valid image
-        $self->local_storage->store(
+        $self->storage->store(
             $self->key($login, $size),
             $content
         );
@@ -111,7 +121,7 @@ sub store {
         my $resized = Image::Resize->new($gd)->resize($width, $width);
         my $resized_content = $resized->png;
 
-        $self->local_storage->store(
+        $self->storage->store(
             $self->key($login, $size),
             $resized_content
         );
@@ -133,7 +143,7 @@ sub has_key {
     my ($login, $size) = validate(\@_, Login, ImageSize);
 
     my $key = $self->key($login, $size);
-    return $self->local_storage->has_key($key);
+    return $self->storage->has_key($key);
 }
 
 sub load {
@@ -141,8 +151,8 @@ sub load {
     my ($login, $size) = validate(\@_, Login, ImageSize);
 
     my $key = $self->key($login, $size);
-    if ($self->local_storage->has_key($key)) {
-        return $self->local_storage->load($key);
+    if ($self->storage->has_key($key)) {
+        return $self->storage->load($key);
     }
     return $self->_load_default($size);
 }
