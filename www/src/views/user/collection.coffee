@@ -1,7 +1,7 @@
 define [
     "underscore"
     "views/proto/paged-collection"
-    "views/user/small"
+    "views/user/small-outer"
     "raw!templates/user/collection.html"
 ], (_, PagedCollection, UserSmall, html) ->
     PagedCollection.extend
@@ -12,7 +12,4 @@ define [
             @collection.options.realm
 
         generateItem: (model) ->
-            new UserSmall(
-                model: model
-                realm: @realm()
-            )
+            new UserSmall model: model, realm: @realm()
