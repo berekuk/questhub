@@ -27,18 +27,6 @@ export default React.createClass({
     return this.props.model.get('rp')[this.props.realm];
   },
 
-  renderLeaderboardTooltip () {
-    if (!this.isCurrent()) {
-      return;
-    }
-    // Bootstrap 2.3.0 tries to line up the text vertically, so we have to use &nbsp;
-    return (
-      <div className='current-user-leaderboard-tip'>
-        <span data-toggle='tooltip' data-trigger='manual' data-placement='right' title='This&nbsp;is&nbsp;you.&nbsp;Climb&nbsp;up!'></span>
-      </div>
-    );
-  },
-
   renderOpenQuests () {
     const openQuests = this.props.model.get('open_quests');
     if (!openQuests) {
@@ -48,7 +36,7 @@ export default React.createClass({
     const line = `${openQuests} open quest${openQuests > 1 ? 's' : ''}`;
 
     return (
-      <span className='user-small-quests'>
+      <span className='user-small__quests'>
         <a href={RouterMap.player(this.login())}>
           {line}
         </a>
@@ -57,19 +45,20 @@ export default React.createClass({
   },
 
   render () {
-    let cs = 'user-small-inner';
+    let cs = 'user-small';
     if (this.isCurrent()) {
-      cs += ' user-small-current';
+      cs += ' user-small--current';
     }
     return (
       <div className={cs}>
-        <span className='user-small-points'>
-          <Reward size='small' points={this.points()}/>
-        </span>
-        <UpicSmall login={this.login()}/>
-        <User login={this.login()}/>
+        <div className='user-small__left'>
+          <div className='user-small__points'>
+            <Reward size='small' points={this.points()} />
+          </div>
+          <UpicSmall login={this.login()} />
+          <User login={this.login()} />
+        </div>
 
-        {this.renderLeaderboardTooltip()}
         {this.renderOpenQuests()}
       </div>
     );

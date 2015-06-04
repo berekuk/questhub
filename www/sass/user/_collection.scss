@@ -1,38 +1,29 @@
 .user-collection {
     max-width: 457px; // bootstrap's span6 on wide screen
-    .current-user-leaderboard-tip {
-        float: right;
-        position: relative;
-        left: 14px;
-        top: 12px;
-    }
 
-    td.user-small {
+    td.user-small-outer {
         padding: 0px;
     }
 }
 
-.user-small-inner {
+.user-small {
     line-height: 25px;
     padding: 8px;
+    display: flex;
+    justify-content: space-between;
 }
-
-.user-small-current {
+.user-small--current {
     background: lighten($highlight, 30%);
 }
 
-.user-small-pic {
-    width: 24px;
-    height: 24px;
-    margin-right: 4px;
+.user-small__left {
+    display: flex;
 }
-
-.user-small-points {
+.user-small__points {
     min-width: 50px;
-    display: inline-block;
     text-align: center;
 }
-.user-small-quests {
-    float: right;
+
+.user-small__quests {
     font-size: 12px;
 }

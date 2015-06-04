@@ -46,10 +46,12 @@ export const User = React.createClass({
   },
 
   render () {
+    let text = this.props.login;
+    if (this.props.colon) text += ':';
+
     return (
       <a href={RouterMap.player(this.props.login)} className='user-link'>
-        {this.props.login}
-        {this.props.colon ? ':' : ''}
+        {text}
       </a>
     );
   },
