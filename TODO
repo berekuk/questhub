@@ -1,8 +1,12 @@
 emails in dev - mailcatcher
 check backend/crontab
-images to S3
+
+images from cloudfront
 
 # WWW
+x template index.html
+react-hot-loader
+production webpack config
 
 Get rid of:
 - jquery-ui

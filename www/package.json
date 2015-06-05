@@ -5,6 +5,7 @@
   "dependencies": {
     "backbone": "1.1.2",
     "bootbox": "^4.4.0",
+    "consolidate": "^0.13.1",
     "express": "^4.12.4",
     "http-proxy": "^1.11.1",
     "jquery": "^1.9.1",

@@ -26,10 +26,18 @@ app.use(
   });
 });
 
+var engines = require('consolidate');
+app.engine('html', engines.underscore);
+
 app.use(function (req, res) {
-  res.sendFile(
-    path.join(__dirname, 'public', 'index.html')
-  );
+  res.render('index.html', {
+    assetPrefix: (process.env.NODE_ENV == 'development' ? 'http://localhost:9090' : ''),
+    settings: {
+      service_name: 'Questhub',
+      analytics: process.env.GOOGLE_ANALYTICS,
+      mixpanel_id: process.env.MIXPANEL_TOKEN,
+    },
+  });
 });
 
 app.listen(80);

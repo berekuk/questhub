@@ -21,7 +21,7 @@
       </div>
     <![endif]-->
 
-    <link href="http://localhost:9090/css/main.css" rel="stylesheet">
+    <link href="<%= assetPrefix %>/css/main.css" rel="stylesheet">
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="/favicon.ico">
@@ -93,7 +93,11 @@ b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);</script>
     <script src="https://login.persona.org/include.js"></script>
     <script src="https://use.edgefonts.net/doppio-one.js"></script>
 
-    <script src="http://localhost:9090/bundle.js"></script>
+    <script>
+      window.questhubGlobalSettings = <%= JSON.stringify(settings) %>;
+    </script>
+
+    <script src="<%= assetPrefix %>/bundle.js"></script>
 
   </body>
 </html>
