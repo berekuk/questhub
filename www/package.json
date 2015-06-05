@@ -3,14 +3,14 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "backbone": "1.1.2",
+    "bootbox": "^4.4.0",
     "express": "^4.12.4",
     "http-proxy": "^1.11.1",
-    "react": "^0.13.3",
-    "backbone": "1.1.2",
-    "underscore": "1.4.4",
     "jquery": "^1.9.1",
     "jquery-autosize": "1.17.8",
-    "bootbox": "^4.4.0"
+    "react": "^0.13.3",
+    "underscore": "1.4.4"
   },
   "devDependencies": {
     "autoprefixer-loader": "^2.0.0",
@@ -21,9 +21,11 @@
     "extract-text-webpack-plugin": "^0.7.1",
     "node-sass": "^3.1.1",
     "raw-loader": "^0.5.1",
+    "react-hot-loader": "^1.2.7",
     "sass-loader": "^1.0.1",
     "style-loader": "^0.12.2",
     "webpack": "^1.8.11",
-    "webpack-dev-middleware": "^1.0.11"
+    "webpack-dev-middleware": "^1.0.11",
+    "webpack-dev-server": "^1.9.0"
   }
 }

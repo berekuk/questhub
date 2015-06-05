@@ -7,13 +7,6 @@ var app = express();
 
 var proxy = httpProxy.createProxyServer();
 
-if (process.env.NODE_ENV === 'development') {
-  var webpackMiddleware = require('webpack-dev-middleware');
-  var webpack = require('webpack');
-  var compiler = webpack(require('./webpack.config.js'));
-  app.use(webpackMiddleware(compiler));
-}
-
 app.use(
   express.static(
     path.join(__dirname, 'public')

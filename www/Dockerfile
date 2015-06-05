@@ -14,8 +14,11 @@ WORKDIR $APP_HOME
 COPY package.json $APP_HOME/package.json
 RUN npm install
 
+RUN apt-get update && apt-get install -y ruby && gem install foreman
+
 COPY . $APP_HOME
 COPY docker-entrypoint.sh /entrypoint.sh
 
 EXPOSE 80
+EXPOSE 9090
 CMD /entrypoint.sh

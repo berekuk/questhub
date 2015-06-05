@@ -37,6 +37,7 @@ www:
     - www:/www
   ports:
     - "8000:80"
+    - "9090:9090"
   links:
     - app
   env_file: config/dev
