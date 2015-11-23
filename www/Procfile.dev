@@ -1,2 +1,2 @@
 web: node index.js
-webpack: webpack-dev-server --inline --hot --host 0.0.0.0 --port 9090
+webpack: webpack-dev-server --progress --host 0.0.0.0 --port 9090

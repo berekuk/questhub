@@ -4,9 +4,9 @@ check backend/crontab
 images from cloudfront
 
 # WWW
-x template index.html
-react-hot-loader
-production webpack config
+webpack: fix reload-on-css-change
+check production webpack config
+deploy static files to cloudfront
 
 Get rid of:
 - jquery-ui

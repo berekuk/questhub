@@ -3,14 +3,13 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var path = require('path');
 var srcRoot = path.join(__dirname, 'src');
 
-module.exports = {
+var config = {
   entry: './app.coffee',
   context: srcRoot,
 
   output: {
     path: path.join(__dirname, 'public'),
     filename: 'bundle.js',
-    publicPath: 'http://localhost:9090/',
   },
 
   resolve: {
@@ -32,26 +31,61 @@ module.exports = {
         test: /\.coffee$/,
         loader: 'coffee-loader',
       },
-      {
-        test: /\.jsx/,
-        loader: 'babel-loader',
-      },
-      {
-        test: /\.scss$/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader!autoprefixer-loader!sass-loader'),
-      },
+      // JSX and SCSS configuration depend on NODE_ENV and will be generated dynamically
     ],
   },
 
-  plugins: [
-    new ExtractTextPlugin('css/main.css', {allChunks: true}),
-  ],
+  plugins: [],
 
   amd: {
     jQuery: true,
     'jquery.timeago': true,
     'jquery-autosize': true,
   },
-
-  devtool: 'eval-source-map',
 };
+
+// Generating dynamic parts of configuration which depend on NODE_ENV
+var jsxLoader = {
+  test: /\.jsx$/,
+  loaders: ['babel-loader'],
+};
+var sassLoader = {
+  test: /\.scss$/,
+  loaders: ['css-loader', 'autoprefixer-loader', 'sass-loader'],
+};
+
+if (process.env.NODE_ENV === 'development') {
+  config.entry = [
+    'webpack-dev-server/client?http://0.0.0.0:9090',
+    'webpack/hot/only-dev-server',
+    config.entry,
+  ];
+  config.output.publicPath = 'http://localhost:9090/';
+
+  jsxLoader.loaders.unshift('react-hot');
+  sassLoader.loaders.unshift('style-loader');
+
+  config.plugins = config.plugins.concat([
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin(),
+  ]);
+
+  config.devtool = 'cheap-module-eval-source-map';
+}
+else if (process.env.NODE_ENV === 'production') {
+  sassLoader.loader = ExtractTextPlugin.extract('style-loader', sassLoader.loaders.join('!'));
+  delete sassLoader.loaders;
+
+  config.plugins = config.plugins.concat([
+    new ExtractTextPlugin('css/main.css', {allChunks: true}),
+    new webpack.optimize.UglifyJsPlugin(),
+  ]);
+  config.devtool = 'source-map';
+}
+else {
+  throw 'Unknown NODE_ENV';
+}
+config.module.loaders.push(jsxLoader);
+config.module.loaders.push(sassLoader);
+
+module.exports = config;

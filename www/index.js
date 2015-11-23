@@ -31,6 +31,7 @@ app.engine('html', engines.underscore);
 
 app.use(function (req, res) {
   res.render('index.html', {
+    env: process.env.NODE_ENV,
     assetPrefix: (process.env.NODE_ENV == 'development' ? 'http://localhost:9090' : ''),
     settings: {
       service_name: 'Questhub',
