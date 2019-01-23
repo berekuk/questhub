@@ -42,9 +42,8 @@ If you need a new CPAN module, add `cpan_module %module_name%` line to `cookbook
 
 You can re-deploy a new chef configuration into an existing VM by running `vagrant provision`.
 
+API
 =========
-
-## API
 
 See `app/API.md` for backend API documentation.
 
